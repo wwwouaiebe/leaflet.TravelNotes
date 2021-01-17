@@ -126,126 +126,6 @@ function ourNewMainViewer ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myLoadConfig
-	@desc This function load the content of the TravelNotesConfig.json file into theConfig object
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadConfig ( configPromiseResult ) {
-		if ( 'fulfilled' === configPromiseResult.status ) {
-			configPromiseResult.value.language = myLanguage;
-			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
-				configPromiseResult.value.note.haveBackground = true;
-			}
-			theConfig.overload ( configPromiseResult.value );
-			return '';
-		}
-		return 'Not possible to load the TravelNotesConfig.json file. ';
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myLoadTranslations
-	@desc This function load the content of the TravelNotesXX.json file into theTranslator object
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadTranslations ( translationPromiseResult, defaultTranslationPromiseResult ) {
-		if ( 'fulfilled' === translationPromiseResult.status ) {
-			theTranslator.setTranslations ( translationPromiseResult.value );
-			return '';
-		}
-		if ( 'fulfilled' === defaultTranslationPromiseResult.status ) {
-			theTranslator.setTranslations ( defaultTranslationPromiseResult.value );
-			return (
-				'Not possible to load the TravelNotes' +
-				myLanguage.toUpperCase ( ) +
-				'.json file. English will be used. '
-			);
-		}
-		return 'Not possible to load the translations. ';
-
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myLoadLayers
-	@desc This function load the content of the TravelNotesLayers.json file into theLayersToolbarUI object
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadLayers ( layersPromiseResult ) {
-		if ( 'fulfilled' === layersPromiseResult.status ) {
-
-			theViewerLayersToolbarUI.addLayers ( layersPromiseResult.value );
-			return '';
-		}
-		return 'Not possible to load the TravelNotesLayers.json file. Only the OpenStreetMap background will be available. ';
-
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetJsonPromises
-	@desc This function gives the Promises list needed to load all the configuration files
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetJsonPromises ( ) {
-		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
-		return [
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'EN.json' )
-		];
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myLoadJsonFiles
-	@desc Load the configuration files
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadJsonFiles ( results ) {
-		const CONFIG_FILE_INDEX = 0;
-		const TRANSLATIONS_FILE_INDEX = 1;
-		const LAYERS_FILE_INDEX = 2;
-		const DEFAULT_TRANSLATIONS_FILE_INDEX = 3;
-		myErrorMessage = myLoadConfig ( results [ CONFIG_FILE_INDEX ] );
-		if ( myErrorMessage ) {
-			console.log ( myErrorMessage );
-			return;
-		}
-		myErrorMessage = myLoadTranslations (
-			results [ TRANSLATIONS_FILE_INDEX ],
-			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
-		);
-		myErrorMessage += myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
-		if ( '' !== myErrorMessage ) {
-			console.log ( myErrorMessage );
-			myErrorMessage = '';
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myLoadTravelNotes
 	@desc Creates the map and the div for the TravelNotes UI and then launch TravelNotes
 	@private
@@ -254,7 +134,8 @@ function ourNewMainViewer ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		if ( theConfig.autoLoad && '' === myErrorMessage ) {
+		const DEFAULT_ZOOM = 2;
+		if ( '' === myErrorMessage ) {
 			theHTMLElementsFactory.create (
 				'div',
 				{ id : 'Map' },
@@ -262,7 +143,7 @@ function ourNewMainViewer ( ) {
 			);
 
 			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
+				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], DEFAULT_ZOOM );
 
 			theTravelNotesData.map = map;
 
@@ -289,16 +170,35 @@ function ourNewMainViewer ( ) {
 		*/
 
 		start ( ) {
-			window.TaN = theTravelNotesViewer;
+
 			myReadURL ( );
 			myLanguage = myLanguage || theConfig.language;
-			Promise.allSettled ( myGetJsonPromises ( ) )
+			let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
+			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Config.json' )
 				.then (
-					results => {
-						myLoadJsonFiles ( results );
+					result => {
+						result.language = myLanguage;
+						if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+							result.note.haveBackground = true;
+						}
+						theConfig.overload ( result );
+						return theHttpRequestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' );
+					}
+				)
+				.then (
+					result => {
+						theTranslator.setTranslations ( result );
+						return theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' );
+					}
+				)
+				.then (
+					result => {
+						theViewerLayersToolbarUI.addLayers ( result );
 						myLoadTravelNotes ( myTravelUrl );
 					}
-				);
+				)
+				.catch ( ( ) => { document.body.textContent = 'An error occurs when loading the configuration '; } );
+
 		}
 	}
 

@@ -49,7 +49,7 @@ import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
-import { LAT_LNG, TWO } from '../util/Constants.js';
+import { LAT_LNG } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -145,6 +145,7 @@ class TravelNotesViewer {
 	*/
 
 	addReadOnlyMap ( travelUrl, addLayerToolbar ) {
+		const DEFAULT_ZOOM = 2;
 		if ( ourTravelNotesLoaded ) {
 			return;
 		}
@@ -167,7 +168,7 @@ class TravelNotesViewer {
 						console.log ( err ? err : 'Not possible to load the .trv file' );
 						theTravelNotesData.map.setView (
 							[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
-							TWO
+							DEFAULT_ZOOM
 						);
 					}
 				);
