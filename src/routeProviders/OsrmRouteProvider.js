@@ -105,7 +105,7 @@ function ourNewOsrmRouteProvider ( ) {
 					function ( step ) {
 						step.geometry = thePolylineEncoder.decode ( step.geometry, OSRM_ROUTE_LAT_LNG_ROUND, false );
 
-						let maneuver = window.L.travelNotes.maneuver;
+						let maneuver = window.TaN.maneuver;
 						maneuver.iconName =
 							ICON_LIST [ step.maneuver.type ]
 								?
@@ -126,7 +126,7 @@ function ourNewOsrmRouteProvider ( ) {
 								:
 								( geometryCounter < step.geometry.length );
 							geometryCounter ++ ) {
-							let itineraryPoint = window.L.travelNotes.itineraryPoint;
+							let itineraryPoint = window.TaN.itineraryPoint;
 							itineraryPoint.latLng = [
 								step.geometry [ geometryCounter ] [ ZERO ],
 								step.geometry [ geometryCounter ] [ ONE ]
@@ -308,7 +308,7 @@ function ourNewOsrmRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewOsrmRouteProvider ( ) );
+window.TaN.addProvider ( ourNewOsrmRouteProvider ( ) );
 
 /*
 --- End of OsrmRouteProvider.js file ------------------------------------------------------------------------------------------

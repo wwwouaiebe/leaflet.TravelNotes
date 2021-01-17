@@ -134,14 +134,14 @@ function ourNewMapzenValhallaRouteProvider ( ) {
 				leg.shape = thePolylineEncoder.decode ( leg.shape, MAPZEN_LAT_LNG_ROUND, false );
 				let itineraryPoints = [];
 				for ( let shapePointCounter = ZERO; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
-					let itineraryPoint = window.L.travelNotes.itineraryPoint;
+					let itineraryPoint = window.TaN.itineraryPoint;
 					itineraryPoint.latLng = leg.shape [ shapePointCounter ];
 					itineraryPoints.push ( itineraryPoint );
 					myRoute.itinerary.itineraryPoints.add ( itineraryPoint );
 				}
 				leg.maneuvers.forEach (
 					mapzenManeuver => {
-						let travelNotesManeuver = window.L.travelNotes.maneuver;
+						let travelNotesManeuver = window.TaN.maneuver;
 						travelNotesManeuver.iconName = myIconList [ mapzenManeuver.type || ZERO ];
 						travelNotesManeuver.instruction = mapzenManeuver.instruction || '';
 						travelNotesManeuver.distance = ( mapzenManeuver.length || ZERO ) * M_IN_KM;
@@ -329,7 +329,7 @@ function ourNewMapzenValhallaRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewMapzenValhallaRouteProvider ( ) );
+window.TaN.addProvider ( ourNewMapzenValhallaRouteProvider ( ) );
 
 /*
 --- End of MapzenValhallaRouteProvider.js file --------------------------------------------------------------------------------

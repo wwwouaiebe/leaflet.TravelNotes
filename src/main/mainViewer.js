@@ -289,7 +289,7 @@ function ourNewMainViewer ( ) {
 		*/
 
 		start ( ) {
-			window.L.travelNotes = theTravelNotesViewer;
+			window.TaN = theTravelNotesViewer;
 			myReadURL ( );
 			myLanguage = myLanguage || theConfig.language;
 			Promise.allSettled ( myGetJsonPromises ( ) )

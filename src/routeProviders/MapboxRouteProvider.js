@@ -117,7 +117,7 @@ function ourNewMapboxRouteProvider ( ) {
 							step.geometry.pop ( );
 						}
 
-						let maneuver = window.L.travelNotes.maneuver;
+						let maneuver = window.TaN.maneuver;
 						maneuver.iconName =
 							ICON_LIST [ step.maneuver.type ]
 								?
@@ -138,7 +138,7 @@ function ourNewMapboxRouteProvider ( ) {
 								:
 								( geometryCounter < step.geometry.length );
 							geometryCounter ++ ) {
-							let itineraryPoint = window.L.travelNotes.itineraryPoint;
+							let itineraryPoint = window.TaN.itineraryPoint;
 							itineraryPoint.latLng = [
 								step.geometry [ geometryCounter ] [ ZERO ],
 								step.geometry [ geometryCounter ] [ ONE ]
@@ -308,7 +308,7 @@ function ourNewMapboxRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewMapboxRouteProvider ( ) );
+window.TaN.addProvider ( ourNewMapboxRouteProvider ( ) );
 
 /*
 --- End of MapboxRouteProvider.js file ----------------------------------------------------------------------------------------

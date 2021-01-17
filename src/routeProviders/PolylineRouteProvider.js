@@ -99,7 +99,7 @@ function ourNewPolylineRouteProvider ( ) {
 	*/
 
 	function myAddManeuver ( itineraryPointObjId, position ) {
-		let maneuver = window.L.travelNotes.maneuver;
+		let maneuver = window.TaN.maneuver;
 
 		maneuver.iconName = myIconNames [ position ];
 		maneuver.instruction =
@@ -127,7 +127,7 @@ function ourNewPolylineRouteProvider ( ) {
 	*/
 
 	function myAddItineraryPoint ( latLng ) {
-		let itineraryPoint = window.L.travelNotes.itineraryPoint;
+		let itineraryPoint = window.TaN.itineraryPoint;
 		itineraryPoint.latLng = latLng;
 		myRoute.itinerary.itineraryPoints.add ( itineraryPoint );
 		return itineraryPoint.objId;
@@ -205,7 +205,7 @@ function ourNewPolylineRouteProvider ( ) {
 			);
 
 			// adding the itinerary point to a tmp array
-			let itineraryPoint = window.L.travelNotes.itineraryPoint;
+			let itineraryPoint = window.TaN.itineraryPoint;
 			itineraryPoint.latLng = [
 				( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
 				( latLngStartPoint [ LNG ] + ( WestEast * deltaLng ) ) * RADIANS_TO_DEGREE
@@ -324,14 +324,14 @@ function ourNewPolylineRouteProvider ( ) {
 				tmpArc,
 				angularDistance
 			);
-			let itineraryPoint = window.L.travelNotes.itineraryPoint;
+			let itineraryPoint = window.TaN.itineraryPoint;
 			itineraryPoint.latLng = [
 				( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
 				( centerPoint [ LNG ] + deltaLng ) * RADIANS_TO_DEGREE
 			];
 			itineraryPoints.push ( itineraryPoint );
 
-			itineraryPoint = window.L.travelNotes.itineraryPoint;
+			itineraryPoint = window.TaN.itineraryPoint;
 			itineraryPoint.latLng = [
 				( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
 				( centerPoint [ LNG ] - deltaLng ) * RADIANS_TO_DEGREE
@@ -339,7 +339,7 @@ function ourNewPolylineRouteProvider ( ) {
 			itineraryPoints.unshift ( itineraryPoint );
 			if ( counter === addedSegments ) {
 				myAddManeuver ( itineraryPoint.objId, 'kStart' );
-				itineraryPoint = window.L.travelNotes.itineraryPoint;
+				itineraryPoint = window.TaN.itineraryPoint;
 				itineraryPoint.latLng = [
 					( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
 					( centerPoint [ LNG ] - deltaLng ) * RADIANS_TO_DEGREE
@@ -442,7 +442,7 @@ function ourNewPolylineRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewPolylineRouteProvider ( ) );
+window.TaN.addProvider ( ourNewPolylineRouteProvider ( ) );
 
 /*
 --- End of PolylineRouteProvider.js file --------------------------------------------------------------------------------------

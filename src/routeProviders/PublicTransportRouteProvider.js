@@ -355,7 +355,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 					myStopsMap.set ( nodeId, node );
 				}
 				else {
-					window.L.travelNotes.showInfo (
+					window.TaN.showInfo (
 						'the relation ' +
 						mySelectedRelationId +
 						' have nodes not positionned on the railway ( node ' +
@@ -614,7 +614,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 				if ( NO_POINT_ADDED < addPoint && ALL_POINTS_ADDED > addPoint ) {
 
 					// an itinerary point is created from the node and is added to the itinerary
-					let itineraryPoint = window.L.travelNotes.itineraryPoint;
+					let itineraryPoint = window.TaN.itineraryPoint;
 					let node = myNodesMap.get ( nodeId );
 					itineraryPoint.latLng = [ node.lat, node.lon ];
 					route.itinerary.itineraryPoints.add ( itineraryPoint );
@@ -623,7 +623,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 					let stopNode = myStopsMap.get ( nodeId );
 					if ( stopNode ) {
 
-						let maneuver = window.L.travelNotes.maneuver;
+						let maneuver = window.TaN.maneuver;
 						let stopName = null;
 						if ( stopNode.tags && stopNode.tags.name ) {
 							stopName = stopNode.tags.name;
@@ -751,7 +751,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 					break;
 				default :
 					nodeWithMoreThan3WaysFound = true;
-					window.L.travelNotes.showInfo (
+					window.TaN.showInfo (
 						'A node with more than 3 ways is found : ' +
 						node.id +
 						' - the relation ' +
@@ -774,7 +774,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 		// removing holes
 		if ( myWaysMap.size > ( ( myNodes3WaysCounter * TWO ) + ONE ) ) {
 			myRemoveHoles ( );
-			window.L.travelNotes.showInfo (
+			window.TaN.showInfo (
 				'Holes found in the OSM relation number ' +
 				mySelectedRelationId +
 				'. Try to correct OSM data.'
@@ -849,7 +849,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 			return Promise.reject ( new Error ( 'No relations found' ) );
 		}
 
-		let baseDialog = window.L.travelNotes.baseDialog;
+		let baseDialog = window.TaN.baseDialog;
 
 		let selectDiv = document.createElement ( 'div' );
 		selectDiv.id = 'TravelNotes-SelectDialog-SelectDiv';
@@ -1030,7 +1030,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewPublicTransportRouteProvider ( ) );
+window.TaN.addProvider ( ourNewPublicTransportRouteProvider ( ) );
 
 /*
 --- End of PublicTransportRouteProvider.js file -------------------------------------------------------------------------------

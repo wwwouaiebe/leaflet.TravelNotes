@@ -117,7 +117,7 @@ function ourNewGraphHopperRouteProvider ( ) {
 				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true );
 				let itineraryPoints = [];
 				for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
-					let itineraryPoint = window.L.travelNotes.itineraryPoint;
+					let itineraryPoint = window.TaN.itineraryPoint;
 					itineraryPoint.lat = path.points [ pointsCounter ] [ LAT ];
 					itineraryPoint.lng = path.points [ pointsCounter ] [ LNG ];
 					itineraryPoint.elev = path.points [ pointsCounter ] [ ELEV ];
@@ -128,7 +128,7 @@ function ourNewGraphHopperRouteProvider ( ) {
 				let previousIconName = '';
 				path.instructions.forEach (
 					instruction => {
-						let maneuver = window.L.travelNotes.maneuver;
+						let maneuver = window.TaN.maneuver;
 						maneuver.iconName = myIconList [ instruction.sign + FOUR || ZERO ];
 						if ( 'kArriveDefault' === previousIconName && 'kContinueStraight' === maneuver.iconName ) {
 							maneuver.iconName = 'kDepartDefault';
@@ -295,7 +295,7 @@ function ourNewGraphHopperRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewGraphHopperRouteProvider ( ) );
+window.TaN.addProvider ( ourNewGraphHopperRouteProvider ( ) );
 
 /*
 --- End of GraphHopperRouteProvider.js file -----------------------------------------------------------------------------------

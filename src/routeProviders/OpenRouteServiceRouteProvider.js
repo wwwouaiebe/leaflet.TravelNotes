@@ -111,7 +111,7 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 		];
 
 		let wayPointIndex = ZERO;
-		let itineraryPoint = window.L.travelNotes.itineraryPoint;
+		let itineraryPoint = window.TaN.itineraryPoint;
 		itineraryPoint.lat = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LAT ];
 		itineraryPoint.lng = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LNG ];
 		itineraryPoint.elev = response.routes [ ZERO ].geometry [ wayPointIndex ] [ ELEV ];
@@ -122,7 +122,7 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 			function ( segment ) {
 				segment.steps.forEach (
 					function ( step ) {
-						let maneuver = window.L.travelNotes.maneuver;
+						let maneuver = window.TaN.maneuver;
 						maneuver.iconName = iconList [ step.type ] || 'kUndefined';
 						maneuver.instruction = step.instruction;
 						maneuver.duration = step.duration;
@@ -135,7 +135,7 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 								||
 								itineraryPoint.lng !== response.routes [ ZERO ].geometry [ wayPointIndex ] [ LNG ]
 							) {
-								itineraryPoint = window.L.travelNotes.itineraryPoint;
+								itineraryPoint = window.TaN.itineraryPoint;
 								itineraryPoint.lat = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LAT ];
 								itineraryPoint.lng = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LNG ];
 								itineraryPoint.elev = response.routes [ ZERO ].geometry [ wayPointIndex ] [ ELEV ];
@@ -384,7 +384,7 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 	};
 }
 
-window.L.travelNotes.addProvider ( ourNewOpenRouteServiceRouteProvider ( ) );
+window.TaN.addProvider ( ourNewOpenRouteServiceRouteProvider ( ) );
 
 /*
 --- End of OpenRouteServiceRouteProvider.js file ------------------------------------------------------------------------------
