@@ -82,6 +82,7 @@ import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
+import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { newPrintFactory } from '../printMap/PrintFactory.js';
@@ -116,7 +117,7 @@ function ourComputeRouteDistances ( route ) {
 	route.duration = DISTANCE.defaultValue;
 
 	while ( ! itineraryPointsIterator.done ) {
-		itineraryPointsIterator.previous.distance = theGeometry.pointsDistance (
+		itineraryPointsIterator.previous.distance = theSphericalTrigonometry.pointsDistance (
 			itineraryPointsIterator.previous.latLng,
 			itineraryPointsIterator.value.latLng
 		);

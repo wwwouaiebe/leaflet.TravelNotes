@@ -44,7 +44,7 @@ Tests ...
 */
 
 import { ZERO, ONE, TWO } from '../util/Constants.js';
-import { theGeometry } from '../util/Geometry.js';
+import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ function ourNewPolylineRouteProvider ( ) {
 				ONE;
 
 		// computing the distance
-		let angularDistance = theGeometry.getArcFromSummitArcArc (
+		let angularDistance = theSphericalTrigonometry.arcFromSummitArcArc (
 			latLngEndPoint [ LNG ] - latLngStartPoint [ LNG ],
 			HALF_PI - latLngStartPoint [ LAT ],
 			HALF_PI - latLngEndPoint [ LAT ]
@@ -177,7 +177,7 @@ function ourNewPolylineRouteProvider ( ) {
 		}
 
 		// and the direction at the start point
-		let direction = theGeometry.getSummitFromArcArcArc (
+		let direction = theSphericalTrigonometry.summitFromArcArcArc (
 			HALF_PI - latLngStartPoint [ LAT ],
 			angularDistance,
 			HALF_PI - latLngEndPoint [ LAT ]
@@ -191,14 +191,14 @@ function ourNewPolylineRouteProvider ( ) {
 			let partialDistance = angularDistance * counter / addedSegments;
 
 			// computing the opposite arc to the start point
-			let tmpArc = theGeometry.getArcFromSummitArcArc (
+			let tmpArc = theSphericalTrigonometry.arcFromSummitArcArc (
 				direction,
 				HALF_PI - latLngStartPoint [ LAT ],
 				partialDistance
 			);
 
 			// computing the lng
-			let deltaLng = theGeometry.getSummitFromArcArcArc (
+			let deltaLng = theSphericalTrigonometry.summitFromArcArcArc (
 				HALF_PI - latLngStartPoint [ LAT ],
 				tmpArc,
 				partialDistance
@@ -299,7 +299,7 @@ function ourNewPolylineRouteProvider ( ) {
 			myRoute.wayPoints.last.lng * DEGREE_TO_RADIANS
 		];
 
-		let angularDistance = theGeometry.getArcFromSummitArcArc (
+		let angularDistance = theSphericalTrigonometry.arcFromSummitArcArc (
 			centerPoint [ LNG ] - distancePoint [ LNG ],
 			HALF_PI - centerPoint [ LAT ],
 			HALF_PI - distancePoint [ LAT ]
@@ -313,13 +313,13 @@ function ourNewPolylineRouteProvider ( ) {
 
 			let direction = ( Math.PI / ( TWO * addedSegments ) ) + ( ( Math.PI * counter ) / addedSegments );
 
-			let tmpArc = theGeometry.getArcFromSummitArcArc (
+			let tmpArc = theSphericalTrigonometry.arcFromSummitArcArc (
 				direction,
 				angularDistance,
 				HALF_PI - centerPoint [ LAT ]
 			);
 
-			let deltaLng = theGeometry.getSummitFromArcArcArc (
+			let deltaLng = theSphericalTrigonometry.summitFromArcArcArc (
 				HALF_PI - centerPoint [ LAT ],
 				tmpArc,
 				angularDistance

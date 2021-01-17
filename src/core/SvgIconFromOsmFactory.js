@@ -72,6 +72,7 @@ This will be used for the note address
 import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
+import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
 import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
@@ -200,7 +201,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// Iteration on the points...
 		myRoute.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				let itineraryPointDistance = theGeometry.pointsDistance ( mySvgLatLngDistance.latLng, itineraryPoint.latLng );
+				let itineraryPointDistance =
+					theSphericalTrigonometry.pointsDistance ( mySvgLatLngDistance.latLng, itineraryPoint.latLng );
 				if ( minDistance > itineraryPointDistance ) {
 					minDistance = itineraryPointDistance;
 					myNearestItineraryPoint = itineraryPoint;
@@ -229,7 +231,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		let minDistance = Number.MAX_VALUE;
 		myPlaces.forEach (
 			place => {
-				let placeDistance = theGeometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
+				let placeDistance =
+					theSphericalTrigonometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
 				if ( minDistance > placeDistance ) {
 					minDistance = placeDistance;
 					myPlace = place.tags.name;
@@ -322,21 +325,24 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		myNodesMap.forEach (
 			node => {
 				if ( myNearestItineraryPoint ) {
-					nodeDistance = theGeometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
+					nodeDistance =
+						theSphericalTrigonometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
 					if ( nodeDistance < svgNodeDistance ) {
 						svgPointId = node.id;
 						svgNodeDistance = nodeDistance;
 					}
 				}
 				if ( incomingItineraryPoint ) {
-					nodeDistance = theGeometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
+					nodeDistance =
+						theSphericalTrigonometry.pointsDistance ( [ node.lat, node.lon ], incomingItineraryPoint.latLng );
 					if ( nodeDistance < incomingNodeDistance ) {
 						incomingNodeId = node.id;
 						incomingNodeDistance = nodeDistance;
 					}
 				}
 				if ( outgoingItineraryPoint ) {
-					nodeDistance = theGeometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
+					nodeDistance =
+						theSphericalTrigonometry.pointsDistance ( [ node.lat, node.lon ], outgoingItineraryPoint.latLng );
 					if ( nodeDistance < outgoingNodeDistance ) {
 						outgoingNodeId = node.id;
 						outgoingNodeDistance = nodeDistance;

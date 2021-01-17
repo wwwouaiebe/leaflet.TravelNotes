@@ -44,6 +44,7 @@ Tests ...
 */
 
 import { ZERO, ONE, TWO, LAT_LNG } from '../util/Constants.js';
+import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 function ourNewPublicTransportRouteProvider ( ) {
 
@@ -376,9 +377,9 @@ function ourNewPublicTransportRouteProvider ( ) {
 					nodeId => {
 						let node = myNodesMap.get ( nodeId );
 						if ( previousNode ) {
-							way.distance +=
-								window.L.latLng ( node.lat, node.lon )
-									.distanceTo ( window.L.latLng ( previousNode.lat, previousNode.lon ) );
+							way.distance += theSphericalTrigonometry.pointsDistance (
+								[ node.lat, node.lon ], [ previousNode.lat, previousNode.lon ]
+							);
 						}
 						previousNode = node;
 					}
@@ -410,8 +411,7 @@ function ourNewPublicTransportRouteProvider ( ) {
 			}
 			distancesBetweenWays.push (
 				{
-					distance : window.L.latLng ( node1.lat, node1.lon )
-						.distanceTo ( window.L.latLng ( node2.lat, node2.lon ) ),
+					distance : theSphericalTrigonometry.pointsDistance ( [ node1.lat, node1.lon ], [ node2.lat, node2.lon ] ),
 					nodesId : [ node1.id, node2.id ]
 				}
 			);
@@ -559,14 +559,18 @@ function ourNewPublicTransportRouteProvider ( ) {
 
 		myStopsMap.forEach (
 			stopPoint => {
-				let distance = window.L.latLng ( stopPoint )
-					.distanceTo ( myRoute.wayPoints.first.latLng );
+				let distance = theSphericalTrigonometry.pointsDistance (
+					[ stopPoint.lat, stopPoint.lon ],
+					myRoute.wayPoints.first.latLng
+				);
 				if ( distance < startStopDistance ) {
 					startStopDistance = distance;
 					startStop = stopPoint;
 				}
-				distance = window.L.latLng ( [ stopPoint.lat, stopPoint.lon ] )
-					.distanceTo ( myRoute.wayPoints.last.latLng );
+				distance = theSphericalTrigonometry.pointsDistance (
+					[ stopPoint.lat, stopPoint.lon ],
+					myRoute.wayPoints.last.latLng
+				);
 				if ( distance < endStopDistance ) {
 					endStopDistance = distance;
 					endStop = stopPoint;
@@ -687,8 +691,10 @@ function ourNewPublicTransportRouteProvider ( ) {
 
 		while ( ! itineraryPointsIterator.done ) {
 			itineraryPointsIterator.value.distance = ZERO;
-			previousPoint.distance = window.L.latLng ( previousPoint.latLng )
-				.distanceTo ( window.L.latLng ( itineraryPointsIterator.value.latLng ) );
+			previousPoint.distance = theSphericalTrigonometry.pointsDistance (
+				previousPoint.latLng,
+				itineraryPointsIterator.value.latLng
+			);
 			route.distance += previousPoint.distance;
 			previousManeuver.distance += previousPoint.distance;
 			if ( maneuversIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
