@@ -76,8 +76,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L */
-
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { DISTANCE, ZERO, ONE, TWO } from '../util/Constants.js';
 
@@ -220,28 +218,28 @@ class Geometry {
 		let minDistance = Number.MAX_VALUE;
 
 		// projections of points are made
-		let point = L.Projection.SphericalMercator.project (
-			L.latLng ( latLng [ ZERO ], latLng [ ONE ] ) );
-		let point1 = L.Projection.SphericalMercator.project (
-			L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+		let point = window.L.Projection.SphericalMercator.project (
+			window.L.latLng ( latLng [ ZERO ], latLng [ ONE ] ) );
+		let point1 = window.L.Projection.SphericalMercator.project (
+			window.L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
 		);
 		let closestLatLng = null;
 		let closestDistance = DISTANCE.defaultValue;
 		let endSegmentDistance = itineraryPointIterator.value.distance;
 		while ( ! itineraryPointIterator.done ) {
-			let point2 = L.Projection.SphericalMercator.project (
-				L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+			let point2 = window.L.Projection.SphericalMercator.project (
+				window.L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
 			);
-			let distance = L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
+			let distance = window.L.LineUtil.pointToSegmentDistance ( point, point1, point2 );
 			if ( distance < minDistance ) {
 				minDistance = distance;
-				closestLatLng = L.Projection.SphericalMercator.unproject (
-					L.LineUtil.closestPointOnSegment ( point, point1, point2 )
+				closestLatLng = window.L.Projection.SphericalMercator.unproject (
+					window.L.LineUtil.closestPointOnSegment ( point, point1, point2 )
 				);
 				closestDistance =
 					endSegmentDistance -
 					closestLatLng.distanceTo (
-						L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
+						window.L.latLng ( itineraryPointIterator.value.lat, itineraryPointIterator.value.lng )
 					);
 			}
 			endSegmentDistance += itineraryPointIterator.value.distance;
@@ -257,14 +255,14 @@ class Geometry {
 	}
 
 	/**
-	This method build a L.latLngBounds object from an array of points
+	This method build a window.L.latLngBounds object from an array of points
 	@param {Array.<Array.<number>>} latLngs the array of latitude and longitude
 	@return {Object} a Leaflet latLngBounds object
 	*/
 
 	getLatLngBounds ( latLngs ) {
-		let sw = L.latLng ( [ MAX_LAT, MAX_LNG ] );
-		let ne = L.latLng ( [ MIN_LAT, MIN_LNG ] );
+		let sw = window.L.latLng ( [ MAX_LAT, MAX_LNG ] );
+		let ne = window.L.latLng ( [ MIN_LAT, MIN_LNG ] );
 		latLngs.forEach (
 			latLng => {
 				sw.lat = Math.min ( sw.lat, latLng [ ZERO ] );
@@ -273,7 +271,7 @@ class Geometry {
 				ne.lng = Math.max ( ne.lng, latLng [ ONE ] );
 			}
 		);
-		return L.latLngBounds ( sw, ne );
+		return window.L.latLngBounds ( sw, ne );
 	}
 
 	/**
@@ -311,7 +309,7 @@ class Geometry {
 	}
 
 	/**
-	This function returns a L.latLngBounds that represents a square
+	This function returns a window.L.latLngBounds that represents a square
 	@param {Array.<number>} latLngCenter The latitude and longitude of the center of the square
 	@param {number} dimension The half length of the square side in meter.
 	*/
@@ -324,9 +322,9 @@ class Geometry {
 				( Math.cos ( dimension / EARTH_RADIUS ) - ( Math.sin ( latCenterRad ) ** TWO ) ) /
 				( Math.cos ( latCenterRad ) ** TWO )
 			) / TO_RADIANS;
-		return L.latLngBounds (
-			L.latLng ( [ latLngCenter [ ZERO ] - deltaLat, latLngCenter [ ONE ] - deltaLng ] ),
-			L.latLng ( [ latLngCenter [ ZERO ] + deltaLat, latLngCenter [ ONE ] + deltaLng ] )
+		return window.L.latLngBounds (
+			window.L.latLng ( [ latLngCenter [ ZERO ] - deltaLat, latLngCenter [ ONE ] - deltaLng ] ),
+			window.L.latLng ( [ latLngCenter [ ZERO ] + deltaLat, latLngCenter [ ONE ] + deltaLng ] )
 		);
 	}
 
@@ -339,7 +337,7 @@ class Geometry {
 	*/
 
 	project ( latLng, zoom ) {
-		let projection = theTravelNotesData.map.project ( L.latLng ( latLng ), zoom );
+		let projection = theTravelNotesData.map.project ( window.L.latLng ( latLng ), zoom );
 		return [ projection.x, projection.y ];
 	}
 
@@ -351,7 +349,7 @@ class Geometry {
 	*/
 
 	screenCoordToLatLng ( xScreen, yScreen ) {
-		let latLng = theTravelNotesData.map.containerPointToLatLng ( L.point ( xScreen, yScreen ) );
+		let latLng = theTravelNotesData.map.containerPointToLatLng ( window.L.point ( xScreen, yScreen ) );
 		return [ latLng.lat, latLng.lng ];
 	}
 

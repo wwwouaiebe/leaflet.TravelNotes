@@ -65,8 +65,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L */
-
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
@@ -102,7 +100,7 @@ let ourTempWayPointShowDragTooltip = 1;
 
 function ourOnTempWayPointMarkerMouseOut ( ) {
 	if ( ourTempWayPointMarker ) {
-		L.DomEvent.off ( ourTempWayPointMarker );
+		window.L.DomEvent.off ( ourTempWayPointMarker );
 		theTravelNotesData.map.removeLayer ( ourTempWayPointMarker );
 		ourTempWayPointMarker = null;
 	}
@@ -120,7 +118,7 @@ function ourOnTempWayPointMarkerMouseOut ( ) {
 */
 
 function ourOnTempWayPointMarkerDragStart ( ) {
-	L.DomEvent.off ( ourTempWayPointMarker, 'mouseout', ourOnTempWayPointMarkerMouseOut );
+	window.L.DomEvent.off ( ourTempWayPointMarker, 'mouseout', ourOnTempWayPointMarkerMouseOut );
 }
 
 /**
@@ -158,9 +156,9 @@ function ourOnTempWayPointMarkerDragEnd ( dragEndEvent ) {
 		[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
 	);
 	if ( ourTempWayPointMarker ) {
-		L.DomEvent.off ( ourTempWayPointMarker, 'dragstart', ourOnTempWayPointMarkerDragStart );
-		L.DomEvent.off ( ourTempWayPointMarker, 'dragend', ourOnTempWayPointMarkerDragEnd );
-		L.DomEvent.off ( ourTempWayPointMarker, 'contextmenu', ourOnTempWayPointMarkerContextMenu );
+		window.L.DomEvent.off ( ourTempWayPointMarker, 'dragstart', ourOnTempWayPointMarkerDragStart );
+		window.L.DomEvent.off ( ourTempWayPointMarker, 'dragend', ourOnTempWayPointMarkerDragEnd );
+		window.L.DomEvent.off ( ourTempWayPointMarker, 'contextmenu', ourOnTempWayPointMarkerContextMenu );
 		theTravelNotesData.map.removeLayer ( ourTempWayPointMarker );
 		ourTempWayPointMarker = null;
 	}
@@ -368,10 +366,10 @@ function ourOnEditedRouteMouseOver ( mapEvent ) {
 			'"></div><div class="TravelNotes-WayPointText">?</div>';
 
 			// a leaflet marker is created...
-			ourTempWayPointMarker = L.marker (
+			ourTempWayPointMarker = window.L.marker (
 				mapEvent.latlng,
 				{
-					icon : L.divIcon (
+					icon : window.L.divIcon (
 						{
 							iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
 							iconAnchor : [
@@ -398,10 +396,10 @@ function ourOnEditedRouteMouseOver ( mapEvent ) {
 
 			}
 			ourTempWayPointMarker.addTo ( theTravelNotesData.map );
-			L.DomEvent.on ( ourTempWayPointMarker, 'mouseout', ourOnTempWayPointMarkerMouseOut );
-			L.DomEvent.on ( ourTempWayPointMarker, 'dragstart', ourOnTempWayPointMarkerDragStart );
-			L.DomEvent.on ( ourTempWayPointMarker, 'dragend', ourOnTempWayPointMarkerDragEnd );
-			L.DomEvent.on ( ourTempWayPointMarker, 'contextmenu', ourOnTempWayPointMarkerContextMenu );
+			window.L.DomEvent.on ( ourTempWayPointMarker, 'mouseout', ourOnTempWayPointMarkerMouseOut );
+			window.L.DomEvent.on ( ourTempWayPointMarker, 'dragstart', ourOnTempWayPointMarkerDragStart );
+			window.L.DomEvent.on ( ourTempWayPointMarker, 'dragend', ourOnTempWayPointMarkerDragEnd );
+			window.L.DomEvent.on ( ourTempWayPointMarker, 'contextmenu', ourOnTempWayPointMarkerContextMenu );
 		}
 	}
 }
@@ -485,7 +483,7 @@ function ourAddTo ( objId, leafletObject ) {
 function ourRemoveObject ( objId ) {
 	let layer = theTravelNotesData.mapObjects.get ( objId );
 	if ( layer ) {
-		L.DomEvent.off ( layer );
+		window.L.DomEvent.off ( layer );
 		theTravelNotesData.map.removeLayer ( layer );
 		theTravelNotesData.mapObjects.delete ( objId );
 	}
@@ -510,13 +508,13 @@ function ourAddNote ( noteObjId, isPopupOpen ) {
 		noteObjects.marker.openPopup ( );
 	}
 	if ( ! theTravelNotesData.travel.readOnly ) {
-		L.DomEvent.on ( noteObjects.bullet, 'dragend', ourOnNoteBulletDragEnd );
-		L.DomEvent.on ( noteObjects.bullet, 'drag',	ourOnNoteBulletDrag );
-		L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	ourOnNoteBulletMouseEnter );
-		L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	ourOnNoteBulletMouseLeave );
-		L.DomEvent.on ( noteObjects.marker, 'contextmenu', ourOnNoteMarkerContextMenu );
-		L.DomEvent.on ( noteObjects.marker, 'dragend', ourOnNoteMarkerDragEnd );
-		L.DomEvent.on ( noteObjects.marker, 'drag', ourOnNoteMarkerDrag );
+		window.L.DomEvent.on ( noteObjects.bullet, 'dragend', ourOnNoteBulletDragEnd );
+		window.L.DomEvent.on ( noteObjects.bullet, 'drag',	ourOnNoteBulletDrag );
+		window.L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	ourOnNoteBulletMouseEnter );
+		window.L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	ourOnNoteBulletMouseLeave );
+		window.L.DomEvent.on ( noteObjects.marker, 'contextmenu', ourOnNoteMarkerContextMenu );
+		window.L.DomEvent.on ( noteObjects.marker, 'dragend', ourOnNoteMarkerDragEnd );
+		window.L.DomEvent.on ( noteObjects.marker, 'drag', ourOnNoteMarkerDrag );
 	}
 }
 
@@ -543,10 +541,10 @@ function ourAddWayPoint ( wayPoint, letter ) {
 	'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
 
 	// a leaflet marker is created...
-	let marker = L.marker (
+	let marker = window.L.marker (
 		wayPoint.latLng,
 		{
-			icon : L.divIcon (
+			icon : window.L.divIcon (
 				{
 					iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
 					iconAnchor : [
@@ -569,14 +567,14 @@ function ourAddWayPoint ( wayPoint, letter ) {
 		-WAY_POINT_ICON_SIZE / TWO
 	];
 
-	L.DomEvent.on ( marker, 'contextmenu', ourOnWayPointContextMenu );
+	window.L.DomEvent.on ( marker, 'contextmenu', ourOnWayPointContextMenu );
 
 	// ... and added to the map...
 	marker.objId = wayPoint.objId;
 	ourAddTo ( wayPoint.objId, marker );
 
 	// ... and a dragend event listener is created
-	L.DomEvent.on ( marker, 'dragend', ourOnWayPointDragEnd );
+	window.L.DomEvent.on ( marker, 'dragend', ourOnWayPointDragEnd );
 }
 
 /**
@@ -596,21 +594,21 @@ function ourAddRoute ( routeObjId ) {
 	let polyline = theTravelNotesData.mapObjects.get ( routeObjId );
 
 	if ( ! theTravelNotesData.travel.readOnly ) {
-		L.DomEvent.on ( polyline, 'contextmenu', ourOnRouteContextMenu );
-		L.DomEvent.on ( polyline, 'mouseover', ourOnEditedRouteMouseOver );
+		window.L.DomEvent.on ( polyline, 'contextmenu', ourOnRouteContextMenu );
+		window.L.DomEvent.on ( polyline, 'mouseover', ourOnEditedRouteMouseOver );
 
 		let notesIterator = route.notes.iterator;
 		while ( ! notesIterator.done ) {
 			let layerGroup = theTravelNotesData.mapObjects.get ( notesIterator.value.objId );
 			let marker = layerGroup.getLayer ( layerGroup.markerId );
 			let bullet = layerGroup.getLayer ( layerGroup.bulletId );
-			L.DomEvent.on ( bullet, 'dragend', ourOnNoteBulletDragEnd );
-			L.DomEvent.on ( bullet, 'drag',	ourOnNoteBulletDrag );
-			L.DomEvent.on ( bullet, 'mouseenter',	ourOnNoteBulletMouseEnter );
-			L.DomEvent.on ( bullet, 'mouseleave',	ourOnNoteBulletMouseLeave );
-			L.DomEvent.on ( marker, 'contextmenu', ourOnNoteMarkerContextMenu );
-			L.DomEvent.on ( marker, 'dragend', ourOnNoteMarkerDragEnd );
-			L.DomEvent.on ( marker, 'drag', ourOnNoteMarkerDrag );
+			window.L.DomEvent.on ( bullet, 'dragend', ourOnNoteBulletDragEnd );
+			window.L.DomEvent.on ( bullet, 'drag',	ourOnNoteBulletDrag );
+			window.L.DomEvent.on ( bullet, 'mouseenter',	ourOnNoteBulletMouseEnter );
+			window.L.DomEvent.on ( bullet, 'mouseleave',	ourOnNoteBulletMouseLeave );
+			window.L.DomEvent.on ( marker, 'contextmenu', ourOnNoteMarkerContextMenu );
+			window.L.DomEvent.on ( marker, 'dragend', ourOnNoteMarkerDragEnd );
+			window.L.DomEvent.on ( marker, 'drag', ourOnNoteMarkerDrag );
 		}
 	}
 
@@ -747,7 +745,7 @@ class MapEditor	{
 	removeAllObjects ( ) {
 		theTravelNotesData.mapObjects.forEach (
 			mapObject => {
-				L.DomEvent.off ( mapObject );
+				window.L.DomEvent.off ( mapObject );
 				theTravelNotesData.map.removeLayer ( mapObject );
 			}
 		);
@@ -775,7 +773,7 @@ class MapEditor	{
 	addItineraryPointMarker ( objId, latLng ) {
 		ourAddTo (
 			objId,
-			L.circleMarker ( latLng, theConfig.itineraryPointMarker )
+			window.L.circleMarker ( latLng, theConfig.itineraryPointMarker )
 		);
 	}
 
@@ -813,10 +811,10 @@ class MapEditor	{
 				) > MARKER_BOUNDS_PRECISION;
 		}
 		if ( showGeometry ) {
-			ourAddTo ( objId, L.polyline ( geometry, theConfig.searchPointPolyline ) );
+			ourAddTo ( objId, window.L.polyline ( geometry, theConfig.searchPointPolyline ) );
 		}
 		else {
-			ourAddTo ( objId, L.circleMarker ( latLng, theConfig.searchPointMarker ) );
+			ourAddTo ( objId, window.L.circleMarker ( latLng, theConfig.searchPointMarker ) );
 		}
 	}
 
@@ -832,7 +830,7 @@ class MapEditor	{
 	addRectangle ( objId, bounds, properties ) {
 		ourAddTo (
 			objId,
-			L.rectangle ( bounds, properties )
+			window.L.rectangle ( bounds, properties )
 		);
 	}
 

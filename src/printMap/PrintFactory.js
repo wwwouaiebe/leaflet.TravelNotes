@@ -58,8 +58,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L */
-
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
@@ -516,10 +514,10 @@ function ourNewPrintFactory ( ) {
 		}
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
-			leafletLayer = L.tileLayer ( url );
+			leafletLayer = window.L.tileLayer ( url );
 		}
 		else {
-			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
+			leafletLayer = window.L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
 		leafletLayer.options.attribution =
@@ -546,7 +544,7 @@ function ourNewPrintFactory ( ) {
 		let notesMarkers = [];
 		myRoute.notes.forEach (
 			note => {
-				let icon = L.divIcon (
+				let icon = window.L.divIcon (
 					{
 						iconSize : [ note.iconWidth, note.iconHeight ],
 						iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
@@ -557,7 +555,7 @@ function ourNewPrintFactory ( ) {
 				);
 
 				const NOTE_Z_INDEX_OFFSET = 100;
-				let marker = L.marker (
+				let marker = window.L.marker (
 					note.iconLatLng,
 					{
 						zIndexOffset : NOTE_Z_INDEX_OFFSET,
@@ -609,13 +607,13 @@ function ourNewPrintFactory ( ) {
 
 		// adding entry point and exit point markers
 		layers.push (
-			L.circleMarker (
+			window.L.circleMarker (
 				[ view.entryPoint.lat, view.entryPoint.lng ],
 				theConfig.printRouteMap.entryPointMarker
 			)
 		);
 		layers.push (
-			L.circleMarker (
+			window.L.circleMarker (
 				[ view.exitPoint.lat, view.exitPoint.lng ],
 				theConfig.printRouteMap.exitPointMarker
 			)
@@ -625,7 +623,7 @@ function ourNewPrintFactory ( ) {
 		layers.push ( myRoutePolyline );
 
 		// creating the map
-		L.map (
+		window.L.map (
 			viewId,
 			{
 				attributionControl : true,
@@ -719,7 +717,7 @@ function ourNewPrintFactory ( ) {
 		while ( ! pointsIterator.done ) {
 			latLng.push ( pointsIterator.value.latLng );
 		}
-		myRoutePolyline = L.polyline (
+		myRoutePolyline = window.L.polyline (
 			latLng,
 			{
 				color : myRoute.color,
@@ -763,7 +761,7 @@ function ourNewPrintFactory ( ) {
 			/*
 			// Remain for debugging
 			myViews.forEach (
-				view => L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
+				view => window.L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
 			);
 			console.log ( 'views :' + myViews.length );
 			*/
