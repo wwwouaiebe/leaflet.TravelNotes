@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.7.0:
 		- issue #89 : Add elevation graph
+	- v2.1.0:
+		- issue #151 : Add itineraries elevations distances and ObjIds to the compressed data...
 Doc reviewed 20200801
 Tests ...
 */
