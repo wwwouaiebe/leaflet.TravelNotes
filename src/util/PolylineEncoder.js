@@ -56,7 +56,7 @@ const OUR_DOT5 = 0.5;
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourPython2Round
-@desc This function round a number in the same wat than Python 2
+@desc This function round a number in the same way than Python 2
 @param {number} value The value to round
 @return {number} The rounded value
 @private
@@ -67,35 +67,6 @@ const OUR_DOT5 = 0.5;
 function ourPython2Round ( value ) {
 	return Math.floor ( Math.abs ( value ) + OUR_DOT5 ) * ( ZERO <= value ? ONE : -ONE );
 }
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourEncode
-@desc Helper function for the polylineEncoder.encode ( ) method
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/* eslint-disable no-bitwise */
-function ourEncode ( current, previous, factor ) {
-	let currentRound = ourPython2Round ( current * factor );
-	let previousRound = ourPython2Round ( previous * factor );
-	let coordinate = currentRound - previousRound;
-	coordinate <<= ONE;
-	if ( ZERO > currentRound - previousRound ) {
-		coordinate = ~ coordinate;
-	}
-	let output = '';
-	while ( OUR_NUMBER32 <= coordinate ) {
-		output += String.fromCharCode ( ( OUR_NUMBER32 | ( coordinate & OUR_NUMBER31 ) ) + OUR_NUMBER63 );
-		coordinate >>= OUR_NUMBER5;
-	}
-	output += String.fromCharCode ( coordinate + OUR_NUMBER63 );
-	return output;
-}
-/* eslint-enable no-bitwise */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -179,9 +150,13 @@ Encoded polyline: _p~iF~ps|U_ulLnnqC_mqNvxq`@
 class polylineEncoder {
 
 	/*
-	encode an array of 2d coordinates to a string
+	encode an array of 2d or 3d coordinates to a string
+
 	@param {array.<array.<number>>} coordinates the coordinates to encode
 	@param {number} precision the precision used for decimals
+	@param {number} precision3D the precision used for decimals on the third dimension. If zero (default value )
+	the given array in the first parameter is 2d, otherwise 3d
+
 	@return {string} the encoded coordinates
 	*/
 
@@ -192,20 +167,40 @@ class polylineEncoder {
 
 		let factor = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision ) ? precision : OUR_NUMBER5 );
 		let factor3D = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision3D ) ? precision3D : TWO );
+
+		/* eslint-disable no-bitwise */
+		function encodeDelta ( current, previous, factorD ) {
+			let currentRound = ourPython2Round ( current * factorD );
+			let previousRound = ourPython2Round ( previous * factorD );
+			let coordinate = currentRound - previousRound;
+			coordinate <<= ONE;
+			if ( ZERO > currentRound - previousRound ) {
+				coordinate = ~ coordinate;
+			}
+			let outputDelta = '';
+			while ( OUR_NUMBER32 <= coordinate ) {
+				outputDelta += String.fromCharCode ( ( OUR_NUMBER32 | ( coordinate & OUR_NUMBER31 ) ) + OUR_NUMBER63 );
+				coordinate >>= OUR_NUMBER5;
+			}
+			outputDelta += String.fromCharCode ( coordinate + OUR_NUMBER63 );
+			return outputDelta;
+		}
+		/* eslint-enable no-bitwise */
+
 		let output =
-				ourEncode ( coordinates[ ZERO ][ ZERO ], ZERO, factor ) +
-				ourEncode ( coordinates[ ZERO ][ ONE ], ZERO, factor );
+				encodeDelta ( coordinates[ ZERO ][ ZERO ], ZERO, factor ) +
+				encodeDelta ( coordinates[ ZERO ][ ONE ], ZERO, factor );
 		if ( ZERO !== precision3D ) {
-			output += ourEncode ( coordinates[ ZERO ][ TWO ], ZERO, factor3D );
+			output += encodeDelta ( coordinates[ ZERO ][ TWO ], ZERO, factor3D );
 		}
 
 		for ( let coordCounter = ONE; coordCounter < coordinates.length; coordCounter ++ ) {
 			let currentCoord = coordinates[ coordCounter ];
 			let previousCoord = coordinates[ coordCounter - ONE ];
-			output += ourEncode ( currentCoord [ ZERO ], previousCoord [ ZERO ], factor );
-			output += ourEncode ( currentCoord [ ONE ], previousCoord [ ONE ], factor );
+			output += encodeDelta ( currentCoord [ ZERO ], previousCoord [ ZERO ], factor );
+			output += encodeDelta ( currentCoord [ ONE ], previousCoord [ ONE ], factor );
 			if ( ZERO !== precision3D ) {
-				output += ourEncode ( currentCoord [ TWO ], previousCoord [ TWO ], factor3D );
+				output += encodeDelta ( currentCoord [ TWO ], previousCoord [ TWO ], factor3D );
 			}
 		}
 
@@ -214,9 +209,12 @@ class polylineEncoder {
 
 	/*
 	decode a string into an array of 2d or 3d coordinates
+
 	@param {string } encodedString the string to decode
 	@param {number} precision the precision used for decimals
-	@param {boolean} is3D true when the encoded polyline is a 3d polyline
+	@param {number} precision3D the precision used for decimals on the third dimension. If zero (default value )
+	the given string in the first parameter encode 2d coordinates, otherwise 3d coordinates
+
 	@return {array.<array.<number>>} the decoded coordinates
 	*/
 
@@ -231,7 +229,7 @@ class polylineEncoder {
 		let factor3D = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision3D ) ? precision3D : TWO );
 
 		/* eslint-disable no-bitwise */
-		while ( index < encodedString.length ) {
+		function decodeDelta ( ) {
 			let byte = null;
 			let shift = ZERO;
 			let result = ZERO;
@@ -240,36 +238,21 @@ class polylineEncoder {
 				result |= ( byte & OUR_NUMBER31 ) << shift;
 				shift += OUR_NUMBER5;
 			} while ( OUR_NUMBER32 <= byte );
-			let deltaLat = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			lat += deltaLat;
+			return ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
+		}
+		/* eslint-enable no-bitwise */
 
-			shift = ZERO;
-			result = ZERO;
-			do {
-				byte = encodedString.charCodeAt ( index ++ ) - OUR_NUMBER63;
-				result |= ( byte & OUR_NUMBER31 ) << shift;
-				shift += OUR_NUMBER5;
-			} while ( OUR_NUMBER32 <= byte );
-			let deltaLon = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			lng += deltaLon;
-
+		while ( index < encodedString.length ) {
+			lat += decodeDelta ( );
+			lng += decodeDelta ( );
 			if ( ZERO === precision3D ) {
 				coordinates.push ( [ lat / factor, lng / factor ] );
 			}
 			else {
-				shift = ZERO;
-				result = ZERO;
-				do {
-					byte = encodedString.charCodeAt ( index ++ ) - OUR_NUMBER63;
-					result |= ( byte & OUR_NUMBER31 ) << shift;
-					shift += OUR_NUMBER5;
-				} while ( OUR_NUMBER32 <= byte );
-				let deltaEle = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-				elev += deltaEle;
+				elev += decodeDelta ( );
 				coordinates.push ( [ lat / factor, lng / factor, elev / factor3D ] );
 			}
 		}
-		/* eslint-enable no-bitwise */
 
 		return coordinates;
 	}

@@ -102,7 +102,7 @@ class SphericalTrigonometry {
 
 	*/
 
-	getArcFromSummitArcArc ( summit, arc1, arc2 ) {
+	arcFromSummitArcArc ( summit, arc1, arc2 ) {
 		return Math.acos (
 			( Math.cos ( arc1 ) * Math.cos ( arc2 ) ) +
 			( Math.sin ( arc1 ) * Math.sin ( arc2 ) * Math.cos ( summit ) )

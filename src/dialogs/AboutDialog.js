@@ -100,7 +100,6 @@ function myNewAboutDialog ( ) {
 		'<p>Version : ' + theCurrentVersion + '.' +
 		'<p>This program uses:' +
 		' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
-		' <a href="https://github.com/mapbox/polyline" target="_blank">mapbox/polyline</a>,' +
 		' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
 		'Project-OSRM/osrm-text-instructions</a> and ' +
 		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
