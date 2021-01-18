@@ -112,9 +112,15 @@ function ourNewGraphHopperRouteProvider ( ) {
 		myRoute.itinerary.descent = ZERO;
 		response.paths.forEach (
 			path => {
-				path.points = thePolylineEncoder.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, TWO );
+				path.points = thePolylineEncoder.decode (
+					path.points,
+					[ GRAPHHOPPER_LAT_LNG_ROUND, GRAPHHOPPER_LAT_LNG_ROUND, TWO ]
+				);
 				/* eslint-disable-next-line camelcase */
-				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, TWO );
+				path.snapped_waypoints = thePolylineEncoder.decode (
+					path.snapped_waypoints,
+					[ GRAPHHOPPER_LAT_LNG_ROUND, GRAPHHOPPER_LAT_LNG_ROUND, TWO ]
+				);
 				let itineraryPoints = [];
 				for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
 					let itineraryPoint = window.TaN.itineraryPoint;

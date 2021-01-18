@@ -98,13 +98,16 @@ function ourNewMapboxRouteProvider ( ) {
 		myRoute.itinerary.ascent = ZERO;
 		myRoute.itinerary.descent = ZERO;
 		response.routes [ ZERO ].geometry =
-			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, MAPBOX_LAT_LNG_ROUND );
+			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, [ MAPBOX_LAT_LNG_ROUND, MAPBOX_LAT_LNG_ROUND ] );
 		response.routes [ ZERO ].legs.forEach (
 			function ( leg ) {
 				let lastPointWithDistance = ZERO;
 				leg.steps.forEach (
 					function ( step ) {
-						step.geometry = thePolylineEncoder.decode ( step.geometry, MAPBOX_LAT_LNG_ROUND );
+						step.geometry = thePolylineEncoder.decode (
+							step.geometry,
+							[ MAPBOX_LAT_LNG_ROUND, MAPBOX_LAT_LNG_ROUND ]
+						);
 						if (
 							'arrive' === step.maneuver.type
 							&&

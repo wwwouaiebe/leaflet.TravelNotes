@@ -85,8 +85,10 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 		if ( ! response.routes || ZERO === response.routes.length ) {
 			returnOnError ( new Error ( 'Route not found' ) );
 		}
-		response.routes [ ZERO ].geometry =
-			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OPEN_ROUTE_LAT_LNG_ROUND, TWO );
+		response.routes [ ZERO ].geometry = thePolylineEncoder.decode (
+			response.routes [ ZERO ].geometry,
+			[ OPEN_ROUTE_LAT_LNG_ROUND, OPEN_ROUTE_LAT_LNG_ROUND, TWO ]
+		);
 		myRoute.itinerary.itineraryPoints.removeAll ( );
 		myRoute.itinerary.maneuvers.removeAll ( );
 		myRoute.itinerary.hasProfile = true;

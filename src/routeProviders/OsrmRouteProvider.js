@@ -95,16 +95,20 @@ function ourNewOsrmRouteProvider ( ) {
 		myRoute.itinerary.ascent = ZERO;
 		myRoute.itinerary.descent = ZERO;
 
-		response.routes [ ZERO ].geometry =
-			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OSRM_ROUTE_LAT_LNG_ROUND );
+		response.routes [ ZERO ].geometry = thePolylineEncoder.decode (
+			response.routes [ ZERO ].geometry,
+			[ OSRM_ROUTE_LAT_LNG_ROUND, OSRM_ROUTE_LAT_LNG_ROUND ]
+		);
 
 		response.routes [ ZERO ].legs.forEach (
 			function ( leg ) {
 				let lastPointWithDistance = ZERO;
 				leg.steps.forEach (
 					function ( step ) {
-						step.geometry = thePolylineEncoder.decode ( step.geometry, OSRM_ROUTE_LAT_LNG_ROUND );
-
+						step.geometry = thePolylineEncoder.decode (
+							step.geometry,
+							[ OSRM_ROUTE_LAT_LNG_ROUND, OSRM_ROUTE_LAT_LNG_ROUND ]
+						);
 						let maneuver = window.TaN.maneuver;
 						maneuver.iconName =
 							ICON_LIST [ step.maneuver.type ]

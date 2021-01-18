@@ -131,7 +131,7 @@ function ourNewMapzenValhallaRouteProvider ( ) {
 
 		response.trip.legs.forEach (
 			leg => {
-				leg.shape = thePolylineEncoder.decode ( leg.shape, MAPZEN_LAT_LNG_ROUND );
+				leg.shape = thePolylineEncoder.decode ( leg.shape, [ MAPZEN_LAT_LNG_ROUND, MAPZEN_LAT_LNG_ROUND ] );
 				let itineraryPoints = [];
 				for ( let shapePointCounter = ZERO; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
 					let itineraryPoint = window.TaN.itineraryPoint;

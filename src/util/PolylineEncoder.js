@@ -218,15 +218,13 @@ class polylineEncoder {
 	@return {array.<array.<number>>} the decoded coordinates
 	*/
 
-	decode ( encodedString, precision, precision3D = ZERO ) {
+	decode ( encodedString, precisions ) {
+		let dimensions = precisions.length;
 
 		let index = ZERO;
-		let lat = ZERO;
-		let lng = ZERO;
-		let elev = ZERO;
-		let coordinates = [];
-		let factor = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision ) ? precision : OUR_NUMBER5 );
-		let factor3D = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision3D ) ? precision3D : TWO );
+		let allDecodedValues = [];
+		let factors = Array.from ( precisions, precision => Math.pow ( OUR_NUMBER10, precision ) );
+		let tmpValues = new Array ( dimensions ).fill ( ZERO );
 
 		/* eslint-disable no-bitwise */
 		function decodeDelta ( ) {
@@ -243,18 +241,15 @@ class polylineEncoder {
 		/* eslint-enable no-bitwise */
 
 		while ( index < encodedString.length ) {
-			lat += decodeDelta ( );
-			lng += decodeDelta ( );
-			if ( ZERO === precision3D ) {
-				coordinates.push ( [ lat / factor, lng / factor ] );
+			let decodedValues = new Array ( dimensions ).fill ( ZERO );
+			for ( let coordCounter = 0; coordCounter < dimensions; coordCounter ++ ) {
+				tmpValues [ coordCounter ] += decodeDelta ( );
+				decodedValues [ coordCounter ] = tmpValues [ coordCounter ] / factors [ coordCounter ];
 			}
-			else {
-				elev += decodeDelta ( );
-				coordinates.push ( [ lat / factor, lng / factor, elev / factor3D ] );
-			}
+			allDecodedValues.push ( decodedValues );
 		}
 
-		return coordinates;
+		return allDecodedValues;
 	}
 }
 
