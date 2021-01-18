@@ -90,10 +90,8 @@ function ourNewFileCompactor ( ) {
 			}
 		);
 		compressedItineraryPoints.latLngs =
-			thePolylineEncoder.encode ( compressedItineraryPoints.latLngs, LAT_LNG.fixed );
+			thePolylineEncoder.encode ( compressedItineraryPoints.latLngs, [ LAT_LNG.fixed, LAT_LNG.fixed ] );
 		routeObject.itinerary.itineraryPoints = compressedItineraryPoints;
-
-		// routeObject.itinerary.maneuvers = [];
 	}
 
 	/**
