@@ -316,8 +316,8 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'src/html/',
-						src: ['TravelNotesRoadbook.html'],
-						dest: 'debug/'
+						src: 'TravelNotesRoadbookDebug.html',
+						rename: function ( ){return 'debug/TravelNotesRoadbook.html';}
 					},
 					{
 						expand: true,
