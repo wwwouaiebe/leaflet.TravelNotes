@@ -304,7 +304,9 @@ function ourNewMapboxRouteProvider ( ) {
 		set providerKey ( ProviderKey ) { myProviderKey = ProviderKey; },
 
 		get userLanguage ( ) { return myUserLanguage; },
-		set userLanguage ( UserLanguage ) { myUserLanguage = UserLanguage; }
+		set userLanguage ( UserLanguage ) {
+			myUserLanguage = theOsrmTextInstructions.loadLanguage ( UserLanguage );
+		}
 	};
 }
 

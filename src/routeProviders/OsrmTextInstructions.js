@@ -53,17 +53,42 @@ Don't rename variables for compatibility with osrm-text-instructions
 
 import { ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
-/*
-Possible language supported by osrm-text-instructions:
-'ar', 'da', 'de', 'en', 'eo', 'es', 'es-ES', 'fi', 'fr', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'my',
-'nl', 'no', 'pl', 'pt-BR', 'pt-PT', 'ro', 'ru', 'sl', 'sv', 'tr', 'uk', 'vi', 'yo', 'zh-Hans';
-
-TravelNotes uses only 'en' and 'fr'. If needed add others languages to supported codes
-*/
+const OSRM_LANGUAGES = [
+	'ar',
+	'da',
+	'de',
+	'en',
+	'eo',
+	'es',
+	'es-ES',
+	'fi',
+	'fr',
+	'he',
+	'hu',
+	'id',
+	'it',
+	'ja',
+	'ko',
+	'my',
+	'nl',
+	'no',
+	'pl',
+	'pt-BR',
+	'pt-PT',
+	'ro',
+	'ru',
+	'sl',
+	'sv',
+	'tr',
+	'uk',
+	'vi',
+	'yo',
+	'zh-Hans'
+];
 
 let languages =
 {
-	supportedCodes : [ 'en', 'fr' ],
+	supportedCodes : [ ],
 	instructions : {},
 	grammars : {},
 	abbreviations : {}
@@ -72,26 +97,10 @@ let languages =
 // working only with v5
 const version = 'v5';
 
-// reference to avoid rewriting ourOsrmTextInstructions
+// references to avoid rewriting ourOsrmTextInstructions
 let instructions = languages.instructions;
 let grammars = languages.grammars;
 let abbreviations = languages.abbreviations;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourVerifyLanguage
-@desc simple function to verify that the language is loaded and avoid crashes
-@param {string} language  the language to test
-@return {string} the verified language or 'en' if language not loaded
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourVerifyLanguage ( language ) {
-	return ( ! language || NOT_FOUND === languages.supportedCodes.indexOf ( language ) ) ? 'en' : language;
-}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -103,7 +112,7 @@ function ourVerifyLanguage ( language ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourDirectionFromDegree ( lng, degree ) {
+function ourDirectionFromDegree ( language, degree ) {
 	const NNE = 20;
 	const ENE = 70;
 	const ESE = 110;
@@ -114,7 +123,6 @@ function ourDirectionFromDegree ( lng, degree ) {
 	const NNW = 340;
 	const NORTH = 360;
 
-	let language = ourVerifyLanguage ( lng );
 	if ( ! degree && ZERO !== degree ) {
 		return '';
 	}
@@ -153,43 +161,20 @@ function ourDirectionFromDegree ( lng, degree ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourLoadJsons
-@desc load the instructions grammars and abbreviations from the json files. Json files are installed by grunt.js from
-node_modules.
-Warning! folders are renamed by grunt.js to avoid multiple fetchJson and parseJson methods
+@function ourFetchJson
+@desc ...
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourLoadJsons ( ) {
-
-	async function parseJson ( data, lngCode, response ) {
-		await response.json ( )
-			.then ( result => { languages [ data ] [ lngCode ] = result; } );
+async function ourFetchJson ( data, lngCode ) {
+	let response = await fetch ( 'TravelNotesProviders/languages/' + data + '/' + lngCode + '.json' );
+	if ( HTTP_STATUS_OK === response.status && response.ok ) {
+		let result = await response.json ( );
+		languages [ data ] [ lngCode ] = result;
 	}
-
-	async function fetchJson ( data, lngCode ) {
-		await fetch ( 'TravelNotesProviders/languages/' + data + '/' + lngCode + '.json' )
-			.then (
-				response => {
-					if ( HTTP_STATUS_OK === response.status && response.ok ) {
-						parseJson ( data, lngCode, response );
-					}
-				}
-			);
-	}
-
-	languages.supportedCodes.forEach (
-		lngCode => {
-			fetchJson ( 'instructions', lngCode );
-			fetchJson ( 'grammars', lngCode );
-			fetchJson ( 'abbreviations', lngCode );
-		}
-	);
 }
-
-ourLoadJsons ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -202,245 +187,250 @@ ourLoadJsons ( );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-const ourOsrmTextInstructions = Object.freeze (
-	{
-		capitalizeFirstLetter : function ( lng, string ) {
-			let language = ourVerifyLanguage ( lng );
-			return string.charAt ( ZERO ).toLocaleUpperCase ( language ) + string.slice ( ONE );
-		},
-
-		ordinalize : function ( lng, number ) {
-			let language = ourVerifyLanguage ( lng );
-			return instructions[ language ][ version ].constants.ordinalize[ number.toString () ] || '';
-		},
-
-		directionFromDegree : function ( lng, degree ) {
-			return ourDirectionFromDegree ( lng, degree );
-		},
-
-		laneConfig : function ( step ) {
-			if ( ! step.intersections || ! step.intersections[ ZERO ].lanes ) {
-				throw new Error ( 'No lanes object' );
-			}
-			let config = [];
-			let currentLaneValidity = null;
-			step.intersections[ ZERO ].lanes.forEach ( function ( lane ) {
-				if ( null === currentLaneValidity || currentLaneValidity !== lane.valid ) {
-					if ( lane.valid ) {
-						config.push ( 'o' );
-					}
-					else {
-						config.push ( 'x' );
-					}
-					currentLaneValidity = lane.valid;
-				}
-			} );
-			return config.join ( '' );
-		},
-
-		/* eslint-disable-next-line complexity */
-		getWayName : function ( lng, step, options ) {
-			let classes = options ? options.classes || [] : [];
-			if ( 'object' !== typeof step ) {
-				throw new Error ( 'step must be an Object' );
-			}
-			let language = ourVerifyLanguage ( lng );
-			if ( ! Array.isArray ( classes ) ) {
-				throw new Error ( 'classes must be an Array or undefined' );
-			}
-			let wayName = '';
-			let stepName = step.name || '';
-			let ref = ( step.ref || '' ).split ( ';' )[ ZERO ];
-			if ( stepName === step.ref ) {
-				stepName = '';
-			}
-			stepName = stepName.replace ( ' (' + step.ref + ')', '' );
-			let wayMotorway = NOT_FOUND !== classes.indexOf ( 'motorway' );
-			if ( stepName && ref && stepName !== ref && ! wayMotorway ) {
-				let phrase = instructions[ language ][ version ].phrase[ 'name and ref' ] ||
-					instructions.en[ version ].phrase[ 'name and ref' ];
-				wayName = this.tokenize ( language, phrase, {
-					name : stepName,
-					ref : ref
-				}, options );
-			}
-			else if ( stepName && ref && wayMotorway && ( /\d/ ).test ( ref ) ) {
-				wayName = options && options.formatToken ? options.formatToken ( 'ref', ref ) : ref;
-			}
-			else if ( ! stepName && ref ) {
-				wayName = options && options.formatToken ? options.formatToken ( 'ref', ref ) : ref;
-			}
-			else {
-				wayName = options && options.formatToken ? options.formatToken ( 'name', stepName ) : stepName;
-			}
-			return wayName;
-		},
-
-		/* eslint-disable-next-line complexity, max-statements */
-		compile : function ( lng, step, opts ) {
-			let language = ourVerifyLanguage ( lng );
-			if ( ! step.maneuver ) {
-				throw new Error ( 'No step maneuver provided' );
-			}
-			let options = opts || {};
-			let type = step.maneuver.type;
-			let modifier = step.maneuver.modifier;
-			let mode = step.mode;
-			let side = step.driving_side;
-			if ( ! type ) {
-				throw new Error ( 'Missing step maneuver type' );
-			}
-			if ( 'depart' !== type && 'arrive' !== type && ! modifier ) {
-				throw new Error ( 'Missing step maneuver modifier' );
-			}
-			if ( ! instructions[ language ][ version ][ type ] ) {
-				/* eslint-disable-next-line no-console */
-				console.log ( 'Encountered unknown instruction type: ' + type );
-				type = 'turn';
-			}
-			let instructionObject = null;
-			if ( instructions[ language ][ version ].modes[ mode ] ) {
-				instructionObject = instructions[ language ][ version ].modes[ mode ];
-			}
-			else {
-				let omitSide = 'off ramp' === type && ZERO <= modifier.indexOf ( side );
-				if ( instructions[ language ][ version ][ type ][ modifier ] && ! omitSide ) {
-					instructionObject = instructions[ language ][ version ][ type ][ modifier ];
-				}
-				else {
-					instructionObject = instructions[ language ][ version ][ type ].default;
-				}
-			}
-			let laneInstruction = null;
-			switch ( type ) {
-			case 'use lane' :
-				laneInstruction = instructions[ language ][ version ].constants.lanes[ this.laneConfig ( step ) ];
-				if ( ! laneInstruction ) {
-					instructionObject = instructions[ language ][ version ][ 'use lane' ].no_lanes;
-				}
-				break;
-			case 'rotary' :
-			case 'roundabout' :
-				if ( step.rotary_name && step.maneuver.exit && instructionObject.name_exit ) {
-					instructionObject = instructionObject.name_exit;
-				}
-				else if ( step.rotary_name && instructionObject.name ) {
-					instructionObject = instructionObject.name;
-				}
-				else if ( step.maneuver.exit && instructionObject.exit ) {
-					instructionObject = instructionObject.exit;
-				}
-				else {
-					instructionObject = instructionObject.default;
-				}
-				break;
-			default :
-			}
-			let wayName = this.getWayName ( language, step, options );
-			let instruction = instructionObject.default;
-			if ( step.destinations && step.exits && instructionObject.exit_destination ) {
-				instruction = instructionObject.exit_destination;
-			}
-			else if ( step.destinations && instructionObject.destination ) {
-				instruction = instructionObject.destination;
-			}
-			else if ( step.exits && instructionObject.exit ) {
-				instruction = instructionObject.exit;
-			}
-			else if ( wayName && instructionObject.name ) {
-				instruction = instructionObject.name;
-			}
-			else if ( options.waypointName && instructionObject.named ) {
-				instruction = instructionObject.named;
-			}
-			let destinations = step.destinations && step.destinations.split ( ': ' );
-			let destinationRef = destinations && destinations[ ZERO ].split ( ',' )[ ZERO ];
-			let destination = destinations && destinations[ ONE ] && destinations[ ONE ].split ( ',' )[ ZERO ];
-			let firstDestination = '';
-			if ( destination && destinationRef ) {
-				firstDestination = destinationRef + ': ' + destination;
-			}
-			else {
-				firstDestination = destinationRef || destination || '';
-			}
-
-			let nthWaypoint =
-				ZERO <= options.legIndex && options.legIndex !== options.legCount - ONE
-					?
-					this.ordinalize ( language, options.legIndex + ONE )
-					:
-					'';
-			let replaceTokens = {
-				/* eslint-disable-next-line camelcase */
-				way_name : wayName,
-				destination : firstDestination,
-				exit : ( step.exits || '' ).split ( ';' )[ ZERO ],
-				/* eslint-disable-next-line camelcase */
-				exit_number : this.ordinalize ( language, step.maneuver.exit || ONE ),
-				/* eslint-disable-next-line camelcase */
-				rotary_name : step.rotary_name,
-				/* eslint-disable-next-line camelcase */
-				lane_instruction : laneInstruction,
-				modifier : instructions[ language ][ version ].constants.modifier[ modifier ],
-				direction : this.directionFromDegree ( language, step.maneuver.bearing_after ),
-				nth : nthWaypoint,
-				/* eslint-disable-next-line camelcase */
-				waypoint_name : options.waypointName
-			};
-			return this.tokenize ( language, instruction, replaceTokens, options );
-		},
-
-		grammarize : function ( lng, nameToProceed, grammar ) {
-			let language = ourVerifyLanguage ( lng );
-			if ( grammar && grammars && grammars[ language ] && grammars[ language ][ version ] ) {
-				let rules = grammars[ language ][ version ][ grammar ];
-				if ( rules ) {
-					let nameWithSpace = ' ' + nameToProceed + ' ';
-					let flags = grammars[ language ].meta.regExpFlags || '';
-					rules.forEach ( function ( rule ) {
-						let re = new RegExp ( rule[ ZERO ], flags );
-						nameWithSpace = nameWithSpace.replace ( re, rule[ ONE ] );
-					} );
-
-					return nameWithSpace.trim ();
-				}
-			}
-			return nameToProceed;
-		},
-
-		abbreviations : abbreviations,
-
-		/* eslint-disable-next-line max-params */
-		tokenize : function ( lng, instruction, tokens, options ) {
-			let language = ourVerifyLanguage ( lng );
-			let that = this;
-			let startedWithToken = false;
-			let output = instruction.replace (
-				/* eslint-disable-next-line max-params */
-				/\{(\w+)(?::(\w+))?\}/g, function ( token, tag, grammar, offset ) {
-					let value = tokens[ tag ];
-					if ( 'undefined' === typeof value ) {
-						return token;
-					}
-					value = that.grammarize ( language, value, grammar );
-					if ( ZERO === offset && instructions[ language ].meta.capitalizeFirstLetter ) {
-						startedWithToken = true;
-						value = that.capitalizeFirstLetter ( language, value );
-					}
-					if ( options && options.formatToken ) {
-						value = options.formatToken ( tag, value );
-					}
-					return value;
-				}
-			)
-				.replace ( / {2}/g, ' ' );
-			if ( ! startedWithToken && instructions[ language ].meta.capitalizeFirstLetter ) {
-				return this.capitalizeFirstLetter ( language, output );
-			}
-			return output;
-		}
+class OsrmTextInstructions 	{
+	constructor ( ) {
+		this.abbreviations = abbreviations;
+		Object.freeze ( this );
 	}
-);
+
+	loadLanguage ( lng ) {
+		let language = NOT_FOUND === OSRM_LANGUAGES.indexOf ( lng ) ? 'en' : lng;
+		[ 'instructions', 'grammars', 'abbreviations' ].forEach (
+			data => ourFetchJson ( data, language )
+		);
+		return language;
+	}
+
+	capitalizeFirstLetter ( language, string ) {
+		return string.charAt ( ZERO ).toLocaleUpperCase ( language ) + string.slice ( ONE );
+	}
+
+	ordinalize ( language, number ) {
+		return instructions[ language ][ version ].constants.ordinalize[ number.toString () ] || '';
+	}
+
+	directionFromDegree ( language, degree ) {
+		return ourDirectionFromDegree ( language, degree );
+	}
+
+	laneConfig ( step ) {
+		if ( ! step.intersections || ! step.intersections[ ZERO ].lanes ) {
+			throw new Error ( 'No lanes object' );
+		}
+		let config = [];
+		let currentLaneValidity = null;
+		step.intersections[ ZERO ].lanes.forEach ( function ( lane ) {
+			if ( null === currentLaneValidity || currentLaneValidity !== lane.valid ) {
+				if ( lane.valid ) {
+					config.push ( 'o' );
+				}
+				else {
+					config.push ( 'x' );
+				}
+				currentLaneValidity = lane.valid;
+			}
+		} );
+		return config.join ( '' );
+	}
+
+	/* eslint-disable-next-line complexity */
+	getWayName ( language, step, options ) {
+		let classes = options ? options.classes || [] : [];
+		if ( 'object' !== typeof step ) {
+			throw new Error ( 'step must be an Object' );
+		}
+		if ( ! Array.isArray ( classes ) ) {
+			throw new Error ( 'classes must be an Array or undefined' );
+		}
+		let wayName = '';
+		let stepName = step.name || '';
+		let ref = ( step.ref || '' ).split ( ';' )[ ZERO ];
+		if ( stepName === step.ref ) {
+			stepName = '';
+		}
+		stepName = stepName.replace ( ' (' + step.ref + ')', '' );
+		let wayMotorway = NOT_FOUND !== classes.indexOf ( 'motorway' );
+		if ( stepName && ref && stepName !== ref && ! wayMotorway ) {
+			let phrase = instructions[ language ][ version ].phrase[ 'name and ref' ] ||
+				instructions.en[ version ].phrase[ 'name and ref' ];
+			wayName = this.tokenize ( language, phrase, {
+				name : stepName,
+				ref : ref
+			}, options );
+		}
+		else if ( stepName && ref && wayMotorway && ( /\d/ ).test ( ref ) ) {
+			wayName = options && options.formatToken ? options.formatToken ( 'ref', ref ) : ref;
+		}
+		else if ( ! stepName && ref ) {
+			wayName = options && options.formatToken ? options.formatToken ( 'ref', ref ) : ref;
+		}
+		else {
+			wayName = options && options.formatToken ? options.formatToken ( 'name', stepName ) : stepName;
+		}
+		return wayName;
+	}
+
+	/* eslint-disable-next-line complexity, max-statements */
+	compile ( language, step, opts ) {
+		if ( ! step.maneuver ) {
+			throw new Error ( 'No step maneuver provided' );
+		}
+		let options = opts || {};
+		let type = step.maneuver.type;
+		let modifier = step.maneuver.modifier;
+		let mode = step.mode;
+		let side = step.driving_side;
+		if ( ! type ) {
+			throw new Error ( 'Missing step maneuver type' );
+		}
+		if ( 'depart' !== type && 'arrive' !== type && ! modifier ) {
+			throw new Error ( 'Missing step maneuver modifier' );
+		}
+		if ( ! instructions[ language ][ version ][ type ] ) {
+			/* eslint-disable-next-line no-console */
+			console.log ( 'Encountered unknown instruction type: ' + type );
+			type = 'turn';
+		}
+		let instructionObject = null;
+		if ( instructions[ language ][ version ].modes[ mode ] ) {
+			instructionObject = instructions[ language ][ version ].modes[ mode ];
+		}
+		else {
+			let omitSide = 'off ramp' === type && ZERO <= modifier.indexOf ( side );
+			if ( instructions[ language ][ version ][ type ][ modifier ] && ! omitSide ) {
+				instructionObject = instructions[ language ][ version ][ type ][ modifier ];
+			}
+			else {
+				instructionObject = instructions[ language ][ version ][ type ].default;
+			}
+		}
+		let laneInstruction = null;
+		switch ( type ) {
+		case 'use lane' :
+			laneInstruction = instructions[ language ][ version ].constants.lanes[ this.laneConfig ( step ) ];
+			if ( ! laneInstruction ) {
+				instructionObject = instructions[ language ][ version ][ 'use lane' ].no_lanes;
+			}
+			break;
+		case 'rotary' :
+		case 'roundabout' :
+			if ( step.rotary_name && step.maneuver.exit && instructionObject.name_exit ) {
+				instructionObject = instructionObject.name_exit;
+			}
+			else if ( step.rotary_name && instructionObject.name ) {
+				instructionObject = instructionObject.name;
+			}
+			else if ( step.maneuver.exit && instructionObject.exit ) {
+				instructionObject = instructionObject.exit;
+			}
+			else {
+				instructionObject = instructionObject.default;
+			}
+			break;
+		default :
+		}
+		let wayName = this.getWayName ( language, step, options );
+		let instruction = instructionObject.default;
+		if ( step.destinations && step.exits && instructionObject.exit_destination ) {
+			instruction = instructionObject.exit_destination;
+		}
+		else if ( step.destinations && instructionObject.destination ) {
+			instruction = instructionObject.destination;
+		}
+		else if ( step.exits && instructionObject.exit ) {
+			instruction = instructionObject.exit;
+		}
+		else if ( wayName && instructionObject.name ) {
+			instruction = instructionObject.name;
+		}
+		else if ( options.waypointName && instructionObject.named ) {
+			instruction = instructionObject.named;
+		}
+		let destinations = step.destinations && step.destinations.split ( ': ' );
+		let destinationRef = destinations && destinations[ ZERO ].split ( ',' )[ ZERO ];
+		let destination = destinations && destinations[ ONE ] && destinations[ ONE ].split ( ',' )[ ZERO ];
+		let firstDestination = '';
+		if ( destination && destinationRef ) {
+			firstDestination = destinationRef + ': ' + destination;
+		}
+		else {
+			firstDestination = destinationRef || destination || '';
+		}
+
+		let nthWaypoint =
+			ZERO <= options.legIndex && options.legIndex !== options.legCount - ONE
+				?
+				this.ordinalize ( language, options.legIndex + ONE )
+				:
+				'';
+		let replaceTokens = {
+			/* eslint-disable-next-line camelcase */
+			way_name : wayName,
+			destination : firstDestination,
+			exit : ( step.exits || '' ).split ( ';' )[ ZERO ],
+			/* eslint-disable-next-line camelcase */
+			exit_number : this.ordinalize ( language, step.maneuver.exit || ONE ),
+			/* eslint-disable-next-line camelcase */
+			rotary_name : step.rotary_name,
+			/* eslint-disable-next-line camelcase */
+			lane_instruction : laneInstruction,
+			modifier : instructions[ language ][ version ].constants.modifier[ modifier ],
+			direction : this.directionFromDegree ( language, step.maneuver.bearing_after ),
+			nth : nthWaypoint,
+			/* eslint-disable-next-line camelcase */
+			waypoint_name : options.waypointName
+		};
+		return this.tokenize ( language, instruction, replaceTokens, options );
+	}
+
+	grammarize ( language, nameToProceed, grammar ) {
+		if ( grammar && grammars && grammars[ language ] && grammars[ language ][ version ] ) {
+			let rules = grammars[ language ][ version ][ grammar ];
+			if ( rules ) {
+				let nameWithSpace = ' ' + nameToProceed + ' ';
+				let flags = grammars[ language ].meta.regExpFlags || '';
+				rules.forEach ( function ( rule ) {
+					let re = new RegExp ( rule[ ZERO ], flags );
+					nameWithSpace = nameWithSpace.replace ( re, rule[ ONE ] );
+				} );
+
+				return nameWithSpace.trim ();
+			}
+		}
+		return nameToProceed;
+	}
+
+	/* eslint-disable-next-line max-params */
+	tokenize ( language, instruction, tokens, options ) {
+		let that = this;
+		let startedWithToken = false;
+		let output = instruction.replace (
+			/* eslint-disable-next-line max-params */
+			/\{(\w+)(?::(\w+))?\}/g, function ( token, tag, grammar, offset ) {
+				let value = tokens[ tag ];
+				if ( 'undefined' === typeof value ) {
+					return token;
+				}
+				value = that.grammarize ( language, value, grammar );
+				if ( ZERO === offset && instructions[ language ].meta.capitalizeFirstLetter ) {
+					startedWithToken = true;
+					value = that.capitalizeFirstLetter ( language, value );
+				}
+				if ( options && options.formatToken ) {
+					value = options.formatToken ( tag, value );
+				}
+				return value;
+			}
+		)
+			.replace ( / {2}/g, ' ' );
+		if ( ! startedWithToken && instructions[ language ].meta.capitalizeFirstLetter ) {
+			return this.capitalizeFirstLetter ( language, output );
+		}
+		return output;
+	}
+}
+
+const ourOsrmTextInstructions = new OsrmTextInstructions ( );
 
 export {
 

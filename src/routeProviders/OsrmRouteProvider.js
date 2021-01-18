@@ -304,7 +304,9 @@ function ourNewOsrmRouteProvider ( ) {
 		set providerKey ( ProviderKey ) { },
 
 		get userLanguage ( ) { return myUserLanguage; },
-		set userLanguage ( UserLanguage ) { myUserLanguage = UserLanguage; }
+		set userLanguage ( UserLanguage ) {
+			myUserLanguage = theOsrmTextInstructions.loadLanguage ( UserLanguage );
+		}
 	};
 }
 

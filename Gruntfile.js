@@ -185,19 +185,19 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/abbreviations/',
-						src: ['en.json', 'fr.json'],
+						src: ['*.json'],
 						dest: 'dist/TravelNotesProviders/languages/abbreviations/'
 					},
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/translations/',
-						src: ['en.json', 'fr.json'],
+						src: ['*.json'],
 						dest: 'dist/TravelNotesProviders/languages/instructions/'
 					},
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/grammar/',
-						src: ['fr.json'],
+						src: ['*.json'],
 						dest: 'dist/TravelNotesProviders/languages/grammars/'
 					},
 					// TravelNotes
@@ -275,13 +275,13 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/abbreviations/',
-						src: ['en.json', 'fr.json'],
+						src: ['fr.json', 'en.json'],
 						dest: 'gh-page/TravelNotesProviders/languages/abbreviations/'
 					},
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/translations/',
-						src: ['en.json', 'fr.json'],
+						src: ['fr.json', 'en.json'],
 						dest: 'gh-page/TravelNotesProviders/languages/instructions/'
 					},
 					{
@@ -360,19 +360,19 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/abbreviations/',
-						src: ['en.json', 'fr.json'],
+						src: ['*.json'],
 						dest: 'debug/TravelNotesProviders/languages/abbreviations/'
 					},
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/translations/',
-						src: ['en.json', 'fr.json'],
+						src: ['*.json'],
 						dest: 'debug/TravelNotesProviders/languages/instructions/'
 					},
 					{
 						expand: true,
 						cwd: 'node_modules/osrm-text-instructions/languages/grammar/',
-						src: ['fr.json'],
+						src: ['*.json'],
 						dest: 'debug/TravelNotesProviders/languages/grammars/'
 					}
 				]
