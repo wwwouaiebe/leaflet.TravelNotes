@@ -36,6 +36,7 @@
 		"no-throw-literal" : [ "warn" ],
 		"no-unmodified-loop-condition" : [ "warn" ],
 		"no-useless-return" : [ "warn" ],
+		"no-unused-vars" : [ "warn" ],
 		"prefer-promise-reject-errors" : [ "warn" ],
 		"yoda" : [ "warn" , "always" ],
 		

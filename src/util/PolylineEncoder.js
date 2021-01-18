@@ -72,7 +72,8 @@ function ourPython2Round ( value ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc Encoder/decoder to encode or decode a polyline into a string
+@classdesc Encoder/decoder to encode or decode a polyline into a string.
+Based on Mark McClure polyline encoder (more info needed...)
 @see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
 @see https://github.com/graphhopper/directions-api-js-client/blob/master/src/GHUtil.js GHUtil.prototype.decodePath
 @see https://developers.google.com/maps/documentation/utilities/polylinealgorithm
@@ -211,6 +212,9 @@ class polylineEncoder {
 
 	decode ( encodedString, precisions ) {
 		let dimensions = precisions.length;
+		if ( ! encodedString || ZERO === encodedString.length ) {
+			return [ ];
+		}
 
 		let index = ZERO;
 		let allDecodedValues = [];
