@@ -43,14 +43,13 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 const OUR_NUMBER5 = 5;
 const OUR_NUMBER10 = 10;
 const OUR_NUMBER31 = 0x1f;
 const OUR_NUMBER32 = 0x20;
 const OUR_NUMBER63 = 0x3f;
-const OUR_NUMBER100 = 100;
 const OUR_DOT5 = 0.5;
 
 /**
@@ -186,21 +185,28 @@ class polylineEncoder {
 	@return {string} the encoded coordinates
 	*/
 
-	encode ( coordinates, precision ) {
+	encode ( coordinates, precision, precision3D = ZERO ) {
 		if ( ! coordinates.length ) {
 			return '';
 		}
 
 		let factor = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision ) ? precision : OUR_NUMBER5 );
+		let factor3D = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision3D ) ? precision3D : TWO );
 		let output =
 				ourEncode ( coordinates[ ZERO ][ ZERO ], ZERO, factor ) +
 				ourEncode ( coordinates[ ZERO ][ ONE ], ZERO, factor );
+		if ( ZERO !== precision3D ) {
+			output += ourEncode ( coordinates[ ZERO ][ TWO ], ZERO, factor3D );
+		}
 
 		for ( let coordCounter = ONE; coordCounter < coordinates.length; coordCounter ++ ) {
 			let currentCoord = coordinates[ coordCounter ];
 			let previousCoord = coordinates[ coordCounter - ONE ];
 			output += ourEncode ( currentCoord [ ZERO ], previousCoord [ ZERO ], factor );
 			output += ourEncode ( currentCoord [ ONE ], previousCoord [ ONE ], factor );
+			if ( ZERO !== precision3D ) {
+				output += ourEncode ( currentCoord [ TWO ], previousCoord [ TWO ], factor3D );
+			}
 		}
 
 		return output;
@@ -214,14 +220,15 @@ class polylineEncoder {
 	@return {array.<array.<number>>} the decoded coordinates
 	*/
 
-	decode ( encodedString, precision, is3D = false ) {
+	decode ( encodedString, precision, precision3D = ZERO ) {
 
 		let index = ZERO;
 		let lat = ZERO;
 		let lng = ZERO;
 		let elev = ZERO;
 		let coordinates = [];
-		let factor = Math.pow ( OUR_NUMBER10, precision );
+		let factor = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision ) ? precision : OUR_NUMBER5 );
+		let factor3D = Math.pow ( OUR_NUMBER10, Number.isInteger ( precision3D ) ? precision3D : TWO );
 
 		/* eslint-disable no-bitwise */
 		while ( index < encodedString.length ) {
@@ -246,7 +253,10 @@ class polylineEncoder {
 			let deltaLon = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
 			lng += deltaLon;
 
-			if ( is3D ) {
+			if ( ZERO === precision3D ) {
+				coordinates.push ( [ lat / factor, lng / factor ] );
+			}
+			else {
 				shift = ZERO;
 				result = ZERO;
 				do {
@@ -256,10 +266,7 @@ class polylineEncoder {
 				} while ( OUR_NUMBER32 <= byte );
 				let deltaEle = ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
 				elev += deltaEle;
-				coordinates.push ( [ lat / factor, lng / factor, elev / OUR_NUMBER100 ] );
-			}
-			else {
-				coordinates.push ( [ lat / factor, lng / factor ] );
+				coordinates.push ( [ lat / factor, lng / factor, elev / factor3D ] );
 			}
 		}
 		/* eslint-enable no-bitwise */

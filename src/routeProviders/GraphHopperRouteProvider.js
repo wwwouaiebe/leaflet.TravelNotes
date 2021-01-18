@@ -44,7 +44,7 @@ Tests ...
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { ZERO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -112,9 +112,9 @@ function ourNewGraphHopperRouteProvider ( ) {
 		myRoute.itinerary.descent = ZERO;
 		response.paths.forEach (
 			path => {
-				path.points = thePolylineEncoder.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, true );
+				path.points = thePolylineEncoder.decode ( path.points, GRAPHHOPPER_LAT_LNG_ROUND, TWO );
 				/* eslint-disable-next-line camelcase */
-				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, true );
+				path.snapped_waypoints = thePolylineEncoder.decode ( path.snapped_waypoints, GRAPHHOPPER_LAT_LNG_ROUND, TWO );
 				let itineraryPoints = [];
 				for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
 					let itineraryPoint = window.TaN.itineraryPoint;

@@ -44,7 +44,7 @@ Tests ...
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 			returnOnError ( new Error ( 'Route not found' ) );
 		}
 		response.routes [ ZERO ].geometry =
-			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OPEN_ROUTE_LAT_LNG_ROUND, true );
+			thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, OPEN_ROUTE_LAT_LNG_ROUND, TWO );
 		myRoute.itinerary.itineraryPoints.removeAll ( );
 		myRoute.itinerary.maneuvers.removeAll ( );
 		myRoute.itinerary.hasProfile = true;

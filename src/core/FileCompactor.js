@@ -110,7 +110,7 @@ function ourNewFileCompactor ( ) {
 
 	function myDecompressRoute ( routeObject ) {
 		routeObject.itinerary.itineraryPoints.latLngs =
-			thePolylineEncoder.decode ( routeObject.itinerary.itineraryPoints.latLngs, LAT_LNG.fixed, false );
+			thePolylineEncoder.decode ( routeObject.itinerary.itineraryPoints.latLngs, LAT_LNG.fixed );
 		let decompressedItineraryPoints = [];
 		let latLngsCounter = ZERO;
 		routeObject.itinerary.itineraryPoints.latLngs.forEach (
