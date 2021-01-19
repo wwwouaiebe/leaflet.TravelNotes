@@ -79,6 +79,7 @@ const ourObjIds = new WeakMap ( );
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line complexity */
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 		throw new Error ( 'No objType for ' + ourObjType.name );
@@ -94,7 +95,33 @@ function ourValidate ( something ) {
 			something.editedRoute = newRoute ( );
 			// eslint break omitted intentionally
 		case '1.5.0' :
-			something.layerName = 'OSM - Color';
+			if ( something.userData.layerId ) {
+
+				// old layersId from maps are converted to TravelNotes layerName
+				let layerConvert =
+				[
+					{ layerId : '0', layerName : 'OSM - Color' },
+					{ layerId : '1', layerName : 'OSM - Black and White' },
+					{ layerId : '2', layerName : 'Thunderforest - Transport' },
+					{ layerId : '3', layerName : 'Thunderforest - OpenCycleMap' },
+					{ layerId : '4', layerName : 'Thunderforest - Outdoors' },
+					{ layerId : '5', layerName : 'Esri - Aerial view' },
+					{ layerId : '6', layerName : 'Kartverket - Norway' },
+					{ layerId : '7', layerName : 'IGN-NGI - Belgium now' },
+					{ layerId : '12', layerName : 'Thunderforest - Landscape' },
+					{ layerId : '24', layerName : 'Lantmäteriet - Sweden' },
+					{ layerId : '25', layerName : 'Maanmittauslaitos - Finland' }
+				].find ( layerConversion => layerConversion.layerId === something.userData.layerId );
+				if ( layerConvert ) {
+					something.layerName = layerConvert.layerName;
+				}
+				else {
+					something.layerName = 'OSM - Color';
+				}
+			}
+			else {
+				something.layerName = 'OSM - Color';
+			}
 			// eslint break omitted intentionally
 		case '1.6.0' :
 		case '1.7.0' :
