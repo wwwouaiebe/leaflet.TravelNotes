@@ -93,7 +93,6 @@ WARNING :
 */
 
 ourValidityMap.set ( 'a', [ 'href', 'target' ] );
-ourValidityMap.set ( 'br', [ ] );
 ourValidityMap.set ( 'div', [ ] );
 ourValidityMap.set ( 'del', [ ] );
 ourValidityMap.set ( 'em', [ ] );
