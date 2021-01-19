@@ -48,8 +48,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint complexity: ["warn", 27]*/
-/* eslint max-statements: ["warn", 50]*/
+/* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
 import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
@@ -99,6 +98,7 @@ function ourUpdateStyles ( somethingText ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line complexity */
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 		throw new Error ( 'No objType for ' + ourObjType.name );
@@ -132,7 +132,9 @@ function ourValidate ( something ) {
 			something.tooltipContent = ourUpdateStyles ( something.tooltipContent );
 			something.phone = ourUpdateStyles ( something.phone );
 			something.address = ourUpdateStyles ( something.address );
-			something.objType.version = '2.0.0';
+			// eslint break omitted intentionally
+		case '2.0.0' :
+			something.objType.version = '2.1.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
@@ -381,6 +383,7 @@ class Note	{
 	a file is opened
 	*/
 
+	/* eslint-disable-next-line complexity, max-statements */
 	validateData ( verbose ) {
 		if ( 'number' !== typeof ( this.iconHeight ) ) {
 			this.iconHeight = DEFAULT_ICON_SIZE;

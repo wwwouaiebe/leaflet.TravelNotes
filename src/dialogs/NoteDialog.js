@@ -64,8 +64,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint max-statements: ["warn", 45, { "ignoreTopLevelFunctions": true }]*/
-
 import { theTranslator } from '../UI/Translator.js';
 import { theConfig } from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
@@ -94,6 +92,7 @@ at the dialog opening
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line max-statements */
 function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	const DEFAULT_ICON = '?????';

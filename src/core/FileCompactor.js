@@ -21,6 +21,8 @@ Changes:
 		- created
 	- v1.7.0:
 		- issue #89 : Add elevation graph
+	- v2.1.0:
+		- issue #151 : Add itineraries elevations distances and ObjIds to the compressed data...
 Doc reviewed 20200801
 Tests ...
 */
@@ -45,10 +47,10 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { polyline } from '../polyline/Polyline.js';
+import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newTravel } from '../data/Travel.js';
-import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, TWO, INVALID_OBJ_ID, LAT_LNG, DISTANCE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -62,8 +64,6 @@ import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, INVALID_OBJ_ID } from '../util/C
 */
 
 function ourNewFileCompactor ( ) {
-
-	const POLYLINE_PRECISION = 6;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -82,20 +82,27 @@ function ourNewFileCompactor ( ) {
 		if ( ZERO !== routeObject.itinerary.itineraryPoints.length ) {
 			objType = routeObject.itinerary.itineraryPoints [ ZERO ].objType;
 		}
-		let compressedItineraryPoints = { latLngs : [], distances : [], elevs : [], objIds : [], objType : objType };
+		let compressedItineraryPoints = { values : '', objType : objType };
+		let itineraryPoints = [];
 		routeObject.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				compressedItineraryPoints.latLngs.push ( [ itineraryPoint.lat, itineraryPoint.lng ] );
-				compressedItineraryPoints.distances.push ( itineraryPoint.distance );
-				compressedItineraryPoints.elevs.push ( itineraryPoint.elev );
-				compressedItineraryPoints.objIds.push ( itineraryPoint.objId );
+				itineraryPoints.push (
+					[
+						itineraryPoint.lat,
+						itineraryPoint.lng,
+						itineraryPoint.distance,
+						itineraryPoint.elev,
+						itineraryPoint.objId
+					]
+				);
 			}
 		);
-		compressedItineraryPoints.latLngs =
-			polyline.encode ( compressedItineraryPoints.latLngs, POLYLINE_PRECISION );
-		routeObject.itinerary.itineraryPoints = compressedItineraryPoints;
+		compressedItineraryPoints.values = thePolylineEncoder.encode (
+			itineraryPoints,
+			[ LAT_LNG.fixed, LAT_LNG.fixed, TWO, TWO, ZERO ]
+		);
 
-		// routeObject.itinerary.maneuvers = [];
+		routeObject.itinerary.itineraryPoints = compressedItineraryPoints;
 	}
 
 	/**
@@ -111,28 +118,60 @@ function ourNewFileCompactor ( ) {
 	*/
 
 	function myDecompressRoute ( routeObject ) {
-		routeObject.itinerary.itineraryPoints.latLngs =
-			polyline.decode ( routeObject.itinerary.itineraryPoints.latLngs, POLYLINE_PRECISION );
 		let decompressedItineraryPoints = [];
-		let latLngsCounter = ZERO;
-		routeObject.itinerary.itineraryPoints.latLngs.forEach (
-			latLng => {
-				let itineraryPoint = {};
-				itineraryPoint.lat = latLng [ ZERO ];
-				itineraryPoint.lng = latLng [ ONE ];
-				itineraryPoint.distance = routeObject.itinerary.itineraryPoints.distances [ latLngsCounter ];
-				if ( routeObject.itinerary.itineraryPoints.elevs ) {
-					itineraryPoint.elev = routeObject.itinerary.itineraryPoints.elevs [ latLngsCounter ];
+
+		// routeObject.itinerary.itineraryPoints have values since version 2.1.0 ,
+		// routeObject.itinerary.itineraryPoints have latLngs before version 2.1.0
+		// not possible to adapt in validate functions because validate functions are executed after this
+		if ( routeObject.itinerary.itineraryPoints.values ) {
+			thePolylineEncoder.decode (
+				routeObject.itinerary.itineraryPoints.values,
+				[ LAT_LNG.fixed, LAT_LNG.fixed, TWO, TWO, ZERO ]
+			)
+				.forEach (
+					value => {
+						let itineraryPoint = {
+							lat : LAT_LNG.defaultValue,
+							lng : LAT_LNG.defaultValue,
+							distance : DISTANCE.defaultValue,
+							elev : ELEV.defaultValue,
+							objId : INVALID_OBJ_ID
+						};
+						[
+							itineraryPoint.lat,
+							itineraryPoint.lng,
+							itineraryPoint.distance,
+							itineraryPoint.elev,
+							itineraryPoint.objId
+						] = value;
+						itineraryPoint.objType = routeObject.itinerary.itineraryPoints.objType;
+						decompressedItineraryPoints.push ( itineraryPoint );
+					}
+				);
+		}
+		else {
+			routeObject.itinerary.itineraryPoints.latLngs =
+				thePolylineEncoder.decode ( routeObject.itinerary.itineraryPoints.latLngs, [ LAT_LNG.fixed, LAT_LNG.fixed ] );
+			let latLngsCounter = ZERO;
+			routeObject.itinerary.itineraryPoints.latLngs.forEach (
+				latLng => {
+					let itineraryPoint = {};
+					itineraryPoint.lat = latLng [ ZERO ];
+					itineraryPoint.lng = latLng [ ONE ];
+					itineraryPoint.distance = routeObject.itinerary.itineraryPoints.distances [ latLngsCounter ];
+					if ( routeObject.itinerary.itineraryPoints.elevs ) {
+						itineraryPoint.elev = routeObject.itinerary.itineraryPoints.elevs [ latLngsCounter ];
+					}
+					else {
+						itineraryPoint.elev = ELEV.defaultValue;
+					}
+					itineraryPoint.objId = routeObject.itinerary.itineraryPoints.objIds [ latLngsCounter ];
+					itineraryPoint.objType = routeObject.itinerary.itineraryPoints.objType;
+					decompressedItineraryPoints.push ( itineraryPoint );
+					latLngsCounter ++;
 				}
-				else {
-					itineraryPoint.elev = ELEV.defaultValue;
-				}
-				itineraryPoint.objId = routeObject.itinerary.itineraryPoints.objIds [ latLngsCounter ];
-				itineraryPoint.objType = routeObject.itinerary.itineraryPoints.objType;
-				decompressedItineraryPoints.push ( itineraryPoint );
-				latLngsCounter ++;
-			}
-		);
+			);
+		}
 		routeObject.itinerary.itineraryPoints = decompressedItineraryPoints;
 	}
 
@@ -181,9 +220,7 @@ function ourNewFileCompactor ( ) {
 		decompress ( travelObject ) {
 			myDecompressTravel ( travelObject );
 			theTravelNotesData.travel.jsonObject = travelObject;
-
 			theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-
 			theTravelNotesData.travel.routes.forEach (
 				route => {
 					if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {

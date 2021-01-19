@@ -61,8 +61,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* global L */
-
 import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
@@ -142,10 +140,10 @@ function ourAddNote ( noteObjId ) {
 
 	// first a marker is created at the note position. This marker is empty and transparent, so
 	// not visible on the map but the marker can be dragged
-	let bullet = L.marker (
+	let bullet = window.L.marker (
 		note.latLng,
 		{
-			icon : L.divIcon (
+			icon : window.L.divIcon (
 				{
 					iconSize : [ theConfig.note.grip.size, theConfig.note.grip.size ],
 					iconAnchor : [ theConfig.note.grip.size / TWO, theConfig.note.grip.size / TWO ],
@@ -160,7 +158,7 @@ function ourAddNote ( noteObjId ) {
 	bullet.objId = note.objId;
 
 	// a second marker is now created. The icon created by the user is used for this marker
-	let icon = L.divIcon (
+	let icon = window.L.divIcon (
 		{
 			iconSize : [ note.iconWidth, note.iconHeight ],
 			iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
@@ -171,7 +169,7 @@ function ourAddNote ( noteObjId ) {
 	);
 
 	const NOTE_Z_INDEX_OFFSET = 100;
-	let marker = L.marker (
+	let marker = window.L.marker (
 		note.iconLatLng,
 		{
 			zIndexOffset : NOTE_Z_INDEX_OFFSET,
@@ -198,14 +196,14 @@ function ourAddNote ( noteObjId ) {
 	}
 
 	// Finally a polyline is created between the 2 markers
-	let polyline = L.polyline ( [ note.latLng, note.iconLatLng ], theConfig.note.polyline );
+	let polyline = window.L.polyline ( [ note.latLng, note.iconLatLng ], theConfig.note.polyline );
 	polyline.objId = note.objId;
 
 	// The 3 objects are added to a layerGroup
-	let layerGroup = L.layerGroup ( [ marker, polyline, bullet ] );
-	layerGroup.markerId = L.Util.stamp ( marker );
-	layerGroup.polylineId = L.Util.stamp ( polyline );
-	layerGroup.bulletId = L.Util.stamp ( bullet );
+	let layerGroup = window.L.layerGroup ( [ marker, polyline, bullet ] );
+	layerGroup.markerId = window.L.Util.stamp ( marker );
+	layerGroup.polylineId = window.L.Util.stamp ( polyline );
+	layerGroup.bulletId = window.L.Util.stamp ( bullet );
 
 	// and the layerGroup added to the leaflet map and JavaScript map
 	ourAddTo ( note.objId, layerGroup );
@@ -282,7 +280,7 @@ class ViewerMapEditor {
 		}
 
 		// the leaflet polyline is created and added to the map
-		let polyline = L.polyline (
+		let polyline = window.L.polyline (
 			latLng,
 			{
 				color : route.color,
@@ -310,7 +308,7 @@ class ViewerMapEditor {
 		);
 
 		// left click event
-		L.DomEvent.on ( polyline, 'click', clickEvent => clickEvent.target.openPopup ( clickEvent.latlng ) );
+		window.L.DomEvent.on ( polyline, 'click', clickEvent => clickEvent.target.openPopup ( clickEvent.latlng ) );
 
 		// notes are added
 		let notesIterator = route.notes.iterator;
@@ -369,10 +367,10 @@ class ViewerMapEditor {
 	setLayer ( layer, url ) {
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
-			leafletLayer = L.tileLayer ( url );
+			leafletLayer = window.L.tileLayer ( url );
 		}
 		else {
-			leafletLayer = L.tileLayer.wms ( url, layer.wmsOptions );
+			leafletLayer = window.L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
 		if ( ourCurrentLayer ) {
@@ -440,8 +438,8 @@ class ViewerMapEditor {
 			zoomToPosition = false;
 		}
 
-		ourGeolocationCircle = L.circleMarker (
-			L.latLng ( position.coords.latitude, position.coords.longitude ),
+		ourGeolocationCircle = window.L.circleMarker (
+			window.L.latLng ( position.coords.latitude, position.coords.longitude ),
 			{
 				radius : theConfig.geoLocation.radius,
 				color : theConfig.geoLocation.color
@@ -454,7 +452,7 @@ class ViewerMapEditor {
 
 		if ( zoomToPosition ) {
 			theTravelNotesData.map.setView (
-				L.latLng ( position.coords.latitude, position.coords.longitude ),
+				window.L.latLng ( position.coords.latitude, position.coords.longitude ),
 				theConfig.geoLocation.zoomFactor
 			);
 		}

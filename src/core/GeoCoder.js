@@ -73,7 +73,7 @@ import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { theGeometry } from '../util/Geometry.js';
+import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ function ourNewGeoCoder ( ) {
 					places [ element.tags.place ] &&
 					element.tags.name
 				) {
-					let nodeDistance = theGeometry.pointsDistance ( myLatLng, [ element.lat, element.lon ] );
+					let nodeDistance = theSphericalTrigonometry.pointsDistance ( myLatLng, [ element.lat, element.lon ] );
 					let place = places [ element.tags.place ];
 					if ( place.maxDistance > nodeDistance && place.distance > nodeDistance ) {
 						place.distance = nodeDistance;

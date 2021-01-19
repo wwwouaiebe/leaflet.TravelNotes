@@ -407,7 +407,10 @@ function ourNewMain ( ) {
 		*/
 
 		start ( ) {
-			window.L.travelNotes = theTravelNotes;
+			window.TaN = theTravelNotes;
+			if ( window.L ) {
+				window.L.travelNotes = window.TaN;
+			}
 			myReadURL ( );
 			myLanguage = myLanguage || theConfig.language || 'fr';
 			theErrorsUI.createUI ( );

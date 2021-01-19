@@ -58,11 +58,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint no-magic-numbers: "off" */
-/* eslint max-depth: ["warn", 5]*/
-
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
+/* eslint-disable no-magic-numbers */
 let ourPrivateConfig = {
 	autoLoad : false,
 	map :
@@ -281,6 +279,7 @@ let ourPrivateConfig = {
 		initialRed : 0
 	}
 };
+/* eslint-enable no-magic-numbers */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -306,6 +305,8 @@ So:
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
+
+/* eslint-disable max-depth */
 
 function ourCopyObjectTo ( source, target ) {
 	if ( ( 'object' !== typeof source ) || ( 'object' !== typeof target ) ) {
@@ -361,6 +362,8 @@ function ourCopyObjectTo ( source, target ) {
 		console.log ( err ? err : 'Not possible to overload Config' );
 	}
 }
+
+/* eslint-enable max-depth */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

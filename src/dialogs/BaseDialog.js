@@ -125,6 +125,7 @@ const DRAG_MARGIN = 20;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line max-statements */
 function ourNewBaseDialog ( ) {
 
 	let myStartDragX = ZERO;

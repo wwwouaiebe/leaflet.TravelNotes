@@ -36,6 +36,7 @@
 		"no-throw-literal" : [ "warn" ],
 		"no-unmodified-loop-condition" : [ "warn" ],
 		"no-useless-return" : [ "warn" ],
+		"no-unused-vars" : [ "warn" ],
 		"prefer-promise-reject-errors" : [ "warn" ],
 		"yoda" : [ "warn" , "always" ],
 		
@@ -69,7 +70,7 @@
 		"max-len" : [ "warn" , { "code" : 128 } ],
 		"max-nested-callbacks" : [ "warn" , { "max" : 3 } ],
 		"max-params" : [ "warn" , { "max" : 3 } ],
-		"max-statements" : [ "warn", 45 ],
+		"max-statements" : [ "warn", 40 ],
 		"max-statements-per-line" : [ "warn" ],
 		"newline-per-chained-call" : [ "warn" ],
 		"no-array-constructor" : [ "warn" ],

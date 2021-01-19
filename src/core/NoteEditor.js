@@ -70,6 +70,7 @@ import { newNote } from '../data/Note.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
+import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { theConfig } from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
@@ -407,7 +408,7 @@ class NoteEditor {
 			if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
 				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, noteLatLng );
 				if ( pointAndDistance ) {
-					let distanceToRoute = theGeometry.pointsDistance (
+					let distanceToRoute = theSphericalTrigonometry.pointsDistance (
 						noteLatLng,
 						pointAndDistance.latLng
 					);
@@ -642,7 +643,7 @@ class NoteEditor {
 			route => {
 				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
 				if ( pointAndDistance ) {
-					let distanceToRoute = theGeometry.pointsDistance (
+					let distanceToRoute = theSphericalTrigonometry.pointsDistance (
 						noteAndRoute.note.latLng,
 						pointAndDistance.latLng
 					);

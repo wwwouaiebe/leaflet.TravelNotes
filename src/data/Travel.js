@@ -79,6 +79,7 @@ const ourObjIds = new WeakMap ( );
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line complexity */
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 		throw new Error ( 'No objType for ' + ourObjType.name );
@@ -131,7 +132,8 @@ function ourValidate ( something ) {
 		case '1.11.0' :
 		case '1.12.0' :
 		case '1.13.0' :
-			something.objType.version = '2.0.0';
+		case '2.0.0' :
+			something.objType.version = '2.1.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );
