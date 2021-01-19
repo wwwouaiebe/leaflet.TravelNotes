@@ -261,22 +261,34 @@ function ourNewGeoCoder ( ) {
 		*/
 
 		parseResponse ( data ) {
-			let overpassData = myParseOverpassData ( data [ ONE ].value );
-			let nominatimData = myParseNominatimData ( data [ ZERO ].value );
+			let overpassData = 'fulfilled' === data[ ONE ].status ? myParseOverpassData ( data [ ONE ].value ) : null;
+			let nominatimData = 'fulfilled' === data[ ZERO ].status ? myParseNominatimData ( data [ ZERO ].value ) : null;
 
-			let city = overpassData.city;
-			if ( overpassData.place ) {
-				city += ' (' + overpassData.place + ')';
+			let city = null;
+			if ( overpassData ) {
+				city = overpassData.city;
+				if ( overpassData.place ) {
+					city += ' (' + overpassData.place + ')';
+				}
+				if ( ! city ) {
+					city = overpassData.country;
+				}
 			}
-			let street = nominatimData.street;
 
-			if ( ! street && ! city ) {
-				city = nominatimData.country || overpassData.country || '';
+			let street = null;
+			let nameDetails = null;
+			if ( nominatimData ) {
+				street = nominatimData.street;
+				nameDetails = nominatimData.nameDetails || '';
+				if ( ! city ) {
+					city = nominatimData.country;
+				}
 			}
 
+			city = city || '';
 			street = street || '';
+			nameDetails = nameDetails || '';
 
-			let nameDetails = nominatimData.nameDetails || '';
 			if ( street.includes ( nameDetails ) || city.includes ( nameDetails ) ) {
 				nameDetails = '';
 			}
