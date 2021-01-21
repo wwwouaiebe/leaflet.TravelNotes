@@ -304,6 +304,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
+	/* eslint-disable-next-line complexity */
 	function mySearchPassingStreets ( ) {
 
 		// searching the previous and next point on the itinerary
@@ -320,10 +321,14 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		let incomingNodeDistance = Number.MAX_VALUE;
 		let outgoingNodeDistance = Number.MAX_VALUE;
 		let nodeDistance = DISTANCE.defaultValue;
+		let rcnRefNode = null;
 
 		// searching in the nodes JS map the incoming, outgoing and icon nodes
 		myNodesMap.forEach (
 			node => {
+				if ( node.tags && node.tags.rcn_ref && 'bike' === myRoute.itinerary.transitMode ) {
+					rcnRefNode = node;
+				}
 				if ( myNearestItineraryPoint ) {
 					nodeDistance =
 						theSphericalTrigonometry.pointsDistance ( [ node.lat, node.lon ], myNearestItineraryPoint.latLng );
@@ -353,6 +358,16 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		let iconNode = myNodesMap.get ( svgPointId );
 
+		if ( rcnRefNode ) {
+			let rcnRefDistance = theSphericalTrigonometry.pointsDistance (
+				[ rcnRefNode.lat, rcnRefNode.lon ],
+				[ iconNode.lat, iconNode.lon ]
+			);
+			if ( theConfig.note.svgRcnRefDistance > rcnRefDistance ) {
+				iconNode = rcnRefNode;
+			}
+		}
+
 		// searching a mini roundabout at the icon node
 		let isMiniRoundabout =
 			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway );
@@ -365,6 +380,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			'bike' === myRoute.itinerary.transitMode
 		) {
 			myRcnRef = iconNode.tags.rcn_ref;
+			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - rcnRef', { rcnRef : myRcnRef } );
 		}
 
 		let incomingStreet = '';

@@ -205,6 +205,7 @@ let ourPrivateConfig = {
 			sharpRight : 340
 		},
 		svgZoom : 17,
+		svgRcnRefDistance : 20,
 		svgAngleDistance : 10,
 		svgHamletDistance : 200,
 		svgVillageDistance : 400,
