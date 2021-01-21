@@ -700,6 +700,10 @@
 		"msgstr" : "Tourner fortement à droite"
 	},
 	{
+		"msgid" : "SvgIconFromOsmFactory - rcnRef",
+		"msgstr" : " (point-nœud  {rcnRef})"
+	},
+	{
 		"msgid" : "SvgIconFromOsmFactory - entry roundabout",
 		"msgstr" : " pour entrer dans le rond-point"
 	},
