@@ -81,7 +81,8 @@ Travel & Notes will automatically create the map and all necessary controls.
 See the [JS code documentation](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
 for more information.
 
-Note, however, that only the TravelNotes object is accessible from additional JS code (via window.L.TravelNotes).
+Note, however, that only the TravelNotes object is accessible from additional JS code 
+(via windoww.TaN - window.L.TravelNotes is deprecated but continues to work currently).
 
 If you want to use other objects, you need to download the sources and import them into your code 
 as EcmaScript modules.
@@ -196,8 +197,6 @@ for smoothing the elevation. Default value: 0.25
 ( -1 = always ).
 - __note.theDevil.addButton__ : when this value is true, a button "theDevil" is added
 to the notes dialog box
-															 
-														 
 - __note.theDevil.noteZoom__ : le zoom for "theDevil" button
 - __note.osmSearchNoteDialog__  : when this value is true, the notes edit box is displayed
 when creating a note from 'Search OpenstreetMap'
@@ -227,6 +226,7 @@ in the roadbook
 - __note.svgAnleMaxDirection.sharpRight__ : the maximum angle of the direction to follow for the indication 
 "Turn sharp right" in the tooltip of the SVG icons
 - __note.svgZoom__ : the zoom value used to make the SVG icons
+- __note.svgRcnRefDistance__ : the maximal acceptable distance between the note and the rcn_ref tag
 - __note.svgAngleDistance__ : the minimum distance to use between the center of the SVG icon and 
 the point used to calculate the rotation of the icon
 - __note.svgHamletDistance__ : the maximum distance between the center of the SVG icon and a point 
@@ -238,8 +238,6 @@ with the tag place = city in OSM for this tag to be used in the address of the i
 - __note.svgTownDistance__ : the maximum distance between the center of the SVG icon and a point 
 with the tag place = town in OSM for this tag to be used in the address of the icon
 - __note.svgTimeOut__ : the duration of the timeout sent with the request to create the SVG icon
-																								
-																								
 - __note.maxManeuversNotes__: the maximum number of notes that can be created with the command
 "Create a note for each route maneuver".
 - __noteDialog.toggleIconDimension__: when this value is false, the dimension controls

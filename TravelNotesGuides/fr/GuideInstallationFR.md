@@ -82,7 +82,8 @@ Travel & Notes créera automatiquement la carte et tous les contrôles nécessai
 Voyez la [documentation du code JS](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TechDoc/index.html )
 pour plus d'informations.
 
-Notez cependant que seul l'objet TravelNotes est accessible depuis du code JS additionnel (via window.L.TravelNotes).
+Notez cependant que seul l'objet TravelNotes est accessible depuis du code JS additionnel 
+(via windoww.TaN - window.L.TravelNotes est déprécié mais continue à fonctionner pour l'instant).
 
 Si vous désirez utiliser d'autres objets, vous devez télécharger les sources et les importer dans votre code comme 
 des modules EcmaScript.
@@ -227,6 +228,7 @@ dans le roadbook
 - __note.svgAnleMaxDirection.sharpRight__ : l'angle maximum de la direction à suivre por l'indication 
 "Tourner fortement à droite" dans le tooltip des icones SVG
 - __note.svgZoom__ : la valeur du zoom utilisé pour réaliser les icônes SVG
+- __note.svgRcnRefDistance__ : la plus grande distance acceptable entre la note et le noeud rcn_ref 
 - __note.svgAngleDistance__ : la distance minimale à utiliser entre le centre de l'icône SVG et le point 
 utilisé pour calculer la rotation de l'icône
 - __note.svgHamletDistance__ : la distance maximum entre le centre de l'icône SVG et un point avec le 
