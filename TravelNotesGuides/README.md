@@ -36,7 +36,7 @@ And the same [demo](https://wwwouaiebe.github.io/samples/Liege/index.html) insid
 
 Other samples:
 
-[A great travel bike from Belgium to the North of Norway and return to Stockholm](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL25vcmQvMjAxNS0yMDE4LU5vcmQudHJ2) ((Keep calm... 8000 km 2Mb)
+[A great travel bike from Belgium to the North of Norway and return to Stockholm](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL25vcmQvMjAxNS0yMDE4LU5vcmQudHJ2) (Keep calm... 8000 km 2Mb)
 
 [An excerpt from my last bike trip from Dover to Chester](https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL1VLMjAxOS9VSzIwMTkudHJ2) 
 

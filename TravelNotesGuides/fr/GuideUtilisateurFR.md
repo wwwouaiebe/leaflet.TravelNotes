@@ -665,7 +665,6 @@ Seules les balises html et attributs suivantes peuvent être utilisé·e·s:
 - la balise &lt;figure&gt; (figure)
 - la balise &lt;figcaption&gt; (légende pour la balise figure)
 - la balise &lt;img&gt; avec les attributs src, alt width et height (image)
-- la balise &lt;br&gt; (passage à la ligne)
 - la balise &lt;a&gt; avec les attributs href et target
 - la balise &lt;del&gt; (texte supprimé)
 - la balise &lt;ins&gt; (texte ajouté)

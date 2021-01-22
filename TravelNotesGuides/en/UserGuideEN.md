@@ -638,7 +638,6 @@ Only the following html tags and attributes can be used:
 - the tag &lt;figure&gt; (figure)
 - the tag &lt;figcaption&gt; (legend for the figure tag)
 - the tag &lt;img&gt; with the attributes src, alt width and height (image)
-- the tag &lt;br&gt; (new line)
 - the tag &lt;a&gt; with the attributes href end target
 - the tag &lt;del&gt; (deleted text)
 - the tag &lt;ins&gt; (added text)
