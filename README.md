@@ -158,4 +158,4 @@ interne, ce qui permet également de réduire fortement la taille des fichiers d
 
 Pour les utilisateurs, seuls quelques bugs mineurs ont été corrigés.
 
-Pour les autres versions, reportez-vous au document ['quoi de neuf?' - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/QuoideNeuf.md)
+Pour les autres versions, reportez-vous au document ['quoi de neuf?' - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/QuoiDeNeuf.md)
