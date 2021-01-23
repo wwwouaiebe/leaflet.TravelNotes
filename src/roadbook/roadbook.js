@@ -115,7 +115,12 @@ if ( pageId ) {
 	theIndexedDb.getOpenPromise ( )
 		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
 		.then ( pageContent => { updateRoadbook ( pageContent ); } )
-		.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
+		.catch ( err => {
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
+		}
+		);
 
 	window.addEventListener (
 		'storage',
@@ -129,7 +134,12 @@ if ( pageId ) {
 						document.getElementById ( 'TravelNotes' ).textContent = '';
 					}
 				} )
-				.catch ( err => console.log ( err ? err : 'An error occurs when loading the content' ) );
+				.catch ( err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+				);
 		}
 	);
 	window.addEventListener (
@@ -163,7 +173,12 @@ if ( language ) {
 					theTranslator.getText ( 'Roadbook - show routes notes' );
 			}
 		)
-		.catch ( err => console.log ( err ? err : 'An error occurs when loading translation' ) );
+		.catch ( err => {
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
+		}
+		);
 }
 
 showTravelNotes ( );

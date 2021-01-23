@@ -63,7 +63,12 @@ function newRoadbookUpdate ( ) {
 				);
 			} )
 			.then ( ( ) => localStorage.setItem ( theTravelNotesData.UUID, Date.now ( ) ) )
-			.catch ( err => console.log ( err ? err : 'An error occurs when writing the content' ) );
+			.catch ( err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+			);
 	}
 }
 

@@ -87,7 +87,9 @@ function ourNewTravelNotesPaneUI ( ) {
 			dragEvent.dataTransfer.dropEffect = 'move';
 		}
 		catch ( err ) {
-			console.log ( err );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 
 		myNoteObjId = dragEvent.target.noteObjId;

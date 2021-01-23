@@ -211,7 +211,9 @@ function ourHaveValidWayPoints ( route ) {
 function ourOnRoutingError ( err ) {
 	ourRoutingRequestStarted = false;
 	theErrorsUI.showError ( err );
-	console.log ( err ? err : 'An error occurs when asking the route to the provider' );
+	if ( err instanceof Error ) {
+		console.error ( err );
+	}
 }
 
 /**
@@ -623,7 +625,13 @@ class RouteEditor {
 				theEventDispatcher.dispatch ( 'updateitinerary' );
 			}
 		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**
@@ -636,7 +644,13 @@ class RouteEditor {
 		newPrintRouteMapDialog ( )
 			.show ( )
 			.then ( printData => newPrintFactory ( ).print ( printData, routeObjId ) )
-			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**

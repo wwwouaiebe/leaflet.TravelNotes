@@ -215,7 +215,6 @@ function ourNewMapboxRouteProvider ( ) {
 			profile = 'mapbox/walking/';
 			break;
 		default :
-			console.log ( 'invalid transitMode' );
 			return;
 		}
 		return 'https://api.mapbox.com/directions/v5/' +

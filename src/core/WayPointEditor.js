@@ -132,7 +132,13 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 				ourRenameWayPoint ( Object.seal ( { name : response.name, address : address } ), wayPointObjId );
 			}
 		)
-		.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
+		.catch (
+			err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+		);
 }
 
 /**
@@ -340,14 +346,21 @@ class WayPointEditor {
 		let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 		let wayPointPropertiesDialog = newWayPointPropertiesDialog ( wayPoint );
 
-		wayPointPropertiesDialog.show ( ).then (
-			( ) => {
-				theEventDispatcher.dispatch ( 'setrouteslist' );
-				theEventDispatcher.dispatch ( 'showitinerary' );
-				theEventDispatcher.dispatch ( 'roadbookupdate' );
-			}
-		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the waypoint properties dialog' ) );
+		wayPointPropertiesDialog.show ( )
+			.then (
+				( ) => {
+					theEventDispatcher.dispatch ( 'setrouteslist' );
+					theEventDispatcher.dispatch ( 'showitinerary' );
+					theEventDispatcher.dispatch ( 'roadbookupdate' );
+				}
+			)
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 }
 

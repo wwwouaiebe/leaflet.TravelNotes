@@ -578,7 +578,9 @@ function ourOnRouteDragStart ( dragEvent ) {
 		dragEvent.dataTransfer.routeObjId = dragEvent.target.objId;
 	}
 	catch ( err ) {
-		console.log ( err );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 	}
 	ourDraggedRouteObjId = dragEvent.target.objId;
 }

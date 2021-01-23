@@ -112,7 +112,9 @@ class Utilities {
 			window.URL.revokeObjectURL ( objURL );
 		}
 		catch ( err ) {
-			console.log ( err ? err : 'An error occurs when saving file' );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 	}
 

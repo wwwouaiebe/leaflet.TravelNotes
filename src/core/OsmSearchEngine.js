@@ -417,9 +417,6 @@ function ourParseSearchResult ( results ) {
 			if ( 'fulfilled' === result.status ) {
 				osmElements = osmElements.concat ( result.value.elements );
 			}
-			else {
-				console.log ( result.reason );
-			}
 		}
 	);
 	ourParseOsmElements ( osmElements );

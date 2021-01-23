@@ -165,7 +165,9 @@ class TravelNotesViewer {
 				)
 				.catch (
 					err => {
-						console.log ( err ? err : 'Not possible to load the .trv file' );
+						if ( err instanceof Error ) {
+							console.error ( err );
+						}
 						theTravelNotesData.map.setView (
 							[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
 							DEFAULT_ZOOM

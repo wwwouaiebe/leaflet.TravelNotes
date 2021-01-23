@@ -410,6 +410,7 @@ class Note	{
 		if ( 'string' === typeof ( this.iconContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.iconContent + ')' );
 			}
 			this.iconContent = result.htmlString;
@@ -420,6 +421,7 @@ class Note	{
 		if ( 'string' === typeof ( this.popupContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.popupContent );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.popupContent + ')' );
 			}
 			this.popupContent = result.htmlString;
@@ -430,6 +432,7 @@ class Note	{
 		if ( 'string' === typeof ( this.tooltipContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.tooltipContent );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.tooltipContent + ')' );
 			}
 			this.tooltipContent = result.htmlString;
@@ -440,6 +443,7 @@ class Note	{
 		if ( 'string' === typeof ( this.phone ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.phone );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.phone + ')' );
 			}
 			this.phone = result.htmlString;
@@ -450,6 +454,7 @@ class Note	{
 		if ( 'string' === typeof ( this.url ) && '' !== this.url ) {
 			let result = theHTMLSanitizer.sanitizeToUrl ( this.url );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.url + ')' );
 			}
 			this.url = encodeURI ( result.url );

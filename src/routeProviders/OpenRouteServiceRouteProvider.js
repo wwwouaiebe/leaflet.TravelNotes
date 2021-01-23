@@ -212,7 +212,6 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 			requestString += 'foot-walking';
 			break;
 		default :
-			console.log ( 'invalid transitMode' );
 			return;
 		}
 		return requestString;

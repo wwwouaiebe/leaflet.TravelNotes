@@ -360,7 +360,9 @@ function ourCopyObjectTo ( source, target ) {
 		}
 	}
 	catch ( err ) {
-		console.log ( err ? err : 'Not possible to overload Config' );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 	}
 }
 

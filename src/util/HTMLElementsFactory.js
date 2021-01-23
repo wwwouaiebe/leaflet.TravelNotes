@@ -64,7 +64,9 @@ function ourAddProperties ( element, properties ) {
 			element [ property ] = properties [ property ];
 		}
 		catch ( err ) {
-			console.log ( 'Invalid property : ' + property );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 	}
 }

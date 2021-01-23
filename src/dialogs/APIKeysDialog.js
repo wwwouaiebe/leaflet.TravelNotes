@@ -471,7 +471,9 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			}
 			catch ( err ) {
 				myAPIKeysDialog.showError ( err.message );
-				console.log ( err ? err : 'An error occurs when reading the file' );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
 			}
 		};
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );

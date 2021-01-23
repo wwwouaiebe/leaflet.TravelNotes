@@ -206,7 +206,9 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 			ourDialogFunctions.hideError ( );
 		}
 		catch ( err ) {
-			console.log ( err ? err.message : 'An error occurs when opening the file' );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 			ourDialogFunctions.showError (
 				theTranslator.getText (
 					'NoteDialogToolbar - An error was found in the json file',

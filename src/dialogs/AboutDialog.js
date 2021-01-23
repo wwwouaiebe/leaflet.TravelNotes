@@ -106,8 +106,15 @@ function myNewAboutDialog ( ) {
 
 	theHTMLSanitizer.sanitizeToHtmlElement ( aboutString, aboutDialog.content );
 
-	aboutDialog.show ( ).then ( )
-		.catch ( err => console.log ( err ? err : 'An error occurs in the dialog' ) );
+	aboutDialog.show ( )
+		.then ( )
+		.catch (
+			err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+		);
 }
 
 export {

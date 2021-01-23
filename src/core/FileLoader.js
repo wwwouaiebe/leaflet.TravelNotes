@@ -161,7 +161,10 @@ function ourNewFileLoader ( ) {
 				fileContent = JSON.parse ( fileReader.result );
 			}
 			catch ( err ) {
-				console.log ( err ? err : 'An error occurs when reading the file' );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+				return;
 			}
 			if ( mustMerge ) {
 				newFileCompactor ( ).decompressMerge ( fileContent );

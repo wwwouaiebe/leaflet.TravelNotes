@@ -207,7 +207,9 @@ function ourOnOkDecryptServerFile ( data ) {
 function ourOnErrorDecryptServerFile ( err ) {
 
 	// Showing the error if not cancelled by user
-	console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
+	if ( err instanceof Error ) {
+		console.error ( err );
+	}
 	if ( err && 'Canceled by user' !== err ) {
 		theErrorsUI.showError (
 			theTranslator.getText ( 'APIKeysManager - An error occurs when reading the APIKeys file' )
@@ -297,7 +299,13 @@ class APIKeysManager {
 					'APIKeys'
 			)
 				.then ( ourOnServerFileFound )
-				.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
+				.catch (
+					err => {
+						if ( err instanceof Error ) {
+							console.error ( err );
+						}
+					}
+				);
 		}
 	}
 
@@ -322,7 +330,13 @@ class APIKeysManager {
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
 			.then ( APIKeys => ourResetAPIKeys ( APIKeys ) )
-			.catch ( err => console.log ( err ? err : 'canceled by user' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**

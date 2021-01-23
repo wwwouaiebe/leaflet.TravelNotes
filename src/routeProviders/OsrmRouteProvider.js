@@ -206,7 +206,6 @@ function ourNewOsrmRouteProvider ( ) {
 			transitModeString = 'routed-foot';
 			break;
 		default :
-			console.log ( 'invalid transitMode' );
 			return;
 		}
 		return 'https://routing.openstreetmap.de/' +

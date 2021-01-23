@@ -136,8 +136,13 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 					myAddressInput.value = address;
 				}
 			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
-
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**

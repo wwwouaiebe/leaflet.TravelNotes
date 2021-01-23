@@ -256,7 +256,9 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myOnGeocoderError ( err ) {
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
-		console.log ( err ? err : 'an error occurs when searching the adress.' );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 		myOnInputControl ( );
 	}
 
@@ -304,7 +306,9 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	function myOnSvgIconError ( err ) {
 		myNoteDialog.hideWait ( );
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
-		console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 		myOnInputControl ( );
 	}
 

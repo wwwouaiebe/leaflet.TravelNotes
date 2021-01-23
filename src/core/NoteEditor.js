@@ -183,7 +183,9 @@ function ourAddAllManeuverNote ( maneuverIterator, route ) {
 			)
 			.catch (
 				err => {
-					console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
 					endAdd ( );
 				}
 			);
@@ -258,7 +260,13 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 	newNoteDialog ( note, routeObjId, isNewNote )
 		.show ( )
 		.then ( ( ) => { ourAddNote ( note, routeObjId, isNewNote ); } )
-		.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
+		.catch (
+			err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+		);
 }
 
 /**
@@ -360,7 +368,13 @@ class NoteEditor {
 					}
 				}
 			)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the note dialog' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**
@@ -496,7 +510,9 @@ class NoteEditor {
 			)
 			.catch (
 				err => {
-					console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
 					ourWaitUI.close ( );
 					ourWaitUI = null;
 				}

@@ -219,7 +219,9 @@ function ourNewBaseDialog ( ) {
 			dragStartEvent.dataTransfer.setData ( 'Text', '1' );
 		}
 		catch ( err ) {
-			console.log ( err );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 		myStartDragX = dragStartEvent.screenX;
 		myStartDragY = dragStartEvent.screenY;

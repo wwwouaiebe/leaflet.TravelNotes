@@ -102,20 +102,19 @@ function ourNewMainViewer ( ) {
 					myTravelUrl = encodeURI ( travelURL.href );
 				}
 				else {
-					console.log ( 'The distant file is not on the same site than the app' );
+					throw new Error ( 'The distant file is not on the same site than the app' );
 				}
 			}
 			catch ( err ) {
-				console.log ( err.message );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
 			}
 		}
 		let urlLng = docURL.searchParams.get ( 'lng' );
 		if ( urlLng ) {
 			if ( urlLng.match ( /^[A-Z,a-z]{2}$/ ) ) {
 				myLanguage = urlLng.toLowerCase ( );
-			}
-			else {
-				console.log ( 'invalid lng parameter' );
 			}
 		}
 		if ( '' === docURL.searchParams.get ( 'lay' ) ) {
