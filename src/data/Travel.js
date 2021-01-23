@@ -67,38 +67,31 @@ const ourObjType = newObjType ( 'Travel' );
 const ourObjIds = new WeakMap ( );
 
 /**
-@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 
-@function ourValidate
-@desc verify that the parameter can be transformed to a Travel and performs the upgrate if needed
-@param {Object} something an object to validate
-@return {Object} the validated object
-@throws {Error} when the parameter is invalid
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} travel a travel to upgrade
+@throws {Error} when the travel version is invalid
 @private
 
-@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint-disable-next-line complexity */
-function ourValidate ( something ) {
-	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
-	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-			something.editedRoute = newRoute ( );
-			// eslint break omitted intentionally
-		case '1.5.0' :
-			if ( something.userData.layerId ) {
+function ourUpgrade ( travel ) {
+	switch ( travel.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+		travel.editedRoute = newRoute ( );
+		// eslint break omitted intentionally
+	case '1.5.0' :
+		if ( travel.userData.layerId ) {
 
-				// old layersId from maps are converted to TravelNotes layerName
-				let layerConvert =
+			// old layersId from maps are converted to TravelNotes layerName
+			let layerConvert =
 				[
 					{ layerId : '0', layerName : 'OSM - Color' },
 					{ layerId : '1', layerName : 'OSM - Black and White' },
@@ -111,34 +104,56 @@ function ourValidate ( something ) {
 					{ layerId : '12', layerName : 'Thunderforest - Landscape' },
 					{ layerId : '24', layerName : 'Lantmäteriet - Sweden' },
 					{ layerId : '25', layerName : 'Maanmittauslaitos - Finland' }
-				].find ( layerConversion => layerConversion.layerId === something.userData.layerId );
-				if ( layerConvert ) {
-					something.layerName = layerConvert.layerName;
-				}
-				else {
-					something.layerName = 'OSM - Color';
-				}
+				].find ( layerConversion => layerConversion.layerId === travel.userData.layerId );
+			if ( layerConvert ) {
+				travel.layerName = layerConvert.layerName;
 			}
 			else {
-				something.layerName = 'OSM - Color';
+				travel.layerName = 'OSM - Color';
 			}
-			// eslint break omitted intentionally
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-		case '2.1.0' :
-			something.objType.version = '2.2.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
 		}
+		else {
+			travel.layerName = 'OSM - Color';
+		}
+		// eslint break omitted intentionally
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		travel.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + ourObjType.name );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@function ourValidate
+@desc verify that the parameter can be transformed to a Travel and performs the upgrate if needed
+@param {Object} something an object to validate
+@return {Object} the validated object
+@throws {Error} when the parameter is invalid
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourValidate ( something ) {
+	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+		throw new Error ( 'No objType for ' + ourObjType.name );
+	}
+	ourObjType.validate ( something.objType );
+	if ( ourObjType.version !== something.objType.version ) {
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'name', 'editedRoute', 'routes', 'objId' ].forEach (

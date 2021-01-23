@@ -64,6 +64,47 @@ const ourObjIds = new WeakMap ( );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} wayPoint a wayPoint to upgrade
+@throws {Error} when the wayPoint version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( wayPoint ) {
+	switch ( wayPoint.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+		wayPoint.address = wayPoint.name;
+		wayPoint.name = '';
+		// eslint break omitted intentionally
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		wayPoint.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + ourObjType.name );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourValidate
 @desc verify that the parameter can be transformed to a WayPoint and performs the upgrate if needed
 @param {Object} something an object to validate
@@ -80,32 +121,7 @@ function ourValidate ( something ) {
 	}
 	ourObjType.validate ( something.objType );
 	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-			something.address = something.name;
-			something.name = '';
-			// eslint break omitted intentionally
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-		case '2.1.0' :
-			something.objType.version = '2.2.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'address', 'name', 'lat', 'lng', 'objId' ].forEach (

@@ -88,6 +88,56 @@ function ourUpdateStyles ( somethingText ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} note a note to upgrade
+@throws {Error} when the note version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( note ) {
+	switch ( note.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+	case '1.12.0' :
+	case '1.13.0' :
+		if ( 'string' === typeof ( note.iconHeight ) ) {
+			note.iconHeight = Number.parseInt ( note.iconHeight );
+		}
+		if ( 'string' === typeof ( note.iconWidth ) ) {
+			note.iconWidth = Number.parseInt ( note.iconWidth );
+		}
+		note.iconContent = ourUpdateStyles ( note.iconContent );
+		note.popupContent = ourUpdateStyles ( note.popupContent );
+		note.tooltipContent = ourUpdateStyles ( note.tooltipContent );
+		note.phone = ourUpdateStyles ( note.phone );
+		note.address = ourUpdateStyles ( note.address );
+		// eslint break omitted intentionally
+	case '2.0.0' :
+	case '2.1.0' :
+		note.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + ourObjType.name );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourValidate
 @desc verify that the parameter can be transformed to a Note and performs the upgrate if needed
 @param {Object} something an object to validate
@@ -98,48 +148,13 @@ function ourUpdateStyles ( somethingText ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint-disable-next-line complexity */
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 		throw new Error ( 'No objType for ' + ourObjType.name );
 	}
 	ourObjType.validate ( something.objType );
 	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-		case '1.12.0' :
-		case '1.13.0' :
-			if ( 'string' === typeof ( something.iconHeight ) ) {
-				something.iconHeight = Number.parseInt ( something.iconHeight );
-			}
-			if ( 'string' === typeof ( something.iconWidth ) ) {
-				something.iconWidth = Number.parseInt ( something.iconWidth );
-			}
-			something.iconContent = ourUpdateStyles ( something.iconContent );
-			something.popupContent = ourUpdateStyles ( something.popupContent );
-			something.tooltipContent = ourUpdateStyles ( something.tooltipContent );
-			something.phone = ourUpdateStyles ( something.phone );
-			something.address = ourUpdateStyles ( something.address );
-			// eslint break omitted intentionally
-		case '2.0.0' :
-		case '2.1.0' :
-			something.objType.version = '2.2.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[

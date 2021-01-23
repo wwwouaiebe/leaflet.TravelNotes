@@ -61,6 +61,48 @@ const ourObjIds = new WeakMap ( );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} maneuver a maneuver to upgrade
+@throws {Error} when the maneuver version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( maneuver ) {
+	switch ( maneuver.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+		if ( 'kArriveDefault' === maneuver.iconName ) {
+			maneuver.distance = DISTANCE.defaultValue;
+		}
+		// eslint break omitted intentionally
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		maneuver.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + ourObjType.name );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourValidate
 @desc verify that the parameter can be transformed to a Maneuver and performs the upgrate if needed
 @param {Object} something an object to validate
@@ -71,40 +113,13 @@ const ourObjIds = new WeakMap ( );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint-disable-next-line complexity */
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 		throw new Error ( 'No objType for ' + ourObjType.name );
 	}
 	ourObjType.validate ( something.objType );
 	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-			if ( 'kArriveDefault' === something.iconName ) {
-				something.distance = DISTANCE.defaultValue;
-			}
-			// eslint break omitted intentionally
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-		case '2.1.0' :
-			something.objType.version = '2.2.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (

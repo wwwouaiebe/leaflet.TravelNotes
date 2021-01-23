@@ -74,6 +74,51 @@ const ourObjIds = new WeakMap ( );
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} route a route to upgrade
+@throws {Error} when the route version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( route ) {
+	switch ( route.objType.version ) {
+	case '1.0.0' :
+		route.dashArray = ZERO;
+		route.hidden = false;
+		// eslint break omitted intentionally
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+		route.edited = ROUTE_EDITION_STATUS.notEdited;
+		// eslint break omitted intentionally
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+		route.editionStatus = route.edited;
+		// eslint break omitted intentionally
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		route.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + ourObjType.name );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourValidate
 @desc verify that the parameter can be transformed to a Route and performs the upgrate if needed
 @param {Object} something an object to validate
@@ -90,36 +135,7 @@ function ourValidate ( something ) {
 	}
 	ourObjType.validate ( something.objType );
 	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-			something.dashArray = ZERO;
-			something.hidden = false;
-			// eslint break omitted intentionally
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-			something.edited = ROUTE_EDITION_STATUS.notEdited;
-			// eslint break omitted intentionally
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-			something.editionStatus = something.edited;
-			// eslint break omitted intentionally
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-		case '2.1.0' :
-			something.objType.version = '2.2.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[
