@@ -134,7 +134,8 @@ function ourValidate ( something ) {
 			something.address = ourUpdateStyles ( something.address );
 			// eslint break omitted intentionally
 		case '2.0.0' :
-			something.objType.version = '2.1.0';
+		case '2.1.0' :
+			something.objType.version = '2.2.0';
 			break;
 		default :
 			throw new Error ( 'invalid version for ' + ourObjType.name );

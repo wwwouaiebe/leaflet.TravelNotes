@@ -60,7 +60,7 @@ You have also to adapt the version in the ourValidate ( ) method of
 Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
 */
 
-const ourCurrentVersion = '2.1.0';
+const ourCurrentVersion = '2.2.0';
 
 export {
 
