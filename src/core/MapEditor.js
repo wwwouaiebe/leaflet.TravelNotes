@@ -842,15 +842,9 @@ class MapEditor	{
 	*/
 
 	setLayer ( layer ) {
-		let url = layer.url;
-		if ( layer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
-			if ( providerKey ) {
-				url = url.replace ( '{providerKey}', providerKey );
-			}
-			else {
-				return;
-			}
+		let url = theAPIKeysManager.getUrl ( layer );
+		if ( ! url ) {
+			return;
 		}
 
 		theViewerMapEditor.setLayer ( layer, url );

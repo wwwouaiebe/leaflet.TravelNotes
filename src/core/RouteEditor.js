@@ -371,7 +371,7 @@ class RouteEditor {
 			(
 				( ! provider )
 				||
-				( provider.providerKeyNeeded && ! theAPIKeysManager.getKey ( providerName ) )
+				( provider.providerKeyNeeded && ! theAPIKeysManager.hasKey ( providerName ) )
 			)
 		) {
 			theErrorsUI.showError (

@@ -250,12 +250,29 @@ function ourOnServerFileFound ( data ) {
 class APIKeysManager {
 
 	/**
-	Get a provider API key
-	@param {string} providerName the provider name for witch the API key is asked
-	@return {string} the provider API key or null if key not found
+	Verify that a provider key is known
+	@param {string} providerName the provider name for witch the API key is searched
+	@return {boolean} true when the provider API key is known
 	*/
 
-	getKey ( providerName ) { return ourGetKey ( providerName ); }
+	hasKey ( providerName ) { return ourKeysMap.has ( providerName ); }
+
+	/**
+	Get the url from the layer
+	@param {Object} layer the layer for witch the url must returned
+	@return {string} the url for the given layer or null if the url cannot be given
+	*/
+
+	getUrl ( layer ) {
+		if ( layer.providerKeyNeeded ) {
+			let providerKey = ourKeysMap.get ( layer.providerName.toLowerCase ( ) );
+			if ( providerKey ) {
+				return layer.url.replace ( '{providerKey}', providerKey );
+			}
+			return null;
+		}
+		return layer.url;
+	}
 
 	/**
 	This method try to restore the API keys from the storage. If not possible the method search

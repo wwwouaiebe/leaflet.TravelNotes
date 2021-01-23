@@ -507,11 +507,7 @@ function ourNewPrintFactory ( ) {
 
 	function myGetLayer ( ) {
 		let layer = theLayersToolbarUI.getLayer ( theTravelNotesData.travel.layerName );
-		let url = layer.url;
-		if ( layer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) );
-			url = url.replace ( '{providerKey}', providerKey );
-		}
+		let url = theAPIKeysManager.getUrl ( layer );
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
 			leafletLayer = window.L.tileLayer ( url );

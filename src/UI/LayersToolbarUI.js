@@ -238,7 +238,7 @@ function ourOnMouseLeaveToolbar ( ) {
 */
 
 function ourCreateLayerButton ( layer ) {
-	if ( layer.providerKeyNeeded && ! theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
+	if ( layer.providerKeyNeeded && ! theAPIKeysManager.hasKey ( layer.providerName.toLowerCase ( ) ) ) {
 		return;
 	}
 	let layerButton = theHTMLElementsFactory.create (
@@ -394,8 +394,7 @@ class LayersToolbarUI {
 	getLayer ( layerName ) {
 		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
 		if ( theLayer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( theLayer.providerName.toLowerCase ( ) );
-			if ( ! providerKey ) {
+			if ( ! theAPIKeysManager.hasKey ( theLayer.providerName.toLowerCase ( ) ) ) {
 				theLayer = ourLayers [ ZERO ];
 			}
 		}
@@ -412,8 +411,7 @@ class LayersToolbarUI {
 	setLayer ( layerName ) {
 		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
 		if ( theLayer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( theLayer.providerName.toLowerCase ( ) );
-			if ( ! providerKey ) {
+			if ( ! theAPIKeysManager.hasKey ( theLayer.providerName.toLowerCase ( ) ) ) {
 				theLayer = ourLayers [ ZERO ];
 			}
 		}
