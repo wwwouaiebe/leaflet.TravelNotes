@@ -58,6 +58,7 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 import { LAT_LNG, ZERO } from '../util/Constants.js';
 
@@ -234,11 +235,17 @@ function ourNewMain ( ) {
 	function myLoadNoteDialogConfig ( noteDialogPromiseResult, defaultNoteDialogPromiseResult ) {
 		if ( 'fulfilled' === noteDialogPromiseResult.status ) {
 			theNoteDialogToolbar.selectOptions = noteDialogPromiseResult.value.preDefinedIconsList;
+			noteDialogPromiseResult.value.preDefinedIconsList.forEach (
+				preDefinedIcon => { preDefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( preDefinedIcon.name ); }
+			);
 			theNoteDialogToolbar.buttons = noteDialogPromiseResult.value.editionButtons;
 			return '';
 		}
 		if ( 'fulfilled' === defaultNoteDialogPromiseResult.status ) {
 			theNoteDialogToolbar.selectOptions = defaultNoteDialogPromiseResult.value.preDefinedIconsList;
+			noteDialogPromiseResult.value.preDefinedIconsList.forEach (
+				preDefinedIcon => { preDefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( preDefinedIcon.name ); }
+			);
 			theNoteDialogToolbar.buttons = defaultNoteDialogPromiseResult.value.editionButtons;
 			return (
 				'Not possible to load the TravelNotesNoteDialog' +
