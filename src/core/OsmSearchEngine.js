@@ -198,31 +198,30 @@ function ourGetSearchPromises ( ) {
 	let searchPromises = [];
 	ourPreviousSearchBounds = ourSearchBounds;
 
-	let elementTypesMap = new Map ( );
 	let keysMap = new Map ( );
-
-	console.log ( ourFilterItems );
 
 	ourFilterItems.forEach (
 		filterItem => {
-			filterItem.elementTypes.forEach (
-				elementType => {
-					elementTypesMap.set ( elementType, elementType );
-				}
-			);
 			filterItem.filterTagsArray.forEach (
 				filterTags => {
-					for ( const [ key, value ] of Object.entries ( filterTags ) ) {
-						let valuesMap = keysMap.get ( key ) || new Map ( );
-						valuesMap.set ( value, value );
-						keysMap.set ( key, valuesMap );
+
+					let [ key, value ] = Object.entries ( filterTags [ ZERO ] ) [ ZERO ];
+					let valuesElements = keysMap.get ( key );
+					if ( ! valuesElements ) {
+						valuesElements = { values : new Map ( ), elements : new Map ( ) };
+						keysMap.set ( key, valuesElements );
 					}
+					valuesElements.values.set ( value, value );
+					filterItem.elementTypes.forEach (
+						elementType => {
+							valuesElements.elements.set ( elementType, elementType );
+						}
+					);
 				}
 			);
 		}
 	);
 
-	let queryElement = ONE === elementTypesMap.size ? elementTypesMap.values ().next ().value : 'nwr';
 	let searchBoundingBoxString = '(' +
 		ourSearchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
 		',' +
@@ -234,27 +233,29 @@ function ourGetSearchPromises ( ) {
 		')';
 
 	keysMap.forEach (
-		( valueMap, key ) => {
+		( valuesElements, key ) => {
 			let queryTag = '"' + key + '"';
-			if ( ONE === valueMap.size ) {
-				let value = valueMap.values ( ).next ( ).value;
-				if ( '*' !== value ) {
+			if ( ONE === valuesElements.values.size ) {
+				let value = valuesElements.values.values ( ).next ( ).value;
+				if ( value ) {
 					queryTag += '="' + value + '"';
 				}
 			}
-			else if ( ONE < valueMap.size ) {
+			else if ( ONE < valuesElements.values.size ) {
 				queryTag += '~"';
-				valueMap.forEach (
+				valuesElements.values.forEach (
 					value => {
 						queryTag += value + '|';
 					}
 				);
 				queryTag = queryTag.substr ( ZERO, queryTag.length - ONE ) + '"';
 			}
+			let queryElement = ONE === valuesElements.elements.size ? valuesElements.elements.values ( ).next ( ).value : 'nwr';
+
 			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];' +
 				queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
 				( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;';
-			
+
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
 		}
 	);
@@ -275,12 +276,17 @@ function ourGetSearchPromises ( ) {
 
 function ourFilterOsmElement ( osmElement, filterTags ) {
 	let isValidOsmElement = true;
-	for ( const [ key, value ] of Object.entries ( filterTags ) ) {
-		isValidOsmElement =
-			isValidOsmElement &&
-			osmElement.tags [ key ] &&
-			( osmElement.tags [ key ] === value || '*' === value );
-	}
+	filterTags.forEach (
+		filterTag => {
+			let [ key, value ] = Object.entries ( filterTag ) [ ZERO ];
+			isValidOsmElement =
+				isValidOsmElement &&
+				osmElement.tags [ key ] &&
+				( ! value || osmElement.tags [ key ] === value );
+
+		}
+	);
+
 	return isValidOsmElement;
 }
 
@@ -539,12 +545,11 @@ class OsmSearchEngine	{
 								currentItem.elementTypes = [ keyAndValue [ ONE ] ];
 							}
 							else {
-								filterTags =
-									filterTags
-									||
-									{
-									};
-								filterTags [ keyAndValue [ ZERO ] ] = keyAndValue [ ONE ];
+								let filterTag = {};
+								filterTag [ keyAndValue [ ZERO ] ] =
+									'*' === keyAndValue [ ONE ] ? null : keyAndValue [ ONE ];
+								filterTags = filterTags || [];
+								filterTags.push ( filterTag );
 							}
 						}
 					}
