@@ -197,21 +197,32 @@ function ourSearchFilters ( item ) {
 function ourGetSearchPromises ( ) {
 	let searchPromises = [];
 	ourPreviousSearchBounds = ourSearchBounds;
-	let tagMaps = { node : new Map ( ), way : new Map ( ), relation : new Map ( ) };
+
+	let elementTypesMap = new Map ( );
+	let keysMap = new Map ( );
+
+	console.log ( ourFilterItems );
+
 	ourFilterItems.forEach (
 		filterItem => {
 			filterItem.elementTypes.forEach (
 				elementType => {
-					filterItem.filterTagsArray.forEach (
-						filterTag => {
-							tagMaps [ elementType ].set ( filterTag, filterTag );
-						}
-					);
+					elementTypesMap.set ( elementType, elementType );
+				}
+			);
+			filterItem.filterTagsArray.forEach (
+				filterTags => {
+					for ( const [ key, value ] of Object.entries ( filterTags ) ) {
+						let valuesMap = keysMap.get ( key ) || new Map ( );
+						valuesMap.set ( value, value );
+						keysMap.set ( key, valuesMap );
+					}
 				}
 			);
 		}
 	);
-	let requestStrings = { node : '', way : '', relation : ''	};
+
+	let queryElement = ONE === elementTypesMap.size ? elementTypesMap.values ().next ().value : 'nwr';
 	let searchBoundingBoxString = '(' +
 		ourSearchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
 		',' +
@@ -221,24 +232,33 @@ function ourGetSearchPromises ( ) {
 		',' +
 		ourSearchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
 		')';
-	for ( const [ element, MapTags ] of Object.entries ( tagMaps ) ) {
-		MapTags.forEach (
-			tag => {
-				let [ key, value ] = Object.entries ( tag ) [ ZERO ];
-				requestStrings [ element ] += element +
-				'[' + key + ( '*' === value ? '' : '=' + value ) + ']' +
-				searchBoundingBoxString + ';';
-			}
-		);
-	}
-	for ( const [ element, requestString ] of Object.entries ( requestStrings ) ) {
-		if ( '' !== requestString ) {
-			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];(' +
-				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
 
+	keysMap.forEach (
+		( valueMap, key ) => {
+			let queryTag = '"' + key + '"';
+			if ( ONE === valueMap.size ) {
+				let value = valueMap.values ( ).next ( ).value;
+				if ( '*' !== value ) {
+					queryTag += '="' + value + '"';
+				}
+			}
+			else if ( ONE < valueMap.size ) {
+				queryTag += '~"';
+				valueMap.forEach (
+					value => {
+						queryTag += value + '|';
+					}
+				);
+				queryTag = queryTag.substr ( ZERO, queryTag.length - ONE ) + '"';
+			}
+			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];' +
+				queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
+				( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;';
+			
 			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
 		}
-	}
+	);
+
 	return searchPromises;
 }
 
