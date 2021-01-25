@@ -22,6 +22,8 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+	- v2.2.0:
+		- Issue #64 : Improve geocoding
 Doc reviewed 20200816
 Tests ...
 */
@@ -128,10 +130,9 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 		geoCoder.getPromiseAddress ( wayPoint.latLng )
 			.then (
 				geoCoderData => {
-					let response = geoCoder.parseResponse ( geoCoderData );
-					let address = response.street;
-					if ( '' !== response.city ) {
-						address += ' ' + response.city;
+					let address = geoCoderData.street;
+					if ( '' !== geoCoderData.city ) {
+						address += ' ' + geoCoderData.city;
 					}
 					myAddressInput.value = address;
 				}

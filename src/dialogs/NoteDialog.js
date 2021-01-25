@@ -40,6 +40,8 @@ Changes:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
+	- v2.2.0:
+		- Issue #64 : Improve geocoding
 Doc reviewed 20200815
 Tests ...
 */
@@ -231,12 +233,11 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myOnGeocoderSucces ( geoCoderData ) {
-		let response = myGeoCoder.parseResponse ( geoCoderData );
-		myAddress = response.street;
-		if ( '' !== response.city ) {
-			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + response.city + '</span>';
+		myAddress = geoCoderData.street;
+		if ( '' !== geoCoderData.city ) {
+			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
 		}
-		myCity = response.city;
+		myCity = geoCoderData.city;
 
 		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && startGeoCoder ) {
 			myAddressInput.value = myAddress;

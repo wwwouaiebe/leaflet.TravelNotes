@@ -29,6 +29,8 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.2.0:
+		- Issue #64 : Improve geocoding
 Doc reviewed 20200810
 Tests ...
 */
@@ -124,12 +126,11 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 	geoCoder.getPromiseAddress ( latLng )
 		.then (
 			geoCoderData => {
-				let response = geoCoder.parseResponse ( geoCoderData );
-				let address = response.street;
-				if ( '' !== response.city ) {
-					address += ' ' + response.city;
+				let address = geoCoderData.street;
+				if ( '' !== geoCoderData.city ) {
+					address += ' ' + geoCoderData.city;
 				}
-				ourRenameWayPoint ( Object.seal ( { name : response.name, address : address } ), wayPointObjId );
+				ourRenameWayPoint ( Object.seal ( { name : geoCoderData.name, address : address } ), wayPointObjId );
 			}
 		)
 		.catch (
