@@ -23,6 +23,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200822
 Tests ...
 */
@@ -50,10 +52,14 @@ Tests ...
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theUtilities } from '../util/Utilities.js';
+import { SAVE_STATUS } from '../util/Constants.js';
 
 let ourMouseDiv = null;
 let ourMousePos = null;
 let ourZoom = null;
+let ourSaveStatus = SAVE_STATUS.saved;
+let ourSaveTimer = null;
+const SAVE_TIME = 300000;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +72,29 @@ let ourZoom = null;
 */
 
 function ourUpdate ( ) {
-	ourMouseDiv.textContent = ourMousePos + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + ourZoom;
+	ourMouseDiv.textContent = ourSaveStatus + '\u00a0' + ourMousePos + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + ourZoom;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSetSaveStatus
+@desc This method change the saveStatus and update the UI with the saveStatus
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSetSaveStatus ( saveStatus ) {
+	ourSaveStatus = saveStatus;
+	if ( SAVE_STATUS.modified === saveStatus && ! ourSaveTimer ) {
+		ourSaveTimer = setTimeout ( ourSetSaveStatus, SAVE_TIME, SAVE_STATUS.notSaved );
+	}
+	if ( SAVE_STATUS.saved === saveStatus && ourSaveTimer ) {
+		clearTimeout ( ourSaveTimer );
+		ourSaveTimer = null;
+	}
+	ourUpdate ( );
 }
 
 /**
@@ -80,10 +108,7 @@ function ourUpdate ( ) {
 */
 
 function ourOnMapMouseMove ( mouseMoveEvent ) {
-	ourMousePos =
-		theUtilities.formatLat ( mouseMoveEvent.latlng.lat ) +
-			'\u00a0-\u00a0' +
-			theUtilities.formatLng ( mouseMoveEvent.latlng.lng );
+	ourMousePos = theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
 	ourUpdate ( );
 }
 
@@ -98,7 +123,7 @@ function ourOnMapMouseMove ( mouseMoveEvent ) {
 */
 
 function ourOnMapZoomEnd ( ) {
-	ourZoom = theTravelNotesData.map.getZoom ( );
+	ourZoom = String ( theTravelNotesData.map.getZoom ( ) );
 	ourUpdate ( );
 }
 
@@ -114,6 +139,12 @@ function ourOnMapZoomEnd ( ) {
 */
 
 class MouseUI {
+
+	/**
+	change the save status on the UI
+	*/
+
+	set saveStatus ( SaveStatus ) { ourSetSaveStatus ( SaveStatus ); }
 
 	/**
 	creates the user interface

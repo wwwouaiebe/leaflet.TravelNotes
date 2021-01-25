@@ -44,6 +44,8 @@ Changes:
 		- Issue #137 : Remove html tags from json files
 		- Issue #139 : Remove Globals
 		- Issue #140 : Remove userData
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200824
 Tests ...
 */
@@ -93,7 +95,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, TWO } from '../util/Constants.js';
+import { LAT_LNG, TWO, SAVE_STATUS } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -389,6 +391,7 @@ class TravelNotes {
 			'<p>' + theTranslator.getText ( 'Help - Continue with interface2' ) + '</p>'
 		);
 		document.title = 'Travel & Notes';
+		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
 
 	/**
