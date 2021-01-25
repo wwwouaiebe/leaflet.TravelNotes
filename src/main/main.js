@@ -50,7 +50,6 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -60,7 +59,7 @@ import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
-import { LAT_LNG, ZERO } from '../util/Constants.js';
+import { LAT_LNG, ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -158,21 +157,29 @@ function ourNewMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myLoadConfig ( configPromiseResult ) {
-		if ( 'fulfilled' === configPromiseResult.status ) {
-			configPromiseResult.value.language = myLanguage;
-			configPromiseResult.value.haveCrypto = myHaveCrypto;
+	async function myLoadConfig ( configPromiseResult ) {
+		if (
+			'fulfilled' === configPromiseResult.status
+			&&
+			HTTP_STATUS_OK === configPromiseResult.value.status
+			&&
+			configPromiseResult.value.ok
+		) {
+
+			let config = await configPromiseResult.value.json ( );
+			config.language = myLanguage;
+			config.haveCrypto = myHaveCrypto;
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
-				configPromiseResult.value.layersToolbarUI.theDevil.addButton = false;
-				configPromiseResult.value.errorUI.showHelp = true;
+				config.layersToolbarUI.theDevil.addButton = false;
+				config.errorUI.showHelp = true;
 				const PRINT_MAX_TILES = 120;
-				configPromiseResult.value.printRouteMap.maxTiles = PRINT_MAX_TILES;
+				config.printRouteMap.maxTiles = PRINT_MAX_TILES;
 				const MAX_MANEUVERS_NOTES = 10;
-				configPromiseResult.value.note.maxManeuversNotes = MAX_MANEUVERS_NOTES;
-				configPromiseResult.value.note.haveBackground = true;
-				configPromiseResult.value.APIKeys.dialogHaveUnsecureButtons = true;
+				config.note.maxManeuversNotes = MAX_MANEUVERS_NOTES;
+				config.note.haveBackground = true;
+				config.APIKeys.dialogHaveUnsecureButtons = true;
 			}
-			theConfig.overload ( configPromiseResult.value );
+			theConfig.overload ( config );
 			return '';
 		}
 		return 'Not possible to load the TravelNotesConfig.json file. ';
@@ -188,13 +195,25 @@ function ourNewMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myLoadTranslations ( translationPromiseResult, defaultTranslationPromiseResult ) {
-		if ( 'fulfilled' === translationPromiseResult.status ) {
-			theTranslator.setTranslations ( translationPromiseResult.value );
+	async function myLoadTranslations ( translationPromiseResult, defaultTranslationPromiseResult ) {
+		if (
+			'fulfilled' === translationPromiseResult.status
+			&&
+			HTTP_STATUS_OK === translationPromiseResult.value.status
+			&&
+			translationPromiseResult.value.ok
+		) {
+			theTranslator.setTranslations ( await translationPromiseResult.value.json ( ) );
 			return '';
 		}
-		if ( 'fulfilled' === defaultTranslationPromiseResult.status ) {
-			theTranslator.setTranslations ( defaultTranslationPromiseResult.value );
+		if (
+			'fulfilled' === defaultTranslationPromiseResult.status
+			&&
+			HTTP_STATUS_OK === defaultTranslationPromiseResult.value.status
+			&&
+			defaultTranslationPromiseResult.value.ok
+		) {
+			theTranslator.setTranslations ( await defaultTranslationPromiseResult.value.json ( ) );
 			return (
 				'Not possible to load the TravelNotes' +
 				myLanguage.toUpperCase ( ) +
@@ -214,9 +233,15 @@ function ourNewMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myLoadLayers ( layersPromiseResult ) {
-		if ( 'fulfilled' === layersPromiseResult.status ) {
-			theLayersToolbarUI.addLayers ( layersPromiseResult.value );
+	async function myLoadLayers ( layersPromiseResult ) {
+		if (
+			'fulfilled' === layersPromiseResult.status
+			&&
+			HTTP_STATUS_OK === layersPromiseResult.value.status
+			&&
+			layersPromiseResult.value.ok
+		) {
+			theLayersToolbarUI.addLayers ( await layersPromiseResult.value.json ( ) );
 			return '';
 		}
 		return 'Not possible to load the TravelNotesLayers.json file. Only the OpenStreetMap background will be available. ';
@@ -232,21 +257,35 @@ function ourNewMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myLoadNoteDialogConfig ( noteDialogPromiseResult, defaultNoteDialogPromiseResult ) {
-		if ( 'fulfilled' === noteDialogPromiseResult.status ) {
-			theNoteDialogToolbar.selectOptions = noteDialogPromiseResult.value.preDefinedIconsList;
-			noteDialogPromiseResult.value.preDefinedIconsList.forEach (
+	async function myLoadNoteDialogConfig ( noteDialogPromiseResult, defaultNoteDialogPromiseResult ) {
+		if (
+			'fulfilled' === noteDialogPromiseResult.status
+			&&
+			HTTP_STATUS_OK === noteDialogPromiseResult.value.status
+			&&
+			noteDialogPromiseResult.value.ok
+		) {
+			let noteDialogData = await noteDialogPromiseResult.value.json ( );
+			theNoteDialogToolbar.selectOptions = noteDialogData.preDefinedIconsList;
+			noteDialogData.preDefinedIconsList.forEach (
 				preDefinedIcon => { preDefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( preDefinedIcon.name ); }
 			);
-			theNoteDialogToolbar.buttons = noteDialogPromiseResult.value.editionButtons;
+			theNoteDialogToolbar.buttons = noteDialogData.editionButtons;
 			return '';
 		}
-		if ( 'fulfilled' === defaultNoteDialogPromiseResult.status ) {
-			theNoteDialogToolbar.selectOptions = defaultNoteDialogPromiseResult.value.preDefinedIconsList;
-			noteDialogPromiseResult.value.preDefinedIconsList.forEach (
+		if (
+			'fulfilled' === defaultNoteDialogPromiseResult.status
+			&&
+			HTTP_STATUS_OK === defaultNoteDialogPromiseResult.value.status
+			&&
+			defaultNoteDialogPromiseResult.value.ok
+		) {
+			let defaultNoteDialogData = await defaultNoteDialogPromiseResult.value.json ( );
+			theNoteDialogToolbar.selectOptions = defaultNoteDialogData.preDefinedIconsList;
+			defaultNoteDialogData.preDefinedIconsList.forEach (
 				preDefinedIcon => { preDefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( preDefinedIcon.name ); }
 			);
-			theNoteDialogToolbar.buttons = defaultNoteDialogPromiseResult.value.editionButtons;
+			theNoteDialogToolbar.buttons = defaultNoteDialogData.editionButtons;
 			return (
 				'Not possible to load the TravelNotesNoteDialog' +
 				myLanguage.toUpperCase ( ) +
@@ -266,13 +305,25 @@ function ourNewMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myLoadSearchDictionary ( searchDictPromiseResult, defaultSearchDictPromiseResult ) {
-		if ( 'fulfilled' === searchDictPromiseResult.status ) {
-			theOsmSearchEngine.parseDictionary ( searchDictPromiseResult.value );
+	async function myLoadSearchDictionary ( searchDictPromiseResult, defaultSearchDictPromiseResult ) {
+		if (
+			'fulfilled' === searchDictPromiseResult.status
+			&&
+			HTTP_STATUS_OK === searchDictPromiseResult.value.status
+			&&
+			searchDictPromiseResult.value.ok
+		) {
+			theOsmSearchEngine.parseDictionary ( await searchDictPromiseResult.value.text ( ) );
 			return '';
 		}
-		if ( 'fulfilled' === defaultSearchDictPromiseResult.status ) {
-			theOsmSearchEngine.parseDictionary ( defaultSearchDictPromiseResult.value );
+		if (
+			'fulfilled' === defaultSearchDictPromiseResult.status
+			&&
+			HTTP_STATUS_OK === defaultSearchDictPromiseResult.value.status
+			&&
+			defaultSearchDictPromiseResult.value.ok
+		) {
+			theOsmSearchEngine.parseDictionary ( await defaultSearchDictPromiseResult.value.text ( ) );
 			return (
 				'Not possible to load the TravelNotesSearchDictionary' +
 				myLanguage.toUpperCase ( ) +
@@ -296,67 +347,15 @@ function ourNewMain ( ) {
 		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
 		return [
 			myTestCrypto ( ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Config.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'EN.json' ),
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'NoteDialogEN.json' ),
-			theHttpRequestBuilder.getTextPromise ( originAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
-			theHttpRequestBuilder.getTextPromise ( originAndPath + 'SearchDictionaryEN.csv' )
+			fetch ( originAndPath + 'Config.json' ),
+			fetch ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
+			fetch ( originAndPath + 'Layers.json' ),
+			fetch ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
+			fetch ( originAndPath + 'EN.json' ),
+			fetch ( originAndPath + 'NoteDialogEN.json' ),
+			fetch ( originAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
+			fetch ( originAndPath + 'SearchDictionaryEN.csv' )
 		];
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myLoadJsonFiles
-	@desc Load the configuration files
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myLoadJsonFiles ( results ) {
-		const CONFIG_FILE_INDEX = 1;
-		const TRANSLATIONS_FILE_INDEX = 2;
-		const LAYERS_FILE_INDEX = 3;
-		const NOTE_CONFIG_FILE_INDEX = 4;
-		const DEFAULT_TRANSLATIONS_FILE_INDEX = 5;
-		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 6;
-		const SEARCH_DICTIONARY_FILE_INDEX = 7;
-		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 8;
-		if ( 'fulfilled' === results [ ZERO ].status ) {
-			myHaveCrypto = true;
-		}
-		myErrorMessage = myLoadConfig ( results [ CONFIG_FILE_INDEX ] );
-		if ( myErrorMessage ) {
-			theErrorsUI.showError ( myErrorMessage );
-			return;
-		}
-		theTravelNotesData.providers.forEach (
-			provider => {
-				provider.userLanguage = theConfig.language;
-			}
-		);
-		myErrorMessage = myLoadTranslations (
-			results [ TRANSLATIONS_FILE_INDEX ],
-			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
-		);
-		myErrorMessage += myLoadNoteDialogConfig (
-			results [ NOTE_CONFIG_FILE_INDEX ],
-			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
-		);
-		myErrorMessage += myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
-		myErrorMessage += myLoadSearchDictionary (
-			results [ SEARCH_DICTIONARY_FILE_INDEX ],
-			results [ DEFAULT_SEARCH_DICTIONARY_FILE_INDEX ]
-		);
-
-		if ( '' !== myErrorMessage ) {
-			theErrorsUI.showWarning ( myErrorMessage );
-			myErrorMessage = '';
-		}
 	}
 
 	/**
@@ -397,6 +396,58 @@ function ourNewMain ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myLoadJsonFiles
+	@desc Load the configuration files
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	async function myLoadJsonFiles ( results ) {
+		const CONFIG_FILE_INDEX = 1;
+		const TRANSLATIONS_FILE_INDEX = 2;
+		const LAYERS_FILE_INDEX = 3;
+		const NOTE_CONFIG_FILE_INDEX = 4;
+		const DEFAULT_TRANSLATIONS_FILE_INDEX = 5;
+		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 6;
+		const SEARCH_DICTIONARY_FILE_INDEX = 7;
+		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 8;
+		if ( 'fulfilled' === results [ ZERO ].status ) {
+			myHaveCrypto = true;
+		}
+		myErrorMessage = await myLoadConfig ( results [ CONFIG_FILE_INDEX ] );
+		if ( myErrorMessage ) {
+			theErrorsUI.showError ( myErrorMessage );
+			return;
+		}
+		theTravelNotesData.providers.forEach (
+			provider => {
+				provider.userLanguage = theConfig.language;
+			}
+		);
+		myErrorMessage = await myLoadTranslations (
+			results [ TRANSLATIONS_FILE_INDEX ],
+			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
+		);
+		myErrorMessage += await myLoadNoteDialogConfig (
+			results [ NOTE_CONFIG_FILE_INDEX ],
+			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
+		);
+		myErrorMessage += await myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
+		myErrorMessage += await myLoadSearchDictionary (
+			results [ SEARCH_DICTIONARY_FILE_INDEX ],
+			results [ DEFAULT_SEARCH_DICTIONARY_FILE_INDEX ]
+		);
+		if ( '' !== myErrorMessage ) {
+			theErrorsUI.showWarning ( myErrorMessage );
+			myErrorMessage = '';
+		}
+		myLoadTravelNotes ( myTravelUrl );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@class
 	@classdesc This Class is used to configure and launch TravelNotes.
 	Not possible to instanciate this class outside TravelNotes.
@@ -420,14 +471,7 @@ function ourNewMain ( ) {
 			myReadURL ( );
 			myLanguage = myLanguage || theConfig.language || 'fr';
 			theErrorsUI.createUI ( );
-
-			Promise.allSettled ( myGetJsonPromises ( ) )
-				.then (
-					results => {
-						myLoadJsonFiles ( results );
-						myLoadTravelNotes ( myTravelUrl );
-					}
-				);
+			Promise.allSettled ( myGetJsonPromises ( ) ).then ( myLoadJsonFiles );
 		}
 	}
 
