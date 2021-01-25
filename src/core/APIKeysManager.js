@@ -69,13 +69,12 @@ import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -293,20 +292,21 @@ class APIKeysManager {
 		}
 
 		// otherwise searching on the server
-		if ( theConfig.haveCrypto ) {
-			theHttpRequestBuilder.getBinaryPromise (
-				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-					'APIKeys'
-			)
-				.then ( ourOnServerFileFound )
-				.catch (
-					err => {
-						if ( err instanceof Error ) {
-							console.error ( err );
-						}
+		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.arrayBuffer ( ).then ( ourOnServerFileFound );
 					}
-				);
-		}
+				}
+			)
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**

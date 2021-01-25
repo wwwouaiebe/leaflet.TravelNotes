@@ -156,47 +156,6 @@ class HttpRequestBuilder {
 
 		return new Promise ( jsonRequest );
 	}
-
-	/**
-	Start the download of a binary file returning a Promise that fullfil when the asked file is downloaded
-	correctly and reject when an error occurs.
-	The file content is returned as an ArrayBuffer to the success handler
-	@param {string} url The url of the file to download
-	@param {Array.<RequestHeader>} requestHeaders An array of request headers to add to the request
-	*/
-
-	getBinaryPromise ( url, requestHeaders ) {
-
-		function binaryRequest ( onOk, onError ) {
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = TIMEOUT;
-			xmlHttpRequest.ontimeout = function ( ) {
-				onError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
-			};
-			xmlHttpRequest.onload = function ( ) {
-				if ( STATUS_OK === xmlHttpRequest.status ) {
-					let arrayBuffer = xmlHttpRequest.response;
-					if ( arrayBuffer ) {
-						onOk ( arrayBuffer );
-					}
-					else {
-						onError ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL );
-					}
-				}
-				else {
-					onError ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL );
-				}
-			};
-			xmlHttpRequest.open ( 'GET', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach ( header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue ) );
-			}
-			xmlHttpRequest.responseType = 'arraybuffer';
-			xmlHttpRequest.send ( null );
-		}
-
-		return new Promise ( binaryRequest );
-	}
 }
 
 const ourHttpRequestBuilder = Object.freeze ( new HttpRequestBuilder );
