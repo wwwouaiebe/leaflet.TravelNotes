@@ -109,14 +109,14 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		}
 	);
 	let myNearestItineraryPoint = null;
-	let myRoute = null; // the TravelNotes route object
-	let myResponse = {}; // the xmlHttpRequest response parsed
+	let myRoute = null; 
+	let myResponse = {}; 
 	let myWaysMap = new Map ( );
 	let myNodesMap = new Map ( );
 	let myPlaces = [];
 	let myPlace = null;
 	let myCity = '';
-	let mySvg = null; // the svg element
+	let mySvg = null; 
 	let myPositionOnRoute = ON_ROUTE;
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
@@ -132,7 +132,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@function myCreateNodesAndWaysMaps
-	@desc This function create the way and node JS maps from the XmlHttpRequest response and extract city and places
+	@desc This function create the way and node JS maps from the overpassAPI response and extract city and places
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
