@@ -85,7 +85,6 @@ import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { theCurrentVersion } from '../data/Version.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
@@ -95,7 +94,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, TWO, SAVE_STATUS } from '../util/Constants.js';
+import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -307,6 +306,28 @@ function ourOnMapContextMenu ( contextMenuEvent ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourLoadDistantTravel
+@desc This method load a travel from a server file
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+async function ourLoadDistantTravel ( travelUrl ) {
+	let travelResponse = fetch ( travelUrl );
+	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
+		let travelContent = await travelResponse.json ( );
+		newViewerFileLoader ( ).openDistantFile ( travelContent );
+	}
+	else {
+		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO	);
+		document.title = 'Travel & Notes';
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc This class is the entry point of the application.
 @see {@link theTravelNotes} for the one and only one instance of this class
@@ -333,24 +354,7 @@ class TravelNotes {
 		}
 		theAttributionsUI.createUI ( );
 		theLayersToolbarUI.setLayer ( 'OSM - Color' );
-		theHttpRequestBuilder.getJsonPromise ( travelUrl )
-			.then (
-				fileContent => {
-					newViewerFileLoader ( ).openDistantFile ( fileContent );
-				}
-			)
-			.catch (
-				err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-					theTravelNotesData.map.setView (
-						[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
-						TWO
-					);
-					document.title = 'Travel & Notes';
-				}
-			);
+		ourLoadDistantTravel ( travelUrl );
 	}
 
 	/**
