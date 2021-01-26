@@ -58,8 +58,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-
-import { LAT_LNG, ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -78,7 +77,7 @@ function ourMain ( ) {
 	let myTravelUrl = null;
 	let myErrorMessage = '';
 	let myHaveCrypto = false;
-	let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
+	let myOriginAndPath = window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'TravelNotes';
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -159,7 +158,7 @@ function ourMain ( ) {
 	*/
 
 	async function myLoadConfig ( ) {
-		let configResponse = await fetch ( originAndPath + 'Config.json' );
+		let configResponse = await fetch ( myOriginAndPath + 'Config.json' );
 
 		if ( HTTP_STATUS_OK === configResponse.status && configResponse.ok ) {
 			let config = await configResponse.json ( );
@@ -348,13 +347,13 @@ function ourMain ( ) {
 
 		let results = await Promise.allSettled ( [
 			myTestCrypto ( ),
-			fetch ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
-			fetch ( originAndPath + 'Layers.json' ),
-			fetch ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
-			fetch ( originAndPath + 'EN.json' ),
-			fetch ( originAndPath + 'NoteDialogEN.json' ),
-			fetch ( originAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
-			fetch ( originAndPath + 'SearchDictionaryEN.csv' )
+			fetch ( myOriginAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
+			fetch ( myOriginAndPath + 'Layers.json' ),
+			fetch ( myOriginAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
+			fetch ( myOriginAndPath + 'EN.json' ),
+			fetch ( myOriginAndPath + 'NoteDialogEN.json' ),
+			fetch ( myOriginAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
+			fetch ( myOriginAndPath + 'SearchDictionaryEN.csv' )
 		] );
 
 		const TRANSLATIONS_FILE_INDEX = 1;
