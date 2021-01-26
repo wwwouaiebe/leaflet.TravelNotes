@@ -78,6 +78,7 @@ function ourMain ( ) {
 	let myTravelUrl = null;
 	let myErrorMessage = '';
 	let myHaveCrypto = false;
+	let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -157,17 +158,12 @@ function ourMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	async function myLoadConfig ( configPromiseResult ) {
-		if (
-			'fulfilled' === configPromiseResult.status
-			&&
-			HTTP_STATUS_OK === configPromiseResult.value.status
-			&&
-			configPromiseResult.value.ok
-		) {
+	async function myLoadConfig ( ) {
+		let configResponse = await fetch ( originAndPath + 'Config.json' );
 
-			let config = await configPromiseResult.value.json ( );
-			config.language = myLanguage;
+		if ( HTTP_STATUS_OK === configResponse.status && configResponse.ok ) {
+			let config = await configResponse.json ( );
+			config.language = myLanguage || config.language;
 			config.haveCrypto = myHaveCrypto;
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
 				config.layersToolbarUI.theDevil.addButton = false;
@@ -180,9 +176,14 @@ function ourMain ( ) {
 				config.APIKeys.dialogHaveUnsecureButtons = true;
 			}
 			theConfig.overload ( config );
-			return '';
+			theTravelNotesData.providers.forEach (
+				provider => {
+					provider.userLanguage = theConfig.language;
+				}
+			);
+			return true;
 		}
-		return 'Not possible to load the TravelNotesConfig.json file. ';
+		return false;
 	}
 
 	/**
@@ -336,18 +337,17 @@ function ourMain ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myGetJsonPromises
-	@desc This function gives the Promises list needed to load all the configuration files
+	@function myLoadJsonFiles
+	@desc Load the configuration files
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetJsonPromises ( ) {
-		let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
-		return [
+	async function myLoadJsonFiles ( ) {
+
+		let results = await Promise.allSettled ( [
 			myTestCrypto ( ),
-			fetch ( originAndPath + 'Config.json' ),
 			fetch ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
 			fetch ( originAndPath + 'Layers.json' ),
 			fetch ( originAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
@@ -355,7 +355,35 @@ function ourMain ( ) {
 			fetch ( originAndPath + 'NoteDialogEN.json' ),
 			fetch ( originAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
 			fetch ( originAndPath + 'SearchDictionaryEN.csv' )
-		];
+		] );
+
+		const TRANSLATIONS_FILE_INDEX = 1;
+		const LAYERS_FILE_INDEX = 2;
+		const NOTE_CONFIG_FILE_INDEX = 3;
+		const DEFAULT_TRANSLATIONS_FILE_INDEX = 4;
+		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 5;
+		const SEARCH_DICTIONARY_FILE_INDEX = 6;
+		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 7;
+		if ( 'fulfilled' === results [ ZERO ].status ) {
+			myHaveCrypto = true;
+		}
+		myErrorMessage = await myLoadTranslations (
+			results [ TRANSLATIONS_FILE_INDEX ],
+			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
+		);
+		myErrorMessage += await myLoadNoteDialogConfig (
+			results [ NOTE_CONFIG_FILE_INDEX ],
+			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
+		);
+		myErrorMessage += await myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
+		myErrorMessage += await myLoadSearchDictionary (
+			results [ SEARCH_DICTIONARY_FILE_INDEX ],
+			results [ DEFAULT_SEARCH_DICTIONARY_FILE_INDEX ]
+		);
+		if ( '' !== myErrorMessage ) {
+			theErrorsUI.showWarning ( myErrorMessage );
+			myErrorMessage = '';
+		}
 	}
 
 	/**
@@ -396,65 +424,33 @@ function ourMain ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myLoadJsonFiles
-	@desc Load the configuration files
+	@function start
+	@desc Launch TravelNotes, loading all the config files needed, depending of the language.
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	async function myLoadJsonFiles ( results ) {
-		const CONFIG_FILE_INDEX = 1;
-		const TRANSLATIONS_FILE_INDEX = 2;
-		const LAYERS_FILE_INDEX = 3;
-		const NOTE_CONFIG_FILE_INDEX = 4;
-		const DEFAULT_TRANSLATIONS_FILE_INDEX = 5;
-		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 6;
-		const SEARCH_DICTIONARY_FILE_INDEX = 7;
-		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 8;
-		if ( 'fulfilled' === results [ ZERO ].status ) {
-			myHaveCrypto = true;
+	async function start ( ) {
+		window.TaN = theTravelNotes;
+		if ( window.L ) {
+
+			// deprecated since v2.2.0. Must be removed a day...
+			window.L.travelNotes = window.TaN;
 		}
-		myErrorMessage = await myLoadConfig ( results [ CONFIG_FILE_INDEX ] );
-		if ( myErrorMessage ) {
-			theErrorsUI.showError ( myErrorMessage );
+		myReadURL ( );
+		if ( ! await myLoadConfig ( ) ) {
+			theErrorsUI.showError ( 'Not possible to load the TravelNotesConfig.json file. ' );
 			return;
 		}
-		theTravelNotesData.providers.forEach (
-			provider => {
-				provider.userLanguage = theConfig.language;
-			}
-		);
-		myErrorMessage = await myLoadTranslations (
-			results [ TRANSLATIONS_FILE_INDEX ],
-			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
-		);
-		myErrorMessage += await myLoadNoteDialogConfig (
-			results [ NOTE_CONFIG_FILE_INDEX ],
-			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
-		);
-		myErrorMessage += await myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
-		myErrorMessage += await myLoadSearchDictionary (
-			results [ SEARCH_DICTIONARY_FILE_INDEX ],
-			results [ DEFAULT_SEARCH_DICTIONARY_FILE_INDEX ]
-		);
-		if ( '' !== myErrorMessage ) {
-			theErrorsUI.showWarning ( myErrorMessage );
-			myErrorMessage = '';
-		}
+
+		myLanguage = myLanguage || theConfig.language || 'fr';
+		theErrorsUI.createUI ( );
+		await myLoadJsonFiles ( );
 		myLoadTravelNotes ( myTravelUrl );
 	}
 
-	window.TaN = theTravelNotes;
-	if ( window.L ) {
-		window.L.travelNotes = window.TaN;
-	}
-
-	myReadURL ( );
-	myLanguage = myLanguage || theConfig.language || 'fr';
-	theErrorsUI.createUI ( );
-	Promise.allSettled ( myGetJsonPromises ( ) ).then ( myLoadJsonFiles );
-
+	start ( );
 }
 
 ourMain ( );
