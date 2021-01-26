@@ -51,8 +51,7 @@ import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
@@ -256,7 +255,7 @@ function ourGetSearchPromises ( ) {
 				queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
 				( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;';
 
-			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
+			searchPromises.push ( fetch ( url ) );
 		}
 	);
 
@@ -436,15 +435,20 @@ function ourParseOsmElements ( osmElements ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourParseSearchResult ( results ) {
+async function ourParseSearchResult ( results ) {
 	let osmElements = [];
-	results.forEach (
-		result => {
-			if ( 'fulfilled' === result.status ) {
-				osmElements = osmElements.concat ( result.value.elements );
-			}
+	for ( let counter = ZERO; counter < results.length; counter ++ ) {
+		if (
+			'fulfilled' === results[ counter ].status
+			&&
+			HTTP_STATUS_OK === results[ counter ].value.status
+			&&
+			results[ counter ].value.ok
+		) {
+			let response = await results[ counter ].value.json ( );
+			osmElements = osmElements.concat ( response.elements );
 		}
-	);
+	}
 	ourParseOsmElements ( osmElements );
 }
 
