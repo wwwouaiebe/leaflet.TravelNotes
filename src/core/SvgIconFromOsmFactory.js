@@ -73,9 +73,8 @@ import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
-import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 
@@ -1023,12 +1022,23 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		mySearchNearestItineraryPoint ( );
 
-		theHttpRequestBuilder.getJsonPromise ( myGetUrl ( ) )
-			.then ( BuildIconAndAdress )
-			.catch (
-				err => {
-					ourRequestStarted = false;
-					onError ( err );
+		fetch ( myGetUrl ( ) )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							. then ( BuildIconAndAdress )
+							.catch (
+								err => {
+									ourRequestStarted = false;
+									onError ( err );
+								}
+							);
+					}
+					else {
+						ourRequestStarted = false;
+						onError ( new Error ( 'An error occurs when callin OverpassAPI' ) );
+					}
 				}
 			);
 	}
