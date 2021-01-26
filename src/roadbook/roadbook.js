@@ -43,11 +43,9 @@ save button
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 function showTravelNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
@@ -156,7 +154,7 @@ else {
 }
 
 if ( language ) {
-	theHttpRequestBuilder.getJsonPromise (
+	fetch (
 		window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
 		'TravelNotes' +
 		language.toUpperCase ( ) +
@@ -164,20 +162,28 @@ if ( language ) {
 	)
 		.then (
 			response => {
-				theTranslator.setTranslations ( response );
-				document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
-					theTranslator.getText ( 'Roadbook - show travel notes' );
-				document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
-					theTranslator.getText ( 'Roadbook - show maneuver' );
-				document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
-					theTranslator.getText ( 'Roadbook - show routes notes' );
+				if ( HTTP_STATUS_OK === response.status && response.ok ) {
+					response.json ( )
+						.then (
+							translations => {
+								theTranslator.setTranslations ( translations );
+								document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
+								theTranslator.getText ( 'Roadbook - show travel notes' );
+								document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
+								theTranslator.getText ( 'Roadbook - show maneuver' );
+								document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
+								theTranslator.getText ( 'Roadbook - show routes notes' );
+							}
+						)
+						.catch (
+							err => {
+								if ( err instanceof Error ) {
+									console.error ( err );
+								}
+							}
+						);
+				}
 			}
-		)
-		.catch ( err => {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
 		);
 }
 
