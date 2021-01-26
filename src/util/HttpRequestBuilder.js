@@ -77,43 +77,6 @@ const TIMEOUT = 40000;
 class HttpRequestBuilder {
 
 	/**
-	Start the download of a text file returning a Promise that fullfil when the asked file is downloaded
-	correctly and reject when an error occurs.
-	The file content is returned as an string to the success handler
-	@param {string} url The url of the file to download
-	@param {Array.<RequestHeader>} requestHeaders An array of request headers to add to the request
-	*/
-
-	getTextPromise ( url, requestHeaders ) {
-
-		function textRequest ( onOk, onError ) {
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = TIMEOUT;
-			xmlHttpRequest.ontimeout = function ( ) {
-				onError ( 'XMLHttpRequest TimeOut. File : ' + xmlHttpRequest.responseURL );
-			};
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
-					if ( STATUS_OK === xmlHttpRequest.status ) {
-						onOk ( xmlHttpRequest.responseText );
-					}
-					else {
-						onError ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL );
-					}
-				}
-			};
-			xmlHttpRequest.open ( 'GET', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach ( header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue ) );
-			}
-			xmlHttpRequest.overrideMimeType ( 'text/plain' );
-			xmlHttpRequest.send ( null );
-		}
-
-		return new Promise ( textRequest );
-	}
-
-	/**
 	Start the download of a json file returning a Promise that fullfil when the asked file is downloaded
 	correctly and reject when an error occurs.
 	The file content is parsed with JSON.parse ( ) and returned as an object to the success handler

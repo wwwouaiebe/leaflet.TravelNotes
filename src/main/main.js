@@ -72,7 +72,7 @@ import { LAT_LNG, ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewMain ( ) {
+function ourMain ( ) {
 
 	let myLanguage = null;
 	let myTravelUrl = null;
@@ -445,40 +445,19 @@ function ourNewMain ( ) {
 		myLoadTravelNotes ( myTravelUrl );
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This Class is used to configure and launch TravelNotes.
-	Not possible to instanciate this class outside TravelNotes.
-	@hideconstructor
-	@public
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class Main {
-
-		/**
-		Launch TravelNotes.
-		*/
-
-		start ( ) {
-			window.TaN = theTravelNotes;
-			if ( window.L ) {
-				window.L.travelNotes = window.TaN;
-			}
-			myReadURL ( );
-			myLanguage = myLanguage || theConfig.language || 'fr';
-			theErrorsUI.createUI ( );
-			Promise.allSettled ( myGetJsonPromises ( ) ).then ( myLoadJsonFiles );
-		}
+	window.TaN = theTravelNotes;
+	if ( window.L ) {
+		window.L.travelNotes = window.TaN;
 	}
 
-	return Object.freeze ( new Main );
+	myReadURL ( );
+	myLanguage = myLanguage || theConfig.language || 'fr';
+	theErrorsUI.createUI ( );
+	Promise.allSettled ( myGetJsonPromises ( ) ).then ( myLoadJsonFiles );
+
 }
 
-ourNewMain ( ).start ( );
+ourMain ( );
 
 /*
 --- End of Main file ----------------------------------------------------------------------------------------------------------
