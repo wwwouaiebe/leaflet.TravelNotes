@@ -97,8 +97,6 @@ const ourQueryDistance = Math.max (
 function ourNewGeoCoder ( ) {
 
 	let myLatLng = null;
-	let myOnOk = null;
-	let myOnError = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -115,8 +113,9 @@ function ourNewGeoCoder ( ) {
 	*/
 
 	function myParseOverpassData ( overpassData ) {
-		const OSM_CITY_ADMIN_LEVEL = '8';
 		const OSM_COUNTRY_ADMIN_LEVEL = '2';
+		let osmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
+
 		const LNG = theConfig.nominatim.language;
 		let adminNames = [];
 		let places = {
@@ -149,6 +148,10 @@ function ourNewGeoCoder ( ) {
 						elementName = element.tags [ 'name:' + LNG ];
 					}
 					adminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
+					if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
+						osmCityAdminLevel =
+							theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || osmCityAdminLevel;
+					}
 				}
 				if (
 					'node' === element.type &&
@@ -172,7 +175,7 @@ function ourNewGeoCoder ( ) {
 
 		for ( let namesCounter = TWO; namesCounter < adminNames.length; namesCounter ++ ) {
 			if ( 'undefined' !== typeof ( adminNames [ namesCounter ] ) ) {
-				if ( OSM_CITY_ADMIN_LEVEL >= namesCounter ) {
+				if ( osmCityAdminLevel >= namesCounter ) {
 					adminCity = adminNames [ namesCounter ];
 				}
 				else {
@@ -272,19 +275,16 @@ function ourNewGeoCoder ( ) {
 		/*
 		https://lz4.overpass-api.de/api/interpreter?
 			data=[out:json][timeout:40];
-			is_in(50.644242,5.572354)->.e;
-			area.e[admin_level][boundary="administrative"]->.f;
-			node(around:1500,50.644242,5.572354)[place]->.g;
-			(.f;.g;)->.h;
-			.h out;
+			is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
+			node(around:1500,50.644242,5.572354)[place];out;
 		*/
 
 		let overpassAPIUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' +
-			theConfig.note.svgTimeOut + '];is_in(' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
-			')->.e;area.e[admin_level][boundary="administrative"]->.f;node(around:' +
-			ourQueryDistance + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
-			')[place]->.g;(.f;.g;)->.h;.h out;';
+			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
+			'is_in(' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
+			')->.e;area.e[admin_level][boundary="administrative"];out;' +
+			'node(around:' + ourQueryDistance + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
+			')[place];out;';
 
 		return Promise.allSettled (
 			[
@@ -304,7 +304,7 @@ function ourNewGeoCoder ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	async function myParseResponses ( data ) {
+	async function myParseResponses ( data, onOk, onError ) {
 		let nominatimResponse = data[ ZERO ].value;
 		let overpassResponse = data[ ONE ].value;
 		if (
@@ -320,7 +320,7 @@ function ourNewGeoCoder ( ) {
 			||
 			! overpassResponse.ok
 		) {
-			myOnError ( new Error ( 'error when calling Nominatim or OverpassAPI' ) );
+			onError ( new Error ( 'error when calling Nominatim or OverpassAPI' ) );
 		}
 
 		let	nominatimData = myParseNominatimData ( await nominatimResponse.json ( ) );
@@ -355,7 +355,7 @@ function ourNewGeoCoder ( ) {
 			nameDetails = '';
 		}
 
-		myOnOk (
+		onOk (
 			Object.seal (
 				{
 					name : theHTMLSanitizer.sanitizeToJsString ( nameDetails ),
@@ -377,10 +377,7 @@ function ourNewGeoCoder ( ) {
 	*/
 
 	function myExecutePromiseAddress ( onOk, onError ) {
-		myOnOk = onOk;
-		myOnError = onError;
-
-		myCallProviders ( ).then ( myParseResponses );
+		myCallProviders ( ).then ( data => myParseResponses ( data, onOk, onError ) );
 	}
 
 	/**

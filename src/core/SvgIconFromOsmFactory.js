@@ -77,6 +77,12 @@ import { theTranslator } from '../UI/Translator.js';
 import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourRequestStarted = false;
+const ourQueryDistance = Math.max (
+	theConfig.note.svgHamletDistance,
+	theConfig.note.svgVillageDistance,
+	theConfig.note.svgCityDistance,
+	theConfig.note.svgTownDistance
+);
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -102,6 +108,9 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	const ON_ROUTE = 0;
 	const AT_END = 1;
 
+	const MY_OSM_COUNTRY_ADMIN_LEVEL = '2';
+	let myOsmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
+
 	let mySvgLatLngDistance = Object.seal (
 		{
 			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
@@ -109,14 +118,15 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		}
 	);
 	let myNearestItineraryPoint = null;
-	let myRoute = null; 
-	let myResponse = {}; 
+	let myRoute = null;
+	let myResponse = {};
 	let myWaysMap = new Map ( );
 	let myNodesMap = new Map ( );
-	let myPlaces = [];
+	let myAdminNames = [];
+	let myPlaces = {};
 	let myPlace = null;
-	let myCity = '';
-	let mySvg = null; 
+	let myCity = null;
+	let mySvg = null;
 	let myPositionOnRoute = ON_ROUTE;
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
@@ -131,8 +141,50 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function mySetHamletAndCity
+	@desc this function search the city and hamlet
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function mySetHamletAndCity ( ) {
+		myCity = null;
+		let adminHamlet = null;
+
+		for ( let namesCounter = TWO; namesCounter < myAdminNames.length; namesCounter ++ ) {
+			if ( 'undefined' !== typeof ( myAdminNames [ namesCounter ] ) ) {
+				if ( myOsmCityAdminLevel >= namesCounter ) {
+					myCity = myAdminNames [ namesCounter ];
+				}
+				else {
+					adminHamlet = myAdminNames [ namesCounter ];
+				}
+			}
+		}
+		myPlace = null;
+		let placeDistance = Number.MAX_VALUE;
+
+		Object.values ( myPlaces ).forEach (
+			place => {
+				if ( place.distance < placeDistance ) {
+					placeDistance = place.distance;
+					myPlace = place.name;
+				}
+			}
+		);
+
+		myPlace = adminHamlet || myPlace;
+		if ( myPlace === myCity ) {
+			myPlace = null;
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myCreateNodesAndWaysMaps
-	@desc This function create the way and node JS maps from the overpassAPI response and extract city and places
+	@desc This function create the way and node JS maps from the overpassAPI response and extract city and myPlaces
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -141,37 +193,69 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	function myCreateNodesAndWaysMaps ( ) {
 		myWaysMap.clear ( );
 		myNodesMap.clear ( );
+		myAdminNames = [];
+		myPlaces = {
+			hamlet : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgHamletDistance
+			},
+			village : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgVillageDistance
+			},
+			city : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgCityDistance
+			},
+			town : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgTownDistance
+			}
+		};
+		const LNG = theConfig.nominatim.language;
 
-		// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
 		myResponse.elements.forEach (
 			element => {
 				switch ( element.type ) {
 				case 'area' :
-
-					// the only area in the response is the city
-					if ( element.tags && element.tags.boundary && element.tags.name ) {
-						myCity = element.tags.name;
+					{
+						let elementName = element.tags.name;
+						if ( LNG && '*' !== LNG && element.tags [ 'name:' + LNG ] ) {
+							elementName = element.tags [ 'name:' + LNG ];
+						}
+						myAdminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
+						if ( MY_OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
+							myOsmCityAdminLevel =
+								theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || myOsmCityAdminLevel;
+						}
 					}
 					break;
 				case 'way' :
-
-					// replacing the nodes property with the nodesId property to
-					// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
 					element.nodesIds = element.nodes;
 					delete element.nodes;
 					myWaysMap.set ( element.id, element );
 					break;
 				case 'node' :
-
 					myNodesMap.set ( element.id, element );
 					if (
-						element.tags && element.tags.place
-						&&
-						[ 'town', 'city', 'village', 'hamlet' ].includes ( element.tags.place )
+						element.tags &&
+						element.tags.place &&
+						myPlaces [ element.tags.place ] &&
+						element.tags.name
 					) {
-
-						// a place is found in the response
-						myPlaces.push ( element );
+						let nodeDistance = theSphericalTrigonometry.pointsDistance (
+							mySvgLatLngDistance.latLng,
+							[ element.lat, element.lon ]
+						);
+						let place = myPlaces [ element.tags.place ];
+						if ( place.maxDistance > nodeDistance && place.distance > nodeDistance ) {
+							place.distance = nodeDistance;
+							place.name = element.tags.name;
+						}
 					}
 					break;
 				default :
@@ -214,30 +298,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// The coordinates of the nearest point are used as position of the SVG
 		mySvgLatLngDistance.latLng = myNearestItineraryPoint.latLng;
 
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function mySearchHamlet
-	@desc this function search the nearest place from the nearest itinerary point
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySearchHamlet ( ) {
-		let minDistance = Number.MAX_VALUE;
-		myPlaces.forEach (
-			place => {
-				let placeDistance =
-					theSphericalTrigonometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
-				if ( minDistance > placeDistance ) {
-					minDistance = placeDistance;
-					myPlace = place.tags.name;
-				}
-			}
-		);
 	}
 
 	/**
@@ -871,42 +931,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		https://lz4.overpass-api.de/api/interpreter?
 		data=
-			[out:json][timeout:40];																=> format, timeout
-
-			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;				=> Searching streets
-
-			is_in(50.489312,5.501035)->.e;														=> Searching city limit
-			area.e[admin_level="2"][name="United Kingdom"]->.f;
-			area.e[admin_level="8"]->.g;
-			area.e[admin_level="10"]->.h;
-			if(f.count(deriveds)==0){
-				.g->.i;																			Normally admin_level = 8
-			}
-			else{																				but in the UK nothing is as
-				if(h.count(deriveds)==0){														in the others countries...
-					.g->.i;																		So we have to search first
-				}																				with admin_level = 10
-				else{																			and if nothing found,
-					.h->.i;																		search with admin_level = 8
-				}
-			}
-			.i out;
-
-			(
-				node(area.i)[place="village"];													=> Searching places in the
-				node(area.i)[place="hamlet"];													city area
-				node(area.i)[place="city"];
-				node(area.i)[place="town"];
-			)->.k;
-
-			( 																					=> Searching places near the
-				node(around:200,50.489312,5.501035)[place="hamlet"];							icon point
-				node(around:400,50.489312,5.501035)[place="village"];
-				node(around:1200,50.489312,5.501035)[place="city"];
-				node(around:1500,50.489312,5.501035)[place="town"];
-			)->.l;
-			node.k.l->.m;
-			.m out;
+			[out:json][timeout:40];
+			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;
+			is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
+			node(around:1500,50.644242,5.572354)[place];out;
 		*/
 
 		const SEARCH_AROUND_FACTOR = 1.5;
@@ -917,48 +945,13 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
 
 		let requestUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' +
-			theConfig.note.svgTimeOut + '];' +
+			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
 			( ICON_DIMENSIONS.svgViewboxDim * SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
-			',' +
-			requestLatLng +
-			')->.a;(.a >;.a;)->.a;.a out;' +
-			'is_in(' +
-			requestLatLng +
-			')->.e;' +
-			'area.e[admin_level="2"][name="United Kingdom"]->.f;' +
-			'area.e[admin_level="8"]->.g;' +
-			'area.e[admin_level="10"]->.h;' +
-			'if(f.count(deriveds)==0){.g->.i;}else{if(h.count(deriveds)==0){.g->.i;}else{.h->.i;}}.i out;' +
-			'(node(area.i)[place="village"];' +
-			'node(area.i)[place="hamlet"];' +
-			'node(area.i)[place="city"];' +
-			'node(area.i)[place="town"];)->.k;' +
-			'( ' +
-			'node(around:' +
-			theConfig.note.svgHamletDistance +
-			',' +
-			requestLatLng +
-			')[place="hamlet"];' +
-			'node(around:' +
-			theConfig.note.svgVillageDistance +
-			',' +
-			requestLatLng +
-			')[place="village"];' +
-			'node(around:' +
-			theConfig.note.svgCityDistance +
-			',' +
-			requestLatLng +
-			')[place="city"];' +
-			'node(around:' +
-			theConfig.note.svgTownDistance +
-			',' +
-			requestLatLng +
-			')[place="town"];' +
-			')->.l;' +
-			'node.k.l->.m;' +
-			'.m out;';
+			',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
+			'is_in(' + requestLatLng + ')->.e;area.e[admin_level][boundary="administrative"];out;' +
+			'node(around:' + ourQueryDistance + ',' + requestLatLng + ')[place];out;';
+
 		return requestUrl;
 	}
 
@@ -981,7 +974,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 			myCreateNodesAndWaysMaps ( );
 			myCreateSvg ( );
-			mySearchHamlet ( );
+			mySetHamletAndCity ( );
 			myComputeTranslation ( );
 			myComputeRotationAndDirection ( );
 			mySetDirectionArrowAndTooltip ( );
@@ -1015,7 +1008,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		myResponse = {};
 		mySvg = null;
-		myCity = '';
+		myCity = null;
+		myPlace = null;
 		myDirectionArrow = ' ';
 		myTooltip = '';
 		myStreets = '';

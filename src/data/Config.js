@@ -207,6 +207,10 @@ let ourPrivateConfig = {
 		svgZoom : 17,
 		svgRcnRefDistance : 20,
 		svgAngleDistance : 10,
+		osmCityAdminLevel : {
+			GB : '10',
+			DEFAULT : '8'
+		},
 		svgHamletDistance : 200,
 		svgVillageDistance : 400,
 		svgCityDistance : 1200,
