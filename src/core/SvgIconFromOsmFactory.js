@@ -107,10 +107,9 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	const AT_START = -1;
 	const ON_ROUTE = 0;
 	const AT_END = 1;
-
 	const MY_OSM_COUNTRY_ADMIN_LEVEL = '2';
-	let myOsmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
 
+	let myOsmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
 	let mySvgLatLngDistance = Object.seal (
 		{
 			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
@@ -119,7 +118,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	);
 	let myNearestItineraryPoint = null;
 	let myRoute = null;
-	let myResponse = {};
 	let myWaysMap = new Map ( );
 	let myNodesMap = new Map ( );
 	let myAdminNames = [];
@@ -190,7 +188,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateNodesAndWaysMaps ( ) {
+	function myCreateNodesAndWaysMaps ( overpassAPIdata ) {
 		myWaysMap.clear ( );
 		myNodesMap.clear ( );
 		myAdminNames = [];
@@ -218,7 +216,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		};
 		const LNG = theConfig.nominatim.language;
 
-		myResponse.elements.forEach (
+		overpassAPIdata.elements.forEach (
 			element => {
 				switch ( element.type ) {
 				case 'area' :
@@ -315,7 +313,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myLatLngCompare ( itineraryPoint ) {
 
-		const COMPARE_PRECISION = 0.00001;
+		const COMPARE_PRECISION = 0.000005;
 
 		let isWayPoint = false;
 		myRoute.wayPoints.forEach (
@@ -958,6 +956,46 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myBuildIconAndAdress
+	@desc Search and build all the needed data
+	@param {function} onOk The success handler passed to the Promise
+	@param {function} onError The error handler passed to the Promise
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myBuildIconAndAdress ( overpassAPIdata, onOk /* , onError */ ) {
+		myCreateNodesAndWaysMaps ( overpassAPIdata );
+		myCreateSvg ( );
+		mySetHamletAndCity ( );
+		myComputeTranslation ( );
+		myComputeRotationAndDirection ( );
+		mySetDirectionArrowAndTooltip ( );
+		mySearchPassingStreets ( );
+		myCreateRoute ( );
+		myCreateWays ( );
+		myCreateRcnRef ( );
+
+		ourRequestStarted = false;
+
+		onOk (
+			Object.freeze (
+				{
+					svg : mySvg,
+					tooltip : myTooltip,
+					city : myCity,
+					place : myPlace,
+					streets : myStreets,
+					latLng : myNearestItineraryPoint.latLng
+				}
+			)
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myGetIconAndAdress
 	@desc This is the entry point for the icon creation
 	@param {function} onOk The success handler passed to the Promise
@@ -969,36 +1007,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myGetIconAndAdress ( onOk, onError ) {
 
-		function BuildIconAndAdress ( response ) {
-			myResponse = response;
-
-			myCreateNodesAndWaysMaps ( );
-			myCreateSvg ( );
-			mySetHamletAndCity ( );
-			myComputeTranslation ( );
-			myComputeRotationAndDirection ( );
-			mySetDirectionArrowAndTooltip ( );
-			mySearchPassingStreets ( );
-			myCreateRoute ( );
-			myCreateWays ( );
-			myCreateRcnRef ( );
-
-			ourRequestStarted = false;
-
-			onOk (
-				Object.freeze (
-					{
-						svg : mySvg,
-						tooltip : myTooltip,
-						city : myCity,
-						place : myPlace,
-						streets : myStreets,
-						latLng : myNearestItineraryPoint.latLng
-					}
-				)
-			);
-		}
-
 		if ( ourRequestStarted ) {
 			onError ( 'A request is already running' );
 			return;
@@ -1006,7 +1014,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		ourRequestStarted = true;
 
-		myResponse = {};
 		mySvg = null;
 		myCity = null;
 		myPlace = null;
@@ -1021,7 +1028,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				response => {
 					if ( HTTP_STATUS_OK === response.status && response.ok ) {
 						response.json ( )
-							. then ( BuildIconAndAdress )
+							. then ( overpassAPIdata => myBuildIconAndAdress ( overpassAPIdata, onOk, onError ) )
 							.catch (
 								err => {
 									ourRequestStarted = false;
