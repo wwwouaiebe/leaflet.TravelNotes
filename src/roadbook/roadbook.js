@@ -47,6 +47,10 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
+let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
+let language = params.get ( 'lng' );
+let pageId = params.get ( 'page' );
+
 function showTravelNotes ( ) {
 	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
@@ -90,6 +94,8 @@ function showRouteManeuvers ( ) {
 	}
 }
 
+document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
+
 function updateRoadbook ( pageContent ) {
 	document.getElementById ( 'TravelNotes' ).textContent = '';
 	theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
@@ -103,88 +109,132 @@ function updateRoadbook ( pageContent ) {
 	showRouteManeuvers ( );
 }
 
-document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
+function setContentFromIndexedDb ( ) {
+	if ( pageId ) {
+		theIndexedDb.getOpenPromise ( )
+			.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
+			.then ( pageContent => { updateRoadbook ( pageContent ); } )
+			.catch ( err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+			);
 
-let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
-let language = params.get ( 'lng' );
-let pageId = params.get ( 'page' );
+		window.addEventListener (
+			'storage',
+			( ) => {
+				theIndexedDb.getReadPromise ( pageId )
+					.then ( pageContent => {
+						if ( pageContent ) {
+							updateRoadbook ( pageContent );
+						}
+						else {
+							document.getElementById ( 'TravelNotes' ).textContent = '';
+						}
+					} )
+					.catch ( err => {
+						if ( err instanceof Error ) {
+							console.error ( err );
+						}
+					}
+					);
+			}
+		);
+		window.addEventListener (
+			'unload',
+			( ) => {
+				theIndexedDb.closeDb ( );
+			}
+		);
 
-if ( pageId ) {
-	theIndexedDb.getOpenPromise ( )
-		.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
-		.then ( pageContent => { updateRoadbook ( pageContent ); } )
-		.catch ( err => {
+	}
+	else {
+		document.getElementById ( 'TravelNotes-Menu' )
+			.removeChild ( document.getElementById ( 'TravelNotes-ButtonContainer' ) );
+	}
+}
+
+function translatePage ( ) {
+	if ( language ) {
+		fetch (
+			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
+			'TravelNotes' +
+			language.toUpperCase ( ) +
+			'.json'
+		)
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							.then (
+								translations => {
+									theTranslator.setTranslations ( translations );
+									document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
+									theTranslator.getText ( 'Roadbook - show travel notes' );
+									document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
+									theTranslator.getText ( 'Roadbook - show maneuver' );
+									document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
+									theTranslator.getText ( 'Roadbook - show routes notes' );
+								}
+							)
+							.catch (
+								err => {
+									if ( err instanceof Error ) {
+										console.error ( err );
+									}
+								}
+							);
+					}
+				}
+			);
+	}
+}
+
+function addSaveButton ( ) {
+	function saveFile ( ) {
+		try {
+			let fileName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' )
+				.textContent + '-Roadbook.html';
+			let tmpSaveButton = document.getElementById ( 'TravelNotes-Menu' ).removeChild (
+				document.getElementById ( 'TravelNotes-SaveButton' )
+			);
+
+			let mapFile = window.URL.createObjectURL (
+				new File (
+					[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
+					fileName,
+					{ type : 'text/plain' }
+				)
+			);
+			let element = document.createElement ( 'a' );
+			element.setAttribute ( 'href', mapFile );
+			element.setAttribute ( 'download', fileName );
+			element.style.display = 'none';
+			document.body.appendChild ( element );
+			element.click ( );
+			document.body.removeChild ( element );
+			window.URL.revokeObjectURL ( mapFile );
+			document.getElementById ( 'TravelNotes-Menu' ).appendChild ( tmpSaveButton );
+		}
+		catch ( err ) {
 			if ( err instanceof Error ) {
 				console.error ( err );
 			}
 		}
-		);
+	}
 
-	window.addEventListener (
-		'storage',
-		( ) => {
-			theIndexedDb.getReadPromise ( pageId )
-				.then ( pageContent => {
-					if ( pageContent ) {
-						updateRoadbook ( pageContent );
-					}
-					else {
-						document.getElementById ( 'TravelNotes' ).textContent = '';
-					}
-				} )
-				.catch ( err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-				}
-				);
-		}
-	);
-	window.addEventListener (
-		'unload',
-		( ) => {
-			theIndexedDb.closeDb ( );
-		}
-	);
-
-}
-else {
-	document.getElementById ( 'TravelNotes-Menu' )
-		.removeChild ( document.getElementById ( 'TravelNotes-ButtonContainer' ) );
+	let saveButton = document.createElement ( 'button' );
+	saveButton.textContent = theTranslator.getText ( 'Roadbook - save file' );
+	saveButton.id = 'TravelNotes-SaveButton';
+	document.getElementById ( 'TravelNotes-Menu' ).appendChild ( saveButton );
+	saveButton.addEventListener ( 'click', saveFile );
 }
 
-if ( language ) {
-	fetch (
-		window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-		'TravelNotes' +
-		language.toUpperCase ( ) +
-		'.json'
-	)
-		.then (
-			response => {
-				if ( HTTP_STATUS_OK === response.status && response.ok ) {
-					response.json ( )
-						.then (
-							translations => {
-								theTranslator.setTranslations ( translations );
-								document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
-								theTranslator.getText ( 'Roadbook - show travel notes' );
-								document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
-								theTranslator.getText ( 'Roadbook - show maneuver' );
-								document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
-								theTranslator.getText ( 'Roadbook - show routes notes' );
-							}
-						)
-						.catch (
-							err => {
-								if ( err instanceof Error ) {
-									console.error ( err );
-								}
-							}
-						);
-				}
-			}
-		);
+if ( pageId ) {
+	translatePage ( );
+	addSaveButton ( );
+	setContentFromIndexedDb ( );
 }
 
 showTravelNotes ( );
