@@ -238,7 +238,7 @@ class Route	{
 		@type {boolean}
 		*/
 
-		this.chain = false;
+		this.chain = true;
 
 		/**
 		the distance betwween the starting point of the traval and the starting point
