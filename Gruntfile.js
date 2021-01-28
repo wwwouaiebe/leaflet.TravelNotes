@@ -152,6 +152,12 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'src/icons/pageIcon',
+						src: ['*.svg'],
+						dest: 'dist/'
+					},
+					{
+						expand: true,
 						cwd: 'src/html/',
 						src: ['index.html'],
 						dest: 'dist/'
@@ -173,6 +179,12 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'src/translations/',
 						src: ['*.json'],
+						dest: 'dist/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/icons/pageIcon',
+						src: ['*.svg'],
 						dest: 'dist/viewer/'
 					},
 					{
@@ -215,6 +227,12 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'src/icons/pageIcon',
+						src: ['*.svg'],
+						dest: 'gh-page/'
+					},
+					{
+						expand: true,
 						cwd: 'src/html/',
 						src: ['index.html'],
 						dest: 'gh-page/'
@@ -236,6 +254,12 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'src/translations/',
 						src: ['*.json'],
+						dest: 'gh-page/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/icons/pageIcon',
+						src: ['*.svg'],
 						dest: 'gh-page/viewer/'
 					},
 					{
@@ -309,6 +333,12 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: 'src/icons/pageIcon',
+						src: ['*.svg'],
+						dest: 'debug/'
+					},
+					{
+						expand: true,
 						cwd: 'src/html/',
 						src: 'indexDebug.html',
 						rename: function ( ){return 'debug/index.html';}
@@ -342,6 +372,12 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'src/translations/',
 						src: ['*.json'],
+						dest: 'debug/viewer/'
+					},
+					{
+						expand: true,
+						cwd: 'src/icons/pageIcon',
+						src: ['*.svg'],
 						dest: 'debug/viewer/'
 					},
 					{
