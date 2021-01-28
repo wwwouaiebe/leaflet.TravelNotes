@@ -225,7 +225,7 @@ function addSaveButton ( ) {
 	}
 
 	let saveButton = document.createElement ( 'button' );
-	saveButton.textContent = theTranslator.getText ( 'Roadbook - save file' );
+	saveButton.textContent = theTranslator.getText ( 'Roadbook - Save' );
 	saveButton.id = 'TravelNotes-SaveButton';
 	document.getElementById ( 'TravelNotes-Menu' ).appendChild ( saveButton );
 	saveButton.addEventListener ( 'click', saveFile );

@@ -8,3 +8,4 @@ backup/
 tmp/
 debug/
 TechDoc/
+tests/
