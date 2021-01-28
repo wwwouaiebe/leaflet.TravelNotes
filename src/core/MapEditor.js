@@ -81,7 +81,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const MARKER_BOUNDS_PRECISION = 0.01;
-const WAY_POINT_ICON_SIZE = 40;
+const WAY_POINT_ICON_SIZE = 20;
 
 let ourTempWayPointMarker = null;
 let ourTempWayPointInitialLatLng = null;
