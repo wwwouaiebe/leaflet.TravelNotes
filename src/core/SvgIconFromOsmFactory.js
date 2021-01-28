@@ -383,7 +383,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// searching in the nodes JS map the incoming, outgoing and icon nodes
 		myNodesMap.forEach (
 			node => {
-				if ( node.tags && node.tags.rcn_ref && 'bike' === myRoute.itinerary.transitMode ) {
+				if ( 'bike' === myRoute.itinerary.transitMode && node.tags && node.tags.rcn_ref ) {
 					rcnRefNode = node;
 				}
 				if ( myNearestItineraryPoint ) {
@@ -430,11 +430,11 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway );
 
 		if (
+			'bike' === myRoute.itinerary.transitMode
+			&&
 			iconNode && iconNode.tags && iconNode.tags.rcn_ref
 			&&
 			iconNode.tags [ 'network:type' ] && 'node_network' === iconNode.tags [ 'network:type' ]
-			&&
-			'bike' === myRoute.itinerary.transitMode
 		) {
 			myRcnRef = iconNode.tags.rcn_ref;
 			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - rcnRef', { rcnRef : myRcnRef } );
