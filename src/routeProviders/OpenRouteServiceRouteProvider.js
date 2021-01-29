@@ -230,81 +230,12 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 
 	function myGetRequestHeaders ( ) {
 
-		return [
-			{
-				headerName : 'Accept',
-				headerValue : 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8'
-			},
-			{
-				headerName : 'Content-Type',
-				headerValue : 'application/json'
-			},
-			{
-				headerName : 'Authorization',
-				headerValue : myProviderKey
-			}
-		];
-	}
+		let orsHeaders = new Headers ( );
+		orsHeaders.append ( 'Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8' );
+		orsHeaders.append ( 'Content-Type', 'application/json' );
+		orsHeaders.append ( 'Authorization', myProviderKey );
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myPostXHRJsonPromise
-	@desc post request to OpenRouteService. Notice that, for openRouteService we need to perform a POST and
-	gives the API key in the request headers and  options and wayPoints in the body...
-	@param {string} url
-	@param {function} onError a function to pass to myParseResponse or to call when an error occurs
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myPostXHRJsonPromise ( url, requestHeaders, body ) {
-
-		/*
-		--- jsonRequest function --------------------------------------------------------------------------------------
-
-		---------------------------------------------------------------------------------------------------------------
-		*/
-
-		function jsonRequest ( onOk, onError ) {
-
-			const READY_STATE_DONE = 4;
-			const HTTP_STATUS_ERR = 400;
-			const REQUEST_TIME_OUT = 15000;
-
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = REQUEST_TIME_OUT;
-
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
-					if ( HTTP_STATUS_OK === xmlHttpRequest.status ) {
-						let response = null;
-						try {
-							response = JSON.parse ( xmlHttpRequest.responseText );
-							onOk ( response );
-						}
-						catch ( err ) { onError ( err ); }
-					}
-					else if ( HTTP_STATUS_ERR <= xmlHttpRequest.status ) {
-						onError (
-							new Error ( 'Error HTTP ' + xmlHttpRequest.status + ' ' + xmlHttpRequest.statusText )
-						);
-					}
-					else {
-						onError ( new Error ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL ) );
-					}
-				}
-			};
-			xmlHttpRequest.open ( 'POST', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach ( header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue ) );
-			}
-			xmlHttpRequest.overrideMimeType ( 'application/json' );
-			xmlHttpRequest.send ( body );
-		}
-
-		return new Promise ( jsonRequest );
+		return orsHeaders;
 	}
 
 	/**
@@ -321,9 +252,18 @@ function ourNewOpenRouteServiceRouteProvider ( ) {
 
 	function myGetRoute ( onOk, onError ) {
 
-		myPostXHRJsonPromise ( myGetUrl ( ), myGetRequestHeaders ( ), myGetBody ( ) )
-			.then ( response => myParseResponse ( response, onOk, onError ) )
-			.catch ( err => onError ( err ) );
+		fetch ( myGetUrl ( ), { method : 'POST', headers : myGetRequestHeaders ( ), body : myGetBody ( ) } )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							.then ( result => myParseResponse ( result, onOk, onError ) );
+					}
+					else {
+						onError ( new Error ( 'Invalid status ' + response.status ) );
+					}
+				}
+			);
 	}
 
 	/**
