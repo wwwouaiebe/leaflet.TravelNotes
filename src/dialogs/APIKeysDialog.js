@@ -717,7 +717,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			myAPIKeysDialog.content
 		);
 
-		if ( theConfig.haveCrypto ) {
+		if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
 			myCreateReloadKeysFromServerFileButton ( );
 			myCreateSaveKeysToSecureFileButton ( );
 			myCreateRestoreKeysFromSecureFileButton ( );

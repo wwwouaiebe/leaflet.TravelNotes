@@ -229,12 +229,14 @@ The methos ask a password to the user and try to decode the file
 */
 
 function ourOnServerFileFound ( data ) {
-	newDataEncryptor ( ).decryptData (
-		data,
-		ourOnOkDecryptServerFile,
-		ourOnErrorDecryptServerFile,
-		newPasswordDialog ( false ).show ( )
-	);
+	if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
+		newDataEncryptor ( ).decryptData (
+			data,
+			ourOnOkDecryptServerFile,
+			ourOnErrorDecryptServerFile,
+			newPasswordDialog ( false ).show ( )
+		);
+	}
 }
 
 /**

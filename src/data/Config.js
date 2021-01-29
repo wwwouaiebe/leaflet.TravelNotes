@@ -273,7 +273,6 @@ let ourPrivateConfig = {
 			fillOpacity : 1
 		}
 	},
-	haveCrypto : false,
 	itineraryPane :
 	{
 		showNotes : true,
@@ -432,7 +431,6 @@ class Config {
 	get nominatim ( ) { return ourPrivateConfig.nominatim; }
 	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
 	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
-	get haveCrypto ( ) { return ourPrivateConfig.haveCrypto; }
 	get itineraryPane ( ) { return ourPrivateConfig.itineraryPane; }
 	get colorDialog ( ) { return ourPrivateConfig.colorDialog; }
 

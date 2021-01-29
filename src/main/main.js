@@ -76,7 +76,6 @@ function ourMain ( ) {
 	let myLanguage = null;
 	let myTravelUrl = null;
 	let myErrorMessage = '';
-	let myHaveCrypto = false;
 	let myOriginAndPath = window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'TravelNotes';
 
 	/**
@@ -127,29 +126,6 @@ function ourMain ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myTestCrypto
-	@desc This function test the crypto functions and the scure context
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myTestCrypto ( ) {
-		if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
-			return window.crypto.subtle.importKey (
-				'raw',
-				new window.TextEncoder ( ).encode ( 'hoho' ),
-				{ name : 'PBKDF2' },
-				false,
-				[ 'deriveKey' ]
-			);
-		}
-		return Promise.reject ( new Error ( 'Invalid crypto functions or unsecure context' ) );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myLoadConfig
 	@desc This function load the content of the TravelNotesConfig.json file into theConfig object
 	@private
@@ -163,7 +139,6 @@ function ourMain ( ) {
 		if ( HTTP_STATUS_OK === configResponse.status && configResponse.ok ) {
 			let config = await configResponse.json ( );
 			config.language = myLanguage || config.language;
-			config.haveCrypto = myHaveCrypto;
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
 				config.layersToolbarUI.theDevil.addButton = false;
 				config.errorUI.showHelp = true;
@@ -346,7 +321,6 @@ function ourMain ( ) {
 	async function myLoadJsonFiles ( ) {
 
 		let results = await Promise.allSettled ( [
-			myTestCrypto ( ),
 			fetch ( myOriginAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
 			fetch ( myOriginAndPath + 'Layers.json' ),
 			fetch ( myOriginAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
@@ -356,16 +330,14 @@ function ourMain ( ) {
 			fetch ( myOriginAndPath + 'SearchDictionaryEN.csv' )
 		] );
 
-		const TRANSLATIONS_FILE_INDEX = 1;
-		const LAYERS_FILE_INDEX = 2;
-		const NOTE_CONFIG_FILE_INDEX = 3;
-		const DEFAULT_TRANSLATIONS_FILE_INDEX = 4;
-		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 5;
-		const SEARCH_DICTIONARY_FILE_INDEX = 6;
-		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 7;
-		if ( 'fulfilled' === results [ ZERO ].status ) {
-			myHaveCrypto = true;
-		}
+		const TRANSLATIONS_FILE_INDEX = 0;
+		const LAYERS_FILE_INDEX = 1;
+		const NOTE_CONFIG_FILE_INDEX = 2;
+		const DEFAULT_TRANSLATIONS_FILE_INDEX = 3;
+		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 4;
+		const SEARCH_DICTIONARY_FILE_INDEX = 5;
+		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 6;
+
 		myErrorMessage = await myLoadTranslations (
 			results [ TRANSLATIONS_FILE_INDEX ],
 			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
