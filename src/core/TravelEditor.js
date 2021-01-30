@@ -90,6 +90,10 @@ import { theMouseUI } from '../UI/MouseUI.js';
 
 class TravelEditor {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method is called when a route is dropped in the TravelUI and then routes reordered.
 	@param {!number} draggedRouteObjId The objId of the dragged route
@@ -153,7 +157,7 @@ class TravelEditor {
 
 }
 
-const ourTravelEditor = Object.seal ( new TravelEditor );
+const ourTravelEditor = new TravelEditor ( );
 
 export {
 

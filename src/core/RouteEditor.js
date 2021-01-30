@@ -316,6 +316,10 @@ function ourOnRoutingOk ( ) {
 
 class RouteEditor {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method add a route to the Travel and, if no other route is beind edited,
 	start the edition of this new route
@@ -734,7 +738,7 @@ class RouteEditor {
 	}
 }
 
-const ourRouteEditor = Object.seal ( new RouteEditor );
+const ourRouteEditor = new RouteEditor ( );
 
 export {
 

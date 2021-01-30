@@ -1057,6 +1057,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	class SvgIconFromOsmFactory {
 
+		constructor ( ) {
+			Object.seal ( this );
+		}
+
 		/**
 		this function returns a Promise for the svg icon creation
 		@param {array.<number>} iconLatLng The lat and lng where the icon must be createDocumentFragment
@@ -1072,7 +1076,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		}
 	}
 
-	return Object.seal ( new SvgIconFromOsmFactory );
+	return new SvgIconFromOsmFactory ( );
 }
 
 /**

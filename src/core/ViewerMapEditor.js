@@ -260,6 +260,10 @@ function ourGetDashArray ( route ) {
 
 class ViewerMapEditor {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method add a route on the map
 	This method is called by the 'routeupdated' event listener of the viewer
@@ -460,7 +464,7 @@ class ViewerMapEditor {
 
 }
 
-const ourViewerMapEditor = Object.seal ( new ViewerMapEditor );
+const ourViewerMapEditor = new ViewerMapEditor ( );
 
 export {
 

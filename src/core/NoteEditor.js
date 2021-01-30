@@ -301,6 +301,10 @@ function ourNewNote ( latLng ) {
 
 class NoteEditor {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/*
 	get the status of the osmSearchNoteDialog flag
 	*/
@@ -733,7 +737,7 @@ class NoteEditor {
 	}
 }
 
-const ourNoteEditor = Object.seal ( new NoteEditor );
+const ourNoteEditor = new NoteEditor ( );
 
 export {
 

@@ -68,6 +68,10 @@ let ourProfileFactory = newProfileFactory ( );
 
 class ProfileWindowsManager {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method creates the profile for a Route after a call to a provider
 	and manages the window profile
@@ -172,7 +176,7 @@ class ProfileWindowsManager {
 
 }
 
-const ourProfileWindowsManager = Object.seal ( new ProfileWindowsManager );
+const ourProfileWindowsManager = new ProfileWindowsManager ( );
 
 export {
 

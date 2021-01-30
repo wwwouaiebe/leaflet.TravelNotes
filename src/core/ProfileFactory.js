@@ -509,6 +509,10 @@ function ourNewProfileFactory ( ) {
 
 	class ProfileFactory {
 
+		constructor ( ) {
+			Object.seal ( this );
+		}
+
 		/**
 		This method smooth the Route elevation. Some elevations are not correct due to imprecisions in the elev files
 		so it's needed to smooth these strange elevs
@@ -526,7 +530,7 @@ function ourNewProfileFactory ( ) {
 		createSvg ( route ) { return myCreateSvg ( route ); }
 	}
 
-	return Object.seal ( new ProfileFactory );
+	return new ProfileFactory ( );
 }
 
 export {

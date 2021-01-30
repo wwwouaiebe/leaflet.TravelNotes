@@ -113,6 +113,10 @@ function ourNewZoomer ( ) {
 
 	class Zoomer {
 
+		constructor ( ) {
+			Object.seal ( this );
+		}
+
 		/**
 		Performs a zoom on a point
 		@param {Array.<number>} latLng The latitude and longitude of the point
@@ -208,7 +212,7 @@ function ourNewZoomer ( ) {
 		}
 	}
 
-	return Object.seal ( new Zoomer );
+	return new Zoomer ( );
 }
 
 export {

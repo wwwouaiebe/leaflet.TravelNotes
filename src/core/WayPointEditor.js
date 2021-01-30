@@ -155,6 +155,10 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 
 class WayPointEditor {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method add a WayPoint
 	@param {Array.<number>} latLng The latitude and longitude where the WayPoint will be added
@@ -365,7 +369,7 @@ class WayPointEditor {
 	}
 }
 
-const ourWayPointEditor = Object.seal ( new WayPointEditor );
+const ourWayPointEditor = new WayPointEditor ( );
 
 export {
 

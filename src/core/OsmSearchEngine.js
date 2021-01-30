@@ -465,6 +465,10 @@ async function ourParseSearchResult ( results ) {
 
 class OsmSearchEngine	{
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	The dictionary is a DictionaryItems tree that is used to performs search in osm
 	*/
@@ -578,7 +582,7 @@ class OsmSearchEngine	{
 	}
 }
 
-const ourOsmSearchEngine = Object.seal ( new OsmSearchEngine );
+const ourOsmSearchEngine = new OsmSearchEngine ( );
 
 export {
 
