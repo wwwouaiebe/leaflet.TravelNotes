@@ -192,11 +192,13 @@ class Layer	{
 				throw new Error ( 'invalid getCapabilitiesUrl for layer ' + this.name );
 			}
 		}
+
+		Object.freeze ( this );
 	}
 }
 
 function ourNewLayer ( jsonLayer ) {
-	return Object.freeze ( new Layer ( jsonLayer ) );
+	return new Layer ( jsonLayer );
 }
 
 export {

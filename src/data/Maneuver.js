@@ -184,6 +184,7 @@ class Maneuver {
 
 		ourObjIds.set ( this, newObjId ( ) );
 
+		Object.seal ( this );
 	}
 
 	/**
@@ -274,7 +275,7 @@ class Maneuver {
 */
 
 function ourNewManeuver ( ) {
-	return Object.seal ( new Maneuver );
+	return new Maneuver ( );
 }
 
 export {

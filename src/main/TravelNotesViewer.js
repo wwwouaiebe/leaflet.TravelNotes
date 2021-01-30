@@ -160,6 +160,10 @@ async function ourLoadDistantTravel ( travelUrl ) {
 
 class TravelNotesViewer {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method load the TravelNotes viewer and open a read only map passed trought the url.
 	This method can only be executed once. Others call will be ignored.
@@ -180,7 +184,7 @@ class TravelNotesViewer {
 	}
 }
 
-const ourTravelNotesViewer = Object.seal ( new TravelNotesViewer );
+const ourTravelNotesViewer = new TravelNotesViewer ( );
 
 export {
 

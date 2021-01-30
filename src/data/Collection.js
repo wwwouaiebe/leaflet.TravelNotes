@@ -233,6 +233,10 @@ function ourNewCollection ( objectConstructor ) {
 
 	class Collection {
 
+		constructor ( ) {
+			Object.seal ( this );
+		}
+
 		/**
 		Add an object at the end of the collection
 		@param {Object} object The object to add
@@ -458,7 +462,7 @@ function ourNewCollection ( objectConstructor ) {
 		}
 	}
 
-	return Object.seal ( new Collection );
+	return new Collection ( );
 }
 
 export {

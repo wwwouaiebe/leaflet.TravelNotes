@@ -175,6 +175,8 @@ class ItineraryPoint {
 		this.elev = ELEV.defaultValue;
 
 		ourObjIds.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -266,7 +268,7 @@ class ItineraryPoint {
 */
 
 function ourNewItineraryPoint ( ) {
-	return Object.seal ( new ItineraryPoint );
+	return new ItineraryPoint ( );
 }
 
 export {

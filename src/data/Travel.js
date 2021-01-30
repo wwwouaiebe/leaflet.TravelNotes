@@ -227,6 +227,7 @@ class Travel {
 
 		ourObjIds.set ( this, newObjId ( ) );
 
+		Object.seal ( this );
 	}
 
 	/**
@@ -314,7 +315,7 @@ class Travel {
 
 function ourNewTravel ( ) {
 
-	return Object.seal ( new Travel );
+	return new Travel ( );
 }
 
 export {

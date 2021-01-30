@@ -298,6 +298,8 @@ class Note	{
 		this.chainedDistance = DISTANCE.defaultValue;
 
 		ourObjIds.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -501,7 +503,7 @@ class Note	{
 */
 
 function ourNewNote ( ) {
-	return Object.seal ( new Note );
+	return new Note ( );
 }
 
 export {

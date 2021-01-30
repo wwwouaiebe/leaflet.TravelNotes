@@ -210,6 +210,8 @@ class Itinerary	{
 		this.maneuvers = newCollection ( newManeuver );
 
 		ourObjIds.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -319,7 +321,7 @@ class Itinerary	{
 
 function ourNewItinerary ( ) {
 
-	return Object.seal ( new Itinerary );
+	return new Itinerary ( );
 }
 
 export {

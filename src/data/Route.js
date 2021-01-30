@@ -278,6 +278,8 @@ class Route	{
 		this.hidden = false;
 
 		ourObjIds.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -421,7 +423,7 @@ class Route	{
 
 function ourNewRoute ( ) {
 
-	return Object.seal ( new Route );
+	return new Route ( );
 }
 
 export {

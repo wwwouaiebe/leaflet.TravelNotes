@@ -79,6 +79,10 @@ function ourNewObjType ( objTypeName ) {
 
 	class ObjType {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		the name of the ObjType
 		@type {string}
@@ -124,7 +128,7 @@ function ourNewObjType ( objTypeName ) {
 		}
 	}
 
-	return Object.seal ( new ObjType );
+	return new ObjType ( );
 
 }
 

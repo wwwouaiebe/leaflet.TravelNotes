@@ -338,6 +338,10 @@ async function ourLoadDistantTravel ( travelUrl ) {
 
 class TravelNotes {
 
+	constructor ( ) {
+		Object.seal ( this );
+	}
+
 	/**
 	This method load TravelNotes and open a read only map passed trought the url.
 	This method can only be executed once. Others call will be ignored.
@@ -446,7 +450,7 @@ class TravelNotes {
 	get version ( ) { return theCurrentVersion; }
 }
 
-const ourTravelNotes = Object.seal ( new TravelNotes );
+const ourTravelNotes = new TravelNotes ( );
 
 export {
 

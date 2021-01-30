@@ -178,6 +178,8 @@ class WayPoint {
 		this.lng = LAT_LNG.defaultValue;
 
 		ourObjIds.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -283,7 +285,7 @@ class WayPoint {
 */
 
 function ourNewWayPoint ( ) {
-	return Object.seal ( new WayPoint );
+	return new WayPoint ( );
 }
 
 export {
