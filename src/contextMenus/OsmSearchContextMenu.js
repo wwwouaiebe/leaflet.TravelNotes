@@ -172,9 +172,7 @@ function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let osmSearchContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
-
-	return Object.seal ( osmSearchContextMenu );
+	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
 export {

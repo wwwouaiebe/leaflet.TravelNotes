@@ -110,9 +110,7 @@ function ourNewProfileContextMenu ( contextMenuEvent ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let profileContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
-
-	return Object.seal ( profileContextMenu );
+	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
 export {

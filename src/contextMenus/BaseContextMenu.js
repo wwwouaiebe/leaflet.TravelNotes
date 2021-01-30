@@ -510,6 +510,10 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
 	class BaseContextMenu {
 
+		constructor ( ) {
+			Object.seal ( this );
+		}
+
 		/**
 		Show the menu on the screen.
 		*/
