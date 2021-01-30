@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, LAT_LNG } from '../util/Constants.js';
+import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 function ourNewPublicTransportRouteProvider ( ) {
@@ -888,69 +888,6 @@ function ourNewPublicTransportRouteProvider ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myGetXHRJsonPromise
-	@desc coming soon...
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetXHRJsonPromise ( url, requestHeaders ) {
-
-		/*
-		--- jsonRequest function ----------------------------------------------------------------------------------
-
-		-----------------------------------------------------------------------------------------------------------
-		*/
-
-		function jsonRequest ( onOk, onError ) {
-
-			const READY_STATE_DONE = 4;
-			const HTTP_STATUS_OK = 200;
-			const HTTP_STATUS_ERR = 400;
-			const REQUEST_TIME_OUT = 15000;
-
-			let xmlHttpRequest = new XMLHttpRequest ( );
-			xmlHttpRequest.timeout = REQUEST_TIME_OUT;
-
-			xmlHttpRequest.onreadystatechange = function ( ) {
-				if ( READY_STATE_DONE === xmlHttpRequest.readyState ) {
-					if ( HTTP_STATUS_OK === xmlHttpRequest.status ) {
-						let response = null;
-						try {
-							response = JSON.parse ( xmlHttpRequest.responseText );
-							onOk ( response );
-						}
-						catch ( err ) {
-							onError ( new Error ( 'JSON parsing error. File : ' + xmlHttpRequest.responseURL ) );
-						}
-					}
-					else if ( HTTP_STATUS_ERR <= xmlHttpRequest.status ) {
-						onError (
-							new Error ( 'Error HTTP ' + xmlHttpRequest.status + ' ' + xmlHttpRequest.statusText )
-						);
-					}
-					else {
-						onError ( new Error ( 'Error XMLHttpRequest - File : ' + xmlHttpRequest.responseURL ) );
-					}
-				}
-			};
-			xmlHttpRequest.open ( 'GET', url, true );
-			if ( requestHeaders ) {
-				requestHeaders.forEach (
-					header => xmlHttpRequest.setRequestHeader ( header.headerName, header.headerValue )
-				);
-			}
-			xmlHttpRequest.overrideMimeType ( 'application/json' );
-			xmlHttpRequest.send ( null );
-		}
-
-		return new Promise ( jsonRequest );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myGetRoute
 	@desc call the provider, wait for the response and then parse the provider response. Notice that we have two calls to the
 	Provider: one for the relation list and one for the ways and nodes. Notice also the dialog box between the 2 calls.
@@ -963,11 +900,31 @@ function ourNewPublicTransportRouteProvider ( ) {
 
 	function myGetRoute ( onOk, onError ) {
 
-		myGetXHRJsonPromise ( myGetRelationsUrl ( ) )
-			.then ( response => myGetDialogPromise ( response ) )
-			.then ( ( ) => myGetXHRJsonPromise ( myGetWayNodesUrl ( ) ) )
-			.then ( response => myParseResponse ( response, onOk, onError ) )
-			.catch ( err => onError ( err ) );
+		fetch ( myGetRelationsUrl ( ) )
+			.then (
+				responseRelations => {
+					if ( HTTP_STATUS_OK === responseRelations.status && responseRelations.ok ) {
+						responseRelations.json ( )
+							.then ( myGetDialogPromise )
+							.then ( ( ) => fetch ( myGetWayNodesUrl ( ) ) )
+							.then (
+								responseWayNodes => {
+									if ( HTTP_STATUS_OK === responseWayNodes.status && responseWayNodes.ok ) {
+										responseWayNodes.json ( )
+											.then ( wayNodes => myParseResponse ( wayNodes, onOk, onError ) );
+									}
+									else {
+										onError ( new Error ( 'An error occurs...' ) );
+									}
+								}
+							)
+							.catch ( ( ) => onError ( new Error ( 'An error occurs...' ) ) );
+					}
+					else {
+						onError ( new Error ( 'An error occurs...' ) );
+					}
+				}
+			);
 	}
 
 	/**
