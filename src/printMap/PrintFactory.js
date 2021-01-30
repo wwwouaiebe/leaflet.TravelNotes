@@ -739,6 +739,10 @@ function ourNewPrintFactory ( ) {
 
 	class PrintFactory {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		Hide the map and user interface, prepares the print views and add a toolbar on top of the screen
 		@param {PrintRouteMapOptions} printData the print options returned by the PrintRouteMapDialog
@@ -770,7 +774,7 @@ function ourNewPrintFactory ( ) {
 		}
 	}
 
-	return Object.freeze ( new PrintFactory );
+	return new PrintFactory ( );
 }
 
 export {

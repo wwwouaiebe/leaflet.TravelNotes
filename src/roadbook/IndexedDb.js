@@ -59,6 +59,10 @@ let ourDb = null;
 
 class IndexedDb {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Open the indexedDb
 	@return {Promise} A Promise  that fullfil when the indexedDb is opened or reject when a problem occurs
@@ -180,7 +184,7 @@ class IndexedDb {
 	}
 }
 
-const ourIndexedDb = Object.freeze ( new IndexedDb );
+const ourIndexedDb = new IndexedDb ( );
 
 export {
 
