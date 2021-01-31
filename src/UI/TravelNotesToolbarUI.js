@@ -367,6 +367,10 @@ function ourCreatePinButton ( ) {
 
 class TravelNotesToolbarUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
@@ -413,7 +417,7 @@ class TravelNotesToolbarUI {
 	}
 }
 
-const ourTravelNotesToolbarUI = Object.freeze ( new TravelNotesToolbarUI );
+const ourTravelNotesToolbarUI = new TravelNotesToolbarUI ( );
 
 export {
 

@@ -326,6 +326,10 @@ function ourNewItineraryPaneUI ( ) {
 
 	class ItineraryPaneUI {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		This function removes all the elements from the data div and control div
 		*/
@@ -368,7 +372,7 @@ function ourNewItineraryPaneUI ( ) {
 		}
 	}
 
-	return Object.freeze ( new ItineraryPaneUI );
+	return new ItineraryPaneUI ( );
 }
 
 export { ourNewItineraryPaneUI as newItineraryPaneUI };

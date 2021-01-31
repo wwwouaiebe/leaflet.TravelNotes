@@ -378,6 +378,10 @@ function ourCreateTransitModesButtons ( ) {
 
 class ProvidersToolbarUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
@@ -424,7 +428,7 @@ class ProvidersToolbarUI {
 	}
 }
 
-const ourProvidersToolbarUI = Object.freeze ( new ProvidersToolbarUI );
+const ourProvidersToolbarUI = new ProvidersToolbarUI ( );
 
 export {
 

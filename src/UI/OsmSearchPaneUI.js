@@ -688,6 +688,10 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	class OsmSearchPaneUI {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		This function removes all the elements from the data div and control div
 		*/
@@ -731,7 +735,7 @@ function ourNewOsmSearchPaneUI ( ) {
 		}
 	}
 
-	return Object.freeze ( new OsmSearchPaneUI );
+	return new OsmSearchPaneUI ( );
 }
 
 export { ourNewOsmSearchPaneUI as newOsmSearchPaneUI };

@@ -74,6 +74,10 @@ let ourTranslations = new Map ( );
 
 class Translator {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Load the translations
 	@param {Array.<Translation>} translations The translations to load
@@ -107,7 +111,7 @@ class Translator {
 	}
 }
 
-const ourTranslator = Object.freeze ( new Translator );
+const ourTranslator = new Translator ( );
 
 export {
 

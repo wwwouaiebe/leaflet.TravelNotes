@@ -357,6 +357,10 @@ Displays buttons to change the background maps and manages the background maps l
 
 class LayersToolbarUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	*/
@@ -432,7 +436,7 @@ class LayersToolbarUI {
 	}
 }
 
-const ourLayersToolbarUI = Object.freeze ( new LayersToolbarUI );
+const ourLayersToolbarUI = new LayersToolbarUI ( );
 
 export {
 

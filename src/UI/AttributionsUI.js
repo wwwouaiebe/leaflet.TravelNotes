@@ -65,6 +65,10 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 class AttributionsUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the Attributions UI.
 	*/
@@ -102,7 +106,7 @@ class AttributionsUI {
 	}
 }
 
-const ourAttributionsUI = Object.seal ( new AttributionsUI );
+const ourAttributionsUI = new AttributionsUI ( );
 
 export {
 

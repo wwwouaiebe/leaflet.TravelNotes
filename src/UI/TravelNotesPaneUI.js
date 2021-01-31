@@ -181,6 +181,10 @@ function ourNewTravelNotesPaneUI ( ) {
 
 	class TravelNotesPaneUI {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		This function removes all the elements from the data div and control div
 		*/
@@ -238,7 +242,7 @@ function ourNewTravelNotesPaneUI ( ) {
 		}
 	}
 
-	return Object.freeze ( new TravelNotesPaneUI );
+	return new TravelNotesPaneUI ( );
 }
 
 export {

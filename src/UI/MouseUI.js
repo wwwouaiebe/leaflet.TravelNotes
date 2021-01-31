@@ -140,6 +140,10 @@ function ourOnMapZoomEnd ( ) {
 
 class MouseUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	change the save status on the UI
 	*/
@@ -171,7 +175,7 @@ class MouseUI {
 	}
 }
 
-const ourMouseUI = Object.freeze ( new MouseUI );
+const ourMouseUI = new MouseUI ( );
 
 export {
 

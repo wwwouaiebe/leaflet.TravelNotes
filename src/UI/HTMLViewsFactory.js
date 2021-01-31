@@ -778,6 +778,10 @@ function ourGetTravelHTML ( classPrefix ) {
 
 class HTMLViewsFactory {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Gives an HTMLElement with the travel header, the travel notes, all the routes of the travel
 	with route header, route notes, route maneuvers, route footer and travel footer
@@ -853,7 +857,7 @@ class HTMLViewsFactory {
 	}
 }
 
-const ourHTMLViewsFactory = Object.freeze ( new HTMLViewsFactory );
+const ourHTMLViewsFactory = new HTMLViewsFactory ( );
 
 export {
 

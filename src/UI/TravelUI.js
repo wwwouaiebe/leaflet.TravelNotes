@@ -682,6 +682,10 @@ function ourOnRouteContextMenu ( contextMenuEvent ) {
 
 class TravelUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
@@ -754,7 +758,7 @@ class TravelUI {
 	}
 }
 
-const ourTravelUI = Object.freeze ( new TravelUI );
+const ourTravelUI = new TravelUI ( );
 
 export {
 
