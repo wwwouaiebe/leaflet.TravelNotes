@@ -102,6 +102,10 @@ const EARTH_RADIUS = 6371e3;
 
 class Geometry {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Compute the latitude, longitude, elevation, ascent and distance of a point on a route when only the distance between
 	the beginning of the route and the point is know
@@ -291,7 +295,7 @@ class Geometry {
 	}
 }
 
-const ourGeometry = Object.freeze ( new Geometry );
+const ourGeometry = new Geometry ( );
 
 export {
 

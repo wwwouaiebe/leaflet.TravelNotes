@@ -88,6 +88,10 @@ function myNormalizeLng ( Lng ) {
 
 class SphericalTrigonometry {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 
 	This function gives an arc of a spherical triangle when the 2 others arcs and the opposite summit are know
@@ -162,7 +166,7 @@ class SphericalTrigonometry {
 	}
 }
 
-const ourSphericalTrigonometry = Object.freeze ( new SphericalTrigonometry );
+const ourSphericalTrigonometry = new SphericalTrigonometry ( );
 
 export {
 

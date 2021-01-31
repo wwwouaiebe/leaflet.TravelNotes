@@ -57,6 +57,10 @@ import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
 
 class Utilities {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Gives an UUID
 	*/
@@ -226,7 +230,7 @@ class Utilities {
 	}
 }
 
-const ourUtilities = Object.freeze ( new Utilities );
+const ourUtilities = new Utilities ( );
 
 export {
 

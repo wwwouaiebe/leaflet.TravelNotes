@@ -348,6 +348,10 @@ function ourGetTarget ( eventName ) {
 
 class EventDispatcher {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Creates and dispatch an event to the correct target
 	@param {string} eventName the name of the event
@@ -366,7 +370,7 @@ class EventDispatcher {
 	}
 }
 
-const ourEventDispatcher = Object.freeze ( new EventDispatcher );
+const ourEventDispatcher = new EventDispatcher ( );
 
 export {
 

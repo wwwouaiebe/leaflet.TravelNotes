@@ -83,6 +83,10 @@ function ourAddProperties ( element, properties ) {
 */
 
 class HTMLElementsFactory {
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	create ( tagName, properties, parentNode ) {
 		let element = null;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
@@ -101,7 +105,7 @@ class HTMLElementsFactory {
 	}
 }
 
-const ourHTMLElementsFactory = Object.freeze ( new HTMLElementsFactory );
+const ourHTMLElementsFactory = new HTMLElementsFactory ( );
 
 export {
 
