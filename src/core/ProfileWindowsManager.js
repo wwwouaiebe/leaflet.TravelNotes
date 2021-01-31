@@ -176,7 +176,7 @@ class ProfileWindowsManager {
 
 }
 
-const ourProfileWindowsManager = new ProfileWindowsManager ( );
+const OUR_PROFILE_WINDOWS_MANAGER = new ProfileWindowsManager ( );
 
 export {
 
@@ -191,7 +191,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourProfileWindowsManager as theProfileWindowsManager
+	OUR_PROFILE_WINDOWS_MANAGER as theProfileWindowsManager
 
 };
 

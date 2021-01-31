@@ -50,13 +50,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE, DEGREES } from '../util/Constants.js';
 
-const DEGREE_180 = 180;
-const DEGREE_360 = 360;
-const DEGREE_540 = 540;
-
-const TO_RADIANS = Math.PI / DEGREE_180;
+const TO_RADIANS = Math.PI / DEGREES.d180;
 const EARTH_RADIUS = 6371e3;
 
 /**
@@ -72,7 +68,7 @@ const EARTH_RADIUS = 6371e3;
 */
 
 function myNormalizeLng ( Lng ) {
-	return ( ( Lng + DEGREE_540 ) % DEGREE_360 ) - DEGREE_180;
+	return ( ( Lng + DEGREES.d540 ) % DEGREES.d360 ) - DEGREES.d180;
 }
 
 /**

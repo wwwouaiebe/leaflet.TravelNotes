@@ -49,7 +49,19 @@ Tests ...
 */
 
 import { theConfig } from '../data/Config.js';
-import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
+import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, DISTANCE } from '../util/Constants.js';
+
+const TEN = 10;
+
+const OUR_LEFT_PROFILE = SVG_PROFILE.margin.toFixed ( ZERO );
+const OUR_BOTTOM_PROFILE = ( SVG_PROFILE.margin + SVG_PROFILE.height ).toFixed ( ZERO );
+const OUR_RIGHT_PROFILE = ( SVG_PROFILE.margin + SVG_PROFILE.width ).toFixed ( ZERO );
+const OUR_TOP_PROFILE = SVG_PROFILE.margin.toFixed ( ZERO );
+const OUR_MAX_X_LEGEND_NUMBER = 8;
+const OUR_MAX_Y_LEGEND_NUMBER = 4;
+const OUR_RIGHT_TEXT_PROFILE = ( SVG_PROFILE.margin + SVG_PROFILE.width + SVG_PROFILE.xDeltaText ).toFixed ( ZERO );
+const OUR_LEFT_TEXT_PROFILE = ( SVG_PROFILE.margin - SVG_PROFILE.xDeltaText ).toFixed ( ZERO );
+const OUR_BOTTOM_TEXT_PROFILE = SVG_PROFILE.margin + SVG_PROFILE.height + ( SVG_PROFILE.margin / TWO );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -241,7 +253,6 @@ function ourNewProfileFactory ( ) {
 
 		}
 
-		const TEN = 10;
 		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * TEN;
 		if ( distance <= TWO * mySmoothPoints * mySmoothDistance ) {
 			return;
@@ -317,13 +328,9 @@ function ourNewProfileFactory ( ) {
 	*/
 
 	function myCreateFramePolyline ( ) {
-		const LEFT = SVG_PROFILE.margin.toFixed ( ZERO );
-		const BOTTOM = ( SVG_PROFILE.margin + SVG_PROFILE.height ).toFixed ( ZERO );
-		const RIGHT = ( SVG_PROFILE.margin + SVG_PROFILE.width ).toFixed ( ZERO );
-		const TOP = SVG_PROFILE.margin.toFixed ( ZERO );
 		let pointsAttribute =
-			LEFT + ',' + TOP + ' ' + LEFT + ',' + BOTTOM + ' ' +
-			RIGHT + ',' + BOTTOM + ' ' + RIGHT + ',' + TOP;
+			OUR_LEFT_PROFILE + ',' + OUR_TOP_PROFILE + ' ' + OUR_LEFT_PROFILE + ',' + OUR_BOTTOM_PROFILE + ' ' +
+			OUR_RIGHT_PROFILE + ',' + OUR_BOTTOM_PROFILE + ' ' + OUR_RIGHT_PROFILE + ',' + OUR_TOP_PROFILE;
 		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
 		polyline.setAttributeNS ( null, 'points', pointsAttribute );
 		polyline.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-framePolyline' );
@@ -342,15 +349,11 @@ function ourNewProfileFactory ( ) {
 
 	function myCreateDistanceTexts ( ) {
 
-		const MAX_X_LEGEND_NUMBER = 8;
-		const BOTTOM_TEXT = SVG_PROFILE.margin + SVG_PROFILE.height + ( SVG_PROFILE.margin / TWO );
-		const M_IN_KM = 1000;
-
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = 0;
 		SVG_PROFILE.hScales.forEach (
 			scale => {
-				let currentDelta = Math.abs ( ( myRoute.distance / MAX_X_LEGEND_NUMBER ) - scale );
+				let currentDelta = Math.abs ( ( myRoute.distance / OUR_MAX_X_LEGEND_NUMBER ) - scale );
 				if ( currentDelta < minDelta ) {
 					minDelta = currentDelta;
 					selectedScale = scale;
@@ -363,9 +366,9 @@ function ourNewProfileFactory ( ) {
 
 			distanceText.appendChild (
 				document.createTextNode (
-					M_IN_KM < selectedScale || ZERO < myRoute.chainedDistance
+					DISTANCE.metersInKm < selectedScale || ZERO < myRoute.chainedDistance
 						?
-						( distance / M_IN_KM ) + ' km'
+						( distance / DISTANCE.metersInKm ) + ' km'
 						:
 						distance + ' m '
 				)
@@ -376,7 +379,7 @@ function ourNewProfileFactory ( ) {
 				'x',
 				SVG_PROFILE.margin + ( ( distance - myRoute.chainedDistance ) * myHScale )
 			);
-			distanceText.setAttributeNS ( null, 'y', BOTTOM_TEXT );
+			distanceText.setAttributeNS ( null, 'y', OUR_BOTTOM_TEXT_PROFILE );
 			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( distanceText );
 			distance += selectedScale;
@@ -395,13 +398,11 @@ function ourNewProfileFactory ( ) {
 
 	function myCreateElevTexts ( ) {
 
-		const MAX_Y_LEGEND_NUMBER = 4;
-
 		let minDelta = Number.MAX_VALUE;
 		let selectedScale = ZERO;
 		SVG_PROFILE.vScales.forEach (
 			scale => {
-				let currentDelta = Math.abs ( ( myDeltaElev / MAX_Y_LEGEND_NUMBER ) - scale );
+				let currentDelta = Math.abs ( ( myDeltaElev / OUR_MAX_Y_LEGEND_NUMBER ) - scale );
 				if ( currentDelta < minDelta ) {
 					minDelta = currentDelta;
 					selectedScale = scale;
@@ -409,26 +410,19 @@ function ourNewProfileFactory ( ) {
 			}
 		);
 		let elev = Math.ceil ( myMinElev / selectedScale ) * selectedScale;
-		const RIGHT_TEXT =
-			(
-				SVG_PROFILE.margin +
-				SVG_PROFILE.width +
-				SVG_PROFILE.xDeltaText
-			).toFixed ( ZERO );
-		const LEFT_TEXT = ( SVG_PROFILE.margin - SVG_PROFILE.xDeltaText ).toFixed ( ZERO );
 		while ( elev < myMaxElev ) {
 			let elevTextY = SVG_PROFILE.margin + ( ( myMaxElev - elev ) * myVScale );
 			let rightElevText = document.createElementNS ( SVG_NS, 'text' );
 			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
 			rightElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
-			rightElevText.setAttributeNS ( null, 'x', RIGHT_TEXT );
+			rightElevText.setAttributeNS ( null, 'x', OUR_RIGHT_TEXT_PROFILE );
 			rightElevText.setAttributeNS ( null, 'y', elevTextY );
 			rightElevText.setAttributeNS ( null, 'text-anchor', 'start' );
 			mySvg.appendChild ( rightElevText );
 			let leftElevText = document.createElementNS ( SVG_NS, 'text' );
 			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
 			leftElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevLegend' );
-			leftElevText.setAttributeNS ( null, 'x', LEFT_TEXT );
+			leftElevText.setAttributeNS ( null, 'x', OUR_LEFT_TEXT_PROFILE );
 			leftElevText.setAttributeNS ( null, 'y', elevTextY );
 			leftElevText.setAttributeNS ( null, 'text-anchor', 'end' );
 			mySvg.appendChild ( leftElevText );

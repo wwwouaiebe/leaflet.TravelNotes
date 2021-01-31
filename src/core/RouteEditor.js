@@ -738,7 +738,7 @@ class RouteEditor {
 	}
 }
 
-const ourRouteEditor = new RouteEditor ( );
+const OUR_ROUTE_EDITOR = new RouteEditor ( );
 
 export {
 
@@ -753,7 +753,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourRouteEditor as theRouteEditor
+	OUR_ROUTE_EDITOR as theRouteEditor
 };
 
 /*

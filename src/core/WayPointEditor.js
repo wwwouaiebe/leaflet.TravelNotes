@@ -369,7 +369,7 @@ class WayPointEditor {
 	}
 }
 
-const ourWayPointEditor = new WayPointEditor ( );
+const OUR_WAY_POINT_EDITOR = new WayPointEditor ( );
 
 export {
 
@@ -384,7 +384,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourWayPointEditor as theWayPointEditor
+	OUR_WAY_POINT_EDITOR as theWayPointEditor
 };
 
 /*

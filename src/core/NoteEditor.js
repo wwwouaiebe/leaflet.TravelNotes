@@ -737,7 +737,7 @@ class NoteEditor {
 	}
 }
 
-const ourNoteEditor = new NoteEditor ( );
+const OUR_NOTE_EDITOR = new NoteEditor ( );
 
 export {
 
@@ -752,7 +752,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourNoteEditor as theNoteEditor
+	OUR_NOTE_EDITOR as theNoteEditor
 };
 
 /*

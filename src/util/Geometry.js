@@ -77,16 +77,14 @@ Tests ...
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { DISTANCE, ZERO, ONE, TWO } from '../util/Constants.js';
-
-const DEGREE_180 = 180;
+import { DISTANCE, ZERO, ONE, TWO, DEGREES } from '../util/Constants.js';
 
 const MAX_LAT = 90;
 const MIN_LAT = -90;
 const MAX_LNG = 180;
 const MIN_LNG = -180;
 
-const TO_RADIANS = Math.PI / DEGREE_180;
+const TO_RADIANS = Math.PI / DEGREES.d180;
 const EARTH_RADIUS = 6371e3;
 
 /**

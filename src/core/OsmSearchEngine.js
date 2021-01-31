@@ -58,7 +58,7 @@ let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
 let ourNextSearchRectangleObjId = INVALID_OBJ_ID;
 let ourSearchStarted = false;
 
-const SEARCH_DIM = 5000;
+const OUR_SEARCH_DIM = 5000;
 let ourPreviousSearchBounds = null;
 let ourSearchBounds = null;
 let ourDictionary = null;
@@ -148,7 +148,7 @@ function ourOnMapChange ( ) {
 	}
 	let mapCenter = theTravelNotesData.map.getCenter ( );
 	ourSearchBounds = theTravelNotesData.map.getBounds ( );
-	let maxBounds = theGeometry.getSquareBoundingBox ( [ mapCenter.lat, mapCenter.lng ], SEARCH_DIM );
+	let maxBounds = theGeometry.getSquareBoundingBox ( [ mapCenter.lat, mapCenter.lng ], OUR_SEARCH_DIM );
 	ourSearchBounds.getSouthWest ( ).lat = Math.max ( ourSearchBounds.getSouthWest ( ).lat, maxBounds.getSouthWest ( ).lat );
 	ourSearchBounds.getSouthWest ( ).lng = Math.max ( ourSearchBounds.getSouthWest ( ).lng, maxBounds.getSouthWest ( ).lng );
 	ourSearchBounds.getNorthEast ( ).lat = Math.min ( ourSearchBounds.getNorthEast ( ).lat, maxBounds.getNorthEast ( ).lat );
@@ -582,7 +582,7 @@ class OsmSearchEngine	{
 	}
 }
 
-const ourOsmSearchEngine = new OsmSearchEngine ( );
+const OUR_OSM_SEARCH_ENGINE = new OsmSearchEngine ( );
 
 export {
 
@@ -597,7 +597,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourOsmSearchEngine as theOsmSearchEngine
+	OUR_OSM_SEARCH_ENGINE as theOsmSearchEngine
 };
 
 /*

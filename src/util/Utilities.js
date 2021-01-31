@@ -42,7 +42,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, TWO, DISTANCE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -171,7 +171,6 @@ class Utilities {
 	*/
 
 	formatDistance ( distance ) {
-		const M_IN_KM = 1000;
 		const DISTANCE_ROUND = 10;
 		const THREE = 3;
 
@@ -179,9 +178,9 @@ class Utilities {
 		if ( ZERO >= iDistance ) {
 			return '0\u00A0km';
 		}
-		return Math.floor ( iDistance / M_IN_KM ) +
+		return Math.floor ( iDistance / DISTANCE.metersInKm ) +
 			',' +
-			Math.floor ( ( iDistance % M_IN_KM ) / DISTANCE_ROUND ).toFixed ( ZERO )
+			Math.floor ( ( iDistance % DISTANCE.metersInKm ) / DISTANCE_ROUND ).toFixed ( ZERO )
 				.padStart ( TWO, '0' )
 				.padEnd ( THREE, '0' ) +
 			'\u00A0km';

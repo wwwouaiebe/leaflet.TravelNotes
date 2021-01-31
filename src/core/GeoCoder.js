@@ -72,9 +72,16 @@ Tests ...
 */
 
 import { theConfig } from '../data/Config.js';
-import { ZERO, ONE, TWO, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, TWO, HTTP_STATUS_OK, OSM_COUNTRY_ADMIN_LEVEL } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+
+const OUR_QUERY_DISTANCE = Math.max (
+	theConfig.note.svgHamletDistance,
+	theConfig.note.svgVillageDistance,
+	theConfig.note.svgCityDistance,
+	theConfig.note.svgTownDistance
+);
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,13 +93,6 @@ import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-
-const ourQueryDistance = Math.max (
-	theConfig.note.svgHamletDistance,
-	theConfig.note.svgVillageDistance,
-	theConfig.note.svgCityDistance,
-	theConfig.note.svgTownDistance
-);
 
 function ourNewGeoCoder ( ) {
 
@@ -113,10 +113,8 @@ function ourNewGeoCoder ( ) {
 	*/
 
 	function myParseOverpassData ( overpassData ) {
-		const OSM_COUNTRY_ADMIN_LEVEL = '2';
 		let osmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
 
-		const LNG = theConfig.nominatim.language;
 		let adminNames = [];
 		let places = {
 			hamlet : {
@@ -144,8 +142,12 @@ function ourNewGeoCoder ( ) {
 			element => {
 				if ( 'area' === element.type ) {
 					let elementName = element.tags.name;
-					if ( LNG && '*' !== LNG && element.tags [ 'name:' + LNG ] ) {
-						elementName = element.tags [ 'name:' + LNG ];
+					if (
+						theConfig.nominatim.language &&
+						'*' !== theConfig.nominatim.language &&
+						element.tags [ 'name:' + theConfig.nominatim.language ]
+					) {
+						elementName = element.tags [ 'name:' + theConfig.nominatim.language ];
 					}
 					adminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
 					if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
@@ -283,7 +285,7 @@ function ourNewGeoCoder ( ) {
 			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
 			'is_in(' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
 			')->.e;area.e[admin_level][boundary="administrative"];out;' +
-			'node(around:' + ourQueryDistance + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
+			'node(around:' + OUR_QUERY_DISTANCE + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
 			')[place];out;';
 
 		return Promise.allSettled (

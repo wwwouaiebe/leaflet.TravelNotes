@@ -178,7 +178,7 @@ class GeoLocator {
 	}
 }
 
-const ourGeoLocator = new GeoLocator ( );
+const OUR_GEO_LOCATOR = new GeoLocator ( );
 
 export {
 
@@ -193,7 +193,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourGeoLocator as theGeoLocator
+	OUR_GEO_LOCATOR as theGeoLocator
 };
 
 /*

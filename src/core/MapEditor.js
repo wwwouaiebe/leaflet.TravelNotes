@@ -80,8 +80,8 @@ import { theTranslator } from '../UI/Translator.js';
 
 import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TWO } from '../util/Constants.js';
 
-const MARKER_BOUNDS_PRECISION = 0.01;
-const WAY_POINT_ICON_SIZE = 20;
+const OUR_MARKER_BOUNDS_PRECISION = 0.01;
+const OUR_WAY_POINT_ICON_SIZE = 20;
 
 let ourTempWayPointMarker = null;
 let ourTempWayPointInitialLatLng = null;
@@ -371,10 +371,10 @@ function ourOnEditedRouteMouseOver ( mapEvent ) {
 				{
 					icon : window.L.divIcon (
 						{
-							iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
+							iconSize : [ OUR_WAY_POINT_ICON_SIZE, OUR_WAY_POINT_ICON_SIZE ],
 							iconAnchor : [
-								WAY_POINT_ICON_SIZE / TWO,
-								WAY_POINT_ICON_SIZE
+								OUR_WAY_POINT_ICON_SIZE / TWO,
+								OUR_WAY_POINT_ICON_SIZE
 							],
 							html : iconHtml,
 							className : 'TravelNotes-WayPointStyle'
@@ -546,10 +546,10 @@ function ourAddWayPoint ( wayPoint, letter ) {
 		{
 			icon : window.L.divIcon (
 				{
-					iconSize : [ WAY_POINT_ICON_SIZE, WAY_POINT_ICON_SIZE ],
+					iconSize : [ OUR_WAY_POINT_ICON_SIZE, OUR_WAY_POINT_ICON_SIZE ],
 					iconAnchor : [
-						WAY_POINT_ICON_SIZE / TWO,
-						WAY_POINT_ICON_SIZE
+						OUR_WAY_POINT_ICON_SIZE / TWO,
+						OUR_WAY_POINT_ICON_SIZE
 					],
 					html : iconHtml,
 					className : 'TravelNotes-WayPointStyle'
@@ -563,8 +563,8 @@ function ourAddWayPoint ( wayPoint, letter ) {
 		tooltipWayPoint => theDataSearchEngine.getWayPoint ( tooltipWayPoint.objId ).fullName
 	);
 	marker.getTooltip ( ).options.offset = [
-		WAY_POINT_ICON_SIZE / TWO,
-		-WAY_POINT_ICON_SIZE / TWO
+		OUR_WAY_POINT_ICON_SIZE / TWO,
+		-OUR_WAY_POINT_ICON_SIZE / TWO
 	];
 
 	window.L.DomEvent.on ( marker, 'contextmenu', ourOnWayPointContextMenu );
@@ -806,13 +806,13 @@ class MapEditor	{
 					( geometryBounds.getEast ( ) - geometryBounds.getWest ( ) )
 					/
 					( mapBounds.getEast ( ) - mapBounds.getWest ( ) )
-				) > MARKER_BOUNDS_PRECISION
+				) > OUR_MARKER_BOUNDS_PRECISION
 				&&
 				(
 					( geometryBounds.getNorth ( ) - geometryBounds.getSouth ( ) )
 					/
 					( mapBounds.getNorth ( ) - mapBounds.getSouth ( ) )
-				) > MARKER_BOUNDS_PRECISION;
+				) > OUR_MARKER_BOUNDS_PRECISION;
 		}
 		if ( showGeometry ) {
 			ourAddTo ( objId, window.L.polyline ( geometry, theConfig.searchPointPolyline ) );
@@ -855,7 +855,7 @@ class MapEditor	{
 	}
 }
 
-const ourMapEditor = new MapEditor ( );
+const OUR_MAP_EDITOR = new MapEditor ( );
 
 export {
 
@@ -870,7 +870,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourMapEditor as theMapEditor
+	OUR_MAP_EDITOR as theMapEditor
 };
 
 /*

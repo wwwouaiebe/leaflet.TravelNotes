@@ -89,7 +89,8 @@ export const SAVE_STATUS = Object.freeze ( {
 export const DISTANCE = Object.freeze ( {
 	fixed : 2,
 	invalid : -1,
-	defaultValue : 0
+	defaultValue : 0,
+	metersInKm : 1000
 } );
 
 /**
@@ -246,6 +247,15 @@ export const ICON_DIMENSIONS = Object.freeze ( {
 	svgViewboxDim : 200
 } );
 
+export const DEGREES = Object.frezze ( {
+	d0 : 0,
+	d90 : 90,
+	d180 : 180,
+	d270 : 270,
+	d360 : 360,
+	d540 : 540
+} );
+
 /**
 
 @var {Array.<number>} MOUSE_WHEEL_FACTORS
@@ -269,6 +279,8 @@ export const TWO = 2;
 export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export const HTTP_STATUS_OK = 200;
+
+export const OSM_COUNTRY_ADMIN_LEVEL = '2';
 
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------

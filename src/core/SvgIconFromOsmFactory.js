@@ -74,15 +74,25 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { theTranslator } from '../UI/Translator.js';
-import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
+import {
+	SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, HTTP_STATUS_OK, DEGREES, OSM_COUNTRY_ADMIN_LEVEL
+}
+	from '../util/Constants.js';
 
 let ourRequestStarted = false;
-const ourQueryDistance = Math.max (
+const OUR_QUERY_DISTANCE = Math.max (
 	theConfig.note.svgHamletDistance,
 	theConfig.note.svgVillageDistance,
 	theConfig.note.svgCityDistance,
 	theConfig.note.svgTownDistance
 );
+const OUR_ICON_POSITION = Object.freeze ( {
+	atStart : -ONE,
+	onRoute : ZERO,
+	atEnd : ONE
+} );
+
+const OUR_SEARCH_AROUND_FACTOR = 1.5;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -97,17 +107,6 @@ const ourQueryDistance = Math.max (
 
 /* eslint-disable-next-line max-statements */
 function ourNewSvgIconFromOsmFactory ( ) {
-
-	const DEGREE_0 = 0;
-	const DEGREE_90 = 90;
-	const DEGREE_180 = 180;
-	const DEGREE_270 = 270;
-	const DEGREE_360 = 360;
-
-	const AT_START = -1;
-	const ON_ROUTE = 0;
-	const AT_END = 1;
-	const MY_OSM_COUNTRY_ADMIN_LEVEL = '2';
 
 	let myOsmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
 	let mySvgLatLngDistance = Object.seal (
@@ -125,7 +124,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	let myPlace = null;
 	let myCity = null;
 	let mySvg = null;
-	let myPositionOnRoute = ON_ROUTE;
+	let myPositionOnRoute = OUR_ICON_POSITION.onRoute;
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
 	let myDirection = null;
@@ -214,19 +213,21 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				maxDistance : theConfig.note.svgTownDistance
 			}
 		};
-		const LNG = theConfig.nominatim.language;
-
 		overpassAPIdata.elements.forEach (
 			element => {
 				switch ( element.type ) {
 				case 'area' :
 					{
 						let elementName = element.tags.name;
-						if ( LNG && '*' !== LNG && element.tags [ 'name:' + LNG ] ) {
-							elementName = element.tags [ 'name:' + LNG ];
+						if (
+							theConfig.nominatim.language &&
+							'*' !== theConfig.nominatim.language &&
+							element.tags [ 'name:' + theConfig.nominatim.language ]
+						) {
+							elementName = element.tags [ 'name:' + theConfig.nominatim.language ];
 						}
 						myAdminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
-						if ( MY_OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
+						if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
 							myOsmCityAdminLevel =
 								theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || myOsmCityAdminLevel;
 						}
@@ -504,12 +505,12 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			}
 		);
 
-		if ( AT_START === myPositionOnRoute ) {
+		if ( OUR_ICON_POSITION.atStart === myPositionOnRoute ) {
 
 			// It's the start point adding a green circle to the outgoing street
 			myStreets = '🟢 ' + outgoingStreet;
 		}
-		else if ( AT_END === myPositionOnRoute ) {
+		else if ( OUR_ICON_POSITION.atEnd === myPositionOnRoute ) {
 
 			// It's the end point adding a red circle to the incoming street
 			myStreets = incomingStreet + ' 🔴 ';
@@ -607,15 +608,15 @@ function ourNewSvgIconFromOsmFactory ( ) {
 					( rotationPoint [ ZERO ] - iconPoint [ ZERO ] )
 				)
 				*
-				DEGREE_180 / Math.PI;
+				DEGREES.d180 / Math.PI;
 			if ( ZERO > myRotation ) {
-				myRotation += DEGREE_360;
+				myRotation += DEGREES.d360;
 			}
-			myRotation -= DEGREE_270;
+			myRotation -= DEGREES.d270;
 
 			// point 0,0 of the svg is the UPPER left corner
 			if ( ZERO > rotationPoint [ ZERO ] - iconPoint [ ZERO ] ) {
-				myRotation += DEGREE_180;
+				myRotation += DEGREES.d180;
 			}
 		}
 
@@ -632,26 +633,26 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				( directionPoint [ ZERO ] - iconPoint [ ZERO ] )
 			)
 				*
-				DEGREE_180 / Math.PI;
+				DEGREES.d180 / Math.PI;
 
 			// point 0,0 of the svg is the UPPER left corner
 			if ( ZERO > directionPoint [ ZERO ] - iconPoint [ ZERO ] ) {
-				myDirection += DEGREE_180;
+				myDirection += DEGREES.d180;
 			}
 			myDirection -= myRotation;
 
 			// setting direction between 0 and 360
-			while ( DEGREE_0 > myDirection ) {
-				myDirection += DEGREE_360;
+			while ( DEGREES.d0 > myDirection ) {
+				myDirection += DEGREES.d360;
 			}
-			while ( DEGREE_360 < myDirection ) {
-				myDirection -= DEGREE_360;
+			while ( DEGREES.d360 < myDirection ) {
+				myDirection -= DEGREES.d360;
 			}
 		}
 		if ( myNearestItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId ) {
-			myRotation = -myDirection - DEGREE_90;
+			myRotation = -myDirection - DEGREES.d90;
 			myDirection = null;
-			myPositionOnRoute = AT_START;
+			myPositionOnRoute = OUR_ICON_POSITION.atStart;
 		}
 
 		if (
@@ -662,7 +663,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 			// using lat & lng because last point is sometime duplicated
 			myDirection = null;
-			myPositionOnRoute = AT_END;
+			myPositionOnRoute = OUR_ICON_POSITION.atEnd;
 		}
 	}
 
@@ -713,10 +714,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			}
 		}
 
-		if ( AT_START === myPositionOnRoute ) {
+		if ( OUR_ICON_POSITION.atStart === myPositionOnRoute ) {
 			myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Start' );
 		}
-		else if ( AT_END === myPositionOnRoute ) {
+		else if ( OUR_ICON_POSITION.atEnd === myPositionOnRoute ) {
 			myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Stop' );
 		}
 	}
@@ -935,8 +936,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			node(around:1500,50.644242,5.572354)[place];out;
 		*/
 
-		const SEARCH_AROUND_FACTOR = 1.5;
-
 		let requestLatLng =
 			mySvgLatLngDistance.latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) +
 			',' +
@@ -945,10 +944,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		let requestUrl = theConfig.overpassApi.url +
 			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
-			( ICON_DIMENSIONS.svgViewboxDim * SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
+			( ICON_DIMENSIONS.svgViewboxDim * OUR_SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
 			',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
 			'is_in(' + requestLatLng + ')->.e;area.e[admin_level][boundary="administrative"];out;' +
-			'node(around:' + ourQueryDistance + ',' + requestLatLng + ')[place];out;';
+			'node(around:' + OUR_QUERY_DISTANCE + ',' + requestLatLng + ')[place];out;';
 
 		return requestUrl;
 	}

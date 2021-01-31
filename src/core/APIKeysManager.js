@@ -376,7 +376,7 @@ class APIKeysManager {
 	}
 }
 
-const ourAPIKeysManager = new APIKeysManager ( );
+const OUR_API_KEYS_MANAGER = new APIKeysManager ( );
 
 export {
 
@@ -391,7 +391,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourAPIKeysManager as theAPIKeysManager
+	OUR_API_KEYS_MANAGER as theAPIKeysManager
 };
 
 /*

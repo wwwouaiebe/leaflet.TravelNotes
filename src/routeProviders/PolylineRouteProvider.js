@@ -43,17 +43,14 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { ZERO, ONE, TWO, DEGREES } from '../util/Constants.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 const LAT = 0;
 const LNG = 1;
 
-const DEGREE180 = 180;
-const DEGREE360 = 360;
-
-const DEGREE_TO_RADIANS = Math.PI / DEGREE180;
-const RADIANS_TO_DEGREE = DEGREE180 / Math.PI;
+const DEGREE_TO_RADIANS = Math.PI / DEGREES.d180;
+const RADIANS_TO_DEGREE = DEGREES.d180 / Math.PI;
 
 const HALF_PI = Math.PI / TWO;
 
@@ -150,7 +147,7 @@ function ourAddIntermediateItineraryPoints ( startWayPoint, endWaypoint ) {
 
 	// searching the direction: from west to east or east to west...
 	let WestEast =
-		( endWaypoint.lng - startWayPoint.lng + DEGREE360 ) % DEGREE360 > DEGREE180
+		( endWaypoint.lng - startWayPoint.lng + DEGREES.d360 ) % DEGREES.d360 > DEGREES.d180
 			?
 			-ONE
 			:
@@ -256,7 +253,7 @@ function ourParseGreatCircle ( ) {
 	while ( ! itineraryPointsIterator.done ) {
 		maxLng = Math.max ( maxLng, itineraryPointsIterator.value.lng );
 	}
-	let deltaLng = ( maxLng % DEGREE360 ) - maxLng;
+	let deltaLng = ( maxLng % DEGREES.d360 ) - maxLng;
 
 	itineraryPointsIterator = ourRoute.itinerary.itineraryPoints.iterator;
 	while ( ! itineraryPointsIterator.done ) {

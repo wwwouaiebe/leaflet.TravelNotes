@@ -44,7 +44,7 @@ Tests ...
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { ZERO, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, HTTP_STATUS_OK, DISTANCE } from '../util/Constants.js';
 
 const MAPZEN_LAT_LNG_ROUND = 6;
 
@@ -107,8 +107,6 @@ let ourRoute = null;
 
 function ourParseResponse ( response, returnOnOk, returnOnError ) {
 
-	const M_IN_KM = 1000;
-
 	if ( ZERO === response.trip.legs.length ) {
 		returnOnError ( 'Route not found' );
 	}
@@ -131,7 +129,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 					let travelNotesManeuver = window.TaN.maneuver;
 					travelNotesManeuver.iconName = OUR_ICON_LIST [ mapzenManeuver.type || ZERO ];
 					travelNotesManeuver.instruction = mapzenManeuver.instruction || '';
-					travelNotesManeuver.distance = ( mapzenManeuver.length || ZERO ) * M_IN_KM;
+					travelNotesManeuver.distance = ( mapzenManeuver.length || ZERO ) * DISTANCE.metersInKm;
 					travelNotesManeuver.duration = mapzenManeuver.time || ZERO;
 					travelNotesManeuver.itineraryPointObjId = itineraryPoints [ mapzenManeuver.begin_shape_index ].objId;
 					ourRoute.itinerary.maneuvers.add ( travelNotesManeuver );

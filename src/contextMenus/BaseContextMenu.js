@@ -72,6 +72,8 @@ import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 
+const OUR_MENU_MARGIN = 20;
+
 let ourContextMenuEvent = null;
 let ourLat = LAT_LNG.defaultValue;
 let ourLng = LAT_LNG.defaultValue;
@@ -364,8 +366,6 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
 	function myMoveContainer ( ) {
 
-		const MENU_MARGIN = 20;
-
 		let body = document.querySelector ( 'body' );
 
 		// a dummy div is created to find the screen width and height
@@ -377,15 +377,15 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
 			ourContextMenuEvent.originalEvent.clientY,
-			screenHeight - ourContainer.clientHeight - MENU_MARGIN
+			screenHeight - ourContainer.clientHeight - OUR_MENU_MARGIN
 		);
 		let menuLeft = Math.min (
 			ourContextMenuEvent.originalEvent.clientX,
-			screenWidth - ourContainer.clientWidth - MENU_MARGIN
+			screenWidth - ourContainer.clientWidth - OUR_MENU_MARGIN
 		);
 		if ( parentDiv ) {
 			ourContainer.style.top = String ( menuTop ) + 'px';
-			ourContainer.style.right = String ( MENU_MARGIN ) + 'px';
+			ourContainer.style.right = String ( OUR_MENU_MARGIN ) + 'px';
 		}
 		else {
 			ourContainer.style.top = String ( menuTop ) + 'px';

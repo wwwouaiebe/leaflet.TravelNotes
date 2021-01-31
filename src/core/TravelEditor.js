@@ -157,7 +157,7 @@ class TravelEditor {
 
 }
 
-const ourTravelEditor = new TravelEditor ( );
+const OUR_TRAVEL_EDITOR = new TravelEditor ( );
 
 export {
 
@@ -172,7 +172,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelEditor as theTravelEditor
+	OUR_TRAVEL_EDITOR as theTravelEditor
 };
 
 /*
