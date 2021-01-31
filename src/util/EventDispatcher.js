@@ -370,7 +370,7 @@ class EventDispatcher {
 	}
 }
 
-const ourEventDispatcher = new EventDispatcher ( );
+const OUR_EVENT_DISPATCHER = new EventDispatcher ( );
 
 export {
 
@@ -385,7 +385,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourEventDispatcher as theEventDispatcher
+	OUR_EVENT_DISPATCHER as theEventDispatcher
 };
 
 /*

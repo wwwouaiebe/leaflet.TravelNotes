@@ -174,7 +174,11 @@ Enum for latitude and longitude
 
 export const LAT_LNG = Object.freeze ( {
 	defaultValue : 0,
-	fixed : 6
+	fixed : 6,
+	maxLat : 90,
+	minLat : -90,
+	maxLng : 180,
+	minLng : -180
 } );
 
 /**
@@ -293,6 +297,8 @@ export const HTTP_STATUS_OK = 200;
 export const OSM_COUNTRY_ADMIN_LEVEL = '2';
 
 export const SVG_NS = 'http://www.w3.org/2000/svg';
+
+export const EARTH_RADIUS = 6371e3;
 
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------

@@ -50,9 +50,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, DEGREES } from '../util/Constants.js';
-
-const EARTH_RADIUS = 6371e3;
+import { ZERO, ONE, DEGREES, EARTH_RADIUS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -161,7 +159,7 @@ class SphericalTrigonometry {
 	}
 }
 
-const ourSphericalTrigonometry = new SphericalTrigonometry ( );
+const OUR_SPHERICAL_TRIGONOMETRY = new SphericalTrigonometry ( );
 
 export {
 
@@ -176,7 +174,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourSphericalTrigonometry as theSphericalTrigonometry
+	OUR_SPHERICAL_TRIGONOMETRY as theSphericalTrigonometry
 };
 
 /*

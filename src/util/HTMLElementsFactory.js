@@ -105,7 +105,7 @@ class HTMLElementsFactory {
 	}
 }
 
-const ourHTMLElementsFactory = new HTMLElementsFactory ( );
+const OUR_HTML_ELEMENTS_FACTORY = new HTMLElementsFactory ( );
 
 export {
 
@@ -120,7 +120,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourHTMLElementsFactory as theHTMLElementsFactory
+	OUR_HTML_ELEMENTS_FACTORY as theHTMLElementsFactory
 };
 
 /*

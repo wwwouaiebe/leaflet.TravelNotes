@@ -69,11 +69,12 @@ class Utilities {
 		const UUID_LENGHT = 8;
 		const UUID_STRLENGHT = 4;
 		let randomValues = new Uint16Array ( UUID_LENGHT );
-		const separators = [ '', '-', '-', '-', '-', '', '', '' ];
+		const UUID_SEPARATORS = [ '', '-', '-', '-', '-', '', '', '' ];
 		window.crypto.getRandomValues ( randomValues );
 		let UUID = '';
 		for ( let counter = ZERO; counter < UUID_LENGHT; counter ++ ) {
-			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) + separators [ counter ];
+			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) +
+				UUID_SEPARATORS [ counter ];
 		}
 		return UUID;
 	}
@@ -227,7 +228,7 @@ class Utilities {
 	}
 }
 
-const ourUtilities = new Utilities ( );
+const OUR_UTILITIES = new Utilities ( );
 
 export {
 
@@ -242,7 +243,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourUtilities as theUtilities
+	OUR_UTILITIES as theUtilities
 };
 
 /*

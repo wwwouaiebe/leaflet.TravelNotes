@@ -77,14 +77,9 @@ Tests ...
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { DISTANCE, ZERO, ONE, TWO, DEGREES } from '../util/Constants.js';
+import { DISTANCE, ZERO, ONE, TWO, DEGREES, LAT_LNG, EARTH_RADIUS } from '../util/Constants.js';
 
-const MAX_LAT = 90;
-const MIN_LAT = -90;
-const MAX_LNG = 180;
-const MIN_LNG = -180;
-
-const EARTH_RADIUS = 6371e3;
+const HUNDRED = 100;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -123,7 +118,6 @@ class Geometry {
 		let previousItineraryPoint = itineraryPointsIterator.value;
 		itineraryPointsIterator.done;
 		let scale = ( previousItineraryPoint.distance - nearestDistance + distance ) / previousItineraryPoint.distance;
-		const HUNDRED = 100;
 		return Object.freeze (
 			{
 				latLng :
@@ -205,8 +199,8 @@ class Geometry {
 	*/
 
 	getLatLngBounds ( latLngs ) {
-		let sw = window.L.latLng ( [ MAX_LAT, MAX_LNG ] );
-		let ne = window.L.latLng ( [ MIN_LAT, MIN_LNG ] );
+		let sw = window.L.latLng ( [ LAT_LNG.maxLat, LAT_LNG.maxLng ] );
+		let ne = window.L.latLng ( [ LAT_LNG.minLat, LAT_LNG.minLng ] );
 		latLngs.forEach (
 			latLng => {
 				sw.lat = Math.min ( sw.lat, latLng [ ZERO ] );
@@ -292,7 +286,7 @@ class Geometry {
 	}
 }
 
-const ourGeometry = new Geometry ( );
+const OUR_GEOMETRY = new Geometry ( );
 
 export {
 
@@ -307,7 +301,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourGeometry as theGeometry
+	OUR_GEOMETRY as theGeometry
 };
 
 /*

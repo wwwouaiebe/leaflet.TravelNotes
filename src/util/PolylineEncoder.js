@@ -252,7 +252,7 @@ class polylineEncoder {
 	}
 }
 
-const ourPolylineEncoder = new polylineEncoder ( );
+const OUR_POLYLINE_ENCODER = new polylineEncoder ( );
 
 export {
 
@@ -267,7 +267,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourPolylineEncoder as thePolylineEncoder
+	OUR_POLYLINE_ENCODER as thePolylineEncoder
 };
 
 /*
