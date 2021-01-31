@@ -62,19 +62,9 @@ import { theRouteEditor } from '../core/RouteEditor.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO } from '../util/Constants.js';
 
-let ourButtonsDiv = null;
-let ourHaveActiveButton = false;
-const ourTransitModes = [ 'bike', 'pedestrian', 'car', 'train', 'line', 'circle' ];
-let ourTransitModeButtons = {
-	bike : null,
-	pedestrian : null,
-	car : null,
-	train : null,
-	line : null,
-	circle : null
-};
-let ourUIMainDiv = null;
-const ourTransitModeImg = {
+const OUR_TRANSIT_MODES = [ 'bike', 'pedestrian', 'car', 'train', 'line', 'circle' ];
+
+const OUR_TRANSIT_MODE_IMG = {
 	bike :
 		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAABmJLR0QAAAAzAJlWvctWAAAACXBIWX\
 		MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AEIChYTLGSDtAAAA65JREFUSMftVl1sk1UYfs53vnZft4/R/W+hHaUrbshcQch06VCGWd\
@@ -159,6 +149,17 @@ const ourTransitModeImg = {
 		1ZGEm4OKhJSgiSWRVAQmb+urtZUep21soRISbzeDkhCf/Z8/dHT9ybtuwm+RUYJFZP9F5mYLhMhdxI5YzOzMRIXUOZmVkYGBgYP3\
 		78yMrKeefui///GRipZIWKssTv398ZL1++LCsry8zMTPXmJADJwQv2CCSQygAAAABJRU5ErkJggg=='
 };
+let ourButtonsDiv = null;
+let ourHaveActiveButton = false;
+let ourTransitModeButtons = {
+	bike : null,
+	pedestrian : null,
+	car : null,
+	train : null,
+	line : null,
+	circle : null
+};
+let ourUIMainDiv = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -221,7 +222,7 @@ function ourSetProvider ( providerName ) {
 
 	// activating the transit mode buttons, depending of the capabilities of the provider
 	let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
-	ourTransitModes.forEach (
+	OUR_TRANSIT_MODES.forEach (
 		transitMode => {
 			if ( provider.transitModes [ transitMode ] ) {
 				ourTransitModeButtons [ transitMode ].classList.remove ( 'TravelNotes-ProvidersToolbarUI-InactiveImgButton' );
@@ -235,7 +236,7 @@ function ourSetProvider ( providerName ) {
 	// changing the transitMode if the provider don't have the active transit mode
 	if ( ! provider.transitModes [ theTravelNotesData.routing.transitMode ] ) {
 		let firstTransitMode = null;
-		ourTransitModes.forEach (
+		OUR_TRANSIT_MODES.forEach (
 			transitMode => {
 				if ( provider.transitModes[ transitMode ] ) {
 					firstTransitMode = firstTransitMode || transitMode;
@@ -298,7 +299,7 @@ function ourCreateProviderButton ( provider ) {
 
 		// ... and the first possible transit mode will be the active transit mode
 		let firstTransitMode = null;
-		ourTransitModes.forEach (
+		OUR_TRANSIT_MODES.forEach (
 			transitMode => {
 				if ( provider.transitModes[ transitMode ] ) {
 					firstTransitMode = firstTransitMode || transitMode;
@@ -309,7 +310,7 @@ function ourCreateProviderButton ( provider ) {
 			'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton'
 		);
 		theTravelNotesData.routing.transitMode = firstTransitMode;
-		ourTransitModes.forEach (
+		OUR_TRANSIT_MODES.forEach (
 			transitMode => {
 				if ( ! provider.transitModes[ transitMode ] ) {
 					ourTransitModeButtons [ transitMode ].classList.add ( 'TravelNotes-ProvidersToolbarUI-InactiveImgButton' );
@@ -347,12 +348,12 @@ function ourCreateProvidersButtons ( ) {
 */
 
 function ourCreateTransitModesButtons ( ) {
-	ourTransitModes.forEach (
+	OUR_TRANSIT_MODES.forEach (
 		transitMode => {
 			ourTransitModeButtons [ transitMode ] = theHTMLElementsFactory.create (
 				'img',
 				{
-					src : ourTransitModeImg [ transitMode ],
+					src : OUR_TRANSIT_MODE_IMG [ transitMode ],
 					id : 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton',
 					className : 'TravelNotes-ProvidersToolbarUI-ImgButton',
 					title : theTranslator.getText ( 'ProvidersToolbarUI - ' + transitMode ),
@@ -428,7 +429,7 @@ class ProvidersToolbarUI {
 	}
 }
 
-const ourProvidersToolbarUI = new ProvidersToolbarUI ( );
+const OUR_PROVIDERS_TOOLBAR_UI = new ProvidersToolbarUI ( );
 
 export {
 
@@ -443,7 +444,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourProvidersToolbarUI as theProvidersToolbarUI
+	OUR_PROVIDERS_TOOLBAR_UI as theProvidersToolbarUI
 };
 
 /*

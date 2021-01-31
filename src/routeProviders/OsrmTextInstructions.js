@@ -53,7 +53,7 @@ Don't rename variables for compatibility with osrm-text-instructions
 
 import { ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
-const OSRM_LANGUAGES = [
+const OUR_OSRM_LANGUAGES = [
 	'ar',
 	'da',
 	'de',
@@ -86,6 +86,9 @@ const OSRM_LANGUAGES = [
 	'zh-Hans'
 ];
 
+// working only with v5
+const OUR_VERSION = 'v5';
+
 let languages =
 {
 	supportedCodes : [ ],
@@ -93,9 +96,6 @@ let languages =
 	grammars : {},
 	abbreviations : {}
 };
-
-// working only with v5
-const version = 'v5';
 
 // references to avoid rewriting ourOsrmTextInstructions
 let instructions = languages.instructions;
@@ -130,31 +130,31 @@ function ourDirectionFromDegree ( language, degree ) {
 		throw new Error ( 'Degree ' + degree + ' invalid' );
 	}
 	else if ( NNE >= degree ) {
-		return instructions[ language ][ version ].constants.direction.north;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.north;
 	}
 	else if ( ENE > degree ) {
-		return instructions[ language ][ version ].constants.direction.northeast;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.northeast;
 	}
 	else if ( ESE >= degree ) {
-		return instructions[ language ][ version ].constants.direction.east;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.east;
 	}
 	else if ( SSE > degree ) {
-		return instructions[ language ][ version ].constants.direction.southeast;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.southeast;
 	}
 	else if ( SSW >= degree ) {
-		return instructions[ language ][ version ].constants.direction.south;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.south;
 	}
 	else if ( WSW > degree ) {
-		return instructions[ language ][ version ].constants.direction.southwest;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.southwest;
 	}
 	else if ( WNW >= degree ) {
-		return instructions[ language ][ version ].constants.direction.west;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.west;
 	}
 	else if ( NNW > degree ) {
-		return instructions[ language ][ version ].constants.direction.northwest;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.northwest;
 	}
 	else {
-		return instructions[ language ][ version ].constants.direction.north;
+		return instructions[ language ][ OUR_VERSION ].constants.direction.north;
 	}
 }
 
@@ -194,7 +194,7 @@ class OsrmTextInstructions 	{
 	}
 
 	loadLanguage ( lng ) {
-		let language = NOT_FOUND === OSRM_LANGUAGES.indexOf ( lng ) ? 'en' : lng;
+		let language = NOT_FOUND === OUR_OSRM_LANGUAGES.indexOf ( lng ) ? 'en' : lng;
 		[ 'instructions', 'grammars', 'abbreviations' ].forEach (
 			data => ourFetchJson ( data, language )
 		);
@@ -206,7 +206,7 @@ class OsrmTextInstructions 	{
 	}
 
 	ordinalize ( language, number ) {
-		return instructions[ language ][ version ].constants.ordinalize[ number.toString () ] || '';
+		return instructions[ language ][ OUR_VERSION ].constants.ordinalize[ number.toString () ] || '';
 	}
 
 	directionFromDegree ( language, degree ) {
@@ -251,8 +251,8 @@ class OsrmTextInstructions 	{
 		stepName = stepName.replace ( ' (' + step.ref + ')', '' );
 		let wayMotorway = NOT_FOUND !== classes.indexOf ( 'motorway' );
 		if ( stepName && ref && stepName !== ref && ! wayMotorway ) {
-			let phrase = instructions[ language ][ version ].phrase[ 'name and ref' ] ||
-				instructions.en[ version ].phrase[ 'name and ref' ];
+			let phrase = instructions[ language ][ OUR_VERSION ].phrase[ 'name and ref' ] ||
+				instructions.en[ OUR_VERSION ].phrase[ 'name and ref' ];
 			wayName = this.tokenize ( language, phrase, {
 				name : stepName,
 				ref : ref
@@ -286,30 +286,30 @@ class OsrmTextInstructions 	{
 		if ( 'depart' !== type && 'arrive' !== type && ! modifier ) {
 			throw new Error ( 'Missing step maneuver modifier' );
 		}
-		if ( ! instructions[ language ][ version ][ type ] ) {
+		if ( ! instructions[ language ][ OUR_VERSION ][ type ] ) {
 			/* eslint-disable-next-line no-console */
 			console.log ( 'Encountered unknown instruction type: ' + type );
 			type = 'turn';
 		}
 		let instructionObject = null;
-		if ( instructions[ language ][ version ].modes[ mode ] ) {
-			instructionObject = instructions[ language ][ version ].modes[ mode ];
+		if ( instructions[ language ][ OUR_VERSION ].modes[ mode ] ) {
+			instructionObject = instructions[ language ][ OUR_VERSION ].modes[ mode ];
 		}
 		else {
 			let omitSide = 'off ramp' === type && ZERO <= modifier.indexOf ( side );
-			if ( instructions[ language ][ version ][ type ][ modifier ] && ! omitSide ) {
-				instructionObject = instructions[ language ][ version ][ type ][ modifier ];
+			if ( instructions[ language ][ OUR_VERSION ][ type ][ modifier ] && ! omitSide ) {
+				instructionObject = instructions[ language ][ OUR_VERSION ][ type ][ modifier ];
 			}
 			else {
-				instructionObject = instructions[ language ][ version ][ type ].default;
+				instructionObject = instructions[ language ][ OUR_VERSION ][ type ].default;
 			}
 		}
 		let laneInstruction = null;
 		switch ( type ) {
 		case 'use lane' :
-			laneInstruction = instructions[ language ][ version ].constants.lanes[ this.laneConfig ( step ) ];
+			laneInstruction = instructions[ language ][ OUR_VERSION ].constants.lanes[ this.laneConfig ( step ) ];
 			if ( ! laneInstruction ) {
-				instructionObject = instructions[ language ][ version ][ 'use lane' ].no_lanes;
+				instructionObject = instructions[ language ][ OUR_VERSION ][ 'use lane' ].no_lanes;
 			}
 			break;
 		case 'rotary' :
@@ -374,7 +374,7 @@ class OsrmTextInstructions 	{
 			rotary_name : step.rotary_name,
 			/* eslint-disable-next-line camelcase */
 			lane_instruction : laneInstruction,
-			modifier : instructions[ language ][ version ].constants.modifier[ modifier ],
+			modifier : instructions[ language ][ OUR_VERSION ].constants.modifier[ modifier ],
 			direction : this.directionFromDegree ( language, step.maneuver.bearing_after ),
 			nth : nthWaypoint,
 			/* eslint-disable-next-line camelcase */
@@ -384,8 +384,8 @@ class OsrmTextInstructions 	{
 	}
 
 	grammarize ( language, nameToProceed, grammar ) {
-		if ( grammar && grammars && grammars[ language ] && grammars[ language ][ version ] ) {
-			let rules = grammars[ language ][ version ][ grammar ];
+		if ( grammar && grammars && grammars[ language ] && grammars[ language ][ OUR_VERSION ] ) {
+			let rules = grammars[ language ][ OUR_VERSION ][ grammar ];
 			if ( rules ) {
 				let nameWithSpace = ' ' + nameToProceed + ' ';
 				let flags = grammars[ language ].meta.regExpFlags || '';
@@ -430,7 +430,7 @@ class OsrmTextInstructions 	{
 	}
 }
 
-const ourOsrmTextInstructions = new OsrmTextInstructions ( );
+const OUR_OSRM_TEXT_INSTRUCTIONS = new OsrmTextInstructions ( );
 
 export {
 
@@ -445,7 +445,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourOsrmTextInstructions as theOsrmTextInstructions
+	OUR_OSRM_TEXT_INSTRUCTIONS as theOsrmTextInstructions
 };
 
 /*

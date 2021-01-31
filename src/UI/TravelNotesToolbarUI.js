@@ -417,7 +417,7 @@ class TravelNotesToolbarUI {
 	}
 }
 
-const ourTravelNotesToolbarUI = new TravelNotesToolbarUI ( );
+const OUR_TRAVEL_NOTES_TOOLBAR_UI = new TravelNotesToolbarUI ( );
 
 export {
 
@@ -432,7 +432,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotesToolbarUI as theTravelNotesToolbarUI
+	OUR_TRAVEL_NOTES_TOOLBAR_UI as theTravelNotesToolbarUI
 };
 
 /*

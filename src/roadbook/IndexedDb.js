@@ -184,7 +184,7 @@ class IndexedDb {
 	}
 }
 
-const ourIndexedDb = new IndexedDb ( );
+const OUR_INDEXED_DB = new IndexedDb ( );
 
 export {
 
@@ -199,7 +199,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourIndexedDb as theIndexedDb
+	OUR_INDEXED_DB as theIndexedDb
 };
 
 /*

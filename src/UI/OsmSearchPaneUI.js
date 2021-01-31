@@ -651,8 +651,8 @@ function ourNewOsmSearchPaneUI ( ) {
 			);
 		}
 		searchResultDiv.title = '';
-		for ( const [ key, value ] of Object.entries ( osmElement.tags ) ) {
-			searchResultDiv.title += key + '=' + value + '\n';
+		for ( const [ KEY, VALUE ] of Object.entries ( osmElement.tags ) ) {
+			searchResultDiv.title += KEY + '=' + VALUE + '\n';
 		}
 		searchResultDiv.addEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
 		searchResultDiv.addEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );

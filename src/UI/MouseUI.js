@@ -54,12 +54,13 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theUtilities } from '../util/Utilities.js';
 import { SAVE_STATUS } from '../util/Constants.js';
 
+const OUR_SAVE_TIME = 300000;
+
 let ourMouseDiv = null;
 let ourMousePos = null;
 let ourZoom = null;
 let ourSaveStatus = SAVE_STATUS.saved;
 let ourSaveTimer = null;
-const SAVE_TIME = 300000;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +89,7 @@ function ourUpdate ( ) {
 function ourSetSaveStatus ( saveStatus ) {
 	ourSaveStatus = saveStatus;
 	if ( SAVE_STATUS.modified === saveStatus && ! ourSaveTimer ) {
-		ourSaveTimer = setTimeout ( ourSetSaveStatus, SAVE_TIME, SAVE_STATUS.notSaved );
+		ourSaveTimer = setTimeout ( ourSetSaveStatus, OUR_SAVE_TIME, SAVE_STATUS.notSaved );
 	}
 	if ( SAVE_STATUS.saved === saveStatus && ourSaveTimer ) {
 		clearTimeout ( ourSaveTimer );
@@ -175,7 +176,7 @@ class MouseUI {
 	}
 }
 
-const ourMouseUI = new MouseUI ( );
+const OUR_MOUSE_UI = new MouseUI ( );
 
 export {
 
@@ -190,7 +191,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourMouseUI as theMouseUI
+	OUR_MOUSE_UI as theMouseUI
 };
 
 /*

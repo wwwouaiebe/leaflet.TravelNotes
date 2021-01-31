@@ -253,7 +253,9 @@ export const DEGREES = Object.freeze ( {
 	d180 : 180,
 	d270 : 270,
 	d360 : 360,
-	d540 : 540
+	d540 : 540,
+	toRadians : Math.PI / 180,
+	fromRadians : 180 / Math.PI
 } );
 
 /**

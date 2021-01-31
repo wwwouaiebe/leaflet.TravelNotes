@@ -52,7 +52,6 @@ Tests ...
 
 import { ZERO, ONE, DEGREES } from '../util/Constants.js';
 
-const TO_RADIANS = Math.PI / DEGREES.d180;
 const EARTH_RADIUS = 6371e3;
 
 /**
@@ -147,14 +146,14 @@ class SphericalTrigonometry {
 			// the function runs infinitely when latLngStartPoint === latLngEndPoint :-(
 			return ZERO;
 		}
-		let latStartPoint = latLngStartPoint [ ZERO ] * TO_RADIANS;
-		let latEndPoint = latLngEndPoint [ ZERO ] * TO_RADIANS;
+		let latStartPoint = latLngStartPoint [ ZERO ] * DEGREES.toRadians;
+		let latEndPoint = latLngEndPoint [ ZERO ] * DEGREES.toRadians;
 		let deltaLng =
 			(
 				myNormalizeLng ( latLngEndPoint [ ONE ] ) -
 				myNormalizeLng ( latLngStartPoint [ ONE ] )
 			)
-			* TO_RADIANS;
+			* DEGREES.toRadians;
 		return Math.acos (
 			( Math.sin ( latStartPoint ) * Math.sin ( latEndPoint ) ) +
 				( Math.cos ( latStartPoint ) * Math.cos ( latEndPoint ) * Math.cos ( deltaLng ) )

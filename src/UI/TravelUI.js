@@ -758,7 +758,7 @@ class TravelUI {
 	}
 }
 
-const ourTravelUI = new TravelUI ( );
+const OUR_TRAVEL_UI = new TravelUI ( );
 
 export {
 
@@ -773,7 +773,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelUI as theTravelUI
+	OUR_TRAVEL_UI as theTravelUI
 };
 
 /*

@@ -84,7 +84,6 @@ const MIN_LAT = -90;
 const MAX_LNG = 180;
 const MIN_LNG = -180;
 
-const TO_RADIANS = Math.PI / DEGREES.d180;
 const EARTH_RADIUS = 6371e3;
 
 /**
@@ -226,13 +225,13 @@ class Geometry {
 	*/
 
 	getSquareBoundingBox ( latLngCenter, dimension ) {
-		let deltaLat = ( dimension / EARTH_RADIUS ) / TO_RADIANS;
-		let latCenterRad = latLngCenter [ ZERO ] * TO_RADIANS;
+		let deltaLat = ( dimension / EARTH_RADIUS ) * DEGREES.fromRadians;
+		let latCenterRad = latLngCenter [ ZERO ] * DEGREES.toRadians;
 		let deltaLng =
 			Math.acos (
 				( Math.cos ( dimension / EARTH_RADIUS ) - ( Math.sin ( latCenterRad ) ** TWO ) ) /
 				( Math.cos ( latCenterRad ) ** TWO )
-			) / TO_RADIANS;
+			) * DEGREES.fromRadians;
 		return window.L.latLngBounds (
 			window.L.latLng ( [ latLngCenter [ ZERO ] - deltaLat, latLngCenter [ ONE ] - deltaLng ] ),
 			window.L.latLng ( [ latLngCenter [ ZERO ] + deltaLat, latLngCenter [ ONE ] + deltaLng ] )

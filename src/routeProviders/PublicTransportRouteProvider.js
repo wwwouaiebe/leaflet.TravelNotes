@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, THREE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 /*
@@ -97,16 +97,14 @@ And also we have to look at this:
 
 */
 
-const INVALID_ID = -1;
-
 let ourUserLanguage = 'fr';
 let ourRoute = null;
 
-let ourSelectedRelationId = INVALID_ID;
+let ourSelectedRelationId = INVALID_OBJ_ID;
 let ourWaysMap = new Map ( );
 let ourNodesMap = new Map ( );
 let ourStopsMap = new Map ( );
-let ourNewId = INVALID_ID;
+let ourNewId = INVALID_OBJ_ID;
 let ourNodes3WaysCounter = ZERO;
 let	ourNodes3Ways = [];
 
@@ -592,11 +590,6 @@ function ourCreateRoute ( route ) {
 	const LAST_POINT_REACHED = 3;
 	const ALL_POINTS_ADDED = 4;
 
-	// values : 0 : the point must not be added
-	//			1 : first point is reached
-	//			2 : others points are reached
-	//			3 : last point is reached
-	//			4 : all points are added
 	let addPoint = NO_POINT_ADDED;
 	let reversePoints = false; // the relation is not ordered, so it's possible we have to reverse
 	Array.from ( ourWaysMap.values ( ) )[ ZERO ].nodesIds.forEach (
@@ -719,7 +712,7 @@ function ourCreateRoute ( route ) {
 function ourParseResponse ( response, onOk, onError ) {
 
 	// resetting variables
-	ourNewId = INVALID_ID;
+	ourNewId = INVALID_OBJ_ID;
 	ourNodes3Ways = [];
 	ourNodes3WaysCounter = ZERO;
 

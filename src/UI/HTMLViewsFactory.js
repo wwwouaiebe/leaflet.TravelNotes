@@ -66,8 +66,8 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
 import { ICON_DIMENSIONS, DISTANCE, ZERO } from '../util/Constants.js';
 
-const LINKS_MAX_LENGTH = 40;
-const MIN_NOTES_DISTANCE = 9;
+const OUR_LINKS_MAX_LENGTH = 40;
+const OUR_MIN_NOTES_DISTANCE = 9;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 	if ( ZERO !== note.url.length ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
 			theTranslator.getText ( 'HTMLViewsFactory - Link' ) + '<a href=' + note.url + ' target="_blank" >' +
-				note.url.substr ( ZERO, LINKS_MAX_LENGTH ) + '...</a>',
+				note.url.substr ( ZERO, OUR_LINKS_MAX_LENGTH ) + '...</a>',
 			theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'NoteHtml-Url' }, noteHTMLElement )
 		);
 	}
@@ -208,7 +208,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 		let nextNote = noteAndRoute.route.notes.next ( note.objId );
 		if ( nextNote ) {
 			let nextDistance = nextNote.distance - note.distance;
-			if ( MIN_NOTES_DISTANCE < nextDistance ) {
+			if ( OUR_MIN_NOTES_DISTANCE < nextDistance ) {
 				theHTMLSanitizer.sanitizeToHtmlElement (
 					'<span>' +
 					theTranslator.getText ( 'HTMLViewsFactory - Next note after' ) +
@@ -857,7 +857,7 @@ class HTMLViewsFactory {
 	}
 }
 
-const ourHTMLViewsFactory = new HTMLViewsFactory ( );
+const OUR_HTML_VIEWS_FACTORY = new HTMLViewsFactory ( );
 
 export {
 
@@ -872,7 +872,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourHTMLViewsFactory as theHTMLViewsFactory
+	OUR_HTML_VIEWS_FACTORY as theHTMLViewsFactory
 };
 
 /*

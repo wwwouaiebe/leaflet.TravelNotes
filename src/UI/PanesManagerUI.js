@@ -254,7 +254,7 @@ class PanesManagerUI {
 	}
 }
 
-const ourPanesManagerUI = new PanesManagerUI ( );
+const OUR_PANES_MANAGER_UI = new PanesManagerUI ( );
 
 export {
 
@@ -269,7 +269,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourPanesManagerUI as thePanesManagerUI
+	OUR_PANES_MANAGER_UI as thePanesManagerUI
 };
 
 /*

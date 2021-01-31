@@ -65,7 +65,6 @@ const OUR_ICON_LIST = [
 	'kStayRight'
 ];
 
-
 let ourProviderKey = '';
 let ourUserLanguage = 'fr';
 let ourRoute = null;

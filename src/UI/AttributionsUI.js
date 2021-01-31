@@ -106,7 +106,7 @@ class AttributionsUI {
 	}
 }
 
-const ourAttributionsUI = new AttributionsUI ( );
+const OUR_ATTRIBUTIONS_UI = new AttributionsUI ( );
 
 export {
 
@@ -121,7 +121,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourAttributionsUI as theAttributionsUI
+	OUR_ATTRIBUTIONS_UI as theAttributionsUI
 };
 
 /*

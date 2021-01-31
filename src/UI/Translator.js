@@ -111,7 +111,7 @@ class Translator {
 	}
 }
 
-const ourTranslator = new Translator ( );
+const OUR_TRANSLATOR = new Translator ( );
 
 export {
 
@@ -126,7 +126,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTranslator as theTranslator
+	OUR_TRANSLATOR as theTranslator
 };
 
 /*

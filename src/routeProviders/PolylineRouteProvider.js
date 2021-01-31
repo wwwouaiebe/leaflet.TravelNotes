@@ -43,21 +43,10 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, DEGREES } from '../util/Constants.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+import { ZERO, ONE, TWO, LAT, LNG, DEGREES } from '../util/Constants.js';
 
-const LAT = 0;
-const LNG = 1;
-
-const DEGREE_TO_RADIANS = Math.PI / DEGREES.d180;
-const RADIANS_TO_DEGREE = DEGREES.d180 / Math.PI;
-
-const HALF_PI = Math.PI / TWO;
-
-const MIN_ANGULAR_DISTANCE = 0.1;
-
-let ourUserLanguage = 'fr';
-let ourRoute = null;
+const OUR_HALF_PI = Math.PI / TWO;
 
 const OUR_INSTRUCTIONS_LIST = Object.freeze (
 	{
@@ -73,6 +62,9 @@ const OUR_ICON_NAMES = Object.freeze (
 		kEnd : 'kArriveDefault'
 	}
 );
+
+let ourUserLanguage = 'fr';
+let ourRoute = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -137,12 +129,12 @@ function ourAddIntermediateItineraryPoints ( startWayPoint, endWaypoint ) {
 
 	// first conversion to radian
 	let latLngStartPoint = [
-		startWayPoint.lat * DEGREE_TO_RADIANS,
-		startWayPoint.lng * DEGREE_TO_RADIANS
+		startWayPoint.lat * DEGREES.toRadians,
+		startWayPoint.lng * DEGREES.toRadians
 	];
 	let latLngEndPoint = [
-		endWaypoint.lat * DEGREE_TO_RADIANS,
-		endWaypoint.lng * DEGREE_TO_RADIANS
+		endWaypoint.lat * DEGREES.toRadians,
+		endWaypoint.lng * DEGREES.toRadians
 	];
 
 	// searching the direction: from west to east or east to west...
@@ -156,19 +148,21 @@ function ourAddIntermediateItineraryPoints ( startWayPoint, endWaypoint ) {
 	// computing the distance
 	let angularDistance = theSphericalTrigonometry.arcFromSummitArcArc (
 		latLngEndPoint [ LNG ] - latLngStartPoint [ LNG ],
-		HALF_PI - latLngStartPoint [ LAT ],
-		HALF_PI - latLngEndPoint [ LAT ]
+		OUR_HALF_PI - latLngStartPoint [ LAT ],
+		OUR_HALF_PI - latLngEndPoint [ LAT ]
 	);
 
-	if ( MIN_ANGULAR_DISTANCE > angularDistance * RADIANS_TO_DEGREE ) {
+	/* for short distances a single line is ok */
+	/* eslint-disable-next-line no-magic-numbers */
+	if ( 0.1 > angularDistance * DEGREES.fromRadians ) {
 		return;
 	}
 
 	// and the direction at the start point
 	let direction = theSphericalTrigonometry.summitFromArcArcArc (
-		HALF_PI - latLngStartPoint [ LAT ],
+		OUR_HALF_PI - latLngStartPoint [ LAT ],
 		angularDistance,
-		HALF_PI - latLngEndPoint [ LAT ]
+		OUR_HALF_PI - latLngEndPoint [ LAT ]
 	);
 
 	let addedSegments = 64;
@@ -181,13 +175,13 @@ function ourAddIntermediateItineraryPoints ( startWayPoint, endWaypoint ) {
 		// computing the opposite arc to the start point
 		let tmpArc = theSphericalTrigonometry.arcFromSummitArcArc (
 			direction,
-			HALF_PI - latLngStartPoint [ LAT ],
+			OUR_HALF_PI - latLngStartPoint [ LAT ],
 			partialDistance
 		);
 
 		// computing the lng
 		let deltaLng = theSphericalTrigonometry.summitFromArcArcArc (
-			HALF_PI - latLngStartPoint [ LAT ],
+			OUR_HALF_PI - latLngStartPoint [ LAT ],
 			tmpArc,
 			partialDistance
 		);
@@ -195,8 +189,8 @@ function ourAddIntermediateItineraryPoints ( startWayPoint, endWaypoint ) {
 		// adding the itinerary point to a tmp array
 		let itineraryPoint = window.TaN.itineraryPoint;
 		itineraryPoint.latLng = [
-			( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
-			( latLngStartPoint [ LNG ] + ( WestEast * deltaLng ) ) * RADIANS_TO_DEGREE
+			( OUR_HALF_PI - tmpArc ) * DEGREES.fromRadians,
+			( latLngStartPoint [ LNG ] + ( WestEast * deltaLng ) ) * DEGREES.fromRadians
 		];
 		itineraryPoints.push ( itineraryPoint );
 	}
@@ -278,19 +272,19 @@ function ourParseGreatCircle ( ) {
 function ourParseCircle ( ) {
 
 	let centerPoint = [
-		ourRoute.wayPoints.first.lat * DEGREE_TO_RADIANS,
-		ourRoute.wayPoints.first.lng * DEGREE_TO_RADIANS
+		ourRoute.wayPoints.first.lat * DEGREES.toRadians,
+		ourRoute.wayPoints.first.lng * DEGREES.toRadians
 	];
 
 	let distancePoint = [
-		ourRoute.wayPoints.last.lat * DEGREE_TO_RADIANS,
-		ourRoute.wayPoints.last.lng * DEGREE_TO_RADIANS
+		ourRoute.wayPoints.last.lat * DEGREES.toRadians,
+		ourRoute.wayPoints.last.lng * DEGREES.toRadians
 	];
 
 	let angularDistance = theSphericalTrigonometry.arcFromSummitArcArc (
 		centerPoint [ LNG ] - distancePoint [ LNG ],
-		HALF_PI - centerPoint [ LAT ],
-		HALF_PI - distancePoint [ LAT ]
+		OUR_HALF_PI - centerPoint [ LAT ],
+		OUR_HALF_PI - distancePoint [ LAT ]
 	);
 
 	let addedSegments = 360;
@@ -304,33 +298,33 @@ function ourParseCircle ( ) {
 		let tmpArc = theSphericalTrigonometry.arcFromSummitArcArc (
 			direction,
 			angularDistance,
-			HALF_PI - centerPoint [ LAT ]
+			OUR_HALF_PI - centerPoint [ LAT ]
 		);
 
 		let deltaLng = theSphericalTrigonometry.summitFromArcArcArc (
-			HALF_PI - centerPoint [ LAT ],
+			OUR_HALF_PI - centerPoint [ LAT ],
 			tmpArc,
 			angularDistance
 		);
 		let itineraryPoint = window.TaN.itineraryPoint;
 		itineraryPoint.latLng = [
-			( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
-			( centerPoint [ LNG ] + deltaLng ) * RADIANS_TO_DEGREE
+			( OUR_HALF_PI - tmpArc ) * DEGREES.fromRadians,
+			( centerPoint [ LNG ] + deltaLng ) * DEGREES.fromRadians
 		];
 		itineraryPoints.push ( itineraryPoint );
 
 		itineraryPoint = window.TaN.itineraryPoint;
 		itineraryPoint.latLng = [
-			( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
-			( centerPoint [ LNG ] - deltaLng ) * RADIANS_TO_DEGREE
+			( OUR_HALF_PI - tmpArc ) * DEGREES.fromRadians,
+			( centerPoint [ LNG ] - deltaLng ) * DEGREES.fromRadians
 		];
 		itineraryPoints.unshift ( itineraryPoint );
 		if ( counter === addedSegments ) {
 			ourAddManeuver ( itineraryPoint.objId, 'kStart' );
 			itineraryPoint = window.TaN.itineraryPoint;
 			itineraryPoint.latLng = [
-				( HALF_PI - tmpArc ) * RADIANS_TO_DEGREE,
-				( centerPoint [ LNG ] - deltaLng ) * RADIANS_TO_DEGREE
+				( OUR_HALF_PI - tmpArc ) * DEGREES.fromRadians,
+				( centerPoint [ LNG ] - deltaLng ) * DEGREES.fromRadians
 			];
 			ourAddManeuver ( itineraryPoint.objId, 'kEnd' );
 			itineraryPoints.push ( itineraryPoint );

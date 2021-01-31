@@ -277,7 +277,7 @@ class ErrorsUI {
 
 }
 
-const ourErrorsUI = new ErrorsUI ( );
+const OUR_ERRORS_UI = new ErrorsUI ( );
 
 export {
 
@@ -292,7 +292,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourErrorsUI as theErrorsUI
+	OUR_ERRORS_UI as theErrorsUI
 };
 
 /*

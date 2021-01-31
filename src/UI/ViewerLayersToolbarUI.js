@@ -230,7 +230,7 @@ class ViewerLayersToolbarUI {
 	}
 }
 
-const ourViewerLayersToolbarUI = new ViewerLayersToolbarUI ( );
+const OUR_VIEWER_LAYERS_TOOLBAR_UI = new ViewerLayersToolbarUI ( );
 
 export {
 
@@ -245,7 +245,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourViewerLayersToolbarUI as theViewerLayersToolbarUI
+	OUR_VIEWER_LAYERS_TOOLBAR_UI as theViewerLayersToolbarUI
 };
 
 /*

@@ -60,6 +60,7 @@ import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { newLayer } from '../data/Layer.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
+const OUR_MIN_BUTTONS_VISIBLE = 3;
 
 let ourLayers = [
 
@@ -178,15 +179,14 @@ function ourOnMouseLeaveLinkButton ( mouseLeaveEvent ) {
 */
 
 function ourOnWheelToolbar ( wheelEvent ) {
-	const MIN_BUTTONS_VISIBLE = 3;
 	if ( wheelEvent.deltaY ) {
 		ourMarginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 		ourMarginTop = ourMarginTop > ourButtonTop ? ourButtonTop : ourMarginTop;
 		ourMarginTop =
 			ourMarginTop < ourButtonTop - ourButtonsHeight +
-			( MIN_BUTTONS_VISIBLE * ourButtonHeight )
+			( OUR_MIN_BUTTONS_VISIBLE * ourButtonHeight )
 				?
-				ourButtonTop - ourButtonsHeight + ( MIN_BUTTONS_VISIBLE * ourButtonHeight )
+				ourButtonTop - ourButtonsHeight + ( OUR_MIN_BUTTONS_VISIBLE * ourButtonHeight )
 				:
 				ourMarginTop;
 		ourLayersToolbarButtonsDiv.style.marginTop = String ( ourMarginTop ) + 'px';
@@ -436,7 +436,7 @@ class LayersToolbarUI {
 	}
 }
 
-const ourLayersToolbarUI = new LayersToolbarUI ( );
+const OUR_LAYERS_TOOLBAR_UI = new LayersToolbarUI ( );
 
 export {
 
@@ -451,7 +451,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourLayersToolbarUI as theLayersToolbarUI
+	OUR_LAYERS_TOOLBAR_UI as theLayersToolbarUI
 };
 
 /*
