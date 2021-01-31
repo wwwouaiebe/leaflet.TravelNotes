@@ -58,8 +58,8 @@ import { theUtilities } from '../util/Utilities.js';
 import { LAT_LNG, ZERO, ONE } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
-const ourObjType = newObjType ( 'WayPoint' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'WayPoint' );
+const OUR_OBJ_IDS = new WeakMap ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ function ourUpgrade ( wayPoint ) {
 		wayPoint.objType.version = '2.2.0';
 		break;
 	default :
-		throw new Error ( 'invalid version for ' + ourObjType.name );
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
 	}
 }
 
@@ -117,17 +117,17 @@ function ourUpgrade ( wayPoint ) {
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
 		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'address', 'name', 'lat', 'lng', 'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -177,7 +177,7 @@ class WayPoint {
 
 		this.lng = LAT_LNG.defaultValue;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		Object.seal ( this );
 	}
@@ -215,7 +215,7 @@ class WayPoint {
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	the ObjType of the WayPoint.
@@ -223,7 +223,7 @@ class WayPoint {
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	An object literal with the WayPoint properties and without any methods.
@@ -237,8 +237,8 @@ class WayPoint {
 			address : this.address,
 			lat : parseFloat ( this.lat.toFixed ( LAT_LNG.fixed ) ),
 			lng : parseFloat ( this.lng.toFixed ( LAT_LNG.fixed ) ),
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -247,7 +247,7 @@ class WayPoint {
 		this.name = otherthing.name || '';
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
 

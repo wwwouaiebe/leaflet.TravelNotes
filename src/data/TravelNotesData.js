@@ -166,7 +166,7 @@ class TravelNotesData {
 	get UUID ( ) { return ourUUID; }
 }
 
-const ourTravelNotesData = new TravelNotesData ( );
+const OUR_TRAVEL_NOTES_DATA = new TravelNotesData ( );
 
 export {
 
@@ -181,7 +181,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotesData as theTravelNotesData
+	OUR_TRAVEL_NOTES_DATA as theTravelNotesData
 };
 
 /*

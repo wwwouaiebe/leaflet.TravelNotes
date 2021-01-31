@@ -55,8 +55,8 @@ import { newObjType } from '../data/ObjType.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'Maneuver' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'Maneuver' );
+const OUR_OBJ_IDS = new WeakMap ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ function ourUpgrade ( maneuver ) {
 		maneuver.objType.version = '2.2.0';
 		break;
 	default :
-		throw new Error ( 'invalid version for ' + ourObjType.name );
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
 	}
 }
 
@@ -115,17 +115,17 @@ function ourUpgrade ( maneuver ) {
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
 		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -182,7 +182,7 @@ class Maneuver {
 
 		this.duration = DISTANCE.defaultValue;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		Object.seal ( this );
 	}
@@ -193,7 +193,7 @@ class Maneuver {
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the Maneuver. objId are unique identifier given by the code
@@ -201,7 +201,7 @@ class Maneuver {
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the Maneuver properties and without any methods.
@@ -216,8 +216,8 @@ class Maneuver {
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			duration : this.duration,
 			itineraryPointObjId : this.itineraryPointObjId,
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -227,7 +227,7 @@ class Maneuver {
 		this.distance = otherthing.distance || DISTANCE.defaultValue;
 		this.duration = otherthing.duration || DISTANCE.defaultValue;
 		this.itineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
 

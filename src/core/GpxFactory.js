@@ -50,6 +50,11 @@ import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theUtilities } from '../util/Utilities.js';
 
+const OUR_TAB_0 = '\n';
+const OUR_TAB_1 = '\n\t';
+const OUR_TAB_2 = '\n\t\t';
+const OUR_TAB_3 = '\n\t\t\t';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -62,11 +67,6 @@ import { theUtilities } from '../util/Utilities.js';
 */
 
 function ourNewGpxFactory ( ) {
-
-	const MY_TAB_0 = '\n';
-	const MY_TAB_1 = '\n\t';
-	const MY_TAB_2 = '\n\t\t';
-	const MY_TAB_3 = '\n\t\t\t';
 
 	let myGpxString = '';
 	let myTimeStamp = '';
@@ -86,7 +86,7 @@ function ourNewGpxFactory ( ) {
 		myTimeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
 
 		// header
-		myGpxString = '<?xml version="1.0"?>' + MY_TAB_0;
+		myGpxString = '<?xml version="1.0"?>' + OUR_TAB_0;
 		myGpxString += '<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
 		'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
 		'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" ' +
@@ -107,7 +107,7 @@ function ourNewGpxFactory ( ) {
 		let wayPointsIterator = myRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			myGpxString +=
-				MY_TAB_1 + '<wpt lat="' + wayPointsIterator.value.lat + '" lon="' + wayPointsIterator.value.lng + '" ' +
+				OUR_TAB_1 + '<wpt lat="' + wayPointsIterator.value.lat + '" lon="' + wayPointsIterator.value.lng + '" ' +
 				myTimeStamp + '/>';
 
 		}
@@ -124,7 +124,7 @@ function ourNewGpxFactory ( ) {
 	*/
 
 	function myAddRoute ( ) {
-		myGpxString += MY_TAB_1 + '<rte>';
+		myGpxString += OUR_TAB_1 + '<rte>';
 		let maneuverIterator = myRoute.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
 			let wayPoint = myRoute.itinerary.itineraryPoints.getAt (
@@ -137,7 +137,7 @@ function ourNewGpxFactory ( ) {
 				.replace ( '>', '&gt;' )
 				.replace ( '<', '&lt;' );
 			myGpxString +=
-				MY_TAB_2 +
+				OUR_TAB_2 +
 				'<rtept lat="' +
 				wayPoint.lat +
 				'" lon="' +
@@ -147,7 +147,7 @@ function ourNewGpxFactory ( ) {
 				'desc="' +
 				instruction + '" />';
 		}
-		myGpxString += MY_TAB_1 + '</rte>';
+		myGpxString += OUR_TAB_1 + '</rte>';
 	}
 
 	/**
@@ -161,12 +161,12 @@ function ourNewGpxFactory ( ) {
 	*/
 
 	function myAddTrack ( ) {
-		myGpxString += MY_TAB_1 + '<trk>';
-		myGpxString += MY_TAB_2 + '<trkseg>';
+		myGpxString += OUR_TAB_1 + '<trk>';
+		myGpxString += OUR_TAB_2 + '<trkseg>';
 		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
 		while ( ! itineraryPointsIterator.done ) {
 			myGpxString +=
-				MY_TAB_3 +
+				OUR_TAB_3 +
 				'<trkpt lat="' + itineraryPointsIterator.value.lat +
 				'" lon="' +
 				itineraryPointsIterator.value.lng +
@@ -174,8 +174,8 @@ function ourNewGpxFactory ( ) {
 				myTimeStamp +
 				' />';
 		}
-		myGpxString += MY_TAB_2 + '</trkseg>';
-		myGpxString += MY_TAB_1 + '</trk>';
+		myGpxString += OUR_TAB_2 + '</trkseg>';
+		myGpxString += OUR_TAB_1 + '</trk>';
 	}
 
 	/**
@@ -189,7 +189,7 @@ function ourNewGpxFactory ( ) {
 	*/
 
 	function myAddFooter ( ) {
-		myGpxString += MY_TAB_0 + '</gpx>';
+		myGpxString += OUR_TAB_0 + '</gpx>';
 	}
 
 	/**

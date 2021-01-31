@@ -55,9 +55,9 @@ import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
-const ourObjType = newObjType ( 'Note' );
-const ourObjIds = new WeakMap ( );
-const DEFAULT_ICON_SIZE = 0;
+const OUR_OBJ_TYPE = newObjType ( 'Note' );
+const OUR_OBJ_IDS = new WeakMap ( );
+const OUR_DEFAULT_ICON_SIZE = 0;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ function ourUpgrade ( note ) {
 		note.objType.version = '2.2.0';
 		break;
 	default :
-		throw new Error ( 'invalid version for ' + ourObjType.name );
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
 	}
 }
 
@@ -150,10 +150,10 @@ function ourUpgrade ( note ) {
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
 		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
@@ -176,7 +176,7 @@ function ourValidate ( something ) {
 	].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -202,14 +202,14 @@ class Note	{
 		@type {!number}
 		*/
 
-		this.iconHeight = DEFAULT_ICON_SIZE;
+		this.iconHeight = OUR_DEFAULT_ICON_SIZE;
 
 		/**
 		the width of the icon associated to the note
 		@type {!number}
 		*/
 
-		this.iconWidth = DEFAULT_ICON_SIZE;
+		this.iconWidth = OUR_DEFAULT_ICON_SIZE;
 
 		/**
 		the html needed to display the icon
@@ -297,7 +297,7 @@ class Note	{
 
 		this.chainedDistance = DISTANCE.defaultValue;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		Object.seal ( this );
 	}
@@ -338,7 +338,7 @@ class Note	{
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the Note. objId are unique identifier given by the code
@@ -346,7 +346,7 @@ class Note	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the Note properties and without any methods.
@@ -370,14 +370,14 @@ class Note	{
 			lng : parseFloat ( this.lng.toFixed ( LAT_LNG.fixed ) ),
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			chainedDistance : parseFloat ( this.chainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
 		let otherthing = ourValidate ( something );
-		this.iconHeight = otherthing.iconHeight || DEFAULT_ICON_SIZE;
-		this.iconWidth = otherthing.iconWidth || DEFAULT_ICON_SIZE;
+		this.iconHeight = otherthing.iconHeight || OUR_DEFAULT_ICON_SIZE;
+		this.iconWidth = otherthing.iconWidth || OUR_DEFAULT_ICON_SIZE;
 		this.iconContent = otherthing.iconContent || '';
 		this.popupContent = otherthing.popupContent || '';
 		this.tooltipContent = otherthing.tooltipContent || '';
@@ -390,7 +390,7 @@ class Note	{
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.invalid;
 		this.chainedDistance = otherthing.chainedDistance || DISTANCE.defaultValue;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( true );
 	}
 
@@ -404,10 +404,10 @@ class Note	{
 	/* eslint-disable-next-line complexity, max-statements */
 	validateData ( verbose ) {
 		if ( 'number' !== typeof ( this.iconHeight ) ) {
-			this.iconHeight = DEFAULT_ICON_SIZE;
+			this.iconHeight = OUR_DEFAULT_ICON_SIZE;
 		}
 		if ( 'number' !== typeof ( this.iconWidth ) ) {
-			this.iconWidth = DEFAULT_ICON_SIZE;
+			this.iconWidth = OUR_DEFAULT_ICON_SIZE;
 		}
 		if ( 'string' === typeof ( this.iconContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );

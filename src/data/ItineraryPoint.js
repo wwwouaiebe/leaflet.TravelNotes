@@ -56,8 +56,8 @@ import { newObjId } from '../data/ObjId.js';
 import { newObjType } from '../data/ObjType.js';
 import { ELEV, LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'ItineraryPoint' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'ItineraryPoint' );
+const OUR_OBJ_IDS = new WeakMap ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ function ourUpgrade ( itineraryPoint ) {
 		itineraryPoint.objType.version = '2.2.0';
 		break;
 	default :
-		throw new Error ( 'invalid version for ' + ourObjType.name );
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
 	}
 }
 
@@ -114,17 +114,17 @@ function ourUpgrade ( itineraryPoint ) {
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
 		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'lat', 'lng', 'distance', 'elev', 'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -174,7 +174,7 @@ class ItineraryPoint {
 
 		this.elev = ELEV.defaultValue;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		Object.seal ( this );
 	}
@@ -196,7 +196,7 @@ class ItineraryPoint {
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the ItineraryPoint. objId are unique identifier given by the code
@@ -204,7 +204,7 @@ class ItineraryPoint {
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the ItineraryPoint properties and without any methods.
@@ -218,8 +218,8 @@ class ItineraryPoint {
 			lng : parseFloat ( this.lng.toFixed ( LAT_LNG.fixed ) ),
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			elev : parseFloat ( this.elev.toFixed ( ELEV.fixed ) ),
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 
@@ -229,7 +229,7 @@ class ItineraryPoint {
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.defaultValue;
 		this.elev = otherthing.elev || ELEV.defaultValue;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
 

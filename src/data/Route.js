@@ -68,8 +68,8 @@ import { newNote } from '../data/Note.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'Route' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'Route' );
+const OUR_OBJ_IDS = new WeakMap ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ function ourUpgrade ( route ) {
 		route.objType.version = '2.2.0';
 		break;
 	default :
-		throw new Error ( 'invalid version for ' + ourObjType.name );
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
 	}
 }
 
@@ -131,10 +131,10 @@ function ourUpgrade ( route ) {
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
 		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
@@ -156,7 +156,7 @@ function ourValidate ( something ) {
 	].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -277,7 +277,7 @@ class Route	{
 
 		this.hidden = false;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		Object.seal ( this );
 	}
@@ -306,7 +306,7 @@ class Route	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	the ObjType of the Route.
@@ -314,7 +314,7 @@ class Route	{
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	An object literal with the WayPoint properties and without any methods.
@@ -337,8 +337,8 @@ class Route	{
 			editionStatus : this.editionStatus,
 			hidden : this.hidden,
 			chainedDistance : parseFloat ( this.chainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -356,7 +356,7 @@ class Route	{
 		this.editionStatus = otherthing.editionStatus || ROUTE_EDITION_STATUS.notEdited;
 		this.hidden = otherthing.hidden || false;
 		this.chainedDistance = otherthing.chainedDistance;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
 

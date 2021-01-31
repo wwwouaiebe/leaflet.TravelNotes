@@ -59,8 +59,8 @@ import { newManeuver } from '../data/Maneuver.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'Itinerary' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'Itinerary' );
+const OUR_OBJ_IDS = new WeakMap ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ function ourUpgrade ( itinerary ) {
 		itinerary.objType.version = '2.2.0';
 		break;
 	default :
-		throw new Error ( 'invalid version for ' + ourObjType.name );
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
 	}
 }
 
@@ -119,10 +119,10 @@ function ourUpgrade ( itinerary ) {
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
 		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
@@ -136,7 +136,7 @@ function ourValidate ( something ) {
 		'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -209,7 +209,7 @@ class Itinerary	{
 
 		this.maneuvers = newCollection ( newManeuver );
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		Object.seal ( this );
 	}
@@ -220,7 +220,7 @@ class Itinerary	{
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the Itinerary. objId are unique identifier given by the code
@@ -228,7 +228,7 @@ class Itinerary	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the Itinerary properties and without any methods.
@@ -245,8 +245,8 @@ class Itinerary	{
 			maneuvers : this.maneuvers.jsonObject,
 			provider : this.provider,
 			transitMode : this.transitMode,
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -258,7 +258,7 @@ class Itinerary	{
 		this.maneuvers.jsonObject = otherthing.maneuvers || [];
 		this.provider = otherthing.provider || '';
 		this.transitMode = otherthing.transitMode || '';
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		// rebuilding links between maneuvers and itineraryPoints
 		let itineraryPointObjIdMap = new Map ( );
