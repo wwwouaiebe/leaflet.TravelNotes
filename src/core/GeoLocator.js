@@ -142,6 +142,10 @@ function ourStart ( ) {
 
 class GeoLocator {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	The status of the geolocation
 	@type {GEOLOCATION_STATUS}
@@ -174,7 +178,7 @@ class GeoLocator {
 	}
 }
 
-const ourGeoLocator = Object.seal ( new GeoLocator );
+const ourGeoLocator = new GeoLocator ( );
 
 export {
 

@@ -302,7 +302,7 @@ function ourNewNote ( latLng ) {
 class NoteEditor {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/*

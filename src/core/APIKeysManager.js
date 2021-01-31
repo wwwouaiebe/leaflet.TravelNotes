@@ -252,6 +252,10 @@ function ourOnServerFileFound ( data ) {
 
 class APIKeysManager {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Verify that a provider key is known
 	@param {string} providerName the provider name for witch the API key is searched
@@ -372,7 +376,7 @@ class APIKeysManager {
 	}
 }
 
-const ourAPIKeysManager = Object.seal ( new APIKeysManager	);
+const ourAPIKeysManager = new APIKeysManager ( );
 
 export {
 

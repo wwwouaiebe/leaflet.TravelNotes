@@ -261,7 +261,7 @@ function ourGetDashArray ( route ) {
 class ViewerMapEditor {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

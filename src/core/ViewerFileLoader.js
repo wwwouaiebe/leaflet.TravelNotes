@@ -80,7 +80,7 @@ function ourNewViewerFileLoader ( ) {
 	class ViewerFileLoader {
 
 		constructor ( ) {
-			Object.seal ( this );
+			Object.freeze ( this );
 		}
 
 		/**

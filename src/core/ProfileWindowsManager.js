@@ -69,7 +69,7 @@ let ourProfileFactory = newProfileFactory ( );
 class ProfileWindowsManager {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

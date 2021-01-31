@@ -466,7 +466,7 @@ async function ourParseSearchResult ( results ) {
 class OsmSearchEngine	{
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

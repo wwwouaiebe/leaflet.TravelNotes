@@ -1058,7 +1058,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	class SvgIconFromOsmFactory {
 
 		constructor ( ) {
-			Object.seal ( this );
+			Object.freeze ( this );
 		}
 
 		/**

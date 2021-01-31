@@ -510,7 +510,7 @@ function ourNewProfileFactory ( ) {
 	class ProfileFactory {
 
 		constructor ( ) {
-			Object.seal ( this );
+			Object.freeze ( this );
 		}
 
 		/**

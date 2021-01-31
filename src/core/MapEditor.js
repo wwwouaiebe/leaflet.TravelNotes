@@ -665,6 +665,10 @@ function ourRemoveRoute ( routeObjId ) {
 
 class MapEditor	{
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	This method update a route on the map.
 	This method is also used for removing a route with the addedRouteObjId = INVALID_OBJ_ID.
@@ -851,7 +855,7 @@ class MapEditor	{
 	}
 }
 
-const ourMapEditor = Object.seal ( new MapEditor );
+const ourMapEditor = new MapEditor ( );
 
 export {
 

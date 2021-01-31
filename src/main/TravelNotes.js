@@ -339,7 +339,7 @@ async function ourLoadDistantTravel ( travelUrl ) {
 class TravelNotes {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

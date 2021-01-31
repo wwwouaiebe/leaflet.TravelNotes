@@ -91,7 +91,7 @@ import { theMouseUI } from '../UI/MouseUI.js';
 class TravelEditor {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

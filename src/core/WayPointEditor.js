@@ -156,7 +156,7 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 class WayPointEditor {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

@@ -148,7 +148,7 @@ function ourNewCollection ( objectConstructor ) {
 
 	function myIterator ( ) {
 		let index = NOT_FOUND;
-		return Object.seal (
+		return Object.freeze (
 			{
 				get value ( ) { return index < myArray.length ? myArray [ index ] : null; },
 				get previous ( ) { return ZERO >= index ? null : myArray [ index - ONE ]; },
@@ -234,7 +234,7 @@ function ourNewCollection ( objectConstructor ) {
 	class Collection {
 
 		constructor ( ) {
-			Object.seal ( this );
+			Object.freeze ( this );
 		}
 
 		/**

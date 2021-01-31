@@ -199,6 +199,10 @@ function ourNewFileLoader ( ) {
 
 	class FileLoader {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		Open a local file and display the content of the file
 		@param {event} changeEvent the changeEvent that have started the process
@@ -234,7 +238,7 @@ function ourNewFileLoader ( ) {
 		mergeLocalFile ( changeEvent ) { myOpenFile ( changeEvent, true ); }
 	}
 
-	return Object.seal ( new FileLoader	);
+	return new FileLoader ( );
 }
 
 export {

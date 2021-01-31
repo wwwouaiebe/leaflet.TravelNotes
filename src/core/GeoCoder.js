@@ -356,7 +356,7 @@ function ourNewGeoCoder ( ) {
 		}
 
 		onOk (
-			Object.seal (
+			Object.freeze (
 				{
 					name : theHTMLSanitizer.sanitizeToJsString ( nameDetails ),
 					street : theHTMLSanitizer.sanitizeToJsString ( street ),
@@ -393,6 +393,10 @@ function ourNewGeoCoder ( ) {
 
 	class GeoCoder {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		get a Promise that will search an address from a point
 		@param {Array.<number>} latLng the lat and lng of the point for witch the address is searched
@@ -405,7 +409,7 @@ function ourNewGeoCoder ( ) {
 		}
 	}
 
-	return Object.seal ( new GeoCoder );
+	return new GeoCoder ( );
 }
 
 export {

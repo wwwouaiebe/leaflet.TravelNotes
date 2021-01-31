@@ -317,7 +317,7 @@ function ourOnRoutingOk ( ) {
 class RouteEditor {
 
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

@@ -250,6 +250,10 @@ function ourNewGpxFactory ( ) {
 
 	class GpxFactory {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		Transform a route into a gpx file
 		@param {!number} routeObjId the objId of the route to save in a gpx file
@@ -260,7 +264,7 @@ function ourNewGpxFactory ( ) {
 		}
 	}
 
-	return Object.seal ( new GpxFactory );
+	return new GpxFactory ( );
 }
 
 export {
