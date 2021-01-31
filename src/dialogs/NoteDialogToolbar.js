@@ -332,6 +332,10 @@ function ourCreateToolbarSelect ( ) {
 
 class NoteDialogToolbar {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Options added to the select input
 	@param {Array.<NoteDialogToolbarSelectOption>} selectOptions An array of NoteDialogToolbarSelectOptions
@@ -388,7 +392,7 @@ class NoteDialogToolbar {
 	}
 }
 
-const ourNoteDialogToolbar = Object.seal ( new NoteDialogToolbar );
+const ourNoteDialogToolbar = new NoteDialogToolbar ( );
 
 export {
 

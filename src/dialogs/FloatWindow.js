@@ -79,6 +79,7 @@ function ourNewFloatWindow ( ) {
 	let myScreenHeight = ZERO;
 
 	let myOnClose = null;
+	let myOnUpdate = null;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -172,6 +173,22 @@ function ourNewFloatWindow ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myClose
+	@desc This method updates the window
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myUpdate ( args ) {
+		if ( myOnUpdate ) {
+			myOnUpdate ( args );
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myCreateTopBar
 	@desc This method creates the window
 	@private
@@ -256,6 +273,10 @@ function ourNewFloatWindow ( ) {
 
 	class FloatWindow {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		Create the window directly on the screen
 		*/
@@ -278,6 +299,18 @@ function ourNewFloatWindow ( ) {
 		*/
 
 		set onClose ( OnClose ) { myOnClose = OnClose; }
+
+		/**
+		Update the window
+		*/
+
+		update ( ...args ) { myUpdate ( args ); }
+
+		/**
+		A function that will be executed when the dialog is updated
+		*/
+
+		set onUpdate ( OnUpdate ) { myOnUpdate = OnUpdate; }
 
 		/**
 		The header of the window. Read only but remember it's an HTMLElement...

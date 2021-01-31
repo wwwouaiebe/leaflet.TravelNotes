@@ -566,6 +566,10 @@ function ourNewBaseDialog ( ) {
 
 	class BaseDialog {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		A function that is called when the user push on the ok button. If this function return nothing, the dialog
 		is not closed. If the function return something, the dialog is closed and the returned value is passed as
@@ -672,7 +676,7 @@ function ourNewBaseDialog ( ) {
 		}
 	}
 
-	return Object.seal ( new BaseDialog );
+	return new BaseDialog ( );
 }
 
 export {

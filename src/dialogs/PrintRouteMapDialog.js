@@ -118,7 +118,7 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myOnOkButtonClick ( ) {
-		return Object.seal (
+		return Object.freeze (
 			{
 				paperWidth : parseInt ( myPaperWidthInput.value ),
 				paperHeight : parseInt ( myPaperHeightInput.value ),

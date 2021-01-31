@@ -327,10 +327,10 @@ function ourNewProfileWindow ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myUpdate ( route ) {
+	function myUpdate ( args ) {
 		myClean ( );
-		myRoute = route;
-		mySvg = newProfileFactory ( ).createSvg ( route );
+		myRoute = args [ ZERO ];
+		mySvg = newProfileFactory ( ).createSvg ( myRoute );
 
 		myProfileWindow.header.textContent = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
 		myProfileWindow.content.appendChild ( mySvg );
@@ -370,9 +370,9 @@ function ourNewProfileWindow ( ) {
 	myProfileWindow = newFloatWindow ( );
 	myProfileWindow.createWindow ( );
 	myProfileWindow.onClose = myOnClose;
-	myProfileWindow.update = myUpdate;
+	myProfileWindow.onUpdate = myUpdate;
 
-	return Object.seal ( myProfileWindow );
+	return myProfileWindow;
 }
 
 export {
