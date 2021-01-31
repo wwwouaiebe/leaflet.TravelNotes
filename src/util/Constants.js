@@ -247,7 +247,7 @@ export const ICON_DIMENSIONS = Object.freeze ( {
 	svgViewboxDim : 200
 } );
 
-export const DEGREES = Object.frezze ( {
+export const DEGREES = Object.freeze ( {
 	d0 : 0,
 	d90 : 90,
 	d180 : 180,
@@ -272,15 +272,25 @@ export const NOT_FOUND = -1;
 
 export const ZERO = 0;
 
+export const LAT = 0;
+
 export const ONE = 1;
+
+export const LNG = 1;
 
 export const TWO = 2;
 
-export const SVG_NS = 'http://www.w3.org/2000/svg';
+export const ELEVATION = 2;
+
+export const THREE = 3;
+
+export const HEXADECIMAL = 16;
 
 export const HTTP_STATUS_OK = 200;
 
 export const OSM_COUNTRY_ADMIN_LEVEL = '2';
+
+export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------

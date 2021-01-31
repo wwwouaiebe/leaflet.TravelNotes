@@ -54,6 +54,8 @@ import { theTranslator } from '../UI/Translator.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
+const OUR_VIEWER_DEFAULT_ZOOM = 2;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -193,7 +195,6 @@ function ourMainViewer ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		const DEFAULT_ZOOM = 2;
 		theHTMLElementsFactory.create (
 			'div',
 			{ id : 'Map' },
@@ -201,7 +202,7 @@ function ourMainViewer ( ) {
 		);
 
 		let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-			.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], DEFAULT_ZOOM );
+			.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], OUR_VIEWER_DEFAULT_ZOOM );
 
 		theTravelNotesData.map = map;
 

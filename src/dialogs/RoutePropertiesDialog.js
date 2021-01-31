@@ -61,6 +61,9 @@ import { newColorDialog } from '../dialogs/ColorDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO } from '../util/Constants.js';
 
+const OUR_ROUTE_MIN_WIDTH = 1;
+const OUR_ROUTE_MAX_WIDTH = 40;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -74,9 +77,6 @@ import { ZERO } from '../util/Constants.js';
 */
 
 function ourNewRoutePropertiesDialog ( route ) {
-
-	const ROUTE_MIN_WIDTH = 1;
-	const ROUTE_MAX_WIDTH = 40;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -239,8 +239,8 @@ function ourNewRoutePropertiesDialog ( route ) {
 				type : 'number',
 				id : 'TravelNotes-RoutePropertiesDialog-WidthInput',
 				value : route.width,
-				min : ROUTE_MIN_WIDTH,
-				max : ROUTE_MAX_WIDTH
+				min : OUR_ROUTE_MIN_WIDTH,
+				max : OUR_ROUTE_MAX_WIDTH
 			},
 			widthDiv
 		);

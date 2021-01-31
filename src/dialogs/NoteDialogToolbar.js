@@ -392,7 +392,7 @@ class NoteDialogToolbar {
 	}
 }
 
-const ourNoteDialogToolbar = new NoteDialogToolbar ( );
+const OUR_NOTE_DIALOG_TOOLBAR = new NoteDialogToolbar ( );
 
 export {
 
@@ -407,7 +407,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourNoteDialogToolbar as theNoteDialogToolbar
+	OUR_NOTE_DIALOG_TOOLBAR as theNoteDialogToolbar
 };
 
 /*

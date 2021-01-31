@@ -50,7 +50,7 @@ import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-const MAPBOX_LAT_LNG_ROUND = 6;
+const OUR_MAPBOX_LAT_LNG_ROUND = 6;
 
 let ourProviderKey = '';
 let ourUserLanguage = 'fr';
@@ -85,7 +85,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 	ourRoute.itinerary.ascent = ZERO;
 	ourRoute.itinerary.descent = ZERO;
 	response.routes [ ZERO ].geometry =
-		thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, [ MAPBOX_LAT_LNG_ROUND, MAPBOX_LAT_LNG_ROUND ] );
+		thePolylineEncoder.decode ( response.routes [ ZERO ].geometry, [ OUR_MAPBOX_LAT_LNG_ROUND, OUR_MAPBOX_LAT_LNG_ROUND ] );
 	response.routes [ ZERO ].legs.forEach (
 		function ( leg ) {
 			let lastPointWithDistance = ZERO;
@@ -93,7 +93,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 				function ( step ) {
 					step.geometry = thePolylineEncoder.decode (
 						step.geometry,
-						[ MAPBOX_LAT_LNG_ROUND, MAPBOX_LAT_LNG_ROUND ]
+						[ OUR_MAPBOX_LAT_LNG_ROUND, OUR_MAPBOX_LAT_LNG_ROUND ]
 					);
 					if (
 						'arrive' === step.maneuver.type

@@ -32,6 +32,8 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { ZERO } from '../util/Constants.js';
 
+const OUR_DRAG_MARGIN = 20;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -64,8 +66,6 @@ import { ZERO } from '../util/Constants.js';
 */
 
 function ourNewFloatWindow ( ) {
-
-	const DRAG_MARGIN = 20;
 
 	let myWindowDiv = null;
 	let myHeaderDiv = null;
@@ -120,12 +120,12 @@ function ourNewFloatWindow ( ) {
 		myWindowX += dragEndEvent.screenX - myStartDragX;
 		myWindowY += dragEndEvent.screenY - myStartDragY;
 		myWindowX = Math.min (
-			Math.max ( myWindowX, DRAG_MARGIN ),
-			myScreenWidth - myWindowDiv.clientWidth - DRAG_MARGIN
+			Math.max ( myWindowX, OUR_DRAG_MARGIN ),
+			myScreenWidth - myWindowDiv.clientWidth - OUR_DRAG_MARGIN
 		);
-		myWindowY = Math.max ( myWindowY, DRAG_MARGIN );
+		myWindowY = Math.max ( myWindowY, OUR_DRAG_MARGIN );
 		let windowMaxHeight =
-			myScreenHeight - Math.max ( myWindowY, ZERO ) - DRAG_MARGIN;
+			myScreenHeight - Math.max ( myWindowY, ZERO ) - OUR_DRAG_MARGIN;
 		myWindowDiv.style.top = String ( myWindowY ) + 'px';
 		myWindowDiv.style.left = String ( myWindowX ) + 'px';
 		myWindowDiv.style [ 'max-height' ] = String ( windowMaxHeight ) + 'px';

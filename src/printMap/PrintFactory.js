@@ -67,7 +67,11 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
+
+const OUR_TILE_SIZE = 256;
+const OUR_LAT_LNG_TOLERANCE = 0.000001;
+const OUR_NOTE_Z_INDEX_OFFSET = 100;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -81,9 +85,6 @@ import { ZERO, ONE, TWO } from '../util/Constants.js';
 */
 
 function ourNewPrintFactory ( ) {
-
-	const LAT = ZERO;
-	const LNG = ONE;
 
 	let myPrintData = null;
 	let myRoute = null;
@@ -152,8 +153,7 @@ function ourNewPrintFactory ( ) {
 		dummyDiv.style.left = '0';
 		dummyDiv.style.width = String ( myPrintData.paperWidth - ( TWO * myPrintData.borderWidth ) ) + 'mm';
 		dummyDiv.style.height = String ( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) + 'mm';
-		const TILE_SIZE = 256;
-		myTilesPage = Math.ceil ( dummyDiv.clientWidth / TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / TILE_SIZE );
+		myTilesPage = Math.ceil ( dummyDiv.clientWidth / OUR_TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / OUR_TILE_SIZE );
 		let topLeftScreen = theGeometry.screenCoordToLatLng ( ZERO, ZERO );
 		let bottomRightScreen = theGeometry.screenCoordToLatLng (
 			dummyDiv.clientWidth,
@@ -179,15 +179,14 @@ function ourNewPrintFactory ( ) {
 	*/
 
 	function myIsFirstPointOnView ( currentView, firstItineraryPoint ) {
-		const tolerance = 0.000001;
 		if (
-			firstItineraryPoint.lat - currentView.bottomLeft.lat < tolerance
+			firstItineraryPoint.lat - currentView.bottomLeft.lat < OUR_LAT_LNG_TOLERANCE
 			||
-			currentView.upperRight.lat - firstItineraryPoint.lat < tolerance
+			currentView.upperRight.lat - firstItineraryPoint.lat < OUR_LAT_LNG_TOLERANCE
 			||
-			firstItineraryPoint.lng - currentView.bottomLeft.lng < tolerance
+			firstItineraryPoint.lng - currentView.bottomLeft.lng < OUR_LAT_LNG_TOLERANCE
 			||
-			currentView.upperRight.lng - firstItineraryPoint.lng < tolerance
+			currentView.upperRight.lng - firstItineraryPoint.lng < OUR_LAT_LNG_TOLERANCE
 		) {
 
 			// itinerary point is really near the frame. we consider the itinerary point as intermediate point
@@ -550,11 +549,10 @@ function ourNewPrintFactory ( ) {
 					}
 				);
 
-				const NOTE_Z_INDEX_OFFSET = 100;
 				let marker = window.L.marker (
 					note.iconLatLng,
 					{
-						zIndexOffset : NOTE_Z_INDEX_OFFSET,
+						zIndexOffset : OUR_NOTE_Z_INDEX_OFFSET,
 						icon : icon,
 						draggable : true
 					}

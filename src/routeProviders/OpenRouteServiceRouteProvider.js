@@ -44,12 +44,28 @@ Tests ...
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, TWO, LAT, LNG, ELEVATION, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-const OPEN_ROUTE_LAT_LNG_ROUND = 5;
-const LAT = 0;
-const LNG = 1;
-const ELEV = 2;
+const OUR_OPEN_ROUTE_LAT_LNG_ROUND = 5;
+
+const OUR_ICON_LIST = [
+	'kTurnLeft',
+	'kTurnRight',
+	'kTurnSharpLeft',
+	'kTurnSharpRight',
+	'kTurnSlightLeft',
+	'kTurnSlightRight',
+	'kContinueStraight',
+	'kRoundaboutRight',
+	'kRoundaboutExit',
+	'kUturnLeft',
+	'kArriveDefault',
+	'kDepartDefault',
+	'kStayLeft',
+	'kStayRight'
+];
+
+
 let ourProviderKey = '';
 let ourUserLanguage = 'fr';
 let ourRoute = null;
@@ -74,7 +90,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 	}
 	response.routes [ ZERO ].geometry = thePolylineEncoder.decode (
 		response.routes [ ZERO ].geometry,
-		[ OPEN_ROUTE_LAT_LNG_ROUND, OPEN_ROUTE_LAT_LNG_ROUND, TWO ]
+		[ OUR_OPEN_ROUTE_LAT_LNG_ROUND, OUR_OPEN_ROUTE_LAT_LNG_ROUND, TWO ]
 	);
 	ourRoute.itinerary.itineraryPoints.removeAll ( );
 	ourRoute.itinerary.maneuvers.removeAll ( );
@@ -82,28 +98,11 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 	ourRoute.itinerary.ascent = ZERO;
 	ourRoute.itinerary.descent = ZERO;
 
-	const iconList = [
-		'kTurnLeft',
-		'kTurnRight',
-		'kTurnSharpLeft',
-		'kTurnSharpRight',
-		'kTurnSlightLeft',
-		'kTurnSlightRight',
-		'kContinueStraight',
-		'kRoundaboutRight',
-		'kRoundaboutExit',
-		'kUturnLeft',
-		'kArriveDefault',
-		'kDepartDefault',
-		'kStayLeft',
-		'kStayRight'
-	];
-
 	let wayPointIndex = ZERO;
 	let itineraryPoint = window.TaN.itineraryPoint;
 	itineraryPoint.lat = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LAT ];
 	itineraryPoint.lng = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LNG ];
-	itineraryPoint.elev = response.routes [ ZERO ].geometry [ wayPointIndex ] [ ELEV ];
+	itineraryPoint.elev = response.routes [ ZERO ].geometry [ wayPointIndex ] [ ELEVATION ];
 	ourRoute.itinerary.itineraryPoints.add ( itineraryPoint );
 	wayPointIndex ++;
 
@@ -112,7 +111,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 			segment.steps.forEach (
 				function ( step ) {
 					let maneuver = window.TaN.maneuver;
-					maneuver.iconName = iconList [ step.type ] || 'kUndefined';
+					maneuver.iconName = OUR_ICON_LIST [ step.type ] || 'kUndefined';
 					maneuver.instruction = step.instruction;
 					maneuver.duration = step.duration;
 					maneuver.distance = step.distance;
@@ -127,7 +126,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 							itineraryPoint = window.TaN.itineraryPoint;
 							itineraryPoint.lat = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LAT ];
 							itineraryPoint.lng = response.routes [ ZERO ].geometry [ wayPointIndex ] [ LNG ];
-							itineraryPoint.elev = response.routes [ ZERO ].geometry [ wayPointIndex ] [ ELEV ];
+							itineraryPoint.elev = response.routes [ ZERO ].geometry [ wayPointIndex ] [ ELEVATION ];
 							ourRoute.itinerary.itineraryPoints.add ( itineraryPoint );
 						}
 						wayPointIndex ++;

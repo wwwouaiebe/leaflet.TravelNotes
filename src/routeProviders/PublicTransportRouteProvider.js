@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, TWO, THREE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 /*
@@ -98,7 +98,6 @@ And also we have to look at this:
 */
 
 const INVALID_ID = -1;
-const THREE = 3;
 
 let ourUserLanguage = 'fr';
 let ourRoute = null;

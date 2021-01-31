@@ -184,7 +184,7 @@ class TravelNotesViewer {
 	}
 }
 
-const ourTravelNotesViewer = new TravelNotesViewer ( );
+const OUR_TRAVEL_NOTES_VIEWER = new TravelNotesViewer ( );
 
 export {
 
@@ -199,7 +199,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotesViewer as theTravelNotesViewer
+	OUR_TRAVEL_NOTES_VIEWER as theTravelNotesViewer
 };
 
 /*

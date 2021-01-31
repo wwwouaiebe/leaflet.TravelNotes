@@ -55,12 +55,16 @@ import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { ZERO, ONE, TWO, THREE, HEXADECIMAL } from '../util/Constants.js';
 
-const MIN_COLOR_VALUE = 0;
-const MAX_COLOR_VALUE = 255;
-const HEXADECIMAL = 16;
-const TWO_EXP_8 = 256;
+const FIVE = 5;
+const OUR_MIN_COLOR_VALUE = 0;
+const OUR_MAX_COLOR_VALUE = 255;
+const OUR_COLOR_CELLS_NUMBER = 6;
+const OUR_COLOR_ROWS_NUMBER = 6;
+const OUR_DELTA_COLOR = 51;
+const OUR_SLIDER_MAX_VALUE = 100;
+const OUR_SLIDER_STEP = 20;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -85,19 +89,21 @@ class Color {
 		The red value of the color
 		*/
 
-		this.red = ( 'number' === typeof red ? red : MAX_COLOR_VALUE ) % TWO_EXP_8;
+		this.red = 'number' === typeof red && OUR_MAX_COLOR_VALUE >= red ? red : OUR_MAX_COLOR_VALUE;
 
 		/**
 		The green value of the color
 		*/
 
-		this.green = ( 'number' === typeof green ? green : MAX_COLOR_VALUE ) % TWO_EXP_8;
+		this.green = 'number' === typeof green && OUR_MAX_COLOR_VALUE >= green ? green : OUR_MAX_COLOR_VALUE;
 
 		/**
 		The blue value of the color
 		*/
 
-		this.blue = ( 'number' === typeof blue ? blue : MAX_COLOR_VALUE ) % TWO_EXP_8;
+		this.blue = 'number' === typeof blue && OUR_MAX_COLOR_VALUE >= blue ? blue : OUR_MAX_COLOR_VALUE;
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -111,8 +117,6 @@ class Color {
 			this.blue.toString ( HEXADECIMAL ).padStart ( TWO, '0' );
 	}
 	set cssColor ( cssColor ) {
-		const THREE = 3;
-		const FIVE = 5;
 		this.red = parseInt ( cssColor.substr ( ONE, TWO ), HEXADECIMAL );
 		this.green = parseInt ( cssColor.substr ( THREE, TWO ), HEXADECIMAL );
 		this.blue = parseInt ( cssColor.substr ( FIVE, TWO ), HEXADECIMAL );
@@ -149,12 +153,6 @@ class Color {
 */
 
 function ourNewColorDialog ( cssColor ) {
-
-	const COLOR_CELLS_NUMBER = 6;
-	const COLOR_ROWS_NUMBER = 6;
-	const DELTA_COLOR = 51;
-	const SLIDER_MAX_VALUE = 100;
-	const SLIDER_STEP = 20;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -210,9 +208,9 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myOnRedColorButtonOrSlider ( redValue ) {
-		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
-			for ( let cellCounter = ZERO; cellCounter < COLOR_ROWS_NUMBER; ++ cellCounter ) {
-				let colorButton = myColorButtons [ ( COLOR_ROWS_NUMBER * rowCounter ) + cellCounter ];
+		for ( let rowCounter = ZERO; rowCounter < OUR_COLOR_ROWS_NUMBER; ++ rowCounter ) {
+			for ( let cellCounter = ZERO; cellCounter < OUR_COLOR_ROWS_NUMBER; ++ cellCounter ) {
+				let colorButton = myColorButtons [ ( OUR_COLOR_ROWS_NUMBER * rowCounter ) + cellCounter ];
 				colorButton.color.red = redValue;
 				colorButton.style [ 'background-color' ] = colorButton.color.cssColor;
 			}
@@ -233,7 +231,7 @@ function ourNewColorDialog ( cssColor ) {
 
 		// Math.ceil because with JS 100 * 2.55 = 254.99999....
 		myOnRedColorButtonOrSlider (
-			Math.ceil ( inputEvent.target.valueAsNumber * ( MAX_COLOR_VALUE / SLIDER_MAX_VALUE ) )
+			Math.ceil ( inputEvent.target.valueAsNumber * ( OUR_MAX_COLOR_VALUE / OUR_SLIDER_MAX_VALUE ) )
 		);
 	}
 
@@ -248,7 +246,7 @@ function ourNewColorDialog ( cssColor ) {
 	*/
 
 	function myOnRedColorButtonClick ( clickEvent ) {
-		myOnRedColorButtonOrSlider ( MAX_COLOR_VALUE - clickEvent.target.color.blue );
+		myOnRedColorButtonOrSlider ( OUR_MAX_COLOR_VALUE - clickEvent.target.color.blue );
 
 	}
 
@@ -317,9 +315,9 @@ function ourNewColorDialog ( cssColor ) {
 
 	function myCreateColorButtonsDiv ( ) {
 		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
-		let cellColor = new Color ( theConfig.colorDialog.initialRed, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
+		let cellColor = new Color ( theConfig.colorDialog.initialRed, OUR_MIN_COLOR_VALUE, OUR_MIN_COLOR_VALUE );
 
-		for ( let rowCounter = ZERO; rowCounter < COLOR_ROWS_NUMBER; ++ rowCounter ) {
+		for ( let rowCounter = ZERO; rowCounter < OUR_COLOR_ROWS_NUMBER; ++ rowCounter ) {
 			let colorButtonsRowDiv = theHTMLElementsFactory.create (
 				'div',
 				{
@@ -328,9 +326,9 @@ function ourNewColorDialog ( cssColor ) {
 				colorButtonsDiv
 			);
 
-			cellColor.green = MIN_COLOR_VALUE;
+			cellColor.green = OUR_MIN_COLOR_VALUE;
 
-			for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
+			for ( let cellCounter = ZERO; cellCounter < OUR_COLOR_CELLS_NUMBER; ++ cellCounter ) {
 				let colorButtonCellDiv = theHTMLElementsFactory.create (
 					'div',
 					{
@@ -341,10 +339,10 @@ function ourNewColorDialog ( cssColor ) {
 				colorButtonCellDiv.color = cellColor.clone ( );
 				colorButtonCellDiv.style [ 'background-color' ] = cellColor.cssColor;
 				colorButtonCellDiv.addEventListener ( 'click', myOnColorButtonClick, false );
-				cellColor.green += DELTA_COLOR;
+				cellColor.green += OUR_DELTA_COLOR;
 				myColorButtons.push ( colorButtonCellDiv );
 			}
-			cellColor.blue += DELTA_COLOR;
+			cellColor.blue += OUR_DELTA_COLOR;
 		}
 	}
 
@@ -360,7 +358,7 @@ function ourNewColorDialog ( cssColor ) {
 
 	function myCreateRedButtonsDiv ( ) {
 		let redButtonsDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
-		let cellColor = new Color ( MAX_COLOR_VALUE, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
+		let cellColor = new Color ( OUR_MAX_COLOR_VALUE, OUR_MIN_COLOR_VALUE, OUR_MIN_COLOR_VALUE );
 		let redButtonsRowDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -369,7 +367,7 @@ function ourNewColorDialog ( cssColor ) {
 			},
 			redButtonsDiv
 		);
-		for ( let cellCounter = ZERO; cellCounter < COLOR_CELLS_NUMBER; ++ cellCounter ) {
+		for ( let cellCounter = ZERO; cellCounter < OUR_COLOR_CELLS_NUMBER; ++ cellCounter ) {
 			let colorButtonCellDiv = theHTMLElementsFactory.create (
 				'div',
 				{
@@ -380,8 +378,8 @@ function ourNewColorDialog ( cssColor ) {
 			colorButtonCellDiv.color = cellColor.clone ( );
 			colorButtonCellDiv.style [ 'background-color' ] = colorButtonCellDiv.color.cssColor;
 			colorButtonCellDiv.addEventListener ( 'click', myOnRedColorButtonClick, false );
-			cellColor.green += DELTA_COLOR;
-			cellColor.blue += DELTA_COLOR;
+			cellColor.green += OUR_DELTA_COLOR;
+			cellColor.blue += OUR_DELTA_COLOR;
 		}
 	}
 
@@ -398,15 +396,15 @@ function ourNewColorDialog ( cssColor ) {
 	function myCreateRedSliderDiv ( ) {
 		let redSliderDiv = theHTMLElementsFactory.create ( 'div', null, myColorDiv );
 		let sliderValue =
-			Math.ceil ( theConfig.colorDialog.initialRed * ( SLIDER_MAX_VALUE / MAX_COLOR_VALUE ) );
+			Math.ceil ( theConfig.colorDialog.initialRed * ( OUR_SLIDER_MAX_VALUE / OUR_MAX_COLOR_VALUE ) );
 		let redSliderInput = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'range',
 				className : 'TravelNotes-ColorDialog-SliderInput',
 				value : sliderValue,
 				min : ZERO,
-				max : SLIDER_MAX_VALUE,
-				step : SLIDER_STEP
+				max : OUR_SLIDER_MAX_VALUE,
+				step : OUR_SLIDER_STEP
 
 			},
 			redSliderDiv
@@ -433,8 +431,8 @@ function ourNewColorDialog ( cssColor ) {
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
 				value : myNewColor.red,
-				min : MIN_COLOR_VALUE,
-				max : MAX_COLOR_VALUE
+				min : OUR_MIN_COLOR_VALUE,
+				max : OUR_MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
@@ -446,8 +444,8 @@ function ourNewColorDialog ( cssColor ) {
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
 				value : myNewColor.green,
-				min : MIN_COLOR_VALUE,
-				max : MAX_COLOR_VALUE
+				min : OUR_MIN_COLOR_VALUE,
+				max : OUR_MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
@@ -459,8 +457,8 @@ function ourNewColorDialog ( cssColor ) {
 				type : 'number',
 				className : 'TravelNotes-ColorDialog-NumberInput',
 				value : myNewColor.blue,
-				min : MIN_COLOR_VALUE,
-				max : MAX_COLOR_VALUE
+				min : OUR_MIN_COLOR_VALUE,
+				max : OUR_MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);

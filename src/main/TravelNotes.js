@@ -450,7 +450,7 @@ class TravelNotes {
 	get version ( ) { return theCurrentVersion; }
 }
 
-const ourTravelNotes = new TravelNotes ( );
+const OUR_TRAVEL_NOTES = new TravelNotes ( );
 
 export {
 
@@ -465,7 +465,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotes as theTravelNotes
+	OUR_TRAVEL_NOTES as theTravelNotes
 };
 
 /*

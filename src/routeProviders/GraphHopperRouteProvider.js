@@ -44,15 +44,10 @@ Tests ...
 */
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
-import { ZERO, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, TWO, LAT, LNG, ELEVATION, LAT_LNG, HTTP_STATUS_OK, DISTANCE } from '../util/Constants.js';
 
-const GRAPHHOPPER_LAT_LNG_ROUND = 5;
+const OUR_GRAPHHOPPER_LAT_LNG_ROUND = 5;
 const FOUR = 4;
-const METERS_IN_KILOMETERS = 1000;
-
-const LAT = 0;
-const LNG = 1;
-const ELEV = 2;
 
 let ourProviderKey = '';
 let ourUserLanguage = 'fr';
@@ -101,19 +96,19 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 		path => {
 			path.points = thePolylineEncoder.decode (
 				path.points,
-				[ GRAPHHOPPER_LAT_LNG_ROUND, GRAPHHOPPER_LAT_LNG_ROUND, TWO ]
+				[ OUR_GRAPHHOPPER_LAT_LNG_ROUND, OUR_GRAPHHOPPER_LAT_LNG_ROUND, TWO ]
 			);
 			/* eslint-disable-next-line camelcase */
 			path.snapped_waypoints = thePolylineEncoder.decode (
 				path.snapped_waypoints,
-				[ GRAPHHOPPER_LAT_LNG_ROUND, GRAPHHOPPER_LAT_LNG_ROUND, TWO ]
+				[ OUR_GRAPHHOPPER_LAT_LNG_ROUND, OUR_GRAPHHOPPER_LAT_LNG_ROUND, TWO ]
 			);
 			let itineraryPoints = [];
 			for ( let pointsCounter = ZERO; pointsCounter < path.points.length; pointsCounter ++ ) {
 				let itineraryPoint = window.TaN.itineraryPoint;
 				itineraryPoint.lat = path.points [ pointsCounter ] [ LAT ];
 				itineraryPoint.lng = path.points [ pointsCounter ] [ LNG ];
-				itineraryPoint.elev = path.points [ pointsCounter ] [ ELEV ];
+				itineraryPoint.elev = path.points [ pointsCounter ] [ ELEVATION ];
 				itineraryPoints.push ( itineraryPoint );
 				ourRoute.itinerary.itineraryPoints.add ( itineraryPoint );
 			}
@@ -128,7 +123,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 					}
 					previousIconName = maneuver.iconName;
 					maneuver.instruction = instruction.text || '';
-					maneuver.duration = instruction.time / METERS_IN_KILOMETERS;
+					maneuver.duration = instruction.time / DISTANCE.metersInKm;
 					maneuver.distance = instruction.distance;
 					maneuver.itineraryPointObjId = itineraryPoints [ instruction.interval [ ZERO ] ].objId;
 					ourRoute.itinerary.maneuvers.add ( maneuver );

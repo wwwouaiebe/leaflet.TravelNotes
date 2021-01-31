@@ -42,7 +42,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, ZERO, ONE, TWO, DISTANCE } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,6 @@ class Utilities {
 	*/
 
 	get UUID ( ) {
-		const HEXADECIMAL = 16;
 		const UUID_LENGHT = 8;
 		const UUID_STRLENGHT = 4;
 		let randomValues = new Uint16Array ( UUID_LENGHT );
@@ -172,7 +171,6 @@ class Utilities {
 
 	formatDistance ( distance ) {
 		const DISTANCE_ROUND = 10;
-		const THREE = 3;
 
 		let iDistance = Math.floor ( distance );
 		if ( ZERO >= iDistance ) {

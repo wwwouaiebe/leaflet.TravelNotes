@@ -51,6 +51,8 @@ import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+const OUR_PSWD_MIN_LENGTH = 12;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -101,12 +103,10 @@ function ourNewPasswordDialog ( verifyPassword ) {
 
 	function myOnOkButtonClick ( ) {
 
-		const PSWD_MIN_LENGTH = 12;
-
 		myPasswordDialog.hideError ( );
 		if ( verifyPassword ) {
 			if (
-				( myPasswordInput.value.length < PSWD_MIN_LENGTH )
+				( myPasswordInput.value.length < OUR_PSWD_MIN_LENGTH )
 				||
 				! myPasswordInput.value.match ( RegExp ( '[0-9]+' ) )
 				||

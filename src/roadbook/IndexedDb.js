@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-const DB_VERSION = 1;
+const OUR_DB_VERSION = 1;
 let ourDb = null;
 
 /**
@@ -74,7 +74,7 @@ class IndexedDb {
 				onOk ( );
 				return;
 			}
-			let openRequest = window.indexedDB.open ( 'TravelNotesDb', DB_VERSION );
+			let openRequest = window.indexedDB.open ( 'TravelNotesDb', OUR_DB_VERSION );
 			openRequest.onerror = function ( ) {
 				ourDb = null;
 				onError ( new Error ( 'Not possible to open the db' ) );

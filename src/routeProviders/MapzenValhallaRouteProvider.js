@@ -46,7 +46,7 @@ Tests ...
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { ZERO, HTTP_STATUS_OK, DISTANCE } from '../util/Constants.js';
 
-const MAPZEN_LAT_LNG_ROUND = 6;
+const OUR_MAPZEN_LAT_LNG_ROUND = 6;
 
 const OUR_ICON_LIST = [
 	'kUndefined', // kNone = 0;
@@ -116,7 +116,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 
 	response.trip.legs.forEach (
 		leg => {
-			leg.shape = thePolylineEncoder.decode ( leg.shape, [ MAPZEN_LAT_LNG_ROUND, MAPZEN_LAT_LNG_ROUND ] );
+			leg.shape = thePolylineEncoder.decode ( leg.shape, [ OUR_MAPZEN_LAT_LNG_ROUND, OUR_MAPZEN_LAT_LNG_ROUND ] );
 			let itineraryPoints = [];
 			for ( let shapePointCounter = ZERO; shapePointCounter < leg.shape.length; shapePointCounter ++ ) {
 				let itineraryPoint = window.TaN.itineraryPoint;
@@ -183,15 +183,14 @@ function ourGetUrl ( ) {
 		);
 	}
 
-	const MANEUVER_PENALTY = 30;
 	switch ( ourRoute.itinerary.transitMode ) {
 	case 'bike' :
 		request.costing = 'bicycle';
 		/* eslint-disable-next-line camelcase */
 		request.costing_options = {
 			bicycle : {
-				/* eslint-disable-next-line camelcase */
-				maneuver_penalty : MANEUVER_PENALTY,
+				/* eslint-disable-next-line camelcase, no-magic-numbers*/
+				maneuver_penalty : 30,
 				/* eslint-disable-next-line camelcase */
 				bicycle_type : 'Cross',
 				/* eslint-disable-next-line camelcase */

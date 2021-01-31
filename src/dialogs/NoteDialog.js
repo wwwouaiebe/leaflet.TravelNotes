@@ -79,6 +79,8 @@ import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
+const OUR_DEFAULT_ICON = '?????';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -97,7 +99,6 @@ at the dialog opening
 /* eslint-disable-next-line max-statements */
 function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
-	const DEFAULT_ICON = '?????';
 	let myFocusControl = null;
 	let myGeoCoder = newGeoCoder ( );
 	let myLatLng = note.latLng;
@@ -200,7 +201,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myOnInputControl ( ) {
 		if ( '' === myIconHtmlContent.value ) {
-			myPreviewNote.iconContent = DEFAULT_ICON;
+			myPreviewNote.iconContent = OUR_DEFAULT_ICON;
 		}
 		else {
 			myPreviewNote.iconContent = myIconHtmlContent.value;
@@ -583,7 +584,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				value : note.iconContent,
-				placeholder : DEFAULT_ICON,
+				placeholder : OUR_DEFAULT_ICON,
 				rows : theConfig.noteDialog.iconAreaHeight
 			},
 			myIconContentDiv
@@ -882,7 +883,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myPreviewNote = newNote ( );
 		myPreviewNote.jsonObject = note.jsonObject;
 		if ( '' === myPreviewNote.iconContent ) {
-			myPreviewNote.iconContent = DEFAULT_ICON;
+			myPreviewNote.iconContent = OUR_DEFAULT_ICON;
 		}
 
 		// the dialog base is created

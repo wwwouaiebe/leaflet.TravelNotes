@@ -60,6 +60,9 @@ import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
+const OUR_DEMO_PRINT_MAX_TILES = 120;
+const OUR_DEMO_MAX_MANEUVERS_NOTES = 10;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -142,10 +145,8 @@ function ourMain ( ) {
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
 				config.layersToolbarUI.theDevil.addButton = false;
 				config.errorUI.showHelp = true;
-				const PRINT_MAX_TILES = 120;
-				config.printRouteMap.maxTiles = PRINT_MAX_TILES;
-				const MAX_MANEUVERS_NOTES = 10;
-				config.note.maxManeuversNotes = MAX_MANEUVERS_NOTES;
+				config.printRouteMap.maxTiles = OUR_DEMO_PRINT_MAX_TILES;
+				config.note.maxManeuversNotes = OUR_DEMO_MAX_MANEUVERS_NOTES;
 				config.note.haveBackground = true;
 				config.APIKeys.dialogHaveUnsecureButtons = true;
 			}
@@ -322,35 +323,30 @@ function ourMain ( ) {
 
 		let results = await Promise.allSettled ( [
 			fetch ( myOriginAndPath +	myLanguage.toUpperCase ( ) + '.json' ),
-			fetch ( myOriginAndPath + 'Layers.json' ),
-			fetch ( myOriginAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
 			fetch ( myOriginAndPath + 'EN.json' ),
+			fetch ( myOriginAndPath + 'NoteDialog' + myLanguage.toUpperCase ( ) + '.json' ),
 			fetch ( myOriginAndPath + 'NoteDialogEN.json' ),
 			fetch ( myOriginAndPath + 'SearchDictionary' + myLanguage.toUpperCase ( ) + '.csv' ),
-			fetch ( myOriginAndPath + 'SearchDictionaryEN.csv' )
+			fetch ( myOriginAndPath + 'SearchDictionaryEN.csv' ),
+			fetch ( myOriginAndPath + 'Layers.json' )
 		] );
 
-		const TRANSLATIONS_FILE_INDEX = 0;
-		const LAYERS_FILE_INDEX = 1;
-		const NOTE_CONFIG_FILE_INDEX = 2;
-		const DEFAULT_TRANSLATIONS_FILE_INDEX = 3;
-		const DEFAULT_NOTE_CONFIG_FILE_INDEX = 4;
-		const SEARCH_DICTIONARY_FILE_INDEX = 5;
-		const DEFAULT_SEARCH_DICTIONARY_FILE_INDEX = 6;
-
+		/* eslint-disable no-magic-numbers */
 		myErrorMessage = await myLoadTranslations (
-			results [ TRANSLATIONS_FILE_INDEX ],
-			results [ DEFAULT_TRANSLATIONS_FILE_INDEX ]
+			results [ 0 ],
+			results [ 1 ]
 		);
 		myErrorMessage += await myLoadNoteDialogConfig (
-			results [ NOTE_CONFIG_FILE_INDEX ],
-			results [ DEFAULT_NOTE_CONFIG_FILE_INDEX ]
+			results [ 2 ],
+			results [ 3 ]
 		);
-		myErrorMessage += await myLoadLayers ( results [ LAYERS_FILE_INDEX ] );
 		myErrorMessage += await myLoadSearchDictionary (
-			results [ SEARCH_DICTIONARY_FILE_INDEX ],
-			results [ DEFAULT_SEARCH_DICTIONARY_FILE_INDEX ]
+			results [ 4 ],
+			results [ 5 ]
 		);
+		myErrorMessage += await myLoadLayers ( results [ 6 ] );
+		/* eslint-enable no-magic-numbers */
+
 		if ( '' !== myErrorMessage ) {
 			theErrorsUI.showWarning ( myErrorMessage );
 			myErrorMessage = '';

@@ -112,7 +112,7 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, TWO } from '../util/Constants.js';
 
-const DRAG_MARGIN = 20;
+const OUR_DRAG_MARGIN = 20;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -193,11 +193,11 @@ function ourNewBaseDialog ( ) {
 		myDialogX += dragEndEvent.screenX - myStartDragX;
 		myDialogY += dragEndEvent.screenY - myStartDragY;
 		myDialogX = Math.min (
-			Math.max ( myDialogX, DRAG_MARGIN ),
-			myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
+			Math.max ( myDialogX, OUR_DRAG_MARGIN ),
+			myScreenWidth - myDialogDiv.clientWidth - OUR_DRAG_MARGIN
 		);
-		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
-		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
+		myDialogY = Math.max ( myDialogY, OUR_DRAG_MARGIN );
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - OUR_DRAG_MARGIN;
 		myDialogDiv.style.top = String ( myDialogY ) + 'px';
 		myDialogDiv.style.left = String ( myDialogX ) + 'px';
 		myDialogDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
@@ -493,11 +493,11 @@ function ourNewBaseDialog ( ) {
 		myDialogX = ( myScreenWidth - myDialogDiv.clientWidth ) / TWO;
 		myDialogY = ( myScreenHeight - myDialogDiv.clientHeight ) / TWO;
 		myDialogX = Math.min (
-			Math.max ( myDialogX, DRAG_MARGIN ),
-			myScreenWidth - myDialogDiv.clientWidth - DRAG_MARGIN
+			Math.max ( myDialogX, OUR_DRAG_MARGIN ),
+			myScreenWidth - myDialogDiv.clientWidth - OUR_DRAG_MARGIN
 		);
-		myDialogY = Math.max ( myDialogY, DRAG_MARGIN );
-		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - DRAG_MARGIN;
+		myDialogY = Math.max ( myDialogY, OUR_DRAG_MARGIN );
+		let dialogMaxHeight = myScreenHeight - Math.max ( myDialogY, ZERO ) - OUR_DRAG_MARGIN;
 		myDialogDiv.style.top = String ( myDialogY ) + 'px';
 		myDialogDiv.style.left = String ( myDialogX ) + 'px';
 		myDialogDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';

@@ -48,7 +48,7 @@ import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
-const OSRM_ROUTE_LAT_LNG_ROUND = 6;
+const OUR_OSRM_ROUTE_LAT_LNG_ROUND = 6;
 
 let ourUserLanguage = 'fr';
 let ourRoute = null;
@@ -84,7 +84,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 
 	response.routes [ ZERO ].geometry = thePolylineEncoder.decode (
 		response.routes [ ZERO ].geometry,
-		[ OSRM_ROUTE_LAT_LNG_ROUND, OSRM_ROUTE_LAT_LNG_ROUND ]
+		[ OUR_OSRM_ROUTE_LAT_LNG_ROUND, OUR_OSRM_ROUTE_LAT_LNG_ROUND ]
 	);
 
 	response.routes [ ZERO ].legs.forEach (
@@ -94,7 +94,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 				function ( step ) {
 					step.geometry = thePolylineEncoder.decode (
 						step.geometry,
-						[ OSRM_ROUTE_LAT_LNG_ROUND, OSRM_ROUTE_LAT_LNG_ROUND ]
+						[ OUR_OSRM_ROUTE_LAT_LNG_ROUND, OUR_OSRM_ROUTE_LAT_LNG_ROUND ]
 					);
 					let maneuver = window.TaN.maneuver;
 					maneuver.iconName =
