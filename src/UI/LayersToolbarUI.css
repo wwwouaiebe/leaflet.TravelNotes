@@ -24,6 +24,8 @@ This file contains:
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.2.0:
+		- Issue #155 : Enable pan and zoom on the map when a dialog is displayed
 
 -----------------------------------------------------------------------------------------------------------------------
 */
@@ -33,7 +35,7 @@ Changes:
 	width: 3em;
 	top: 0;
 	left: 0;
-	z-index: 1000;
+	z-index: 1300;
 	display: flex;
 	flex-direction: column;
 	height: auto;

@@ -35,6 +35,8 @@ Changes:
 		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+	- v2.2.0:
+		- Issue #155 : Enable pan and zoom on the map when a dialog is displayed
 Doc reviewed 20200811
 Tests ...
 */
@@ -110,7 +112,9 @@ Box model
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { ZERO, TWO } from '../util/Constants.js';
+import { theGeometry } from '../util/Geometry.js';
+import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { ZERO, ONE, TWO } from '../util/Constants.js';
 
 const OUR_DRAG_MARGIN = 20;
 
@@ -134,6 +138,10 @@ function ourNewBaseDialog ( ) {
 	let myDialogY = ZERO;
 	let myScreenWidth = ZERO;
 	let myScreenHeight = ZERO;
+	let myMapPanOngoing = false;
+	let myMapCenter = theTravelNotesData.map.getCenter ( );
+	let myStartPanX = 0;
+	let myStartPanY = 0;
 
 	let myBackgroundDiv = null;
 	let myTopBar = null;
@@ -285,6 +293,114 @@ function ourNewBaseDialog ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myOnMouseDownBackground
+	@desc Click event listener for the mouse down on the background
+	@listens mousedown
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnMouseDownBackground ( mouseEvent ) {
+		if ( 'TravelNotes-Background' !== mouseEvent.target.id ) {
+			return;
+		}
+
+		myMapPanOngoing = true;
+		myStartPanX = mouseEvent.screenX;
+		myStartPanY = mouseEvent.screenY;
+		myMapCenter = theTravelNotesData.map.getCenter ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnMouseMoveBackground
+	@desc Click event listener for the mouse move on the background
+	@listens mousemove
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnMouseMoveBackground ( mouseEvent ) {
+		if ( myMapPanOngoing ) {
+			mouseEvent.preventDefault ( );
+			mouseEvent.stopPropagation ( );
+			let latLngAtStart = theGeometry.screenCoordToLatLng ( myStartPanX, myStartPanY );
+			let latLngAtEnd = theGeometry.screenCoordToLatLng ( mouseEvent.screenX, mouseEvent.screenY );
+			theTravelNotesData.map.panTo (
+				[
+					myMapCenter.lat + latLngAtStart [ ZERO ] - latLngAtEnd [ ZERO ],
+					myMapCenter.lng + latLngAtStart [ ONE ] - latLngAtEnd [ ONE ]
+				]
+			);
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnMouseUpBackground
+	@desc Click event listener for the mouse up on the background
+	@listens mouseup
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnMouseUpBackground ( mouseEvent ) {
+		if ( 'TravelNotes-Background' !== mouseEvent.target.id ) {
+			return;
+		}
+		myOnMouseMoveBackground ( mouseEvent );
+		myMapPanOngoing = false;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnMouseWheelBackground
+	@desc Click event listener for the mouse wheel on the background
+	@listens wheel
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnMouseWheelBackground ( wheelEvent ) {
+		if ( 'TravelNotes-Background' !== wheelEvent.target.id ) {
+			return;
+		}
+
+		const WHEEL_CORRECTION_FACTOR = 100;
+		let zoom = theTravelNotesData.map.getZoom ( ) - Math.round ( wheelEvent.deltaY / WHEEL_CORRECTION_FACTOR );
+		zoom = Math.min ( theTravelNotesData.map.getMaxZoom ( ), zoom );
+		zoom = Math.max ( theTravelNotesData.map.getMinZoom ( ), zoom );
+		theTravelNotesData.map.setZoomAround (
+			window.L.point ( wheelEvent.clientX, wheelEvent.clientY ),
+			zoom
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnContextMenu
+	@desc Click event listener for context menu on the background
+	@listens contextmenu
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnContextMenu ( contextmenuEvent ) {
+		contextmenuEvent.preventDefault ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myCreateBackgroundDiv
 	@desc This method creates the background covering the entire screen
 	@private
@@ -295,9 +411,18 @@ function ourNewBaseDialog ( ) {
 	function myCreateBackgroundDiv ( ) {
 
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		myBackgroundDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-Background' } );
+		myBackgroundDiv = theHTMLElementsFactory.create (
+			'div',
+			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
+		);
 		myBackgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
 		myBackgroundDiv.addEventListener ( 'drop', ( ) => null, false );
+
+		myBackgroundDiv.addEventListener ( 'mousedown', myOnMouseDownBackground, false );
+		myBackgroundDiv.addEventListener ( 'mouseup', myOnMouseUpBackground, false );
+		myBackgroundDiv.addEventListener ( 'mousemove', myOnMouseMoveBackground, false );
+		myBackgroundDiv.addEventListener ( 'wheel', myOnMouseWheelBackground, false );
+		myBackgroundDiv.addEventListener ( 'contextmenu', myOnContextMenu, false );
 	}
 
 	/**
