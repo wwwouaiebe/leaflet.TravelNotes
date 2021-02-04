@@ -262,7 +262,7 @@ class APIKeysManager {
 	@return {boolean} true when the provider API key is known
 	*/
 
-	hasKey ( providerName ) { return ourKeysMap.has ( providerName ); }
+	hasKey ( providerName ) { return ourKeysMap.has ( providerName.toLowerCase ( ) ); }
 
 	/**
 	Get the url from the layer
