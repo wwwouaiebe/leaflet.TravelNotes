@@ -69,13 +69,12 @@ import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
 
@@ -207,7 +206,9 @@ function ourOnOkDecryptServerFile ( data ) {
 function ourOnErrorDecryptServerFile ( err ) {
 
 	// Showing the error if not cancelled by user
-	console.log ( err ? err : 'An error occurs when reading the APIKeys file' );
+	if ( err instanceof Error ) {
+		console.error ( err );
+	}
 	if ( err && 'Canceled by user' !== err ) {
 		theErrorsUI.showError (
 			theTranslator.getText ( 'APIKeysManager - An error occurs when reading the APIKeys file' )
@@ -228,12 +229,14 @@ The methos ask a password to the user and try to decode the file
 */
 
 function ourOnServerFileFound ( data ) {
-	newDataEncryptor ( ).decryptData (
-		data,
-		ourOnOkDecryptServerFile,
-		ourOnErrorDecryptServerFile,
-		newPasswordDialog ( false ).show ( )
-	);
+	if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
+		newDataEncryptor ( ).decryptData (
+			data,
+			ourOnOkDecryptServerFile,
+			ourOnErrorDecryptServerFile,
+			newPasswordDialog ( false ).show ( )
+		);
+	}
 }
 
 /**
@@ -249,13 +252,34 @@ function ourOnServerFileFound ( data ) {
 
 class APIKeysManager {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
-	Get a provider API key
-	@param {string} providerName the provider name for witch the API key is asked
-	@return {string} the provider API key or null if key not found
+	Verify that a provider key is known
+	@param {string} providerName the provider name for witch the API key is searched
+	@return {boolean} true when the provider API key is known
 	*/
 
-	getKey ( providerName ) { return ourGetKey ( providerName ); }
+	hasKey ( providerName ) { return ourKeysMap.has ( providerName.toLowerCase ( ) ); }
+
+	/**
+	Get the url from the layer
+	@param {Object} layer the layer for witch the url must returned
+	@return {string} the url for the given layer or null if the url cannot be given
+	*/
+
+	getUrl ( layer ) {
+		if ( layer.providerKeyNeeded ) {
+			let providerKey = ourKeysMap.get ( layer.providerName.toLowerCase ( ) );
+			if ( providerKey ) {
+				return layer.url.replace ( '{providerKey}', providerKey );
+			}
+			return null;
+		}
+		return layer.url;
+	}
 
 	/**
 	This method try to restore the API keys from the storage. If not possible the method search
@@ -274,14 +298,21 @@ class APIKeysManager {
 		}
 
 		// otherwise searching on the server
-		if ( theConfig.haveCrypto ) {
-			theHttpRequestBuilder.getBinaryPromise (
-				window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-					'APIKeys'
+		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.arrayBuffer ( ).then ( ourOnServerFileFound );
+					}
+				}
 			)
-				.then ( ourOnServerFileFound )
-				.catch ( err => console.log ( err ? err : 'APIKeys not found on server' ) );
-		}
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**
@@ -305,7 +336,13 @@ class APIKeysManager {
 		newAPIKeysDialog ( ApiKeys )
 			.show ( )
 			.then ( APIKeys => ourResetAPIKeys ( APIKeys ) )
-			.catch ( err => console.log ( err ? err : 'canceled by user' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**
@@ -339,7 +376,7 @@ class APIKeysManager {
 	}
 }
 
-const ourAPIKeysManager = Object.seal ( new APIKeysManager	);
+const OUR_API_KEYS_MANAGER = new APIKeysManager ( );
 
 export {
 
@@ -354,7 +391,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourAPIKeysManager as theAPIKeysManager
+	OUR_API_KEYS_MANAGER as theAPIKeysManager
 };
 
 /*

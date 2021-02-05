@@ -37,7 +37,7 @@ import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newProfileContextMenu } from '../contextMenus/ProfileContextMenu.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO } from '../util/Constants.js';
+import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -176,7 +176,6 @@ function ourNewProfileWindow ( ) {
 		let clientRect = mySvg.getBoundingClientRect ( );
 		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
-			const THREE = 3;
 
 			// itinerary point marker on the map
 			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
@@ -327,10 +326,10 @@ function ourNewProfileWindow ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myUpdate ( route ) {
+	function myUpdate ( args ) {
 		myClean ( );
-		myRoute = route;
-		mySvg = newProfileFactory ( ).createSvg ( route );
+		myRoute = args [ ZERO ];
+		mySvg = newProfileFactory ( ).createSvg ( myRoute );
 
 		myProfileWindow.header.textContent = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
 		myProfileWindow.content.appendChild ( mySvg );
@@ -370,9 +369,9 @@ function ourNewProfileWindow ( ) {
 	myProfileWindow = newFloatWindow ( );
 	myProfileWindow.createWindow ( );
 	myProfileWindow.onClose = myOnClose;
-	myProfileWindow.update = myUpdate;
+	myProfileWindow.onUpdate = myUpdate;
 
-	return Object.seal ( myProfileWindow );
+	return myProfileWindow;
 }
 
 export {

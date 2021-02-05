@@ -271,9 +271,7 @@ function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let routeContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
-
-	return Object.seal ( routeContextMenu );
+	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
 export {

@@ -56,11 +56,14 @@ Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! War
 						 //      o     \\
 						 \==============/
 
-You have also to adapt the version in the ourValidate ( ) method of
+You have also to adapt the version in the ourUpgrade ( ) method of
 Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
+
+and change the version in the package.json file and run npm audit fix.
+
 */
 
-const ourCurrentVersion = '2.1.0';
+const OUR_CURRENT_VERSION = '2.2.0';
 
 export {
 
@@ -75,7 +78,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourCurrentVersion as theCurrentVersion
+	OUR_CURRENT_VERSION as theCurrentVersion
 };
 
 /*

@@ -181,9 +181,7 @@ function ourNewMapContextMenu ( contextMenuEvent ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let mapContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
-
-	return Object.seal ( mapContextMenu );
+	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
 export {

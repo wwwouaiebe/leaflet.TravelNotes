@@ -62,9 +62,8 @@ import { theCurrentVersion } from '../data/Version.js';
 
 function ourNewObjType ( objTypeName ) {
 
-	const myName = objTypeName;
-
-	const myVersion = theCurrentVersion;
+	const MY_NAME = objTypeName;
+	const MY_VERSION = theCurrentVersion;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -79,19 +78,23 @@ function ourNewObjType ( objTypeName ) {
 
 	class ObjType {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		the name of the ObjType
 		@type {string}
 		*/
 
-		get name ( ) { return myName; }
+		get name ( ) { return MY_NAME; }
 
 		/**
 		the version of the ObjType
 		@type {string}
 		*/
 
-		get version ( ) { return myVersion; }
+		get version ( ) { return MY_VERSION; }
 
 		/**
 		An object literal with the ObjType properties and without any methods.
@@ -101,8 +104,8 @@ function ourNewObjType ( objTypeName ) {
 
 		get jsonObject ( ) {
 			return {
-				name : myName,
-				version : myVersion
+				name : MY_NAME,
+				version : MY_VERSION
 			};
 		}
 
@@ -113,18 +116,18 @@ function ourNewObjType ( objTypeName ) {
 
 		validate ( something ) {
 			if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
-				throw new Error ( 'No name for ' + myName );
+				throw new Error ( 'No name for ' + MY_NAME );
 			}
-			if ( myName !== something.name ) {
-				throw new Error ( 'Invalid name for ' + myName );
+			if ( MY_NAME !== something.name ) {
+				throw new Error ( 'Invalid name for ' + MY_NAME );
 			}
 			if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
-				throw new Error ( 'No version for ' + myName );
+				throw new Error ( 'No version for ' + MY_NAME );
 			}
 		}
 	}
 
-	return Object.seal ( new ObjType );
+	return new ObjType ( );
 
 }
 

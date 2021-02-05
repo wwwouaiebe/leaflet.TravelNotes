@@ -190,6 +190,10 @@ function ourAddMouseEventListeners ( ) {
 
 class UI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	@param {HTMLElement} uiDiv The HTML element in witch the UI have to be created
@@ -220,7 +224,7 @@ class UI {
 	}
 }
 
-const ourUI = Object.freeze ( new UI );
+const OUR_UI = new UI ( );
 
 export {
 
@@ -235,7 +239,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourUI as theUI
+	OUR_UI as theUI
 };
 
 /*

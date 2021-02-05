@@ -28,6 +28,8 @@ Changes:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200801
 Tests ...
 */
@@ -55,13 +57,14 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
+import { theMouseUI } from '../UI/MouseUI.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -161,7 +164,10 @@ function ourNewFileLoader ( ) {
 				fileContent = JSON.parse ( fileReader.result );
 			}
 			catch ( err ) {
-				console.log ( err ? err : 'An error occurs when reading the file' );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+				return;
 			}
 			if ( mustMerge ) {
 				newFileCompactor ( ).decompressMerge ( fileContent );
@@ -172,6 +178,9 @@ function ourNewFileLoader ( ) {
 			}
 
 			myDisplay ( );
+			if ( ! mustMerge ) {
+				theMouseUI.saveStatus = SAVE_STATUS.saved;
+			}
 
 		};
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
@@ -189,6 +198,10 @@ function ourNewFileLoader ( ) {
 	*/
 
 	class FileLoader {
+
+		constructor ( ) {
+			Object.freeze ( this );
+		}
 
 		/**
 		Open a local file and display the content of the file
@@ -225,7 +238,7 @@ function ourNewFileLoader ( ) {
 		mergeLocalFile ( changeEvent ) { myOpenFile ( changeEvent, true ); }
 	}
 
-	return Object.seal ( new FileLoader	);
+	return new FileLoader ( );
 }
 
 export {

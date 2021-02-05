@@ -50,14 +50,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE } from '../util/Constants.js';
-
-const DEGREE_180 = 180;
-const DEGREE_360 = 360;
-const DEGREE_540 = 540;
-
-const TO_RADIANS = Math.PI / DEGREE_180;
-const EARTH_RADIUS = 6371e3;
+import { ZERO, ONE, DEGREES, EARTH_RADIUS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -72,7 +65,7 @@ const EARTH_RADIUS = 6371e3;
 */
 
 function myNormalizeLng ( Lng ) {
-	return ( ( Lng + DEGREE_540 ) % DEGREE_360 ) - DEGREE_180;
+	return ( ( Lng + DEGREES.d540 ) % DEGREES.d360 ) - DEGREES.d180;
 }
 
 /**
@@ -87,6 +80,10 @@ function myNormalizeLng ( Lng ) {
 */
 
 class SphericalTrigonometry {
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	/**
 
@@ -147,14 +144,14 @@ class SphericalTrigonometry {
 			// the function runs infinitely when latLngStartPoint === latLngEndPoint :-(
 			return ZERO;
 		}
-		let latStartPoint = latLngStartPoint [ ZERO ] * TO_RADIANS;
-		let latEndPoint = latLngEndPoint [ ZERO ] * TO_RADIANS;
+		let latStartPoint = latLngStartPoint [ ZERO ] * DEGREES.toRadians;
+		let latEndPoint = latLngEndPoint [ ZERO ] * DEGREES.toRadians;
 		let deltaLng =
 			(
 				myNormalizeLng ( latLngEndPoint [ ONE ] ) -
 				myNormalizeLng ( latLngStartPoint [ ONE ] )
 			)
-			* TO_RADIANS;
+			* DEGREES.toRadians;
 		return Math.acos (
 			( Math.sin ( latStartPoint ) * Math.sin ( latEndPoint ) ) +
 				( Math.cos ( latStartPoint ) * Math.cos ( latEndPoint ) * Math.cos ( deltaLng ) )
@@ -162,7 +159,7 @@ class SphericalTrigonometry {
 	}
 }
 
-const ourSphericalTrigonometry = Object.freeze ( new SphericalTrigonometry );
+const OUR_SPHERICAL_TRIGONOMETRY = new SphericalTrigonometry ( );
 
 export {
 
@@ -177,7 +174,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourSphericalTrigonometry as theSphericalTrigonometry
+	OUR_SPHERICAL_TRIGONOMETRY as theSphericalTrigonometry
 };
 
 /*

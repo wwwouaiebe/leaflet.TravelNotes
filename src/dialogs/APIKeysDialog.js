@@ -60,8 +60,7 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -268,6 +267,27 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myDecryptAPIKeysFile
+	@desc This method is called when a 'APIKeys' file is found on the web server
+	The methos ask a password to the user and try to decode the file
+	@param {ArrayBuffer} data the data to decode
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myDecryptAPIKeysFile ( data ) {
+		newDataEncryptor ( ).decryptData (
+			data,
+			myOnOkDecrypt,
+			myOnErrorDecrypt,
+			newPasswordDialog ( false ).show ( )
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@function myOnReloadKeysFromServerFileButtonClick
 	@desc Event listener for the reload server file button
 	@private
@@ -279,27 +299,20 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 		clickEvent.stopPropagation ( );
 		myAPIKeysDialog.showWait ( );
 		myAPIKeysDialog.keyboardEventListenerEnabled = false;
-		theHttpRequestBuilder.getBinaryPromise (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-				'APIKeys'
-		)
+
+		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
 			.then (
-				data => {
-					newDataEncryptor ( ).decryptData (
-						data,
-						myOnOkDecrypt,
-						myOnErrorDecrypt,
-						newPasswordDialog ( false ).show ( )
-					);
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.arrayBuffer ( ).then ( myDecryptAPIKeysFile );
+					}
 				}
 			)
 			.catch (
-				() => {
-					myAPIKeysDialog.showError (
-						theTranslator.getText ( 'APIKeysDialog - An error occurs when loading the APIKeys file' )
-					);
-					myAPIKeysDialog.hideWait ( );
-					myAPIKeysDialog.keyboardEventListenerEnabled = true;
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
 				}
 			);
 	}
@@ -471,7 +484,9 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			}
 			catch ( err ) {
 				myAPIKeysDialog.showError ( err.message );
-				console.log ( err ? err : 'An error occurs when reading the file' );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
 			}
 		};
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
@@ -702,7 +717,7 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 			myAPIKeysDialog.content
 		);
 
-		if ( theConfig.haveCrypto ) {
+		if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
 			myCreateReloadKeysFromServerFileButton ( );
 			myCreateSaveKeysToSecureFileButton ( );
 			myCreateRestoreKeysFromSecureFileButton ( );

@@ -40,6 +40,8 @@ Changes:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
+	- v2.2.0:
+		- Issue #64 : Improve geocoding
 Doc reviewed 20200815
 Tests ...
 */
@@ -77,6 +79,8 @@ import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
+const OUR_DEFAULT_ICON = '?????';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -95,7 +99,6 @@ at the dialog opening
 /* eslint-disable-next-line max-statements */
 function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
-	const DEFAULT_ICON = '?????';
 	let myFocusControl = null;
 	let myGeoCoder = newGeoCoder ( );
 	let myLatLng = note.latLng;
@@ -198,7 +201,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myOnInputControl ( ) {
 		if ( '' === myIconHtmlContent.value ) {
-			myPreviewNote.iconContent = DEFAULT_ICON;
+			myPreviewNote.iconContent = OUR_DEFAULT_ICON;
 		}
 		else {
 			myPreviewNote.iconContent = myIconHtmlContent.value;
@@ -231,12 +234,11 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myOnGeocoderSucces ( geoCoderData ) {
-		let response = myGeoCoder.parseResponse ( geoCoderData );
-		myAddress = response.street;
-		if ( '' !== response.city ) {
-			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + response.city + '</span>';
+		myAddress = geoCoderData.street;
+		if ( '' !== geoCoderData.city ) {
+			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
 		}
-		myCity = response.city;
+		myCity = geoCoderData.city;
 
 		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && startGeoCoder ) {
 			myAddressInput.value = myAddress;
@@ -256,7 +258,9 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myOnGeocoderError ( err ) {
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' ) );
-		console.log ( err ? err : 'an error occurs when searching the adress.' );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 		myOnInputControl ( );
 	}
 
@@ -304,7 +308,9 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	function myOnSvgIconError ( err ) {
 		myNoteDialog.hideWait ( );
 		myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' ) );
-		console.log ( err ? err : 'an error occurs when creating the SVG icon.' );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 		myOnInputControl ( );
 	}
 
@@ -578,7 +584,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				value : note.iconContent,
-				placeholder : DEFAULT_ICON,
+				placeholder : OUR_DEFAULT_ICON,
 				rows : theConfig.noteDialog.iconAreaHeight
 			},
 			myIconContentDiv
@@ -877,7 +883,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myPreviewNote = newNote ( );
 		myPreviewNote.jsonObject = note.jsonObject;
 		if ( '' === myPreviewNote.iconContent ) {
-			myPreviewNote.iconContent = DEFAULT_ICON;
+			myPreviewNote.iconContent = OUR_DEFAULT_ICON;
 		}
 
 		// the dialog base is created

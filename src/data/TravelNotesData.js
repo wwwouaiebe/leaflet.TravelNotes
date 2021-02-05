@@ -131,6 +131,8 @@ class TravelNotesData {
 		*/
 
 		this.searchData = [];
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -164,7 +166,7 @@ class TravelNotesData {
 	get UUID ( ) { return ourUUID; }
 }
 
-const ourTravelNotesData = Object.seal ( new TravelNotesData );
+const OUR_TRAVEL_NOTES_DATA = new TravelNotesData ( );
 
 export {
 
@@ -179,7 +181,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotesData as theTravelNotesData
+	OUR_TRAVEL_NOTES_DATA as theTravelNotesData
 };
 
 /*

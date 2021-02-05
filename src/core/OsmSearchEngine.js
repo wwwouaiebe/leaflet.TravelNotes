@@ -51,15 +51,14 @@ import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
-import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 let ourPreviousSearchRectangleObjId = INVALID_OBJ_ID;
 let ourNextSearchRectangleObjId = INVALID_OBJ_ID;
 let ourSearchStarted = false;
 
-const SEARCH_DIM = 5000;
+const OUR_SEARCH_DIM = 5000;
 let ourPreviousSearchBounds = null;
 let ourSearchBounds = null;
 let ourDictionary = null;
@@ -149,7 +148,7 @@ function ourOnMapChange ( ) {
 	}
 	let mapCenter = theTravelNotesData.map.getCenter ( );
 	ourSearchBounds = theTravelNotesData.map.getBounds ( );
-	let maxBounds = theGeometry.getSquareBoundingBox ( [ mapCenter.lat, mapCenter.lng ], SEARCH_DIM );
+	let maxBounds = theGeometry.getSquareBoundingBox ( [ mapCenter.lat, mapCenter.lng ], OUR_SEARCH_DIM );
 	ourSearchBounds.getSouthWest ( ).lat = Math.max ( ourSearchBounds.getSouthWest ( ).lat, maxBounds.getSouthWest ( ).lat );
 	ourSearchBounds.getSouthWest ( ).lng = Math.max ( ourSearchBounds.getSouthWest ( ).lng, maxBounds.getSouthWest ( ).lng );
 	ourSearchBounds.getNorthEast ( ).lat = Math.min ( ourSearchBounds.getNorthEast ( ).lat, maxBounds.getNorthEast ( ).lat );
@@ -197,21 +196,31 @@ function ourSearchFilters ( item ) {
 function ourGetSearchPromises ( ) {
 	let searchPromises = [];
 	ourPreviousSearchBounds = ourSearchBounds;
-	let tagMaps = { node : new Map ( ), way : new Map ( ), relation : new Map ( ) };
+
+	let keysMap = new Map ( );
+
 	ourFilterItems.forEach (
 		filterItem => {
-			filterItem.elementTypes.forEach (
-				elementType => {
-					filterItem.filterTagsArray.forEach (
-						filterTag => {
-							tagMaps [ elementType ].set ( filterTag, filterTag );
+			filterItem.filterTagsArray.forEach (
+				filterTags => {
+
+					let [ key, value ] = Object.entries ( filterTags [ ZERO ] ) [ ZERO ];
+					let valuesElements = keysMap.get ( key );
+					if ( ! valuesElements ) {
+						valuesElements = { values : new Map ( ), elements : new Map ( ) };
+						keysMap.set ( key, valuesElements );
+					}
+					valuesElements.values.set ( value, value );
+					filterItem.elementTypes.forEach (
+						elementType => {
+							valuesElements.elements.set ( elementType, elementType );
 						}
 					);
 				}
 			);
 		}
 	);
-	let requestStrings = { node : '', way : '', relation : ''	};
+
 	let searchBoundingBoxString = '(' +
 		ourSearchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
 		',' +
@@ -221,24 +230,35 @@ function ourGetSearchPromises ( ) {
 		',' +
 		ourSearchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
 		')';
-	for ( const [ element, MapTags ] of Object.entries ( tagMaps ) ) {
-		MapTags.forEach (
-			tag => {
-				let [ key, value ] = Object.entries ( tag ) [ ZERO ];
-				requestStrings [ element ] += element +
-				'[' + key + ( '*' === value ? '' : '=' + value ) + ']' +
-				searchBoundingBoxString + ';';
-			}
-		);
-	}
-	for ( const [ element, requestString ] of Object.entries ( requestStrings ) ) {
-		if ( '' !== requestString ) {
-			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];(' +
-				requestString + ');' + ( 'node' === element ? '' : '(._;>;);' ) + 'out;';
 
-			searchPromises.push ( theHttpRequestBuilder.getJsonPromise ( url ) );
+	keysMap.forEach (
+		( valuesElements, key ) => {
+			let queryTag = '"' + key + '"';
+			if ( ONE === valuesElements.values.size ) {
+				let value = valuesElements.values.values ( ).next ( ).value;
+				if ( value ) {
+					queryTag += '="' + value + '"';
+				}
+			}
+			else if ( ONE < valuesElements.values.size ) {
+				queryTag += '~"';
+				valuesElements.values.forEach (
+					value => {
+						queryTag += value + '|';
+					}
+				);
+				queryTag = queryTag.substr ( ZERO, queryTag.length - ONE ) + '"';
+			}
+			let queryElement = ONE === valuesElements.elements.size ? valuesElements.elements.values ( ).next ( ).value : 'nwr';
+
+			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];' +
+				queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
+				( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;';
+
+			searchPromises.push ( fetch ( url ) );
 		}
-	}
+	);
+
 	return searchPromises;
 }
 
@@ -255,12 +275,17 @@ function ourGetSearchPromises ( ) {
 
 function ourFilterOsmElement ( osmElement, filterTags ) {
 	let isValidOsmElement = true;
-	for ( const [ key, value ] of Object.entries ( filterTags ) ) {
-		isValidOsmElement =
-			isValidOsmElement &&
-			osmElement.tags [ key ] &&
-			( osmElement.tags [ key ] === value || '*' === value );
-	}
+	filterTags.forEach (
+		filterTag => {
+			let [ key, value ] = Object.entries ( filterTag ) [ ZERO ];
+			isValidOsmElement =
+				isValidOsmElement &&
+				osmElement.tags [ key ] &&
+				( ! value || osmElement.tags [ key ] === value );
+
+		}
+	);
+
 	return isValidOsmElement;
 }
 
@@ -410,18 +435,20 @@ function ourParseOsmElements ( osmElements ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourParseSearchResult ( results ) {
+async function ourParseSearchResult ( results ) {
 	let osmElements = [];
-	results.forEach (
-		result => {
-			if ( 'fulfilled' === result.status ) {
-				osmElements = osmElements.concat ( result.value.elements );
-			}
-			else {
-				console.log ( result.reason );
-			}
+	for ( let counter = ZERO; counter < results.length; counter ++ ) {
+		if (
+			'fulfilled' === results[ counter ].status
+			&&
+			HTTP_STATUS_OK === results[ counter ].value.status
+			&&
+			results[ counter ].value.ok
+		) {
+			let response = await results[ counter ].value.json ( );
+			osmElements = osmElements.concat ( response.elements );
 		}
-	);
+	}
 	ourParseOsmElements ( osmElements );
 }
 
@@ -437,6 +464,10 @@ function ourParseSearchResult ( results ) {
 */
 
 class OsmSearchEngine	{
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	/**
 	The dictionary is a DictionaryItems tree that is used to performs search in osm
@@ -522,12 +553,11 @@ class OsmSearchEngine	{
 								currentItem.elementTypes = [ keyAndValue [ ONE ] ];
 							}
 							else {
-								filterTags =
-									filterTags
-									||
-									{
-									};
-								filterTags [ keyAndValue [ ZERO ] ] = keyAndValue [ ONE ];
+								let filterTag = {};
+								filterTag [ keyAndValue [ ZERO ] ] =
+									'*' === keyAndValue [ ONE ] ? null : keyAndValue [ ONE ];
+								filterTags = filterTags || [];
+								filterTags.push ( filterTag );
 							}
 						}
 					}
@@ -552,7 +582,7 @@ class OsmSearchEngine	{
 	}
 }
 
-const ourOsmSearchEngine = Object.seal ( new OsmSearchEngine );
+const OUR_OSM_SEARCH_ENGINE = new OsmSearchEngine ( );
 
 export {
 
@@ -567,7 +597,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourOsmSearchEngine as theOsmSearchEngine
+	OUR_OSM_SEARCH_ENGINE as theOsmSearchEngine
 };
 
 /*

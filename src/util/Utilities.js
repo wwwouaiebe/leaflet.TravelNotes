@@ -42,7 +42,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -57,20 +57,24 @@ import { LAT_LNG, ZERO, ONE, TWO } from '../util/Constants.js';
 
 class Utilities {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Gives an UUID
 	*/
 
 	get UUID ( ) {
-		const HEXADECIMAL = 16;
 		const UUID_LENGHT = 8;
 		const UUID_STRLENGHT = 4;
 		let randomValues = new Uint16Array ( UUID_LENGHT );
-		const separators = [ '', '-', '-', '-', '-', '', '', '' ];
+		const UUID_SEPARATORS = [ '', '-', '-', '-', '-', '', '', '' ];
 		window.crypto.getRandomValues ( randomValues );
 		let UUID = '';
 		for ( let counter = ZERO; counter < UUID_LENGHT; counter ++ ) {
-			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) + separators [ counter ];
+			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) +
+				UUID_SEPARATORS [ counter ];
 		}
 		return UUID;
 	}
@@ -112,7 +116,9 @@ class Utilities {
 			window.URL.revokeObjectURL ( objURL );
 		}
 		catch ( err ) {
-			console.log ( err ? err : 'An error occurs when saving file' );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 	}
 
@@ -165,17 +171,15 @@ class Utilities {
 	*/
 
 	formatDistance ( distance ) {
-		const M_IN_KM = 1000;
 		const DISTANCE_ROUND = 10;
-		const THREE = 3;
 
 		let iDistance = Math.floor ( distance );
 		if ( ZERO >= iDistance ) {
 			return '0\u00A0km';
 		}
-		return Math.floor ( iDistance / M_IN_KM ) +
+		return Math.floor ( iDistance / DISTANCE.metersInKm ) +
 			',' +
-			Math.floor ( ( iDistance % M_IN_KM ) / DISTANCE_ROUND ).toFixed ( ZERO )
+			Math.floor ( ( iDistance % DISTANCE.metersInKm ) / DISTANCE_ROUND ).toFixed ( ZERO )
 				.padStart ( TWO, '0' )
 				.padEnd ( THREE, '0' ) +
 			'\u00A0km';
@@ -224,7 +228,7 @@ class Utilities {
 	}
 }
 
-const ourUtilities = Object.freeze ( new Utilities );
+const OUR_UTILITIES = new Utilities ( );
 
 export {
 
@@ -239,7 +243,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourUtilities as theUtilities
+	OUR_UTILITIES as theUtilities
 };
 
 /*

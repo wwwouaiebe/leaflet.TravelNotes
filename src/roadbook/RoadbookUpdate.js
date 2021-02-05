@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200825
 Tests ...
 */
@@ -39,6 +41,8 @@ import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theUtilities } from '../util/Utilities.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
+import { theMouseUI } from '../UI/MouseUI.js';
+import { SAVE_STATUS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -54,6 +58,8 @@ read the new roadbbok content in the indexedDb and update
 
 function newRoadbookUpdate ( ) {
 
+	theMouseUI.saveStatus = SAVE_STATUS.modified;
+
 	if ( theUtilities.storageAvailable ( 'localStorage' ) ) {
 		theIndexedDb.getOpenPromise ( )
 			.then ( ( ) => {
@@ -63,7 +69,12 @@ function newRoadbookUpdate ( ) {
 				);
 			} )
 			.then ( ( ) => localStorage.setItem ( theTravelNotesData.UUID, Date.now ( ) ) )
-			.catch ( err => console.log ( err ? err : 'An error occurs when writing the content' ) );
+			.catch ( err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+			);
 	}
 }
 

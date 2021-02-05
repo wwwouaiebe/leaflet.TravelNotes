@@ -55,8 +55,50 @@ import { newObjType } from '../data/ObjType.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'Maneuver' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'Maneuver' );
+const OUR_OBJ_IDS = new WeakMap ( );
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} maneuver a maneuver to upgrade
+@throws {Error} when the maneuver version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( maneuver ) {
+	switch ( maneuver.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+		if ( 'kArriveDefault' === maneuver.iconName ) {
+			maneuver.distance = DISTANCE.defaultValue;
+		}
+		// eslint break omitted intentionally
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		maneuver.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -73,42 +115,17 @@ const ourObjIds = new WeakMap ( );
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-			if ( 'kArriveDefault' === something.iconName ) {
-				something.distance = DISTANCE.defaultValue;
-			}
-			// eslint break omitted intentionally
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-			something.objType.version = '2.1.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -165,8 +182,9 @@ class Maneuver {
 
 		this.duration = DISTANCE.defaultValue;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
+		Object.seal ( this );
 	}
 
 	/**
@@ -175,7 +193,7 @@ class Maneuver {
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the Maneuver. objId are unique identifier given by the code
@@ -183,7 +201,7 @@ class Maneuver {
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the Maneuver properties and without any methods.
@@ -198,8 +216,8 @@ class Maneuver {
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			duration : this.duration,
 			itineraryPointObjId : this.itineraryPointObjId,
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -209,7 +227,7 @@ class Maneuver {
 		this.distance = otherthing.distance || DISTANCE.defaultValue;
 		this.duration = otherthing.duration || DISTANCE.defaultValue;
 		this.itineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
 
@@ -257,7 +275,7 @@ class Maneuver {
 */
 
 function ourNewManeuver ( ) {
-	return Object.seal ( new Maneuver );
+	return new Maneuver ( );
 }
 
 export {

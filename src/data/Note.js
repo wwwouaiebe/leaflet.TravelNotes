@@ -55,9 +55,9 @@ import { newObjType } from '../data/ObjType.js';
 import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
-const ourObjType = newObjType ( 'Note' );
-const ourObjIds = new WeakMap ( );
-const DEFAULT_ICON_SIZE = 0;
+const OUR_OBJ_TYPE = newObjType ( 'Note' );
+const OUR_OBJ_IDS = new WeakMap ( );
+const OUR_DEFAULT_ICON_SIZE = 0;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -88,6 +88,56 @@ function ourUpdateStyles ( somethingText ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} note a note to upgrade
+@throws {Error} when the note version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( note ) {
+	switch ( note.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+	case '1.12.0' :
+	case '1.13.0' :
+		if ( 'string' === typeof ( note.iconHeight ) ) {
+			note.iconHeight = Number.parseInt ( note.iconHeight );
+		}
+		if ( 'string' === typeof ( note.iconWidth ) ) {
+			note.iconWidth = Number.parseInt ( note.iconWidth );
+		}
+		note.iconContent = ourUpdateStyles ( note.iconContent );
+		note.popupContent = ourUpdateStyles ( note.popupContent );
+		note.tooltipContent = ourUpdateStyles ( note.tooltipContent );
+		note.phone = ourUpdateStyles ( note.phone );
+		note.address = ourUpdateStyles ( note.address );
+		// eslint break omitted intentionally
+	case '2.0.0' :
+	case '2.1.0' :
+		note.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @function ourValidate
 @desc verify that the parameter can be transformed to a Note and performs the upgrate if needed
 @param {Object} something an object to validate
@@ -98,47 +148,13 @@ function ourUpdateStyles ( somethingText ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* eslint-disable-next-line complexity */
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-		case '1.12.0' :
-		case '1.13.0' :
-			if ( 'string' === typeof ( something.iconHeight ) ) {
-				something.iconHeight = Number.parseInt ( something.iconHeight );
-			}
-			if ( 'string' === typeof ( something.iconWidth ) ) {
-				something.iconWidth = Number.parseInt ( something.iconWidth );
-			}
-			something.iconContent = ourUpdateStyles ( something.iconContent );
-			something.popupContent = ourUpdateStyles ( something.popupContent );
-			something.tooltipContent = ourUpdateStyles ( something.tooltipContent );
-			something.phone = ourUpdateStyles ( something.phone );
-			something.address = ourUpdateStyles ( something.address );
-			// eslint break omitted intentionally
-		case '2.0.0' :
-			something.objType.version = '2.1.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[
@@ -160,7 +176,7 @@ function ourValidate ( something ) {
 	].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -186,14 +202,14 @@ class Note	{
 		@type {!number}
 		*/
 
-		this.iconHeight = DEFAULT_ICON_SIZE;
+		this.iconHeight = OUR_DEFAULT_ICON_SIZE;
 
 		/**
 		the width of the icon associated to the note
 		@type {!number}
 		*/
 
-		this.iconWidth = DEFAULT_ICON_SIZE;
+		this.iconWidth = OUR_DEFAULT_ICON_SIZE;
 
 		/**
 		the html needed to display the icon
@@ -281,7 +297,9 @@ class Note	{
 
 		this.chainedDistance = DISTANCE.defaultValue;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -320,7 +338,7 @@ class Note	{
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the Note. objId are unique identifier given by the code
@@ -328,7 +346,7 @@ class Note	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the Note properties and without any methods.
@@ -352,14 +370,14 @@ class Note	{
 			lng : parseFloat ( this.lng.toFixed ( LAT_LNG.fixed ) ),
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			chainedDistance : parseFloat ( this.chainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
 		let otherthing = ourValidate ( something );
-		this.iconHeight = otherthing.iconHeight || DEFAULT_ICON_SIZE;
-		this.iconWidth = otherthing.iconWidth || DEFAULT_ICON_SIZE;
+		this.iconHeight = otherthing.iconHeight || OUR_DEFAULT_ICON_SIZE;
+		this.iconWidth = otherthing.iconWidth || OUR_DEFAULT_ICON_SIZE;
 		this.iconContent = otherthing.iconContent || '';
 		this.popupContent = otherthing.popupContent || '';
 		this.tooltipContent = otherthing.tooltipContent || '';
@@ -372,7 +390,7 @@ class Note	{
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.invalid;
 		this.chainedDistance = otherthing.chainedDistance || DISTANCE.defaultValue;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( true );
 	}
 
@@ -386,14 +404,15 @@ class Note	{
 	/* eslint-disable-next-line complexity, max-statements */
 	validateData ( verbose ) {
 		if ( 'number' !== typeof ( this.iconHeight ) ) {
-			this.iconHeight = DEFAULT_ICON_SIZE;
+			this.iconHeight = OUR_DEFAULT_ICON_SIZE;
 		}
 		if ( 'number' !== typeof ( this.iconWidth ) ) {
-			this.iconWidth = DEFAULT_ICON_SIZE;
+			this.iconWidth = OUR_DEFAULT_ICON_SIZE;
 		}
 		if ( 'string' === typeof ( this.iconContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.iconContent + ')' );
 			}
 			this.iconContent = result.htmlString;
@@ -404,6 +423,7 @@ class Note	{
 		if ( 'string' === typeof ( this.popupContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.popupContent );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.popupContent + ')' );
 			}
 			this.popupContent = result.htmlString;
@@ -414,6 +434,7 @@ class Note	{
 		if ( 'string' === typeof ( this.tooltipContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.tooltipContent );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.tooltipContent + ')' );
 			}
 			this.tooltipContent = result.htmlString;
@@ -424,6 +445,7 @@ class Note	{
 		if ( 'string' === typeof ( this.phone ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.phone );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.phone + ')' );
 			}
 			this.phone = result.htmlString;
@@ -434,6 +456,7 @@ class Note	{
 		if ( 'string' === typeof ( this.url ) && '' !== this.url ) {
 			let result = theHTMLSanitizer.sanitizeToUrl ( this.url );
 			if ( verbose && '' !== result.errorsString ) {
+				/* eslint-disable-next-line no-console */
 				console.log ( result.errorsString + ' (' + this.url + ')' );
 			}
 			this.url = encodeURI ( result.url );
@@ -480,7 +503,7 @@ class Note	{
 */
 
 function ourNewNote ( ) {
-	return Object.seal ( new Note );
+	return new Note ( );
 }
 
 export {

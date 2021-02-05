@@ -31,6 +31,8 @@ Changes:
 	- v2.0.0:
 		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #148 : Nominatim gives bad responses for cities... find a temporary solution.
+	- v2.2.0:
+		- Issue #64 : Improve geocoding
 Doc reviewed 20200802
 Tests ...
 
@@ -69,11 +71,17 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theConfig } from '../data/Config.js';
-import { ZERO, ONE, TWO } from '../util/Constants.js';
+import { ZERO, ONE, TWO, HTTP_STATUS_OK, OSM_COUNTRY_ADMIN_LEVEL } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+
+const OUR_QUERY_DISTANCE = Math.max (
+	theConfig.note.svgHamletDistance,
+	theConfig.note.svgVillageDistance,
+	theConfig.note.svgCityDistance,
+	theConfig.note.svgTownDistance
+);
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -85,13 +93,6 @@ import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-
-const ourQueryDistance = Math.max (
-	theConfig.note.svgHamletDistance,
-	theConfig.note.svgVillageDistance,
-	theConfig.note.svgCityDistance,
-	theConfig.note.svgTownDistance
-);
 
 function ourNewGeoCoder ( ) {
 
@@ -112,9 +113,8 @@ function ourNewGeoCoder ( ) {
 	*/
 
 	function myParseOverpassData ( overpassData ) {
-		const OSM_CITY_ADMIN_LEVEL = '8';
-		const OSM_COUNTRY_ADMIN_LEVEL = '2';
-		const LNG = theConfig.nominatim.language;
+		let osmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
+
 		let adminNames = [];
 		let places = {
 			hamlet : {
@@ -142,10 +142,18 @@ function ourNewGeoCoder ( ) {
 			element => {
 				if ( 'area' === element.type ) {
 					let elementName = element.tags.name;
-					if ( LNG && '*' !== LNG && element.tags [ 'name:' + LNG ] ) {
-						elementName = element.tags [ 'name:' + LNG ];
+					if (
+						theConfig.nominatim.language &&
+						'*' !== theConfig.nominatim.language &&
+						element.tags [ 'name:' + theConfig.nominatim.language ]
+					) {
+						elementName = element.tags [ 'name:' + theConfig.nominatim.language ];
 					}
 					adminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
+					if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
+						osmCityAdminLevel =
+							theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || osmCityAdminLevel;
+					}
 				}
 				if (
 					'node' === element.type &&
@@ -169,7 +177,7 @@ function ourNewGeoCoder ( ) {
 
 		for ( let namesCounter = TWO; namesCounter < adminNames.length; namesCounter ++ ) {
 			if ( 'undefined' !== typeof ( adminNames [ namesCounter ] ) ) {
-				if ( OSM_CITY_ADMIN_LEVEL >= namesCounter ) {
+				if ( osmCityAdminLevel >= namesCounter ) {
 					adminCity = adminNames [ namesCounter ];
 				}
 				else {
@@ -244,6 +252,139 @@ function ourNewGeoCoder ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
+	@function myCallProviders
+	@desc This function prepare the call to Nominatim and OverpassAPI
+	@return {Promise} a promise that will be fullfilled when the provider calls are done
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCallProviders ( ) {
+		let NominatimUrl =
+			theConfig.nominatim.url + 'reverse?format=json&lat=' +
+			myLatLng [ ZERO ] + '&lon=' + myLatLng [ ONE ] +
+			'&zoom=18&addressdetails=1&namedetails=1';
+		let nominatimLanguage = theConfig.nominatim.language;
+		if ( nominatimLanguage && '*' !== nominatimLanguage ) {
+			NominatimUrl += '&accept-language=' + nominatimLanguage;
+		}
+		let nominatimHeaders = new Headers ( );
+		if ( nominatimLanguage && '*' === nominatimLanguage ) {
+			nominatimHeaders.append ( 'accept-language', '' );
+		}
+
+		/*
+		https://lz4.overpass-api.de/api/interpreter?
+			data=[out:json][timeout:40];
+			is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
+			node(around:1500,50.644242,5.572354)[place];out;
+		*/
+
+		let overpassAPIUrl = theConfig.overpassApi.url +
+			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
+			'is_in(' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
+			')->.e;area.e[admin_level][boundary="administrative"];out;' +
+			'node(around:' + OUR_QUERY_DISTANCE + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
+			')[place];out;';
+
+		return Promise.allSettled (
+			[
+				fetch ( NominatimUrl, { headers : nominatimHeaders } ),
+				fetch ( overpassAPIUrl )
+			]
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myParseResponses
+	@desc This function parse the responses from Nominatim and OverpassAPI and call the onOk or onError functions
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	async function myParseResponses ( data, onOk, onError ) {
+		let nominatimResponse = data[ ZERO ].value;
+		let overpassResponse = data[ ONE ].value;
+		if (
+			'fulfilled' !== data[ ZERO ].status
+			||
+			'fulfilled' !== data[ ONE ].status
+			||
+			HTTP_STATUS_OK !== nominatimResponse.status
+			||
+			! nominatimResponse.ok
+			||
+			HTTP_STATUS_OK !== overpassResponse.status
+			||
+			! overpassResponse.ok
+		) {
+			onError ( new Error ( 'error when calling Nominatim or OverpassAPI' ) );
+		}
+
+		let	nominatimData = myParseNominatimData ( await nominatimResponse.json ( ) );
+		let overpassData = myParseOverpassData ( await overpassResponse.json ( ) );
+
+		let city = null;
+		if ( overpassData ) {
+			city = overpassData.city;
+			if ( overpassData.place ) {
+				city += ' (' + overpassData.place + ')';
+			}
+			if ( ! city ) {
+				city = overpassData.country;
+			}
+		}
+
+		let street = null;
+		let nameDetails = null;
+		if ( nominatimData ) {
+			street = nominatimData.street;
+			nameDetails = nominatimData.nameDetails || '';
+			if ( ! city ) {
+				city = nominatimData.country;
+			}
+		}
+
+		city = city || '';
+		street = street || '';
+		nameDetails = nameDetails || '';
+
+		if ( street.includes ( nameDetails ) || city.includes ( nameDetails ) ) {
+			nameDetails = '';
+		}
+
+		onOk (
+			Object.freeze (
+				{
+					name : theHTMLSanitizer.sanitizeToJsString ( nameDetails ),
+					street : theHTMLSanitizer.sanitizeToJsString ( street ),
+					city : theHTMLSanitizer.sanitizeToJsString ( city )
+				}
+			)
+		);
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myExecutePromiseAddress
+	@desc This function ...
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myExecutePromiseAddress ( onOk, onError ) {
+		myCallProviders ( ).then ( data => myParseResponses ( data, onOk, onError ) );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
 	@class GeoCoder
 	@classdesc This class call Nominatim and parse the response
 	@see {@link newGeoCoder} for constructor
@@ -254,103 +395,23 @@ function ourNewGeoCoder ( ) {
 
 	class GeoCoder {
 
-		/**
-		Parse the Nominatim and overpassAPI response
-		@param {Array.<object>} data the responses from Nominatim and OverpassAPI
-		@return {GeoCoderAddress} the name and address of the point
-		*/
-
-		parseResponse ( data ) {
-			let overpassData = 'fulfilled' === data[ ONE ].status ? myParseOverpassData ( data [ ONE ].value ) : null;
-			let nominatimData = 'fulfilled' === data[ ZERO ].status ? myParseNominatimData ( data [ ZERO ].value ) : null;
-
-			let city = null;
-			if ( overpassData ) {
-				city = overpassData.city;
-				if ( overpassData.place ) {
-					city += ' (' + overpassData.place + ')';
-				}
-				if ( ! city ) {
-					city = overpassData.country;
-				}
-			}
-
-			let street = null;
-			let nameDetails = null;
-			if ( nominatimData ) {
-				street = nominatimData.street;
-				nameDetails = nominatimData.nameDetails || '';
-				if ( ! city ) {
-					city = nominatimData.country;
-				}
-			}
-
-			city = city || '';
-			street = street || '';
-			nameDetails = nameDetails || '';
-
-			if ( street.includes ( nameDetails ) || city.includes ( nameDetails ) ) {
-				nameDetails = '';
-			}
-
-			return Object.seal (
-				{
-					name : theHTMLSanitizer.sanitizeToJsString ( nameDetails ),
-					street : theHTMLSanitizer.sanitizeToJsString ( street ),
-					city : theHTMLSanitizer.sanitizeToJsString ( city )
-				}
-			);
+		constructor ( ) {
+			Object.freeze ( this );
 		}
 
 		/**
 		get a Promise that will search an address from a point
 		@param {Array.<number>} latLng the lat and lng of the point for witch the address is searched
-		@return {Promise} a Promise that fulfill with the Nominatim response
+		@return {Promise} a Promise that fulfill with the address from Nominatim and OverpassAPI responses
 		*/
 
 		getPromiseAddress ( latLng ) {
 			myLatLng = latLng;
-			let NominatimUrl =
-				theConfig.nominatim.url + 'reverse?format=json&lat=' +
-				latLng [ ZERO ] + '&lon=' + latLng [ ONE ] +
-				'&zoom=18&addressdetails=1&namedetails=1';
-			let nominatimLanguage = theConfig.nominatim.language;
-			if ( nominatimLanguage && '*' !== nominatimLanguage ) {
-				NominatimUrl += '&accept-language=' + nominatimLanguage;
-			}
-			let requestHeaders = null;
-
-			if ( nominatimLanguage && '*' === nominatimLanguage ) {
-				requestHeaders = [ { headerName : 'accept-language', headerValue : '' } ];
-			}
-
-			/*
-			https://lz4.overpass-api.de/api/interpreter?
-				data=[out:json][timeout:40];
-				is_in(50.644242,5.572354)->.e;
-				area.e[admin_level][boundary="administrative"]->.f;
-				node(around:1500,50.644242,5.572354)[place]->.g;
-				(.f;.g;)->.h;
-				.h out;
-			*/
-
-			let overpassAPIUrl = theConfig.overpassApi.url +
-				'?data=[out:json][timeout:' +
-				theConfig.note.svgTimeOut + '];is_in(' + latLng [ ZERO ] + ',' + latLng [ ONE ] +
-				')->.e;area.e[admin_level][boundary="administrative"]->.f;node(around:' +
-				ourQueryDistance + ',' + latLng [ ZERO ] + ',' + latLng [ ONE ] +
-				')[place]->.g;(.f;.g;)->.h;.h out;';
-
-			return Promise.allSettled (
-				[
-					theHttpRequestBuilder.getJsonPromise ( NominatimUrl, requestHeaders ),
-					theHttpRequestBuilder.getJsonPromise ( overpassAPIUrl )
-				]
-			);
+			return new Promise ( myExecutePromiseAddress );
 		}
 	}
 
-	return Object.seal ( new GeoCoder );
+	return new GeoCoder ( );
 }
 
 export {

@@ -64,7 +64,9 @@ function ourAddProperties ( element, properties ) {
 			element [ property ] = properties [ property ];
 		}
 		catch ( err ) {
-			console.log ( 'Invalid property : ' + property );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 	}
 }
@@ -81,6 +83,10 @@ function ourAddProperties ( element, properties ) {
 */
 
 class HTMLElementsFactory {
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	create ( tagName, properties, parentNode ) {
 		let element = null;
 		if ( 'text' === tagName.toLowerCase ( ) ) {
@@ -99,7 +105,7 @@ class HTMLElementsFactory {
 	}
 }
 
-const ourHTMLElementsFactory = Object.freeze ( new HTMLElementsFactory );
+const OUR_HTML_ELEMENTS_FACTORY = new HTMLElementsFactory ( );
 
 export {
 
@@ -114,7 +120,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourHTMLElementsFactory as theHTMLElementsFactory
+	OUR_HTML_ELEMENTS_FACTORY as theHTMLElementsFactory
 };
 
 /*

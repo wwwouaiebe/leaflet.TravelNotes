@@ -113,9 +113,7 @@ function ourNewWayPointContextMenu ( contextMenuEvent ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	let wayPointContextMenu = newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
-
-	return Object.seal ( wayPointContextMenu );
+	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
 export {

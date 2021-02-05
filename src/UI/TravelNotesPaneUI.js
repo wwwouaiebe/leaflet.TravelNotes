@@ -87,7 +87,9 @@ function ourNewTravelNotesPaneUI ( ) {
 			dragEvent.dataTransfer.dropEffect = 'move';
 		}
 		catch ( err ) {
-			console.log ( err );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 		}
 
 		myNoteObjId = dragEvent.target.noteObjId;
@@ -179,6 +181,10 @@ function ourNewTravelNotesPaneUI ( ) {
 
 	class TravelNotesPaneUI {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		This function removes all the elements from the data div and control div
 		*/
@@ -236,7 +242,7 @@ function ourNewTravelNotesPaneUI ( ) {
 		}
 	}
 
-	return Object.freeze ( new TravelNotesPaneUI );
+	return new TravelNotesPaneUI ( );
 }
 
 export {

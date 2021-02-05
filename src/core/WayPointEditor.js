@@ -29,6 +29,8 @@ Changes:
 		- issue #97 : Improve adding a new waypoint to a route
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.2.0:
+		- Issue #64 : Improve geocoding
 Doc reviewed 20200810
 Tests ...
 */
@@ -124,15 +126,20 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 	geoCoder.getPromiseAddress ( latLng )
 		.then (
 			geoCoderData => {
-				let response = geoCoder.parseResponse ( geoCoderData );
-				let address = response.street;
-				if ( '' !== response.city ) {
-					address += ' ' + response.city;
+				let address = geoCoderData.street;
+				if ( '' !== geoCoderData.city ) {
+					address += ' ' + geoCoderData.city;
 				}
-				ourRenameWayPoint ( Object.seal ( { name : response.name, address : address } ), wayPointObjId );
+				ourRenameWayPoint ( Object.seal ( { name : geoCoderData.name, address : address } ), wayPointObjId );
 			}
 		)
-		.catch ( err => console.log ( err ? err : 'An error occurs in the geoCoder' ) );
+		.catch (
+			err => {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+		);
 }
 
 /**
@@ -147,6 +154,10 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 */
 
 class WayPointEditor {
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	/**
 	This method add a WayPoint
@@ -340,18 +351,25 @@ class WayPointEditor {
 		let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
 		let wayPointPropertiesDialog = newWayPointPropertiesDialog ( wayPoint );
 
-		wayPointPropertiesDialog.show ( ).then (
-			( ) => {
-				theEventDispatcher.dispatch ( 'setrouteslist' );
-				theEventDispatcher.dispatch ( 'showitinerary' );
-				theEventDispatcher.dispatch ( 'roadbookupdate' );
-			}
-		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the waypoint properties dialog' ) );
+		wayPointPropertiesDialog.show ( )
+			.then (
+				( ) => {
+					theEventDispatcher.dispatch ( 'setrouteslist' );
+					theEventDispatcher.dispatch ( 'showitinerary' );
+					theEventDispatcher.dispatch ( 'roadbookupdate' );
+				}
+			)
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 }
 
-const ourWayPointEditor = Object.seal ( new WayPointEditor );
+const OUR_WAY_POINT_EDITOR = new WayPointEditor ( );
 
 export {
 
@@ -366,7 +384,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourWayPointEditor as theWayPointEditor
+	OUR_WAY_POINT_EDITOR as theWayPointEditor
 };
 
 /*

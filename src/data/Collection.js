@@ -70,6 +70,11 @@ is reached
 
 import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
+const OUR_SWAP_UP = -1;
+const OUR_SWAP_DOWN = 1;
+const OUR_NEXT = 1;
+const OUR_PREVIOUS = -1;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -84,12 +89,7 @@ import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 
 function ourNewCollection ( objectConstructor ) {
 
-	const SWAP_UP = -1;
-	const SWAP_DOWN = 1;
-	const NEXT = 1;
-	const PREVIOUS = -1;
-
-	const myObjectConstructor = objectConstructor;
+	const MY_OBJECT_CONSTRUCTOR = objectConstructor;
 	let myArray = [];
 
 	/**
@@ -105,7 +105,7 @@ function ourNewCollection ( objectConstructor ) {
 	*/
 
 	function mySetObjName ( ) {
-		let tmpObject = myObjectConstructor ( );
+		let tmpObject = MY_OBJECT_CONSTRUCTOR ( );
 		if ( ( ! tmpObject.objType ) || ( ! tmpObject.objType.name ) ) {
 			throw new Error ( 'invalid object name for collection' );
 		}
@@ -114,7 +114,7 @@ function ourNewCollection ( objectConstructor ) {
 
 	/* ---------------------------------------------------------------------------------------------------------------*/
 
-	const myObjName = mySetObjName ( );
+	const MY_OBJ_NAME = mySetObjName ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ function ourNewCollection ( objectConstructor ) {
 	*/
 
 	function myAdd ( object ) {
-		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== myObjName ) ) {
+		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== MY_OBJ_NAME ) ) {
 			throw new Error ( 'invalid object name for add function' );
 		}
 		myArray.push ( object );
@@ -148,7 +148,7 @@ function ourNewCollection ( objectConstructor ) {
 
 	function myIterator ( ) {
 		let index = NOT_FOUND;
-		return Object.seal (
+		return Object.freeze (
 			{
 				get value ( ) { return index < myArray.length ? myArray [ index ] : null; },
 				get previous ( ) { return ZERO >= index ? null : myArray [ index - ONE ]; },
@@ -187,9 +187,9 @@ function ourNewCollection ( objectConstructor ) {
 	@desc gives the previous or next object in the collection that fullfil a given condition
 	@param {!number} objId The objId of the object from witch the search start
 	@param {?function} condition A fonction used to compare the objects. If null, ( ) => true is used
-	@param (!number} direction The direction to follow. Must be NEXT or PREVIOUS
+	@param (!number} direction The direction to follow. Must be OUR_NEXT or OUR_PREVIOUS
 	@return (?Object) An object or null if nothing found
-	@throws When direction is not NEXT or PREVIOUS or when the starting object is not found
+	@throws When direction is not OUR_NEXT or OUR_PREVIOUS or when the starting object is not found
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ function ourNewCollection ( objectConstructor ) {
 		if ( NOT_FOUND === index ) {
 			throw new Error ( 'invalid objId for next or previous function' );
 		}
-		if ( direction !== NEXT && direction !== PREVIOUS ) {
+		if ( direction !== OUR_NEXT && direction !== OUR_PREVIOUS ) {
 			throw new Error ( 'invalid direction' );
 		}
 
@@ -232,6 +232,10 @@ function ourNewCollection ( objectConstructor ) {
 	*/
 
 	class Collection {
+
+		constructor ( ) {
+			Object.freeze ( this );
+		}
 
 		/**
 		Add an object at the end of the collection
@@ -302,7 +306,7 @@ function ourNewCollection ( objectConstructor ) {
 		@throws When the starting object is not found
 		*/
 
-		next ( objId, condition ) { return myNextOrPrevious ( objId, condition, NEXT ); }
+		next ( objId, condition ) { return myNextOrPrevious ( objId, condition, OUR_NEXT ); }
 
 		/**
 		@desc gives the previous object in the collection that fullfil a given condition
@@ -312,7 +316,7 @@ function ourNewCollection ( objectConstructor ) {
 		@throws When the starting object is not found
 		*/
 
-		previous ( objId, condition ) { return myNextOrPrevious ( objId, condition, PREVIOUS ); }
+		previous ( objId, condition ) { return myNextOrPrevious ( objId, condition, OUR_PREVIOUS ); }
 
 		/**
 		Remove an object from the Collection
@@ -354,7 +358,7 @@ function ourNewCollection ( objectConstructor ) {
 			if ( NOT_FOUND === index ) {
 				throw new Error ( 'invalid objId for replace function' );
 			}
-			if ( ( ! newObject.objType ) || ( ! newObject.objType.name ) || ( newObject.objType.name !== myObjName ) ) {
+			if ( ( ! newObject.objType ) || ( ! newObject.objType.name ) || ( newObject.objType.name !== MY_OBJ_NAME ) ) {
 				throw new Error ( 'invalid object name for replace function' );
 			}
 			myArray [ index ] = newObject;
@@ -393,8 +397,8 @@ function ourNewCollection ( objectConstructor ) {
 				throw new Error ( 'invalid objId for swap function' );
 			}
 			let tmp = myArray [ index ];
-			myArray [ index ] = myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ];
-			myArray [ index + ( swapUp ? SWAP_UP : SWAP_DOWN ) ] = tmp;
+			myArray [ index ] = myArray [ index + ( swapUp ? OUR_SWAP_UP : OUR_SWAP_DOWN ) ];
+			myArray [ index + ( swapUp ? OUR_SWAP_UP : OUR_SWAP_DOWN ) ] = tmp;
 		}
 
 		/**
@@ -450,7 +454,7 @@ function ourNewCollection ( objectConstructor ) {
 
 			something.forEach (
 				arrayObject => {
-					newObject = myObjectConstructor ( );
+					newObject = MY_OBJECT_CONSTRUCTOR ( );
 					newObject.jsonObject = arrayObject;
 					myAdd ( newObject );
 				}
@@ -458,7 +462,7 @@ function ourNewCollection ( objectConstructor ) {
 		}
 	}
 
-	return Object.seal ( new Collection );
+	return new Collection ( );
 }
 
 export {

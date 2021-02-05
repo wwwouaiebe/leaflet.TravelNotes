@@ -159,6 +159,10 @@ function ourCreateLayerButton ( layer ) {
 
 class ViewerLayersToolbarUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	*/
@@ -226,7 +230,7 @@ class ViewerLayersToolbarUI {
 	}
 }
 
-const ourViewerLayersToolbarUI = Object.seal ( new ViewerLayersToolbarUI );
+const OUR_VIEWER_LAYERS_TOOLBAR_UI = new ViewerLayersToolbarUI ( );
 
 export {
 
@@ -241,7 +245,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourViewerLayersToolbarUI as theViewerLayersToolbarUI
+	OUR_VIEWER_LAYERS_TOOLBAR_UI as theViewerLayersToolbarUI
 };
 
 /*

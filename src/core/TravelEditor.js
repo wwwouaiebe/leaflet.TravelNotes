@@ -38,6 +38,8 @@ Changes:
 		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200810
 Tests ...
 */
@@ -72,7 +74,8 @@ import { newTravel } from '../data/Travel.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
+import { theMouseUI } from '../UI/MouseUI.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -86,6 +89,10 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 */
 
 class TravelEditor {
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	/**
 	This method is called when a route is dropped in the TravelUI and then routes reordered.
@@ -115,6 +122,7 @@ class TravelEditor {
 		}
 		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
 		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
 
 	/**
@@ -144,11 +152,12 @@ class TravelEditor {
 		if ( theConfig.travelEditor.startupRouteEdition ) {
 			theRouteEditor.editRoute ( theTravelNotesData.travel.routes.first.objId );
 		}
+		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
 
 }
 
-const ourTravelEditor = Object.seal ( new TravelEditor );
+const OUR_TRAVEL_EDITOR = new TravelEditor ( );
 
 export {
 
@@ -163,7 +172,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelEditor as theTravelEditor
+	OUR_TRAVEL_EDITOR as theTravelEditor
 };
 
 /*

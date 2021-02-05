@@ -65,6 +65,8 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 
+const OUR_MAX_ZOOM = 15;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -118,7 +120,7 @@ function ourNewPrintRouteMapDialog ( ) {
 	*/
 
 	function myOnOkButtonClick ( ) {
-		return Object.seal (
+		return Object.freeze (
 			{
 				paperWidth : parseInt ( myPaperWidthInput.value ),
 				paperHeight : parseInt ( myPaperHeightInput.value ),
@@ -309,15 +311,14 @@ function ourNewPrintRouteMapDialog ( ) {
 			},
 			zoomFactorDiv
 		);
-		const MAX_ZOOM = 15;
 		myZoomFactorInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-PrintRouteMapDialog-NumberInput',
-				value : Math.min ( theConfig.printRouteMap.zoomFactor, MAX_ZOOM ),
+				value : Math.min ( theConfig.printRouteMap.zoomFactor, OUR_MAX_ZOOM ),
 				min : theTravelNotesData.map.getMinZoom ( ),
-				max : Math.min ( theTravelNotesData.map.getMaxZoom ( ), MAX_ZOOM )
+				max : Math.min ( theTravelNotesData.map.getMaxZoom ( ), OUR_MAX_ZOOM )
 			},
 			zoomFactorDiv
 		);

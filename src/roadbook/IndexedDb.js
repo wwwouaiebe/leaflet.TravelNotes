@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-const DB_VERSION = 1;
+const OUR_DB_VERSION = 1;
 let ourDb = null;
 
 /**
@@ -59,6 +59,10 @@ let ourDb = null;
 
 class IndexedDb {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Open the indexedDb
 	@return {Promise} A Promise  that fullfil when the indexedDb is opened or reject when a problem occurs
@@ -70,7 +74,7 @@ class IndexedDb {
 				onOk ( );
 				return;
 			}
-			let openRequest = window.indexedDB.open ( 'TravelNotesDb', DB_VERSION );
+			let openRequest = window.indexedDB.open ( 'TravelNotesDb', OUR_DB_VERSION );
 			openRequest.onerror = function ( ) {
 				ourDb = null;
 				onError ( new Error ( 'Not possible to open the db' ) );
@@ -180,7 +184,7 @@ class IndexedDb {
 	}
 }
 
-const ourIndexedDb = Object.freeze ( new IndexedDb );
+const OUR_INDEXED_DB = new IndexedDb ( );
 
 export {
 
@@ -195,7 +199,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourIndexedDb as theIndexedDb
+	OUR_INDEXED_DB as theIndexedDb
 };
 
 /*

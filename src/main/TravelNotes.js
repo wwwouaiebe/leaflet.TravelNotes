@@ -44,6 +44,8 @@ Changes:
 		- Issue #137 : Remove html tags from json files
 		- Issue #139 : Remove Globals
 		- Issue #140 : Remove userData
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200824
 Tests ...
 */
@@ -83,7 +85,6 @@ import { newManeuver } from '../data/Maneuver.js';
 import { newItineraryPoint } from '../data/ItineraryPoint.js';
 import { theCurrentVersion } from '../data/Version.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
@@ -93,7 +94,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
-import { LAT_LNG, TWO } from '../util/Constants.js';
+import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -305,6 +306,28 @@ function ourOnMapContextMenu ( contextMenuEvent ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourLoadDistantTravel
+@desc This method load a travel from a server file
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+async function ourLoadDistantTravel ( travelUrl ) {
+	let travelResponse = fetch ( travelUrl );
+	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
+		let travelContent = await travelResponse.json ( );
+		newViewerFileLoader ( ).openDistantFile ( travelContent );
+	}
+	else {
+		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO	);
+		document.title = 'Travel & Notes';
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc This class is the entry point of the application.
 @see {@link theTravelNotes} for the one and only one instance of this class
@@ -314,6 +337,10 @@ function ourOnMapContextMenu ( contextMenuEvent ) {
 */
 
 class TravelNotes {
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	/**
 	This method load TravelNotes and open a read only map passed trought the url.
@@ -331,22 +358,7 @@ class TravelNotes {
 		}
 		theAttributionsUI.createUI ( );
 		theLayersToolbarUI.setLayer ( 'OSM - Color' );
-		theHttpRequestBuilder.getJsonPromise ( travelUrl )
-			.then (
-				fileContent => {
-					newViewerFileLoader ( ).openDistantFile ( fileContent );
-				}
-			)
-			.catch (
-				err => {
-					console.log ( err ? err : 'Not possible to load the .trv file' );
-					theTravelNotesData.map.setView (
-						[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
-						TWO
-					);
-					document.title = 'Travel & Notes';
-				}
-			);
+		ourLoadDistantTravel ( travelUrl );
 	}
 
 	/**
@@ -387,6 +399,7 @@ class TravelNotes {
 			'<p>' + theTranslator.getText ( 'Help - Continue with interface2' ) + '</p>'
 		);
 		document.title = 'Travel & Notes';
+		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
 
 	/**
@@ -437,7 +450,7 @@ class TravelNotes {
 	get version ( ) { return theCurrentVersion; }
 }
 
-const ourTravelNotes = Object.seal ( new TravelNotes );
+const OUR_TRAVEL_NOTES = new TravelNotes ( );
 
 export {
 
@@ -452,7 +465,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotes as theTravelNotes
+	OUR_TRAVEL_NOTES as theTravelNotes
 };
 
 /*

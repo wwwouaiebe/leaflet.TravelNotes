@@ -70,6 +70,9 @@ Tests ...
 
 import { SVG_NS, NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
 
+const OUR_PROTOCOL = window.location.protocol;
+const OUR_PARSER = new DOMParser ( );
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -123,9 +126,6 @@ ourValidityMap.set ( 'svg', [ 'xmlns', 'viewBox', 'class' ] );
 ourValidityMap.set ( 'text', [ 'x', 'y', 'text-anchor' ] );
 ourValidityMap.set ( 'polyline', [ 'points', 'class', 'transform' ] );
 
-const ourProtocol = window.location.protocol;
-const ourParser = new DOMParser ( );
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -162,7 +162,7 @@ function ourAddHtmlEntities ( htmlString ) {
 */
 
 function ourSanitizeToJsString ( stringToSanitize ) {
-	let parseResult = ourParser.parseFromString ( '<div>' + stringToSanitize + '</div>', 'text/html' );
+	let parseResult = OUR_PARSER.parseFromString ( '<div>' + stringToSanitize + '</div>', 'text/html' );
 	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
 		return '';
 	}
@@ -203,7 +203,7 @@ null (in this case 'href' is used as default)
 */
 
 function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
-	let parseResult = ourParser.parseFromString ( '<div>' + urlString + '</div>', 'text/html' );
+	let parseResult = OUR_PARSER.parseFromString ( '<div>' + urlString + '</div>', 'text/html' );
 	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
 		return { url : '', errorsString : 'Parsing error' };
 	}
@@ -237,7 +237,7 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	}
 
 	let validProtocols = [ 'https:' ];
-	if ( 'http:' === ourProtocol || 'href' === attributeName ) {
+	if ( 'http:' === OUR_PROTOCOL || 'href' === attributeName ) {
 		validProtocols.push ( 'http:' );
 	}
 	if ( 'href' === attributeName ) {
@@ -357,7 +357,7 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 		}
 	}
 
-	let parseResult = ourParser.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' );
+	let parseResult = OUR_PARSER.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' );
 	if ( parseResult && '#document' === parseResult.nodeName ) {
 		cloneNode ( parseResult.querySelector ( 'body' ).firstChild, targetNode );
 	}
@@ -458,7 +458,8 @@ function ourSanitizeToHtmlString ( htmlString ) {
 		}
 	}
 
-	let parseResult = ourParser.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' );
+	let parseResult =
+		OUR_PARSER.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' );
 	if ( parseResult && '#document' === parseResult.nodeName ) {
 		ourStringify ( parseResult.querySelector ( 'body' ).firstChild );
 		return { htmlString : targetString, errorsString : errorsString };
@@ -539,7 +540,7 @@ class HTMLSanitizer {
 	sanitizeToHtmlString ( htmlString ) { return ourSanitizeToHtmlString ( htmlString ); }
 }
 
-const ourHTMLSanitizer = Object.freeze ( new HTMLSanitizer );
+const OUR_HTML_SANITIZER = Object.freeze ( new HTMLSanitizer );
 
 export {
 
@@ -554,7 +555,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourHTMLSanitizer as theHTMLSanitizer
+	OUR_HTML_SANITIZER as theHTMLSanitizer
 };
 
 /*

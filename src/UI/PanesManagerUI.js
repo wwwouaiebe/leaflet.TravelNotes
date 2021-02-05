@@ -171,6 +171,10 @@ function ourOnPaneDataDivWheel ( wheelEvent ) {
 
 class PanesManagerUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the data panes on the user interface
 	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
@@ -250,7 +254,7 @@ class PanesManagerUI {
 	}
 }
 
-const ourPanesManagerUI = Object.freeze ( new PanesManagerUI );
+const OUR_PANES_MANAGER_UI = new PanesManagerUI ( );
 
 export {
 
@@ -265,7 +269,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourPanesManagerUI as thePanesManagerUI
+	OUR_PANES_MANAGER_UI as thePanesManagerUI
 };
 
 /*

@@ -48,13 +48,13 @@ Tests ...
 
 import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
+import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
-import { LAT_LNG, ZERO } from '../util/Constants.js';
+const OUR_VIEWER_DEFAULT_ZOOM = 2;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -67,12 +67,12 @@ import { LAT_LNG, ZERO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewMainViewer ( ) {
+function ourMainViewer ( ) {
 
 	let myLanguage = null;
 	let myTravelUrl = null;
 	let myAddLayerToolbar = false;
-	let myErrorMessage = '';
+	let myOriginAndPath = window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'TravelNotes';
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -102,11 +102,13 @@ function ourNewMainViewer ( ) {
 					myTravelUrl = encodeURI ( travelURL.href );
 				}
 				else {
-					console.log ( 'The distant file is not on the same site than the app' );
+					throw new Error ( 'The distant file is not on the same site than the app' );
 				}
 			}
 			catch ( err ) {
-				console.log ( err.message );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
 			}
 		}
 		let urlLng = docURL.searchParams.get ( 'lng' );
@@ -114,13 +116,72 @@ function ourNewMainViewer ( ) {
 			if ( urlLng.match ( /^[A-Z,a-z]{2}$/ ) ) {
 				myLanguage = urlLng.toLowerCase ( );
 			}
-			else {
-				console.log ( 'invalid lng parameter' );
-			}
 		}
 		if ( '' === docURL.searchParams.get ( 'lay' ) ) {
 			myAddLayerToolbar = true;
 		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadConfig
+	@desc This function load the content of the TravelNotesConfig.json file into theConfig object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	async function myLoadConfig ( ) {
+		let configResponse = await fetch ( myOriginAndPath + 'Config.json' );
+		if ( HTTP_STATUS_OK === configResponse.status && configResponse.ok ) {
+			let config = await configResponse.json ( );
+			config.language = myLanguage || config.language;
+			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+				config.note.haveBackground = true;
+			}
+			theConfig.overload ( config );
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadLanguage
+	@desc This function load the content of the TravelNotesXX.json file into theTranslator object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	async function myLoadLanguage ( ) {
+		let languageResponse = await fetch ( myOriginAndPath +	myLanguage.toUpperCase ( ) + '.json' );
+		if ( HTTP_STATUS_OK === languageResponse.status && languageResponse.ok ) {
+			theTranslator.setTranslations ( await languageResponse.json ( ) );
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myLoadLayers
+	@desc This function load the content of the TravelNotesLayers.json file into theViewerLayersToolbarUI object
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	async function myLoadLayers ( ) {
+		let layersResponse = await fetch ( myOriginAndPath +	'Layers.json' );
+		if ( HTTP_STATUS_OK === layersResponse.status && layersResponse.ok ) {
+			theViewerLayersToolbarUI.addLayers ( await layersResponse.json ( ) );
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -134,78 +195,54 @@ function ourNewMainViewer ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		const DEFAULT_ZOOM = 2;
-		if ( '' === myErrorMessage ) {
-			theHTMLElementsFactory.create (
-				'div',
-				{ id : 'Map' },
-				document.querySelector ( 'body' )
-			);
+		theHTMLElementsFactory.create (
+			'div',
+			{ id : 'Map' },
+			document.querySelector ( 'body' )
+		);
 
-			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
-				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], DEFAULT_ZOOM );
+		let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+			.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], OUR_VIEWER_DEFAULT_ZOOM );
 
-			theTravelNotesData.map = map;
+		theTravelNotesData.map = map;
 
-			theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
-		}
+		theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
 	}
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@class
-	@classdesc This Class is used to configure and launch the TravelNotes viewer.
-	Not possible to instanciate this class outside TravelNotes.
-	@hideconstructor
-	@public
+	@function start
+	@desc Launch the TravelNotes viewer , loading all the config files needed, depending of the language.
+	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	class MainViewer {
-
-		/**
-		Launch the TravelNotes viewer.
-		*/
-
-		start ( ) {
-
-			myReadURL ( );
-			myLanguage = myLanguage || theConfig.language;
-			let originAndPath = window.location.origin + window.location.pathname + 'TravelNotes';
-			theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Config.json' )
-				.then (
-					result => {
-						result.language = myLanguage;
-						if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
-							result.note.haveBackground = true;
-						}
-						theConfig.overload ( result );
-						return theHttpRequestBuilder.getJsonPromise ( originAndPath +	myLanguage.toUpperCase ( ) + '.json' );
-					}
-				)
-				.then (
-					result => {
-						theTranslator.setTranslations ( result );
-						return theHttpRequestBuilder.getJsonPromise ( originAndPath + 'Layers.json' );
-					}
-				)
-				.then (
-					result => {
-						theViewerLayersToolbarUI.addLayers ( result );
-						myLoadTravelNotes ( myTravelUrl );
-					}
-				)
-				.catch ( ( ) => { document.body.textContent = 'An error occurs when loading the configuration '; } );
-
+	async function start ( ) {
+		myReadURL ( );
+		if ( ! await myLoadConfig ( ) ) {
+			document.body.textContent = 'Not possible to load the TravelNotesConfig.json file. ';
+			return;
 		}
+		myLanguage = myLanguage || theConfig.language;
+		if ( ! await myLoadLanguage ( ) ) {
+			document.body.textContent =
+				'Not possible to load the TravelNotesConfig' + myLanguage.toUpperCase ( ) + '.json file. ';
+			return;
+		}
+		if ( ! await myLoadLayers ( ) ) {
+			document.body.textContent = 'Not possible to load the TravelNotesLayers.json file. ';
+			return;
+		}
+		document.body.textContent = 'Loaded.... ';
+		myLoadTravelNotes ( myTravelUrl );
 	}
 
-	return Object.freeze ( new MainViewer );
+	start ( );
 }
 
-ourNewMainViewer ( ).start ( );
+ourMainViewer ( );
 
 /*
 --- End of MainViewer file ----------------------------------------------------------------------------------------------------

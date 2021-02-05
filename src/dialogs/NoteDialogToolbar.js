@@ -206,7 +206,9 @@ function ourOnOpenFileInputChange ( changeEvent ) {
 			ourDialogFunctions.hideError ( );
 		}
 		catch ( err ) {
-			console.log ( err ? err.message : 'An error occurs when opening the file' );
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
 			ourDialogFunctions.showError (
 				theTranslator.getText (
 					'NoteDialogToolbar - An error was found in the json file',
@@ -330,6 +332,10 @@ function ourCreateToolbarSelect ( ) {
 
 class NoteDialogToolbar {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Options added to the select input
 	@param {Array.<NoteDialogToolbarSelectOption>} selectOptions An array of NoteDialogToolbarSelectOptions
@@ -386,7 +392,7 @@ class NoteDialogToolbar {
 	}
 }
 
-const ourNoteDialogToolbar = Object.seal ( new NoteDialogToolbar );
+const OUR_NOTE_DIALOG_TOOLBAR = new NoteDialogToolbar ( );
 
 export {
 
@@ -401,7 +407,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourNoteDialogToolbar as theNoteDialogToolbar
+	OUR_NOTE_DIALOG_TOOLBAR as theNoteDialogToolbar
 };
 
 /*

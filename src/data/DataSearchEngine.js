@@ -74,6 +74,10 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 class DataSearchEngine {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Search a route with the route objId
 	@param {!number} objId the objId of the route to search
@@ -137,7 +141,7 @@ class DataSearchEngine {
 	}
 }
 
-const ourDataSearchEngine = Object.seal ( new DataSearchEngine );
+const OUR_DATA_SEARCH_ENGINE = new DataSearchEngine ( );
 
 export {
 
@@ -152,7 +156,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourDataSearchEngine as theDataSearchEngine
+	OUR_DATA_SEARCH_ENGINE as theDataSearchEngine
 };
 
 /*

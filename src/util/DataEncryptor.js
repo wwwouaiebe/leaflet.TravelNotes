@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourDataEncryptor ( ) {
+function ourNewDataEncryptor ( ) {
 
 	function myImportKey ( pswd ) {
 		return window.crypto.subtle.importKey (
@@ -140,6 +140,10 @@ function ourDataEncryptor ( ) {
 
 	class DataEncryptor {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		@param {Uint8Array} data The data to encrypt. See TextEncoder ( ) to transform string to Uint8Array
 		@param {function} onOk A function to execute when the encryption succeeds
@@ -160,7 +164,8 @@ function ourDataEncryptor ( ) {
 		/* eslint-disable-next-line max-params */
 		decryptData ( data, onOk, onError, pswdPromise ) { myDecryptData ( data, onOk, onError, pswdPromise ); }
 	}
-	return Object.freeze ( new DataEncryptor );
+
+	return new DataEncryptor ( );
 }
 
 export {
@@ -176,7 +181,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourDataEncryptor as newDataEncryptor
+	ourNewDataEncryptor as newDataEncryptor
 };
 
 /*

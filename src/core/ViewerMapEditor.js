@@ -69,8 +69,9 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
-const DEFAULT_MAX_ZOOM = 18;
-const DEFAULT_MIN_ZOOM = 0;
+const OUR_DEFAULT_MAX_ZOOM = 18;
+const OUR_DEFAULT_MIN_ZOOM = 0;
+const OUR_NOTE_Z_INDEX_OFFSET = 100;
 
 let ourCurrentLayer = null;
 let ourGeolocationCircle = null;
@@ -168,11 +169,10 @@ function ourAddNote ( noteObjId ) {
 		}
 	);
 
-	const NOTE_Z_INDEX_OFFSET = 100;
 	let marker = window.L.marker (
 		note.iconLatLng,
 		{
-			zIndexOffset : NOTE_Z_INDEX_OFFSET,
+			zIndexOffset : OUR_NOTE_Z_INDEX_OFFSET,
 			icon : icon,
 			draggable : ! theTravelNotesData.travel.readOnly
 		}
@@ -259,6 +259,10 @@ function ourGetDashArray ( route ) {
 */
 
 class ViewerMapEditor {
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	/**
 	This method add a route on the map
@@ -382,14 +386,14 @@ class ViewerMapEditor {
 
 			// strange... see issue #79 ... zoom is not correct on read only file
 			// when the background map have bounds...
-			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || DEFAULT_MIN_ZOOM ) ) {
-				theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || OUR_DEFAULT_MIN_ZOOM ) ) {
+				theTravelNotesData.map.setZoom ( layer.minZoom || OUR_DEFAULT_MIN_ZOOM );
 			}
-			theTravelNotesData.map.setMinZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
-			if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || DEFAULT_MAX_ZOOM ) ) {
-				theTravelNotesData.map.setZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
+			theTravelNotesData.map.setMinZoom ( layer.minZoom || OUR_DEFAULT_MIN_ZOOM );
+			if ( theTravelNotesData.map.getZoom ( ) > ( layer.maxZoom || OUR_DEFAULT_MAX_ZOOM ) ) {
+				theTravelNotesData.map.setZoom ( layer.maxZoom || OUR_DEFAULT_MAX_ZOOM );
 			}
-			theTravelNotesData.map.setMaxZoom ( layer.maxZoom || DEFAULT_MAX_ZOOM );
+			theTravelNotesData.map.setMaxZoom ( layer.maxZoom || OUR_DEFAULT_MAX_ZOOM );
 			if ( layer.bounds ) {
 				if (
 					! theTravelNotesData.map.getBounds ( ).intersects ( layer.bounds )
@@ -398,7 +402,7 @@ class ViewerMapEditor {
 				) {
 					theTravelNotesData.map.setMaxBounds ( null );
 					theTravelNotesData.map.fitBounds ( layer.bounds );
-					theTravelNotesData.map.setZoom ( layer.minZoom || DEFAULT_MIN_ZOOM );
+					theTravelNotesData.map.setZoom ( layer.minZoom || OUR_DEFAULT_MIN_ZOOM );
 				}
 				theTravelNotesData.map.setMaxBounds ( layer.bounds );
 			}
@@ -460,7 +464,7 @@ class ViewerMapEditor {
 
 }
 
-const ourViewerMapEditor = Object.seal ( new ViewerMapEditor );
+const OUR_VIEWER_MAP_EDITOR = new ViewerMapEditor ( );
 
 export {
 
@@ -475,7 +479,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourViewerMapEditor as theViewerMapEditor
+	OUR_VIEWER_MAP_EDITOR as theViewerMapEditor
 };
 
 /*

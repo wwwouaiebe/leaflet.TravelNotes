@@ -211,6 +211,10 @@ function ourNewFileCompactor ( ) {
 
 	class FileCompactor {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		Decompress a file
 		@param {Object} travelObject the compressed travel as read from the file. travelObject is not a Travel instance!
@@ -268,7 +272,7 @@ function ourNewFileCompactor ( ) {
 		}
 	}
 
-	return Object.seal ( new FileCompactor );
+	return new FileCompactor ( );
 }
 
 export {

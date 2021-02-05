@@ -186,9 +186,9 @@
 			"height" : 40
 		},
 		{
-			"name" : "Bureau d\"information",
+			"name" : "Bureau d'information",
 			"icon" : "<div class=\"TravelNotes-MapNote TravelNotes-MapNoteCategory-0011\"></div>",
-			"tooltip" : "Bureau d\"information",
+			"tooltip" : "Bureau d'information",
 			"width" : 40,
 			"height" : 40
 		},
@@ -270,16 +270,16 @@
 			"height" : 40
 		},
 		{
-			"name" : "Point d\"eau",
+			"name" : "Point d'eau",
 			"icon" : "<div class=\"TravelNotes-MapNote TravelNotes-MapNoteCategory-0023\"></div>",
-			"tooltip" : "Point d\"eau",
+			"tooltip" : "Point d'eau",
 			"width" : 40,
 			"height" : 40
 		},
 		{
 			"name" : "Chambre d’hôtes",
 			"icon" : "<div class=\"TravelNotes-MapNote TravelNotes-MapNoteCategory-0024\"></div>",
-			"tooltip" : "Chambre d\"hôtes",
+			"tooltip" : "Chambre d'hôtes",
 			"width" : 40,
 			"height" : 40
 		},

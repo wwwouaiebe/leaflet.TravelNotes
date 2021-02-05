@@ -68,8 +68,53 @@ import { newNote } from '../data/Note.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'Route' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'Route' );
+const OUR_OBJ_IDS = new WeakMap ( );
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} route a route to upgrade
+@throws {Error} when the route version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( route ) {
+	switch ( route.objType.version ) {
+	case '1.0.0' :
+		route.dashArray = ZERO;
+		route.hidden = false;
+		// eslint break omitted intentionally
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+		route.edited = ROUTE_EDITION_STATUS.notEdited;
+		// eslint break omitted intentionally
+	case '1.5.0' :
+	case '1.6.0' :
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+		route.editionStatus = route.edited;
+		// eslint break omitted intentionally
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		route.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,39 +131,11 @@ const ourObjIds = new WeakMap ( );
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-			something.dashArray = ZERO;
-			something.hidden = false;
-			// eslint break omitted intentionally
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-			something.edited = ROUTE_EDITION_STATUS.notEdited;
-			// eslint break omitted intentionally
-		case '1.5.0' :
-		case '1.6.0' :
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-			something.editionStatus = something.edited;
-			// eslint break omitted intentionally
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-			something.objType.version = '2.1.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[
@@ -139,7 +156,7 @@ function ourValidate ( something ) {
 	].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -221,7 +238,7 @@ class Route	{
 		@type {boolean}
 		*/
 
-		this.chain = false;
+		this.chain = true;
 
 		/**
 		the distance betwween the starting point of the traval and the starting point
@@ -260,7 +277,9 @@ class Route	{
 
 		this.hidden = false;
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -287,7 +306,7 @@ class Route	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	the ObjType of the Route.
@@ -295,7 +314,7 @@ class Route	{
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	An object literal with the WayPoint properties and without any methods.
@@ -318,8 +337,8 @@ class Route	{
 			editionStatus : this.editionStatus,
 			hidden : this.hidden,
 			chainedDistance : parseFloat ( this.chainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -337,7 +356,7 @@ class Route	{
 		this.editionStatus = otherthing.editionStatus || ROUTE_EDITION_STATUS.notEdited;
 		this.hidden = otherthing.hidden || false;
 		this.chainedDistance = otherthing.chainedDistance;
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 		this.validateData ( );
 	}
 
@@ -404,7 +423,7 @@ class Route	{
 
 function ourNewRoute ( ) {
 
-	return Object.seal ( new Route );
+	return new Route ( );
 }
 
 export {

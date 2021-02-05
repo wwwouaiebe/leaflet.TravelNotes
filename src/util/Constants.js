@@ -22,6 +22,8 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
+	-v2.2.0:
+		- Issue #129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200825
 Tests ...
 */
@@ -54,6 +56,27 @@ Tests ...
 
 @readonly
 @enum {Object}
+@desc Enum for the save status displayed with the coordinates and zoom values
+@property {string} notSaved The string to display when the travel is modified since more than 5 minutes
+@property {string} modified The string to display when the travel is modified since less than 5 minutes
+@property {string} saved The string to display when the travel is not modified
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+ */
+
+export const SAVE_STATUS = Object.freeze ( {
+	notSaved : '🔴', // red circle
+	modified : '🟡', // yellow circle
+	saved : '🟢' // green circle
+} );
+
+/**
+
+@------------------------------------------------------------------------------------------------------------------------------
+
+@readonly
+@enum {Object}
 @desc Enum for distances
 @property {number} fixed The decimal length used for distances
 @property {number} invalid The distance is invalid
@@ -66,7 +89,8 @@ Tests ...
 export const DISTANCE = Object.freeze ( {
 	fixed : 2,
 	invalid : -1,
-	defaultValue : 0
+	defaultValue : 0,
+	metersInKm : 1000
 } );
 
 /**
@@ -150,7 +174,11 @@ Enum for latitude and longitude
 
 export const LAT_LNG = Object.freeze ( {
 	defaultValue : 0,
-	fixed : 6
+	fixed : 6,
+	maxLat : 90,
+	minLat : -90,
+	maxLng : 180,
+	minLng : -180
 } );
 
 /**
@@ -223,6 +251,17 @@ export const ICON_DIMENSIONS = Object.freeze ( {
 	svgViewboxDim : 200
 } );
 
+export const DEGREES = Object.freeze ( {
+	d0 : 0,
+	d90 : 90,
+	d180 : 180,
+	d270 : 270,
+	d360 : 360,
+	d540 : 540,
+	toRadians : Math.PI / 180,
+	fromRadians : 180 / Math.PI
+} );
+
 /**
 
 @var {Array.<number>} MOUSE_WHEEL_FACTORS
@@ -239,13 +278,27 @@ export const NOT_FOUND = -1;
 
 export const ZERO = 0;
 
+export const LAT = 0;
+
 export const ONE = 1;
+
+export const LNG = 1;
 
 export const TWO = 2;
 
-export const SVG_NS = 'http://www.w3.org/2000/svg';
+export const ELEVATION = 2;
+
+export const THREE = 3;
+
+export const HEXADECIMAL = 16;
 
 export const HTTP_STATUS_OK = 200;
+
+export const OSM_COUNTRY_ADMIN_LEVEL = '2';
+
+export const SVG_NS = 'http://www.w3.org/2000/svg';
+
+export const EARTH_RADIUS = 6371e3;
 
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------

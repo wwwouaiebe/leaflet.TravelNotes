@@ -46,10 +46,9 @@ Tests ...
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
-import { LAT_LNG } from '../util/Constants.js';
+import { TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -129,6 +128,28 @@ function ourAddEventsListeners ( ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourLoadDistantTravel
+@desc This method load a travel from a server file
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+async function ourLoadDistantTravel ( travelUrl ) {
+	let travelResponse = fetch ( travelUrl );
+	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
+		let travelContent = await travelResponse.json ( );
+		newViewerFileLoader ( ).openDistantFile ( travelContent );
+	}
+	else {
+		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO );
+		document.title = 'Travel & Notes';
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc This class is the entry point of the viewer.
 @see {@link theTravelNotesViewer} for the one and only one instance of this class
@@ -139,13 +160,16 @@ function ourAddEventsListeners ( ) {
 
 class TravelNotesViewer {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	This method load the TravelNotes viewer and open a read only map passed trought the url.
 	This method can only be executed once. Others call will be ignored.
 	*/
 
 	addReadOnlyMap ( travelUrl, addLayerToolbar ) {
-		const DEFAULT_ZOOM = 2;
 		if ( ourTravelNotesLoaded ) {
 			return;
 		}
@@ -156,27 +180,11 @@ class TravelNotesViewer {
 			theViewerLayersToolbarUI.createUI ( );
 		}
 		theViewerLayersToolbarUI.setLayer ( 'OSM - Color' );
-		if ( travelUrl ) {
-			theHttpRequestBuilder.getJsonPromise ( travelUrl )
-				.then (
-					fileContent => {
-						newViewerFileLoader ( ).openDistantFile ( fileContent );
-					}
-				)
-				.catch (
-					err => {
-						console.log ( err ? err : 'Not possible to load the .trv file' );
-						theTravelNotesData.map.setView (
-							[ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
-							DEFAULT_ZOOM
-						);
-					}
-				);
-		}
+		ourLoadDistantTravel ( travelUrl );
 	}
 }
 
-const ourTravelNotesViewer = Object.seal ( new TravelNotesViewer );
+const OUR_TRAVEL_NOTES_VIEWER = new TravelNotesViewer ( );
 
 export {
 
@@ -191,7 +199,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourTravelNotesViewer as theTravelNotesViewer
+	OUR_TRAVEL_NOTES_VIEWER as theTravelNotesViewer
 };
 
 /*

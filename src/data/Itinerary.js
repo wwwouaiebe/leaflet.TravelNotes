@@ -59,8 +59,50 @@ import { newManeuver } from '../data/Maneuver.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO } from '../util/Constants.js';
 
-const ourObjType = newObjType ( 'Itinerary' );
-const ourObjIds = new WeakMap ( );
+const OUR_OBJ_TYPE = newObjType ( 'Itinerary' );
+const OUR_OBJ_IDS = new WeakMap ( );
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpgrade
+@desc performs the upgrade
+@param {Object} itinerary an itinerary to upgrade
+@throws {Error} when the itinerary version is invalid
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpgrade ( itinerary ) {
+	switch ( itinerary.objType.version ) {
+	case '1.0.0' :
+	case '1.1.0' :
+	case '1.2.0' :
+	case '1.3.0' :
+	case '1.4.0' :
+	case '1.5.0' :
+	case '1.6.0' :
+		itinerary.hasProfile = false;
+		itinerary.ascent = ZERO;
+		itinerary.descent = ZERO;
+		// eslint break omitted intentionally
+	case '1.7.0' :
+	case '1.7.1' :
+	case '1.8.0' :
+	case '1.9.0' :
+	case '1.10.0' :
+	case '1.11.0' :
+	case '1.12.0' :
+	case '1.13.0' :
+	case '2.0.0' :
+	case '2.1.0' :
+		itinerary.objType.version = '2.2.0';
+		break;
+	default :
+		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -77,36 +119,11 @@ const ourObjIds = new WeakMap ( );
 
 function ourValidate ( something ) {
 	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + ourObjType.name );
+		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 	}
-	ourObjType.validate ( something.objType );
-	if ( ourObjType.version !== something.objType.version ) {
-		switch ( something.objType.version ) {
-		case '1.0.0' :
-		case '1.1.0' :
-		case '1.2.0' :
-		case '1.3.0' :
-		case '1.4.0' :
-		case '1.5.0' :
-		case '1.6.0' :
-			something.hasProfile = false;
-			something.ascent = ZERO;
-			something.descent = ZERO;
-			// eslint break omitted intentionally
-		case '1.7.0' :
-		case '1.7.1' :
-		case '1.8.0' :
-		case '1.9.0' :
-		case '1.10.0' :
-		case '1.11.0' :
-		case '1.12.0' :
-		case '1.13.0' :
-		case '2.0.0' :
-			something.objType.version = '2.1.0';
-			break;
-		default :
-			throw new Error ( 'invalid version for ' + ourObjType.name );
-		}
+	OUR_OBJ_TYPE.validate ( something.objType );
+	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+		ourUpgrade ( something );
 	}
 	let properties = Object.getOwnPropertyNames ( something );
 	[ 	'hasProfile',
@@ -119,7 +136,7 @@ function ourValidate ( something ) {
 		'objId' ].forEach (
 		property => {
 			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + ourObjType.name );
+				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
 			}
 		}
 	);
@@ -192,7 +209,9 @@ class Itinerary	{
 
 		this.maneuvers = newCollection ( newManeuver );
 
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+
+		Object.seal ( this );
 	}
 
 	/**
@@ -201,7 +220,7 @@ class Itinerary	{
 	@readonly
 	*/
 
-	get objType ( ) { return ourObjType; }
+	get objType ( ) { return OUR_OBJ_TYPE; }
 
 	/**
 	the objId of the Itinerary. objId are unique identifier given by the code
@@ -209,7 +228,7 @@ class Itinerary	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return ourObjIds.get ( this ); }
+	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
 
 	/**
 	An object literal with the Itinerary properties and without any methods.
@@ -226,8 +245,8 @@ class Itinerary	{
 			maneuvers : this.maneuvers.jsonObject,
 			provider : this.provider,
 			transitMode : this.transitMode,
-			objId : ourObjIds.get ( this ),
-			objType : ourObjType.jsonObject
+			objId : OUR_OBJ_IDS.get ( this ),
+			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
@@ -239,7 +258,7 @@ class Itinerary	{
 		this.maneuvers.jsonObject = otherthing.maneuvers || [];
 		this.provider = otherthing.provider || '';
 		this.transitMode = otherthing.transitMode || '';
-		ourObjIds.set ( this, newObjId ( ) );
+		OUR_OBJ_IDS.set ( this, newObjId ( ) );
 
 		// rebuilding links between maneuvers and itineraryPoints
 		let itineraryPointObjIdMap = new Map ( );
@@ -302,7 +321,7 @@ class Itinerary	{
 
 function ourNewItinerary ( ) {
 
-	return Object.seal ( new Itinerary );
+	return new Itinerary ( );
 }
 
 export {

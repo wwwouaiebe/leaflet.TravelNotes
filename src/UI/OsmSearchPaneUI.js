@@ -651,8 +651,8 @@ function ourNewOsmSearchPaneUI ( ) {
 			);
 		}
 		searchResultDiv.title = '';
-		for ( const [ key, value ] of Object.entries ( osmElement.tags ) ) {
-			searchResultDiv.title += key + '=' + value + '\n';
+		for ( const [ KEY, VALUE ] of Object.entries ( osmElement.tags ) ) {
+			searchResultDiv.title += KEY + '=' + VALUE + '\n';
 		}
 		searchResultDiv.addEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
 		searchResultDiv.addEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
@@ -687,6 +687,10 @@ function ourNewOsmSearchPaneUI ( ) {
 	*/
 
 	class OsmSearchPaneUI {
+
+		constructor ( ) {
+			Object.freeze ( this );
+		}
 
 		/**
 		This function removes all the elements from the data div and control div
@@ -731,7 +735,7 @@ function ourNewOsmSearchPaneUI ( ) {
 		}
 	}
 
-	return Object.freeze ( new OsmSearchPaneUI );
+	return new OsmSearchPaneUI ( );
 }
 
 export { ourNewOsmSearchPaneUI as newOsmSearchPaneUI };

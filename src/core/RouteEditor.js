@@ -211,7 +211,9 @@ function ourHaveValidWayPoints ( route ) {
 function ourOnRoutingError ( err ) {
 	ourRoutingRequestStarted = false;
 	theErrorsUI.showError ( err );
-	console.log ( err ? err : 'An error occurs when asking the route to the provider' );
+	if ( err instanceof Error ) {
+		console.error ( err );
+	}
 }
 
 /**
@@ -314,6 +316,10 @@ function ourOnRoutingOk ( ) {
 
 class RouteEditor {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	This method add a route to the Travel and, if no other route is beind edited,
 	start the edition of this new route
@@ -371,7 +377,7 @@ class RouteEditor {
 			(
 				( ! provider )
 				||
-				( provider.providerKeyNeeded && ! theAPIKeysManager.getKey ( providerName ) )
+				( provider.providerKeyNeeded && ! theAPIKeysManager.hasKey ( providerName ) )
 			)
 		) {
 			theErrorsUI.showError (
@@ -623,7 +629,13 @@ class RouteEditor {
 				theEventDispatcher.dispatch ( 'updateitinerary' );
 			}
 		)
-			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**
@@ -636,7 +648,13 @@ class RouteEditor {
 		newPrintRouteMapDialog ( )
 			.show ( )
 			.then ( printData => newPrintFactory ( ).print ( printData, routeObjId ) )
-			.catch ( err => console.log ( err ? err : 'An error occurs in the route properties dialog' ) );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**
@@ -720,7 +738,7 @@ class RouteEditor {
 	}
 }
 
-const ourRouteEditor = Object.seal ( new RouteEditor );
+const OUR_ROUTE_EDITOR = new RouteEditor ( );
 
 export {
 
@@ -735,7 +753,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourRouteEditor as theRouteEditor
+	OUR_ROUTE_EDITOR as theRouteEditor
 };
 
 /*

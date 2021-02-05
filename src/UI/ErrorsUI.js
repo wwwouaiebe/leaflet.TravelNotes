@@ -220,6 +220,10 @@ function ourShow ( message, errorLevel ) {
 
 class ErrorsUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	*/
@@ -273,7 +277,7 @@ class ErrorsUI {
 
 }
 
-const ourErrorsUI = Object.freeze ( new ErrorsUI );
+const OUR_ERRORS_UI = new ErrorsUI ( );
 
 export {
 
@@ -288,7 +292,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourErrorsUI as theErrorsUI
+	OUR_ERRORS_UI as theErrorsUI
 };
 
 /*

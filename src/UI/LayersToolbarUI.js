@@ -60,6 +60,7 @@ import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { newLayer } from '../data/Layer.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
+const OUR_MIN_BUTTONS_VISIBLE = 3;
 
 let ourLayers = [
 
@@ -178,15 +179,14 @@ function ourOnMouseLeaveLinkButton ( mouseLeaveEvent ) {
 */
 
 function ourOnWheelToolbar ( wheelEvent ) {
-	const MIN_BUTTONS_VISIBLE = 3;
 	if ( wheelEvent.deltaY ) {
 		ourMarginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 		ourMarginTop = ourMarginTop > ourButtonTop ? ourButtonTop : ourMarginTop;
 		ourMarginTop =
 			ourMarginTop < ourButtonTop - ourButtonsHeight +
-			( MIN_BUTTONS_VISIBLE * ourButtonHeight )
+			( OUR_MIN_BUTTONS_VISIBLE * ourButtonHeight )
 				?
-				ourButtonTop - ourButtonsHeight + ( MIN_BUTTONS_VISIBLE * ourButtonHeight )
+				ourButtonTop - ourButtonsHeight + ( OUR_MIN_BUTTONS_VISIBLE * ourButtonHeight )
 				:
 				ourMarginTop;
 		ourLayersToolbarButtonsDiv.style.marginTop = String ( ourMarginTop ) + 'px';
@@ -238,7 +238,7 @@ function ourOnMouseLeaveToolbar ( ) {
 */
 
 function ourCreateLayerButton ( layer ) {
-	if ( layer.providerKeyNeeded && ! theAPIKeysManager.getKey ( layer.providerName.toLowerCase ( ) ) ) {
+	if ( layer.providerKeyNeeded && ! theAPIKeysManager.hasKey ( layer.providerName.toLowerCase ( ) ) ) {
 		return;
 	}
 	let layerButton = theHTMLElementsFactory.create (
@@ -357,6 +357,10 @@ Displays buttons to change the background maps and manages the background maps l
 
 class LayersToolbarUI {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	creates the user interface
 	*/
@@ -394,8 +398,7 @@ class LayersToolbarUI {
 	getLayer ( layerName ) {
 		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
 		if ( theLayer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( theLayer.providerName.toLowerCase ( ) );
-			if ( ! providerKey ) {
+			if ( ! theAPIKeysManager.hasKey ( theLayer.providerName.toLowerCase ( ) ) ) {
 				theLayer = ourLayers [ ZERO ];
 			}
 		}
@@ -412,8 +415,7 @@ class LayersToolbarUI {
 	setLayer ( layerName ) {
 		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
 		if ( theLayer.providerKeyNeeded ) {
-			let providerKey = theAPIKeysManager.getKey ( theLayer.providerName.toLowerCase ( ) );
-			if ( ! providerKey ) {
+			if ( ! theAPIKeysManager.hasKey ( theLayer.providerName.toLowerCase ( ) ) ) {
 				theLayer = ourLayers [ ZERO ];
 			}
 		}
@@ -434,7 +436,7 @@ class LayersToolbarUI {
 	}
 }
 
-const ourLayersToolbarUI = Object.freeze ( new LayersToolbarUI );
+const OUR_LAYERS_TOOLBAR_UI = new LayersToolbarUI ( );
 
 export {
 
@@ -449,7 +451,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourLayersToolbarUI as theLayersToolbarUI
+	OUR_LAYERS_TOOLBAR_UI as theLayersToolbarUI
 };
 
 /*

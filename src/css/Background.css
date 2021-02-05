@@ -42,5 +42,5 @@ Changes:
 }
 
 .TravelNotes-Background:hover {
-	cursor: not-allowed;
+	cursor: move;
 }

@@ -150,6 +150,10 @@ Encoded polyline: _p~iF~ps|U_ulLnnqC_mqNvxq`@
 
 class polylineEncoder {
 
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/*
 	encode an array of coordinates to a string ( coordinates can be 1d or 2d or 3d or more...)
 
@@ -248,7 +252,7 @@ class polylineEncoder {
 	}
 }
 
-const ourPolylineEncoder = Object.freeze ( new polylineEncoder ( ) );
+const OUR_POLYLINE_ENCODER = new polylineEncoder ( );
 
 export {
 
@@ -263,7 +267,7 @@ export {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	ourPolylineEncoder as thePolylineEncoder
+	OUR_POLYLINE_ENCODER as thePolylineEncoder
 };
 
 /*

@@ -207,6 +207,10 @@ let ourPrivateConfig = {
 		svgZoom : 17,
 		svgRcnRefDistance : 20,
 		svgAngleDistance : 10,
+		osmCityAdminLevel : {
+			GB : '10',
+			DEFAULT : '8'
+		},
 		svgHamletDistance : 200,
 		svgVillageDistance : 400,
 		svgCityDistance : 1200,
@@ -269,7 +273,6 @@ let ourPrivateConfig = {
 			fillOpacity : 1
 		}
 	},
-	haveCrypto : false,
 	itineraryPane :
 	{
 		showNotes : true,
@@ -360,7 +363,9 @@ function ourCopyObjectTo ( source, target ) {
 		}
 	}
 	catch ( err ) {
-		console.log ( err ? err : 'Not possible to overload Config' );
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
 	}
 }
 
@@ -426,7 +431,6 @@ class Config {
 	get nominatim ( ) { return ourPrivateConfig.nominatim; }
 	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
 	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
-	get haveCrypto ( ) { return ourPrivateConfig.haveCrypto; }
 	get itineraryPane ( ) { return ourPrivateConfig.itineraryPane; }
 	get colorDialog ( ) { return ourPrivateConfig.colorDialog; }
 

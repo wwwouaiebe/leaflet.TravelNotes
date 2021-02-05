@@ -78,6 +78,10 @@ function ourNewWaitUI ( ) {
 
 	class WaitUI {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		creates the user interface
 		*/
@@ -141,7 +145,7 @@ function ourNewWaitUI ( ) {
 		}
 	}
 
-	return Object.freeze ( new WaitUI );
+	return new WaitUI ( );
 }
 
 export {

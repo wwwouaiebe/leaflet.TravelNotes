@@ -79,6 +79,10 @@ function ourNewViewerFileLoader ( ) {
 
 	class ViewerFileLoader {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		Open a distant file from a web server and display the content of the file
 		@param {Object} fileContent
@@ -136,7 +140,7 @@ function ourNewViewerFileLoader ( ) {
 		}
 	}
 
-	return Object.seal ( new ViewerFileLoader );
+	return new ViewerFileLoader ( );
 }
 
 export {

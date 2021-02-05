@@ -73,11 +73,26 @@ import { theConfig } from '../data/Config.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
-import { theHttpRequestBuilder } from '../util/HttpRequestBuilder.js';
 import { theTranslator } from '../UI/Translator.js';
-import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import {
+	SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, HTTP_STATUS_OK, DEGREES, OSM_COUNTRY_ADMIN_LEVEL
+}
+	from '../util/Constants.js';
 
 let ourRequestStarted = false;
+const OUR_QUERY_DISTANCE = Math.max (
+	theConfig.note.svgHamletDistance,
+	theConfig.note.svgVillageDistance,
+	theConfig.note.svgCityDistance,
+	theConfig.note.svgTownDistance
+);
+const OUR_ICON_POSITION = Object.freeze ( {
+	atStart : -ONE,
+	onRoute : ZERO,
+	atEnd : ONE
+} );
+
+const OUR_SEARCH_AROUND_FACTOR = 1.5;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -93,16 +108,7 @@ let ourRequestStarted = false;
 /* eslint-disable-next-line max-statements */
 function ourNewSvgIconFromOsmFactory ( ) {
 
-	const DEGREE_0 = 0;
-	const DEGREE_90 = 90;
-	const DEGREE_180 = 180;
-	const DEGREE_270 = 270;
-	const DEGREE_360 = 360;
-
-	const AT_START = -1;
-	const ON_ROUTE = 0;
-	const AT_END = 1;
-
+	let myOsmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
 	let mySvgLatLngDistance = Object.seal (
 		{
 			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
@@ -110,15 +116,15 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		}
 	);
 	let myNearestItineraryPoint = null;
-	let myRoute = null; // the TravelNotes route object
-	let myResponse = {}; // the xmlHttpRequest response parsed
+	let myRoute = null;
 	let myWaysMap = new Map ( );
 	let myNodesMap = new Map ( );
-	let myPlaces = [];
+	let myAdminNames = [];
+	let myPlaces = {};
 	let myPlace = null;
-	let myCity = '';
-	let mySvg = null; // the svg element
-	let myPositionOnRoute = ON_ROUTE;
+	let myCity = null;
+	let mySvg = null;
+	let myPositionOnRoute = OUR_ICON_POSITION.onRoute;
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
 	let myDirection = null;
@@ -132,47 +138,123 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateNodesAndWaysMaps
-	@desc This function create the way and node JS maps from the XmlHttpRequest response and extract city and places
+	@function mySetHamletAndCity
+	@desc this function search the city and hamlet
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateNodesAndWaysMaps ( ) {
+	function mySetHamletAndCity ( ) {
+		myCity = null;
+		let adminHamlet = null;
+
+		for ( let namesCounter = TWO; namesCounter < myAdminNames.length; namesCounter ++ ) {
+			if ( 'undefined' !== typeof ( myAdminNames [ namesCounter ] ) ) {
+				if ( myOsmCityAdminLevel >= namesCounter ) {
+					myCity = myAdminNames [ namesCounter ];
+				}
+				else {
+					adminHamlet = myAdminNames [ namesCounter ];
+				}
+			}
+		}
+		myPlace = null;
+		let placeDistance = Number.MAX_VALUE;
+
+		Object.values ( myPlaces ).forEach (
+			place => {
+				if ( place.distance < placeDistance ) {
+					placeDistance = place.distance;
+					myPlace = place.name;
+				}
+			}
+		);
+
+		myPlace = adminHamlet || myPlace;
+		if ( myPlace === myCity ) {
+			myPlace = null;
+		}
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myCreateNodesAndWaysMaps
+	@desc This function create the way and node JS maps from the overpassAPI response and extract city and myPlaces
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myCreateNodesAndWaysMaps ( overpassAPIdata ) {
 		myWaysMap.clear ( );
 		myNodesMap.clear ( );
-
-		// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
-		myResponse.elements.forEach (
+		myAdminNames = [];
+		myPlaces = {
+			hamlet : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgHamletDistance
+			},
+			village : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgVillageDistance
+			},
+			city : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgCityDistance
+			},
+			town : {
+				name : null,
+				distance : Number.MAX_VALUE,
+				maxDistance : theConfig.note.svgTownDistance
+			}
+		};
+		overpassAPIdata.elements.forEach (
 			element => {
 				switch ( element.type ) {
 				case 'area' :
-
-					// the only area in the response is the city
-					if ( element.tags && element.tags.boundary && element.tags.name ) {
-						myCity = element.tags.name;
+					{
+						let elementName = element.tags.name;
+						if (
+							theConfig.nominatim.language &&
+							'*' !== theConfig.nominatim.language &&
+							element.tags [ 'name:' + theConfig.nominatim.language ]
+						) {
+							elementName = element.tags [ 'name:' + theConfig.nominatim.language ];
+						}
+						myAdminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
+						if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
+							myOsmCityAdminLevel =
+								theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || myOsmCityAdminLevel;
+						}
 					}
 					break;
 				case 'way' :
-
-					// replacing the nodes property with the nodesId property to
-					// avoid confusion between nodes and nodesId. The element.nodes contains nodesIds!!
 					element.nodesIds = element.nodes;
 					delete element.nodes;
 					myWaysMap.set ( element.id, element );
 					break;
 				case 'node' :
-
 					myNodesMap.set ( element.id, element );
 					if (
-						element.tags && element.tags.place
-						&&
-						[ 'town', 'city', 'village', 'hamlet' ].includes ( element.tags.place )
+						element.tags &&
+						element.tags.place &&
+						myPlaces [ element.tags.place ] &&
+						element.tags.name
 					) {
-
-						// a place is found in the response
-						myPlaces.push ( element );
+						let nodeDistance = theSphericalTrigonometry.pointsDistance (
+							mySvgLatLngDistance.latLng,
+							[ element.lat, element.lon ]
+						);
+						let place = myPlaces [ element.tags.place ];
+						if ( place.maxDistance > nodeDistance && place.distance > nodeDistance ) {
+							place.distance = nodeDistance;
+							place.name = element.tags.name;
+						}
 					}
 					break;
 				default :
@@ -220,30 +302,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function mySearchHamlet
-	@desc this function search the nearest place from the nearest itinerary point
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySearchHamlet ( ) {
-		let minDistance = Number.MAX_VALUE;
-		myPlaces.forEach (
-			place => {
-				let placeDistance =
-					theSphericalTrigonometry.pointsDistance ( myNearestItineraryPoint.latLng, [ place.lat, place.lon ] );
-				if ( minDistance > placeDistance ) {
-					minDistance = placeDistance;
-					myPlace = place.tags.name;
-				}
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myLatLngCompare
 	@desc this function compare the lat and lng of the parameter with the lat and lng of the route waypoints
 	@param {ItineraryPoint} itineraryPoint the itineraryPoint to test
@@ -256,7 +314,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myLatLngCompare ( itineraryPoint ) {
 
-		const COMPARE_PRECISION = 0.00001;
+		const COMPARE_PRECISION = 0.000005;
 
 		let isWayPoint = false;
 		myRoute.wayPoints.forEach (
@@ -326,7 +384,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		// searching in the nodes JS map the incoming, outgoing and icon nodes
 		myNodesMap.forEach (
 			node => {
-				if ( node.tags && node.tags.rcn_ref && 'bike' === myRoute.itinerary.transitMode ) {
+				if ( 'bike' === myRoute.itinerary.transitMode && node.tags && node.tags.rcn_ref ) {
 					rcnRefNode = node;
 				}
 				if ( myNearestItineraryPoint ) {
@@ -373,11 +431,11 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway );
 
 		if (
+			'bike' === myRoute.itinerary.transitMode
+			&&
 			iconNode && iconNode.tags && iconNode.tags.rcn_ref
 			&&
 			iconNode.tags [ 'network:type' ] && 'node_network' === iconNode.tags [ 'network:type' ]
-			&&
-			'bike' === myRoute.itinerary.transitMode
 		) {
 			myRcnRef = iconNode.tags.rcn_ref;
 			myTooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - rcnRef', { rcnRef : myRcnRef } );
@@ -447,12 +505,12 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			}
 		);
 
-		if ( AT_START === myPositionOnRoute ) {
+		if ( OUR_ICON_POSITION.atStart === myPositionOnRoute ) {
 
 			// It's the start point adding a green circle to the outgoing street
 			myStreets = '🟢 ' + outgoingStreet;
 		}
-		else if ( AT_END === myPositionOnRoute ) {
+		else if ( OUR_ICON_POSITION.atEnd === myPositionOnRoute ) {
 
 			// It's the end point adding a red circle to the incoming street
 			myStreets = incomingStreet + ' 🔴 ';
@@ -550,15 +608,15 @@ function ourNewSvgIconFromOsmFactory ( ) {
 					( rotationPoint [ ZERO ] - iconPoint [ ZERO ] )
 				)
 				*
-				DEGREE_180 / Math.PI;
+				DEGREES.d180 / Math.PI;
 			if ( ZERO > myRotation ) {
-				myRotation += DEGREE_360;
+				myRotation += DEGREES.d360;
 			}
-			myRotation -= DEGREE_270;
+			myRotation -= DEGREES.d270;
 
 			// point 0,0 of the svg is the UPPER left corner
 			if ( ZERO > rotationPoint [ ZERO ] - iconPoint [ ZERO ] ) {
-				myRotation += DEGREE_180;
+				myRotation += DEGREES.d180;
 			}
 		}
 
@@ -575,26 +633,26 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				( directionPoint [ ZERO ] - iconPoint [ ZERO ] )
 			)
 				*
-				DEGREE_180 / Math.PI;
+				DEGREES.d180 / Math.PI;
 
 			// point 0,0 of the svg is the UPPER left corner
 			if ( ZERO > directionPoint [ ZERO ] - iconPoint [ ZERO ] ) {
-				myDirection += DEGREE_180;
+				myDirection += DEGREES.d180;
 			}
 			myDirection -= myRotation;
 
 			// setting direction between 0 and 360
-			while ( DEGREE_0 > myDirection ) {
-				myDirection += DEGREE_360;
+			while ( DEGREES.d0 > myDirection ) {
+				myDirection += DEGREES.d360;
 			}
-			while ( DEGREE_360 < myDirection ) {
-				myDirection -= DEGREE_360;
+			while ( DEGREES.d360 < myDirection ) {
+				myDirection -= DEGREES.d360;
 			}
 		}
 		if ( myNearestItineraryPoint.objId === myRoute.itinerary.itineraryPoints.first.objId ) {
-			myRotation = -myDirection - DEGREE_90;
+			myRotation = -myDirection - DEGREES.d90;
 			myDirection = null;
-			myPositionOnRoute = AT_START;
+			myPositionOnRoute = OUR_ICON_POSITION.atStart;
 		}
 
 		if (
@@ -605,7 +663,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 			// using lat & lng because last point is sometime duplicated
 			myDirection = null;
-			myPositionOnRoute = AT_END;
+			myPositionOnRoute = OUR_ICON_POSITION.atEnd;
 		}
 	}
 
@@ -656,10 +714,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			}
 		}
 
-		if ( AT_START === myPositionOnRoute ) {
+		if ( OUR_ICON_POSITION.atStart === myPositionOnRoute ) {
 			myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Start' );
 		}
-		else if ( AT_END === myPositionOnRoute ) {
+		else if ( OUR_ICON_POSITION.atEnd === myPositionOnRoute ) {
 			myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Stop' );
 		}
 	}
@@ -872,45 +930,11 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		https://lz4.overpass-api.de/api/interpreter?
 		data=
-			[out:json][timeout:40];																=> format, timeout
-
-			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;				=> Searching streets
-
-			is_in(50.489312,5.501035)->.e;														=> Searching city limit
-			area.e[admin_level="2"][name="United Kingdom"]->.f;
-			area.e[admin_level="8"]->.g;
-			area.e[admin_level="10"]->.h;
-			if(f.count(deriveds)==0){
-				.g->.i;																			Normally admin_level = 8
-			}
-			else{																				but in the UK nothing is as
-				if(h.count(deriveds)==0){														in the others countries...
-					.g->.i;																		So we have to search first
-				}																				with admin_level = 10
-				else{																			and if nothing found,
-					.h->.i;																		search with admin_level = 8
-				}
-			}
-			.i out;
-
-			(
-				node(area.i)[place="village"];													=> Searching places in the
-				node(area.i)[place="hamlet"];													city area
-				node(area.i)[place="city"];
-				node(area.i)[place="town"];
-			)->.k;
-
-			( 																					=> Searching places near the
-				node(around:200,50.489312,5.501035)[place="hamlet"];							icon point
-				node(around:400,50.489312,5.501035)[place="village"];
-				node(around:1200,50.489312,5.501035)[place="city"];
-				node(around:1500,50.489312,5.501035)[place="town"];
-			)->.l;
-			node.k.l->.m;
-			.m out;
+			[out:json][timeout:40];
+			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;
+			is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
+			node(around:1500,50.644242,5.572354)[place];out;
 		*/
-
-		const SEARCH_AROUND_FACTOR = 1.5;
 
 		let requestLatLng =
 			mySvgLatLngDistance.latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) +
@@ -918,49 +942,54 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
 
 		let requestUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' +
-			theConfig.note.svgTimeOut + '];' +
+			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
 			'way[highway](around:' +
-			( ICON_DIMENSIONS.svgViewboxDim * SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
-			',' +
-			requestLatLng +
-			')->.a;(.a >;.a;)->.a;.a out;' +
-			'is_in(' +
-			requestLatLng +
-			')->.e;' +
-			'area.e[admin_level="2"][name="United Kingdom"]->.f;' +
-			'area.e[admin_level="8"]->.g;' +
-			'area.e[admin_level="10"]->.h;' +
-			'if(f.count(deriveds)==0){.g->.i;}else{if(h.count(deriveds)==0){.g->.i;}else{.h->.i;}}.i out;' +
-			'(node(area.i)[place="village"];' +
-			'node(area.i)[place="hamlet"];' +
-			'node(area.i)[place="city"];' +
-			'node(area.i)[place="town"];)->.k;' +
-			'( ' +
-			'node(around:' +
-			theConfig.note.svgHamletDistance +
-			',' +
-			requestLatLng +
-			')[place="hamlet"];' +
-			'node(around:' +
-			theConfig.note.svgVillageDistance +
-			',' +
-			requestLatLng +
-			')[place="village"];' +
-			'node(around:' +
-			theConfig.note.svgCityDistance +
-			',' +
-			requestLatLng +
-			')[place="city"];' +
-			'node(around:' +
-			theConfig.note.svgTownDistance +
-			',' +
-			requestLatLng +
-			')[place="town"];' +
-			')->.l;' +
-			'node.k.l->.m;' +
-			'.m out;';
+			( ICON_DIMENSIONS.svgViewboxDim * OUR_SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
+			',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
+			'is_in(' + requestLatLng + ')->.e;area.e[admin_level][boundary="administrative"];out;' +
+			'node(around:' + OUR_QUERY_DISTANCE + ',' + requestLatLng + ')[place];out;';
+
 		return requestUrl;
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myBuildIconAndAdress
+	@desc Search and build all the needed data
+	@param {function} onOk The success handler passed to the Promise
+	@param {function} onError The error handler passed to the Promise
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myBuildIconAndAdress ( overpassAPIdata, onOk /* , onError */ ) {
+		myCreateNodesAndWaysMaps ( overpassAPIdata );
+		myCreateSvg ( );
+		mySetHamletAndCity ( );
+		myComputeTranslation ( );
+		myComputeRotationAndDirection ( );
+		mySetDirectionArrowAndTooltip ( );
+		mySearchPassingStreets ( );
+		myCreateRoute ( );
+		myCreateWays ( );
+		myCreateRcnRef ( );
+
+		ourRequestStarted = false;
+
+		onOk (
+			Object.freeze (
+				{
+					svg : mySvg,
+					tooltip : myTooltip,
+					city : myCity,
+					place : myPlace,
+					streets : myStreets,
+					latLng : myNearestItineraryPoint.latLng
+				}
+			)
+		);
 	}
 
 	/**
@@ -977,36 +1006,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	function myGetIconAndAdress ( onOk, onError ) {
 
-		function BuildIconAndAdress ( response ) {
-			myResponse = response;
-
-			myCreateNodesAndWaysMaps ( );
-			myCreateSvg ( );
-			mySearchHamlet ( );
-			myComputeTranslation ( );
-			myComputeRotationAndDirection ( );
-			mySetDirectionArrowAndTooltip ( );
-			mySearchPassingStreets ( );
-			myCreateRoute ( );
-			myCreateWays ( );
-			myCreateRcnRef ( );
-
-			ourRequestStarted = false;
-
-			onOk (
-				Object.freeze (
-					{
-						svg : mySvg,
-						tooltip : myTooltip,
-						city : myCity,
-						place : myPlace,
-						streets : myStreets,
-						latLng : myNearestItineraryPoint.latLng
-					}
-				)
-			);
-		}
-
 		if ( ourRequestStarted ) {
 			onError ( 'A request is already running' );
 			return;
@@ -1014,21 +1013,32 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		ourRequestStarted = true;
 
-		myResponse = {};
 		mySvg = null;
-		myCity = '';
+		myCity = null;
+		myPlace = null;
 		myDirectionArrow = ' ';
 		myTooltip = '';
 		myStreets = '';
 
 		mySearchNearestItineraryPoint ( );
 
-		theHttpRequestBuilder.getJsonPromise ( myGetUrl ( ) )
-			.then ( BuildIconAndAdress )
-			.catch (
-				err => {
-					ourRequestStarted = false;
-					onError ( err );
+		fetch ( myGetUrl ( ) )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.json ( )
+							. then ( overpassAPIdata => myBuildIconAndAdress ( overpassAPIdata, onOk, onError ) )
+							.catch (
+								err => {
+									ourRequestStarted = false;
+									onError ( err );
+								}
+							);
+					}
+					else {
+						ourRequestStarted = false;
+						onError ( new Error ( 'An error occurs when callin OverpassAPI' ) );
+					}
 				}
 			);
 	}
@@ -1046,6 +1056,10 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	class SvgIconFromOsmFactory {
 
+		constructor ( ) {
+			Object.freeze ( this );
+		}
+
 		/**
 		this function returns a Promise for the svg icon creation
 		@param {array.<number>} iconLatLng The lat and lng where the icon must be createDocumentFragment
@@ -1061,7 +1075,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		}
 	}
 
-	return Object.seal ( new SvgIconFromOsmFactory );
+	return new SvgIconFromOsmFactory ( );
 }
 
 /**
