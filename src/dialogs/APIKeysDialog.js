@@ -75,7 +75,7 @@ import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 */
 
 /* eslint-disable-next-line max-statements */
-function ourNewAPIKeysDialog ( APIKeys ) {
+function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -306,10 +306,14 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 					if ( HTTP_STATUS_OK === response.status && response.ok ) {
 						response.arrayBuffer ( ).then ( myDecryptAPIKeysFile );
 					}
+					else {
+						myOnErrorDecrypt ( new Error ( 'Invalid http status' ) );
+					}
 				}
 			)
 			.catch (
 				err => {
+					myOnErrorDecrypt ( err );
 					if ( err instanceof Error ) {
 						console.error ( err );
 					}
@@ -552,16 +556,18 @@ function ourNewAPIKeysDialog ( APIKeys ) {
 	*/
 
 	function myCreateReloadKeysFromServerFileButton ( ) {
-		myReloadKeysFromServerFileButton = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
-				textContent : '🔄'
-			},
-			myToolbarDiv
-		);
-		myReloadKeysFromServerFileButton.addEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
+		if ( haveAPIKeysFile ) {
+			myReloadKeysFromServerFileButton = theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-BaseDialog-Button',
+					title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
+					textContent : '🔄'
+				},
+				myToolbarDiv
+			);
+			myReloadKeysFromServerFileButton.addEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
+		}
 	}
 
 	/**

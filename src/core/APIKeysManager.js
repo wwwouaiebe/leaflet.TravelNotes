@@ -77,6 +77,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourKeysMap = new Map;
+let ourHaveAPIKeysFile = false;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -291,10 +292,12 @@ class APIKeysManager {
 
 	setKeysFromServerFile ( ) {
 
+		let keysRestoredFromStorage = false;
+
 		// Try first to restore keys from storage
 		if ( ZERO !== ourSetKeysFromSessionStorage ( ) ) {
 			theEventDispatcher.dispatch ( 'providersadded' );
-			return;
+			keysRestoredFromStorage = true;
 		}
 
 		// otherwise searching on the server
@@ -302,7 +305,10 @@ class APIKeysManager {
 			.then (
 				response => {
 					if ( HTTP_STATUS_OK === response.status && response.ok ) {
-						response.arrayBuffer ( ).then ( ourOnServerFileFound );
+						ourHaveAPIKeysFile = true;
+						if ( ! keysRestoredFromStorage ) {
+							response.arrayBuffer ( ).then ( ourOnServerFileFound );
+						}
 					}
 				}
 			)
@@ -333,7 +339,7 @@ class APIKeysManager {
 		);
 
 		// showing dialog
-		newAPIKeysDialog ( ApiKeys )
+		newAPIKeysDialog ( ApiKeys, ourHaveAPIKeysFile )
 			.show ( )
 			.then ( APIKeys => ourResetAPIKeys ( APIKeys ) )
 			.catch (
