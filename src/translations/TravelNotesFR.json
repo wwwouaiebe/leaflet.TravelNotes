@@ -125,11 +125,11 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
-		"msgstr" : "Montée : {ascent} m."
+		"msgstr" : "Montée"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Descent",
-		"msgstr" : "Descente : {descent} m."
+		"msgstr" : "Descente"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
@@ -141,7 +141,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "Temps\u00a0:\u00a0{duration}"
+		"msgstr" : "Temps"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
@@ -181,7 +181,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Route distance",
-		"msgstr" : "Longueur du trajet\u00a0:\u00a0{distance}"
+		"msgstr" : "Longueur du trajet"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",

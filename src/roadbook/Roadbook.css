@@ -119,7 +119,25 @@ Changes:
 	margin-bottom: 1em;
 }
 
-.TravelNotes-NoteHtml-Address-City {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+Notes popup on the map
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-Roadbook-NoteHtml-TooltipContent {
+	font-weight: bold;
+}
+
+.TravelNotes-Roadbook-NoteHtml-LatLng > span,
+.TravelNotes-Roadbook-NoteHtml-Address > span:first-child,
+.TravelNotes-Roadbook-NoteHtml-Phone > span:first-child,
+.TravelNotes-Roadbook-NoteHtml-Url > span:first-child,
+.TravelNotes-Roadbook-NoteHtml-Distance > span:first-child,
+.TravelNotes-Roadbook-NoteHtml-NextDistance > span:first-child,
+.TravelNotes-Roadbook-NoteHtml-Address-City {
 	text-decoration: underline;
 }
 
@@ -167,8 +185,7 @@ Changes:
 }
 
 @media print {
-	#TravelNotes-Menu,
-	.TravelNotes-Roadbook-NoteHtml-Url {
+	#TravelNotes-Menu {
 		visibility: hidden;
 		width: 0;
 		height: 0;

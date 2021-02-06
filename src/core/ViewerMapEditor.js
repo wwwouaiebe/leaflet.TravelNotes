@@ -307,7 +307,7 @@ class ViewerMapEditor {
 		polyline.bindPopup (
 			layer => {
 				let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
-				return theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-UI-', popupRoute );
+				return theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-', popupRoute );
 			}
 		);
 

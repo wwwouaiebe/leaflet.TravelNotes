@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- WaitUI.css file --------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the WaitAnimation of dialogs, OsmSearchUI, and WaitUI
+@file WaitAnimation.css
+@desc CSS for the WaitAnimation of dialogs, OsmSearchUI, and WaitUI
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 .TravelNotes-WaitAnimation {
@@ -48,3 +48,8 @@ Changes:
 	from { margin-left: 0%; }
 	to { margin-left: calc(100% - 1em); }
 }
+
+
+/*
+--- End of WaitAnimation.css --------------------------------------------------------------------------------------------------
+*/

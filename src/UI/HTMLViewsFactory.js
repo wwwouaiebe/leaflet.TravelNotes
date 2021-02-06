@@ -130,8 +130,12 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 
 	if ( ZERO !== note.url.length ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText ( 'HTMLViewsFactory - Link' ) + '<a href=' + note.url + ' target="_blank" >' +
-				note.url.substr ( ZERO, OUR_LINKS_MAX_LENGTH ) + '...</a>',
+			'<span>' + theTranslator.getText ( 'HTMLViewsFactory - Link' ) +
+				'</span><a href=' +
+				note.url +
+				' target="_blank" >' +
+				note.url.substr ( ZERO, OUR_LINKS_MAX_LENGTH ) +
+				'...</a>',
 			theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'NoteHtml-Url' }, noteHTMLElement )
 		);
 	}
@@ -453,12 +457,10 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 
 	if ( ZERO !== route.distance ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText (
-				'HTMLViewsFactory - Route distance',
-				{
-					distance : theUtilities.formatDistance ( route.distance )
-				}
-			),
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Route distance' ) +
+				'</span>\u00a0:\u00a0' +
+				theUtilities.formatDistance ( route.distance ),
 			theHTMLElementsFactory.create (
 				'div',
 				{
@@ -471,10 +473,10 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 
 	if ( ! theTravelNotesData.travel.readOnly && 'bike' !== route.itinerary.transitMode ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText (
-				'HTMLViewsFactory - Duration',
-				{ duration : theUtilities.formatTime ( route.duration ) }
-			),
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Duration' ) +
+				'</span>\u00a0:\u00a0' +
+				theUtilities.formatTime ( route.duration ),
 			theHTMLElementsFactory.create (
 				'div',
 				{
@@ -487,10 +489,11 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 
 	if ( route.itinerary.hasProfile ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText (
-				'HTMLViewsFactory - Ascent',
-				{ ascent : route.itinerary.ascent.toFixed ( ZERO ) }
-			),
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Ascent' ) +
+				'</span>\u00a0:\u00a0' +
+				String ( route.itinerary.ascent.toFixed ( ZERO ) ) +
+				' m.',
 			theHTMLElementsFactory.create (
 				'div',
 				{
@@ -500,10 +503,11 @@ function ourGetRouteHeaderHTML ( classPrefix, route ) {
 			)
 		);
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText (
-				'HTMLViewsFactory - Descent',
-				{ descent : route.itinerary.descent.toFixed ( ZERO ) }
-			),
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Descent' ) +
+				'</span>\u00a0:\u00a0' +
+				String ( route.itinerary.descent.toFixed ( ZERO ) ) +
+				' m.',
 			theHTMLElementsFactory.create (
 				'div',
 				{

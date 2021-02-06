@@ -16,21 +16,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- Notes.css file ----------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the notes
+@file Notes.css
+@desc CSS for
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 	- v2.0.0:
 		- Issue #138 : Protect the app - control html entries done by user.
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-/* notes popup */
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+Notes popup on the map
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 .TravelNotes-NoteHtml-TooltipContent {
 	font-weight: bold;
 }
@@ -45,6 +52,50 @@ Changes:
 	text-decoration: underline;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+Notes in the UI
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-UI-NoteHtml-TooltipContent {
+	font-weight: bold;
+}
+/* stylelint-disable no-descending-specificity */
+.TravelNotes-UI-NoteHtml-LatLng > span,
+/* stylelint-enable no-descending-specificity */
+.TravelNotes-UI-NoteHtml-Address > span:first-child,
+.TravelNotes-UI-NoteHtml-Phone > span:first-child,
+.TravelNotes-UI-NoteHtml-Url > span:first-child,
+.TravelNotes-UI-NoteHtml-Distance > span:first-child,
+.TravelNotes-UI-NoteHtml-NextDistance > span:first-child,
+.TravelNotes-UI-NoteHtml-Address-City {
+	text-decoration: underline;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+.TravelNotes-AllNotes ( the .TravelNotes-AllNotes class is added to the L.divIcon when created )
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-AllNotes {
+	background: transparent;
+	height: auto;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+.TravelNotes-MapNote ( The 73 predefined notes have the .TravelNotes-MapNote class )
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 .TravelNotes-MapNote {
 	width: 100%;
 	height: 100%;
@@ -53,36 +104,51 @@ Changes:
 	vertical-align: top;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+.TravelNotes-SvgIcon ( All svg icons have the .TravelNotes-SvgIcon class )
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 .TravelNotes-SvgIcon {
 	border-style: solid;
 	border-color: black;
 	border-width: 0.1em;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+.TravelNotes-MapNote-Background ( This class is added to the 73 predefined notes and svgIcons when a background is asked )
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 .TravelNotes-MapNote-Background {
 	background-color: white;
 }
 
-.TravelNotes-ManeuverNote {
-	background-repeat: no-repeat;
-	height: 40px;
-	width: 40px;
-	display: inline-block;
-	vertical-align: top;
-	background-color: white;
-	border-color: black;
-	border-width: 1px;
-	border-style: solid;
-}
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-.TravelNotes-AllNotes {
-	background: transparent;
-	height: auto;
-}
+.TravelNotes-Note-Bullet ( This class is added to the bullet of the note )
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 .TravelNotes-Note-Bullet {
 	background-color: black;
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+classes for color span created with buttons in the NoteDialog
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 .TravelNotes-Note-WhiteRed {
 	color: white;
@@ -124,6 +190,14 @@ svg.TravelNotes-Note-Knooppunt {
 	background-color: white;
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+classes for old knooppunt notes maintained for backward compatibility
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 .TravelNotes-Note-Knooppunt > text {
 	fill: green;
 	font: bold 120px sans-serif;
@@ -134,3 +208,7 @@ svg.TravelNotes-Note-Knooppunt {
 	stroke: green;
 	stroke-width: 10;
 }
+
+/*
+--- End of Notes.css ----------------------------------------------------------------------------------------------------------
+*/

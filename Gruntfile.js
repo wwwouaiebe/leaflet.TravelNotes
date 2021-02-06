@@ -65,17 +65,17 @@ module.exports = function(grunt) {
 			release: {
 				files: {
 					'dist/TravelNotes.min.css': [ 'src/**/*.css'],
-					'dist/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Popup.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
+					'dist/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Routes.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
 					'dist/TravelNotesRoadbook.min.css': [ 'src/dialogs/ProfileWindow.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ],
 					'gh-page/TravelNotes.min.css': [ 'src/**/*.css'],
-					'gh-page/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Popup.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
+					'gh-page/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Routes.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
 					'gh-page/TravelNotesRoadbook.min.css': [ 'src/dialogs/ProfileWindow.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
 				}
 			},
 			debug: {
 				files: {
 					'debug/TravelNotes.min.css': [ 'src/**/*.css'],
-					'debug/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Popup.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
+					'debug/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Routes.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
 					'debug/TravelNotesRoadbook.min.css': [ 'src/dialogs/ProfileWindow.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
 				}
 			}

@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- Popup.css file ----------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the popup
+@file Popup.css
+@desc CSS for Routes
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 .TravelNotes-Route-Header-Name {
@@ -33,6 +33,23 @@ Changes:
 }
 
 .TravelNotes-Route-Header-Distance > span,
+.TravelNotes-Route-Header-Ascent > span,
+.TravelNotes-Route-Header-Descent > span,
 .TravelNotes-Route-Header-Duration > span {
 	text-decoration: underline;
 }
+
+.TravelNotes-UI-Route-Header-Name {
+	font-weight: bold;
+}
+
+.TravelNotes-UI-Route-Header-Distance > span,
+.TravelNotes-UI-Route-Header-Ascent > span,
+.TravelNotes-UI-Route-Header-Descent > span,
+.TravelNotes-UI-Route-Header-Duration > span {
+	text-decoration: underline;
+}
+
+/*
+--- End of Routes.css ---------------------------------------------------------------------------------------------------------
+*/

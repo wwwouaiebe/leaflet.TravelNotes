@@ -5,12 +5,10 @@ This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -19,32 +17,65 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Background.css
-@desc CSS for  the frozen background for dialogs and WauitUI
+@file Print.css
+@desc CSS for map printing and #TravelNotes-PrintToolbar
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v2.2.0:
+		- created from Map.css
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-Background {
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
-	max-width: 100vw;
-	max-height: 100vh;
+.TravelNotes-PrintViews-Hidden {
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
 	top: 0;
 	left: 0;
-	z-index: 1200;
-	overflow: none;
-	background-color: rgba(0, 0, 0, 0.4);
+	visibility: hidden;
 }
 
-.TravelNotes-Background:hover {
-	cursor: move;
+.TravelNotes-routeViewDiv {
+	margin: 5mm;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.TravelNotes-routeViewDiv.TravelNotes-PrintPageBreak {
+	page-break-inside: avoid;
+}
+
+#TravelNotes-PrintToolbar {
+	position: fixed;
+	top: 0;
+	right: 0;
+	margin: 1em;
+	padding: 0.5em;
+	z-index: 1000;
+	border-style: solid;
+	border-width: 0.1em;
+	background-color: white;
+}
+
+@media print {
+	.TravelNotes-routeViewDiv {
+		margin: 0;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	#TravelNotes-PrintToolbar {
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		top: 0;
+		left: 0;
+		visibility: hidden;
+	}
 }
 
 /*
---- End of Background.css -----------------------------------------------------------------------------------------------------
+--- End of Print.css ----------------------------------------------------------------------------------------------------------
 */
