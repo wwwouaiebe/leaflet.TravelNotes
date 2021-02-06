@@ -37,7 +37,7 @@ Changes:
 	top: 0;
 	left: 0;
 	z-index: 1200;
-	overflow: none;
+	overflow: hidden;
 	background-color: rgba(0, 0, 0, 0.4);
 }
 

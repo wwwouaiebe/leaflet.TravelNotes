@@ -28,6 +28,15 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+.leaflet-popup-tip-container {
+	transform: scale(0);
+	visibility: hidden;
+}
+
+.leaflet-popup-content-wrapper {
+	border-radius: 0;
+}
+
 .TravelNotes-Route-Header-Name {
 	font-weight: bold;
 }
