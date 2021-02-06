@@ -219,6 +219,10 @@ let ourPrivateConfig = {
 		maxManeuversNotes : 100
 	},
 	noteDialog : {
+		theDevil : {
+			addButton : false,
+			noteZoom : 17
+		},
 		toggleIconDimension : true,
 		toggleIconTextArea : false,
 		toggleTooltip : false,

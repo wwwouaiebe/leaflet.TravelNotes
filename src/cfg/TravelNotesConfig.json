@@ -135,10 +135,6 @@
 	},
 	"note":
 	{
-		"theDevil": {
-			"addButton": true,
-			"noteZoom" : 17
-		},
 		"osmSearchNoteDialog":false,
 		"reverseGeocoding":true,
 		"grip":
@@ -179,6 +175,10 @@
 		"maxManeuversNotes":100
 	},
 	"noteDialog":{
+		"theDevil": {
+			"addButton": true,
+			"noteZoom" : 17
+		},
 		"toggleIconDimension":true,
 		"toggleIconTextArea":false,
 		"toggleTooltip":false,

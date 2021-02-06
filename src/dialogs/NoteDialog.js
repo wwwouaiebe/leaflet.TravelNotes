@@ -733,7 +733,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDataDiv
 		);
 
-		if ( theConfig.note.theDevil.addButton ) {
+		if ( theConfig.noteDialog.theDevil.addButton ) {
 			theHTMLElementsFactory.create (
 				'text',
 				{
@@ -745,7 +745,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 						href : 'https://www.google.com/maps/@' +
 							note.lat.toFixed ( LAT_LNG.fixed ) + ',' +
 							note.lng.toFixed ( LAT_LNG.fixed ) + ',' +
-							theConfig.note.theDevil.noteZoom + 'z',
+							theConfig.noteDialog.theDevil.noteZoom + 'z',
 						target : '_blank',
 						title : 'Reminder! The devil will know everything about you'
 					},

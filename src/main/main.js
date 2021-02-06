@@ -144,6 +144,7 @@ function ourMain ( ) {
 			config.language = myLanguage || config.language;
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
 				config.layersToolbarUI.theDevil.addButton = false;
+				config.noteDialog.theDevil.addButton = false;
 				config.errorUI.showHelp = true;
 				config.printRouteMap.maxTiles = OUR_DEMO_PRINT_MAX_TILES;
 				config.note.maxManeuversNotes = OUR_DEMO_MAX_MANEUVERS_NOTES;

@@ -51,6 +51,7 @@ Tests ...
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
+import { theConfig } from '../data/Config.js';
 import { theUtilities } from '../util/Utilities.js';
 import { SAVE_STATUS } from '../util/Constants.js';
 
@@ -87,6 +88,9 @@ function ourUpdate ( ) {
 */
 
 function ourSetSaveStatus ( saveStatus ) {
+	if ( SAVE_STATUS.modified === saveStatus && SAVE_STATUS.notSaved === ourSaveStatus ) {
+		return;
+	}
 	ourSaveStatus = saveStatus;
 	if ( SAVE_STATUS.modified === saveStatus && ! ourSaveTimer ) {
 		ourSaveTimer = setTimeout ( ourSetSaveStatus, OUR_SAVE_TIME, SAVE_STATUS.notSaved );
@@ -157,8 +161,10 @@ class MouseUI {
 
 	createUI ( ) {
 		ourZoom = theTravelNotesData.map.getZoom ( );
-		let mousePos = theTravelNotesData.map.getCenter ( );
-		ourMousePos = theUtilities.formatLat ( mousePos.lat ) + '\u00a0-\u00a0' + theUtilities.formatLng ( mousePos.lng );
+		ourMousePos =
+			theUtilities.formatLat ( theConfig.map.center.lat ) +
+			'\u00a0-\u00a0' +
+			theUtilities.formatLng ( theConfig.map.center.lng );
 		ourMouseDiv =
 			theHTMLElementsFactory.create (
 				'span',
