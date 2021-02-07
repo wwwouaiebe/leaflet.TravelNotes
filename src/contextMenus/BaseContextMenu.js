@@ -369,7 +369,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		let body = document.querySelector ( 'body' );
 
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-Panel' }, body );
+		let dummyDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-DummyDiv' }, body );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
 		body.removeChild ( dummyDiv );

@@ -28,23 +28,14 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.leaflet-popup-tip-container {
-	transform: scale(0);
-	visibility: hidden;
-}
-
-.leaflet-popup-content-wrapper {
-	border-radius: 0;
-}
-
-.TravelNotes-Route-Header-Name {
+.TravelNotes-Map-Route-Header-Name {
 	font-weight: bold;
 }
 
-.TravelNotes-Route-Header-Distance > span,
-.TravelNotes-Route-Header-Ascent > span,
-.TravelNotes-Route-Header-Descent > span,
-.TravelNotes-Route-Header-Duration > span {
+.TravelNotes-Map-Route-Header-Distance > span,
+.TravelNotes-Map-Route-Header-Ascent > span,
+.TravelNotes-Map-Route-Header-Descent > span,
+.TravelNotes-Map-Route-Header-Duration > span {
 	text-decoration: underline;
 }
 

@@ -149,7 +149,7 @@ function ourAddNote ( noteObjId ) {
 					iconSize : [ theConfig.note.grip.size, theConfig.note.grip.size ],
 					iconAnchor : [ theConfig.note.grip.size / TWO, theConfig.note.grip.size / TWO ],
 					html : '<div></div>',
-					className : 'TravelNotes-Note-Bullet'
+					className : 'TravelNotes-Map-Note-Bullet'
 				}
 			),
 			opacity : theConfig.note.grip.opacity,
@@ -165,7 +165,7 @@ function ourAddNote ( noteObjId ) {
 			iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
 			popupAnchor : [ ZERO, -note.iconHeight / TWO ],
 			html : note.iconContent,
-			className : 'TravelNotes-AllNotes '
+			className : 'TravelNotes-Map-AllNotes '
 		}
 	);
 
@@ -182,7 +182,7 @@ function ourAddNote ( noteObjId ) {
 	// a popup is binded to the the marker...
 	marker.bindPopup (
 		layer => theHTMLViewsFactory.getNoteTextHTML (
-			'TravelNotes-',
+			'TravelNotes-Map-',
 			theDataSearchEngine.getNoteAndRoute ( layer.objId )
 		)
 	);
@@ -210,7 +210,7 @@ function ourAddNote ( noteObjId ) {
 
 	if ( theConfig.note.haveBackground ) {
 		document.querySelectorAll ( '.TravelNotes-MapNote,.TravelNotes-SvgIcon' ).forEach (
-			noteIcon => noteIcon.classList.add ( 'TravelNotes-MapNote-Background' )
+			noteIcon => noteIcon.classList.add ( 'TravelNotes-Map-Note-Background' )
 		);
 	}
 	return Object.freeze ( { marker : marker, polyline : polyline, bullet : bullet } );
@@ -307,7 +307,7 @@ class ViewerMapEditor {
 		polyline.bindPopup (
 			layer => {
 				let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
-				return theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-', popupRoute );
+				return theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-Map-', popupRoute );
 			}
 		);
 

@@ -368,23 +368,23 @@ function ourMain ( ) {
 		if ( theConfig.autoLoad && '' === myErrorMessage ) {
 			theHTMLElementsFactory.create (
 				'div',
-				{ id : 'Map' },
+				{ id : 'TravelNotes-Map' },
 				document.querySelector ( 'body' )
 			);
 			theHTMLElementsFactory.create (
 				'div',
-				{ id : 'TravelNotes' },
+				{ id : 'TravelNotes-UI' },
 				document.querySelector ( 'body' )
 			);
 
-			let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+			let map = window.L.map ( 'TravelNotes-Map', { attributionControl : false, zoomControl : false } )
 				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
 
 			if ( myTravelUrl ) {
 				theTravelNotes.addReadOnlyMap ( map, myTravelUrl );
 			}
 			else {
-				theTravelNotes.addControl ( map, 'TravelNotes' );
+				theTravelNotes.addControl ( map, 'TravelNotes-UI' );
 			}
 		}
 	}

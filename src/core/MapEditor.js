@@ -362,8 +362,8 @@ function ourOnEditedRouteMouseOver ( mapEvent ) {
 
 			// a HTML element is created, with different class name, depending of the waypont position.
 			// See also WayPoints.css
-			let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPointTmp' +
-			'"></div><div class="TravelNotes-WayPointText">?</div>';
+			let iconHtml = '<div class="TravelNotes-Map-WayPoint TravelNotes-Map-WayPointTmp' +
+			'"></div><div class="TravelNotes-Map-WayPointText">?</div>';
 
 			// a leaflet marker is created...
 			ourTempWayPointMarker = window.L.marker (
@@ -377,7 +377,7 @@ function ourOnEditedRouteMouseOver ( mapEvent ) {
 								OUR_WAY_POINT_ICON_SIZE
 							],
 							html : iconHtml,
-							className : 'TravelNotes-WayPointStyle'
+							className : 'TravelNotes-Map-WayPointStyle'
 						}
 					),
 					draggable : true
@@ -536,9 +536,9 @@ function ourAddWayPoint ( wayPoint, letter ) {
 	}
 
 	// a HTML element is created, with different class name, depending of the waypont position. See also WayPoints.css
-	let iconHtml = '<div class="TravelNotes-WayPoint TravelNotes-WayPoint' +
+	let iconHtml = '<div class="TravelNotes-Map-WayPoint TravelNotes-Map-WayPoint' +
 	( 'A' === letter ? 'Start' : ( 'B' === letter ? 'End' : 'Via' ) ) +
-	'"></div><div class="TravelNotes-WayPointText">' + letter + '</div>';
+	'"></div><div class="TravelNotes-Map-WayPointText">' + letter + '</div>';
 
 	// a leaflet marker is created...
 	let marker = window.L.marker (
@@ -552,7 +552,7 @@ function ourAddWayPoint ( wayPoint, letter ) {
 						OUR_WAY_POINT_ICON_SIZE
 					],
 					html : iconHtml,
-					className : 'TravelNotes-WayPointStyle'
+					className : 'TravelNotes-Map-WayPointStyle'
 				}
 			),
 			draggable : true

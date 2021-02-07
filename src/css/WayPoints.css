@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 @------------------------------------------------------------------------------------------------------------------------------
 
 @file WayPoints.css
-@desc CSS forthe waypoints
+@desc CSS for the waypoints
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
@@ -28,12 +28,12 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-WayPointStyle {
+.TravelNotes-Map-WayPointStyle {
 	background: transparent;
 	height: auto;
 }
 
-.TravelNotes-WayPoint {
+.TravelNotes-Map-WayPoint {
 	background-repeat: no-repeat;
 	height: 20px;
 	width: 20px;
@@ -41,23 +41,23 @@ Changes:
 	vertical-align: top;
 }
 
-.TravelNotes-WayPointStart {
+.TravelNotes-Map-WayPointStart {
 	background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(0,192,0)"> <path d="M 0,0 l9,9 v10 l1,1 l1,-1 v-10 l9,-9 h-18 z"/> </g> </svg>');
 }
 
-.TravelNotes-WayPointVia {
+.TravelNotes-Map-WayPointVia {
 	background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(192,128,0)"> <path d="M 0,0 l9,9 v10 l1,1 l1,-1 v-10 l9,-9 h-18 z"/> </g> </svg>');
 }
 
-.TravelNotes-WayPointEnd {
+.TravelNotes-Map-WayPointEnd {
 	background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(192,0,0)"> <path d="M 0,0 l9,9 v10 l1,1 l1,-1 v-10 l9,-9 h-18 z"/> </g> </svg>');
 }
 
-.TravelNotes-WayPointTmp {
+.TravelNotes-Map-WayPointTmp {
 	background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(128,128,128)"> <path d="M 0,0 l9,9 v10 l1,1 l1,-1 v-10 l9,-9 h-18 z"/> </g> </svg>');
 }
 
-.TravelNotes-WayPointText {
+.TravelNotes-Map-WayPointText {
 	width: 20px;
 	text-align: center;
 	font-size: 1em;

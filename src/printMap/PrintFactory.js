@@ -545,7 +545,7 @@ function ourNewPrintFactory ( ) {
 						iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
 						popupAnchor : [ ZERO, -note.iconHeight / TWO ],
 						html : note.iconContent,
-						className : 'TravelNotes-AllNotes '
+						className : 'TravelNotes-Map-AllNotes '
 					}
 				);
 
