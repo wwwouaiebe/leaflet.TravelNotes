@@ -250,7 +250,7 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 	let iconHTML = theHTMLElementsFactory.create (
 		'div',
 		{
-			className : classPrefix + 'Travel-Notes-IconCell'
+			className : classPrefix + ( noteAndRoute.route ? 'Route-ManeuversAndNotes-IconCell' : 'Travel-Notes-IconCell' )
 		},
 		NoteTextAndIconHTML
 	);
@@ -274,7 +274,7 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 	}
 
 	let noteTextHTMLElement = ourGetNoteTextHTML ( classPrefix, noteAndRoute );
-	noteTextHTMLElement.className = classPrefix + 'Travel-Notes-Cell';
+	noteTextHTMLElement.className = classPrefix + ( noteAndRoute.route ? 'Route-ManeuversAndNotes-Cell' : 'Travel-Notes-Cell' );
 	NoteTextAndIconHTML.appendChild ( noteTextHTMLElement );
 	NoteTextAndIconHTML.noteObjId = noteAndRoute.note.objId;
 
@@ -563,7 +563,13 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
 				'</span>\u00a0:\u00a0' +
 				theUtilities.formatDistance ( routeAndManeuver.route.chainedDistance + routeAndManeuver.maneuverDistance ),
-			theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Route-Maneuver-Distance'
+				},
+				maneuverTextHTML
+			)
 		);
 	}
 
@@ -572,7 +578,13 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 			theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
 			'</span>\u00a0:\u00a0' +
 			theUtilities.formatDistance ( routeAndManeuver.maneuverDistance ),
-		theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : classPrefix + 'Route-Maneuver-Distance'
+			},
+			maneuverTextHTML
+		)
 	);
 
 	if ( DISTANCE.defaultValue < routeAndManeuver.maneuver.distance ) {
@@ -581,7 +593,13 @@ function ourGetManeuverHTML ( classPrefix, routeAndManeuver ) {
 				theTranslator.getText ( 'HTMLViewsFactory - Next maneuver after' ) +
 				'</span>\u00a0:\u00a0' +
 				theUtilities.formatDistance ( routeAndManeuver.maneuver.distance ),
-			theHTMLElementsFactory.create ( 'div', null, maneuverTextHTML )
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : classPrefix + 'Route-Maneuver-Distance'
+				},
+				maneuverTextHTML
+			)
 		);
 	}
 	return maneuverHTML;

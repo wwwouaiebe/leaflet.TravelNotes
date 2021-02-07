@@ -152,8 +152,8 @@ function ourNewItineraryPaneUI ( ) {
 
 	function myOnShowNotesClick ( clickEvent ) {
 		myShowNotes = clickEvent.target.checked;
-		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row' ).forEach (
-			noteRow => { noteRow.classList.toggle ( 'TravelNotes-UI-Route-Notes-Row-Hidden' ); }
+		document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Notes-Row' ).forEach (
+			noteRow => { noteRow.classList.toggle ( 'TravelNotes-Hidden' ); }
 		);
 	}
 
@@ -169,8 +169,8 @@ function ourNewItineraryPaneUI ( ) {
 
 	function myOnShowManeuversClick ( clickEvent ) {
 		myShowManeuvers = clickEvent.target.checked;
-		document.querySelectorAll ( '.TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
-			maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-UI-Route-Maneuvers-Row-Hidden' ); }
+		document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row' ).forEach (
+			maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-Hidden' ); }
 		);
 	}
 
@@ -216,14 +216,16 @@ function ourNewItineraryPaneUI ( ) {
 	*/
 
 	function myClearPaneDataDiv ( ) {
-		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row, .TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
+		document.querySelectorAll (
+			'.TravelNotes-ItineraryPaneUI-Route-Notes-Row, .TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row'
+		).forEach (
 			row => {
 				row.removeEventListener ( 'contextmenu', myOnManeuverOrNoteContextMenu, false );
 				row.removeEventListener ( 'mouseenter', myOnManeuverOrNoteMouseEnter, false );
 				row.removeEventListener ( 'mouseleave', myOnManeuverOrNoteMouseLeave, false );
 			}
 		);
-		let routeAndNotesElement = document.querySelector ( '.TravelNotes-UI-Route-ManeuversAndNotes' );
+		let routeAndNotesElement = document.querySelector ( '.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes' );
 		if ( routeAndNotesElement ) {
 			myPaneDataDiv.removeChild ( routeAndNotesElement );
 		}
@@ -275,7 +277,8 @@ function ourNewItineraryPaneUI ( ) {
 			myCheckBoxesDiv
 		);
 		myShowManeuversCheckBox.addEventListener ( 'click', myOnShowManeuversClick, false );
-		myRouteHeader = theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-UI-', theTravelNotesData.travel.editedRoute );
+		myRouteHeader =
+			theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-ItineraryPaneUI-', theTravelNotesData.travel.editedRoute );
 		myPaneControlDiv.appendChild ( myRouteHeader );
 	}
 
@@ -290,9 +293,13 @@ function ourNewItineraryPaneUI ( ) {
 	*/
 
 	function myAddData ( ) {
-		myPaneDataDiv.appendChild ( theHTMLViewsFactory.getEditedRouteManeuversAndNotesHTML ( 'TravelNotes-UI-' ) );
+		myPaneDataDiv.appendChild (
+			theHTMLViewsFactory.getEditedRouteManeuversAndNotesHTML ( 'TravelNotes-ItineraryPaneUI-' )
+		);
 
-		document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row, .TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
+		document.querySelectorAll (
+			'.TravelNotes-ItineraryPaneUI-Route-Notes-Row, .TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row'
+		).forEach (
 			row => {
 				row.addEventListener ( 'contextmenu', myOnManeuverOrNoteContextMenu, false );
 				row.addEventListener ( 'mouseenter', myOnManeuverOrNoteMouseEnter, false );
@@ -300,13 +307,13 @@ function ourNewItineraryPaneUI ( ) {
 			}
 		);
 		if ( ! myShowNotes ) {
-			document.querySelectorAll ( '.TravelNotes-UI-Route-Notes-Row' ).forEach (
-				noteRow => { noteRow.classList.toggle ( 'TravelNotes-UI-Route-Notes-Row-Hidden' ); }
+			document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Notes-Row' ).forEach (
+				noteRow => { noteRow.classList.toggle ( 'TravelNotes-Hidden' ); }
 			);
 		}
 		if ( ! myShowManeuvers ) {
-			document.querySelectorAll ( '.TravelNotes-UI-Route-Maneuvers-Row' ).forEach (
-				maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-UI-Route-Maneuvers-Row-Hidden' ); }
+			document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row' ).forEach (
+				maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-Hidden' ); }
 			);
 		}
 	}

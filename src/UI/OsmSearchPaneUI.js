@@ -244,8 +244,8 @@ function ourNewOsmSearchPaneUI ( ) {
 		let itemDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-SearchPaneUI-SearchItem ' +
-					'TravelNotes-SearchPaneUI-SearchItemMargin' + myDeepTree,
+				className : 'TravelNotes-OsmSearchPaneUI-SearchItem ' +
+					'TravelNotes-OsmSearchPaneUI-SearchItemMargin' + myDeepTree,
 				dictItem : item
 			},
 			mySearchTreeDiv

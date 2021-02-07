@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- AttributionsUI.css file -------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the AttributionsUI
+@file AttributionsUI.css
+@desc CSS for the AttributionsUI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 #TravelNotes-AttributionsUI {
@@ -43,3 +43,7 @@ Changes:
 #TravelNotes-AttributionsUI a {
 	color: #0078a8;
 }
+
+/*
+--- End of AttributionsUI.css -------------------------------------------------------------------------------------------------
+*/

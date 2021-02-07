@@ -38,18 +38,32 @@ Notes in the UI
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-UI-NoteHtml-TooltipContent {
+.TravelNotes-ItineraryPaneUI-NoteHtml-TooltipContent {
 	font-weight: bold;
 }
 /* stylelint-disable no-descending-specificity */
-.TravelNotes-UI-NoteHtml-LatLng > span,
+.TravelNotes-ItineraryPaneUI-NoteHtml-LatLng > span,
 /* stylelint-enable no-descending-specificity */
-.TravelNotes-UI-NoteHtml-Address > span:first-child,
-.TravelNotes-UI-NoteHtml-Phone > span:first-child,
-.TravelNotes-UI-NoteHtml-Url > span:first-child,
-.TravelNotes-UI-NoteHtml-Distance > span:first-child,
-.TravelNotes-UI-NoteHtml-NextDistance > span:first-child,
-.TravelNotes-UI-NoteHtml-Address-City {
+.TravelNotes-ItineraryPaneUI-NoteHtml-Address > span:first-child,
+.TravelNotes-ItineraryPaneUI-NoteHtml-Phone > span:first-child,
+.TravelNotes-ItineraryPaneUI-NoteHtml-Url > span:first-child,
+.TravelNotes-ItineraryPaneUI-NoteHtml-Distance > span:first-child,
+.TravelNotes-ItineraryPaneUI-NoteHtml-NextDistance > span:first-child,
+.TravelNotes-ItineraryPaneUI-NoteHtml-Address-City {
+	text-decoration: underline;
+}
+
+.TravelNotes-TravelNotesPaneUI-NoteHtml-TooltipContent {
+	font-weight: bold;
+}
+
+.TravelNotes-TravelNotesPaneUI-NoteHtml-LatLng > span,
+.TravelNotes-TravelNotesPaneUI-NoteHtml-Address > span:first-child,
+.TravelNotes-TravelNotesPaneUI-NoteHtml-Phone > span:first-child,
+.TravelNotes-TravelNotesPaneUI-NoteHtml-Url > span:first-child,
+.TravelNotes-TravelNotesPaneUI-NoteHtml-Distance > span:first-child,
+.TravelNotes-TravelNotesPaneUI-NoteHtml-NextDistance > span:first-child,
+.TravelNotes-TravelNotesPaneUI-NoteHtml-Address-City {
 	text-decoration: underline;
 }
 

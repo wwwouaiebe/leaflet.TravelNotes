@@ -16,35 +16,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- TravelNotesPaneUI.css file ----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the TravelNotesPaneUI
+@file TravelNotesPaneUI.css
+@desc CSS for the TravelNotesPaneUI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-UI-Travel-Notes-Row {
+.TravelNotes-TravelNotesPaneUI-Travel-Notes-Row {
 	display: flex;
 	flex-direction: row;
-}
-
-.TravelNotes-UI-Travel-Notes-Cell {
-	padding: 0.3em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	border-bottom-color: lightgray;
+}
+
+.TravelNotes-TravelNotesPaneUI-Travel-Notes-Cell {
+	padding: 0.3em;
 	flex-shrink: 1;
 }
 
-.TravelNotes-UI-Travel-Notes-IconCell {
+.TravelNotes-TravelNotesPaneUI-Travel-Notes-IconCell {
 	width: 40px;
 	height: 40px;
 	min-height: 20px;
 	background-repeat: no-repeat;
 	flex-shrink: 0;
 }
+
+/*
+--- End of TravelNotesPaneUI.css ----------------------------------------------------------------------------------------------
+*/

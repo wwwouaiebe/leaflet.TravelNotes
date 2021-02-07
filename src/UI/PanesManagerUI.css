@@ -16,19 +16,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- PanesManagerUI.css file ----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the PanesManagerUI
+@file PanesManagerUI.css
+@desc CSS for the PanesManagerUI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
-
-/* --- Pane buttons --- */
 
 #TravelNotes-PanesManagerUI-PaneControlsDiv {
 	margin-left: 0.5em;
@@ -44,7 +42,7 @@ Changes:
 	flex-grow: 2;
 }
 
-.TravelNotes-DataPaneUI-PaneButton {
+.TravelNotes-PanesManagerUI-PaneButton {
 	border-style: solid;
 	border-top-width: 0.3em;
 	border-right-width: 0.1em;
@@ -55,7 +53,11 @@ Changes:
 	margin-left: 0.1em;
 }
 
-.TravelNotes-DataPaneUI-ActivePaneButton {
+.TravelNotes-PanesManagerUI-ActivePaneButton {
 	background-color: white;
 	border-bottom-color: white;
 }
+
+/*
+--- End of PanesManagerUI.css -------------------------------------------------------------------------------------------------
+*/

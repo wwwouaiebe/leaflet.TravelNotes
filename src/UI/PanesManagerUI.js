@@ -114,13 +114,13 @@ function ourShowPane ( paneId ) {
 	ourRemoveActivePane ( );
 	ourActivePaneId = paneId;
 	ourPanes.get ( ourActivePaneId ).add ( );
-	document.querySelectorAll ( '.TravelNotes-DataPaneUI-PaneButton' ).forEach (
+	document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
 		paneButton => {
 			if ( paneButton.paneId === ourActivePaneId ) {
-				paneButton.classList.add ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+				paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
 			}
 			else {
-				paneButton.classList.remove ( 'TravelNotes-DataPaneUI-ActivePaneButton' );
+				paneButton.classList.remove ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
 			}
 		}
 	);
@@ -214,7 +214,7 @@ class PanesManagerUI {
 					'div',
 					{
 						textContent : pane.getButtonText ( ),
-						className : 'TravelNotes-DataPaneUI-PaneButton',
+						className : 'TravelNotes-PanesManagerUI-PaneButton',
 						paneId : pane.getId ( )
 					},
 					headerDiv

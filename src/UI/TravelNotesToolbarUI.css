@@ -16,22 +16,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- TravelNotesToolbarUI.css file -------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the TravelNotesToolbarUI
+@file TravelNotesToolbarUI.css
+@desc CSS for the TravelNotesToolbarUI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
-
-/* --- geolocation striked button --- */
 
 .TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked {
 	text-decoration: line-through;
 	text-decoration-color: red;
 	text-decoration-thickness: 2px;
 }
+
+/*
+--- End of TravelNotesToolbarUI.css ----------------------------------------------------------------------------------------------
+*/

@@ -28,13 +28,13 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-UI-Route-Header-Name {
+.TravelNotes-ItineraryPaneUI-Route-Header-Name {
 	font-weight: bold;
 }
 
-.TravelNotes-UI-Route-Header-Distance > span,
-.TravelNotes-UI-Route-Header-Ascent > span,
-.TravelNotes-UI-Route-Header-Descent > span,
-.TravelNotes-UI-Route-Header-Duration > span {
+.TravelNotes-ItineraryPaneUI-Route-Header-Distance > span,
+.TravelNotes-ItineraryPaneUI-Route-Header-Ascent > span,
+.TravelNotes-ItineraryPaneUI-Route-Header-Descent > span,
+.TravelNotes-ItineraryPaneUI-Route-Header-Duration > span {
 	text-decoration: underline;
 }

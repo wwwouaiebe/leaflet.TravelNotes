@@ -16,58 +16,44 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- ItineraryPaneUI.css file ------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the ItineraryPaneUI
+@file ItineraryPaneUI.css
+@desc CSS for the ItineraryPaneUI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes {
-	border-spacing: 0.4em 0.2em;
-}
-
-.TravelNotes-UI-Route-Maneuvers-Row-Hidden,
-.TravelNotes-UI-Route-Notes-Row-Hidden {
-	visibility: hidden;
-	min-width: 0;
-	min-height: 0;
-	width: 0;
-	height: 0;
-	padding: 0;
-	margin: 0;
-	border-style: none;
-	border-width: 0;
-	transform: scale(0);
-}
-
-.TravelNotes-UI-Route-ManeuversAndNotes {
-	border-spacing: 0.4em 0.2em;
-}
-
-.TravelNotes-UI-Route-Maneuvers-Row,
-.TravelNotes-UI-Route-Notes-Row {
+.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row,
+.TravelNotes-ItineraryPaneUI-Route-Notes-Row {
 	display: flex;
 	flex-direction: row;
-}
-
-.TravelNotes-UI-Route-ManeuversAndNotes-Cell {
-	padding: 0.3em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
 	border-bottom-color: lightgray;
+}
+
+.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes-Cell {
+	padding: 0.3em;
 	flex-shrink: 1;
 }
 
-.TravelNotes-UI-Route-ManeuversAndNotes-IconCell {
+.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes-IconCell {
 	width: 40px;
 	height: 40px;
 	min-height: 20px;
 	background-repeat: no-repeat;
 	flex-shrink: 0;
 }
+
+.TravelNotes-ItineraryPaneUI-Route-Maneuver-Distance > span {
+	text-decoration: underline;
+}
+
+/*
+--- End of ItineraryPaneUI.css ------------------------------------------------------------------------------------------------
+*/

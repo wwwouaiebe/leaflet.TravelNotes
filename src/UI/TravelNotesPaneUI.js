@@ -207,7 +207,7 @@ function ourNewTravelNotesPaneUI ( ) {
 		*/
 
 		add ( ) {
-			myTravelNotesDiv = theHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-UI-' );
+			myTravelNotesDiv = theHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-TravelNotesPaneUI-' );
 			myTravelNotesDiv.addEventListener ( 'drop', myOnNoteDrop, false );
 			myTravelNotesDiv.addEventListener ( 'dragover', myOnNotesListDragOver, false );
 			myPaneDataDiv.appendChild ( myTravelNotesDiv );
