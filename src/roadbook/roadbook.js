@@ -56,10 +56,10 @@ function showTravelNotes ( ) {
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
 	for ( let notesCounter = ZERO; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
-			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
+			notes [ notesCounter ].classList.remove ( 'TravelNotes-Hidden' );
 		}
 		else {
-			notes [ notesCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
+			notes [ notesCounter ].classList.add ( 'TravelNotes-Hidden' );
 		}
 	}
 }
@@ -71,10 +71,10 @@ function showRouteNotes ( ) {
 	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
 	for ( let notesCounter = ZERO; notesCounter < notes.length; notesCounter ++ ) {
 		if ( show ) {
-			notes [ notesCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
+			notes [ notesCounter ].classList.remove ( 'TravelNotes-Hidden' );
 		}
 		else {
-			notes [ notesCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
+			notes [ notesCounter ].classList.add ( 'TravelNotes-Hidden' );
 		}
 	}
 }
@@ -86,10 +86,10 @@ function showRouteManeuvers ( ) {
 	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
 	for ( let maneuversCounter = ZERO; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
 		if ( show ) {
-			maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Roadbook-Hidden-Row' );
+			maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Hidden' );
 		}
 		else {
-			maneuvers [ maneuversCounter ].classList.add ( 'TravelNotes-Roadbook-Hidden-Row' );
+			maneuvers [ maneuversCounter ].classList.add ( 'TravelNotes-Hidden' );
 		}
 	}
 }
@@ -150,7 +150,7 @@ function setContentFromIndexedDb ( ) {
 
 	}
 	else {
-		document.getElementById ( 'TravelNotes-Menu' )
+		document.getElementById ( 'TravelNotes-Roadbook-Menu' )
 			.removeChild ( document.getElementById ( 'TravelNotes-ButtonContainer' ) );
 	}
 }
@@ -198,7 +198,7 @@ function addSaveButton ( ) {
 		try {
 			let fileName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' )
 				.textContent + '-Roadbook.html';
-			let tmpSaveButton = document.getElementById ( 'TravelNotes-Menu' ).removeChild (
+			let tmpSaveButton = document.getElementById ( 'TravelNotes-Roadbook-Menu' ).removeChild (
 				document.getElementById ( 'TravelNotes-SaveButton' )
 			);
 
@@ -217,7 +217,7 @@ function addSaveButton ( ) {
 			element.click ( );
 			document.body.removeChild ( element );
 			window.URL.revokeObjectURL ( mapFile );
-			document.getElementById ( 'TravelNotes-Menu' ).appendChild ( tmpSaveButton );
+			document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( tmpSaveButton );
 		}
 		catch ( err ) {
 			if ( err instanceof Error ) {
@@ -228,7 +228,7 @@ function addSaveButton ( ) {
 
 	let saveButton = document.createElement ( 'button' );
 	saveButton.id = 'TravelNotes-SaveButton';
-	document.getElementById ( 'TravelNotes-Menu' ).appendChild ( saveButton );
+	document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( saveButton );
 	saveButton.addEventListener ( 'click', saveFile );
 }
 

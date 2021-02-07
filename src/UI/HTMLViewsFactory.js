@@ -343,12 +343,10 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 	}
 
 	theHTMLSanitizer.sanitizeToHtmlElement (
-		theTranslator.getText (
-			'HTMLViewsFactory - Travel distance',
-			{
-				distance : theUtilities.formatDistance ( travelDistance )
-			}
-		),
+		'<span>' +
+			theTranslator.getText ( 'HTMLViewsFactory - Travel distance' ) +
+			'</span>\u00A0:\u00A0' +
+			theUtilities.formatDistance ( travelDistance ),
 		theHTMLElementsFactory.create (
 			'div',
 			{
@@ -360,12 +358,11 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 
 	if ( ZERO !== travelAscent ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText (
-				'HTMLViewsFactory - Travel ascent',
-				{
-					ascent : travelAscent.toFixed ( ZERO )
-				}
-			),
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Travel ascent' ) +
+				'</span>\u00A0:\u00A0' +
+				String ( travelAscent.toFixed ( ZERO ) ) +
+				' m.',
 			theHTMLElementsFactory.create (
 				'div',
 				{
@@ -378,12 +375,11 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 
 	if ( ZERO !== travelDescent ) {
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			theTranslator.getText (
-				'HTMLViewsFactory - Travel descent',
-				{
-					descent : travelDescent.toFixed ( ZERO )
-				}
-			),
+			'<span>' +
+				theTranslator.getText ( 'HTMLViewsFactory - Travel descent' ) +
+				'</span>\u00A0:\u00A0' +
+				String ( travelDescent.toFixed ( ZERO ) ) +
+				' m.',
 			theHTMLElementsFactory.create (
 				'div',
 				{

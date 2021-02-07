@@ -201,15 +201,15 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel ascent",
-		"msgstr" : "Travel ascent\u00A0:\u00A0{ascent} m."
+		"msgstr" : "Travel ascent"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel descent",
-		"msgstr" : "Travel descent\u00A0:\u00A0{descent} m."
+		"msgstr" : "Travel descent"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel distance",
-		"msgstr" : "Travel distance\u00A0:\u00A0{distance}"
+		"msgstr" : "Travel distance"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",

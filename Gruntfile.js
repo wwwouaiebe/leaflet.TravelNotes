@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 		'src/css/Map.css', 
 		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesMap.css', 'src/css/NotesUI.css', 
 		'src/css/Print.css',
-		'src/css/RoutesMap.css' ,'src/css/RoutesUI.css', 'src/css/RoutesSvgProfileMap.css',
+		'src/css/RoutesMap.css' ,'src/css/RoutesUI.css', 'src/css/RoutesSvgProfile.css',
 		'src/css/WayPoints.css',
 		'src/css/Background.css', 'src/css/WaitAnimation.css', 'src/contextMenus/ContextMenu.css',
 		'src/dialogs/AboutDialog.css', 'src/dialogs/APIKeysDialog.css', 'src/dialogs/BaseDialog.css', 'src/dialogs/ColorDialog.css', 'src/dialogs/NoteDialog.css', 
@@ -45,8 +45,10 @@ module.exports = function(grunt) {
 		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css'
 	];
 	let travelNotesRoadbookCss = [ 
-		'src/css/Notes.css', 'src/css/NotesIcons.css',
-		'src/css/RoutesSvgProfileMap.css',
+		'src/css/TravelRoadbook.css',
+		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesRoadbook.css',
+		'src/css/RoutesRoadbook.css',
+		'src/css/RoutesSvgProfile.css',
 		'src/roadbook/Roadbook.css',
 		'src/css/Hidden.css'
 	];

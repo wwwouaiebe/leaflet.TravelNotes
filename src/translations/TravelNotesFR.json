@@ -201,15 +201,15 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel ascent",
-		"msgstr" : "Montées du voyage\u00a0:\u00a0{ascent} m."
+		"msgstr" : "Montées du voyage"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel descent",
-		"msgstr" : "Descentes du voyage\u00a0:\u00a0{descent} m."
+		"msgstr" : "Descentes du voyage"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel distance",
-		"msgstr" : "Longueur du voyage\u00a0:\u00a0{distance}"
+		"msgstr" : "Longueur du voyage"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",

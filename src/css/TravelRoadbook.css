@@ -5,10 +5,12 @@ This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -17,31 +19,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Hidden.css
-@desc CSS for hidden elements
+@file TravelRoadbook.css
+@desc CSS for the Travel on the Roadbook
 Changes:
 	- v1.0.0:
 		- created
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-.TravelNotes-Hidden > *,
-.TravelNotes-Hidden > * > *,
-.TravelNotes-Hidden > * > * > *,
-.TravelNotes-Hidden {
-	width: 0;
-	height: 0;
-	margin: 0;
-	padding: 0;
-	top: 0;
-	left: 0;
-	border-width: 0;
-	border-style: none;
-	animation: none;
-	visibility: hidden;
-	transform: scale(0);
+
+.TravelNotes-Roadbook-Travel {
+	margin-top: 0.5em;
+	margin-left: 1em;
+	margin-right: 1em;
+	font-family: sans-serif;
+	line-height: 1.5em;
 }
 
+.TravelNotes-Roadbook-Travel-Header {
+	border-style: solid;
+	border-width: 0.1em;
+	padding: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-Name {
+	font-size: 156%;
+	font-weight: bold;
+	margin-bottom: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-TravelDistance {
+	margin-top: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-TravelDistance > span,
+.TravelNotes-Roadbook-Travel-Header-TravelAscent > span,
+.TravelNotes-Roadbook-Travel-Header-TravelDescent > span {
+	text-decoration: underline;
+}
+
+.TravelNotes-Roadbook-TravelFooter {
+	border-top-style: solid;
+	border-top-width: 0.1em;
+	padding-top: 2em;
+	padding-bottom: 2em;
+}
+
+
 /*
---- End of Hidden.css ---------------------------------------------------------------------------------------------------------
+--- End of TravelRoadbook.css -------------------------------------------------------------------------------------------------
 */

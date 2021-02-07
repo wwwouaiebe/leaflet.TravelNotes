@@ -30,33 +30,9 @@ Changes:
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-#TravelNotes-GoTop > a {
+#TravelNotes-Roadbook-GoTop > a {
 	color: black;
 	text-decoration: none;
-}
-
-.TravelNotes-Roadbook-Travel {
-	margin-top: 0.5em;
-	margin-left: 1em;
-	margin-right: 1em;
-	font-family: sans-serif;
-	line-height: 1.5em;
-}
-
-.TravelNotes-Roadbook-Travel-Header {
-	border-style: solid;
-	border-width: 0.1em;
-	padding: 1em;
-}
-
-.TravelNotes-Roadbook-Travel-Header-Name {
-	font-size: 156%;
-	font-weight: bold;
-	margin-bottom: 1em;
-}
-
-.TravelNotes-Roadbook-Travel-Header-TravelDistance {
-	margin-top: 1em;
 }
 
 .TravelNotes-Roadbook-Travel-Notes,
@@ -91,68 +67,7 @@ Changes:
 	flex-shrink: 2;
 }
 
-.TravelNotes-Roadbook-Hidden-Row,
-.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Travel-Notes-IconCell,
-.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell,
-.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Travel-Notes-Cell,
-.TravelNotes-Roadbook-Hidden-Row > .TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell {
-	visibility: hidden;
-	min-width: 0;
-	min-height: 0;
-	width: 0;
-	height: 0;
-	padding: 0;
-	margin: 0;
-	border-bottom-style: none;
-	border-bottom-width: 0;
-}
-
-.TravelNotes-Roadbook-Route-Header {
-	border-style: solid;
-	border-width: 0.1em;
-	padding: 1em;
-}
-
-.TravelNotes-Roadbook-Route-Header-Name {
-	font-size: 125%;
-	font-weight: bold;
-	margin-bottom: 1em;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-Notes popup on the map
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-.TravelNotes-Roadbook-NoteHtml-TooltipContent {
-	font-weight: bold;
-}
-
-.TravelNotes-Roadbook-NoteHtml-LatLng > span,
-.TravelNotes-Roadbook-NoteHtml-Address > span:first-child,
-.TravelNotes-Roadbook-NoteHtml-Phone > span:first-child,
-.TravelNotes-Roadbook-NoteHtml-Url > span:first-child,
-.TravelNotes-Roadbook-NoteHtml-Distance > span:first-child,
-.TravelNotes-Roadbook-NoteHtml-NextDistance > span:first-child,
-.TravelNotes-Roadbook-NoteHtml-Address-City {
-	text-decoration: underline;
-}
-
-.TravelNotes-Roadbook-RouteFooter {
-	padding-bottom: 2em;
-}
-
-.TravelNotes-Roadbook-TravelFooter {
-	border-top-style: solid;
-	border-top-width: 0.1em;
-	padding-top: 2em;
-	padding-bottom: 2em;
-}
-
-#TravelNotes-Menu {
+#TravelNotes-Roadbook-Menu {
 	position: fixed;
 	top: 1em;
 	left: 1em;
@@ -164,14 +79,14 @@ Notes popup on the map
 		padding-top: 3.5em;
 	}
 
-	#TravelNotes-Menu {
+	#TravelNotes-Roadbook-Menu {
 		padding: 0.5em;
 		border-style: solid;
 		border-width: 1px;
 		margin-left: 0.5em;
 	}
 
-	#TravelNotes-Menu > div {
+	#TravelNotes-Roadbook-Menu > div {
 		display: inline-block;
 	}
 }
@@ -185,7 +100,7 @@ Notes popup on the map
 }
 
 @media print {
-	#TravelNotes-Menu {
+	#TravelNotes-Roadbook-Menu {
 		visibility: hidden;
 		width: 0;
 		height: 0;
