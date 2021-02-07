@@ -17,55 +17,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Print.css
-@desc CSS for map printing and #TravelNotes-PrintToolbar
+@file Hidden.css
+@desc CSS for hidden elements
 Changes:
-	- v2.2.0:
-		- created from Map.css
+	- v1.0.0:
+		- created
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-
-.TravelNotes-routeViewDiv {
-	margin: 5mm;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.TravelNotes-routeViewDiv.TravelNotes-PrintPageBreak {
-	page-break-inside: avoid;
-}
-
-#TravelNotes-PrintToolbar {
-	position: fixed;
+.TravelNotes-Hidden > *,
+.TravelNotes-Hidden > * > *,
+.TravelNotes-Hidden > * > * > *,
+.TravelNotes-Hidden {
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
 	top: 0;
-	right: 0;
-	margin: 1em;
-	padding: 0.5em;
-	z-index: 1000;
-	border-style: solid;
-	border-width: 0.1em;
-	background-color: white;
-}
-
-@media print {
-	.TravelNotes-routeViewDiv {
-		margin: 0;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	#TravelNotes-PrintToolbar {
-		width: 0;
-		height: 0;
-		margin: 0;
-		padding: 0;
-		top: 0;
-		left: 0;
-		visibility: hidden;
-	}
+	left: 0;
+	border-width: 0;
+	animation: none;
+	visibility: hidden;
+	transform: scale(0);
 }
 
 /*
---- End of Print.css ----------------------------------------------------------------------------------------------------------
+--- End of Hidden.css ---------------------------------------------------------------------------------------------------------
 */

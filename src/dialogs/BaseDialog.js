@@ -535,7 +535,7 @@ function ourNewBaseDialog ( ) {
 		myErrorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-BaseDialog-Hidden'
+				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-Hidden'
 			},
 			myDialogDiv
 		);
@@ -562,12 +562,12 @@ function ourNewBaseDialog ( ) {
 		myWaitAnimationBulletDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-WaitAnimationBullet TravelNotes-BaseDialog-Hidden'
+				className : 'TravelNotes-WaitAnimationBullet TravelNotes-Hidden'
 			},
 			myWaitAnimationDiv = theHTMLElementsFactory.create (
 				'div',
 				{
-					className : 'TravelNotes-WaitAnimation TravelNotes-BaseDialog-Hidden'
+					className : 'TravelNotes-WaitAnimation TravelNotes-Hidden'
 				},
 				myWaitDiv
 			)
@@ -758,7 +758,7 @@ function ourNewBaseDialog ( ) {
 		showError ( errorText ) {
 			myErrorDiv.textContent = '';
 			theHTMLSanitizer.sanitizeToHtmlElement ( errorText, myErrorDiv );
-			myErrorDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+			myErrorDiv.classList.remove ( 'TravelNotes-Hidden' );
 		}
 
 		/**
@@ -767,7 +767,7 @@ function ourNewBaseDialog ( ) {
 
 		hideError ( ) {
 			myErrorDiv.textContent = '';
-			myErrorDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+			myErrorDiv.classList.add ( 'TravelNotes-Hidden' );
 		}
 
 		/**
@@ -775,9 +775,9 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		showWait ( ) {
-			myWaitAnimationBulletDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
-			myWaitAnimationDiv.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
-			myOkButton.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
+			myWaitAnimationBulletDiv.classList.remove ( 'TravelNotes-Hidden' );
+			myWaitAnimationDiv.classList.remove ( 'TravelNotes-Hidden' );
+			myOkButton.classList.add ( 'TravelNotes-Hidden' );
 		}
 
 		/**
@@ -785,9 +785,9 @@ function ourNewBaseDialog ( ) {
 		*/
 
 		hideWait ( ) {
-			myWaitAnimationBulletDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
-			myWaitAnimationDiv.classList.add ( 'TravelNotes-BaseDialog-Hidden' );
-			myOkButton.classList.remove ( 'TravelNotes-BaseDialog-Hidden' );
+			myWaitAnimationBulletDiv.classList.add ( 'TravelNotes-Hidden' );
+			myWaitAnimationDiv.classList.add ( 'TravelNotes-Hidden' );
+			myOkButton.classList.remove ( 'TravelNotes-Hidden' );
 		}
 
 		/**

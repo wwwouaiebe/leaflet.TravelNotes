@@ -125,7 +125,7 @@ function ourNewPrintFactory ( ) {
 
 		let childrens = myBody.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
-			childrens.item ( counter ).classList.remove ( 'TravelNotes-PrintViews-Hidden' );
+			childrens.item ( counter ).classList.remove ( 'TravelNotes-Hidden' );
 		}
 		theTravelNotesData.map.invalidateSize ( false );
 		window.removeEventListener ( 'afterprint', myOnAfterPrint, true );
@@ -692,7 +692,7 @@ function ourNewPrintFactory ( ) {
 
 		let childrens = myBody.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
-			childrens.item ( counter ).classList.add ( 'TravelNotes-PrintViews-Hidden' );
+			childrens.item ( counter ).classList.add ( 'TravelNotes-Hidden' );
 		}
 		document.title =
 			'' === theTravelNotesData.travel.name

@@ -456,28 +456,28 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myToggleContents ( ) {
 		if ( theConfig.noteDialog.toggleIconDimension ) {
-			myIconDimensionsDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myIconDimensionsDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.toggleIconTextArea ) {
-			myIconContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myIconContentDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.togglePopupContent ) {
-			myPopupContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myPopupContentDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.toggleTooltip ) {
-			myTooltipContentDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myTooltipContentDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.toggleAddress ) {
-			myAddressHeaderDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
-			myAddressInputDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myAddressHeaderDiv.classList.toggle ( 'TravelNotes-Hidden' );
+			myAddressInputDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.toggleLink ) {
-			myLinkHeaderDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
-			myLinkInputDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myLinkHeaderDiv.classList.toggle ( 'TravelNotes-Hidden' );
+			myLinkInputDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.togglePhone ) {
-			myPhoneHeaderDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
-			myPhoneInputDiv.classList.toggle ( 'TravelNotes-NoteDialog-HiddenItem' );
+			myPhoneHeaderDiv.classList.toggle ( 'TravelNotes-Hidden' );
+			myPhoneInputDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
 	}
 

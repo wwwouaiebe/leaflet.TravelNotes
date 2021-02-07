@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Notes.css
-@desc CSS for Notes
+@file NotesMap.css
+@desc CSS for Notes on the map
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
@@ -33,100 +33,62 @@ Changes:
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-.TravelNotes-MapNote ( The 73 predefined notes have the .TravelNotes-MapNote class )
+Notes popup on the map
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-MapNote {
-	width: 100%;
-	height: 100%;
-	background-repeat: no-repeat;
-	display: inline-block;
-	vertical-align: top;
+.TravelNotes-Map-NoteHtml-TooltipContent {
+	font-weight: bold;
+}
+
+.TravelNotes-Map-NoteHtml-LatLng > span,
+.TravelNotes-Map-NoteHtml-Address > span:first-child,
+.TravelNotes-Map-NoteHtml-Phone > span:first-child,
+.TravelNotes-Map-NoteHtml-Url > span:first-child,
+.TravelNotes-Map-NoteHtml-Distance > span:first-child,
+.TravelNotes-Map-NoteHtml-NextDistance > span:first-child,
+.TravelNotes-Map-NoteHtml-Address-City {
+	text-decoration: underline;
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-.TravelNotes-SvgIcon ( All svg icons have the .TravelNotes-SvgIcon class )
+.TravelNotes-Map-AllNotes ( the .TravelNotes-Map-AllNotes class is added to the L.divIcon when created )
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-SvgIcon {
-	border-style: solid;
-	border-color: black;
-	border-width: 0.1em;
+.TravelNotes-Map-AllNotes {
+	background: transparent;
+	height: auto;
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-classes for color span created with buttons in the NoteDialog
+.TravelNotes-Map-Note-Background ( This class is added to the 73 predefined notes and svgIcons when a background is asked )
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-Note-WhiteRed {
-	color: white;
-	background-color: red;
+.TravelNotes-Map-Note-Background {
+	background-color: white;
 }
 
-.TravelNotes-Note-WhiteGreen {
-	color: white;
-	background-color: green;
-}
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-.TravelNotes-Note-WhiteBlue {
-	color: white;
-	background-color: blue;
-}
+.TravelNotes-Map-Note-Bullet ( This class is added to the bullet of the note )
 
-.TravelNotes-Note-WhiteBrown {
-	color: white;
-	background-color: brown;
-}
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-.TravelNotes-Note-WhiteBlack {
-	color: white;
+.TravelNotes-Map-Note-Bullet {
 	background-color: black;
 }
 
-.TravelNotes-Note-BlackWhite {
-	color: black;
-	background-color: white;
-	border: solid 0.1em;
-}
-
-.TravelNotes-Note-BlackOrange {
-	color: black;
-	background-color: orange;
-}
-
-svg.TravelNotes-Note-Knooppunt {
-	background-color: white;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-classes for old knooppunt notes maintained for backward compatibility
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-.TravelNotes-Note-Knooppunt > text {
-	fill: green;
-	font: bold 120px sans-serif;
-}
-
-.TravelNotes-Note-Knooppunt > polyline {
-	fill: none;
-	stroke: green;
-	stroke-width: 10;
-}
-
 /*
---- End of Notes.css ----------------------------------------------------------------------------------------------------------
+--- End of NotesMap.css -------------------------------------------------------------------------------------------------------
 */

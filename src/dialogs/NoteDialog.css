@@ -116,16 +116,6 @@ Changes:
 	background-color: white;
 }
 
-.TravelNotes-NoteDialog-HiddenItem > *,
-.TravelNotes-NoteDialog-HiddenItem > * > *,
-.TravelNotes-NoteDialog-HiddenItem > * > * > *,
-.TravelNotes-NoteDialog-HiddenItem {
-	transform: scale(0);
-	margin: 0;
-	padding: 0;
-	height: 0;
-}
-
 /*
 --- End of NoteDialog.css -----------------------------------------------------------------------------------------------------
 */

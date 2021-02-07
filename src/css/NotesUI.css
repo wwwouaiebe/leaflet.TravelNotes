@@ -19,32 +19,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Background.css
-@desc CSS for  the frozen background for dialogs and WaitUI
+@file NotesUI.css
+@desc CSS for Notes in the UI
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-Background {
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
-	max-width: 100vw;
-	max-height: 100vh;
-	top: 0;
-	left: 0;
-	z-index: 1200;
-	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0.4);
-}
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-.TravelNotes-Background:hover {
-	cursor: move;
+Notes in the UI
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-UI-NoteHtml-TooltipContent {
+	font-weight: bold;
+}
+/* stylelint-disable no-descending-specificity */
+.TravelNotes-UI-NoteHtml-LatLng > span,
+/* stylelint-enable no-descending-specificity */
+.TravelNotes-UI-NoteHtml-Address > span:first-child,
+.TravelNotes-UI-NoteHtml-Phone > span:first-child,
+.TravelNotes-UI-NoteHtml-Url > span:first-child,
+.TravelNotes-UI-NoteHtml-Distance > span:first-child,
+.TravelNotes-UI-NoteHtml-NextDistance > span:first-child,
+.TravelNotes-UI-NoteHtml-Address-City {
+	text-decoration: underline;
 }
 
 /*
---- End of Background.css -----------------------------------------------------------------------------------------------------
+--- End of NotesUI.css --------------------------------------------------------------------------------------------------------
 */

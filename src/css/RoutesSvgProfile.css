@@ -5,10 +5,12 @@ This  program is free software;
 you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation;
 either version 3 of the License, or any later version.
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -17,55 +19,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Print.css
-@desc CSS for map printing and #TravelNotes-PrintToolbar
+@file Map.css
+@desc CSS for Route svg profile
 Changes:
-	- v2.2.0:
-		- created from Map.css
+	- v1.0.0:
+		- created
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-routeViewDiv {
-	margin: 5mm;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.TravelNotes-routeViewDiv.TravelNotes-PrintPageBreak {
-	page-break-inside: avoid;
-}
-
-#TravelNotes-PrintToolbar {
-	position: fixed;
-	top: 0;
-	right: 0;
-	margin: 1em;
-	padding: 0.5em;
-	z-index: 1000;
-	border-style: solid;
-	border-width: 0.1em;
+.TravelNotes-Route-SvgProfile {
 	background-color: white;
+	margin: 1em;
 }
 
-@media print {
-	.TravelNotes-routeViewDiv {
-		margin: 0;
-		margin-left: auto;
-		margin-right: auto;
-	}
+.TravelNotes-Route-SvgProfile-profilePolyline {
+	fill: none;
+	stroke: red;
+	stroke-width: 3;
+}
 
-	#TravelNotes-PrintToolbar {
-		width: 0;
-		height: 0;
-		margin: 0;
-		padding: 0;
-		top: 0;
-		left: 0;
-		visibility: hidden;
-	}
+.TravelNotes-Route-SvgProfile-markerPolyline,
+.TravelNotes-Route-SvgProfile-framePolyline {
+	fill: none;
+	stroke: black;
+	stroke-width: 1;
+}
+
+.TravelNotes-Route-SvgProfile-elevText {
+	fill: black;
+	font: bold 30px sans-serif;
+}
+
+.TravelNotes-Route-SvgProfile-elevLegend,
+.TravelNotes-Route-SvgProfile-distLegend {
+	fill: black;
+	font: bold 24px sans-serif;
 }
 
 /*
---- End of Print.css ----------------------------------------------------------------------------------------------------------
+--- End of Routes.css ---------------------------------------------------------------------------------------------------------
 */

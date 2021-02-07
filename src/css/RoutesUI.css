@@ -19,25 +19,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Popup.css
-@desc CSS for Routes
+@file RouteUI.css
+@desc CSS for Routes on the UI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-
-.TravelNotes-Map-Route-Header-Name {
-	font-weight: bold;
-}
-
-.TravelNotes-Map-Route-Header-Distance > span,
-.TravelNotes-Map-Route-Header-Ascent > span,
-.TravelNotes-Map-Route-Header-Descent > span,
-.TravelNotes-Map-Route-Header-Duration > span {
-	text-decoration: underline;
-}
 
 .TravelNotes-UI-Route-Header-Name {
 	font-weight: bold;
@@ -49,36 +38,3 @@ Changes:
 .TravelNotes-UI-Route-Header-Duration > span {
 	text-decoration: underline;
 }
-
-.TravelNotes-Route-SvgProfile {
-	background-color: white;
-	margin: 1em;
-}
-
-.TravelNotes-Route-SvgProfile-profilePolyline {
-	fill: none;
-	stroke: red;
-	stroke-width: 3;
-}
-
-.TravelNotes-Route-SvgProfile-markerPolyline,
-.TravelNotes-Route-SvgProfile-framePolyline {
-	fill: none;
-	stroke: black;
-	stroke-width: 1;
-}
-
-.TravelNotes-Route-SvgProfile-elevText {
-	fill: black;
-	font: bold 30px sans-serif;
-}
-
-.TravelNotes-Route-SvgProfile-elevLegend,
-.TravelNotes-Route-SvgProfile-distLegend {
-	fill: black;
-	font: bold 24px sans-serif;
-}
-
-/*
---- End of Routes.css ---------------------------------------------------------------------------------------------------------
-*/

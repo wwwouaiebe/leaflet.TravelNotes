@@ -23,6 +23,33 @@ module.exports = function(grunt) {
 		'\n * \n * @licend  The above is the entire license notice' +
 		'\n * for the JavaScript code in this page.' +
 		'\n * \n */\n\n';
+	let travelNotesCss = [
+		'src/css/Map.css', 
+		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesMap.css', 'src/css/NotesUI.css', 
+		'src/css/Print.css',
+		'src/css/RoutesMap.css' ,'src/css/RoutesUI.css', 'src/css/RoutesSvgProfileMap.css',
+		'src/css/WayPoints.css',
+		'src/css/Background.css', 'src/css/WaitAnimation.css', 'src/contextMenus/ContextMenu.css',
+		'src/dialogs/AboutDialog.css', 'src/dialogs/APIKeysDialog.css', 'src/dialogs/BaseDialog.css', 'src/dialogs/ColorDialog.css', 'src/dialogs/NoteDialog.css', 
+		'src/dialogs/PrintRouteMapDialog.css', 'src/dialogs/RoutePropertiesDialog.css', 'src/dialogs/TwoButtonsDialog.css', 'src/dialogs/WayPointPropertiesDialog.css',
+		'src/dialogs/FloatWindow.css',
+		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css',
+		'src/UI/ItineraryPaneUI.css', 'src/UI/LayersToolbarUI.css', 'src/UI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
+		'src/UI/ProvidersToolbarUI.css', 'src/UI/TravelNotesPaneUI.css', 'src/UI/TravelNotesToolbarUI.css', 'src/UI/TravelUI.css', 'src/UI/UI.css', 'src/UI/WaitUI.css',
+		'src/css/Hidden.css' // must always be the last css
+	];
+	let travelNotesViewerCss = [ 
+		'src/css/Map.css', 
+		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesMap.css', 
+		'src/css/RoutesMap.css',
+		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css'
+	];
+	let travelNotesRoadbookCss = [ 
+		'src/css/Notes.css', 'src/css/NotesIcons.css',
+		'src/css/RoutesSvgProfileMap.css',
+		'src/roadbook/Roadbook.css',
+		'src/css/Hidden.css'
+	];
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		eslint: {
@@ -56,7 +83,7 @@ module.exports = function(grunt) {
 				 fix: true
 			 },
 			src: ['src/**/*.css']
-		},		
+		},	
 		cssmin: {
 			options: {
 				mergeIntoShorthands: false,
@@ -64,19 +91,19 @@ module.exports = function(grunt) {
 			},
 			release: {
 				files: {
-					'dist/TravelNotes.min.css': [ 'src/**/*.css'],
-					'dist/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Routes.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
-					'dist/TravelNotesRoadbook.min.css': [ 'src/css/Routes.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ],
-					'gh-page/TravelNotes.min.css': [ 'src/**/*.css'],
-					'gh-page/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Routes.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
-					'gh-page/TravelNotesRoadbook.min.css': [ 'src/css/Routes.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
+					'dist/TravelNotes.min.css': travelNotesCss,
+					'dist/viewer/TravelNotesViewer.min.css': travelNotesViewerCss,
+					'dist/TravelNotesRoadbook.min.css': travelNotesRoadbookCss,
+					'gh-page/TravelNotes.min.css': travelNotesCss,
+					'gh-page/viewer/TravelNotesViewer.min.css': travelNotesViewerCss,
+					'gh-page/TravelNotesRoadbook.min.css': travelNotesRoadbookCss
 				}
 			},
 			debug: {
 				files: {
-					'debug/TravelNotes.min.css': [ 'src/**/*.css'],
-					'debug/viewer/TravelNotesViewer.min.css': [ 'src/css/Map.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/Routes.css', 'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css' ],
-					'debug/TravelNotesRoadbook.min.css': [ 'src/css/Routes.css', 'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/roadbook/Roadbook.css' ]
+					'debug/TravelNotes.min.css': travelNotesCss,
+					'debug/viewer/TravelNotesViewer.min.css': travelNotesViewerCss,
+					'debug/TravelNotesRoadbook.min.css': travelNotesRoadbookCss
 				}
 			}
 		},
