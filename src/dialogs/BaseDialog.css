@@ -16,18 +16,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- BaseDialog.css file -----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the BaseDialog
+@file BaseDialog.css
+@desc CSS for the BaseDialog
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 	- v2.2.0:
 		- Issue #155 : Enable pan and zoom on the map when a dialog is displayed
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 .TravelNotes-BaseDialog-Container {
@@ -115,9 +115,15 @@ Changes:
 .TravelNotes-BaseDialog-Hidden {
 	width: 0;
 	height: 0;
-	padding: 0;
 	margin: 0;
-	visibility: hidden;
+	padding: 0;
+	top: 0;
+	left: 0;
 	border-width: 0;
 	animation: none;
+	visibility: hidden;
 }
+
+/*
+--- End of BaseDialog.css -----------------------------------------------------------------------------------------------------
+*/

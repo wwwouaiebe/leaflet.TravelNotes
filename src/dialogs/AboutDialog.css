@@ -16,19 +16,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- AboutDialog.css file ----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the AboutDialog
+@file AboutDialog.css
+@desc CSS for the AboutDialog
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 #TravelNotes-AboutDialog-AboutDiv {
 	width: 30em;
 	color: gray;
 }
+
+/*
+--- End of AboutDialog.css ----------------------------------------------------------------------------------------------------
+*/

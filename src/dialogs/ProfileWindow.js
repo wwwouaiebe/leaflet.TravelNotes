@@ -206,7 +206,7 @@ function ourNewProfileWindow ( ) {
 				'points',
 				String ( markerX ) + ',' + SVG_PROFILE.margin + ' ' + markerX + ',' + markerY
 			);
-			myMarker.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-markerPolyline' );
+			myMarker.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-markerPolyline' );
 			mySvg.appendChild ( myMarker );
 
 			// texts
@@ -223,7 +223,7 @@ function ourNewProfileWindow ( ) {
 			myDistanceText.appendChild (
 				document.createTextNode ( theUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
 			);
-			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
+			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
 			myDistanceText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
 			myDistanceText.setAttributeNS ( null, 'y', SVG_PROFILE.margin + SVG_PROFILE.yDeltaText );
 			myDistanceText.setAttributeNS ( null, 'text-anchor', textAnchor );
@@ -236,7 +236,7 @@ function ourNewProfileWindow ( ) {
 					'Alt. ' + latLngElevOnRoute.elev.toFixed ( ZERO ) + ' m.'
 				)
 			);
-			myElevText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
+			myElevText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
 			myElevText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
 			myElevText.setAttributeNS (
 				null,
@@ -253,7 +253,7 @@ function ourNewProfileWindow ( ) {
 					'Pente ' + latLngElevOnRoute.ascent.toFixed ( ZERO ) + ' % '
 				)
 			);
-			myAscentText.setAttributeNS ( null, 'class', 'TravelNotes-SvgProfile-elevText' );
+			myAscentText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
 			myAscentText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
 			myAscentText.setAttributeNS (
 				null,

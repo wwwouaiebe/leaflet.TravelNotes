@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- TwoButtonsDialog.css file -----------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the TwoButtonsDialog
+@file TwoButtonsDialog.css
+@desc CSS for the TwoButtonsDialog
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 .TravelNotes-TwoButtonsDialog-FooterDiv {
@@ -41,3 +41,7 @@ Changes:
 	min-width: 2em;
 	width: auto;
 }
+
+/*
+--- End of TwoButtonsDialog.css -----------------------------------------------------------------------------------------------
+*/

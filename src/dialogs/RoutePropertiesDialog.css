@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- RoutePropertiesDialog.css file ------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the RoutePropertiesDialog
+@file RoutePropertiesDialog.css
+@desc CSS for the RoutePropertiesDialog
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 #TravelNotes-RoutePropertiesDialog-MainDataDiv {
@@ -65,3 +65,7 @@ Changes:
 #TravelNotes-RoutePropertiesDialog-ColorHeaderDiv {
 	margin: 0.5em;
 }
+
+/*
+--- End of RoutePropertiesDialog.css ------------------------------------------------------------------------------------------
+*/

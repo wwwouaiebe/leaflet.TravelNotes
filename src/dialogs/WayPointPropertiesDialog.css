@@ -16,17 +16,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- WayPointPropertiesDialog.css file ---------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the WayPointPropertiesDialog
+@file WayPointPropertiesDialog.css
+@desc CSS for the WayPointPropertiesDialog
 Changes:
 	- v1.12.0:
-		- Created
+		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
+
 #TravelNotes-WayPointPropertiesDialog-DataDiv {
 	width: 30em;
 }
@@ -43,3 +44,7 @@ Changes:
 .TravelNotes-WayPointPropertiesDialog-Input {
 	width: calc(100% - 0.5em);
 }
+
+/*
+--- End of WayPointPropertiesDialog.css ---------------------------------------------------------------------------------------
+*/

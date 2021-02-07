@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- FloatWindow.css file ----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the FloatWindow
+@file FloatWindow.css
+@desc CSS for the FloatWindow
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 .TravelNotes-FloatWindow-Container {
@@ -62,3 +62,7 @@ Changes:
 .TravelNotes-FloatWindow-CancelButton:hover {
 	color: red;
 }
+
+/*
+--- End of FloatWindow.css ----------------------------------------------------------------------------------------------------
+*/

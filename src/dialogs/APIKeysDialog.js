@@ -718,7 +718,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 		myToolbarDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-APIKeysDialog-ToolbarDiv'
+				id : 'TravelNotes-APIKeysDialog-ToolbarDiv'
 			},
 			myAPIKeysDialog.content
 		);

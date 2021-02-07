@@ -16,11 +16,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- NoteDialog.css file -----------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the NoteDialog
+@file NoteDialog.css
+@desc CSS for the NoteDialog
 Changes:
 	- v1.12.0:
 		- Issue #120 : Review the UserInterface
@@ -28,7 +28,7 @@ Changes:
 		- Issue #138 : Protect the app - control html entries done by user.
 		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 .TravelNotes-BaseDialog-Container {
@@ -126,6 +126,6 @@ Changes:
 	height: 0;
 }
 
-#TravelNotes-NoteDialog-TelSmsButton {
-	width: 4em;
-}
+/*
+--- End of NoteDialog.css -----------------------------------------------------------------------------------------------------
+*/
