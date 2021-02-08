@@ -16,16 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-/*
---- UI.css file -------------------------------------------------------------------------------------------------------
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-This file contains:
-	- the css for the UI
+@file UI.css
+@desc CSS for the UI
 Changes:
-	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+	- v1.0.0:
+		- created
 
------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
 */
 
 /* --- Main settings --- */
@@ -38,19 +38,12 @@ Changes:
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-}
-
-/* --- Main settings - overload for maximized user interface --- */
-
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Maximize {
 	max-width: 30em;
 	width: 30em;
 	background-color: white;
 }
 
-/* --- Main settings - overload for minimized user interface --- */
-
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize {
+#TravelNotes-UI-MainDiv.TravelNotes-UI-Minimized {
 	height: 3em;
 	background-color: transparent;
 	width: 8em;
@@ -61,46 +54,21 @@ Changes:
 /* --- title --- */
 
 #TravelNotes-UI-MainDiv-Title {
+	position: absolute;
+	top: 0;
+	right: 0;
 	text-align: center;
 	font-size: 1em;
 	font-weight: bold;
 	color: white;
 	background-color: black;
-	padding: 0.5em;
-	margin: 0;
-}
-
-/* --- title - overload for maximized user interface --- */
-
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Maximize > div#TravelNotes-UI-MainDiv-Title {
-	margin: 0;
-	padding: 0;
-	transform: scale(0);
-	height: 0;
-}
-
-/* --- title - overload for minimized user interface --- */
-
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div#TravelNotes-UI-MainDiv-Title {
 	transform-origin: bottom right;
-	transform: rotateZ(-90deg) translateX(3em) scale(1);
+	transform: rotateZ(-90deg) translateX(4em);
+	padding: 0.5em;
 	padding-top: 1em;
-	padding-bottom: 0.5em;
 	margin: 0;
-	height: 3em;
+	height: 2em;
 	width: 8em;
-}
-
-/* --- all div - overload for minimized user interface --- */
-
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div,
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div > div,
-#TravelNotes-UI-MainDiv.TravelNotes-UI-MainDiv-Minimize > div > div > div {
-	margin: 0;
-	padding: 0;
-	transform: scale(0);
-	width: 0;
-	height: 0;
 }
 
 /* --- Cursor --- */
@@ -150,3 +118,8 @@ Changes:
 .TravelNotes-UI-Button > a:visited {
 	color: black;
 }
+
+/*
+--- End of UI.css -------------------------------------------------------------------------------------------------------------
+*/
+

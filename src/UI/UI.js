@@ -70,6 +70,7 @@ import { PANE_ID } from '../util/Constants.js';
 let ourMainDiv = null;
 let ourUiIsPinned = false;
 let ourTimerId = null;
+let ourTitleDiv = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -195,8 +196,13 @@ function ourOnMouseEnterUI ( ) {
 		clearTimeout ( ourTimerId );
 		ourTimerId = null;
 	}
-	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Minimize' );
-	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
+	ourMainDiv.classList.remove ( 'TravelNotes-UI-Minimized' );
+
+	ourTitleDiv.classList.add ( 'TravelNotes-Hidden' );
+	let children = ourMainDiv.childNodes;
+	for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
+		children[ childrenCounter ].classList.remove ( 'TravelNotes-Hidden' );
+	}
 }
 
 /**
@@ -210,8 +216,13 @@ function ourOnMouseEnterUI ( ) {
 */
 
 function ourOnTimeOutMouseLeave ( ) {
-	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Maximize' );
-	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
+	ourMainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
+
+	ourTitleDiv.classList.remove ( 'TravelNotes-Hidden' );
+	let children = ourMainDiv.childNodes;
+	for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
+		children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
+	}
 }
 
 /**
@@ -232,7 +243,7 @@ function ourOnMouseLeaveUI ( ) {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @function ourPinUI
-@desc this function switch the pin status of the UI 
+@desc this function switch the pin status of the UI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -279,17 +290,7 @@ class UI {
 		ourMainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
 		ourMainDiv.pin = ourPinUI;
 
-		if ( theConfig.travelEditor.startMinimized ) {
-			ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-			ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-			ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
-		}
-		else {
-			ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
-			ourUiIsPinned = true;
-		}
-
-		theHTMLElementsFactory.create (
+		ourTitleDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-UI-MainDiv-Title',
@@ -297,6 +298,7 @@ class UI {
 			},
 			ourMainDiv
 		);
+
 		theTravelNotesToolbarUI.createUI ( ourMainDiv );
 		theTravelUI.createUI ( ourMainDiv );
 		thePanesManagerUI.addPane ( newItineraryPaneUI ( ) );
@@ -304,6 +306,21 @@ class UI {
 		thePanesManagerUI.addPane ( newOsmSearchPaneUI ( ) );
 		thePanesManagerUI.createUI ( ourMainDiv );
 		theProvidersToolbarUI.createUI ( ourMainDiv );
+
+		if ( theConfig.travelEditor.startMinimized ) {
+			ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+			ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+			ourMainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
+			let children = ourMainDiv.childNodes;
+			for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
+				children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
+			}
+		}
+		else {
+			ourTitleDiv.classList.add ( 'TravelNotes-Hidden' );
+			ourUiIsPinned = true;
+		}
+
 		ourAddTravelNotesEventListeners ( );
 		ourAddMouseEventListeners ( );
 	}
