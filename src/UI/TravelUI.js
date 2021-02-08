@@ -459,8 +459,8 @@ function ourCreateButtonsDiv ( ) {
 
 function ourOnExpandRoutesButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
-	ourRoutesList.classList.toggle ( 'TravelNotes-TravelUI-HiddenRouteList' );
-	let hiddenList = ourRoutesList.classList.contains ( 'TravelNotes-TravelUI-HiddenRouteList' );
+	ourRoutesList.classList.toggle ( 'TravelNotes-Hidden' );
+	let hiddenList = ourRoutesList.classList.contains ( 'TravelNotes-Hidden' );
 	clickEvent.target.textContent =
 		hiddenList ? '▶' : '▼'; // 25b6 = '▶'  25bc = ▼
 	clickEvent.target.title =
