@@ -56,6 +56,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import { theConfig } from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelUI } from '../UI/TravelUI.js';
 import { thePanesManagerUI } from '../UI/PanesManagerUI.js';
@@ -67,6 +68,8 @@ import { newOsmSearchPaneUI } from '../UI/OsmSearchPaneUI.js';
 import { PANE_ID } from '../util/Constants.js';
 
 let ourMainDiv = null;
+let ourUiIsPinned = false;
+let ourTimerId = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -180,6 +183,76 @@ function ourAddMouseEventListeners ( ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourOnMouseEnterUI
+@desc Event listener for the mouse enter on the UI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnMouseEnterUI ( ) {
+	if ( ourTimerId ) {
+		clearTimeout ( ourTimerId );
+		ourTimerId = null;
+	}
+	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Minimize' );
+	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnTimeOutMouseLeave
+@desc Event listener for the timer on mouse leave on the UI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnTimeOutMouseLeave ( ) {
+	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Maximize' );
+	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnMouseLeaveUI
+@desc Event listener for the mouse leave on the UI
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnMouseLeaveUI ( ) {
+	ourTimerId = setTimeout ( ourOnTimeOutMouseLeave, theConfig.travelEditor.timeout );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourPinUI
+@desc this function switch the pin status of the UI 
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourPinUI ( ) {
+	if ( ourUiIsPinned ) {
+		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+	}
+	else {
+		ourMainDiv.removeEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+		ourMainDiv.removeEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+	}
+	ourUiIsPinned = ! ourUiIsPinned;
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc This class is the User Interface ( UI )
 @see {@link theUI} for the one and only one instance of this class
@@ -204,6 +277,18 @@ class UI {
 			return;
 		}
 		ourMainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
+		ourMainDiv.pin = ourPinUI;
+
+		if ( theConfig.travelEditor.startMinimized ) {
+			ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
+			ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
+			ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
+		}
+		else {
+			ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
+			ourUiIsPinned = true;
+		}
+
 		theHTMLElementsFactory.create (
 			'div',
 			{

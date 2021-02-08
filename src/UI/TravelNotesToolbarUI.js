@@ -57,58 +57,8 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
 let ourGeoLocationButton = null;
-let ourTimerId = null;
 let ourButtonsDiv = null;
 let ourMainDiv = null;
-let ourUiIsPinned = false;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMouseEnterUI
-@desc Event listener for the mouse enter on the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMouseEnterUI ( ) {
-	if ( ourTimerId ) {
-		clearTimeout ( ourTimerId );
-		ourTimerId = null;
-	}
-	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Minimize' );
-	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnTimeOutMouseLeave
-@desc Event listener for the timer on mouse leave on the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnTimeOutMouseLeave ( ) {
-	ourMainDiv.classList.remove ( 'TravelNotes-UI-MainDiv-Maximize' );
-	ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMouseLeaveUI
-@desc Event listener for the mouse leave on the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMouseLeaveUI ( ) {
-	ourTimerId = setTimeout ( ourOnTimeOutMouseLeave, theConfig.travelEditor.timeout );
-}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -309,17 +259,10 @@ function ourCreateGeoLocationButton ( ) {
 */
 
 function ourOnPinButtonClick ( clickEvent ) {
-	if ( ourUiIsPinned ) {
-		clickEvent.target.textContent = '📌';
-		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-	}
-	else {
-		clickEvent.target.textContent = '❌';
-		ourMainDiv.removeEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-		ourMainDiv.removeEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-	}
-	ourUiIsPinned = ! ourUiIsPinned;
+
+	clickEvent.target.textContent =
+		'📌' === clickEvent.target.textContent ? '❌' : '📌';
+	ourMainDiv.pin ( );
 }
 
 /**
@@ -336,22 +279,12 @@ function ourCreatePinButton ( ) {
 	let pinButton = theHTMLElementsFactory.create (
 		'div',
 		{
-			textContent : '❌',
+			textContent : theConfig.travelEditor.startMinimized ? '📌' : '❌',
 			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton'
 		},
 		ourButtonsDiv
 	);
 	pinButton.addEventListener ( 'click', ourOnPinButtonClick, false );
-	if ( theConfig.travelEditor.startMinimized ) {
-		pinButton.textContent = '📌';
-		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-		ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Minimize' );
-	}
-	else {
-		ourMainDiv.classList.add ( 'TravelNotes-UI-MainDiv-Maximize' );
-		ourUiIsPinned = true;
-	}
 }
 
 /**
