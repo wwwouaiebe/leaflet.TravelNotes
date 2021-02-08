@@ -25,10 +25,10 @@ module.exports = function(grunt) {
 		'\n * \n */\n\n';
 	let travelNotesCss = [
 		'src/css/Map.css', 
-		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesMap.css', 'src/css/NotesUI.css', 
+		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesForMap.css', 'src/css/NotesForUI.css', 
 		'src/css/Print.css',
-		'src/css/RoutesMap.css' ,'src/css/RoutesUI.css', 'src/css/RoutesSvgProfile.css',
-		'src/css/WayPoints.css',
+		'src/css/RoutesForMap.css' ,'src/css/RoutesForUI.css', 'src/css/RoutesForSvgProfile.css',
+		'src/css/WayPointsForMap.css',
 		'src/css/Background.css', 'src/css/WaitAnimation.css', 'src/contextMenus/ContextMenu.css',
 		'src/dialogs/AboutDialog.css', 'src/dialogs/APIKeysDialog.css', 'src/dialogs/BaseDialog.css', 'src/dialogs/ColorDialog.css', 'src/dialogs/NoteDialog.css', 
 		'src/dialogs/PrintRouteMapDialog.css', 'src/dialogs/RoutePropertiesDialog.css', 'src/dialogs/TwoButtonsDialog.css', 'src/dialogs/WayPointPropertiesDialog.css',
@@ -40,15 +40,15 @@ module.exports = function(grunt) {
 	];
 	let travelNotesViewerCss = [ 
 		'src/css/Map.css', 
-		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesMap.css', 
-		'src/css/RoutesMap.css',
+		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesForMap.css', 
+		'src/css/RoutesForMap.css',
 		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css'
 	];
 	let travelNotesRoadbookCss = [ 
-		'src/css/TravelRoadbook.css',
-		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesRoadbook.css',
-		'src/css/RoutesRoadbook.css',
-		'src/css/RoutesSvgProfile.css',
+		'src/css/TravelForRoadbook.css',
+		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesForRoadbook.css',
+		'src/css/RoutesForRoadbook.css',
+		'src/css/RoutesForSvgProfile.css',
 		'src/roadbook/Roadbook.css',
 		'src/css/Hidden.css'
 	];

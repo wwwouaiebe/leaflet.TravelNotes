@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Map.css
-@desc CSS for Route svg profile
+@file RoutesForMap.css
+@desc CSS for Routes on the Map
 Changes:
 	- v1.0.0:
 		- created
@@ -28,35 +28,17 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-Route-SvgProfile {
-	background-color: white;
-	margin: 1em;
+.TravelNotes-Map-Route-Header-Name {
+	font-weight: bold;
 }
 
-.TravelNotes-Route-SvgProfile-profilePolyline {
-	fill: none;
-	stroke: red;
-	stroke-width: 3;
-}
-
-.TravelNotes-Route-SvgProfile-markerPolyline,
-.TravelNotes-Route-SvgProfile-framePolyline {
-	fill: none;
-	stroke: black;
-	stroke-width: 1;
-}
-
-.TravelNotes-Route-SvgProfile-elevText {
-	fill: black;
-	font: bold 30px sans-serif;
-}
-
-.TravelNotes-Route-SvgProfile-elevLegend,
-.TravelNotes-Route-SvgProfile-distLegend {
-	fill: black;
-	font: bold 24px sans-serif;
+.TravelNotes-Map-Route-Header-Distance > span,
+.TravelNotes-Map-Route-Header-Ascent > span,
+.TravelNotes-Map-Route-Header-Descent > span,
+.TravelNotes-Map-Route-Header-Duration > span {
+	text-decoration: underline;
 }
 
 /*
---- End of Routes.css ---------------------------------------------------------------------------------------------------------
+--- End of RoutesForMap.css ---------------------------------------------------------------------------------------------------
 */

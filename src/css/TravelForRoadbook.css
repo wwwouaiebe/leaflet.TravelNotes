@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Map.css
-@desc CSS for Routes on the Map
+@file TravelForRoadbook.css
+@desc CSS for the Travel on the Roadbook
 Changes:
 	- v1.0.0:
 		- created
@@ -28,13 +28,43 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-Map-Route-Header-Name {
-	font-weight: bold;
+.TravelNotes-Roadbook-Travel {
+	margin-top: 0.5em;
+	margin-left: 1em;
+	margin-right: 1em;
+	font-family: sans-serif;
+	line-height: 1.5em;
 }
 
-.TravelNotes-Map-Route-Header-Distance > span,
-.TravelNotes-Map-Route-Header-Ascent > span,
-.TravelNotes-Map-Route-Header-Descent > span,
-.TravelNotes-Map-Route-Header-Duration > span {
+.TravelNotes-Roadbook-Travel-Header {
+	border-style: solid;
+	border-width: 0.1em;
+	padding: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-Name {
+	font-size: 156%;
+	font-weight: bold;
+	margin-bottom: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-TravelDistance {
+	margin-top: 1em;
+}
+
+.TravelNotes-Roadbook-Travel-Header-TravelDistance > span,
+.TravelNotes-Roadbook-Travel-Header-TravelAscent > span,
+.TravelNotes-Roadbook-Travel-Header-TravelDescent > span {
 	text-decoration: underline;
 }
+
+.TravelNotes-Roadbook-TravelFooter {
+	border-top-style: solid;
+	border-top-width: 0.1em;
+	padding-top: 2em;
+	padding-bottom: 2em;
+}
+
+/*
+--- End of TravelForRoadbook.css -------------------------------------------------------------------------------------------------
+*/

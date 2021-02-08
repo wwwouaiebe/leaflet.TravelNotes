@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file RoutesRoadbook.css
-@desc CSS for Routes on the Roadbook
+@file RoutesForSvgProfile.css
+@desc CSS for Route svg profile
 Changes:
 	- v1.0.0:
 		- created
@@ -28,29 +28,35 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-.TravelNotes-Roadbook-Route-Header {
-	border-style: solid;
-	border-width: 0.1em;
-	padding: 1em;
+.TravelNotes-Route-SvgProfile {
+	background-color: white;
+	margin: 1em;
 }
 
-.TravelNotes-Roadbook-Route-Header-Name {
-	font-size: 125%;
-	font-weight: bold;
-	margin-bottom: 1em;
+.TravelNotes-Route-SvgProfile-profilePolyline {
+	fill: none;
+	stroke: red;
+	stroke-width: 3;
 }
 
-.TravelNotes-Roadbook-Route-Header-Distance > span,
-.TravelNotes-Roadbook-Route-Header-Ascent > span,
-.TravelNotes-Roadbook-Route-Header-Descent > span,
-.TravelNotes-Roadbook-Route-Header-Duration > span {
-	text-decoration: underline;
+.TravelNotes-Route-SvgProfile-markerPolyline,
+.TravelNotes-Route-SvgProfile-framePolyline {
+	fill: none;
+	stroke: black;
+	stroke-width: 1;
 }
 
-.TravelNotes-Roadbook-RouteFooter {
-	padding-bottom: 2em;
+.TravelNotes-Route-SvgProfile-elevText {
+	fill: black;
+	font: bold 30px sans-serif;
+}
+
+.TravelNotes-Route-SvgProfile-elevLegend,
+.TravelNotes-Route-SvgProfile-distLegend {
+	fill: black;
+	font: bold 24px sans-serif;
 }
 
 /*
---- End of RoutesRoadbook.css -------------------------------------------------------------------------------------------------
+--- End of RoutesForSvgProfile.css --------------------------------------------------------------------------------------------
 */
