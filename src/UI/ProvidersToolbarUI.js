@@ -159,7 +159,6 @@ let ourTransitModeButtons = {
 	line : null,
 	circle : null
 };
-let ourUIMainDiv = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -389,7 +388,6 @@ class ProvidersToolbarUI {
 	*/
 
 	createUI ( uiMainDiv ) {
-		ourUIMainDiv = uiMainDiv;
 		ourButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -424,8 +422,11 @@ class ProvidersToolbarUI {
 	*/
 
 	providersAdded ( ) {
-		ourUIMainDiv.removeChild ( ourButtonsDiv );
-		this.createUI ( ourUIMainDiv );
+		while ( ourButtonsDiv.firstChild ) {
+			ourButtonsDiv.removeChild ( ourButtonsDiv.firstChild );
+		}
+		ourCreateTransitModesButtons ( );
+		ourCreateProvidersButtons ( );
 	}
 }
 

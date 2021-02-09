@@ -104,12 +104,12 @@
 	"route":
 	{
 		"color":"#ff0000",
-		"width":3,
+		"width":5,
 		"dashArray": 0,
 		"dashChoices": [
 			{ 
 				"text":"——————",
-				"iDashArray" : null
+				"iDashArray" : [0]
 			}, 
 			{
 				"text":"— — — — —",

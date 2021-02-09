@@ -158,7 +158,7 @@ let ourPrivateConfig = {
 		dashChoices : [
 			{
 				text : '——————',
-				iDashArray : null
+				iDashArray : [ 0 ]
 			},
 			{
 				text : '— — — — —',

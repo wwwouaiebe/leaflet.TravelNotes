@@ -197,11 +197,11 @@ function ourMainViewer ( ) {
 	function myLoadTravelNotes ( ) {
 		theHTMLElementsFactory.create (
 			'div',
-			{ id : 'Map' },
+			{ id : 'TravelNotes-Map' },
 			document.querySelector ( 'body' )
 		);
 
-		let map = window.L.map ( 'Map', { attributionControl : false, zoomControl : false } )
+		let map = window.L.map ( 'TravelNotes-Map', { attributionControl : false, zoomControl : false } )
 			.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], OUR_VIEWER_DEFAULT_ZOOM );
 
 		theTravelNotesData.map = map;
@@ -235,8 +235,7 @@ function ourMainViewer ( ) {
 			document.body.textContent = 'Not possible to load the TravelNotesLayers.json file. ';
 			return;
 		}
-		document.body.textContent = 'Loaded.... ';
-		myLoadTravelNotes ( myTravelUrl );
+		myLoadTravelNotes ( );
 	}
 
 	start ( );

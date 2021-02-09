@@ -136,7 +136,7 @@ function ourAddEventsListeners ( ) {
 */
 
 async function ourLoadDistantTravel ( travelUrl ) {
-	let travelResponse = fetch ( travelUrl );
+	let travelResponse = await fetch ( travelUrl );
 	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
 		let travelContent = await travelResponse.json ( );
 		newViewerFileLoader ( ).openDistantFile ( travelContent );
@@ -180,7 +180,9 @@ class TravelNotesViewer {
 			theViewerLayersToolbarUI.createUI ( );
 		}
 		theViewerLayersToolbarUI.setLayer ( 'OSM - Color' );
-		ourLoadDistantTravel ( travelUrl );
+		if ( travelUrl ) {
+			ourLoadDistantTravel ( travelUrl );
+		}
 	}
 }
 
