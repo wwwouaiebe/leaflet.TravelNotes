@@ -96,6 +96,23 @@ function showRouteManeuvers ( ) {
 
 document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
 
+function updateIcons ( ) {
+	document.querySelectorAll (
+		'.TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell, .TravelNotes-Roadbook-Travel-Notes-IconCell'
+	).forEach (
+		icon => {
+			let width = icon.getAttribute ( 'tanwidth' );
+			if ( width ) {
+				icon.style.width = width;
+			}
+			let height = icon.getAttribute ( 'tanheight' );
+			if ( height ) {
+				icon.style.height = height;
+			}
+		}
+	);
+}
+
 function updateRoadbook ( pageContent ) {
 	document.getElementById ( 'TravelNotes' ).textContent = '';
 	theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
@@ -104,6 +121,7 @@ function updateRoadbook ( pageContent ) {
 		document.title =
 			'' === headerName.textContent ? 'roadbook' : headerName.textContent + ' - roadbook';
 	}
+	updateIcons ( );
 	showTravelNotes ( );
 	showRouteNotes ( );
 	showRouteManeuvers ( );
@@ -113,7 +131,7 @@ function setContentFromIndexedDb ( ) {
 	if ( pageId ) {
 		theIndexedDb.getOpenPromise ( )
 			.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
-			.then ( pageContent => { updateRoadbook ( pageContent ); } )
+			.then ( updateRoadbook )
 			.catch ( err => {
 				if ( err instanceof Error ) {
 					console.error ( err );
@@ -236,6 +254,9 @@ if ( pageId ) {
 	translatePage ( );
 	addSaveButton ( );
 	setContentFromIndexedDb ( );
+}
+else {
+	updateIcons ( );
 }
 
 showTravelNotes ( );

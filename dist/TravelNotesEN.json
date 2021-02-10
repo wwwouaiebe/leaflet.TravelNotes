@@ -125,11 +125,11 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Ascent",
-		"msgstr" : "Ascent : {ascent} m."
+		"msgstr" : "Ascent"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Descent",
-		"msgstr" : "Descent : {descent} m."
+		"msgstr" : "Descent"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Distance from start of travel",
@@ -141,7 +141,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Duration",
-		"msgstr" : "Time\u00A0:\u00A0{duration}"
+		"msgstr" : "Time"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
@@ -181,7 +181,7 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Route distance",
-		"msgstr" : "Route distance\u00a0:\u00a0{distance}"
+		"msgstr" : "Route distance"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - TransitMode bike",
@@ -201,15 +201,15 @@
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel ascent",
-		"msgstr" : "Travel ascent\u00A0:\u00A0{ascent} m."
+		"msgstr" : "Travel ascent"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel descent",
-		"msgstr" : "Travel descent\u00A0:\u00A0{descent} m."
+		"msgstr" : "Travel descent"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel distance",
-		"msgstr" : "Travel distance\u00A0:\u00A0{distance}"
+		"msgstr" : "Travel distance"
 	},
 	{
 		"msgid" : "HTMLViewsFactory - Travel footer",

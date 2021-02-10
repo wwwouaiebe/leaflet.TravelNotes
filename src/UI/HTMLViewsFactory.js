@@ -64,7 +64,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newProfileFactory } from '../core/ProfileFactory.js';
-import { ICON_DIMENSIONS, DISTANCE, ZERO } from '../util/Constants.js';
+import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 const OUR_LINKS_MAX_LENGTH = 40;
 const OUR_MIN_NOTES_DISTANCE = 9;
@@ -254,9 +254,8 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 		},
 		NoteTextAndIconHTML
 	);
+	let dimCoeficient = ONE;
 	theHTMLSanitizer.sanitizeToHtmlElement ( noteAndRoute.note.iconContent, iconHTML );
-	iconHTML.style.width = String ( noteAndRoute.note.iconWidth ) + 'px';
-	iconHTML.style.height = String ( noteAndRoute.note.iconHeight ) + 'px';
 	if ( 'TravelNotes-Roadbook-' === classPrefix && iconHTML.firstChild ) {
 		if ( 'svg' === iconHTML.firstChild.tagName ) {
 			iconHTML.firstChild.setAttributeNS (
@@ -264,13 +263,21 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 				'viewBox',
 				'0 0 ' + ICON_DIMENSIONS.svgViewboxDim + ' ' + ICON_DIMENSIONS.svgViewboxDim
 			);
-			iconHTML.style.width = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
-			iconHTML.style.height = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
+			dimCoeficient = theConfig.note.svgRoadbookDimCoef;
 		}
 		else if ( iconHTML.firstChild.classList.contains ( 'TravelNotes-MapNoteCategory-0073' ) ) {
-			iconHTML.style.width = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
-			iconHTML.style.height = String ( noteAndRoute.note.iconWidth * theConfig.note.svgRoadbookDimCoef ) + 'px';
+			dimCoeficient = theConfig.note.svgRoadbookDimCoef;
 		}
+		iconHTML.setAttribute (
+			'tanwidth', String ( noteAndRoute.note.iconWidth * dimCoeficient ) + 'px'
+		);
+		iconHTML.setAttribute (
+			'tanheight', String ( noteAndRoute.note.iconWidth * dimCoeficient ) + 'px'
+		);
+	}
+	else {
+		iconHTML.style.width = String ( noteAndRoute.note.iconWidth ) + 'px';
+		iconHTML.style.height = String ( noteAndRoute.note.iconHeight ) + 'px';
 	}
 
 	let noteTextHTMLElement = ourGetNoteTextHTML ( classPrefix, noteAndRoute );

@@ -57,14 +57,6 @@
 	{
 		"timeout": 1500
 	},
-	"errorMessages" :
-	{
-		"timeout" : 20000
-	},
-	"routing":
-	{
-		"auto":true
-	},
 	"language":"fr",
 	"itineraryPointMarker":
 	{
@@ -104,12 +96,12 @@
 	"route":
 	{
 		"color":"#ff0000",
-		"width":3,
+		"width":5,
 		"dashArray": 0,
 		"dashChoices": [
 			{ 
 				"text":"——————",
-				"iDashArray" : null
+				"iDashArray" : [0]
 			}, 
 			{
 				"text":"— — — — —",
@@ -130,15 +122,11 @@
 			"smoothCoefficient": 0.25,
 			"smoothPoints": 3
 		},
-		"showDragTooltip": -1
+		"showDragTooltip": 0
 		
 	},
 	"note":
 	{
-		"theDevil": {
-			"addButton": true,
-			"noteZoom" : 17
-		},
 		"osmSearchNoteDialog":false,
 		"reverseGeocoding":true,
 		"grip":
@@ -179,6 +167,10 @@
 		"maxManeuversNotes":100
 	},
 	"noteDialog":{
+		"theDevil": {
+			"addButton": true,
+			"noteZoom" : 17
+		},
 		"toggleIconDimension":true,
 		"toggleIconTextArea":false,
 		"toggleTooltip":false,

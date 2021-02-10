@@ -299,7 +299,9 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 			let nodeName = currentNode.nodeName.toLowerCase ( );
 			let validAttributesNames = ourValidityMap.get ( nodeName );
 			if ( validAttributesNames ) {
-				validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
+				validAttributesNames = validAttributesNames.concat (
+					[ 'id', 'class', 'dir', 'title', 'tanwidth', 'tanheight' ]
+				);
 				let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
 				let newChildNode = isSvg ? document.createElementNS ( SVG_NS, nodeName ) : document.createElement ( nodeName );
 				validAttributesNames.forEach (
@@ -393,7 +395,9 @@ function ourSanitizeToHtmlString ( htmlString ) {
 			let nodeName = currentNode.nodeName.toLowerCase ( );
 			let validAttributesNames = ourValidityMap.get ( nodeName );
 			if ( validAttributesNames ) {
-				validAttributesNames = validAttributesNames.concat ( [ 'id', 'class', 'dir', 'title' ] );
+				validAttributesNames = validAttributesNames.concat (
+					[ 'id', 'class', 'dir', 'title', 'tanwidth', 'tanheight' ]
+				);
 				let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
 				targetString += '<' + nodeName;
 				validAttributesNames.forEach (
