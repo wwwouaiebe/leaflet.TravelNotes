@@ -102,8 +102,6 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	let myFocusControl = null;
 	let myGeoCoder = newGeoCoder ( );
 	let myLatLng = note.latLng;
-	let myAddress = '';
-	let myCity = '';
 	let myPreviewNote = null;
 
 	let myIconDimensionsDiv = null;
@@ -234,15 +232,12 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myOnGeocoderSucces ( geoCoderData ) {
-		myAddress = geoCoderData.street;
+		let address = geoCoderData.street;
 		if ( '' !== geoCoderData.city ) {
-			myAddress += ' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
+			address += ' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
 		}
-		myCity = geoCoderData.city;
-
-		if ( ( theConfig.note.reverseGeocoding ) && ( '' === note.address ) && startGeoCoder ) {
-			myAddressInput.value = myAddress;
-		}
+		myAddressInput.value = address;
+		myNoteDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
 		myOnInputControl ( );
 	}
 
@@ -261,7 +256,25 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		if ( err instanceof Error ) {
 			console.error ( err );
 		}
+		myNoteDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
 		myOnInputControl ( );
+	}
+
+	/**
+	@--------------------------------------------------------------------------------------------------------------------------
+
+	@function myOnAddressButtonClick
+	@desc Event listener for the address button
+	@private
+
+	@--------------------------------------------------------------------------------------------------------------------------
+	*/
+
+	function myOnAddressButtonClick ( ) {
+		myNoteDialog.okButton.classList.add ( 'TravelNotes-Hidden' );
+		myGeoCoder.getPromiseAddress ( note.latLng )
+			.then ( myOnGeocoderSucces )
+			.catch ( myOnGeocoderError );
 	}
 
 	/**
@@ -280,11 +293,10 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myTooltipContent.value = osmNoteData.tooltip;
 
 		let address = osmNoteData.streets;
-		let city = '' === osmNoteData.city ? myCity : osmNoteData.city;
-		if ( '' !== city ) {
-			address += ' <span class="TravelNotes-NoteHtml-Address-City">' + city + '</span>';
+		if ( '' !== osmNoteData.city ) {
+			address += ' <span class="TravelNotes-NoteHtml-Address-City">' + osmNoteData.city + '</span>';
 		}
-		if ( osmNoteData.place && osmNoteData.place !== city ) {
+		if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
 			address += ' (' + osmNoteData.place + ')';
 		}
 
@@ -389,21 +401,6 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myFocusControl.setSelectionRange ( selectionStart, selectionEnd );
 		myFocusControl.focus ( );
 
-		myOnInputControl ( );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnAddressButtonClick
-	@desc Event listener for the address button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnAddressButtonClick ( ) {
-		myAddressInput.value = myAddress;
 		myOnInputControl ( );
 	}
 
@@ -907,9 +904,9 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myCreateLinkContent ( );
 		myCreatePhoneContent ( );
 		myCreatePreviewContent ( );
-		myGeoCoder.getPromiseAddress ( note.latLng )
-			.then ( myOnGeocoderSucces )
-			.catch ( myOnGeocoderError );
+		if ( startGeoCoder && theConfig.note.reverseGeocoding ) {
+			myOnAddressButtonClick ( );
+		}
 		myToggleContents ( );
 	}
 
