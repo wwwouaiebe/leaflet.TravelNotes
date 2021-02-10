@@ -297,9 +297,8 @@ function ourOnRoutingOk ( ) {
 	);
 
 	theEventDispatcher.dispatch ( 'roadbookupdate' );
-
-	// and the itinerary and waypoints are displayed
 	theEventDispatcher.dispatch ( 'showitinerary' );
+	theEventDispatcher.dispatch ( 'setrouteslist' );
 }
 
 /**

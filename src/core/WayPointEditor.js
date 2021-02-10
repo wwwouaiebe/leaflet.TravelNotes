@@ -329,11 +329,9 @@ class WayPointEditor {
 
 	wayPointDragEnd ( wayPointObjId ) {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
-		if ( theConfig.wayPoint.reverseGeocoding ) {
-			ourRenameWayPointWithGeocoder (
-				theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
-			);
-		}
+		ourRenameWayPointWithGeocoder (
+			theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
+		);
 		theRouteEditor.startRouting ( );
 	}
 
