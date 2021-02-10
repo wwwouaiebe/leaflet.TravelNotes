@@ -58,7 +58,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 const OUR_DEMO_PRINT_MAX_TILES = 120;
 const OUR_DEMO_MAX_MANEUVERS_NOTES = 10;
@@ -150,6 +150,7 @@ function ourMain ( ) {
 				config.note.maxManeuversNotes = OUR_DEMO_MAX_MANEUVERS_NOTES;
 				config.note.haveBackground = true;
 				config.APIKeys.dialogHaveUnsecureButtons = true;
+				config.route.showDragTooltip = NOT_FOUND;
 			}
 			theConfig.overload ( config );
 			theTravelNotesData.providers.forEach (
