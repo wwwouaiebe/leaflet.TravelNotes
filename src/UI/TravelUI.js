@@ -723,8 +723,11 @@ class TravelUI {
 			let routeName =
 				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId ? '🔴\u00a0' : '' ) +
 				( route.chain ? '⛓\u00a0' : '' ) +
-				( route.computedName );
-
+				(
+					routesIterator.value.objId === theTravelNotesData.editedRouteObjId ?
+						theTravelNotesData.travel.editedRoute.computedName :
+						route.computedName
+				);
 			let routeDiv = theHTMLElementsFactory.create (
 				'div',
 				{

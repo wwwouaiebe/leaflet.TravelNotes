@@ -116,9 +116,6 @@ let ourPrivateConfig = {
 	contextMenu : {
 		timeout : 1500
 	},
-	routing : {
-		auto : true
-	},
 	language : 'fr',
 	itineraryPointMarker : {
 		color : '#ff0000',
@@ -416,7 +413,6 @@ class Config {
 	get errorUI ( ) { return ourPrivateConfig.errorUI; }
 	get APIKeys ( ) { return ourPrivateConfig.APIKeys; }
 	get contextMenu ( ) { return ourPrivateConfig.contextMenu; }
-	get routing ( ) { return ourPrivateConfig.routing; }
 	get language ( ) { return ourPrivateConfig.language; }
 	get itineraryPointMarker ( ) { return ourPrivateConfig.itineraryPointMarker; }
 	get searchPointMarker ( ) { return ourPrivateConfig.searchPointMarker; }

@@ -385,6 +385,10 @@ class TravelNotes {
 		if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
 			theLayersToolbarUI.createUI ( );
 		}
+		else {
+			theLayersToolbarUI.setLayer ( 'OSM - Color' );
+		}
+
 		if ( theConfig.mouseUI.haveMouseUI ) {
 			theMouseUI.createUI ( );
 		}

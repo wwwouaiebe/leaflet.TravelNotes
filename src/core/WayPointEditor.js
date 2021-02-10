@@ -119,6 +119,9 @@ function ourRenameWayPoint ( wayPointOsmData, wayPointObjId ) {
 
 function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 	if ( ! theConfig.wayPoint.reverseGeocoding ) {
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
 		return;
 	}
 
@@ -169,8 +172,8 @@ class WayPointEditor {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = newWayPoint ( );
 		wayPoint.latLng = latLng;
-		ourRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
 		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
+		ourRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
 		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
@@ -198,8 +201,8 @@ class WayPointEditor {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = newWayPoint ( );
 		wayPoint.latLng = finalLatLng;
-		ourRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
 		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
+		ourRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
 		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
@@ -281,9 +284,7 @@ class WayPointEditor {
 			);
 		}
 		theTravelNotesData.travel.editedRoute.wayPoints.first.latLng = latLng;
-		if ( theConfig.wayPoint.reverseGeocoding ) {
-			ourRenameWayPointWithGeocoder ( latLng, theTravelNotesData.travel.editedRoute.wayPoints.first.objId );
-		}
+		ourRenameWayPointWithGeocoder ( latLng, theTravelNotesData.travel.editedRoute.wayPoints.first.objId );
 		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
@@ -309,9 +310,7 @@ class WayPointEditor {
 			);
 		}
 		theTravelNotesData.travel.editedRoute.wayPoints.last.latLng = latLng;
-		if ( theConfig.wayPoint.reverseGeocoding ) {
-			ourRenameWayPointWithGeocoder ( latLng, theTravelNotesData.travel.editedRoute.wayPoints.last.objId );
-		}
+		ourRenameWayPointWithGeocoder ( latLng, theTravelNotesData.travel.editedRoute.wayPoints.last.objId );
 		theEventDispatcher.dispatch (
 			'addwaypoint',
 			{
