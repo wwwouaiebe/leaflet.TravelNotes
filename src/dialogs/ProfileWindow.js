@@ -331,7 +331,10 @@ function ourNewProfileWindow ( ) {
 		myRoute = args [ ZERO ];
 		mySvg = newProfileFactory ( ).createSvg ( myRoute );
 
-		myProfileWindow.header.textContent = theTranslator.getText ( 'ProfileWindow - Profile {name}', myRoute );
+		myProfileWindow.header.textContent = theTranslator.getText (
+			'ProfileWindow - Profile {name}',
+			{ name : myRoute.computedName }
+		);
 		myProfileWindow.content.appendChild ( mySvg );
 		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
 		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
