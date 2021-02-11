@@ -74,7 +74,9 @@ let ourSaveTimer = null;
 */
 
 function ourUpdate ( ) {
-	ourMouseDiv.textContent = ourSaveStatus + '\u00a0' + ourMousePos + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + ourZoom;
+	if ( ourMouseDiv ) {
+		ourMouseDiv.textContent = ourSaveStatus + '\u00a0' + ourMousePos + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + ourZoom;
+	}
 }
 
 /**

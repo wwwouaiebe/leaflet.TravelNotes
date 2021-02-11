@@ -323,6 +323,7 @@ function ourNewGeoCoder ( ) {
 			! overpassResponse.ok
 		) {
 			onError ( new Error ( 'error when calling Nominatim or OverpassAPI' ) );
+			return;
 		}
 
 		let	nominatimData = myParseNominatimData ( await nominatimResponse.json ( ) );

@@ -83,7 +83,7 @@ import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Co
 let ourWaitUI = null;
 let ourManeuverCounter = ZERO;
 let ourManeuverLength = ZERO;
-let ourOsmSearchNoteDialog = theConfig.osmSearch.showSearchNoteDialog;
+let ourShowSearchNoteDialog = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -309,14 +309,19 @@ class NoteEditor {
 	get the status of the osmSearchNoteDialog flag
 	*/
 
-	get osmSearchNoteDialog ( ) { return ourOsmSearchNoteDialog; }
+	get osmSearchNoteDialog ( ) {
+		if ( null === ourShowSearchNoteDialog ) {
+			ourShowSearchNoteDialog = theConfig.osmSearch.showSearchNoteDialog;
+		}
+		return ourShowSearchNoteDialog;
+	}
 
 	/*
 	change the status of the osmSearchNoteDialog flag
 	*/
 
 	changeOsmSearchNoteDialog ( ) {
-		ourOsmSearchNoteDialog = ! ourOsmSearchNoteDialog;
+		ourShowSearchNoteDialog = ! this.osmSearchNoteDialog;
 	}
 
 	/**
@@ -472,11 +477,10 @@ class NoteEditor {
 		note.phone = data.osmElement.tags.phone || '';
 		note.tooltipContent = data.osmElement.description || '';
 		note.popupContent = data.osmElement.tags.name || '';
-
 		if ( ! data.isTravelNote && INVALID_OBJ_ID === routeObjId ) {
 			theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
 		}
-		else if ( ourOsmSearchNoteDialog || '' === note.iconContent ) {
+		else if ( this.osmSearchNoteDialog || '' === note.iconContent ) {
 			ourNoteDialog ( note, routeObjId, true );
 		}
 		else {

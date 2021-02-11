@@ -444,10 +444,7 @@ class ViewerMapEditor {
 
 		ourGeolocationCircle = window.L.circleMarker (
 			window.L.latLng ( position.coords.latitude, position.coords.longitude ),
-			{
-				radius : theConfig.geoLocation.marker.radius,
-				color : theConfig.geoLocation.marker.color
-			}
+			theConfig.geoLocation.marker
 		)
 			.bindTooltip (
 				theUtilities.formatLatLng ( [ position.coords.latitude, position.coords.longitude ] )
