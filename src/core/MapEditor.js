@@ -416,6 +416,7 @@ function ourOnEditedRouteMouseOver ( mapEvent ) {
 */
 
 function ourOnRouteContextMenu ( contextMenuEvent ) {
+	window.L.DomEvent.stopPropagation ( contextMenuEvent );
 	newRouteContextMenu ( contextMenuEvent ).show ( );
 }
 

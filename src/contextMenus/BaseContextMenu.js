@@ -70,13 +70,11 @@ but not active
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { LAT_LNG, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
+import { INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 
 const OUR_MENU_MARGIN = 20;
 
 let ourContextMenuEvent = null;
-let ourLat = LAT_LNG.defaultValue;
-let ourLng = LAT_LNG.defaultValue;
 let ourContainer = null;
 let ourTimerId = null;
 
@@ -260,8 +258,6 @@ function ourOnCloseMenu ( ) {
 
 	// reset global vars
 	ourContextMenuEvent = null;
-	ourLat = LAT_LNG.defaultValue;
-	ourLng = LAT_LNG.defaultValue;
 	ourContainer = null;
 	ourKeyboardFocusIsOnItem = INVALID_OBJ_ID;
 	ourMouseFocusIsOnItem = INVALID_OBJ_ID;
@@ -453,21 +449,6 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
 		ourContextMenuEvent = contextMenuEvent;
 
-		// when clicking on a leaflet polyline, a route event AND a map event are generated
-		// with the same latlng. We compare positions and returns when latlng are equals
-		// to avoid a map menu on top of the route menu
-		if (
-			! ourContextMenuEvent.fromUI
-			&&
-			( ourContextMenuEvent.latlng.lat === ourLat )
-			&&
-			( ourContextMenuEvent.latlng.lng === ourLng )
-		) {
-			return;
-		}
-
-		ourLat = ourContextMenuEvent.latlng.lat;
-		ourLng = ourContextMenuEvent.latlng.lng;
 		if ( ourContainer ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
