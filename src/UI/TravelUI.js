@@ -272,8 +272,9 @@ function ourOnOpenTravelInputChange ( changeEvent ) {
 
 function ourOnOpenTravelButtonClick ( ) {
 	if (
-		! window.confirm (
-			theTranslator.getText ( 'TravelEditor - This page ask to close; data are perhaps not saved.' )
+		theConfig.travelNotes.haveBeforeUnloadWarning
+		&&
+		( ! window.confirm ( theTranslator.getText ( 'TravelEditor - This page ask to close; data are perhaps not saved.' ) )
 		)
 	) {
 		return;

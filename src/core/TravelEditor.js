@@ -135,8 +135,11 @@ class TravelEditor {
 	*/
 
 	clear ( ) {
-		if ( ! window.confirm ( theTranslator.getText (
-			'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) ) {
+		if (
+			theConfig.travelNotes.haveBeforeUnloadWarning &&
+			( ! window.confirm ( theTranslator.getText (
+				'TravelEditor - This page ask to close; data are perhaps not saved.' ) ) )
+		) {
 			return;
 		}
 		theProfileWindowsManager.deleteAllProfiles ( );

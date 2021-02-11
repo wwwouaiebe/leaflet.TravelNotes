@@ -283,7 +283,6 @@ let ourPrivateConfig = {
 		showEditedRouteInRoadbook : true
 	},
 	travelEditor : {
-		clearAfterSave : true,
 		startMinimized : true,
 		startupRouteEdition : true,
 		timeout : 1000

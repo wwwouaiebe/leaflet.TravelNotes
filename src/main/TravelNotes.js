@@ -281,8 +281,10 @@ function ourAddUnloadEventsListeners ( ) {
 		'beforeunload',
 		beforeUnloadEvent => {
 			theIndexedDb.closeDb ( theTravelNotesData.UUID );
-			beforeUnloadEvent.returnValue = 'x';
-			return 'x';
+			if ( theConfig.travelNotes.haveBeforeUnloadWarning ) {
+				beforeUnloadEvent.returnValue = 'x';
+				return 'x';
+			}
 		}
 	);
 }

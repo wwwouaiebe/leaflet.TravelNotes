@@ -230,7 +230,6 @@
 	},
 	"travelEditor":
 	{
-		"clearAfterSave":true,
 		"startMinimized":true,
 		"startupRouteEdition":true,
 		"timeout":1500
