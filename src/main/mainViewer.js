@@ -136,7 +136,7 @@ function ourMainViewer ( ) {
 		let configResponse = await fetch ( myOriginAndPath + 'Config.json' );
 		if ( HTTP_STATUS_OK === configResponse.status && configResponse.ok ) {
 			let config = await configResponse.json ( );
-			config.language = myLanguage || config.language;
+			config.travelNotes.language = myLanguage || config.travelNotes.language;
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
 				config.note.haveBackground = true;
 			}

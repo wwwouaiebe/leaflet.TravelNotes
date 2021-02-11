@@ -77,10 +77,10 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 
 const OUR_QUERY_DISTANCE = Math.max (
-	theConfig.note.svgHamletDistance,
-	theConfig.note.svgVillageDistance,
-	theConfig.note.svgCityDistance,
-	theConfig.note.svgTownDistance
+	theConfig.geoCoder.distances.hamlet,
+	theConfig.geoCoder.distances.village,
+	theConfig.geoCoder.distances.city,
+	theConfig.geoCoder.distances.town
 );
 
 /**
@@ -113,29 +113,29 @@ function ourNewGeoCoder ( ) {
 	*/
 
 	function myParseOverpassData ( overpassData ) {
-		let osmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
+		let osmCityAdminLevel = theConfig.geoCoder.osmCityAdminLevel.DEFAULT;
 
 		let adminNames = [];
 		let places = {
 			hamlet : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgHamletDistance
+				maxDistance : theConfig.geoCoder.distances.hamlet
 			},
 			village : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgVillageDistance
+				maxDistance : theConfig.geoCoder.distances.village
 			},
 			city : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgCityDistance
+				maxDistance : theConfig.geoCoder.distances.city
 			},
 			town : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgTownDistance
+				maxDistance : theConfig.geoCoder.distances.town
 			}
 		};
 		overpassData.elements.forEach (
@@ -152,7 +152,7 @@ function ourNewGeoCoder ( ) {
 					adminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
 					if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
 						osmCityAdminLevel =
-							theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || osmCityAdminLevel;
+							theConfig.geoCoder.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || osmCityAdminLevel;
 					}
 				}
 				if (
@@ -282,7 +282,7 @@ function ourNewGeoCoder ( ) {
 		*/
 
 		let overpassAPIUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
+			'?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
 			'is_in(' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
 			')->.e;area.e[admin_level][boundary="administrative"];out;' +
 			'node(around:' + OUR_QUERY_DISTANCE + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +

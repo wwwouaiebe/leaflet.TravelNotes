@@ -191,7 +191,7 @@ function ourOnApiKeysButtonClick ( clickEvent ) {
 */
 
 function ourCreateApiKeysButton ( ) {
-	if ( theConfig.APIKeys.showDialogButton ) {
+	if ( theConfig.APIKeysDialog.showButton ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{

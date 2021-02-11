@@ -81,10 +81,10 @@ import {
 
 let ourRequestStarted = false;
 const OUR_QUERY_DISTANCE = Math.max (
-	theConfig.note.svgHamletDistance,
-	theConfig.note.svgVillageDistance,
-	theConfig.note.svgCityDistance,
-	theConfig.note.svgTownDistance
+	theConfig.geoCoder.distances.hamlet,
+	theConfig.geoCoder.distances.village,
+	theConfig.geoCoder.distances.city,
+	theConfig.geoCoder.distances.town
 );
 const OUR_ICON_POSITION = Object.freeze ( {
 	atStart : -ONE,
@@ -108,7 +108,7 @@ const OUR_SEARCH_AROUND_FACTOR = 1.5;
 /* eslint-disable-next-line max-statements */
 function ourNewSvgIconFromOsmFactory ( ) {
 
-	let myOsmCityAdminLevel = theConfig.note.osmCityAdminLevel.DEFAULT;
+	let myOsmCityAdminLevel = theConfig.geoCoder.osmCityAdminLevel.DEFAULT;
 	let mySvgLatLngDistance = Object.seal (
 		{
 			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
@@ -128,8 +128,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
 	let myDirection = null;
-	let mySvgZoom = theConfig.note.svgZoom;
-	let mySvgAngleDistance = theConfig.note.svgAngleDistance;
+	let mySvgZoom = theConfig.note.svgIcon.zoom;
+	let mySvgAngleDistance = theConfig.note.svgIcon.angleDistance;
 	let myDirectionArrow = ' ';
 	let myTooltip = '';
 	let myStreets = '';
@@ -195,22 +195,22 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			hamlet : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgHamletDistance
+				maxDistance : theConfig.geoCoder.distances.hamlet
 			},
 			village : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgVillageDistance
+				maxDistance : theConfig.geoCoder.distances.village
 			},
 			city : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgCityDistance
+				maxDistance : theConfig.geoCoder.distances.city
 			},
 			town : {
 				name : null,
 				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.note.svgTownDistance
+				maxDistance : theConfig.geoCoder.distances.town
 			}
 		};
 		overpassAPIdata.elements.forEach (
@@ -229,7 +229,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 						myAdminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
 						if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
 							myOsmCityAdminLevel =
-								theConfig.note.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || myOsmCityAdminLevel;
+								theConfig.geoCoder.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || myOsmCityAdminLevel;
 						}
 					}
 					break;
@@ -421,7 +421,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				[ rcnRefNode.lat, rcnRefNode.lon ],
 				[ iconNode.lat, iconNode.lon ]
 			);
-			if ( theConfig.note.svgRcnRefDistance > rcnRefDistance ) {
+			if ( theConfig.note.svgIcon.rcnRefDistance > rcnRefDistance ) {
 				iconNode = rcnRefNode;
 			}
 		}
@@ -680,31 +680,31 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	function mySetDirectionArrowAndTooltip ( ) {
 
 		if ( null !== myDirection ) {
-			if ( myDirection < theConfig.note.svgAnleMaxDirection.right ) {
+			if ( myDirection < theConfig.note.svgIcon.angleDirection.right ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
 				myDirectionArrow = '🢂';
 			}
-			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightRight ) {
+			else if ( myDirection < theConfig.note.svgIcon.angleDirection.slightRight ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight right' );
 				myDirectionArrow = '🢅';
 			}
-			else if ( myDirection < theConfig.note.svgAnleMaxDirection.continue ) {
+			else if ( myDirection < theConfig.note.svgIcon.angleDirection.continue ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Continue' );
 				myDirectionArrow = '🢁';
 			}
-			else if ( myDirection < theConfig.note.svgAnleMaxDirection.slightLeft ) {
+			else if ( myDirection < theConfig.note.svgIcon.angleDirection.slightLeft ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight left' );
 				myDirectionArrow = '🢄';
 			}
-			else if ( myDirection < theConfig.note.svgAnleMaxDirection.left ) {
+			else if ( myDirection < theConfig.note.svgIcon.angleDirection.left ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn left' );
 				myDirectionArrow = '🢀';
 			}
-			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpLeft ) {
+			else if ( myDirection < theConfig.note.svgIcon.angleDirection.sharpLeft ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp left' );
 				myDirectionArrow = '🢇';
 			}
-			else if ( myDirection < theConfig.note.svgAnleMaxDirection.sharpRight ) {
+			else if ( myDirection < theConfig.note.svgIcon.angleDirection.sharpRight ) {
 				myTooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp right' );
 				myDirectionArrow = '🢆';
 			}
@@ -942,7 +942,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
 
 		let requestUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' + theConfig.note.svgTimeOut + '];' +
+			'?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
 			'way[highway](around:' +
 			( ICON_DIMENSIONS.svgViewboxDim * OUR_SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
 			',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +

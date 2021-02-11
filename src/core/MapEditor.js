@@ -777,7 +777,7 @@ class MapEditor	{
 	addItineraryPointMarker ( objId, latLng ) {
 		ourAddTo (
 			objId,
-			window.L.circleMarker ( latLng, theConfig.itineraryPointMarker )
+			window.L.circleMarker ( latLng, theConfig.itineraryPoint.marker )
 		);
 	}
 
@@ -815,10 +815,10 @@ class MapEditor	{
 				) > OUR_MARKER_BOUNDS_PRECISION;
 		}
 		if ( showGeometry ) {
-			ourAddTo ( objId, window.L.polyline ( geometry, theConfig.searchPointPolyline ) );
+			ourAddTo ( objId, window.L.polyline ( geometry, theConfig.osmSearch.searchPointPolyline ) );
 		}
 		else {
-			ourAddTo ( objId, window.L.circleMarker ( latLng, theConfig.searchPointMarker ) );
+			ourAddTo ( objId, window.L.circleMarker ( latLng, theConfig.osmSearch.searchPointMarker ) );
 		}
 	}
 

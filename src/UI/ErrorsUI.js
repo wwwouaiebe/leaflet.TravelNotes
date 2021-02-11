@@ -58,7 +58,7 @@ let ourErrorDiv = null;
 let ourTimerId = null;
 let ourShowHelpInput = null;
 let ourShowHelpDiv = null;
-let ourShowHelp = theConfig.errorUI.showHelp;
+let ourShowHelp = theConfig.errorsUI.showHelp;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -154,13 +154,13 @@ function ourAddHelpCheckbox ( ) {
 
 function ourShow ( message, errorLevel ) {
 	if (
-		( 'Error' === errorLevel && ! theConfig.errorUI.showError )
+		( 'Error' === errorLevel && ! theConfig.errorsUI.showError )
 		||
-		( 'Warning' === errorLevel && ! theConfig.errorUI.showWarning )
+		( 'Warning' === errorLevel && ! theConfig.errorsUI.showWarning )
 		||
-		( 'Info' === errorLevel && ! theConfig.errorUI.showInfo )
+		( 'Info' === errorLevel && ! theConfig.errorsUI.showInfo )
 		||
-		( 'Help' === errorLevel && ! theConfig.errorUI.showHelp )
+		( 'Help' === errorLevel && ! theConfig.errorsUI.showHelp )
 		||
 		( 'Help' === errorLevel && ! ourShowHelp )
 	) {
@@ -198,10 +198,10 @@ function ourShow ( message, errorLevel ) {
 	);
 
 	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
-	let timeOutDuration = theConfig.errorUI.timeOut;
+	let timeOutDuration = theConfig.errorsUI.timeOut;
 	if ( 'Help' === errorLevel ) {
 		ourAddHelpCheckbox ( );
-		timeOutDuration = theConfig.errorUI.helpTimeOut;
+		timeOutDuration = theConfig.errorsUI.helpTimeOut;
 	}
 	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Hidden' );
 	ourTimerId = setTimeout ( ourOnTimer, timeOutDuration );
@@ -244,7 +244,7 @@ class ErrorsUI {
 
 	/**
 	Show an error message ( a white text on a red background )
-	@see theConfig.errorUI.showError to disable or enable the error messages
+	@see theConfig.errorsUI.showError to disable or enable the error messages
 	@param {string} error The error message to display
 	*/
 
@@ -252,7 +252,7 @@ class ErrorsUI {
 
 	/**
 	Show an warning message ( a black text on an orange background )
-	@see theConfig.errorUI.showWarning to disable or enable the warning messages
+	@see theConfig.errorsUI.showWarning to disable or enable the warning messages
 	@param {string} warning The warning message to display
 	*/
 
@@ -260,7 +260,7 @@ class ErrorsUI {
 
 	/**
 	Show an info message ( a black text on a white background )
-	@see theConfig.errorUI.showInfo to disable or enable the info messages
+	@see theConfig.errorsUI.showInfo to disable or enable the info messages
 	@param {string} info The info message to display
 	*/
 
@@ -268,7 +268,7 @@ class ErrorsUI {
 
 	/**
 	Show a help message ( a black text on a white background )
-	@see theConfig.errorUI.showHelp to disable or enable the help messages and the
+	@see theConfig.errorsUI.showHelp to disable or enable the help messages and the
 	checkbox in the UI to disable the help
 	@param {string} help The help message to display
 	*/

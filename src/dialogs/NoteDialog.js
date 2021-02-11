@@ -452,27 +452,27 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	*/
 
 	function myToggleContents ( ) {
-		if ( theConfig.noteDialog.toggleIconDimension ) {
+		if ( theConfig.noteDialog.mask.iconsDimension ) {
 			myIconDimensionsDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
-		if ( theConfig.noteDialog.toggleIconTextArea ) {
+		if ( theConfig.noteDialog.mask.iconTextArea ) {
 			myIconContentDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
-		if ( theConfig.noteDialog.togglePopupContent ) {
+		if ( theConfig.noteDialog.mask.popupContent ) {
 			myPopupContentDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
-		if ( theConfig.noteDialog.toggleTooltip ) {
+		if ( theConfig.noteDialog.mask.tooltip ) {
 			myTooltipContentDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
-		if ( theConfig.noteDialog.toggleAddress ) {
+		if ( theConfig.noteDialog.mask.address ) {
 			myAddressHeaderDiv.classList.toggle ( 'TravelNotes-Hidden' );
 			myAddressInputDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
-		if ( theConfig.noteDialog.toggleLink ) {
+		if ( theConfig.noteDialog.mask.link ) {
 			myLinkHeaderDiv.classList.toggle ( 'TravelNotes-Hidden' );
 			myLinkInputDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
-		if ( theConfig.noteDialog.togglePhone ) {
+		if ( theConfig.noteDialog.mask.phone ) {
 			myPhoneHeaderDiv.classList.toggle ( 'TravelNotes-Hidden' );
 			myPhoneInputDiv.classList.toggle ( 'TravelNotes-Hidden' );
 		}
@@ -582,7 +582,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 				className : 'TravelNotes-NoteDialog-TextArea',
 				value : note.iconContent,
 				placeholder : OUR_DEFAULT_ICON,
-				rows : theConfig.noteDialog.iconAreaHeight
+				rows : theConfig.noteDialog.areaHeight.icon
 			},
 			myIconContentDiv
 		);
@@ -614,7 +614,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				value : note.popupContent,
-				rows : theConfig.noteDialog.popupAreaHeigth
+				rows : theConfig.noteDialog.areaHeight.popupContent
 			},
 			myPopupContentDiv
 		);
@@ -742,7 +742,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 						href : 'https://www.google.com/maps/@' +
 							note.lat.toFixed ( LAT_LNG.fixed ) + ',' +
 							note.lng.toFixed ( LAT_LNG.fixed ) + ',' +
-							theConfig.noteDialog.theDevil.noteZoom + 'z',
+							theConfig.noteDialog.theDevil.zoomFactor + 'z',
 						target : '_blank',
 						title : 'Reminder! The devil will know everything about you'
 					},

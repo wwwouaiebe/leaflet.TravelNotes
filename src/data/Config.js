@@ -62,20 +62,68 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
 /* eslint-disable no-magic-numbers */
 let ourPrivateConfig = {
-	autoLoad : false,
-	map :
-	{
-		center : {
-			lat : 50.50923,
-			lng : 5.49542
-		},
-		zoom : 12
+	APIKeys : {
+		saveToSessionStorage : true
 	},
-	travelNotesToolbarUI :
+	APIKeysDialog : {
+		haveUnsecureButtons : true,
+		showAPIKeys : true,
+		showButton : true
+	},
+	colorDialog : {
+		haveSlider : true,
+		initialRed : 0
+	},
+	contextMenu : {
+		timeout : 1500
+	},
+	errorsUI :
 	{
-		contactMail : {
-			url : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
+		helpTimeOut : 30000,
+		showError : true,
+		showHelp : true,
+		showInfo : true,
+		showWarning : true,
+		timeOut : 10000
+	},
+	geoCoder : {
+		distances : {
+			city : 1200,
+			hamlet : 200,
+			town : 1500,
+			village : 400
+		},
+		osmCityAdminLevel : {
+			DEFAULT : '8',
+			GB : '10'
 		}
+	},
+	geoLocation : {
+		marker : {
+			color : '#ff0000',
+			radius : 11
+		},
+		options : {
+			enableHighAccuracy : false,
+			maximumAge : 0,
+			timeout : Infinity
+		},
+		zoomFactor : 17,
+		zoomToPosition : true
+	},
+	itineraryPaneUI :
+	{
+		showManeuvers : false,
+		showNotes : true
+	},
+	itineraryPoint : {
+		marker : {
+			color : '#ff0000',
+			fill : false,
+			radius : 7,
+			weight : 2
+		},
+		zoomFactor : 17
 	},
 	layersToolbarUI : {
 		haveLayersToolbarUI : true,
@@ -84,170 +132,98 @@ let ourPrivateConfig = {
 			addButton : false
 		}
 	},
+	map :
+	{
+		center : {
+			lat : 50.50923,
+			lng : 5.49542
+		},
+		zoom : 12
+	},
 	mouseUI : {
 		haveMouseUI : true
-	},
-	errorUI :
-	{
-		timeOut : 10000,
-		helpTimeOut : 30000,
-		showError : true,
-		showWarning : true,
-		showInfo : true,
-		showHelp : true
-	},
-	geoLocation : {
-		color : '#ff0000',
-		radius : 11,
-		zoomToPosition : true,
-		zoomFactor : 17,
-		options : {
-			enableHighAccuracy : false,
-			maximumAge : 0,
-			timeout : Infinity
-		}
-	},
-	APIKeys : {
-		showDialogButton : true,
-		saveToSessionStorage : true,
-		showAPIKeysInDialog : true,
-		dialogHaveUnsecureButtons : true
-	},
-	contextMenu : {
-		timeout : 1500
-	},
-	language : 'fr',
-	itineraryPointMarker : {
-		color : '#ff0000',
-		weight : 2,
-		radius : 7,
-		fill : false
-	},
-	searchPointMarker : {
-		color : '#006400',
-		weight : 4,
-		radius : 20,
-		fill : false
-	},
-	searchPointPolyline : {
-		color : '#006400',
-		weight : 4,
-		radius : 20,
-		fill : false
-	},
-	previousSearchLimit : {
-		color : '#006400',
-		fill : false,
-		weight : 1
-	},
-	nextSearchLimit : {
-		color : '#ff0000',
-		fill : false,
-		weight : 1
-	},
-	wayPoint : {
-		reverseGeocoding : false
-	},
-	route : {
-		color : '#ff0000',
-		width : 3,
-		dashArray : 0,
-		dashChoices : [
-			{
-				text : '——————',
-				iDashArray : [ 0 ]
-			},
-			{
-				text : '— — — — —',
-				iDashArray : [ 4, 2 ]
-			},
-			{
-				text : '—‧—‧—‧—‧—',
-				iDashArray : [ 4, 2, 0, 2 ]
-			},
-			{
-				text : '················',
-				iDashArray : [ 0, 2 ]
-			}
-		],
-		elev : {
-			smooth : true,
-			smoothCoefficient : 0.25,
-			smoothPoints : 3
-		},
-		showDragTooltip : 3
-	},
-	note : {
-		osmSearchNoteDialog : false,
-		reverseGeocoding : false,
-		grip : {
-			size : 10,
-			opacity : 0,
-			moveOpacity : 1
-		},
-		polyline : {
-			color : '#808080',
-			weight : 1
-		},
-		haveBackground : false,
-		svgRoadbookDimCoef : 2,
-		svgAnleMaxDirection :
-		{
-			right : 35,
-			slightRight : 80,
-			continue : 100,
-			slightLeft : 145,
-			left : 200,
-			sharpLeft : 270,
-			sharpRight : 340
-		},
-		svgZoom : 17,
-		svgRcnRefDistance : 20,
-		svgAngleDistance : 10,
-		osmCityAdminLevel : {
-			GB : '10',
-			DEFAULT : '8'
-		},
-		svgHamletDistance : 200,
-		svgVillageDistance : 400,
-		svgCityDistance : 1200,
-		svgTownDistance : 1500,
-		svgTimeOut : 40,
-		maxManeuversNotes : 100
-	},
-	noteDialog : {
-		theDevil : {
-			addButton : false,
-			noteZoom : 17
-		},
-		toggleIconDimension : true,
-		toggleIconTextArea : false,
-		toggleTooltip : false,
-		togglePopupContent : false,
-		toggleAddress : false,
-		toggleLink : false,
-		togglePhone : true,
-		iconAreaHeight : 2,
-		popupAreaHeigth : 8
-	},
-	itineraryPointZoom : 17,
-	routeEditor : {
-		displayEditionInHTMLPage : true
-	},
-	travelEditor : {
-		clearAfterSave : true,
-		startMinimized : true,
-		timeout : 1000,
-		startupRouteEdition : true
-	},
-	haveBeforeUnloadWarning : true,
-	overpassApi : {
-		url : 'https://lz4.overpass-api.de/api/interpreter'
 	},
 	nominatim :
 	{
 		url : 'https://nominatim.openstreetmap.org/',
 		language : '*'
+	},
+	note : {
+		grip : {
+			size : 10,
+			opacity : 0,
+			moveOpacity : 1
+		},
+		haveBackground : false,
+		maxManeuversNotes : 100,
+		polyline : {
+			color : '#808080',
+			weight : 1
+		},
+		reverseGeocoding : false,
+		svgIcon : {
+			angleDistance : 10,
+			angleDirection :
+			{
+				right : 35,
+				slightRight : 80,
+				continue : 100,
+				slightLeft : 145,
+				left : 200,
+				sharpLeft : 270,
+				sharpRight : 340
+			},
+			rcnRefDistance : 20,
+			roadbookFactor : 1,
+			zoom : 17
+		}
+	},
+	noteDialog : {
+		areaHeight : {
+			icon : 2,
+			popupContent : 8
+		},
+		mask : {
+			iconsDimension : true,
+			iconTextArea : false,
+			tooltip : false,
+			popupContent : false,
+			address : false,
+			link : false,
+			phone : true
+		},
+		theDevil : {
+			addButton : false,
+			zoomFactor : 17
+		}
+	},
+	osmSearch : {
+		nextSearchLimit : {
+			color : '#ff0000',
+			fill : false,
+			weight : 1
+		},
+		previousSearchLimit : {
+			color : '#006400',
+			fill : false,
+			weight : 1
+		},
+		searchPointMarker : {
+			color : '#006400',
+			fill : false,
+			radius : 20,
+			weight : 4
+		},
+		searchPointPolyline : {
+			color : '#006400',
+			fill : false,
+			weight : 4
+		},
+		showSearchNoteDialog : false
+	},
+	overpassApi : {
+		timeOut : 40,
+		url : 'https://lz4.overpass-api.de/api/interpreter'
 	},
 	printRouteMap :
 	{
@@ -274,14 +250,57 @@ let ourPrivateConfig = {
 			fillOpacity : 1
 		}
 	},
-	itineraryPane :
-	{
-		showNotes : true,
-		showManeuvers : false
+	route : {
+		color : '#ff0000',
+		dashArray : 0,
+		dashChoices : [
+			{
+				text : '——————',
+				iDashArray : [ 0 ]
+			},
+			{
+				text : '— — — — —',
+				iDashArray : [ 4, 2 ]
+			},
+			{
+				text : '—‧—‧—‧—‧—',
+				iDashArray : [ 4, 2, 0, 2 ]
+			},
+			{
+				text : '················',
+				iDashArray : [ 0, 2 ]
+			}
+		],
+		elev : {
+			smooth : true,
+			smoothCoefficient : 0.25,
+			smoothPoints : 3
+		},
+		showDragTooltip : 3,
+		width : 3
 	},
-	colorDialog : {
-		haveSlider : true,
-		initialRed : 0
+	routeEditor : {
+		showEditedRouteInRoadbook : true
+	},
+	travelEditor : {
+		clearAfterSave : true,
+		startMinimized : true,
+		startupRouteEdition : true,
+		timeout : 1000
+	},
+	travelNotes : {
+		autoLoad : true,
+		haveBeforeUnloadWarning : true,
+		language : 'fr'
+	},
+	travelNotesToolbarUI :
+	{
+		contactMail : {
+			url : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/issues'
+		}
+	},
+	wayPoint : {
+		reverseGeocoding : false
 	}
 };
 /* eslint-enable no-magic-numbers */
@@ -405,34 +424,30 @@ function ourFreeze ( object ) {
 */
 
 class Config {
-	get autoLoad ( ) { return ourPrivateConfig.autoLoad; }
-	get map ( ) { return ourPrivateConfig.map; }
-	get travelNotesToolbarUI ( ) { return ourPrivateConfig.travelNotesToolbarUI; }
-	get layersToolbarUI ( ) { return ourPrivateConfig.layersToolbarUI; }
-	get mouseUI ( ) { return ourPrivateConfig.mouseUI; }
-	get errorUI ( ) { return ourPrivateConfig.errorUI; }
 	get APIKeys ( ) { return ourPrivateConfig.APIKeys; }
+	get APIKeysDialog ( ) { return ourPrivateConfig.APIKeysDialog; }
+	get colorDialog ( ) { return ourPrivateConfig.colorDialog; }
 	get contextMenu ( ) { return ourPrivateConfig.contextMenu; }
-	get language ( ) { return ourPrivateConfig.language; }
-	get itineraryPointMarker ( ) { return ourPrivateConfig.itineraryPointMarker; }
-	get searchPointMarker ( ) { return ourPrivateConfig.searchPointMarker; }
-	get searchPointPolyline ( ) { return ourPrivateConfig.searchPointPolyline; }
-	get previousSearchLimit ( ) { return ourPrivateConfig.previousSearchLimit; }
-	get nextSearchLimit ( ) { return ourPrivateConfig.nextSearchLimit; }
-	get wayPoint ( ) { return ourPrivateConfig.wayPoint; }
-	get route ( ) { return ourPrivateConfig.route; }
+	get errorsUI ( ) { return ourPrivateConfig.errorsUI; }
+	get geoCoder ( ) { return ourPrivateConfig.geoCoder; }
+	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
+	get itineraryPaneUI ( ) { return ourPrivateConfig.itineraryPaneUI; }
+	get itineraryPoint ( ) { return ourPrivateConfig.itineraryPoint; }
+	get layersToolbarUI ( ) { return ourPrivateConfig.layersToolbarUI; }
+	get map ( ) { return ourPrivateConfig.map; }
+	get mouseUI ( ) { return ourPrivateConfig.mouseUI; }
+	get nominatim ( ) { return ourPrivateConfig.nominatim; }
 	get note ( ) { return ourPrivateConfig.note; }
 	get noteDialog ( ) { return ourPrivateConfig.noteDialog; }
-	get itineraryPointZoom ( ) { return ourPrivateConfig.itineraryPointZoom; }
+	get osmSearch ( ) { return ourPrivateConfig.osmSearch; }
+	get overpassApi ( ) { return ourPrivateConfig.overpassApi; }
+	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
+	get route ( ) { return ourPrivateConfig.route; }
 	get routeEditor ( ) { return ourPrivateConfig.routeEditor; }
 	get travelEditor ( ) { return ourPrivateConfig.travelEditor; }
-	get haveBeforeUnloadWarning ( ) { return ourPrivateConfig.haveBeforeUnloadWarning; }
-	get overpassApi ( ) { return ourPrivateConfig.overpassApi; }
-	get nominatim ( ) { return ourPrivateConfig.nominatim; }
-	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
-	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
-	get itineraryPane ( ) { return ourPrivateConfig.itineraryPane; }
-	get colorDialog ( ) { return ourPrivateConfig.colorDialog; }
+	get travelNotes ( ) { return ourPrivateConfig.travelNotes; }
+	get travelNotesToolbarUI ( ) { return ourPrivateConfig.travelNotesToolbarUI; }
+	get wayPoint ( ) { return ourPrivateConfig.wayPoint; }
 
 	overload ( source ) {
 		ourCopyObjectTo ( source, ourPrivateConfig );

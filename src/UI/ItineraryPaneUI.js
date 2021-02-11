@@ -60,8 +60,8 @@ import { INVALID_OBJ_ID, LAT_LNG, PANE_ID } from '../util/Constants.js';
 
 function ourNewItineraryPaneUI ( ) {
 
-	let myShowNotes = theConfig.itineraryPane.showNotes;
-	let myShowManeuvers = theConfig.itineraryPane.showManeuvers;
+	let myShowNotes = theConfig.itineraryPaneUI.showNotes;
+	let myShowManeuvers = theConfig.itineraryPaneUI.showManeuvers;
 	let myPaneDataDiv = null;
 	let myPaneControlDiv = null;
 	let myCheckBoxesDiv = null;

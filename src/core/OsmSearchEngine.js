@@ -119,7 +119,7 @@ function ourDrawPreviousSearchRectangle ( ) {
 				[ ourPreviousSearchBounds.getSouthWest ( ).lat, ourPreviousSearchBounds.getSouthWest ( ).lng ],
 				[ ourPreviousSearchBounds.getNorthEast ( ).lat, ourPreviousSearchBounds.getNorthEast ( ).lng ]
 			],
-			properties : theConfig.previousSearchLimit
+			properties : theConfig.osmSearch.previousSearchLimit
 		}
 	);
 
@@ -158,7 +158,7 @@ function ourOnMapChange ( ) {
 		{
 			objId : ourNextSearchRectangleObjId,
 			bounds : ourSearchBounds,
-			properties : theConfig.nextSearchLimit
+			properties : theConfig.osmSearch.nextSearchLimit
 		}
 	);
 }
@@ -251,7 +251,7 @@ function ourGetSearchPromises ( ) {
 			}
 			let queryElement = ONE === valuesElements.elements.size ? valuesElements.elements.values ( ).next ( ).value : 'nwr';
 
-			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:40];' +
+			let url = theConfig.overpassApi.url + '?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
 				queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
 				( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;';
 

@@ -83,7 +83,7 @@ import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Co
 let ourWaitUI = null;
 let ourManeuverCounter = ZERO;
 let ourManeuverLength = ZERO;
-let ourOsmSearchNoteDialog = theConfig.note.osmSearchNoteDialog;
+let ourOsmSearchNoteDialog = theConfig.osmSearch.showSearchNoteDialog;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

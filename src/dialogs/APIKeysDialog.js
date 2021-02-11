@@ -199,7 +199,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 				className : 'TravelNotes-APIKeysDialog-ApiKeyValue TravelNotes-APIKeysDialog-Input',
 				value : APIKey.providerKey,
 				placeholder : theTranslator.getText ( 'APIKeysDialog - API key' ),
-				type : theConfig.APIKeys.showAPIKeysInDialog ? 'text' : 'password'
+				type : theConfig.APIKeysDialog.showAPIKeys ? 'text' : 'password'
 			},
 			APIKeyRow
 		);
@@ -731,7 +731,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 
 		myCreateAddNewKeyButton ( );
 
-		if ( theConfig.APIKeys.dialogHaveUnsecureButtons ) {
+		if ( theConfig.APIKeysDialog.haveUnsecureButtons ) {
 			myCreateSaveKeysToUnsecureFileButton ( );
 			myCreateRestoreKeysFromUnsecureFileButton ( );
 		}

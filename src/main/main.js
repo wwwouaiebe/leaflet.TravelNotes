@@ -141,21 +141,21 @@ function ourMain ( ) {
 
 		if ( HTTP_STATUS_OK === configResponse.status && configResponse.ok ) {
 			let config = await configResponse.json ( );
-			config.language = myLanguage || config.language;
+			config.travelNotes.language = myLanguage || config.travelNotes.language;
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
+				config.APIKeysDialog.haveUnsecureButtons = true;
+				config.errorsUI.showHelp = true;
 				config.layersToolbarUI.theDevil.addButton = false;
-				config.noteDialog.theDevil.addButton = false;
-				config.errorUI.showHelp = true;
-				config.printRouteMap.maxTiles = OUR_DEMO_PRINT_MAX_TILES;
 				config.note.maxManeuversNotes = OUR_DEMO_MAX_MANEUVERS_NOTES;
 				config.note.haveBackground = true;
-				config.APIKeys.dialogHaveUnsecureButtons = true;
+				config.noteDialog.theDevil.addButton = false;
+				config.printRouteMap.maxTiles = OUR_DEMO_PRINT_MAX_TILES;
 				config.route.showDragTooltip = NOT_FOUND;
 			}
 			theConfig.overload ( config );
 			theTravelNotesData.providers.forEach (
 				provider => {
-					provider.userLanguage = theConfig.language;
+					provider.userLanguage = theConfig.travelNotes.language;
 				}
 			);
 			return true;
@@ -366,7 +366,7 @@ function ourMain ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		if ( theConfig.autoLoad && '' === myErrorMessage ) {
+		if ( theConfig.travelNotes.autoLoad && '' === myErrorMessage ) {
 			theHTMLElementsFactory.create (
 				'div',
 				{ id : 'TravelNotes-Map' },
@@ -413,7 +413,7 @@ function ourMain ( ) {
 			return;
 		}
 
-		myLanguage = myLanguage || theConfig.language || 'fr';
+		myLanguage = myLanguage || theConfig.travelNotes.language || 'fr';
 		theErrorsUI.createUI ( );
 		await myLoadJsonFiles ( );
 		myLoadTravelNotes ( myTravelUrl );

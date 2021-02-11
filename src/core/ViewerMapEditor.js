@@ -356,7 +356,7 @@ class ViewerMapEditor {
 			theTravelNotesData.map.fitBounds ( theGeometry.getLatLngBounds ( latLngs ) );
 		}
 		else {
-			theTravelNotesData.map.setView ( latLng, theConfig.itineraryPointZoom );
+			theTravelNotesData.map.setView ( latLng, theConfig.itineraryPoint.zoomFactor );
 		}
 	}
 
@@ -445,8 +445,8 @@ class ViewerMapEditor {
 		ourGeolocationCircle = window.L.circleMarker (
 			window.L.latLng ( position.coords.latitude, position.coords.longitude ),
 			{
-				radius : theConfig.geoLocation.radius,
-				color : theConfig.geoLocation.color
+				radius : theConfig.geoLocation.marker.radius,
+				color : theConfig.geoLocation.marker.color
 			}
 		)
 			.bindTooltip (

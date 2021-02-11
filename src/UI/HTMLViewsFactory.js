@@ -263,10 +263,10 @@ function ourGetNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
 				'viewBox',
 				'0 0 ' + ICON_DIMENSIONS.svgViewboxDim + ' ' + ICON_DIMENSIONS.svgViewboxDim
 			);
-			dimCoeficient = theConfig.note.svgRoadbookDimCoef;
+			dimCoeficient = theConfig.note.svgIcon.roadbookFactor;
 		}
 		else if ( iconHTML.firstChild.classList.contains ( 'TravelNotes-MapNoteCategory-0073' ) ) {
-			dimCoeficient = theConfig.note.svgRoadbookDimCoef;
+			dimCoeficient = theConfig.note.svgIcon.roadbookFactor;
 		}
 		iconHTML.setAttribute (
 			'tanwidth', String ( noteAndRoute.note.iconWidth * dimCoeficient ) + 'px'
@@ -323,7 +323,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 		let route =
 			( routesIterator.value.objId === theTravelNotesData.editedRouteObjId
 				&&
-				theConfig.routeEditor.displayEditionInHTMLPage
+				theConfig.routeEditor.showEditedRouteInRoadbook
 			)
 				?
 				theTravelNotesData.travel.editedRoute
@@ -773,7 +773,7 @@ function ourGetTravelHTML ( classPrefix ) {
 	let travelRoutesIterator = theTravelNotesData.travel.routes.iterator;
 	while ( ! travelRoutesIterator.done ) {
 		let useEditedRoute =
-			theConfig.routeEditor.displayEditionInHTMLPage
+			theConfig.routeEditor.showEditedRouteInRoadbook
 			&&
 			travelRoutesIterator.value.objId === theTravelNotesData.editedRouteObjId;
 		let route = useEditedRoute ? theTravelNotesData.travel.editedRoute : travelRoutesIterator.value;
