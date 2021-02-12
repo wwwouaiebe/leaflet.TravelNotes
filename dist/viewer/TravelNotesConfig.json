@@ -1,18 +1,67 @@
 {
-	"autoLoad":true,
-	"map":
+	"APIKeys":
 	{
-		"center": {
-			"lat":50.50923,
-			"lng":5.49542
-		},
-		"zoom":12
+		"saveToSessionStorage":true
 	},
-	"travelNotesToolbarUI":
+	"APIKeysDialog":{
+		"haveUnsecureButtons":false,
+		"showAPIKeys":false,
+		"showButton":true
+	},
+	"colorDialog" : {
+		"haveSlider" : true,
+		"initialRed" : 0
+	},
+	"contextMenu":
 	{
-		"contactMail": {
-			"url":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+		"timeout": 1500
+	},
+	"errorsUI":
+	{
+		"helpTimeOut":30000,
+		"showError":true,
+		"showHelp":false,
+		"showInfo":true,
+		"showWarning":true,
+		"timeOut":10000
+	},
+	"geoCoder" : {
+		"distances" : {
+			"city":1200,
+			"hamlet":200,
+			"town":1500,
+			"village":400
+		},
+		"osmCityAdminLevel" : { 
+			"DEFAULT" : "8",
+			"GB" : "10"
 		}
+	},
+	"geoLocation":{
+		"marker":{
+			"color":"#ff0000",
+			"radius":10
+		},
+		"options":{
+			"enableHighAccuracy":false, 
+			"maximumAge":0, 
+			"timeout":3600000
+		},
+		"zoomFactor":17,
+		"zoomToPosition":true
+	},
+	"itineraryPaneUI" : {	
+		"showManeuvers" : false,
+		"showNotes" : true
+	},
+	"itineraryPoint": {
+		"marker":{
+			"color":"#ff0000",
+			"fill":false,
+			"radius":7,
+			"weight":2
+		},
+		"zoomFactor":17
 	},
 	"layersToolbarUI":
 	{
@@ -22,185 +71,102 @@
 			"addButton": true
 		}
 	},
+	"map":
+	{
+		"center": {
+			"lat":50.50923,
+			"lng":5.49542
+		},
+		"zoom":12
+	},
 	"mouseUI":
 	{
 		"haveMouseUI":true
 	},
-	"errorUI":
+	"nominatim":
 	{
-		"timeOut":10000,
-		"helpTimeOut":30000,
-		"showError":true,
-		"showWarning":true,
-		"showInfo":true,
-		"showHelp":false
-	},
-	"geoLocation":{
-			"color":"#ff0000",
-			"radius":10,
-			"zoomToPosition":true,
-			"zoomFactor":17,
-			"options":{
-				"enableHighAccuracy":false, 
-				"maximumAge":0, 
-				"timeout":3600000
-			}
-	},
-	"APIKeys":
-	{
-		"showDialogButton":true,
-		"saveToSessionStorage":true,
-		"showAPIKeysInDialog":false,
-		"dialogHaveUnsecureButtons":false
-	},
-	"contextMenu":
-	{
-		"timeout": 1500
-	},
-	"language":"fr",
-	"itineraryPointMarker":
-	{
-		"color":"#ff0000",
-		"weight":2,
-		"radius":7,
-		"fill":false
-	},
-	"searchPointMarker" : {
-		"color" : "#006400",
-		"weight" : 4,
-		"radius" : 20,
-		"fill" : false
-	},
-	"searchPointPolyline" : {
-		"polyline" : {
-			"color" : "#006400",
-			"weight" : 4,
-			"fill" : false
-		},
-		"minZoom" : 17
-	},
-	"previousSearchLimit" : {
-		"color" : "#006400",
-		"fill" : false,
-		"weight" : 1
-	},
-	"nextSearchLimit" : {
-		"color" : "#ff0000",
-		"fill" : false,
-		"weight" : 1
-	},
-	"wayPoint":
-	{
-		"reverseGeocoding":true
-	},
-	"route":
-	{
-		"color":"#ff0000",
-		"width":5,
-		"dashArray": 0,
-		"dashChoices": [
-			{ 
-				"text":"——————",
-				"iDashArray" : [0]
-			}, 
-			{
-				"text":"— — — — —",
-				"iDashArray":[4,2] 
-			}, 
-			{
-				"text":"—‧—‧—‧—‧—",
-				"iDashArray":[4,2,0,2] 
-			}, 
-			{
-				"text":"················",
-				"iDashArray":[0,2] 
-			}
-		],
-		"elev":
-		{
-			"smooth" : true,
-			"smoothCoefficient": 0.25,
-			"smoothPoints": 3
-		},
-		"showDragTooltip": 0
-		
+		"url":"https://nominatim.openstreetmap.org/",
+		"language": "*"
 	},
 	"note":
 	{
-		"osmSearchNoteDialog":false,
-		"reverseGeocoding":true,
 		"grip":
 		{
 			"size":10,
 			"opacity":0,
 			"moveOpacity":1
 		},
+		"haveBackground":false,
+		"maxManeuversNotes":100,
 		"polyline":
 		{
 			"color":"#808080",
 			"weight":1
 		},
-		"haveBackground":false,
-		"svgRoadbookDimCoef":6,
-		"svgAnleMaxDirection":
-		{
-			"right":35,
-			"slightRight":80,
-			"continue":100,
-			"slightLeft":145,
-			"left":200,
-			"sharpLeft":270,
-			"sharpRight":340
-		},
-		"svgZoom":17,
-		"svgRcnRefDistance":20,
-		"svgAngleDistance":10,
-		"osmCityAdminLevel" : { 
-			"GB" : "10",
-			"DEFAULT" : "8"
-		},
-		"svgHamletDistance":200,
-		"svgVillageDistance":400,
-		"svgCityDistance":1200,
-		"svgTownDistance":1500,
-		"svgTimeOut":40,
-		"maxManeuversNotes":100
+		"reverseGeocoding":true,
+		"svgIcon":{
+			"angleDistance":10,
+			"angleDirection":
+			{
+				"right":35,
+				"slightRight":80,
+				"continue":100,
+				"slightLeft":145,
+				"left":200,
+				"sharpLeft":270,
+				"sharpRight":340
+			},
+			"rcnRefDistance":20,
+			"roadbookFactor":6,
+			"zoom":17
+		}
 	},
 	"noteDialog":{
+		"areaHeight" : {
+			"icon":2,
+			"popupContent":8
+		},
+		"mask" : {
+			"iconsDimension":true,
+			"iconTextArea":false,
+			"tooltip":false,
+			"popupContent":false,
+			"address":false,
+			"link":false,
+			"phone":true
+		},
 		"theDevil": {
 			"addButton": true,
-			"noteZoom" : 17
+			"zoomFactor" : 17
+		}
+	},
+	"osmSearch": {
+		"nextSearchLimit" : {
+			"color" : "#ff0000",
+			"fill" : false,
+			"weight" : 1
 		},
-		"toggleIconDimension":true,
-		"toggleIconTextArea":false,
-		"toggleTooltip":false,
-		"togglePopupContent":false,
-		"toggleAddress":false,
-		"toggleLink":false,
-		"togglePhone":true,
-		"iconAreaHeight":2,
-		"popupAreaHeigth":8
+		"previousSearchLimit" : {
+			"color" : "#006400",
+			"fill" : false,
+			"weight" : 1
+		},
+		"searchPointMarker" : {
+			"color" : "#006400",
+			"fill" : false,
+			"radius" : 20,
+			"weight" : 4
+		},
+		"searchPointPolyline" : {
+			"color" : "#006400",
+			"fill" : false,
+			"weight" : 4
+		},
+		"showSearchNoteDialog":false
 	},
-	"itineraryPointZoom":17,
-	"routeEditor":
-	{
-		"displayEditionInHTMLPage" : true
-	},
-	"travelEditor":
-	{
-		"clearAfterSave":true,
-		"startMinimized":true,
-		"timeout":1500,
-		"startupRouteEdition":true
-	},
-	"haveBeforeUnloadWarning":true,
 	"overpassApi": {
+		"timeOut":40,
 		"url":"https://lz4.overpass-api.de/api/interpreter"
-	},
-	"nominatim":
-	{
-		"url":"https://nominatim.openstreetmap.org/",
-		"language": "*"
 	},
 	"printRouteMap":
 	{
@@ -227,12 +193,60 @@
 			"fillOpacity" : 1
 		}
 	},
-	"itineraryPane" : {	
-		"showNotes" : true,
-		"showManeuvers" : false
+	"route":
+	{
+		"color":"#ff0000",
+		"dashArray": 0,
+		"dashChoices": [
+			{ 
+				"text":"——————",
+				"iDashArray" : [0]
+			}, 
+			{
+				"text":"— — — — —",
+				"iDashArray":[4,2] 
+			}, 
+			{
+				"text":"—‧—‧—‧—‧—",
+				"iDashArray":[4,2,0,2] 
+			}, 
+			{
+				"text":"················",
+				"iDashArray":[0,2] 
+			}
+		],
+		"elev":
+		{
+			"smooth":true,
+			"smoothCoefficient":0.25,
+			"smoothPoints":3
+		},
+		"showDragTooltip":0,
+		"width":5	
 	},
-	"colorDialog" : {
-		"haveSlider" : true,
-		"initialRed" : 0
+	"routeEditor":
+	{
+		"showEditedRouteInRoadbook" : true
+	},
+	"travelEditor":
+	{
+		"startMinimized":true,
+		"startupRouteEdition":true,
+		"timeout":1500
+	},
+	"travelNotes" : {
+		"autoLoad":true,
+		"haveBeforeUnloadWarning":true,
+		"language":"fr"
+	},
+	"travelNotesToolbarUI":
+	{
+		"contactMail": {
+			"url":"https://github.com/wwwouaiebe/leaflet.TravelNotes/issues"
+		}
+	},
+	"wayPoint":
+	{
+		"reverseGeocoding":true
 	}
 }
