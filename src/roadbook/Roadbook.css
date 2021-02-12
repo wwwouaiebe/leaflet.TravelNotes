@@ -69,12 +69,45 @@ Changes:
 
 #TravelNotes-Roadbook-Menu {
 	position: fixed;
-	top: 1em;
-	left: 1em;
-	background-color: white;
+	top: 0;
+	left: 0;
+	z-index: 200;
 }
 
-@media screen and (max-width: 70em) {
+@media screen and (max-width: 320px) {
+	body {
+		margin: 0;
+		padding: 0;
+	}
+
+	#TravelNotes-Roadbook-Menu {
+		position: static;
+	}
+
+	.TravelNotes-Roadbook-Travel {
+		margin-right: 0;
+		margin-left: 0;
+	}
+
+	.TravelNotes-Roadbook-Travel-Notes-Row,
+	.TravelNotes-Roadbook-Route-Maneuvers-Row,
+	.TravelNotes-Roadbook-Route-Notes-Row {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.TravelNotes-Roadbook-NoteHtml-Url {
+		overflow: hidden;
+	}
+
+	.TravelNotes-Roadbook-Travel-Notes-Cell,
+	.TravelNotes-Roadbook-Route-ManeuversAndNotes-Cell {
+		padding-left: 0;
+		flex-shrink: 2;
+	}
+}
+
+@media screen and (min-width: 321px) and (max-width: 70em) {
 	.TravelNotes-Roadbook-Travel {
 		padding-top: 3.5em;
 	}

@@ -243,11 +243,12 @@ function addSaveButton ( ) {
 			}
 		}
 	}
-
 	let saveButton = document.createElement ( 'button' );
 	saveButton.id = 'TravelNotes-SaveButton';
-	document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( saveButton );
 	saveButton.addEventListener ( 'click', saveFile );
+	let saveDiv = document.createElement ( 'div' );
+	saveDiv.appendChild ( saveButton );
+	document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( saveDiv );
 }
 
 if ( pageId ) {

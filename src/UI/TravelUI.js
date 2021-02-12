@@ -407,7 +407,7 @@ function ourCreateRoadbookButton ( ) {
 			'a',
 			{
 				className : 'TravelNotes-UI-LinkButton',
-				href : 'TravelNotesRoadbook.html?lng=' + theConfig.language + '&page=' + theTravelNotesData.UUID,
+				href : 'TravelNotesRoadbook.html?lng=' + theConfig.travelNotes.language + '&page=' + theTravelNotesData.UUID,
 				target : '_blank'
 			},
 			theHTMLElementsFactory.create (
