@@ -765,6 +765,7 @@ function ourParseResponse ( response, onOk, onError ) {
 		onError ( new Error (
 			'A node with more than 3 ways was found in the relation.See the console for more infos'
 		) );
+		return;
 	}
 
 	// removing holes
@@ -957,27 +958,14 @@ class PublicTransportRouteProvider {
 	getPromiseRoute ( route ) { return ourGetPromiseRoute ( route ); }
 
 	get icon ( ) {
-		return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWX\
-				MAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4goTCi4V9AmY6AAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAA\
-				AEc0lEQVRIx8VXTUhbWxD+zr0ag77Gqo1/RazRYjcBaxAVoxXFhQtRXLgt2iJUaAl9FBFcPBdtceeuBXGr4uaCq67rz0IaaUtFBc\
-				XAq1WjVkhiTm6u3u8tXs1TG6NVyxuYzZy5fHNm5s58R5Ak/gdJOs+htbUVNpsNLpcLZWVlcDqdyMrKujoyE8j4+DhVVaXH42FdXR\
-				2tVisBxNTlcnF2dpaXEfyKcyAQIAD29vZydHSUdrudT58+/b3AUkru7OywoaGBdrudpmnyKiLOa67d3V3U19fjy5cvJ+ylpaVwOp\
-				3IyMhAWloa7HY7Kioq4HK5kJmZebUaR6NRKooSq6mqqlRVlUKIE7U+ra9fv75aqvPy8giARUVF9Pv91HWduq5TSkmv18v+/n5WVV\
-				XFBX/48OHlgFtaWgiA6enpF6pZNBplMBjk3t4e9/b2uL+/T5/P92vA79+/j0Xu9Xov3UBSSn79+jXu2U8DxOfzoa6uDgDw9u1blJ\
-				eXAwAGBgYwMzODcDgMALBarbh58yZyc3NRXFyMe/fuIT8/H6qqIhKJ4ODgALdu3UJycvL5zfXp06fYTYeGhmL2tra2hM10nj569O\
-				jsVGuaRgAUQnBycpIkubi4yOzs7CuBHunu7u7PwD09PQTA27dvMxQKUUrJZ8+eXQvgkTocjpPAhYWFBMCBgQGS5PLy8rUCHtdAIB\
-				ADVhwOB46GV3V1NQKBwG9bhY2Njf+txa6uLrS3t0PTNFRWVib8sLS0FG63G2VlZSguLsaNGzcQiUTw/ft3bGxs4Nu3b/D7/QgGgw\
-				iHw5BSQkoJXdcRjUYRDAah6zpSUlKQpGkapZQCAEKhEFRVxf3791FbW8uGhgbcuXMH+fn5sNvtiWISp3+WODb8SDcsFgvE58+fab\
-				PZoKoqsrOzYbFYfivz2NraQk5ODpKcTmfc6C5KiYQQP92YJMWPg9P2w8NDmKYJVdO0v3w+Hw4ODqDrOhRFQWpqKsQFxePxiOnpaU\
-				xNTUFRFBQWFuI06NbWFtbX17G9vS0cDoeQUgokJSXFbf2Ojg6+e/eOm5ubjEajZ87j42szIyMjrs/Q0NCJ2W8YBkHSnJubY0lJiX\
-				kqCPO4ulwuU9M0U0ppGoZhHsns7KwJgCkpKSwoKCBJmqfoid/vZ15eHm02m7mysmJGIhHzxKw2DIMLCwt0u91nDgFFUWixWHj37l\
-				0ODg5yfn6eh4eHCXma1+vl2NgYnzx5QgAMhULx1+LIyAhfvnzJpaUl1tTUXOv06uzsTEwE5ubmaLVa2dTUxImJCb558+ZagI+yk5\
-				D66LrO5uZmAmB5eTmXl5c5Pj7OBw8e/DJgZmYm19bWLs4yAWB4eBjd3d0AgL6+Prx69QoAMD8/j48fP2J1dRXb29sIh8MwDANCCI\
-				TDYZimiZycHHR2dsLtdl+cZR6XnZ0dOhyOWIN9+PDhTN/p6Wl6PB62trYSAGtrazk1NUXDMC73kiDJx4+7KMS/6Xv+3EPD0M/07e\
-				vrpc32x4mUv3jxJ9fX/+Y/YWHR4vXjhpgAAAAASUVORK5CYII=';
+		return 'data:image/svg+xml;utf8,<svg viewBox="-3 -3 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(128,0,0)">\
+			<path d="M 5,0 C 3.025911,-0.0084 1,3 1,7 l 0,2 c 0,1 1,2 2,2 l 8,0 c 1,0 2,-1 2,-2 L 13,7 C 13,3 11,0 9,0 z m \
+			-1,3 6,0 c 0,0 1,1 1,3 L 3.03125,6 C 2.994661,3.9916 4,3 4,3 z M 3,8 6,8 6,9 3,9 z m 5,0 3,0 0,1 -3,0 z m -6,4 \
+			-1,2 3,0 1,-2 z m 7,0 1,2 3,0 -1,-2 z"/></g></svg>';
+
 	}
 
-	get name ( ) { return 'leaflet.TravelNotesPublicTransport & OpenStreetMap'; }
+	get name ( ) { return 'Public Transport on OpenStreetMap'; }
 
 	get transitModes ( ) { return { car : false, bike : false, pedestrian : false, train : true }; }
 

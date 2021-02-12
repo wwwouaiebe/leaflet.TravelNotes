@@ -74,17 +74,18 @@ const OUR_ICON_LIST =
 @function ourParseResponse
 @desc parse the response from the provider and add the received itinerary to the ourRoute itinerary
 @param {Object} response the itinerary received from the provider
-@param {function} returnOnOk a function to call when the response is parsed correctly
-@param {function} returnOnError a function to call when an error occurs
+@param {function} onOk a function to call when the response is parsed correctly
+@param {function} onError a function to call when an error occurs
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourParseResponse ( response, returnOnOk, returnOnError ) {
+function ourParseResponse ( response, onOk, onError ) {
 
 	if ( ZERO === response.paths.length ) {
-		returnOnError ( 'Route not found' );
+		onError ( 'Route not found' );
+		return;
 	}
 
 	ourRoute.itinerary.itineraryPoints.removeAll ( );
@@ -143,7 +144,7 @@ function ourParseResponse ( response, returnOnOk, returnOnError ) {
 		}
 	);
 
-	returnOnOk ( ourRoute );
+	onOk ( ourRoute );
 }
 
 /**

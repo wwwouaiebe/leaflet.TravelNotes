@@ -340,14 +340,14 @@ function ourParseCircle ( ) {
 
 @function ourParseResponse
 @desc Build a polyline (as stuff of a great circle) or a circle from the start and end wayPoints
-@param {function} returnOnOk a function to call when the response is parsed correctly
-@param {function} returnOnError a function to call when an error occurs
+@param {function} onOk a function to call when the response is parsed correctly
+@param {function} onError a function to call when an error occurs
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourParseResponse ( returnOnOk, returnOnError ) {
+function ourParseResponse ( onOk, onError ) {
 	try {
 		ourRoute.itinerary.itineraryPoints.removeAll ( );
 		ourRoute.itinerary.maneuvers.removeAll ( );
@@ -365,9 +365,9 @@ function ourParseResponse ( returnOnOk, returnOnError ) {
 		default :
 			break;
 		}
-		returnOnOk ( ourRoute );
+		onOk ( ourRoute );
 	}
-	catch ( err ) { returnOnError ( err ); }
+	catch ( err ) { onError ( err ); }
 }
 
 /**
@@ -410,14 +410,13 @@ class PolylineRouteProvider {
 	getPromiseRoute ( route ) { return ourGetPromiseRoute ( route ); }
 
 	get icon ( ) {
-		return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3\
-				RJTUUH4ggaBh8z7ov/KQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAqElEQVRIx9VW0Q6AIAgU5v\
-				//sr1Us0I6EGy5HnLR3XnAhFprJWdxSVuJ0FX7SLS/uEzDVJ8cMdAuOJfXCBPR/gSn8cHNMz+7DLEa3ccf5QSo7itPpBzoYAOuCH\
-				TbdvEMqQBb5hoGp1G0RbIYg9bFvqXaUnxKPiURHNDfg8PxLMrYNHYabe5GxI2eUqWvHj3YgTjJjWXX7vS18u2wEDT0rJlDoie0fw\
-				5mG+C/L0HylIYKAAAAAElFTkSuQmCC';
+		return 'data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" c\
+		y="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)" \
+		/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(\
+		255,204,0)" /> </svg>';
 	}
 
-	get name ( ) { return 'Polyline'; }
+	get name ( ) { return 'Polyline & Circle'; }
 
 	get transitModes ( ) { return { line : true, circle : true }; }
 

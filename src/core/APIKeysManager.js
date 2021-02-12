@@ -230,7 +230,7 @@ The methos ask a password to the user and try to decode the file
 */
 
 function ourOnServerFileFound ( data ) {
-	if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
+	if ( window.isSecureContext && window.crypto && window.crypto.subtle && window.crypto.subtle.importKey ) {
 		newDataEncryptor ( ).decryptData (
 			data,
 			ourOnOkDecryptServerFile,
