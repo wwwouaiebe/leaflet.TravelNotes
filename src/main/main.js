@@ -367,7 +367,7 @@ function ourMain ( ) {
 
 	function myLoadTravelNotes ( ) {
 		if ( theConfig.travelNotes.autoLoad && '' === myErrorMessage ) {
-			theHTMLElementsFactory.create (
+			let mapDiv = theHTMLElementsFactory.create (
 				'div',
 				{ id : 'TravelNotes-Map' },
 				document.querySelector ( 'body' )
@@ -387,6 +387,7 @@ function ourMain ( ) {
 			else {
 				theTravelNotes.addControl ( map, 'TravelNotes-UI' );
 			}
+			mapDiv.focus ( );
 		}
 	}
 

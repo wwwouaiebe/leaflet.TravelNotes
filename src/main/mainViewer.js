@@ -195,7 +195,7 @@ function ourMainViewer ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		theHTMLElementsFactory.create (
+		let mapDiv = theHTMLElementsFactory.create (
 			'div',
 			{ id : 'TravelNotes-Map' },
 			document.querySelector ( 'body' )
@@ -207,6 +207,8 @@ function ourMainViewer ( ) {
 		theTravelNotesData.map = map;
 
 		theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
+
+		mapDiv.focus ( );
 	}
 
 	/**
@@ -225,7 +227,7 @@ function ourMainViewer ( ) {
 			document.body.textContent = 'Not possible to load the TravelNotesConfig.json file. ';
 			return;
 		}
-		myLanguage = myLanguage || theConfig.language;
+		myLanguage = myLanguage || theConfig.travelNotes.language;
 		if ( ! await myLoadLanguage ( ) ) {
 			document.body.textContent =
 				'Not possible to load the TravelNotesConfig' + myLanguage.toUpperCase ( ) + '.json file. ';

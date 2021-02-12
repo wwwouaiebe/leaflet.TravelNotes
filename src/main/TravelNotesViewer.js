@@ -48,9 +48,27 @@ import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
-import { TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { theGeoLocator } from '../core/GeoLocator.js';
+import { newZoomer } from '../core/Zoomer.js';
+import { ZERO, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
+
+function ourOnKeyDown ( keyBoardEvent ) {
+	if ( 'Z' === keyBoardEvent.key || 'z' === keyBoardEvent.key ) {
+		newZoomer ( ).zoomToTravel ( );
+	}
+	else if ( 'G' === keyBoardEvent.key || 'g' === keyBoardEvent.key ) {
+		theGeoLocator.switch ( );
+	}
+	else {
+		let charCode = keyBoardEvent.key.charCodeAt ( ZERO );
+		/* eslint-disable-next-line no-magic-numbers */
+		if ( 47 < charCode && 58 > charCode ) {
+			theViewerLayersToolbarUI.setLayer ( keyBoardEvent.key );
+		}
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,6 +81,7 @@ let ourTravelNotesLoaded = false;
 */
 
 function ourAddEventsListeners ( ) {
+	document.addEventListener ( 'keydown', ourOnKeyDown, true );
 	document.addEventListener (
 		'routeupdated',
 		updateRouteEvent => {

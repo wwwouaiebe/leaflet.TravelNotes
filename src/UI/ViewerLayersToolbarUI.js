@@ -209,7 +209,12 @@ class ViewerLayersToolbarUI {
 	*/
 
 	setLayer ( layerName ) {
-		let newLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
+		let newLayer =
+			( layerName.match ( /^[0-9]$/ ) )
+				?
+				ourLayers [ Number.parseInt ( layerName ) ] || ourLayers [ ZERO ]
+				:
+				ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
 		theEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
 		theAttributionsUI.attributions = newLayer.attribution;
 	}
