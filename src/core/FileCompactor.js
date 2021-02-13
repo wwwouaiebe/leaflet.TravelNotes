@@ -263,8 +263,8 @@ function ourNewFileCompactor ( ) {
 		@return a copy of the currently edited travel compressed and ready to be written in a file
 		*/
 
-		compress ( ) {
-			let compressedTravelObject = theTravelNotesData.travel.jsonObject;
+		compress ( travel ) {
+			let compressedTravelObject = travel.jsonObject;
 			compressedTravelObject.routes.forEach ( myCompressRoute );
 			myCompressRoute ( compressedTravelObject.editedRoute );
 

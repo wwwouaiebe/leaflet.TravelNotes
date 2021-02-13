@@ -67,6 +67,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theConfig } from '../data/Config.js';
+import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newRoute } from '../data/Route.js';
@@ -76,6 +77,46 @@ import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 import { theMouseUI } from '../UI/MouseUI.js';
+import { newSaveAsDialog } from '../dialogs/SaveAsDialog.js';
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourSaveAsTravel
+@desc This function save the travel to a file, removing notes and maneuvers, depending of the user choice.
+@param {Object} removeData an object describing witch data must be saved
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourSaveAsTravel ( removeData ) {
+
+	let saveAsTravel = newTravel ( );
+	saveAsTravel.jsonObject = theTravelNotesData.travel.jsonObject;
+	saveAsTravel.name += '-partial';
+	let routesIterator = saveAsTravel.routes.iterator;
+	while ( ! routesIterator.done ) {
+		routesIterator.value.hidden = false;
+	}
+	if ( removeData.removeTravelNotes ) {
+		saveAsTravel.notes.removeAll ( );
+	}
+	if ( removeData.removeRoutesNotes ) {
+		routesIterator = saveAsTravel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			routesIterator.value.notes.removeAll ( );
+		}
+	}
+	if ( removeData.removeManeuvers ) {
+		routesIterator = saveAsTravel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			routesIterator.value.itinerary.maneuvers.removeAll ( );
+		}
+	}
+	let compressedSaveAsTravel = newFileCompactor ( ).compress ( saveAsTravel );
+	theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
+}
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -112,10 +153,43 @@ class TravelEditor {
 	}
 
 	/**
+	This method save the current travel to a file. The user can choose to save the notes and the maneuvers
+	*/
+
+	saveAsTravel ( ) {
+		if ( '' === theTravelNotesData.travel.name ) {
+			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Gives a name to the travel' ) );
+			return;
+		}
+
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+			theErrorsUI.showError (
+				theTranslator.getText ( 'TravelEditor - Not possible to partial save when a route is edited.' )
+			);
+			return;
+		}
+
+		let saveAsDialog = newSaveAsDialog ( );
+		saveAsDialog.show ( )
+			.then ( removeData => ourSaveAsTravel ( removeData ) )
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
+	}
+
+	/**
 	This method save the current travel to a file
 	*/
 
 	saveTravel ( ) {
+		if ( '' === theTravelNotesData.travel.name ) {
+			theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Gives a name to the travel' ) );
+			return;
+		}
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
 		while ( ! routesIterator.done ) {
 			routesIterator.value.hidden = false;

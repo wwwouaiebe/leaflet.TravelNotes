@@ -35,6 +35,11 @@ Changes:
 	width: 100%;
 }
 
+.TravelNotes-TravelUI-SaveAsButton {
+	background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <path d="M 1,1 L 19,1 19,16 1,16 1,1 z" fill="rgb(255,0,0)" /> </svg>');
+	background-position: center;
+}
+
 /* --- routes list --- */
 
 .TravelNotes-TravelUI-RoutesListDiv {

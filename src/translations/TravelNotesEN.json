@@ -660,6 +660,22 @@
 		"msgstr" : "Zoom to this point"
 	},
 	{
+		"msgid" : "SaveAsDialog - SaveAs",
+		"msgstr" : "Select\u00a0:"
+	},
+	{
+		"msgid" : "SaveAsDialog - Remove Travel Notes",
+		"msgstr" : "Remove Travel Notes"
+	},
+	{
+		"msgid" : "SaveAsDialog - Remove Routes Notes",
+		"msgstr" : "Remove Routes Notes"
+	},
+	{
+		"msgid" : "SaveAsDialog - Remove Maneuvers",
+		"msgstr" : "Remove Maneuvers"
+	},
+	{
 		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
 		"msgstr" : " at the small roundabout on the ground"
 	},
@@ -720,16 +736,20 @@
 		"msgstr" : "It's impossible to remove an edited route"
 	},
 	{
+		"msgid" : "TravelEditor - Gives a name to the travel",
+		"msgstr" : "Gives first a name to the travel"
+	},
+	{
+		"msgid" : "TravelEditor - Not possible to partial save when a route is edited.",
+		"msgstr" : "Not possible to partial save when a route is edited."
+	},
+	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "This page ask to close; data are perhaps not saved."
 	},
 	{
 		"msgid" : "TravelUI - Cancel travel",
 		"msgstr" : "Cancel travel"
-	},
-	{
-		"msgid" : "TravelUI - Gives a name to the travel",
-		"msgstr" : "Gives first a name to the travel"
 	},
 	{
 		"msgid" : "TravelUI - Hide",
@@ -758,6 +778,10 @@
 	{
 		"msgid" : "TravelUI - Route",
 		"msgstr" : "Route"
+	},
+	{
+		"msgid" : "TravelUI - Save as travel",
+		"msgstr" : "☢️ Partial save ☢️"
 	},
 	{
 		"msgid" : "TravelUI - Save travel",

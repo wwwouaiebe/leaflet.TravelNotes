@@ -214,12 +214,7 @@ function ourCreateCancelTravelButton ( ) {
 
 function ourOnSaveTravelButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
-	if ( '' === theTravelNotesData.travel.name ) {
-		theErrorsUI.showError ( theTranslator.getText ( 'TravelUI - Gives a name to the travel' ) );
-	}
-	else {
-		theTravelEditor.saveTravel ( );
-	}
+	theTravelEditor.saveTravel ( );
 }
 
 /**
@@ -243,6 +238,44 @@ function ourCreateSaveTravelButton ( ) {
 		ourButtonsDiv
 	)
 		.addEventListener ( 'click', ourOnSaveTravelButtonClick, false );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnSaveTravelButtonClick
+@desc click event listener for the save travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnSaveAsTravelButtonClick ( clickEvent ) {
+	clickEvent.stopPropagation ( );
+	theTravelEditor.saveAsTravel ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourCreateSaveAsTravelButton
+@desc This method creates the save travel button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourCreateSaveAsTravelButton ( ) {
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-UI-Button TravelNotes-TravelUI-SaveAsButton',
+			title : theTranslator.getText ( 'TravelUI - Save as travel' ),
+			textContent : '💾'
+		},
+		ourButtonsDiv
+	)
+		.addEventListener ( 'click', ourOnSaveAsTravelButtonClick, false );
 }
 
 /**
@@ -441,6 +474,7 @@ function ourCreateButtonsDiv ( ) {
 		ourUIMainDiv
 	);
 
+	ourCreateSaveAsTravelButton ( );
 	ourCreateCancelTravelButton ( );
 	ourCreateSaveTravelButton ( );
 	ourCreateOpenTravelButton ( );

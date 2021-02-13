@@ -352,7 +352,7 @@ export {
 	@function newRoutePropertiesDialog
 	@desc constructor for RoutePropertiesDialog objects
 	@param {Route} route The route to edit at the dialog opening
-	@return {NoteDialog} an instance of NoteDialog object
+	@return {RoutePropertiesDialog} an instance of RoutePropertiesDialog object
 	@global
 
 	@--------------------------------------------------------------------------------------------------------------------------
