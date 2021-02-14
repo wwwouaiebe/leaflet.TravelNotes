@@ -336,6 +336,10 @@
 		"msgstr" : "Contenu de l'icône\u00a0:\u00a0"
 	},
 	{
+		"msgid" : "NoteDialog - invalidUrl",
+		"msgstr" : "Lien non valide"
+	},
+	{
 		"msgid" : "NoteDialog - Link",
 		"msgstr" : "Lien : "
 	},
@@ -660,6 +664,22 @@
 		"msgstr" : "Zoomer sur cet endroit"
 	},
 	{
+		"msgid" : "SaveAsDialog - SaveAs",
+		"msgstr" : "Sélectionnez\u00a0:"
+	},
+	{
+		"msgid" : "SaveAsDialog - Remove Travel Notes",
+		"msgstr" : "Supprimer les notes de voyage"
+	},
+	{
+		"msgid" : "SaveAsDialog - Remove Routes Notes",
+		"msgstr" : "Supprimer les notes de trajets"
+	},
+	{
+		"msgid" : "SaveAsDialog - Remove Maneuvers",
+		"msgstr" : "Supprimer les manœuvres"
+	},
+	{
 		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
 		"msgstr" : " au petit rond-point au sol"
 	},
@@ -720,16 +740,20 @@
 		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
 	},
 	{
+		"msgid" : "TravelEditor - Gives a name to the travel",
+		"msgstr" : "Donnez d'abord un nom à ce voyage."
+	},
+	{
+		"msgid" : "TravelEditor - Not possible to partial save when a route is edited.",
+		"msgstr" : "Il n'est pas possible de faire une sauvegarde partielle quand un trajet est en cours d'édition"
+	},
+	{
 		"msgid" : "TravelEditor - This page ask to close; data are perhaps not saved.",
 		"msgstr" : "Cette page demande de confirmer sa fermeture ; des données saisies pourraient ne pas être enregistrées."
 	},
 	{
 		"msgid" : "TravelUI - Cancel travel",
 		"msgstr" : "Abandonner ce voyage"
-	},
-	{
-		"msgid" : "TravelUI - Gives a name to the travel",
-		"msgstr" : "Donnez d'abord un nom à ce voyage."
 	},
 	{
 		"msgid" : "TravelUI - Hide",
@@ -758,6 +782,10 @@
 	{
 		"msgid" : "TravelUI - Route",
 		"msgstr" : "Trajet"
+	},
+	{
+		"msgid" : "TravelUI - Save as travel",
+		"msgstr" : "☢️ Sauvegarde partielle ☢️"
 	},
 	{
 		"msgid" : "TravelUI - Save travel",
