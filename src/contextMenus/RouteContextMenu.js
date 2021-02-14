@@ -163,7 +163,7 @@ function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 			{
 				context : myZoomer,
 				name : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
-				action : myZoomer.zoomToRoute,
+				action : myRoute.hidden ? null : myZoomer.zoomToRoute,
 				param : myRouteObjId
 			},
 			{

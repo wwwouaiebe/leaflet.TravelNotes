@@ -336,6 +336,10 @@
 		"msgstr" : "Contenu de l'icône\u00a0:\u00a0"
 	},
 	{
+		"msgid" : "NoteDialog - invalidUrl",
+		"msgstr" : "Lien non valide"
+	},
+	{
 		"msgid" : "NoteDialog - Link",
 		"msgstr" : "Lien : "
 	},

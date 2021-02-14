@@ -167,7 +167,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		}
 		if ( '' !== myLinkInput.value ) {
 			if ( '' === theHTMLSanitizer.sanitizeToUrl ( myLinkInput.value ).url ) {
-				myNoteDialog.showError ( theTranslator.getText ( 'Notedialog - invalidUrl' ) );
+				myNoteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
 				return;
 			}
 		}
@@ -437,7 +437,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			myNoteDialog.hideError ( );
 		}
 		else {
-			myNoteDialog.showError ( verifyResult.errorsString );
+			myNoteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
 		}
 	}
 

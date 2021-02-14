@@ -336,6 +336,10 @@
 		"msgstr" : "Icon content\u00A0:\u00A0"
 	},
 	{
+		"msgid" : "NoteDialog - invalidUrl",
+		"msgstr" : "Invalid link"
+	},
+	{
 		"msgid" : "NoteDialog - Link",
 		"msgstr" : "Link : "
 	},
