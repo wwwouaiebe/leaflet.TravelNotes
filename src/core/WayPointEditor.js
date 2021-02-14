@@ -133,7 +133,11 @@ function ourRenameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 				if ( '' !== geoCoderData.city ) {
 					address += ' ' + geoCoderData.city;
 				}
-				ourRenameWayPoint ( Object.seal ( { name : geoCoderData.name, address : address } ), wayPointObjId );
+				let wayPointName = '';
+				if ( theConfig.wayPoint.geocodingIncludeName ) {
+					wayPointName = geoCoderData.name;
+				}
+				ourRenameWayPoint ( Object.seal ( { name : wayPointName, address : address } ), wayPointObjId );
 			}
 		)
 		.catch (

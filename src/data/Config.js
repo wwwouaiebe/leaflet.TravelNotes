@@ -299,7 +299,8 @@ let ourPrivateConfig = {
 		}
 	},
 	wayPoint : {
-		reverseGeocoding : false
+		reverseGeocoding : false,
+		geocodingIncludeName : false
 	}
 };
 /* eslint-enable no-magic-numbers */

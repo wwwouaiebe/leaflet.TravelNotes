@@ -247,6 +247,7 @@
 	},
 	"wayPoint":
 	{
-		"reverseGeocoding":true
+		"reverseGeocoding":true,
+		"geocodingIncludeName":true
 	}
 }
