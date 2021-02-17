@@ -97,4 +97,20 @@ La version 2.1.0. est avant tout une version contenant des changements pour les 
 - tous les repositories de plugins on été fusionnés dans TravelNotes et il n'y a donc plus qu'un seul repository. Grâce à celà,
 les tailles de certains plugins ont été considérablement réduites.
 - @mapbox\polyline n'est plus utilisé pour la compression des données et a été remplacé par un dévelopement 
-interne, ce qui permet également de réduire fortement la taille des fichiers de donnée..
+interne, ce qui permet également de réduire fortement la taille des fichiers de donnée.
+
+### Quoi de neuf dans la version 2.2.0
+
+- le fichier TravelNotesConfig.json a été entièrement revu. Si vous utilisez une version modifiée de ce fichier, il est important
+de revoir celle-ci. Voyez le guide d'installation.
+- un indicateur du statut de la dernière utilisation de la commande "Sauver dans un fichier" a été ajoutée (vert : voyage sauvé - jaune :
+voyage modifié depuis la dernière sauvegarde - rouge : voyage modifié et non sauvé depuis au mins 5 minutes).
+- la méthode utilisée pour rechercher la commune d'une adresse a été revue.
+- la recherche de points d'intérêts dans OpenStreetMap a été améliorée et est beaucoup plus rapide.
+- une commande "Sauvegarde partielle" a été ajoutée. Celle-ci permet de sauver un voyage SANS les notes de voyage et/ou SANS les notes de
+trajet et/ou SANS les manoeuvres. Cette commande permet d'avoir un fichier beaucoup plus léger pour des présentations de carte sur Internet
+- les css ont été réorganisés et revus. De nombreux petits bugs de présentation liés à CSS ont été corrigés.
+- il est possible de faire des zooms et des pans sur la carte quand un dialogue est affiché.
+- il est possible d'utiliser le clavier pour les commandes du viewer. Voir 
+le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#Viewer)
+- et de nombreuses modifications purement techniques ainsi qie la correction de nombreux petits bugs.

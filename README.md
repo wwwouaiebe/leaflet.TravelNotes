@@ -70,13 +70,17 @@ how to convert files made with an earlier version.
 
 ## What's new in the last release
 
-Version 2.1.0. is primarily a version containing changes for developers:
-- all plugin repositories have been merged into TravelNotes and there is therefore only one repository. Thanks to that,
-the sizes of some plugins have been reduced considerably.
-- @mapbox\polyline is no longer used for data compression and has been replaced by an internal development
-which also greatly reduces the size of the data files. 
-
-For users, only a few minor bugs have been fixed.
+- the TravelNotesConfig.json file has been completely revised. If you are using a modified version of this file, it is important to review this one. See the installation guide.
+- a status indicator for the last use of the "Save to file" command has been added (green: travel saved - yellow: travel modified since the last save - red: travel modified and not saved for at least 5 minutes).
+- the method used to find the municipality of an address has been revised.
+- the search for points of interest in OpenStreetMap has been improved and is much faster.
+- a "Partial save" command has been added. This allows you to save a travel WITHOUT the travel notes and / or WITHOUT the route notes and / or WITHOUT the maneuvers. This command allows to have a much lighter file
+for map presentations on the Internet
+- the css have been reorganized and revised. Many small presentation bugs related to CSS have been fixed.
+- it is possible to zoom and pan on the map when a dialog is displayed.
+- it is possible to use the keyboard for the viewer commands. See the 
+ [user guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#Viewer)
+- and many purely technical modifications as well as the correction of many small bugs.
 
 For other versions, see the document ['What's new?' - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/WhatsNew.md)
 
@@ -150,12 +154,18 @@ comment convertir des fichiers réalisés avec une version antérieure.
 
 ## Quoi de neuf dans la dernière version
 
-La version 2.1.0. est avant tout une version contenant des changements pour les dévelopeurs:
-- tous les repositories de plugins on été fusionnés dans TravelNotes et il n'y a donc plus qu'un seul repository. Grâce à celà,
-les tailles de certains plugins ont été considérablement réduites.
-- @mapbox\polyline n'est plus utilisé pour la compression des données et a été remplacé par un dévelopement 
-interne, ce qui permet également de réduire fortement la taille des fichiers de donnée..
-
-Pour les utilisateurs, seuls quelques bugs mineurs ont été corrigés.
+- le fichier TravelNotesConfig.json a été entièrement revu. Si vous utilisez une version modifiée de ce fichier, il est important
+de revoir celle-ci. Voyez le guide d'installation.
+- un indicateur du statut de la dernière utilisation de la commande "Sauver dans un fichier" a été ajoutée (vert : voyage sauvé - jaune :
+voyage modifié depuis la dernière sauvegarde - rouge : voyage modifié et non sauvé depuis au mins 5 minutes).
+- la méthode utilisée pour rechercher la commune d'une adresse a été revue.
+- la recherche de points d'intérêts dans OpenStreetMap a été améliorée et est beaucoup plus rapide.
+- une commande "Sauvegarde partielle" a été ajoutée. Celle-ci permet de sauver un voyage SANS les notes de voyage et/ou SANS les notes de
+trajet et/ou SANS les manoeuvres. Cette commande permet d'avoir un fichier beaucoup plus léger pour des présentations de carte sur Internet
+- les css ont été réorganisés et revus. De nombreux petits bugs de présentation liés à CSS ont été corrigés.
+- il est possible de faire des zooms et des pans sur la carte quand un dialogue est affiché.
+- il est possible d'utiliser le clavier pour les commandes du viewer. Voir 
+le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#Viewer)
+- et de nombreuses modifications purement techniques ainsi qie la correction de nombreux petits bugs.
 
 Pour les autres versions, reportez-vous au document ['quoi de neuf?' - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/QuoiDeNeuf.md)

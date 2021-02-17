@@ -96,3 +96,17 @@ Version 2.1.0. is primarily a version containing changes for developers:
 the sizes of some plugins have been reduced considerably.
 - @mapbox\polyline is no longer used for data compression and has been replaced by an internal development
 which also greatly reduces the size of the data files. 
+
+### What's new in release 2.2.0
+
+- the TravelNotesConfig.json file has been completely revised. If you are using a modified version of this file, it is important to review this one. See the installation guide.
+- a status indicator for the last use of the "Save to file" command has been added (green: travel saved - yellow: travel modified since the last save - red: travel modified and not saved for at least 5 minutes).
+- the method used to find the municipality of an address has been revised.
+- the search for points of interest in OpenStreetMap has been improved and is much faster.
+- a "Partial save" command has been added. This allows you to save a travel WITHOUT the travel notes and / or WITHOUT the route notes and / or WITHOUT the maneuvers. This command allows to have a much lighter file
+for map presentations on the Internet
+- the css have been reorganized and revised. Many small presentation bugs related to CSS have been fixed.
+- it is possible to zoom and pan on the map when a dialog is displayed.
+- it is possible to use the keyboard for the viewer commands. See the 
+ [user guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#Viewer)
+- and many purely technical modifications as well as the correction of many small bugs.
