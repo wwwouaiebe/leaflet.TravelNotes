@@ -447,30 +447,28 @@ Il est possible de déplacer un profil sur l'écran en faisant un glisser/dépos
 ### Tracer un trajet en train sur la carte
 
 - sélectionnez leaflet.TravelNotesPublicTransport comme fournisseur de trajet en cliquant sur l'icône 
-<img width='40' height='40' src='data:image/svg+xml;utf8,<svg viewBox="-3 -3 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(128,0,0)"><path d="M 5,0 C 3.025911,-0.0084 1,3 1,7 l 0,2 c 0,1 1,2 2,2 l 8,0 c 1,0 2,-1 2,-2 L 13,7 C 13,3 11,0 9,0 z m -1,3 6,0 c 0,0 1,1 1,3 L 3.03125,6 C 2.994661,3.9916 4,3 4,3 z M 3,8 6,8 6,9 3,9 z m 5,0 3,0 0,1 -3,0 z m -6,4 -1,2 3,0 1,-2 z m 7,0 1,2 3,0 -1,-2 z"/></g></svg>' /> 
+<img src="PublicTransportButton.PNG" /> 
 dans le bas de l'interface
 - faites un click droit sur la carte à proximité de la gare de départ et choisissez "Sélectionner cet endroit comme point de départ" dans le menu contextuel.
 - faites un click droit sur la carte à proximité de la gare de destination et choisissez "Sélectionner cet endroit comme point de fin" dans le menu contextuel.
 - après quelques instants, une liste de tous les trains reliant les deux gares est affichée 
-<img src="TrainsSelectBox.png" />
+<img src="TrainsSelectBox.PNG" />
 
 - ouvrez la liste 
-<img src="TrainsSelectBoxOpen.png" />
+<img src="TrainsSelectBoxOpen.PNG" />
 et sélectionnez le train correspondant au trajet souhaité et terminez en cliquant sur le bouton 🆗.
 
 - le trajet en train s'affichera sur la carte 
-<img src="TrainMap.png" /> 
+<img src="TrainMap.PNG" /> 
 
 - les différents arrêts du train seront ajoutés à l'itinéraire 
-<img src="TrainItinerary.png" />
+<img src="TrainItinerary.PNG" />
 
 <a id="LineItinerary"></a>
 ### Dessiner une ligne entre deux points sur la carte.
 
-- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône 
-<img src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" cy="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)"/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(255,204,0)" /> </svg>' /> 
-dans le bas de l'interface et "Itinéraire à vol d'oiseau" comme mode de déplacement en cliquant sur l'icône 
-<img width='40' height='40' src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)" /> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(255,204,0)" /> </svg>' />
+- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> 
+dans le bas de l'interface et "Itinéraire à vol d'oiseau" comme mode de déplacement en cliquant sur l'icône <img width='40' height='40' src="PolylineButton.PNG" />
 
 - indiquez le point de départ et le point de fin ainsi que éventuellement des points intermédiaires. Entre chacun des points
 indiqués, une portion de "grand cercle" est dessinée.
@@ -483,10 +481,9 @@ mais dans tous les cas ce sera la représentation d'une portion de grand cercle 
 <a id="CircleItinerary"></a>
 ### Dessiner un cercle sur la carte.
 
-- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône 
-<img src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" cy="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)"/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(255,204,0)" /> </svg>' /> 
+- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> 
 dans le bas de l'interface et "Cercle" comme mode de déplacement en cliquant sur l'icône 
-<img width='40' height='40' src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <g fill="transparent"> <circle cx="8" cy="6" r="5" stroke="rgb(0,0,0)" /> <circle cx="12" cy="12" r="4" stroke="rgb(255,204,0)" /> <circle cx="14" cy="8" r="3" stroke="rgb(191,0,0)" /> </g> </svg>' />
+<img src="CircleButton.PNG" />
 - Indiquez le centre du cercle en utilisant la commande "Sélectionner cet endroit comme point de départ" et un point devant être sur
 le cercle en utilisant la commande "Sélectionner cet endroit comme point de fin".
 
