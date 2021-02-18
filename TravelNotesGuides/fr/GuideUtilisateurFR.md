@@ -26,7 +26,9 @@
 	- [Calcul de l'itinéraire](#ComputingItinerary)
 	- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
 	- [Profil d'un trajet](#RouteProfile)
-	- [Itinéraire en train](#TrainItinerary)
+	- [Tracer un trajet en train sur la carte](#TrainItinerary)
+	- [Dessiner une ligne entre deux points sur la carte](#LineItinerary)
+	- [Dessiner un cercle sur la carte](#CircleItinerary)
 	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
 	- [Imprimer les cartes d'un trajet](#PrintRouteMaps)
 - [Notes](#Notes1)
@@ -158,13 +160,14 @@ supprimer celui-ci.
 
 Quand vos clefs d'accès sont introduites, appuyez sur le bouton 🆗 pour terminer. 
 Vos clefs sont sauvegardées dans le "sessionStorage" du browser et disponibles jusqu'à la fermeture 
-de celui-ci.
+de l'onglet.
 
 Il est possible de sauvegarder les clefs d'accès dans un fichier, protégé par un mot de passe ou non protégé.
 
 **Attention**: la page doit être servie en HTTPS pour sauvegarder dans un fichier protégé par un mot de passe.
 
-Le bouton 🔄 permet de recharger le fichier des clefs d'accès depuis le serveur web.
+Le bouton 🔄 permet de recharger le fichier des clefs d'accès depuis le serveur web, si un fichier a été trouvé précédemment 
+sur le serveur.
 
 Le bouton 💾 à **gauche** de la boite de dialogue permet de sauver les clefs d'accès 
 dans un fichier protégé par mot de passe. Celui-ci doit contenir au moins 12 caractères dont
@@ -182,17 +185,19 @@ un fichier **non protégé** par mot de passe.
 Le bouton 📂 à **droite** de la boite de dialogue remplace toutes les clefs d'accès de la 
 boite de dialogue par le contenu d'un fichier **non protégé** par mot de passe.
 
+Ces deux boutons ne sont présents que si ils ont été activés dans le fichier TravelNotesConfig.json.
+
 Si un fichier protégé par un mot de passe et nommé **APIKeys** est placé dans le même répertoire que 
 Travel & Notes sur le serveur, Travel & Notes vous demandera le mot de passe à l'ouverture pour 
 pouvoir utiliser les clefs contenues dans ce fichier.
 
 Pour les geeks et les paranos voyez aussi ,dans le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson) et dans le fichier 
 TravelNotesConfig.json:
-- APIKeys.showDialogButton pour afficher ou masquer le bouton 🔑 dans la barre d'outils
 - APIKeys.saveToSessionStorage pour sauver ou non les clefs dans le sessionStorage
-- APIKeys.showAPIKeysInDialog pour montrer ou masquer les clefs comme un mot de passe dans la boite 
+- APIKeysDialog.showButton pour afficher ou masquer le bouton 🔑 dans la barre d'outils
+- APIKeysDialog.showAPIKeys pour montrer ou masquer les clefs comme un mot de passe dans la boite 
 de dialogue
-- APIKeys.dialogHaveUnsecureButtons pour afficher ou masquer les boutons 💾 
+- APIKeysDialog.haveUnsecureButtons pour afficher ou masquer les boutons 💾 
 et 📂 à __droite__
 
 L'ancienne méthode consistant à introduire les clefs d'accès via l'url est supprimée.
@@ -224,10 +229,8 @@ Déplacez la souris sur ce rectangle pour voir l'interface complète:
 
 En haut de l'interface se trouve une première barre d'outils:
 - le bouton 🏠 redirige vers votre page d'accueil
-- le bouton ? redirige vers 
-[la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
-- le bouton @ redirige vers une page de contact. Par défaut, c'est 
-[la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
+- le bouton ? redirige vers [la page d'aide sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides)
+- le bouton @ redirige vers une page de contact. Par défaut, c'est [la page des issues de Travel & Notes sur Github](https://github.com/wwwouaiebe/leaflet.TravelNotes/issues).
 L'url peut être modifiée via le fichier TravelNotesConfig.json (travelNotesToolbarUI.contactMail.url)
 - le bouton 🔑 affiche la boite de dialogue des clefs d'accès
 - le bouton 🌐 active ou désactive la localisation. 
@@ -246,6 +249,7 @@ de pouvoir sauver celui-ci.
 <a id="RouteToolbar"></a>
 #### Boutons de la barre d'outils "Voyage"
 
+- le bouton 💾 sur fond **rouge** sauve le voyage en cours d'édition SANS les notes ni les manœuvres.
 - le bouton ❌ efface toutes les données du voyage et commence l'édition d'un nouveau voyage.
 - le bouton 💾 sauve le voyage en cours d'édition dans un fichier sur votre ordinateur
 - le bouton 📂 ouvre un voyage préalablement sauvé dans un fichier
@@ -338,8 +342,8 @@ et si la clef d'accès pour ce fournisseur est connue (qund une clef d'accès es
 ## Boites d'édition
 
 Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
-toujours possible de glisser / déposer une boite d'édition en la saississant par la barre dans la 
-partie supérieure.
+toujours possible, soit de ddéplacer / modifier la carte avec un zoom ou un pan, soit de glisser / déposer la
+boite d'édition en la saississant par la barre dans la partie supérieure.
 
 <a id="Routes"></a>
 ## Trajets et points de passage
@@ -389,7 +393,8 @@ est possible.
 ### Renommer un point de passage ou changer son adresse
 
 Quand un point de passage est créé, son adresse est recherchée avec Nominatim. Si un nom, tel que 
-un nom de magasin ou d'immeuble est trouvé par Nominatim, celui-ci sera également ajouté.
+un nom de magasin ou d'immeuble est trouvé par Nominatim, celui-ci sera également ajouté 
+( voir wayPoint.geocodingIncludeName dans le fichier TravelNotesConfig.json our désactiver cette possibilité ) .
 
 Vous pouvez modifier ce nom et cette adresse en faisant un clic droit sur le point de passage et en 
 sélectionnant "Modifier les propriétés de ce point de passage" dans le menu contextuel.
@@ -439,10 +444,54 @@ Il peut y avoir plusieurs fenêtres affichant des profils ouvertes.
 Il est possible de déplacer un profil sur l'écran en faisant un glisser/déposer de la barre supérieure de la fenêtre.
 
 <a id="TrainItinerary"></a>
-### Itinéraire en train
+### Tracer un trajet en train sur la carte
 
-Reportez vous à la [documentation de leaflet.TravelNotesPublicTransport](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
-pour plus d'explications sur la façon de créer un itinéraire en train.
+- sélectionnez leaflet.TravelNotesPublicTransport comme fournisseur de trajet en cliquant sur l'icône 
+<img width='40' height='40' src='data:image/svg+xml;utf8,<svg viewBox="-3 -3 20 20" xmlns="http://www.w3.org/2000/svg"> <g fill="rgb(128,0,0)"><path d="M 5,0 C 3.025911,-0.0084 1,3 1,7 l 0,2 c 0,1 1,2 2,2 l 8,0 c 1,0 2,-1 2,-2 L 13,7 C 13,3 11,0 9,0 z m -1,3 6,0 c 0,0 1,1 1,3 L 3.03125,6 C 2.994661,3.9916 4,3 4,3 z M 3,8 6,8 6,9 3,9 z m 5,0 3,0 0,1 -3,0 z m -6,4 -1,2 3,0 1,-2 z m 7,0 1,2 3,0 -1,-2 z"/></g></svg>' /> 
+dans le bas de l'interface
+- faites un click droit sur la carte à proximité de la gare de départ et choisissez "Sélectionner cet endroit comme point de départ" dans le menu contextuel.
+- faites un click droit sur la carte à proximité de la gare de destination et choisissez "Sélectionner cet endroit comme point de fin" dans le menu contextuel.
+- après quelques instants, une liste de tous les trains reliant les deux gares est affichée 
+<img src="TrainsSelectBox.png" />
+
+- ouvrez la liste 
+<img src="TrainsSelectBoxOpen.png" />
+et sélectionnez le train correspondant au trajet souhaité et terminez en cliquant sur le bouton 🆗.
+
+- le trajet en train s'affichera sur la carte 
+<img src="TrainMap.png" /> 
+
+- les différents arrêts du train seront ajoutés à l'itinéraire 
+<img src="TrainItinerary.png" />
+
+<a id="LineItinerary"></a>
+### Dessiner une ligne entre deux points sur la carte.
+
+- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône 
+<img src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" cy="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)"/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(255,204,0)" /> </svg>' /> 
+dans le bas de l'interface et "Itinéraire à vol d'oiseau" comme mode de déplacement en cliquant sur l'icône 
+<img width='40' height='40' src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)" /> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(255,204,0)" /> </svg>' />
+
+- indiquez le point de départ et le point de fin ainsi que éventuellement des points intermédiaires. Entre chacun des points
+indiqués, une portion de "grand cercle" est dessinée.
+
+Notez que, en fonction des points choisis, le résultat sur la carte peut être une ligne, un arc de cercle ou une partie de sinusoïde,
+mais dans tous les cas ce sera la représentation d'une portion de grand cercle sur le globe terrestre ( = le plus court chemin entre les deux points).
+
+<img src="HELJFK.PNG" />
+
+<a id="CircleItinerary"></a>
+### Dessiner un cercle sur la carte.
+
+- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône 
+<img src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" cy="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)"/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(255,204,0)" /> </svg>' /> 
+dans le bas de l'interface et "Cercle" comme mode de déplacement en cliquant sur l'icône 
+<img width='40' height='40' src='data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <g fill="transparent"> <circle cx="8" cy="6" r="5" stroke="rgb(0,0,0)" /> <circle cx="12" cy="12" r="4" stroke="rgb(255,204,0)" /> <circle cx="14" cy="8" r="3" stroke="rgb(191,0,0)" /> </g> </svg>' />
+- Indiquez le centre du cercle en utilisant la commande "Sélectionner cet endroit comme point de départ" et un point devant être sur
+le cercle en utilisant la commande "Sélectionner cet endroit comme point de fin".
+
+Ici aussi, le résultat peut être une ellipse, un rectangle ou une sinusoïde mais dans tous les cas ce sera la représentation d'un 
+cercle sur le globe terrestre.
 
 <a id="RouteDlg"></a>
 ### La boite d'édition des propriétés d'un trajet
@@ -502,8 +551,7 @@ des vues de la carte qui ont les dimensions souhaitées et deux boutons sont pr�
 
 <img src="PrintRouteMapToolbar.PNG" />
 
-Le bouton &#x1F5A8;&#xFE0F; lancera la commande d'impression de votre browser et le bouton &#x274c;
-annulera l'impression et réaffichera la carte.
+Le bouton 🖨️ lancera la commande d'impression de votre browser et le bouton ❌ annulera l'impression et réaffichera la carte.
 
 Lorsque la commande d'impression du browser est fermée, les vues d'impression seront également fermées 
 et la carte réaffichée.
@@ -625,7 +673,7 @@ Pour chaque manœuvre du trajet, [une note en SVG à partir des données OpenStr
 Dans le haut de la boite, une liste déroulante permet de choisir des notes prédéfinies. Il est possible 
 de modifier cette liste. Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesNoteDialogJson).
 
-Le bouton ▼ cache ou affiche certaines zones d'édition qui sont masquées par défaut (les deux controles permettant de 
+Le bouton ▼ cache ou affiche certaines zones d'édition qui sont masquées par défaut (les deux contrôles permettant de 
 modifier les dimensions de l'icône et le n° de téléphone ). Il est possible de choisir quelles zones sont masquées par défaut.
 Consultez le [guide d'installation](GuideInstallationFR.md#TravelNotesConfigJson)
 
@@ -832,6 +880,15 @@ https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWF
 
 Vous pouvez cependant ajouter &lay à la fin de l'url pour afficher également une barre d'outils 
 reprenant les fonds de carte ne nécéssitant pas de clef d'accès.
+
+Vous pouvez également utiliser le clavier pour quelques commandes:
+
+- les flèches __haut__ , __bas__, __gauche__ et __droite__ pour déplacer la carte
+- __+__ et __-__ pour zoomer sur la carte
+- __Z__ et __z__ pour zoomer sur le voyage
+- __G__ et __g__ pour activer/deactiver la géollocalisation
+- les chiffres de __0__ à __9__ pour activer d'autres fonds de carte ( les chiffres utilisables dépendent des fonds de carte définis dans le fichier TravelNotesLayers.json - Seules
+les cartes ne nécessitant pas de clefs d'accès peuvent être affichées, le viewer ne gérant pas les clefs d'accès ).
 
 ```
 https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==&lay

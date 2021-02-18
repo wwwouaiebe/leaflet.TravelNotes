@@ -373,9 +373,11 @@ The TravelNotesSearchDictionaryFR.csv (in French) or TravelNotesSearchDictionary
 The file must be saved with Unicode as the character set and encoded in utf-8. the semicolon must be used as a separator.
 
 The tree structure as it is visible in Travel & Notes:
+
 <img src="OSMSearchTransportEN.PNG" />
 
 And the contents of the file with the same tree structure (cells with a light red background):
+
 <img src = "TravelNotesSearchDictionaryEN.PNG" />
 
 The cells with a light yellow, light green or light blue background represent the tags of the objects to be searched in OpenStreetMap.

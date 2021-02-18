@@ -372,9 +372,11 @@ pour configurer la recherche dans OpenStreetMap. Le fichier peut être édité a
 Le fichier doit être sauvé avec Unicode comme jeu de caractères et encodé en utf-8. le point-virgule doit être utilisé comme séparateur.
 
 L'arborescence telle qu'elle est visible dans Travel & Notes:
+
 <img src="OSMSearchTransportFR.PNG" />
 
 Et le contenu du fichier avec la même arborescence ( les cellules avec un fond rouge clair ):
+
 <img src = "TravelNotesSearchDictionaryFR.PNG" />
 
 Les cellules avec un fond jaune clair, vert clair ou bleu clair repreésentent les tags des objets à rechercher dans OpenStreetMap.
