@@ -446,29 +446,32 @@ Il est possible de déplacer un profil sur l'écran en faisant un glisser/dépos
 <a id="TrainItinerary"></a>
 ### Tracer un trajet en train sur la carte
 
-- sélectionnez leaflet.TravelNotesPublicTransport comme fournisseur de trajet en cliquant sur l'icône 
-<img src="PublicTransportButton.PNG" /> 
-dans le bas de l'interface
+- sélectionnez leaflet.TravelNotesPublicTransport comme fournisseur de trajet en cliquant sur l'icône <img src="PublicTransportButton.PNG" /> dans le bas de l'interface
 - faites un click droit sur la carte à proximité de la gare de départ et choisissez "Sélectionner cet endroit comme point de départ" dans le menu contextuel.
 - faites un click droit sur la carte à proximité de la gare de destination et choisissez "Sélectionner cet endroit comme point de fin" dans le menu contextuel.
 - après quelques instants, une liste de tous les trains reliant les deux gares est affichée 
+
 <img src="TrainsSelectBox.PNG" />
 
 - ouvrez la liste 
+
 <img src="TrainsSelectBoxOpen.PNG" />
+
 et sélectionnez le train correspondant au trajet souhaité et terminez en cliquant sur le bouton 🆗.
 
 - le trajet en train s'affichera sur la carte 
+
 <img src="TrainMap.PNG" /> 
 
 - les différents arrêts du train seront ajoutés à l'itinéraire 
+
 <img src="TrainItinerary.PNG" />
 
 <a id="LineItinerary"></a>
 ### Dessiner une ligne entre deux points sur la carte.
 
-- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> 
-dans le bas de l'interface et "Itinéraire à vol d'oiseau" comme mode de déplacement en cliquant sur l'icône <img width='40' height='40' src="PolylineButton.PNG" />
+- sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> dans le bas de l'interface et "Itinéraire à vol d'oiseau" 
+comme mode de déplacement en cliquant sur l'icône <img src="PolylineButton.PNG" />
 
 - indiquez le point de départ et le point de fin ainsi que éventuellement des points intermédiaires. Entre chacun des points
 indiqués, une portion de "grand cercle" est dessinée.
@@ -482,8 +485,8 @@ mais dans tous les cas ce sera la représentation d'une portion de grand cercle 
 ### Dessiner un cercle sur la carte.
 
 - sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> 
-dans le bas de l'interface et "Cercle" comme mode de déplacement en cliquant sur l'icône 
-<img src="CircleButton.PNG" />
+dans le bas de l'interface et "Cercle" comme mode de déplacement en cliquant sur l'icône <img src="CircleButton.PNG" />
+
 - Indiquez le centre du cercle en utilisant la commande "Sélectionner cet endroit comme point de départ" et un point devant être sur
 le cercle en utilisant la commande "Sélectionner cet endroit comme point de fin".
 
