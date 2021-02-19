@@ -26,7 +26,9 @@
 	- [Calculation of the itinerary](#ComputingItinerary)
 	- [Save or discard changes](#SaveOrDiscardRoute)
 	- [Route profile](#RouteProfile)
-	- [Itinerary by train](#TrainItinerary)
+	- [Train route](#TrainItinerary)
+	- [Draw a line between two points on the map](#LineItinerary)
+	- [Draw a circle on the map](#CircleItinerary)
 	- [Editing the properties of a route](#RouteDlg)
 	- [Print route maps](#PrintRouteMaps)
 - [Notes](#Notes1)
@@ -148,14 +150,13 @@ the access key. The different names currently possible are 'GraphHopper', 'Lantm
 Use the + button to add a service provider and the ❌ button on the right to delete this one.
 
 When your access keys are entered, press the button 🆗 to finish.
-Your keys are saved in the "sessionStorage" of the browser and available until closing
-of it.
+Your keys are saved in the "sessionStorage" of the browser and available until the tab is closed.
 
 It is possible to save the access keys in a file, protected by a password or unprotected.
 
 **Attention**: the page must be served in HTTPS to save in a file protected by a password.
 
-The button 🔄 reloads the APIkeys file from the web server.
+The 🔄 button is used to reload the access keys file from the web server, if a file was previously found on the server.
 
 The button 💾 on the **left** of the dialog box allows you to save the access keys
 in a password protected file. This must contain at least 12 characters including at least 
@@ -173,15 +174,17 @@ a file **not protected** by password.
 The button 📂 on the **right** of the dialog box replaces all the access keys of the
 dialog box by the contents of a file **not protected** by password.
 
+These two buttons are only present if they have been enabled in the TravelNotesConfig.json file.
+
 If a password protected file named **APIKeys** is placed in the same directory as
 Travel & Notes on the server, Travel & Notes will ask you for the password when you open it 
 in order to use the keys contained in this file.
 
 For geeks and paranos also see in the [installation guide](InstallationGuideEN.md#TravelNotesConfigJson) and in the file TravelNotesConfig.json:
-- APIKeys.showDialogButton to show or hide the 🔑 button in the toolbar
 - APIKeys.saveToSessionStorage to save or not the keys in the sessionStorage
-- APIKeys.showAPIKeysInDialog to show or hide the keys as a password in the dialog box
-- APIKeys.dialogHaveUnsecureButtons to show or hide the buttons 💾 and 📂 on __right__
+- APIKeysDialog.showButton to show or hide the 🔑 button in the toolbar
+- APIKeysDialog.showAPIKeys to show or hide the keys as a password in the dialog box
+- APIKeysDialog.haveUnsecureButtons to show or hide the buttons 💾 and 📂 on __right__
 
 The old method consisting in entering the access keys via the url is removed.
 
@@ -234,6 +237,7 @@ to be able to save this one.
 <a id="RouteToolbar"></a>
 #### Toolbar buttons "Travel"
 
+- the button 💾 on a red **background** saves the travel being edited WITHOUT any notes or maneuvers.
 - the button ❌ erases all travel data and starts editing a new travel.
 - the button 💾 saves the travel being edited to a file on your computer
 - the button 📂 opens a previously saved travel
@@ -323,8 +327,8 @@ for this provider is known (when an access key is required).
 <a id="EditBoxes"></a>
 ## Edit boxes
 
-Sometimes an edit box may hide an object from the map you want to view. It is always possible to drag 
-and drop an edit box by clicking on the bar at the top.
+Sometimes, an edit box can hide an object of the map that you want to consult. It is always possible, 
+either to move / modify the map with a zoom or a pan, or to drag / drop the edit box with the bar at the top.
 
 <a id="Routes"></a>
 ## Routes and waypoints
@@ -371,8 +375,9 @@ delete the start point or the end point. Only a drag and drop is possible.
 <a id="RenameWayPoint"></a>
 ### Rename a waypoint or change its address
 
-When a waypoint is created, its address is searched for with Nominatim. If a name, such as
-a store or building name is found by Nominatim, this will also be added.
+When a waypoint is created, its address is searched with Nominatim. If a name, such as a store or building name 
+is found by Nominatim, this will also be added (see wayPoint.geocodingIncludeName in the TravelNotesConfig.json 
+file to disable this possibility).
 
 You can change this name and address by right-clicking on the waypoint and 
 selecting "Modify the properties of this waypoint" from the context menu.
@@ -420,10 +425,54 @@ There may be multiple open windows displaying profiles.
 It is possible to move a profile on the screen by dragging and dropping with the top bar of the window.
 
 <a id="TrainItinerary"></a>
-### Itinerary by train
+### Train route
 
-Go to the [leaflet.TravelNotesPublicTransport documentation](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
-for more explanation on how to create a train route.
+- select leaflet.TravelNotesPublicTransport as the route provider by clicking on the <img src="PublicTransportButton.PNG" /> icon at the bottom of the interface
+- right click on the map near the departure station and choose "Select this point as the start point" from the context menu.
+- right click on the map near the destination station and choose "Select this point as end point" from the context menu.
+- after a few moments, a list of all the trains connecting the two stations is displayed.
+
+<img src="TrainsSelectBox.PNG" />
+
+- open the list
+
+<img src="TrainsSelectBoxOpen.PNG" />
+
+and select the train corresponding to the desired route and finish by clicking on the button 🆗.
+
+- the train route will be displayed on the map 
+
+<img src="TrainMap.PNG" /> 
+
+- the different train stops will be added to the route
+
+<img src="TrainItinerary.PNG" />
+
+<a id="LineItinerary"></a>
+### Draw a line between two points on the map
+
+- select "Polyline & Circle" as the route provider by clicking on the <img src="PolylineCircleButton.PNG" /> icon at the bottom of the interface and 
+"Directions as the crow flies" as the transit mode by clicking on the icon <img src="PolylineButton.PNG" />.
+
+- indicate the starting point and the end point as well as possible intermediate points. Between each of the points
+indicated, a portion of "large circle" is drawn.
+
+Note that, depending on the points chosen, the result on the map can be a line, an arc of a circle or a part of a sinusoid, but in all cases it will be 
+the representation of a portion of a large circle on the terrestrial globe ( = the shortest path between the two points).
+
+<img src="HELJFK.PNG" />
+
+<a id="CircleItinerary"></a>
+### Draw a circle on the map
+
+- select "Polyline & Circle" as the route provider by clicking on the icon <img src="PolylineCircleButton.PNG" />
+at the bottom of the interface and "Circle" as transit mode by clicking on the icon <img src="CircleButton.PNG" />
+
+- Indicate the center of the circle using the command "Select this point as start point" and a point to be on
+circle using the command "Select this point as end point".
+
+Here too, the result can be an ellipse, a rectangle or a sinusoid but in all cases it will be the representation of a
+circle on the earth globe.
 
 <a id="RouteDlg"></a>
 ### Editing the properties of a route
@@ -481,7 +530,7 @@ have the desired dimensions and two buttons are present at the top right:
 
 <img src="PrintRouteMapToolbar.PNG" />
 
-The button &#x1F5A8;&#xFE0F; will launch the print command from your browser and the button &#x274c; 
+The button 🖨️ will launch the print command from your browser and the button &#x274c; 
 will cancel printing and redisplay the map.
 
 When the print command of the browser is closed, the print views will also be closed and 
@@ -801,6 +850,15 @@ https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWF
 
 You can however add &lay at the end of the url to also display a toolbar showing the background maps 
 not requiring an access key.
+
+You can also use the keyboard for a few commands:
+
+- the arrows __up__, __down__, __left__ and __right__ to move the map
+- __ + __ and __-__ to zoom in on the map
+- __Z__ and __z__ to zoom in on the travel
+- __G__ and __g__ to activate / deactivate geolocation
+- the numbers __0__ to __9__ to activate other base maps (the numbers that can be used depend on the base maps defined in the 
+TravelNotesLayers.json file - Only maps that do not require access keys can be displayed, the viewer does not manage the access keys).
 
 ```
 https://wwwouaiebe.github.io/leaflet.TravelNotes/viewer/?fil=aHR0cHM6Ly93d3dvdWFpZWJlLmdpdGh1Yi5pby9zYW1wbGVzL0xpZWdlL1N0YXRpb25Ub1lvdXRoSG9zdGVsLnRydg==&lay

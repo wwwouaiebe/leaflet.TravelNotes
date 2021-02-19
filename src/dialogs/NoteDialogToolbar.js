@@ -102,14 +102,6 @@ let ourOpenFileInput = null;
 
 let ourDialogFunctions = null;
 
-/*
-
-let ourOnSelectEventListener = null;
-let ourOnButtonClickEventListener = null;
-let ourToggleContentsFunction = null;
-let ourShowErrorFunction = null;
-let ourNoteDialog = null;
-*/
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
