@@ -153,7 +153,7 @@ cliquez sur le bouton 🔑 dans la barre d'outil en haut de l'interface.
 
 Pour chaque fournisseur de service, vous devez indiquer à gauche le nom de ce fournisseur  et à droite 
 la clef d' accès. Les différents noms possibles actuellement sont 'GraphHopper', 'Lantmateriet',
-'Mapbox', 'MapzenValhalla', 'OpenRouteService' et 'Thunderforest' (insensible au majuscules/minuscules).
+'Mapbox', 'MapzenValhalla', 'OpenRouteService' et 'Thunderforest' (insensibles au majuscules/minuscules).
 
 Utilisez le bouton + pour ajouter un fournisseur de service et le bouton ❌ à droite pour 
 supprimer celui-ci.
@@ -216,7 +216,7 @@ l'itinéraire affichera un menu contextuel pour cette manœuvre.
 <a id="Interface1"></a>
 ## __Interface__
 
-Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur de la carte:
+Lorsque la carte s'affiche, seul un petit rectangle noir est est visible dans le coin supérieur droit de la carte:
 
 <img src="MinInterface.PNG" />
 
@@ -342,7 +342,7 @@ et si la clef d'accès pour ce fournisseur est connue (qund une clef d'accès es
 ## Boites d'édition
 
 Parfois, une boite d'édition peut masquer un objet de la carte que l'on désire consulter. Il est 
-toujours possible, soit de ddéplacer / modifier la carte avec un zoom ou un pan, soit de glisser / déposer la
+toujours possible, soit de déplacer / modifier la carte avec un zoom ou un pan, soit de glisser / déposer la
 boite d'édition en la saississant par la barre dans la partie supérieure.
 
 <a id="Routes"></a>
