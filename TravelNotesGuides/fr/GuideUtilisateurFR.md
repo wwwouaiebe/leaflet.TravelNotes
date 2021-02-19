@@ -26,7 +26,7 @@
 	- [Calcul de l'itinéraire](#ComputingItinerary)
 	- [Sauver ou abandonner les modifications](#SaveOrDiscardRoute)
 	- [Profil d'un trajet](#RouteProfile)
-	- [Tracer un trajet en train sur la carte](#TrainItinerary)
+	- [Trajet en train](#TrainItinerary)
 	- [Dessiner une ligne entre deux points sur la carte](#LineItinerary)
 	- [Dessiner un cercle sur la carte](#CircleItinerary)
 	- [La boite d'édition des propriétés d'un trajet](#RouteDlg)
@@ -394,7 +394,7 @@ est possible.
 
 Quand un point de passage est créé, son adresse est recherchée avec Nominatim. Si un nom, tel que 
 un nom de magasin ou d'immeuble est trouvé par Nominatim, celui-ci sera également ajouté 
-( voir wayPoint.geocodingIncludeName dans le fichier TravelNotesConfig.json our désactiver cette possibilité ) .
+( voir wayPoint.geocodingIncludeName dans le fichier TravelNotesConfig.json pour désactiver cette possibilité ) .
 
 Vous pouvez modifier ce nom et cette adresse en faisant un clic droit sur le point de passage et en 
 sélectionnant "Modifier les propriétés de ce point de passage" dans le menu contextuel.
@@ -444,11 +444,11 @@ Il peut y avoir plusieurs fenêtres affichant des profils ouvertes.
 Il est possible de déplacer un profil sur l'écran en faisant un glisser/déposer de la barre supérieure de la fenêtre.
 
 <a id="TrainItinerary"></a>
-### Tracer un trajet en train sur la carte
+### Trajet en train
 
 - sélectionnez leaflet.TravelNotesPublicTransport comme fournisseur de trajet en cliquant sur l'icône <img src="PublicTransportButton.PNG" /> dans le bas de l'interface
-- faites un click droit sur la carte à proximité de la gare de départ et choisissez "Sélectionner cet endroit comme point de départ" dans le menu contextuel.
-- faites un click droit sur la carte à proximité de la gare de destination et choisissez "Sélectionner cet endroit comme point de fin" dans le menu contextuel.
+- faites un clic droit sur la carte à proximité de la gare de départ et choisissez "Sélectionner cet endroit comme point de départ" dans le menu contextuel.
+- faites un clic droit sur la carte à proximité de la gare de destination et choisissez "Sélectionner cet endroit comme point de fin" dans le menu contextuel.
 - après quelques instants, une liste de tous les trains reliant les deux gares est affichée 
 
 <img src="TrainsSelectBox.PNG" />
@@ -459,19 +459,19 @@ Il est possible de déplacer un profil sur l'écran en faisant un glisser/dépos
 
 et sélectionnez le train correspondant au trajet souhaité et terminez en cliquant sur le bouton 🆗.
 
-- le trajet en train s'affichera sur la carte 
+- le trajet en train s'affichera sur la carte.
 
 <img src="TrainMap.PNG" /> 
 
-- les différents arrêts du train seront ajoutés à l'itinéraire 
+- les différents arrêts du train seront ajoutés à l'itinéraire.
 
 <img src="TrainItinerary.PNG" />
 
 <a id="LineItinerary"></a>
-### Dessiner une ligne entre deux points sur la carte.
+### Dessiner une ligne entre deux points sur la carte
 
 - sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> dans le bas de l'interface et "Itinéraire à vol d'oiseau" 
-comme mode de déplacement en cliquant sur l'icône <img src="PolylineButton.PNG" />
+comme mode de déplacement en cliquant sur l'icône <img src="PolylineButton.PNG" />.
 
 - indiquez le point de départ et le point de fin ainsi que éventuellement des points intermédiaires. Entre chacun des points
 indiqués, une portion de "grand cercle" est dessinée.
@@ -482,10 +482,10 @@ mais dans tous les cas ce sera la représentation d'une portion de grand cercle 
 <img src="HELJFK.PNG" />
 
 <a id="CircleItinerary"></a>
-### Dessiner un cercle sur la carte.
+### Dessiner un cercle sur la carte
 
 - sélectionnez "Polyline & Circle" comme fournisseur de trajet en cliquant sur l'icône <img src="PolylineCircleButton.PNG" /> 
-dans le bas de l'interface et "Cercle" comme mode de déplacement en cliquant sur l'icône <img src="CircleButton.PNG" />
+dans le bas de l'interface et "Cercle" comme mode de déplacement en cliquant sur l'icône <img src="CircleButton.PNG" />.
 
 - Indiquez le centre du cercle en utilisant la commande "Sélectionner cet endroit comme point de départ" et un point devant être sur
 le cercle en utilisant la commande "Sélectionner cet endroit comme point de fin".
@@ -886,7 +886,7 @@ Vous pouvez également utiliser le clavier pour quelques commandes:
 - les flèches __haut__ , __bas__, __gauche__ et __droite__ pour déplacer la carte
 - __+__ et __-__ pour zoomer sur la carte
 - __Z__ et __z__ pour zoomer sur le voyage
-- __G__ et __g__ pour activer/deactiver la géollocalisation
+- __G__ et __g__ pour activer/deactiver la géolocalisation
 - les chiffres de __0__ à __9__ pour activer d'autres fonds de carte ( les chiffres utilisables dépendent des fonds de carte définis dans le fichier TravelNotesLayers.json - Seules
 les cartes ne nécessitant pas de clefs d'accès peuvent être affichées, le viewer ne gérant pas les clefs d'accès ).
 
