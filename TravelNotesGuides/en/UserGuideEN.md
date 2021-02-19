@@ -425,12 +425,6 @@ There may be multiple open windows displaying profiles.
 It is possible to move a profile on the screen by dragging and dropping with the top bar of the window.
 
 <a id="TrainItinerary"></a>
-### Itinerary by train
-
-Go to the [leaflet.TravelNotesPublicTransport documentation](https://github.com/wwwouaiebe/leaflet.TravelNotesPublicTransport/blob/master/README.md)
-for more explanation on how to create a train route.
-
-<a id="TrainItinerary"></a>
 ### Train route
 
 - select leaflet.TravelNotesPublicTransport as the route provider by clicking on the <img src="PublicTransportButton.PNG" /> icon at the bottom of the interface
