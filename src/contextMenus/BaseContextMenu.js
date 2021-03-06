@@ -362,13 +362,12 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 
 	function myMoveContainer ( ) {
 
-		let body = document.querySelector ( 'body' );
-
 		// a dummy div is created to find the screen width and height
-		let dummyDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-DummyDiv' }, body );
+		let dummyDiv =
+			theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-DummyDiv' }, document.body );
 		let screenWidth = dummyDiv.clientWidth;
 		let screenHeight = dummyDiv.clientHeight;
-		body.removeChild ( dummyDiv );
+		document.body.removeChild ( dummyDiv );
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
@@ -467,7 +466,7 @@ function ourNewBaseContextMenu ( contextMenuEvent, menuItems, parentDiv ) {
 		ourMouseFocusIsOnItem = INVALID_OBJ_ID;
 		ourCurrentFocusItem = INVALID_OBJ_ID;
 		ourCloseButton = null;
-		ourParentDiv = parentDiv || document.querySelector ( 'body' );
+		ourParentDiv = parentDiv || document.body;
 		ourMenuItems = menuItems;
 
 		myBuildContainer ( );

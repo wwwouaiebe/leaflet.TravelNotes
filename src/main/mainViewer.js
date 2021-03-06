@@ -195,11 +195,7 @@ function ourMainViewer ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		let mapDiv = theHTMLElementsFactory.create (
-			'div',
-			{ id : 'TravelNotes-Map' },
-			document.querySelector ( 'body' )
-		);
+		let mapDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-Map' }, document.body );
 
 		let map = window.L.map ( 'TravelNotes-Map', { attributionControl : false, zoomControl : false } )
 			.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], OUR_VIEWER_DEFAULT_ZOOM );

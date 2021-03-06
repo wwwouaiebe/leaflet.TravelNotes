@@ -367,16 +367,8 @@ function ourMain ( ) {
 
 	function myLoadTravelNotes ( ) {
 		if ( theConfig.travelNotes.autoLoad && '' === myErrorMessage ) {
-			let mapDiv = theHTMLElementsFactory.create (
-				'div',
-				{ id : 'TravelNotes-Map' },
-				document.querySelector ( 'body' )
-			);
-			theHTMLElementsFactory.create (
-				'div',
-				{ id : 'TravelNotes-UI' },
-				document.querySelector ( 'body' )
-			);
+			let mapDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-Map' }, document.body );
+			theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI' }, document.body );
 
 			let map = window.L.map ( 'TravelNotes-Map', { attributionControl : false, zoomControl : false } )
 				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );

@@ -309,7 +309,7 @@ function ourGetTarget ( eventName ) {
 			'settransitmode'
 		].indexOf ( eventName )
 	) {
-		return document.getElementById ( 'TravelNotes-UI-MainDiv' );
+		return document.querySelector ( '#TravelNotes-UI-MainDiv' );
 	}
 	else if ( NOT_FOUND <
 		[

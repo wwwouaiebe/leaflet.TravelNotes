@@ -366,13 +366,7 @@ class LayersToolbarUI {
 	*/
 
 	createUI ( ) {
-		ourLayersToolbar = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-LayersToolbarUI'
-			},
-			document.querySelector ( 'body' )
-		);
+		ourLayersToolbar = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-LayersToolbarUI' }, document.body );
 		theHTMLElementsFactory.create (
 			'div',
 			{
