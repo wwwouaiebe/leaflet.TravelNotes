@@ -47,56 +47,112 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
-let params = new URLSearchParams ( document.location.search.substring ( ONE ) );
-let language = params.get ( 'lng' );
-let pageId = params.get ( 'page' );
+let ourParams = new URLSearchParams ( document.location.search.substring ( ONE ) );
+let ourPageId = ourParams.get ( 'page' );
+let ourShowTravelNotes = true;
+let ourShowRouteNotes = true;
+let ourShowManeuversNotes = false;
+let OurSaveButton = null;
+let ourSaveDiv = null;
+let ourMenu = document.querySelector ( '#TravelNotes-Roadbook-Menu' );
+let ourTravelNotesDiv = document.querySelector ( '#TravelNotes' );
 
-function showTravelNotes ( ) {
-	let show = document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked;
-	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Travel-Notes-Row' );
-	for ( let notesCounter = ZERO; notesCounter < notes.length; notesCounter ++ ) {
-		if ( show ) {
-			notes [ notesCounter ].classList.remove ( 'TravelNotes-Hidden' );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourToggleTravelNotes
+@desc Hide or show the travel notes
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourToggleTravelNotes ( ) {
+	document.querySelectorAll ( '.TravelNotes-Roadbook-Travel-Notes-Row' ).forEach (
+		note => {
+			if ( ourShowTravelNotes ) {
+				note.classList.remove ( 'TravelNotes-Hidden' );
+			}
+			else {
+				note.classList.add ( 'TravelNotes-Hidden' );
+			}
 		}
-		else {
-			notes [ notesCounter ].classList.add ( 'TravelNotes-Hidden' );
-		}
-	}
+	);
 }
 
-document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change', showTravelNotes );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-function showRouteNotes ( ) {
-	let show = document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked;
-	let notes = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Notes-Row' );
-	for ( let notesCounter = ZERO; notesCounter < notes.length; notesCounter ++ ) {
-		if ( show ) {
-			notes [ notesCounter ].classList.remove ( 'TravelNotes-Hidden' );
+@function ourToggleRouteNotes
+@desc Hide or show the route notes
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourToggleRouteNotes ( ) {
+	document.querySelectorAll ( '.TravelNotes-Roadbook-Route-Notes-Row' ).forEach (
+		note => {
+			if ( ourShowRouteNotes ) {
+				note.classList.remove ( 'TravelNotes-Hidden' );
+			}
+			else {
+				note.classList.add ( 'TravelNotes-Hidden' );
+			}
 		}
-		else {
-			notes [ notesCounter ].classList.add ( 'TravelNotes-Hidden' );
-		}
-	}
+	);
 }
 
-document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', showRouteNotes );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-function showRouteManeuvers ( ) {
-	let show = document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked;
-	let maneuvers = document.getElementsByClassName ( 'TravelNotes-Roadbook-Route-Maneuvers-Row' );
-	for ( let maneuversCounter = ZERO; maneuversCounter < maneuvers.length; maneuversCounter ++ ) {
-		if ( show ) {
-			maneuvers [ maneuversCounter ].classList.remove ( 'TravelNotes-Hidden' );
+@function ourToggleManeuversNotes
+@desc Hide or show the maneuver notes
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourToggleManeuversNotes ( ) {
+	document.querySelectorAll ( '.TravelNotes-Roadbook-Route-Maneuvers-Row' ).forEach (
+		note => {
+			if ( ourShowManeuversNotes ) {
+				note.classList.remove ( 'TravelNotes-Hidden' );
+			}
+			else {
+				note.classList.add ( 'TravelNotes-Hidden' );
+			}
 		}
-		else {
-			maneuvers [ maneuversCounter ].classList.add ( 'TravelNotes-Hidden' );
-		}
-	}
+	);
 }
 
-document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', showRouteManeuvers );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-function updateIcons ( ) {
+@function ourToggleNotes
+@desc Hide or show the notes
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourToggleNotes ( ) {
+	ourToggleTravelNotes ( );
+	ourToggleRouteNotes ( );
+	ourToggleManeuversNotes ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpdateIcons
+@desc Update the icons width and height
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpdateIcons ( ) {
 	document.querySelectorAll (
 		'.TravelNotes-Roadbook-Route-ManeuversAndNotes-IconCell, .TravelNotes-Roadbook-Travel-Notes-IconCell'
 	).forEach (
@@ -113,158 +169,284 @@ function updateIcons ( ) {
 	);
 }
 
-function updateRoadbook ( pageContent ) {
-	document.getElementById ( 'TravelNotes' ).textContent = '';
-	theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, document.getElementById ( 'TravelNotes' ) );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpdateRoadbook
+@desc update the roadbook content
+@param {string} pageContent the content of the roadbook
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourUpdateRoadbook ( pageContent ) {
+	ourTravelNotesDiv.textContent = '';
+	theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, ourTravelNotesDiv );
 	let headerName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' );
 	if ( headerName ) {
 		document.title =
 			'' === headerName.textContent ? 'roadbook' : headerName.textContent + ' - roadbook';
 	}
-	updateIcons ( );
-	showTravelNotes ( );
-	showRouteNotes ( );
-	showRouteManeuvers ( );
+	ourUpdateIcons ( );
+	ourToggleNotes ( );
 }
 
-function setContentFromIndexedDb ( ) {
-	if ( pageId ) {
-		theIndexedDb.getOpenPromise ( )
-			.then ( ( ) => theIndexedDb.getReadPromise ( pageId ) )
-			.then ( updateRoadbook )
-			.catch ( err => {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourUpdateRoadbook
+@desc Storage event listener. Update the page
+@param {string} pageContent the content of the roadbook
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnStorage ( ) {
+	theIndexedDb.getReadPromise ( ourPageId )
+		.then (
+			pageContent => {
+				if ( pageContent ) {
+					ourUpdateRoadbook ( pageContent );
+				}
+				else {
+					ourTravelNotesDiv.textContent = '';
+				}
+			}
+		)
+		.catch (
+			err => {
 				if ( err instanceof Error ) {
 					console.error ( err );
 				}
 			}
-			);
-
-		window.addEventListener (
-			'storage',
-			( ) => {
-				theIndexedDb.getReadPromise ( pageId )
-					.then ( pageContent => {
-						if ( pageContent ) {
-							updateRoadbook ( pageContent );
-						}
-						else {
-							document.getElementById ( 'TravelNotes' ).textContent = '';
-						}
-					} )
-					.catch ( err => {
-						if ( err instanceof Error ) {
-							console.error ( err );
-						}
-					}
-					);
-			}
 		);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOpenIndexedDb
+@desc Open the indexed db and add event listeners
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOpenIndexedDb ( ) {
+	if ( ourPageId ) {
+		theIndexedDb.getOpenPromise ( )
+			.then ( ( ) => theIndexedDb.getReadPromise ( ourPageId ) )
+			.then ( ourUpdateRoadbook )
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
+		window.addEventListener ( 'storage', ourOnStorage );
 		window.addEventListener (
 			'unload',
 			( ) => {
 				theIndexedDb.closeDb ( );
 			}
 		);
+	}
+}
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourTranslatePage
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourTranslatePage ( ) {
+	document.querySelector ( '#TravelNotes-Travel-ShowNotesLabel' ).textContent =
+	theTranslator.getText ( 'Roadbook - show travel notes' );
+	document.querySelector ( '#TravelNotes-Routes-ShowManeuversLabel' ).textContent =
+	theTranslator.getText ( 'Roadbook - show maneuver' );
+	document.querySelector ( '#TravelNotes-Routes-ShowNotesLabel' ).textContent =
+	theTranslator.getText ( 'Roadbook - show routes notes' );
+	if ( OurSaveButton ) {
+		OurSaveButton.textContent = theTranslator.getText ( 'Roadbook - Save' );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourLoadTranslations
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourLoadTranslations ( ) {
+	let language = ourParams.get ( 'lng' ) || 'fr';
+	fetch (
+		window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
+		'TravelNotes' +
+		language.toUpperCase ( ) +
+		'.json'
+	)
+		.then (
+			response => {
+				if ( HTTP_STATUS_OK === response.status && response.ok ) {
+					response.json ( )
+						.then ( theTranslator.setTranslations )
+						.then ( ourTranslatePage )
+						.catch (
+							err => {
+								if ( err instanceof Error ) {
+									console.error ( err );
+								}
+							}
+						);
+				}
+			}
+		);
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnSaveButtonClick
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnSaveButtonClick ( ) {
+	try {
+		let fileName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' ).textContent + '-Roadbook.html';
+		ourMenu.removeChild ( ourSaveDiv );
+
+		let mapFile = window.URL.createObjectURL (
+			new File (
+				[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
+				fileName,
+				{ type : 'text/plain' }
+			)
+		);
+		let anchorElement = document.createElement ( 'a' );
+		anchorElement.setAttribute ( 'href', mapFile );
+		anchorElement.setAttribute ( 'download', fileName );
+		anchorElement.style.display = 'none';
+		document.body.appendChild ( anchorElement );
+		anchorElement.click ( );
+		document.body.removeChild ( anchorElement );
+		window.URL.revokeObjectURL ( mapFile );
+		ourMenu.appendChild ( ourSaveDiv );
+	}
+	catch ( err ) {
+		if ( err instanceof Error ) {
+			console.error ( err );
+		}
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourAddSaveButton
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourAddSaveButton ( ) {
+	OurSaveButton = document.createElement ( 'button' );
+	OurSaveButton.id = 'TravelNotes-SaveButton';
+	OurSaveButton.addEventListener ( 'click', ourOnSaveButtonClick );
+	ourSaveDiv = document.createElement ( 'div' );
+	ourSaveDiv.appendChild ( OurSaveButton );
+	ourMenu.appendChild ( ourSaveDiv );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnShowTravelNotesChange
+@desc event listener for the ShowTravelNotes checkbox
+@param { event } changeEvent a reference to the event
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnShowTravelNotesChange ( changeEvent ) {
+	ourShowTravelNotes = changeEvent.target.checked;
+	ourToggleTravelNotes ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnShowTravelNotesChange
+@desc event listener for the ShowRouteNotes checkbox
+@param { event } changeEvent a reference to the event
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnShowRouteNotesChange ( changeEvent ) {
+	ourShowRouteNotes = changeEvent.target.checked;
+	ourToggleRouteNotes ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourOnShowTravelNotesChange
+@desc event listener for the ShowManeuverNotes checkbox
+@param { event } changeEvent a reference to the event
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourOnShowManeuverNotesChange ( changeEvent ) {
+	ourShowManeuversNotes = changeEvent.target.checked;
+	ourToggleManeuversNotes ( );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourMain
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourMain ( ) {
+	document.querySelector ( '#TravelNotes-Travel-ShowNotes' ).checked = ourShowTravelNotes;
+	document.querySelector ( '#TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change', ourOnShowTravelNotesChange );
+	document.querySelector ( '#TravelNotes-Routes-ShowNotes' ).checked = ourShowRouteNotes;
+	document.querySelector ( '#TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', ourOnShowRouteNotesChange );
+	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' ).checked = ourShowManeuversNotes;
+	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', ourOnShowManeuverNotesChange );
+
+	if ( ourPageId ) {
+		ourAddSaveButton ( );
+		ourOpenIndexedDb ( );
+		ourLoadTranslations ( );
 	}
 	else {
-		document.getElementById ( 'TravelNotes-Roadbook-Menu' )
-			.removeChild ( document.getElementById ( 'TravelNotes-ButtonContainer' ) );
+		ourUpdateIcons ( );
 	}
+
+	ourToggleNotes ( );
 }
 
-function translatePage ( ) {
-	if ( language ) {
-		fetch (
-			window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) +
-			'TravelNotes' +
-			language.toUpperCase ( ) +
-			'.json'
-		)
-			.then (
-				response => {
-					if ( HTTP_STATUS_OK === response.status && response.ok ) {
-						response.json ( )
-							.then (
-								translations => {
-									theTranslator.setTranslations ( translations );
-									document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
-									theTranslator.getText ( 'Roadbook - show travel notes' );
-									document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
-									theTranslator.getText ( 'Roadbook - show maneuver' );
-									document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
-									theTranslator.getText ( 'Roadbook - show routes notes' );
-									document.getElementById ( 'TravelNotes-SaveButton' ).textContent =
-									theTranslator.getText ( 'Roadbook - Save' );
-								}
-							)
-							.catch (
-								err => {
-									if ( err instanceof Error ) {
-										console.error ( err );
-									}
-								}
-							);
-					}
-				}
-			);
-	}
-}
-
-function addSaveButton ( ) {
-	function saveFile ( ) {
-		try {
-			let fileName = document.querySelector ( '.TravelNotes-Roadbook-Travel-Header-Name' )
-				.textContent + '-Roadbook.html';
-			let tmpSaveButton = document.getElementById ( 'TravelNotes-Roadbook-Menu' ).removeChild (
-				document.getElementById ( 'TravelNotes-SaveButton' )
-			);
-
-			let mapFile = window.URL.createObjectURL (
-				new File (
-					[ '<!DOCTYPE html>', document.documentElement.outerHTML ],
-					fileName,
-					{ type : 'text/plain' }
-				)
-			);
-			let element = document.createElement ( 'a' );
-			element.setAttribute ( 'href', mapFile );
-			element.setAttribute ( 'download', fileName );
-			element.style.display = 'none';
-			document.body.appendChild ( element );
-			element.click ( );
-			document.body.removeChild ( element );
-			window.URL.revokeObjectURL ( mapFile );
-			document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( tmpSaveButton );
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
-	}
-	let saveButton = document.createElement ( 'button' );
-	saveButton.id = 'TravelNotes-SaveButton';
-	saveButton.addEventListener ( 'click', saveFile );
-	let saveDiv = document.createElement ( 'div' );
-	saveDiv.appendChild ( saveButton );
-	document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( saveDiv );
-}
-
-if ( pageId ) {
-	translatePage ( );
-	addSaveButton ( );
-	setContentFromIndexedDb ( );
-}
-else {
-	updateIcons ( );
-}
-
-showTravelNotes ( );
-showRouteNotes ( );
-showRouteManeuvers ( );
+ourMain ( );
 
 /*
 --- End of roadbook.js file ---------------------------------------------------------------------------------------------------
-
 */
