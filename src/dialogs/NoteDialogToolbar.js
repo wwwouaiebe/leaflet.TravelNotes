@@ -140,9 +140,8 @@ function ourAddButtons ( ) {
 	ourButtons.forEach (
 		editionButton => {
 			let newButton = theHTMLElementsFactory.create (
-				'button',
+				'div',
 				{
-					type : 'button',
 					htmlBefore : editionButton.htmlBefore || '',
 					htmlAfter : editionButton.htmlAfter || '',
 					className : 'TravelNotes-NoteDialog-EditorButton'
