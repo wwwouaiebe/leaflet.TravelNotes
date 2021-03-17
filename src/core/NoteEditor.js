@@ -77,10 +77,12 @@ import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import { newGeoCoder } from '../core/GeoCoder.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
 let ourWaitUI = null;
+let ourGeoCoder = newGeoCoder ( );
 let ourManeuverCounter = ZERO;
 let ourManeuverLength = ZERO;
 let ourShowSearchNoteDialog = null;
@@ -470,12 +472,6 @@ class NoteEditor {
 		else {
 			note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
 		}
-		note.address =
-			( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-			( data.osmElement.tags [ 'addr:street' ] ? data.osmElement.tags [ 'addr:street' ] + ' ' : '' ) +
-			( data.osmElement.tags [ 'addr:postcode' ] ? data.osmElement.tags [ 'addr:postcode' ] + ' ' : '' ) +
-			( data.osmElement.tags [ 'addr:city' ] ? data.osmElement.tags [ 'addr:city' ] + ' ' : '' );
-
 		note.url = data.osmElement.tags.website || '';
 		note.phone = data.osmElement.tags.phone || '';
 		note.tooltipContent = data.osmElement.description || '';
@@ -483,11 +479,51 @@ class NoteEditor {
 		if ( ! data.isTravelNote && INVALID_OBJ_ID === routeObjId ) {
 			theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
 		}
-		else if ( this.osmSearchNoteDialog || '' === note.iconContent ) {
-			ourNoteDialog ( note, routeObjId, true );
-		}
 		else {
-			ourAddNote ( note, routeObjId, true );
+			let showDialog = this.osmSearchNoteDialog || '' === note.iconContent;
+			if (
+				! data.osmElement.tags [ 'addr:street' ]
+				||
+				! data.osmElement.tags [ 'addr:city' ]
+			) {
+				ourWaitUI = newWaitUI ( );
+				ourWaitUI.createUI ( );
+				ourWaitUI.showInfo ( 'Creating address' );
+				ourGeoCoder.getPromiseAddress ( [ data.osmElement.lat, data.osmElement.lon ] )
+					.then (
+						geoCoderData => {
+							ourWaitUI.close ( );
+							note.address = geoCoderData.street;
+							if ( '' !== geoCoderData.city ) {
+								note.address +=
+									' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
+							}
+							if ( showDialog ) {
+								ourNoteDialog ( note, routeObjId, true );
+							}
+							else {
+								ourAddNote ( note, routeObjId, true );
+							}
+						}
+					)
+					.catch (
+						( ) => {
+							ourWaitUI.close ( );
+						}
+					);
+			}
+			else {
+				note.address =
+					( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+					data.osmElement.tags [ 'addr:street' ] +
+					' <span class="TravelNotes-NoteHtml-Address-City">' + data.osmElement.tags [ 'addr:city' ] + '</span>';
+				if ( showDialog ) {
+					ourNoteDialog ( note, routeObjId, true );
+				}
+				else {
+					ourAddNote ( note, routeObjId, true );
+				}
+			}
 		}
 	}
 
