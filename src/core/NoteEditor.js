@@ -426,6 +426,7 @@ class NoteEditor {
 		let newNoteLatLng = [ data.osmElement.lat, data.osmElement.lon ];
 		let routeObjId = INVALID_OBJ_ID;
 		let distance = Number.MAX_VALUE;
+		let distanceOnRoute = ZERO;
 
 		function selectRoute ( route ) {
 			if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
@@ -439,6 +440,7 @@ class NoteEditor {
 						routeObjId = route.objId;
 						distance = distanceToRoute;
 						newNoteLatLng = pointAndDistance.latLng;
+						distanceOnRoute = pointAndDistance.distance;
 					}
 				}
 			}
@@ -456,6 +458,7 @@ class NoteEditor {
 		note.iconLatLng = noteLatLng;
 		note.iconHeight = ICON_DIMENSIONS.height;
 		note.iconWidth = ICON_DIMENSIONS.width;
+		note.distance = distanceOnRoute;
 
 		if ( data.osmElement.tags.rcn_ref ) {
 			note.iconContent =
