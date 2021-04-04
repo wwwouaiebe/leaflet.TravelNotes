@@ -195,7 +195,7 @@ function ourMainViewer ( ) {
 	*/
 
 	function myLoadTravelNotes ( ) {
-		let mapDiv = theHTMLElementsFactory.create (
+		/* let mapDiv = */ theHTMLElementsFactory.create (
 			'div',
 			{ id : 'TravelNotes-Map' },
 			document.querySelector ( 'body' )
@@ -208,7 +208,7 @@ function ourMainViewer ( ) {
 
 		theTravelNotesViewer.addReadOnlyMap ( myTravelUrl, myAddLayerToolbar );
 
-		mapDiv.focus ( );
+		// mapDiv.focus ( );
 	}
 
 	/**
