@@ -350,6 +350,9 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 						}
 					);
 				}
+				if ( currentNode.hasAttribute ( 'target' ) ) {
+					newChildNode.setAttribute ( 'rel', 'noopener noreferrer' );
+				}
 				newNode.appendChild ( newChildNode );
 				cloneNode ( currentNode, newChildNode );
 			}
@@ -400,6 +403,9 @@ function ourSanitizeToHtmlString ( htmlString ) {
 				);
 				let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
 				targetString += '<' + nodeName;
+				if ( currentNode.hasAttribute ( 'target' ) ) {
+					targetString += ' rel="noopener noreferrer"';
+				}
 				validAttributesNames.forEach (
 					validAttributeName => {
 						if ( isSvg ) {

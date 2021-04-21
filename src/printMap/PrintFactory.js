@@ -67,6 +67,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
 
 const OUR_TILE_SIZE = 256;
@@ -514,12 +515,13 @@ function ourNewPrintFactory ( ) {
 			leafletLayer = window.L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
-		leafletLayer.options.attribution =
+		leafletLayer.options.attribution = theHTMLSanitizer.sanitizeToHtmlString (
 			' © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			layer.attribution +
 			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
-			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a> '
+		).htmlString;
 
 		return leafletLayer;
 	}
