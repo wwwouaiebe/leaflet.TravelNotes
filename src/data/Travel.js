@@ -78,6 +78,7 @@ const OUR_OBJ_IDS = new WeakMap ( );
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line complexity */
 function ourUpgrade ( travel ) {
 	switch ( travel.objType.version ) {
 	case '1.0.0' :
@@ -127,7 +128,8 @@ function ourUpgrade ( travel ) {
 	case '1.13.0' :
 	case '2.0.0' :
 	case '2.1.0' :
-		travel.objType.version = '2.2.0';
+	case '2.2.0' :
+		travel.objType.version = '2.3.0';
 		break;
 	default :
 		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
