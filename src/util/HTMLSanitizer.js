@@ -166,7 +166,7 @@ function ourSanitizeToJsString ( stringToSanitize ) {
 	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
 		return '';
 	}
-	let resultNode = parseResult.querySelector ( 'body' ).firstChild;
+	let resultNode = parseResult.body.firstChild;
 	let sanitizedString = '';
 	for ( let nodeCounter = 0; nodeCounter < resultNode.childNodes.length; nodeCounter ++ ) {
 		if ( '#text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
@@ -207,7 +207,7 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
 		return { url : '', errorsString : 'Parsing error' };
 	}
-	let resultNode = parseResult.querySelector ( 'body' ).firstChild;
+	let resultNode = parseResult.body.firstChild;
 	let newUrlString = '';
 	for ( let nodeCounter = 0; nodeCounter < resultNode.childNodes.length; nodeCounter ++ ) {
 		if ( '#text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
@@ -350,6 +350,9 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 						}
 					);
 				}
+				if ( currentNode.hasAttribute ( 'target' ) ) {
+					newChildNode.setAttribute ( 'rel', 'noopener noreferrer' );
+				}
 				newNode.appendChild ( newChildNode );
 				cloneNode ( currentNode, newChildNode );
 			}
@@ -361,7 +364,7 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 
 	let parseResult = OUR_PARSER.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' );
 	if ( parseResult && '#document' === parseResult.nodeName ) {
-		cloneNode ( parseResult.querySelector ( 'body' ).firstChild, targetNode );
+		cloneNode ( parseResult.body.firstChild, targetNode );
 	}
 	else {
 		targetNode.textContent = '';
@@ -400,6 +403,9 @@ function ourSanitizeToHtmlString ( htmlString ) {
 				);
 				let isSvg = ( 'svg' === nodeName || 'text' === nodeName || 'polyline' === nodeName );
 				targetString += '<' + nodeName;
+				if ( currentNode.hasAttribute ( 'target' ) ) {
+					targetString += ' rel="noopener noreferrer"';
+				}
 				validAttributesNames.forEach (
 					validAttributeName => {
 						if ( isSvg ) {
@@ -465,7 +471,7 @@ function ourSanitizeToHtmlString ( htmlString ) {
 	let parseResult =
 		OUR_PARSER.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' );
 	if ( parseResult && '#document' === parseResult.nodeName ) {
-		ourStringify ( parseResult.querySelector ( 'body' ).firstChild );
+		ourStringify ( parseResult.body.firstChild );
 		return { htmlString : targetString, errorsString : errorsString };
 	}
 	return { htmlString : '', errorsString : 'Parsing error' };

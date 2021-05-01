@@ -142,7 +142,7 @@ function ourSetTransitMode ( transitMode ) {
 	if ( activeTransitModeButton ) {
 		activeTransitModeButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
 	}
-	document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton' )
+	document.querySelector ( '#TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton' )
 		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
 }
 
@@ -175,12 +175,11 @@ function ourOnTransitModeButtonClick ( clickEvent ) {
 
 function ourSetProvider ( providerName ) {
 	theTravelNotesData.routing.provider = providerName;
-	let activeProviderButton =
-			document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
+	let activeProviderButton = document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 	if ( activeProviderButton ) {
 		activeProviderButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 	}
-	document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + providerName + 'ImgButton' )
+	document.querySelector ( '#TravelNotes-ProvidersToolbarUI-' + providerName + 'ImgButton' )
 		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
 
 	// activating the transit mode buttons, depending of the capabilities of the provider

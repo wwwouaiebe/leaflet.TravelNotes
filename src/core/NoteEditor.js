@@ -77,8 +77,9 @@ import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import { newGeoCoder } from '../core/GeoCoder.js';
 
-import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
+import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS, LAT_LNG } from '../util/Constants.js';
 
 let ourWaitUI = null;
 let ourManeuverCounter = ZERO;
@@ -291,6 +292,137 @@ function ourNewNote ( latLng ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
+@function ourGetNearestRouteData
+@desc This method search route data for the nearest route of a given point
+@param {Array.<number>} latLng The latitude and longitude of the point
+@return {RouteData} A routeData object
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+function ourGetNearestRouteData ( latLng ) {
+
+	let nearestRouteData = {
+		distance : Number.MAX_VALUE,
+		route : null,
+		distanceOnRoute : ZERO,
+		latLngOnRoute : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ]
+	};
+
+	function selectRoute ( route ) {
+		if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
+			let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, latLng );
+			if ( pointAndDistance ) {
+				let distanceToRoute = theSphericalTrigonometry.pointsDistance (
+					latLng,
+					pointAndDistance.latLng
+				);
+				if ( distanceToRoute < nearestRouteData.distance ) {
+					nearestRouteData.route = route;
+					nearestRouteData.distance = distanceToRoute;
+					nearestRouteData.latLngOnRoute = pointAndDistance.latLng;
+					nearestRouteData.distanceOnRoute = pointAndDistance.distance;
+				}
+			}
+		}
+	}
+
+	theTravelNotesData.travel.routes.forEach ( selectRoute );
+	if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+		selectRoute ( theTravelNotesData.travel.editedRoute );
+	}
+
+	return Object.freeze ( nearestRouteData );
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@function ourNewNote
+@desc This method construct a new search note object
+@param {Object} data The search data coming from osm
+@param {boolean} osmSearchNoteDialog a boolean indicating when the note dialog must be showed
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+async function ourNewSearchNote ( data, osmSearchNoteDialog ) {
+
+	let routeObjId = INVALID_OBJ_ID;
+	let note = newNote ( );
+	if ( data.isTravelNote ) {
+		note.latLng = [ data.osmElement.lat, data.osmElement.lon ];
+	}
+	else {
+		let nearestRouteData = ourGetNearestRouteData ( [ data.osmElement.lat, data.osmElement.lon ] );
+		if ( ! nearestRouteData.route ) {
+			theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
+			return;
+		}
+		note.latLng = nearestRouteData.latLngOnRoute;
+		note.distance = nearestRouteData.distanceOnRoute;
+		routeObjId = nearestRouteData.route.objId;
+	}
+	note.iconLatLng = [ data.osmElement.lat, data.osmElement.lon ];
+	note.iconHeight = ICON_DIMENSIONS.height;
+	note.iconWidth = ICON_DIMENSIONS.width;
+	if ( data.osmElement.tags.rcn_ref ) {
+		note.iconContent =
+			'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
+			'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+			data.osmElement.tags.rcn_ref +
+			'</text></svg></div>';
+	}
+	else {
+		note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
+	}
+	note.url = data.osmElement.tags.website || '';
+	note.phone = data.osmElement.tags.phone || '';
+	note.tooltipContent = data.osmElement.description || '';
+	note.popupContent = data.osmElement.tags.name || '';
+	if (
+		! data.osmElement.tags [ 'addr:street' ]
+		||
+		! data.osmElement.tags [ 'addr:city' ]
+	) {
+		ourWaitUI = newWaitUI ( );
+		ourWaitUI.createUI ( );
+		ourWaitUI.showInfo ( 'Creating address' );
+		let geoCoderData = null;
+		try {
+			geoCoderData = await newGeoCoder ( ).getPromiseAddress ( [ data.osmElement.lat, data.osmElement.lon ] );
+		}
+		catch ( err ) {
+			console.error ( err );
+		}
+		ourWaitUI.close ( );
+		if ( geoCoderData ) {
+			note.address = geoCoderData.street;
+			if ( '' !== geoCoderData.city ) {
+				note.address +=
+					' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
+			}
+		}
+	}
+	else {
+		note.address =
+			( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+			data.osmElement.tags [ 'addr:street' ] +
+			' <span class="TravelNotes-NoteHtml-Address-City">' + data.osmElement.tags [ 'addr:city' ] + '</span>';
+	}
+	if ( osmSearchNoteDialog || '' === note.iconContent ) {
+		ourNoteDialog ( note, routeObjId, true );
+	}
+	else {
+		ourAddNote ( note, routeObjId, true );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc This class contains all the needed methods fot Notes creation or modifications
 @see {@link theNoteEditor} for the one and only one instance of this class
@@ -421,71 +553,7 @@ class NoteEditor {
 	*/
 
 	newSearchNote ( data ) {
-
-		let noteLatLng = [ data.osmElement.lat, data.osmElement.lon ];
-		let newNoteLatLng = [ data.osmElement.lat, data.osmElement.lon ];
-		let routeObjId = INVALID_OBJ_ID;
-		let distance = Number.MAX_VALUE;
-
-		function selectRoute ( route ) {
-			if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
-				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, noteLatLng );
-				if ( pointAndDistance ) {
-					let distanceToRoute = theSphericalTrigonometry.pointsDistance (
-						noteLatLng,
-						pointAndDistance.latLng
-					);
-					if ( distanceToRoute < distance ) {
-						routeObjId = route.objId;
-						distance = distanceToRoute;
-						newNoteLatLng = pointAndDistance.latLng;
-					}
-				}
-			}
-		}
-
-		if ( ! data.isTravelNote ) {
-			theTravelNotesData.travel.routes.forEach ( selectRoute );
-			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-				selectRoute ( theTravelNotesData.travel.editedRoute );
-			}
-		}
-
-		let note = newNote ( );
-		note.latLng = newNoteLatLng;
-		note.iconLatLng = noteLatLng;
-		note.iconHeight = ICON_DIMENSIONS.height;
-		note.iconWidth = ICON_DIMENSIONS.width;
-
-		if ( data.osmElement.tags.rcn_ref ) {
-			note.iconContent =
-				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
-				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
-				data.osmElement.tags.rcn_ref +
-				'</text></svg></div>';
-		}
-		else {
-			note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
-		}
-		note.address =
-			( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-			( data.osmElement.tags [ 'addr:street' ] ? data.osmElement.tags [ 'addr:street' ] + ' ' : '' ) +
-			( data.osmElement.tags [ 'addr:postcode' ] ? data.osmElement.tags [ 'addr:postcode' ] + ' ' : '' ) +
-			( data.osmElement.tags [ 'addr:city' ] ? data.osmElement.tags [ 'addr:city' ] + ' ' : '' );
-
-		note.url = data.osmElement.tags.website || '';
-		note.phone = data.osmElement.tags.phone || '';
-		note.tooltipContent = data.osmElement.description || '';
-		note.popupContent = data.osmElement.tags.name || '';
-		if ( ! data.isTravelNote && INVALID_OBJ_ID === routeObjId ) {
-			theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
-		}
-		else if ( this.osmSearchNoteDialog || '' === note.iconContent ) {
-			ourNoteDialog ( note, routeObjId, true );
-		}
-		else {
-			ourAddNote ( note, routeObjId, true );
-		}
+		ourNewSearchNote ( data, this.osmSearchNoteDialog );
 	}
 
 	/**
@@ -658,36 +726,16 @@ class NoteEditor {
 	*/
 
 	attachNoteToRoute ( noteObjId ) {
-		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
-		let distance = Number.MAX_VALUE;
-		let selectedRoute = null;
-		let newNoteLatLng = null;
-		let newNoteDistance = null;
-		theTravelNotesData.travel.routes.forEach (
-			route => {
-				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, noteAndRoute.note.latLng );
-				if ( pointAndDistance ) {
-					let distanceToRoute = theSphericalTrigonometry.pointsDistance (
-						noteAndRoute.note.latLng,
-						pointAndDistance.latLng
-					);
-					if ( distanceToRoute < distance ) {
-						distance = distanceToRoute;
-						selectedRoute = route;
-						newNoteLatLng = pointAndDistance.latLng;
-						newNoteDistance = pointAndDistance.distance;
-					}
-				}
-			}
-		);
+		let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
+		let nearestRouteData = ourGetNearestRouteData ( note.latLng );
 
-		if ( selectedRoute ) {
+		if ( nearestRouteData.route ) {
 			theTravelNotesData.travel.notes.remove ( noteObjId );
-			noteAndRoute.note.distance = newNoteDistance;
-			noteAndRoute.note.latLng = newNoteLatLng;
-			noteAndRoute.note.chainedDistance = selectedRoute.chainedDistance;
-			selectedRoute.notes.add ( noteAndRoute.note );
-			selectedRoute.notes.sort (
+			note.distance = nearestRouteData.distance;
+			note.latLng = nearestRouteData.latLngOnRoute;
+			note.chainedDistance = nearestRouteData.route.chainedDistance;
+			nearestRouteData.route.notes.add ( note );
+			nearestRouteData.route.notes.sort (
 				( first, second ) => first.distance - second.distance
 			);
 

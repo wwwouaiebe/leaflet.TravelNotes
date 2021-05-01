@@ -63,7 +63,7 @@ and change the version in the package.json file and run npm audit fix.
 
 */
 
-const OUR_CURRENT_VERSION = '2.2.0';
+const OUR_CURRENT_VERSION = '2.3.0';
 
 export {
 

@@ -149,7 +149,7 @@ function ourNewFloatWindow ( ) {
 			{
 				className : 'TravelNotes-FloatWindow-Container'
 			},
-			document.querySelector ( 'body' )
+			document.body
 		);
 	}
 
@@ -167,7 +167,7 @@ function ourNewFloatWindow ( ) {
 		if ( myOnClose ) {
 			myOnClose ( );
 		}
-		document.querySelector ( 'body' ).removeChild ( myWindowDiv );
+		document.body.removeChild ( myWindowDiv );
 	}
 
 	/**

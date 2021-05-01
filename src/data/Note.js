@@ -97,6 +97,7 @@ function ourUpdateStyles ( somethingText ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable-next-line complexity */
 function ourUpgrade ( note ) {
 	switch ( note.objType.version ) {
 	case '1.0.0' :
@@ -128,7 +129,8 @@ function ourUpgrade ( note ) {
 		// eslint break omitted intentionally
 	case '2.0.0' :
 	case '2.1.0' :
-		note.objType.version = '2.2.0';
+	case '2.2.0' :
+		note.objType.version = '2.3.0';
 		break;
 	default :
 		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );

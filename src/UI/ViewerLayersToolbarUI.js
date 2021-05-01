@@ -170,10 +170,8 @@ class ViewerLayersToolbarUI {
 	createUI ( ) {
 		ourLayersToolbar = theHTMLElementsFactory.create (
 			'div',
-			{
-				id : 'TravelNotes-ViewerLayersToolbarUI'
-			},
-			document.querySelector ( 'body' )
+			{ id : 'TravelNotes-ViewerLayersToolbarUI' },
+			document.body
 		);
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS

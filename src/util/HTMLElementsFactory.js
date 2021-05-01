@@ -69,6 +69,9 @@ function ourAddProperties ( element, properties ) {
 			}
 		}
 	}
+	if ( element.target ) {
+		element.rel = 'noopener noreferrer';
+	}
 }
 
 /**

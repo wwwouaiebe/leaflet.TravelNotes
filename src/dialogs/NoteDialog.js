@@ -904,7 +904,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myCreateLinkContent ( );
 		myCreatePhoneContent ( );
 		myCreatePreviewContent ( );
-		if ( startGeoCoder && theConfig.note.reverseGeocoding ) {
+		if ( '' === note.address && startGeoCoder && theConfig.note.reverseGeocoding ) {
 			myOnAddressButtonClick ( );
 		}
 		myToggleContents ( );

@@ -247,7 +247,7 @@ function ourNewBaseDialog ( ) {
 
 	function myDeleteDialog ( ) {
 		document.removeEventListener ( 'keydown', myOnKeyDown, true );
-		document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
+		document.body.removeChild ( myBackgroundDiv );
 	}
 
 	/**
@@ -644,7 +644,7 @@ function ourNewBaseDialog ( ) {
 		myOnOk = onOk;
 		myOnCancel = onCancel;
 
-		document.querySelector ( 'body' ).appendChild ( myBackgroundDiv );
+		document.body.appendChild ( myBackgroundDiv );
 		document.addEventListener ( 'keydown', myOnKeyDown, true );
 
 		myScreenWidth = myBackgroundDiv.clientWidth;

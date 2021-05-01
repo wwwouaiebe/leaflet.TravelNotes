@@ -87,43 +87,18 @@ function ourNewWaitUI ( ) {
 		*/
 
 		createUI ( ) {
-			if ( document.getElementById ( 'TravelNotes-WaitUI' ) ) {
+			if ( document.querySelector ( '#TravelNotes-WaitUI' ) ) {
 				return;
 			}
-			myBackgroundDiv = theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-Background'
-				},
-				document.querySelector ( 'body' )
-			);
-			let waitDiv = theHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-WaitUI'
-				},
-				myBackgroundDiv
-			);
-			myMessageDiv = theHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-WaitUI-MessageDiv'
-				},
-				waitDiv
-			);
+			myBackgroundDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-Background' }, document.body );
+			let waitDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-WaitUI' }, myBackgroundDiv );
+			myMessageDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-WaitUI-MessageDiv' }, waitDiv );
 			theHTMLElementsFactory.create (
 				'div',
 				{
 					className : 'TravelNotes-WaitAnimationBullet'
 				},
-				theHTMLElementsFactory.create (
-					'div',
-					{
-						className : 'TravelNotes-WaitAnimation'
-					},
-					waitDiv
-				)
-			);
+				theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-WaitAnimation' }, waitDiv ) );
 		}
 
 		/**
@@ -140,7 +115,7 @@ function ourNewWaitUI ( ) {
 		*/
 
 		close ( ) {
-			document.querySelector ( 'body' ).removeChild ( myBackgroundDiv );
+			document.body.removeChild ( myBackgroundDiv );
 			myBackgroundDiv = null;
 		}
 	}

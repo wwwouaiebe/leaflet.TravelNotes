@@ -95,7 +95,8 @@ function ourUpgrade ( wayPoint ) {
 	case '1.13.0' :
 	case '2.0.0' :
 	case '2.1.0' :
-		wayPoint.objType.version = '2.2.0';
+	case '2.2.0' :
+		wayPoint.objType.version = '2.3.0';
 		break;
 	default :
 		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );

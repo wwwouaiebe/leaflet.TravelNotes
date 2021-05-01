@@ -171,13 +171,7 @@ class MouseUI {
 			theHTMLElementsFactory.create (
 				'span',
 				null,
-				theHTMLElementsFactory.create (
-					'div',
-					{
-						id : 'TravelNotes-MouseUI'
-					},
-					document.querySelector ( 'body' )
-				)
+				theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MouseUI' }, document.body )
 			);
 		theTravelNotesData.map.on ( 'mousemove', ourOnMapMouseMove );
 		theTravelNotesData.map.on ( 'zoomend', ourOnMapZoomEnd );

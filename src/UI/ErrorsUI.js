@@ -238,7 +238,7 @@ class ErrorsUI {
 				id : 'TravelNotes-ErrorsUI',
 				className : 'TravelNotes-ErrorsUI-Hidden'
 			},
-			document.querySelector ( 'body' )
+			document.body
 		);
 	}
 

@@ -67,6 +67,7 @@ import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
 
 const OUR_TILE_SIZE = 256;
@@ -91,8 +92,11 @@ function ourNewPrintFactory ( ) {
 	let myPrintSize = null;
 	let myViews = [];
 	let myViewCounter = 0;
+	let myViewDiv = [];
 	let myRoutePolyline = null;
-	let myBody = document.querySelector ( 'body' );
+	let myPrintToolbar = null;
+	let myPrintButton = null;
+	let myCancelButton = null;
 	let myTilesPage = 0;
 
 	/*
@@ -114,16 +118,13 @@ function ourNewPrintFactory ( ) {
 	*/
 
 	function myOnAfterPrint ( ) {
-		while ( ZERO < document.getElementsByClassName ( 'TravelNotes-routeViewDiv' ).length ) {
-			myBody.removeChild ( document.getElementsByClassName ( 'TravelNotes-routeViewDiv' ) [ ZERO ] );
-		}
-		document.getElementById ( 'TravelNotes-PrintToolbar-PrintButton' )
-			.removeEventListener (	'click', ( ) => window.print ( ), false );
-		document.getElementById ( 'TravelNotes-PrintToolbar-CancelButton' )
-			.removeEventListener (	'click', myOnAfterPrint, false );
-		myBody.removeChild ( document.getElementById ( 'TravelNotes-PrintToolbar' ) );
+		myViewDiv.forEach ( viewDiv => document.body.removeChild ( viewDiv ) );
+		myViewDiv.length = ZERO;
+		myPrintButton.removeEventListener (	'click', ( ) => window.print ( ), false );
+		myCancelButton.removeEventListener (	'click', myOnAfterPrint, false );
+		document.body.removeChild ( myPrintToolbar );
 
-		let childrens = myBody.children;
+		let childrens = document.body.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.remove ( 'TravelNotes-Hidden' );
 		}
@@ -146,8 +147,7 @@ function ourNewPrintFactory ( ) {
 
 	function myComputePrintSize ( ) {
 
-		let body = document.querySelector ( 'body' );
-		let dummyDiv = theHTMLElementsFactory.create ( 'div', { }, body );
+		let dummyDiv = theHTMLElementsFactory.create ( 'div', { }, document.body );
 		dummyDiv.style.position = 'absolute';
 		dummyDiv.style.top = '0';
 		dummyDiv.style.left = '0';
@@ -159,7 +159,7 @@ function ourNewPrintFactory ( ) {
 			dummyDiv.clientWidth,
 			dummyDiv.clientHeight
 		);
-		body.removeChild ( dummyDiv );
+		document.body.removeChild ( dummyDiv );
 
 		let scale = theTravelNotesData.map.getZoomScale ( theTravelNotesData.map.getZoom ( ), myPrintData.zoomFactor );
 		myPrintSize = [
@@ -515,12 +515,13 @@ function ourNewPrintFactory ( ) {
 			leafletLayer = window.L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
-		leafletLayer.options.attribution =
+		leafletLayer.options.attribution = theHTMLSanitizer.sanitizeToHtmlString (
 			' © <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
 			'title="OpenStreetMap contributors">OpenStreetMap contributors</a> ' +
 			layer.attribution +
 			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
-			'title="https://github.com/wwwouaiebe">Travel & Notes</a> ';
+			'title="https://github.com/wwwouaiebe">Travel & Notes</a> '
+		).htmlString;
 
 		return leafletLayer;
 	}
@@ -582,8 +583,9 @@ function ourNewPrintFactory ( ) {
 				className : 'TravelNotes-routeViewDiv',
 				id : viewId
 			},
-			myBody
+			document.body
 		);
+		myViewDiv.push ( viewDiv );
 
 		if ( myPrintData.pageBreak ) {
 			viewDiv.classList.add ( 'TravelNotes-PrintPageBreak' );
@@ -645,35 +647,35 @@ function ourNewPrintFactory ( ) {
 	*/
 
 	function myCreateToolbar ( ) {
-		let printToolbar = theHTMLElementsFactory.create (
+		myPrintToolbar = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar'
 			},
-			myBody
+			document.body
 		);
-		theHTMLElementsFactory.create (
+
+		myPrintButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-PrintToolbar-PrintButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Print' ),
 				textContent : '🖨️'
 			},
-			printToolbar
-		)
-			.addEventListener (	'click', ( ) => window.print ( ), false );
-		theHTMLElementsFactory.create (
+			myPrintToolbar
+		);
+		myPrintButton.addEventListener (	'click', ( ) => window.print ( ), false );
+
+		myCancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-PrintToolbar-CancelButton',
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
 				textContent : '❌'
 			},
-			printToolbar
-		)
-			.addEventListener (	'click', myOnAfterPrint, false );
+			myPrintToolbar
+		);
+		myCancelButton.addEventListener (	'click', myOnAfterPrint, false );
 	}
 
 	/**
@@ -690,7 +692,7 @@ function ourNewPrintFactory ( ) {
 
 		// adding classes to the body
 
-		let childrens = myBody.children;
+		let childrens = document.body.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.add ( 'TravelNotes-Hidden' );
 		}

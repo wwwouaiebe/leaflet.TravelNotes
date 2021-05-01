@@ -52,6 +52,8 @@ Tests ...
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 
+let ourAttributionsDiv = null;
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -74,13 +76,7 @@ class AttributionsUI {
 	*/
 
 	createUI ( ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-AttributionsUI'
-			},
-			document.querySelector ( 'body' )
-		);
+		ourAttributionsDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-AttributionsUI' }, document.body );
 		this.attributions = '';
 	}
 
@@ -97,12 +93,10 @@ class AttributionsUI {
 			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a>';
 
-		let attributionsDiv = document.getElementById ( 'TravelNotes-AttributionsUI' );
-		while ( attributionsDiv.firstChild ) {
-			attributionsDiv.removeChild ( attributionsDiv.firstChild );
+		while ( ourAttributionsDiv.firstChild ) {
+			ourAttributionsDiv.removeChild ( ourAttributionsDiv.firstChild );
 		}
-
-		theHTMLSanitizer.sanitizeToHtmlElement ( attributionsString, attributionsDiv );
+		theHTMLSanitizer.sanitizeToHtmlElement ( attributionsString, ourAttributionsDiv );
 	}
 }
 
