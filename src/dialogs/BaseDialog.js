@@ -373,8 +373,7 @@ function ourNewBaseDialog ( ) {
 			return;
 		}
 
-		const WHEEL_CORRECTION_FACTOR = 100;
-		let zoom = theTravelNotesData.map.getZoom ( ) - Math.round ( wheelEvent.deltaY / WHEEL_CORRECTION_FACTOR );
+		let zoom = theTravelNotesData.map.getZoom ( ) + ( ZERO > wheelEvent.deltaY ? ONE : -ONE );
 		zoom = Math.min ( theTravelNotesData.map.getMaxZoom ( ), zoom );
 		zoom = Math.max ( theTravelNotesData.map.getMinZoom ( ), zoom );
 		theTravelNotesData.map.setZoomAround (
