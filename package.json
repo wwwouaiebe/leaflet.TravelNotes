@@ -7,8 +7,7 @@
     "leaflet": "^1.7.1"
   },
   "devDependencies": {
-    "osrm-text-instructions": "^0.13.4",
-    "grunt": "^1.1.0",
+    "grunt": "^1.4.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
@@ -18,7 +17,8 @@
     "grunt-stylelint": "^0.15.0",
     "grunt-terser": "^1.0.0",
     "jsdoc": "^3.6.5",
-    "stylelint": "^13.6.1",
+    "osrm-text-instructions": "^0.13.4",
+    "stylelint": "^13.13.1",
     "stylelint-config-standard": "^20.0.0"
   },
   "repository": {
