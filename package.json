@@ -16,7 +16,7 @@
     "grunt-rollup": "^11.2.0",
     "grunt-stylelint": "^0.15.0",
     "grunt-terser": "^1.0.0",
-    "jsdoc": "^3.6.5",
+    "jsdoc": "^3.6.7",
     "osrm-text-instructions": "^0.13.4",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^20.0.0"
