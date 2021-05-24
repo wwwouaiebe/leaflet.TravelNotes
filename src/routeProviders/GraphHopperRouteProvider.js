@@ -279,6 +279,8 @@ class GraphHopperRouteProvider {
 
 	get name ( ) { return 'GraphHopper'; }
 
+	get title ( ) { return 'GraphHopper'; }
+
 	get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false }; }
 
 	get providerKeyNeeded ( ) { return true; }

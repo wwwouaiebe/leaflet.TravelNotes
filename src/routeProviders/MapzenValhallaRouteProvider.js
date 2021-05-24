@@ -309,6 +309,8 @@ class MapzenValhallaRouteProvider {
 
 	get name ( ) { return 'MapzenValhalla'; }
 
+	get title ( ) { return 'Mapzen Valhalla with Stadia Maps'; }
+
 	get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false }; }
 
 	get providerKeyNeeded ( ) { return true; }

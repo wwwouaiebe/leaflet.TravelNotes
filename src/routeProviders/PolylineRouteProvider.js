@@ -410,13 +410,15 @@ class PolylineRouteProvider {
 	getPromiseRoute ( route ) { return ourGetPromiseRoute ( route ); }
 
 	get icon ( ) {
-		return 'data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" c\
-		y="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)" \
-		/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(\
-		255,204,0)" /> </svg>';
+		return 'data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" > <circle cx="12" c' +
+		'y="12" r="3" stroke="rgb(0,0,0)" fill="transparent" /> <line x1="5" y1="17" x2="11" y2="2" stroke="rgb(0,0,0)" ' +
+		'/> <line x1="3" y1="6" x2="17" y2="9" stroke="rgb(191,0,0)" /> <line x1="3" y1="16" x2="17" y2="5" stroke="rgb(' +
+		'255,204,0)" /> </svg>';
 	}
 
-	get name ( ) { return 'Polyline & Circle'; }
+	get name ( ) { return 'Polyline'; }
+
+	get title ( ) { return 'Polyline & Circle'; }
 
 	get transitModes ( ) { return { line : true, circle : true }; }
 

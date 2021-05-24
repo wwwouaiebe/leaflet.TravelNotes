@@ -294,6 +294,8 @@ class MapboxRouteProvider {
 
 	get name ( ) { return 'Mapbox'; }
 
+	get title ( ) { return 'Mapbox'; }
+
 	get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false }; }
 	get providerKeyNeeded ( ) { return true; }
 

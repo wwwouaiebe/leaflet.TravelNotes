@@ -307,6 +307,8 @@ class OpenRouteServiceRouteProvider {
 
 	get name ( ) { return 'OpenRouteService'; }
 
+	get title ( ) { return 'OpenRouteService'; }
+
 	get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false }; }
 
 	get providerKeyNeeded ( ) { return true; }
