@@ -97,7 +97,7 @@ classes for knoppunten
 
 .TravelNotes-OSM-RcnRef {
 	font: bold 50px sans-serif;
-	fill: rgb(0, 255, 255);
+	fill: rgb(0, 0, 0);
 	fill-opacity: 75%;
 	text-anchor: middle;
 }
