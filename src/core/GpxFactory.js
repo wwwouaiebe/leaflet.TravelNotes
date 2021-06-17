@@ -131,11 +131,19 @@ function ourNewGpxFactory ( ) {
 				maneuverIterator.value.itineraryPointObjId
 			);
 			let instruction = maneuverIterator.value.instruction
+
+			/*
 				.replace ( '&', '&amp;' )
 				.replace ( '"', '&apos;' )
 				.replace ( '"', '&quote;' )
 				.replace ( '>', '&gt;' )
 				.replace ( '<', '&lt;' );
+				*/
+
+				.replaceAll ( /\u0027/g, '&apos;' )
+				.replaceAll ( /"/g, '&quot;' )
+				.replaceAll ( /</g, '&lt;' )
+				.replaceAll ( />/g, '&gt;' );
 			myGpxString +=
 				OUR_TAB_2 +
 				'<rtept lat="' +
