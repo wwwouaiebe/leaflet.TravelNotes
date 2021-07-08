@@ -110,3 +110,17 @@ for map presentations on the Internet
 - it is possible to use the keyboard for the viewer commands. See the 
  [user guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#Viewer)
 - and many purely technical modifications as well as the correction of many small bugs.
+
+### What's new in release 2.3.0
+
+Following bugs are corrected:
+
+- Issue #158: when creating a route note from an Osm search result, the distance from the beginning of route is 0
+- Issue #159: When creating a note from an Osm search result, it's needed to verify the address before adding the note or showing the dialog
+- Issue #160: noopener noreferrer are added automaticaly when a link is created with target='_blank'
+- Issue #162: Zoom on the map is not working when a dialog is displayed.
+- Issue #163: svg icons integrated in js files are not displayed correctly ( Chrome ).
+- Issue #164: PolylineProvider and PublicTransportProvider crash when selected from the provider toolbar 
+- Issue #168: RCN REF numbers are difficult to read in the notes icons. Change the color.
+- Issue #170: The apps crash when renaming a waypoint and then saving the route before the end of the renaming operation..
+
