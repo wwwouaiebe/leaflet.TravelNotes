@@ -70,17 +70,16 @@ how to convert files made with an earlier version.
 
 ## What's new in the last release
 
-- the TravelNotesConfig.json file has been completely revised. If you are using a modified version of this file, it is important to review this one. See the installation guide.
-- a status indicator for the last use of the "Save to file" command has been added (green: travel saved - yellow: travel modified since the last save - red: travel modified and not saved for at least 5 minutes).
-- the method used to find the municipality of an address has been revised.
-- the search for points of interest in OpenStreetMap has been improved and is much faster.
-- a "Partial save" command has been added. This allows you to save a travel WITHOUT the travel notes and / or WITHOUT the route notes and / or WITHOUT the maneuvers. This command allows to have a much lighter file
-for map presentations on the Internet
-- the css have been reorganized and revised. Many small presentation bugs related to CSS have been fixed.
-- it is possible to zoom and pan on the map when a dialog is displayed.
-- it is possible to use the keyboard for the viewer commands. See the 
- [user guide - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/UserGuideEN.md#Viewer)
-- and many purely technical modifications as well as the correction of many small bugs.
+Following bugs are corrected:
+
+- Issue #158: when creating a route note from an Osm search result, the distance from the beginning of route is 0
+- Issue #159: When creating a note from an Osm search result, it's needed to verify the address before adding the note or showing the dialog
+- Issue #160: noopener noreferrer are added automaticaly when a link is created with target='_blank'
+- Issue #162: Zoom on the map is not working when a dialog is displayed.
+- Issue #163: svg icons integrated in js files are not displayed correctly ( Chrome ).
+- Issue #164: PolylineProvider and PublicTransportProvider crash when selected from the provider toolbar 
+- Issue #168: RCN REF numbers are difficult to read in the notes icons. Change the color.
+- Issue #170: The apps crash when renaming a waypoint and then saving the route before the end of the renaming operation..
 
 For other versions, see the document ['What's new?' - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/WhatsNew.md)
 
@@ -154,18 +153,15 @@ comment convertir des fichiers réalisés avec une version antérieure.
 
 ## Quoi de neuf dans la dernière version
 
-- le fichier TravelNotesConfig.json a été entièrement revu. Si vous utilisez une version modifiée de ce fichier, il est important
-de revoir celle-ci. Voyez le guide d'installation.
-- un indicateur du statut de la dernière utilisation de la commande "Sauver dans un fichier" a été ajoutée (vert : voyage sauvé - jaune :
-voyage modifié depuis la dernière sauvegarde - rouge : voyage modifié et non sauvé depuis au mins 5 minutes).
-- la méthode utilisée pour rechercher la commune d'une adresse a été revue.
-- la recherche de points d'intérêts dans OpenStreetMap a été améliorée et est beaucoup plus rapide.
-- une commande "Sauvegarde partielle" a été ajoutée. Celle-ci permet de sauver un voyage SANS les notes de voyage et/ou SANS les notes de
-trajet et/ou SANS les manoeuvres. Cette commande permet d'avoir un fichier beaucoup plus léger pour des présentations de carte sur Internet
-- les css ont été réorganisés et revus. De nombreux petits bugs de présentation liés à CSS ont été corrigés.
-- il est possible de faire des zooms et des pans sur la carte quand un dialogue est affiché.
-- il est possible d'utiliser le clavier pour les commandes du viewer. Voir 
-le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#Viewer)
-- et de nombreuses modifications purement techniques ainsi qie la correction de nombreux petits bugs.
+Les bugs suivants sont corrigés:
+
+- Issue #158: la distance entre une note de trajet et le début du trajet est 0 quand cette note est créée depuis un résultat de recherche dans OpenStreetMap.
+- Issue #159: l'adresse doit être vérifiée quand une note est créée depuis un résultat de recherche dans OpenStreetMap.
+- Issue #160: noopener noreferrer sont ajoutés automatiquement quand un lien est créé avec target='_blank'
+- Issue #162: le zoom ne fonctionne pas quand un dialogue est affiché ( Firefox ).
+- Issue #163: les icônes en svg intégrées dans les fichiers JS ne sont pas affichées correctement ( Chrome ).
+- Issue #164: polylineProvider et PublicTransportProvider crash quand les providers sont sélectionnés 
+- Issue #168: La couleur des références RCN-REF est modifiée dans les icônes.
+- Issue #170: un crash survient lorsque un trajet édité est sauvé avant qu'un point de passage soit entièrement renommé.
 
 Pour les autres versions, reportez-vous au document ['quoi de neuf?' - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/QuoiDeNeuf.md)
