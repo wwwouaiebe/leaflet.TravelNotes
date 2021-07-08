@@ -30,6 +30,8 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	-v2.2.0:
 		- Issue #129 : Add an indicator when the travel is modified and not saved
+	-v2.3.0:
+		- Issue #171 : Add a warning when opening a file with invalid version
 Doc reviewed 20200801
 Tests ...
 */
@@ -169,17 +171,21 @@ function ourNewFileLoader ( ) {
 				}
 				return;
 			}
-			if ( mustMerge ) {
-				newFileCompactor ( ).decompressMerge ( fileContent );
+			try {
+				if ( mustMerge ) {
+					newFileCompactor ( ).decompressMerge ( fileContent );
+				}
+				else {
+					theProfileWindowsManager.deleteAllProfiles ( );
+					newFileCompactor ( ).decompress ( fileContent );
+				}
+				myDisplay ( );
+				if ( ! mustMerge ) {
+					theMouseUI.saveStatus = SAVE_STATUS.saved;
+				}
 			}
-			else {
-				theProfileWindowsManager.deleteAllProfiles ( );
-				newFileCompactor ( ).decompress ( fileContent );
-			}
-
-			myDisplay ( );
-			if ( ! mustMerge ) {
-				theMouseUI.saveStatus = SAVE_STATUS.saved;
+			catch ( err ) {
+				theErrorsUI.showError ( 'An error occurs when reading the file : ' + err.message );
 			}
 
 		};
