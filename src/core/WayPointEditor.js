@@ -31,6 +31,9 @@ Changes:
 		- Issue #120 : Review the UserInterface
 	- v2.2.0:
 		- Issue #64 : Improve geocoding
+	- v2.3.0:
+		- Issue #170 : The apps crash when renaming a waypoint and then saving the route before the end of the renaming...
+
 Doc reviewed 20200810
 Tests ...
 */
@@ -93,13 +96,18 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 */
 
 function ourRenameWayPoint ( wayPointOsmData, wayPointObjId ) {
-	theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 	let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
-	wayPoint.name = wayPointOsmData.name;
-	wayPoint.address = wayPointOsmData.address;
-	theEventDispatcher.dispatch ( 'setrouteslist' );
-	theEventDispatcher.dispatch ( 'showitinerary' );
-	theEventDispatcher.dispatch ( 'roadbookupdate' );
+	if ( wayPoint ) {
+		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
+		wayPoint.name = wayPointOsmData.name;
+		wayPoint.address = wayPointOsmData.address;
+		theEventDispatcher.dispatch ( 'setrouteslist' );
+		theEventDispatcher.dispatch ( 'showitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+	}
+	else {
+		console.error ( 'waypoint not found' );
+	}
 }
 
 /**
@@ -205,16 +213,7 @@ class WayPointEditor {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		let wayPoint = newWayPoint ( );
 		wayPoint.latLng = finalLatLng;
-		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
-		ourRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
-		theEventDispatcher.dispatch (
-			'addwaypoint',
-			{
-				wayPoint : theTravelNotesData.travel.editedRoute.wayPoints.last,
-				letter : theTravelNotesData.travel.editedRoute.wayPoints.length - TWO
-			}
-		);
-
+		let letter = '';
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
 			let latLngDistance = theGeometry.getClosestLatLngDistance (
@@ -222,13 +221,17 @@ class WayPointEditor {
 				wayPointsIterator.value.latLng
 			);
 			if ( newWayPointDistance < latLngDistance.distance ) {
+				letter = String ( wayPointsIterator.index );
+				theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
 				theTravelNotesData.travel.editedRoute.wayPoints.moveTo (
 					wayPoint.objId, wayPointsIterator.value.objId, true
 				);
+				ourRenameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
+				theEventDispatcher.dispatch ( 'addwaypoint', { wayPoint : wayPoint, letter : letter } );
+				theRouteEditor.startRouting ( );
 				break;
 			}
 		}
-		theRouteEditor.startRouting ( );
 	}
 
 	/**
