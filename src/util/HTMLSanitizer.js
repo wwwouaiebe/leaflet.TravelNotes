@@ -456,12 +456,14 @@ function ourSanitizeToHtmlString ( htmlString ) {
 			}
 			if ( currentNode.hasAttributes ) {
 				for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
-					errorsString +=
-						'\nAn unsecure attribute ' +
-						currentNode.attributes [ attCounter ].name +
-						'="' +
-						currentNode.attributes [ attCounter ].value +
-						'" was removed.';
+					if ( 'rel' !==  currentNode.attributes [ attCounter ].name ) {
+						errorsString +=
+							'\nAn unsecure attribute ' +
+							currentNode.attributes [ attCounter ].name +
+							'="' +
+							currentNode.attributes [ attCounter ].value +
+							'" was removed.';
+					}
 				}
 			}
 
