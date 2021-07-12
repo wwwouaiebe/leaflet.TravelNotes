@@ -456,7 +456,7 @@ function ourSanitizeToHtmlString ( htmlString ) {
 			}
 			if ( currentNode.hasAttributes ) {
 				for ( let attCounter = ZERO; attCounter < currentNode.attributes.length; attCounter ++ ) {
-					if ( 'rel' !==  currentNode.attributes [ attCounter ].name ) {
+					if ( 'rel' !== currentNode.attributes [ attCounter ].name ) {
 						errorsString +=
 							'\nAn unsecure attribute ' +
 							currentNode.attributes [ attCounter ].name +
