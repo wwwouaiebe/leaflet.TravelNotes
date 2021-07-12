@@ -17,6 +17,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
+	- v2.4.0:
+		- Issue #174 : UUID generator is not rfc 4122 compliant
 Doc reviewed 20200825
 Tests ...
 */
@@ -62,20 +64,41 @@ class Utilities {
 	}
 
 	/**
-	Gives an UUID
+	Gives an UUID conform to the rfc 4122 section 4.4
 	*/
 
 	get UUID ( ) {
-		const UUID_LENGHT = 8;
-		const UUID_STRLENGHT = 4;
-		let randomValues = new Uint16Array ( UUID_LENGHT );
-		const UUID_SEPARATORS = [ '', '-', '-', '-', '-', '', '', '' ];
+		const UUID_LENGHT = 16;
+		const UUID_STRLENGHT = 2;
+		let randomValues = new Uint8Array ( UUID_LENGHT );
+		const UUID_SEPARATORS = [ '', '', '', '-', '', '-', '', '-', '', '-', '', '', '', '', '', '' ];
+
 		window.crypto.getRandomValues ( randomValues );
+
+		/* eslint-disable no-bitwise */
+		/* eslint-disable no-magic-numbers */
+		/*
+		rfc 4122 section 4.4 : Set the four most significant bits (bits 12 through 15) of the
+		time_hi_and_version field to the 4-bit version number from section 4.1.3.
+		*/
+
+		randomValues [ 6 ] = ( randomValues [ 6 ] & 0x0f ) | 0x40;
+
+		/*
+		rfc 4122 section 4.4 : Set the two most significant bits (bits 6 and 7) of the
+		clock_seq_hi_and_reserved to zero and one, respectively.
+		*/
+
+		randomValues [ 8 ] = ( randomValues [ 8 ] & 0x3f ) | 0x80;
+		/* eslint-enable no-bitwise */
+		/* eslint-enable no-magic-numbers */
+
 		let UUID = '';
 		for ( let counter = ZERO; counter < UUID_LENGHT; counter ++ ) {
 			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) +
 				UUID_SEPARATORS [ counter ];
 		}
+
 		return UUID;
 	}
 
