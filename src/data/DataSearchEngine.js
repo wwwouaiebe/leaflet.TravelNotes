@@ -23,7 +23,9 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20200731
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210714
 Tests ...
 */
 
@@ -141,23 +143,18 @@ class DataSearchEngine {
 	}
 }
 
-const OUR_DATA_SEARCH_ENGINE = new DataSearchEngine ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of DataSearchEngine class
+@type {DataSearchEngine}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of DataSearchEngine class
-	@type {DataSearchEngine}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_DATA_SEARCH_ENGINE as theDataSearchEngine
-};
+export const theDataSearchEngine = new DataSearchEngine ( );
 
 /*
 --- End of DataSearchEngine.js file -------------------------------------------------------------------------------------------

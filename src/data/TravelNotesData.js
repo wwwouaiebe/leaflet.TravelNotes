@@ -22,7 +22,9 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20200728
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210714
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -58,7 +60,8 @@ Tests ...
 @interface
 @desc An object that stores the provider properties. Created by the plugins
 @property {string} icon The icon displayed in the provider toolbar, base64 encoded
-@property {string} name The	name of the provider
+@property {string} name The name of the provider
+@property {string} title The title used for the icon
 @property {object} transitModes An object with the possible transit modes
 @property {boolean} providerKeyNeeded A boolean true when a provider key is needed
 @property {string} providerKey 	The provider key
@@ -78,14 +81,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newTravel } from '../data/Travel.js';
+import Travel from '../data/Travel.js';
 import { theUtilities } from '../util/Utilities.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
-
-let ourProviders = new Map ( );
-let ourMapObjects = new Map ( );
-let ourRouting = Object.seal ( { provider : '', transitMode : '' } );
-let ourUUID = theUtilities.UUID;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -99,6 +97,11 @@ let ourUUID = theUtilities.UUID;
 */
 
 class TravelNotesData {
+
+	#providers = new Map ( );
+	#mapObjects = new Map ( );
+	#routing = Object.seal ( { provider : '', transitMode : '' } );
+	#UUID = theUtilities.UUID;
 
 	constructor ( ) {
 
@@ -116,7 +119,7 @@ class TravelNotesData {
 		@see Travel
 		*/
 
-		this.travel = newTravel ( );
+		this.travel = new Travel ( );
 
 		/**
 		The objId of the currently edited route or INVALID_OBJ_ID if none
@@ -141,14 +144,14 @@ class TravelNotesData {
 	@see {@link module:TravelNotesData~provider}
 	*/
 
-	get providers ( ) { return ourProviders; }
+	get providers ( ) { return this.#providers; }
 
 	/**
 	A JS map with all the Leaflet objects
 	@type {Map.Object}
 	*/
 
-	get mapObjects ( ) { return ourMapObjects; }
+	get mapObjects ( ) { return this.#mapObjects; }
 
 	/**
 	An Object with the provider and transit mode used
@@ -156,33 +159,28 @@ class TravelNotesData {
 	@see {@link module:TravelNotesData~routing}
 	*/
 
-	get routing ( ) { return ourRouting; }
+	get routing ( ) { return this.#routing; }
 
 	/**
 	The UUID currently used
 	@type {string}
 	*/
 
-	get UUID ( ) { return ourUUID; }
+	get UUID ( ) { return this.#UUID; }
 }
 
-const OUR_TRAVEL_NOTES_DATA = new TravelNotesData ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of TravelNoteData class
+@type {TravelNotesData}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of TravelNoteData class
-	@type {TravelNotesData}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRAVEL_NOTES_DATA as theTravelNotesData
-};
+export const theTravelNotesData = new TravelNotesData ( );
 
 /*
 --- End of TravelNotesData.js file --------------------------------------------------------------------------------------------

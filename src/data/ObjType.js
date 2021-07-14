@@ -22,7 +22,9 @@ Changes:
 		- Issue #52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20200731
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210714
 Tests ...
 */
 
@@ -46,107 +48,76 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import { NOT_FOUND } from '../util/Constants.js';
 import { theCurrentVersion } from '../data/Version.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewObjType
-@desc Constructor for a ObjType object
-@param {string} objTypeName The name of the ObjType
-@return {ObjType} an instance of a ObjType object
-@private
+@class ObjType
+@classdesc This class represent a ObjType
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewObjType ( objTypeName ) {
-
-	const MY_NAME = objTypeName;
-	const MY_VERSION = theCurrentVersion;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class ObjType
-	@classdesc This class represent a ObjType
-	@see {@link newObjType} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class ObjType {
-
-		constructor ( ) {
-			Object.freeze ( this );
+class ObjType {
+	
+	#objTypeName = '';
+	
+	constructor ( objTypeName ) {
+		if ( NOT_FOUND === ['Itinerary', 'ItineraryPoint','Maneuver', 'Note', 'Route', 'Travel', 'WayPoint'].indexOf ( objTypeName ) ) {
+			throw new Error ( 'Invalid ObjType name : ' + objTypeName  );
 		}
-
-		/**
-		the name of the ObjType
-		@type {string}
-		*/
-
-		get name ( ) { return MY_NAME; }
-
-		/**
-		the version of the ObjType
-		@type {string}
-		*/
-
-		get version ( ) { return MY_VERSION; }
-
-		/**
-		An object literal with the ObjType properties and without any methods.
-		This object can be used with the JSON object
-		@type {Object}
-		*/
-
-		get jsonObject ( ) {
-			return {
-				name : MY_NAME,
-				version : MY_VERSION
-			};
-		}
-
-		/**
-		Verify that the ObjType is valid
-		@throws when the ObjType is invalid
-		*/
-
-		validate ( something ) {
-			if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
-				throw new Error ( 'No name for ' + MY_NAME );
-			}
-			if ( MY_NAME !== something.name ) {
-				throw new Error ( 'Invalid name for ' + MY_NAME );
-			}
-			if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
-				throw new Error ( 'No version for ' + MY_NAME );
-			}
-		}
+		this.#objTypeName = objTypeName;
+		Object.freeze ( this );
 	}
 
-	return new ObjType ( );
-
-}
-
-export {
-
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newObjType
-	@desc Constructor for a ObjType object
-	@param {string} objTypeName The name of the ObjType
-	@return {ObjType} an instance of a ObjType object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	the name of the ObjType
+	@type {string}
 	*/
 
-	ourNewObjType as newObjType
-};
+	get name ( ) { return this.#objTypeName; }
+
+	/**
+	the version of the ObjType
+	@type {string}
+	*/
+
+	get version ( ) { return theCurrentVersion; }
+
+	/**
+	An object literal with the ObjType properties and without any methods.
+	This object can be used with the JSON object
+	@type {Object}
+	*/
+
+	get jsonObject ( ) {
+		return {
+			name : this.#objTypeName,
+			version : theCurrentVersion
+		};
+	}
+
+	/**
+	Verify that the ObjType is valid
+	@throws when the ObjType is invalid
+	*/
+
+	validate ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'name' ) ) {
+			throw new Error ( 'No name for ' + this.#objTypeName );
+		}
+		if ( this.#objTypeName !== something.name ) {
+			throw new Error ( 'Invalid name for ' + this.#objTypeName );
+		}
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'version' ) ) {
+			throw new Error ( 'No version for ' + this.#objTypeName );
+		}
+	}
+}
+
+export default ObjType;
 
 /*
 --- End of ObjType.js file ----------------------------------------------------------------------------------------------------

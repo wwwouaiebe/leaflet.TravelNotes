@@ -24,7 +24,9 @@ Changes:
 		- Issue #65 : Time to go to ES6 modules?
 	- v2.0.0:
 		- Issue #138 : Protect the app - control html entries done by user.
-Doc reviewed 20200730
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210714
 Tests ...
 */
 
@@ -50,101 +52,91 @@ Tests ...
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-import { newObjId } from '../data/ObjId.js';
-import { newObjType } from '../data/ObjType.js';
+import ObjId from '../data/ObjId.js';
+import ObjType from '../data/ObjType.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
-const OUR_OBJ_TYPE = newObjType ( 'Maneuver' );
-const OUR_OBJ_IDS = new WeakMap ( );
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourUpgrade
-@desc performs the upgrade
-@param {Object} maneuver a maneuver to upgrade
-@throws {Error} when the maneuver version is invalid
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourUpgrade ( maneuver ) {
-	switch ( maneuver.objType.version ) {
-	case '1.0.0' :
-	case '1.1.0' :
-	case '1.2.0' :
-	case '1.3.0' :
-	case '1.4.0' :
-	case '1.5.0' :
-	case '1.6.0' :
-	case '1.7.0' :
-	case '1.7.1' :
-	case '1.8.0' :
-	case '1.9.0' :
-	case '1.10.0' :
-	case '1.11.0' :
-		if ( 'kArriveDefault' === maneuver.iconName ) {
-			maneuver.distance = DISTANCE.defaultValue;
-		}
-		// eslint break omitted intentionally
-	case '1.12.0' :
-	case '1.13.0' :
-	case '2.0.0' :
-	case '2.1.0' :
-	case '2.2.0' :
-		maneuver.objType.version = '2.3.0';
-		break;
-	default :
-		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourValidate
-@desc verify that the parameter can be transformed to a Maneuver and performs the upgrate if needed
-@param {Object} something an object to validate
-@return {Object} the validated object
-@throws {Error} when the parameter is invalid
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourValidate ( something ) {
-	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
-	}
-	OUR_OBJ_TYPE.validate ( something.objType );
-	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-		ourUpgrade ( something );
-	}
-	let properties = Object.getOwnPropertyNames ( something );
-	[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
-		property => {
-			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
-			}
-		}
-	);
-	return something;
-}
+const OUR_OBJ_TYPE = new ObjType ( 'Maneuver' );
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class Maneuver
 @classdesc This class represent a maneuver
-@see {@link newManeuver} for constructor
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
 class Maneuver {
+
+	#objId = INVALID_OBJ_ID;;
+
+	/**
+	Performs the upgrade
+	@param {Object} maneuver a maneuver to upgrade
+	@throws {Error} when the maneuver version is invalid
+	@private
+	*/
+
+	static #upgradeObject ( maneuver ) {
+		switch ( maneuver.objType.version ) {
+		case '1.0.0' :
+		case '1.1.0' :
+		case '1.2.0' :
+		case '1.3.0' :
+		case '1.4.0' :
+		case '1.5.0' :
+		case '1.6.0' :
+		case '1.7.0' :
+		case '1.7.1' :
+		case '1.8.0' :
+		case '1.9.0' :
+		case '1.10.0' :
+		case '1.11.0' :
+			if ( 'kArriveDefault' === maneuver.iconName ) {
+				maneuver.distance = DISTANCE.defaultValue;
+			}
+			// eslint break omitted intentionally
+		case '1.12.0' :
+		case '1.13.0' :
+		case '2.0.0' :
+		case '2.1.0' :
+		case '2.2.0' :
+			maneuver.objType.version = '2.3.0';
+			break;
+		default :
+			throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+		}
+	}
+
+	/**
+	Verify that the parameter can be transformed to a Maneuver and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+	*/
+
+	static #validateObject ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
+		}
+		OUR_OBJ_TYPE.validate ( something.objType );
+		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+			this.#upgradeObject ( something );
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		[ 'iconName', 'instruction', 'distance', 'duration', 'itineraryPointObjId', 'objId' ].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
+				}
+			}
+		);
+		return something;
+	}
 
 	constructor ( ) {
 
@@ -183,7 +175,7 @@ class Maneuver {
 
 		this.duration = DISTANCE.defaultValue;
 
-		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+		this.#objId = ObjId.nextObjId;
 
 		Object.seal ( this );
 	}
@@ -202,7 +194,7 @@ class Maneuver {
 	@type {!number}
 	*/
 
-	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
+	get objId ( ) { return this.#objId; }
 
 	/**
 	An object literal with the Maneuver properties and without any methods.
@@ -217,18 +209,18 @@ class Maneuver {
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			duration : this.duration,
 			itineraryPointObjId : this.itineraryPointObjId,
-			objId : OUR_OBJ_IDS.get ( this ),
+			objId : this.#objId,
 			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = ourValidate ( something );
+		let otherthing =  Maneuver.#validateObject ( something );
 		this.iconName = otherthing.iconName || '';
 		this.instruction = otherthing.instruction || '';
 		this.distance = otherthing.distance || DISTANCE.defaultValue;
 		this.duration = otherthing.duration || DISTANCE.defaultValue;
 		this.itineraryPointObjId = otherthing.itineraryPointObjId || INVALID_OBJ_ID;
-		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+		this.#objId = ObjId.nextObjId;
 		this.validateData ( );
 	}
 
@@ -264,36 +256,7 @@ class Maneuver {
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNewManeuver
-@desc Constructor for a Maneuver object
-@return {Maneuver} an instance of a Maneuver object
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewManeuver ( ) {
-	return new Maneuver ( );
-}
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newManeuver
-	@desc Construct a Maneuver object
-	@return {Maneuver} an instance of a Maneuver object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewManeuver as newManeuver
-};
+export default Maneuver;
 
 /*
 --- End of Maneuver.js file ---------------------------------------------------------------------------------------------------

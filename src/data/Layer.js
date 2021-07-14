@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v2.0.0:
 		- created
-Doc reviewed ...
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210714
 Tests ...
 */
 
@@ -63,20 +65,6 @@ import { ZERO, ONE } from '../util/Constants.js';
 @class Layer
 @classdesc This class represent a background map
 @desc A background map with all the properties
-@property {string} service The type of service: wms or wmts
-@property {string} url The url to use to get the map
-@property {Object} wmsOptions See the Leaflet TileLayer.WMS documentation
-@property {Array.<number>} bounds The lower left and upper right corner of the map
-@property {number} minZoom The smallest possible zoom for this map
-@property {number} maxZoom The largest possible zoom for this map
-@property {string} name The name of the map
-@property {LayerToolbarButton} toolbar An object with text, color and backgroundColor properties used to create
-the button in the toolbar
-@property {string} providerName The name of the service provider. This name will be used to find the access key to the service.
-@property {booolean} providerKeyNeeded When true, an access key is required to get the map.
-@property {string} attribution The map attributions. For maps based on OpenStreetMap, it is not necessary to add
-the attributions of OpenStreetMap because they are always present in Travel & Notes.
-@property {string} getCapabilitiesUrl The url of the getCapabilities file when it is known.@see {@link newLayer} for constructor
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -87,18 +75,36 @@ class Layer	{
 	/* eslint-disable-next-line complexity, max-statements */
 	constructor ( jsonLayer ) {
 		if ( jsonLayer.name && 'string' === typeof ( jsonLayer.name ) ) {
+
+			/**
+			The name of the map
+			@type {string}
+			*/
+
 			this.name = theHTMLSanitizer.sanitizeToJsString ( jsonLayer.name );
 		}
 		else {
 			throw new Error ( 'invalid name for layer' );
 		}
 		if ( jsonLayer.service && ( 'wms' === jsonLayer.service || 'wmts' === jsonLayer.service ) ) {
+
+			/**
+			The type of service: wms or wmts
+			@type {string}
+			*/
+
 			this.service = jsonLayer.service;
 		}
 		else {
 			throw new Error ( 'invalid service for layer ' + this.name );
 		}
 		if ( jsonLayer.url && 'string' === typeof ( jsonLayer.url ) ) {
+
+			/**
+			The url to use to get the map
+			@type {string}
+			*/
+
 			this.url = jsonLayer.url;
 		}
 		else {
@@ -114,6 +120,12 @@ class Layer	{
 				&&
 				jsonLayer.wmsOptions.transparent && 'boolean' === typeof ( jsonLayer.wmsOptions.transparent )
 			) {
+				
+				/**
+				See the Leaflet TileLayer.WMS documentation
+				@type {object}
+				*/
+				
 				this.wmsOptions = jsonLayer.wmsOptions;
 				this.wmsOptions.layers = theHTMLSanitizer.sanitizeToJsString ( this.wmsOptions.layers );
 				this.wmsOptions.format = theHTMLSanitizer.sanitizeToJsString ( this.wmsOptions.format );
@@ -134,6 +146,12 @@ class Layer	{
 				&&
 				'number' === typeof jsonLayer.bounds [ ONE ] [ ONE ]
 			) {
+				
+				/**
+				The lower left and upper right corner of the map
+				@type {Array.<number>}
+				*/
+				
 				this.bounds = jsonLayer.bounds;
 			}
 		}
@@ -141,9 +159,21 @@ class Layer	{
 			throw new Error ( 'invalid bounds for layer ' + this.name );
 		}
 		if ( jsonLayer.minZoom && 'number' === typeof ( jsonLayer.minZoom ) ) {
+
+			/**
+			The smallest possible zoom for this map
+			@type {number}
+			*/
+
 			this.minZoom = jsonLayer.minZoom;
 		}
 		if ( jsonLayer.maxZoom && 'number' === typeof ( jsonLayer.maxZoom ) ) {
+
+			/**
+			The largest possible zoom for this map
+			@type {number}
+			*/
+
 			this.maxZoom = jsonLayer.maxZoom;
 		}
 		if (
@@ -155,6 +185,12 @@ class Layer	{
 			&&
 			jsonLayer.toolbar.backgroundColor && 'string' === typeof ( jsonLayer.toolbar.backgroundColor )
 		) {
+			
+			/**
+			An object with text, color and backgroundColor properties used to create the button in the toolbar
+			@type {LayerToolbarButton}
+			*/
+
 			this.toolbar = jsonLayer.toolbar;
 			this.toolbar.text = theHTMLSanitizer.sanitizeToJsString ( this.toolbar.text );
 			this.toolbar.color =
@@ -166,18 +202,37 @@ class Layer	{
 			throw new Error ( 'invalid toolbar for layer ' + this.name );
 		}
 		if ( jsonLayer.providerName && 'string' === typeof ( jsonLayer.providerName ) ) {
+			
+			/**
+			The name of the service provider. This name will be used to find the access key to the service.
+			@type {string}
+			*/
+
 			this.providerName = theHTMLSanitizer.sanitizeToJsString ( jsonLayer.providerName );
 		}
 		else {
 			throw new Error ( 'invalid providerName for layer ' + this.name );
 		}
 		if ( 'boolean' === typeof ( jsonLayer.providerKeyNeeded ) ) {
+			
+			/**
+			When true, an access key is required to get the map.
+			@type {boolean}
+			*/
+
 			this.providerKeyNeeded = jsonLayer.providerKeyNeeded;
 		}
 		else {
 			throw new Error ( 'invalid providerKeyNeeded for layer ' + this.name );
 		}
 		if ( '' === jsonLayer.attribution ) {
+			
+			/**
+			The map attributions. For maps based on OpenStreetMap, it is not necessary to add
+			the attributions of OpenStreetMap because they are always present in Travel & Notes.
+			@type {string}
+			*/
+
 			this.attribution = '';
 		}
 		else if ( jsonLayer.attribution && 'string' === typeof ( jsonLayer.attribution ) ) {
@@ -187,6 +242,12 @@ class Layer	{
 			throw new Error ( 'invalid attribution for layer ' + this.name );
 		}
 		if ( jsonLayer.getCapabilitiesUrl && 'string' === typeof ( jsonLayer.getCapabilitiesUrl ) ) {
+			
+			/**
+			The url of the getCapabilities file when it is known.
+			@type {string}
+			*/
+
 			this.getCapabilitiesUrl = theHTMLSanitizer.sanitizeToUrl ( jsonLayer.getCapabilitiesUrl ).url;
 			if ( '' === this.getCapabilitiesUrl ) {
 				throw new Error ( 'invalid getCapabilitiesUrl for layer ' + this.name );
@@ -197,27 +258,7 @@ class Layer	{
 	}
 }
 
-function ourNewLayer ( jsonLayer ) {
-	return new Layer ( jsonLayer );
-}
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function
-	@desc constructor of Layer objects
-	@param {object} jsonLayer the layer description coming from the TravelNotesLayer file
-	@return {Layer} an instance of a Layer object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewLayer as newLayer
-};
-
+export default Layer;
 /**
 --- End of Layer.js file ------------------------------------------------------------------------------------------------------
 */
