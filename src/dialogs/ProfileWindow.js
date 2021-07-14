@@ -29,7 +29,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { newObjId } from '../data/ObjId.js';
+import ObjId from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theGeometry } from '../util/Geometry.js';
@@ -72,7 +72,7 @@ import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js
 
 function ourNewProfileWindow ( ) {
 
-	let myLatLngObjId = newObjId ( );
+	let myLatLngObjId = ObjId.nextObjId;
 
 	let mySvg = null;
 	let myMarker = null;

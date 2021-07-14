@@ -59,7 +59,7 @@ import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { newObjId } from '../data/ObjId.js';
+import ObjId from '../data/ObjId.js';
 import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
@@ -590,7 +590,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			{
 				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Row',
 				osmElement : osmElement,
-				objId : newObjId ( )
+				objId : ObjId.nextObjId
 			},
 			myPaneDataDiv
 		);

@@ -77,12 +77,12 @@ import { theMapEditor } from '../core/MapEditor.js';
 import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
 import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theUI } from '../UI/UI.js';
-import { newTravel } from '../data/Travel.js';
-import { newRoute } from '../data/Route.js';
+import Travel from '../data/Travel.js';
+import Route from '../data/Route.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newManeuver } from '../data/Maneuver.js';
-import { newItineraryPoint } from '../data/ItineraryPoint.js';
+import Maneuver from '../data/Maneuver.js';
+import ItineraryPoint from '../data/ItineraryPoint.js';
 import { theCurrentVersion } from '../data/Version.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
@@ -379,8 +379,8 @@ class TravelNotes {
 			theTravelNotesData.map = map;
 			theTravelNotesData.map.on ( 'contextmenu', ourOnMapContextMenu );
 		}
-		theTravelNotesData.travel = newTravel ( );
-		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+		theTravelNotesData.travel = new Travel ( );
+		theTravelNotesData.travel.routes.add ( new Route ( ) );
 		theUI.createUI ( document.getElementById ( divControlId ) );
 		theAttributionsUI.createUI ( );
 		theAPIKeysManager.setKeysFromServerFile ( );
@@ -441,13 +441,13 @@ class TravelNotes {
 	get a new Maneuver object. Used by plugins.
 	*/
 
-	get maneuver ( ) { return newManeuver ( ); }
+	get maneuver ( ) { return new Maneuver ( ); }
 
 	/**
 	get a new ItineraryPoint object. Used by plugins.
 	*/
 
-	get itineraryPoint ( ) { return newItineraryPoint ( ); }
+	get itineraryPoint ( ) { return new ItineraryPoint ( ); }
 
 	/**
 	theTravelNotes version

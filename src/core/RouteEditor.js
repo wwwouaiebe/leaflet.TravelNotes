@@ -75,7 +75,7 @@ import { theAPIKeysManager } from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newRoute } from '../data/Route.js';
+import Route from '../data/Route.js';
 import { newGpxFactory } from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
@@ -330,7 +330,7 @@ class RouteEditor {
 	*/
 
 	addRoute ( ) {
-		let route = newRoute ( );
+		let route = new Route ( );
 		theTravelNotesData.travel.routes.add ( route );
 		if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
 			ourChainRoutes ( );
@@ -403,7 +403,7 @@ class RouteEditor {
 		}
 
 		// The edited route is pushed in the editors
-		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = new Route ( );
 		initialRoute.editionStatus = ROUTE_EDITION_STATUS.editedNoChange;
 
 		// Route is cloned, so we can have a cancel button in the editor
@@ -550,7 +550,7 @@ class RouteEditor {
 	saveEdition ( ) {
 
 		// the edited route is cloned
-		let clonedRoute = newRoute ( );
+		let clonedRoute = new Route ( );
 		clonedRoute.jsonObject = theTravelNotesData.travel.editedRoute.jsonObject;
 
 		// and the initial route replaced with the clone
@@ -587,7 +587,7 @@ class RouteEditor {
 		);
 
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = new Route ( );
 		ourChainRoutes ( );
 
 		theEventDispatcher.dispatch ( 'roadbookupdate' );

@@ -49,7 +49,7 @@ Tests ...
 
 import { thePolylineEncoder } from '../util/PolylineEncoder.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newTravel } from '../data/Travel.js';
+import Travel from '../data/Travel.js';
 import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, TWO, INVALID_OBJ_ID, LAT_LNG, DISTANCE } from '../util/Constants.js';
 
 /**
@@ -242,7 +242,7 @@ function ourNewFileCompactor ( ) {
 
 		decompressMerge ( travelObject ) {
 			myDecompressTravel ( travelObject );
-			let mergedTravel = newTravel ( );
+			let mergedTravel = new Travel ( );
 			mergedTravel.jsonObject = travelObject;
 
 			// routes are added with their notes

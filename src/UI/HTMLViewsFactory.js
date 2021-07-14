@@ -58,7 +58,7 @@ Tests ...
 
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { newObjId } from '../data/ObjId.js';
+import ObjId from '../data/ObjId.js';
 import { theUtilities } from '../util/Utilities.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
@@ -632,7 +632,7 @@ function ourGetRouteManeuversAndNotesHTML ( classPrefix, route ) {
 	while ( ! notesIterator.done ) {
 		let noteTextAndIconHTML = ourGetNoteTextAndIconHTML ( classPrefix, { note : notesIterator.value, route : route } );
 		noteTextAndIconHTML.className = classPrefix + 'Route-Notes-Row';
-		noteTextAndIconHTML.objId = newObjId ( );
+		noteTextAndIconHTML.objId = ObjId.nextObjId;
 		noteTextAndIconHTML.latLng = notesIterator.value.latLng;
 		noteTextAndIconHTML.noteObjId = notesIterator.value.objId;
 		noteTextAndIconHTML.distance = notesIterator.value.distance;
@@ -650,7 +650,7 @@ function ourGetRouteManeuversAndNotesHTML ( classPrefix, route ) {
 			}
 		);
 		maneuverHTML.className = classPrefix + 'Route-Maneuvers-Row';
-		maneuverHTML.objId = newObjId ( );
+		maneuverHTML.objId = ObjId.nextObjId;
 		maneuverHTML.latLng =
 			route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
 		maneuverHTML.maneuverObjId = maneuversIterator.value.objId;

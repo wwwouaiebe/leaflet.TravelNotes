@@ -74,7 +74,7 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
-import { newNote } from '../data/Note.js';
+import Note from '../data/Note.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
@@ -123,7 +123,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	Create an instance of the dialog, then execute the show ( ) method. The edited note is given as parameter of the
 	succes handler of the Promise returned by the show ( ) method.
 	@example
-	newNoteDialog ( newNote ( ), INVALID_OBJ_ID, true )
+	newNoteDialog ( new Note ( ), INVALID_OBJ_ID, true )
 		.show ( )
 		.then ( note => doSomethingWithTheNote )
 		.catch ( error => doSomethingWithTheError );
@@ -877,7 +877,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	function myCreateDialog ( ) {
 
-		myPreviewNote = newNote ( );
+		myPreviewNote = new Note ( );
 		myPreviewNote.jsonObject = note.jsonObject;
 		if ( '' === myPreviewNote.iconContent ) {
 			myPreviewNote.iconContent = OUR_DEFAULT_ICON;

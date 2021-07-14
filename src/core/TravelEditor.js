@@ -70,8 +70,8 @@ import { theConfig } from '../data/Config.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theUtilities } from '../util/Utilities.js';
-import { newRoute } from '../data/Route.js';
-import { newTravel } from '../data/Travel.js';
+import Route from '../data/Route.js';
+import Travel from '../data/Travel.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newFileCompactor } from '../core/FileCompactor.js';
 import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
@@ -92,7 +92,7 @@ import { newSaveAsDialog } from '../dialogs/SaveAsDialog.js';
 
 function ourSaveAsTravel ( removeData ) {
 
-	let saveAsTravel = newTravel ( );
+	let saveAsTravel = new Travel ( );
 	saveAsTravel.jsonObject = theTravelNotesData.travel.jsonObject;
 	saveAsTravel.name += '-partial';
 	let routesIterator = saveAsTravel.routes.iterator;
@@ -218,10 +218,10 @@ class TravelEditor {
 		}
 		theProfileWindowsManager.deleteAllProfiles ( );
 		theEventDispatcher.dispatch ( 'removeallobjects' );
-		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = new Route ( );
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-		theTravelNotesData.travel = newTravel ( );
-		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+		theTravelNotesData.travel = new Travel ( );
+		theTravelNotesData.travel.routes.add ( new Route ( ) );
 		theEventDispatcher.dispatch ( 'setrouteslist' );
 		theEventDispatcher.dispatch ( 'showitinerary' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );

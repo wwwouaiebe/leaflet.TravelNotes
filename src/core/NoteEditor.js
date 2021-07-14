@@ -66,7 +66,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
-import { newNote } from '../data/Note.js';
+import Note from '../data/Note.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
@@ -100,7 +100,7 @@ let ourShowSearchNoteDialog = null;
 */
 
 function ourNewNoteFromOsmData ( osmNoteData, route ) {
-	let note = newNote ( );
+	let note = new Note ( );
 	note.iconContent = osmNoteData.svg.outerHTML;
 	note.popupContent = '';
 	note.iconWidth = ICON_DIMENSIONS.width;
@@ -283,7 +283,7 @@ function ourNoteDialog ( note, routeObjId, isNewNote ) {
 */
 
 function ourNewNote ( latLng ) {
-	let note = newNote ( );
+	let note = new Note ( );
 	note.latLng = latLng;
 	note.iconLatLng = latLng;
 	return note;
@@ -351,7 +351,7 @@ function ourGetNearestRouteData ( latLng ) {
 async function ourNewSearchNote ( data, osmSearchNoteDialog ) {
 
 	let routeObjId = INVALID_OBJ_ID;
-	let note = newNote ( );
+	let note = new Note ( );
 	if ( data.isTravelNote ) {
 		note.latLng = [ data.osmElement.lat, data.osmElement.lon ];
 	}

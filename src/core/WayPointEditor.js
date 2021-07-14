@@ -75,7 +75,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
-import { newWayPoint } from '../data/WayPoint.js';
+import WayPoint from '../data/WayPoint.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
@@ -182,7 +182,7 @@ class WayPointEditor {
 
 	addWayPoint ( latLng ) {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
-		let wayPoint = newWayPoint ( );
+		let wayPoint = new WayPoint ( );
 		wayPoint.latLng = latLng;
 		theTravelNotesData.travel.editedRoute.wayPoints.add ( wayPoint );
 		ourRenameWayPointWithGeocoder ( latLng, wayPoint.objId );
@@ -211,7 +211,7 @@ class WayPointEditor {
 			initialLatLng
 		).distance;
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
-		let wayPoint = newWayPoint ( );
+		let wayPoint = new WayPoint ( );
 		wayPoint.latLng = finalLatLng;
 		let letter = '';
 		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;

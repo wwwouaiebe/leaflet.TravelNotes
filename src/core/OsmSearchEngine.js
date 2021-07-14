@@ -46,7 +46,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newObjId } from '../data/ObjId.js';
+import ObjId from '../data/ObjId.js';
 import { theConfig } from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
@@ -106,7 +106,7 @@ function ourDrawPreviousSearchRectangle ( ) {
 		return;
 	}
 	if ( INVALID_OBJ_ID === ourPreviousSearchRectangleObjId ) {
-		ourPreviousSearchRectangleObjId = newObjId ( );
+		ourPreviousSearchRectangleObjId = ObjId.nextObjId;
 	}
 	else {
 		theEventDispatcher.dispatch ( 'removeobject', { objId : ourPreviousSearchRectangleObjId } );
@@ -141,7 +141,7 @@ function ourDrawPreviousSearchRectangle ( ) {
 
 function ourOnMapChange ( ) {
 	if ( INVALID_OBJ_ID === ourNextSearchRectangleObjId ) {
-		ourNextSearchRectangleObjId = newObjId ( );
+		ourNextSearchRectangleObjId = ObjId.nextObjId;
 	}
 	else {
 		theEventDispatcher.dispatch ( 'removeobject', { objId : ourNextSearchRectangleObjId } );
