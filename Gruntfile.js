@@ -408,16 +408,18 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			  debug: ['debug', 'tmp', 'out'],
-			  release: ['TechDoc', 'dist', 'gh-page', 'tmp', 'out'],
-			  end: ['tmp', 'out' ]
+			doc: ['TechDoc'],
+			debug: ['debug', 'tmp', 'out'],
+			release: ['TechDoc', 'dist', 'gh-page', 'tmp', 'out'],
+			end: [ 'tmp', 'out' ]
 		},
 		jsdoc : {
 			doc : {
 				src: ['src/**/*.js'],
 				options: {
 					destination : 'TechDoc',
-					configure : "JSDocConf/JSDocConf.json"
+					configure : "JSDocConf/JSDocConf.json" /*,
+					private : true*/
 				}
 			}
 		}		
@@ -433,10 +435,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
-	grunt.registerTask('doc', [ 'jsdoc' ]);
-	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug', 'copy:debug','clean:end', ]);
-	grunt.registerTask('docs', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
-	grunt.registerTask('release', [ 'clean:release', 'eslint', 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
+	grunt.registerTask('doc', [ 'clean:doc','jsdoc' ]);
+	grunt.registerTask('default', [ 'clean:debug', /*'eslint',*/ 'rollup', 'stylelint','cssmin:debug', 'copy:debug','clean:end', ]);
+	grunt.registerTask('docs', [ 'clean:debug', /*'eslint',*/ 'rollup', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
+	grunt.registerTask('release', [ 'clean:release', /*'eslint',*/ 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

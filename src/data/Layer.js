@@ -120,12 +120,12 @@ class Layer	{
 				&&
 				jsonLayer.wmsOptions.transparent && 'boolean' === typeof ( jsonLayer.wmsOptions.transparent )
 			) {
-				
+
 				/**
 				See the Leaflet TileLayer.WMS documentation
 				@type {object}
 				*/
-				
+
 				this.wmsOptions = jsonLayer.wmsOptions;
 				this.wmsOptions.layers = theHTMLSanitizer.sanitizeToJsString ( this.wmsOptions.layers );
 				this.wmsOptions.format = theHTMLSanitizer.sanitizeToJsString ( this.wmsOptions.format );
@@ -146,12 +146,12 @@ class Layer	{
 				&&
 				'number' === typeof jsonLayer.bounds [ ONE ] [ ONE ]
 			) {
-				
+
 				/**
 				The lower left and upper right corner of the map
 				@type {Array.<number>}
 				*/
-				
+
 				this.bounds = jsonLayer.bounds;
 			}
 		}
@@ -185,7 +185,7 @@ class Layer	{
 			&&
 			jsonLayer.toolbar.backgroundColor && 'string' === typeof ( jsonLayer.toolbar.backgroundColor )
 		) {
-			
+
 			/**
 			An object with text, color and backgroundColor properties used to create the button in the toolbar
 			@type {LayerToolbarButton}
@@ -202,7 +202,7 @@ class Layer	{
 			throw new Error ( 'invalid toolbar for layer ' + this.name );
 		}
 		if ( jsonLayer.providerName && 'string' === typeof ( jsonLayer.providerName ) ) {
-			
+
 			/**
 			The name of the service provider. This name will be used to find the access key to the service.
 			@type {string}
@@ -214,7 +214,7 @@ class Layer	{
 			throw new Error ( 'invalid providerName for layer ' + this.name );
 		}
 		if ( 'boolean' === typeof ( jsonLayer.providerKeyNeeded ) ) {
-			
+
 			/**
 			When true, an access key is required to get the map.
 			@type {boolean}
@@ -226,7 +226,7 @@ class Layer	{
 			throw new Error ( 'invalid providerKeyNeeded for layer ' + this.name );
 		}
 		if ( '' === jsonLayer.attribution ) {
-			
+
 			/**
 			The map attributions. For maps based on OpenStreetMap, it is not necessary to add
 			the attributions of OpenStreetMap because they are always present in Travel & Notes.
@@ -242,7 +242,7 @@ class Layer	{
 			throw new Error ( 'invalid attribution for layer ' + this.name );
 		}
 		if ( jsonLayer.getCapabilitiesUrl && 'string' === typeof ( jsonLayer.getCapabilitiesUrl ) ) {
-			
+
 			/**
 			The url of the getCapabilities file when it is known.
 			@type {string}
@@ -259,6 +259,7 @@ class Layer	{
 }
 
 export default Layer;
+
 /**
 --- End of Layer.js file ------------------------------------------------------------------------------------------------------
 */
