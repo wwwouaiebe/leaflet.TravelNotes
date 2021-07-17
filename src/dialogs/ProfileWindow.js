@@ -36,7 +36,7 @@ import { theGeometry } from '../util/Geometry.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newProfileContextMenu } from '../contextMenus/ProfileContextMenu.js';
-import { newProfileFactory } from '../core/ProfileFactory.js';
+import ProfileFactory from '../core/ProfileFactory.js';
 import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js';
 
 /**
@@ -329,7 +329,7 @@ function ourNewProfileWindow ( ) {
 	function myUpdate ( args ) {
 		myClean ( );
 		myRoute = args [ ZERO ];
-		mySvg = newProfileFactory ( ).createSvg ( myRoute );
+		mySvg = new ProfileFactory ( ).createSvg ( myRoute );
 
 		myProfileWindow.header.textContent = theTranslator.getText (
 			'ProfileWindow - Profile {name}',

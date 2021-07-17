@@ -44,13 +44,15 @@ Tests ...
 */
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
+import ViewerMapEditor from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
-import { theGeoLocator } from '../core/GeoLocator.js';
+import theGeoLocator from '../core/GeoLocator.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { ZERO, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+
+const theViewerMapEditor = new ViewerMapEditor ( );
 
 let ourTravelNotesLoaded = false;
 

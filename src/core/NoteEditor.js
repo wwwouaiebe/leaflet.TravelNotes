@@ -39,7 +39,9 @@ Changes:
 	- v2.0.0:
 		- Issue #135 : Remove innerHTML from code
 		- Issue #138 : Protect the app - control html entries done by user.
-Doc reviewed 20200803
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 */
 
@@ -81,345 +83,6 @@ import { newGeoCoder } from '../core/GeoCoder.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS, LAT_LNG } from '../util/Constants.js';
 
-let ourWaitUI = null;
-let ourManeuverCounter = ZERO;
-let ourManeuverLength = ZERO;
-let ourShowSearchNoteDialog = null;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNewNoteFromOsmData
-@desc This function creates a new route note with data from osm
-@param {OsmNoteData} osmNoteData The osm data needed for the note
-@param {Route} route The route to witch the note will be attached
-@fires noteupdated
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewNoteFromOsmData ( osmNoteData, route ) {
-	let note = new Note ( );
-	note.iconContent = osmNoteData.svg.outerHTML;
-	note.popupContent = '';
-	note.iconWidth = ICON_DIMENSIONS.width;
-	note.iconHeight = ICON_DIMENSIONS.height;
-	note.tooltipContent = osmNoteData.tooltip;
-	note.address = osmNoteData.streets;
-	if ( '' !== osmNoteData.city ) {
-		note.address += ' ' + '<span class="TravelNotes-NoteHtml-Address-City">' + osmNoteData.city + '</span>';
-	}
-	if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
-		note.address += ' (' + osmNoteData.place + ')';
-	}
-	note.latLng = osmNoteData.latLng;
-	note.iconLatLng = osmNoteData.latLng;
-	note.distance = theGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
-	note.chainedDistance = route.chainedDistance;
-	route.notes.add ( note );
-	theEventDispatcher.dispatch (
-		'noteupdated',
-		{
-			removedNoteObjId : INVALID_OBJ_ID,
-			addedNoteObjId : note.objId
-		}
-	);
-	theEventDispatcher.dispatch ( 'roadbookupdate' );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddAllManeuverNote
-@desc This method add a note with data from osm for each maneuver of a route. This function is recursive!
-@param {CollectionIterator} maneuverIterator an iterator on the maneuvers
-@param {Route} route The route to witch the notes will be attached
-@fires updateitinerary
-@fires roadbookupdate
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddAllManeuverNote ( maneuverIterator, route ) {
-
-	function endAdd ( ) {
-		if ( maneuverIterator.done ) {
-			route.notes.sort (
-				( first, second ) => first.distance - second.distance
-			);
-			theEventDispatcher.dispatch ( 'updateitinerary' );
-			theEventDispatcher.dispatch ( 'roadbookupdate' );
-			ourWaitUI.close ( );
-			ourWaitUI = null;
-		}
-		else {
-			ourAddAllManeuverNote ( maneuverIterator, route );
-		}
-	}
-
-	ourWaitUI.showInfo (
-		theTranslator.getText (
-			'NoteEditor - Creating note',
-			{ noteNumber : ourManeuverCounter, notesLength : ourManeuverLength }
-		)
-	);
-	if (
-		( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
-		||
-		( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
-	) {
-		endAdd ( );
-	}
-	else {
-		ourManeuverCounter ++;
-		let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
-			.then (
-				osmNoteData => {
-					ourNewNoteFromOsmData ( osmNoteData, route );
-					endAdd ( );
-				}
-			)
-			.catch (
-				err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-					endAdd ( );
-				}
-			);
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddNote
-@desc This method add or update a note to theTravelNotesData and to the map
-@param {Note} note the note to add
-@param {Route} route The route to witch the notes will be attached
-@param {boolean} isNewNote true when the note is a new note
-@fires updateitinerary
-@fires roadbookupdate
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddNote ( note, routeObjId, isNewNote ) {
-	if ( isNewNote ) {
-		if ( INVALID_OBJ_ID === routeObjId ) {
-			theTravelNotesData.travel.notes.add ( note );
-			theEventDispatcher.dispatch ( 'showtravelnotes' );
-		}
-		else {
-			let route = theDataSearchEngine.getRoute ( routeObjId );
-			route.notes.add ( note );
-			note.chainedDistance = route.chainedDistance;
-			route.notes.sort (
-				( first, second ) => first.distance - second.distance
-			);
-			theEventDispatcher.dispatch ( 'showitinerary' );
-		}
-	}
-	else if ( INVALID_OBJ_ID === routeObjId ) {
-		theEventDispatcher.dispatch ( 'updatetravelnotes' );
-	}
-	else {
-		theEventDispatcher.dispatch ( 'updateitinerary' );
-	}
-	theEventDispatcher.dispatch (
-		'noteupdated',
-		{
-			removedNoteObjId : note.objId,
-			addedNoteObjId : note.objId
-		}
-	);
-	theEventDispatcher.dispatch ( 'roadbookupdate' );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNoteDialog
-@desc This method show the Note dialog and then add or update the note
-@param {Note} note the Note to be added or updated
-@param {!number} routeObjId The route objId to witch the note will be attached (= INVALID_OBJ_ID for a travel note)
-@param {boolean} isNewNote when true the note will be added, otherwise updated
-@fires showtravelnotes
-@fires showitinerary
-@fires noteupdated
-@fires roadbookupdate
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNoteDialog ( note, routeObjId, isNewNote ) {
-	newNoteDialog ( note, routeObjId, isNewNote )
-		.show ( )
-		.then ( ( ) => { ourAddNote ( note, routeObjId, isNewNote ); } )
-		.catch (
-			err => {
-				if ( err instanceof Error ) {
-					console.error ( err );
-				}
-			}
-		);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNewNote
-@desc This method construct a new Note object
-@param {Array.<number>} latLng The latitude and longitude of the note
-@return {Note} A new note object with the lat and lng completed
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewNote ( latLng ) {
-	let note = new Note ( );
-	note.latLng = latLng;
-	note.iconLatLng = latLng;
-	return note;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourGetNearestRouteData
-@desc This method search route data for the nearest route of a given point
-@param {Array.<number>} latLng The latitude and longitude of the point
-@return {RouteData} A routeData object
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourGetNearestRouteData ( latLng ) {
-
-	let nearestRouteData = {
-		distance : Number.MAX_VALUE,
-		route : null,
-		distanceOnRoute : ZERO,
-		latLngOnRoute : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ]
-	};
-
-	function selectRoute ( route ) {
-		if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
-			let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, latLng );
-			if ( pointAndDistance ) {
-				let distanceToRoute = theSphericalTrigonometry.pointsDistance (
-					latLng,
-					pointAndDistance.latLng
-				);
-				if ( distanceToRoute < nearestRouteData.distance ) {
-					nearestRouteData.route = route;
-					nearestRouteData.distance = distanceToRoute;
-					nearestRouteData.latLngOnRoute = pointAndDistance.latLng;
-					nearestRouteData.distanceOnRoute = pointAndDistance.distance;
-				}
-			}
-		}
-	}
-
-	theTravelNotesData.travel.routes.forEach ( selectRoute );
-	if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-		selectRoute ( theTravelNotesData.travel.editedRoute );
-	}
-
-	return Object.freeze ( nearestRouteData );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNewNote
-@desc This method construct a new search note object
-@param {Object} data The search data coming from osm
-@param {boolean} osmSearchNoteDialog a boolean indicating when the note dialog must be showed
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-async function ourNewSearchNote ( data, osmSearchNoteDialog ) {
-
-	let routeObjId = INVALID_OBJ_ID;
-	let note = new Note ( );
-	if ( data.isTravelNote ) {
-		note.latLng = [ data.osmElement.lat, data.osmElement.lon ];
-	}
-	else {
-		let nearestRouteData = ourGetNearestRouteData ( [ data.osmElement.lat, data.osmElement.lon ] );
-		if ( ! nearestRouteData.route ) {
-			theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
-			return;
-		}
-		note.latLng = nearestRouteData.latLngOnRoute;
-		note.distance = nearestRouteData.distanceOnRoute;
-		routeObjId = nearestRouteData.route.objId;
-	}
-	note.iconLatLng = [ data.osmElement.lat, data.osmElement.lon ];
-	note.iconHeight = ICON_DIMENSIONS.height;
-	note.iconWidth = ICON_DIMENSIONS.width;
-	if ( data.osmElement.tags.rcn_ref ) {
-		note.iconContent =
-			'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
-			'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
-			data.osmElement.tags.rcn_ref +
-			'</text></svg></div>';
-	}
-	else {
-		note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
-	}
-	note.url = data.osmElement.tags.website || '';
-	note.phone = data.osmElement.tags.phone || '';
-	note.tooltipContent = data.osmElement.description || '';
-	note.popupContent = data.osmElement.tags.name || '';
-	if (
-		! data.osmElement.tags [ 'addr:street' ]
-		||
-		! data.osmElement.tags [ 'addr:city' ]
-	) {
-		ourWaitUI = newWaitUI ( );
-		ourWaitUI.createUI ( );
-		ourWaitUI.showInfo ( 'Creating address' );
-		let geoCoderData = null;
-		try {
-			geoCoderData = await newGeoCoder ( ).getPromiseAddress ( [ data.osmElement.lat, data.osmElement.lon ] );
-		}
-		catch ( err ) {
-			console.error ( err );
-		}
-		ourWaitUI.close ( );
-		if ( geoCoderData ) {
-			note.address = geoCoderData.street;
-			if ( '' !== geoCoderData.city ) {
-				note.address +=
-					' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
-			}
-		}
-	}
-	else {
-		note.address =
-			( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-			data.osmElement.tags [ 'addr:street' ] +
-			' <span class="TravelNotes-NoteHtml-Address-City">' + data.osmElement.tags [ 'addr:city' ] + '</span>';
-	}
-	if ( osmSearchNoteDialog || '' === note.iconContent ) {
-		ourNoteDialog ( note, routeObjId, true );
-	}
-	else {
-		ourAddNote ( note, routeObjId, true );
-	}
-}
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -432,6 +95,222 @@ async function ourNewSearchNote ( data, osmSearchNoteDialog ) {
 */
 
 class NoteEditor {
+	
+	#waitUI = null;
+	
+	#showSearchNoteDialog = null;
+	
+	#maneuverCounter = ZERO;
+
+	/**
+	This function creates a new route note with data from osm
+	@param {OsmNoteData} osmNoteData The osm data needed for the note
+	@param {Route} route The route to witch the note will be attached
+	@fires noteupdated
+	@private
+	*/
+
+	#newNoteFromOsmData ( osmNoteData, route ) {
+		let note = new Note ( );
+		note.iconContent = osmNoteData.svg.outerHTML;
+		note.popupContent = '';
+		note.iconWidth = ICON_DIMENSIONS.width;
+		note.iconHeight = ICON_DIMENSIONS.height;
+		note.tooltipContent = osmNoteData.tooltip;
+		note.address = osmNoteData.streets;
+		if ( '' !== osmNoteData.city ) {
+			note.address += ' ' + '<span class="TravelNotes-NoteHtml-Address-City">' + osmNoteData.city + '</span>';
+		}
+		if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
+			note.address += ' (' + osmNoteData.place + ')';
+		}
+		note.latLng = osmNoteData.latLng;
+		note.iconLatLng = osmNoteData.latLng;
+		note.distance = theGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
+		note.chainedDistance = route.chainedDistance;
+		route.notes.add ( note );
+		theEventDispatcher.dispatch (
+			'noteupdated',
+			{
+				removedNoteObjId : INVALID_OBJ_ID,
+				addedNoteObjId : note.objId
+			}
+		);
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+	}
+
+	/**
+	This method add a note with data from osm for each maneuver of a route.
+	@param {Route} route The route to witch the notes will be attached
+	@param {maneuverLength} The number of maneuver to proceed !== route.itinerary.maneuvers.length
+	@fires updateitinerary
+	@fires roadbookupdate
+	@private
+	*/
+
+	async #addAllManeuverNotes ( route, maneuverLength ) {
+		this.#waitUI = newWaitUI ( );
+		this.#waitUI.createUI ( );
+		let maneuverIterator = route.itinerary.maneuvers.iterator;
+		while ( ! maneuverIterator.done ) {
+			this.#waitUI.showInfo (
+				theTranslator.getText (
+					'NoteEditor - Creating note',
+					{ noteNumber : maneuverIterator.index + ONE, notesLength : maneuverLength }
+				)
+			);
+
+			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
+			await newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
+				.then ( 
+					osmNoteData => {
+						this.#newNoteFromOsmData ( osmNoteData, route );
+					}
+				)
+				.catch (
+					err => {
+						if ( err instanceof Error ) {
+							console.error ( err );
+						}
+					}
+				);
+		}
+		route.notes.sort ( ( first, second ) => first.distance - second.distance );
+		theEventDispatcher.dispatch ( 'updateitinerary' );
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+		this.#waitUI.close ( );
+		this.#waitUI = null;
+	}
+
+
+	/**
+	This method add or update a note to theTravelNotesData and to the map
+	@param {Note} note the note to add
+	@param {Route} route The route to witch the notes will be attached
+	@param {boolean} isNewNote true when the note is a new note
+	@fires updateitinerary
+	@fires roadbookupdate
+	@private
+	*/
+
+	#addNote ( note, routeObjId, isNewNote ) {
+		if ( isNewNote ) {
+			if ( INVALID_OBJ_ID === routeObjId ) {
+				theTravelNotesData.travel.notes.add ( note );
+				theEventDispatcher.dispatch ( 'showtravelnotes' );
+			}
+			else {
+				let route = theDataSearchEngine.getRoute ( routeObjId );
+				route.notes.add ( note );
+				note.chainedDistance = route.chainedDistance;
+				route.notes.sort (
+					( first, second ) => first.distance - second.distance
+				);
+				theEventDispatcher.dispatch ( 'showitinerary' );
+			}
+		}
+		else if ( INVALID_OBJ_ID === routeObjId ) {
+			theEventDispatcher.dispatch ( 'updatetravelnotes' );
+		}
+		else {
+			theEventDispatcher.dispatch ( 'updateitinerary' );
+		}
+		theEventDispatcher.dispatch (
+			'noteupdated',
+			{
+				removedNoteObjId : note.objId,
+				addedNoteObjId : note.objId
+			}
+		);
+		theEventDispatcher.dispatch ( 'roadbookupdate' );
+	}
+
+	/**
+	This method show the Note dialog and then add or update the note
+	@param {Note} note the Note to be added or updated
+	@param {!number} routeObjId The route objId to witch the note will be attached (= INVALID_OBJ_ID for a travel note)
+	@param {boolean} isNewNote when true the note will be added, otherwise updated
+	@fires showtravelnotes
+	@fires showitinerary
+	@fires noteupdated
+	@fires roadbookupdate
+	@private
+	*/
+
+	#noteDialog ( note, routeObjId, isNewNote ) {
+		newNoteDialog ( note, routeObjId, isNewNote )
+			.show ( )
+			.then ( ( ) => { this.#addNote ( note, routeObjId, isNewNote ); } )
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
+	}
+
+	/**
+	This method construct a new Note object
+	@param {Array.<number>} latLng The latitude and longitude of the note
+	@return {Note} A new note object with the lat and lng completed
+	@private
+	*/
+	
+	#newNote ( latLng ) {
+		let note = new Note ( );
+		note.latLng = latLng;
+		note.iconLatLng = latLng;
+		return note;
+	}
+	
+	/**
+	This method search route data for the nearest route of a given point
+	@param {Array.<number>} latLng The latitude and longitude of the point
+	@return {RouteData} A routeData object
+	@private
+	*/
+	
+	#getNearestRouteData ( latLng ) {
+		let nearestRouteData = {
+			distance : Number.MAX_VALUE,
+			route : null,
+			distanceOnRoute : ZERO,
+			latLngOnRoute : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ]
+		};
+
+		function selectRoute ( route ) {
+			if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
+				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, latLng );
+				if ( pointAndDistance ) {
+					let distanceToRoute = theSphericalTrigonometry.pointsDistance (
+						latLng,
+						pointAndDistance.latLng
+					);
+					if ( distanceToRoute < nearestRouteData.distance ) {
+						nearestRouteData.route = route;
+						nearestRouteData.distance = distanceToRoute;
+						nearestRouteData.latLngOnRoute = pointAndDistance.latLng;
+						nearestRouteData.distanceOnRoute = pointAndDistance.distance;
+					}
+				}
+			}
+		}
+
+		theTravelNotesData.travel.routes.forEach ( selectRoute );
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+			selectRoute ( theTravelNotesData.travel.editedRoute );
+		}
+
+		return Object.freeze ( nearestRouteData );
+	}
+	
+	/**
+	This method construct a new search note object
+	@param {Object} data The search data coming from osm
+	@param {boolean} osmSearchNoteDialog a boolean indicating when the note dialog must be showed
+	@private
+	*/
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -442,10 +321,10 @@ class NoteEditor {
 	*/
 
 	get osmSearchNoteDialog ( ) {
-		if ( null === ourShowSearchNoteDialog ) {
-			ourShowSearchNoteDialog = theConfig.osmSearch.showSearchNoteDialog;
+		if ( null === this.#showSearchNoteDialog ) {
+			this.#showSearchNoteDialog = theConfig.osmSearch.showSearchNoteDialog;
 		}
-		return ourShowSearchNoteDialog;
+		return this.#showSearchNoteDialog;
 	}
 
 	/*
@@ -453,7 +332,7 @@ class NoteEditor {
 	*/
 
 	changeOsmSearchNoteDialog ( ) {
-		ourShowSearchNoteDialog = ! this.osmSearchNoteDialog;
+		this.#showSearchNoteDialog = ! this.osmSearchNoteDialog;
 	}
 
 	/**
@@ -468,21 +347,21 @@ class NoteEditor {
 	addAllManeuverNotes ( routeObjId ) {
 		let route = theDataSearchEngine.getRoute ( routeObjId );
 		let maneuverIterator = route.itinerary.maneuvers.iterator;
-		ourManeuverLength = ZERO;
+		let maneuverLength = ZERO;
 		while ( ! maneuverIterator.done ) {
 			if (
 				! ( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
 				&&
 				! ( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
 			) {
-				ourManeuverLength ++;
+				maneuverLength ++;
 			}
 		}
 
-		if ( theConfig.note.maxManeuversNotes < ourManeuverLength ) {
+		if ( theConfig.note.maxManeuversNotes < maneuverLength ) {
 			theErrorsUI.showError (
 				theTranslator.getText ( 'NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}',
-					{ maneuversLength : ourManeuverLength, maxManeuversNotes : theConfig.note.maxManeuversNotes } )
+					{ maneuversLength : maneuverLength, maxManeuversNotes : theConfig.note.maxManeuversNotes } )
 			);
 			return;
 		}
@@ -492,23 +371,13 @@ class NoteEditor {
 				title : theTranslator.getText ( 'NoteEditor - Add a note for each maneuver' ),
 				textContent : theTranslator.getText (
 					'NoteEditor - Add a note for each maneuver. Are you sure?',
-					{ noteLength : ourManeuverLength }
+					{ noteLength : maneuverLength }
 				),
 				secondButtonContent : '❌'
 			}
 		)
 			.show ( )
-			.then (
-				( ) => {
-					maneuverIterator = route.itinerary.maneuvers.iterator;
-					if ( ! maneuverIterator.done ) {
-						ourWaitUI = newWaitUI ( );
-						ourWaitUI.createUI ( );
-						ourManeuverCounter = ONE;
-						ourAddAllManeuverNote ( maneuverIterator, route );
-					}
-				}
-			)
+			.then ( ( ) => {this.#addAllManeuverNotes ( route, maneuverLength ) } )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {
@@ -538,10 +407,10 @@ class NoteEditor {
 		);
 
 		// the note is created
-		let note = ourNewNote ( latLngDistance.latLng );
+		let note = this.#newNote ( latLngDistance.latLng );
 		note.distance = latLngDistance.distance;
 
-		ourNoteDialog ( note, route.objId, true );
+		this.#noteDialog ( note, route.objId, true );
 	}
 
 	/**
@@ -552,47 +421,75 @@ class NoteEditor {
 	@fires roadbookupdate
 	*/
 
-	newSearchNote ( data ) {
-		ourNewSearchNote ( data, this.osmSearchNoteDialog );
-	}
-
-	/**
-	This method add a note with data from osm for a maneuver
-	@param {!number} maneuverObjId The objId of the maneuver
-	@fires showitinerary
-	@fires noteupdated
-	@fires roadbookupdate
-	*/
-
-	newManeuverNote ( maneuverObjId ) {
-		ourWaitUI = newWaitUI ( );
-		ourWaitUI.createUI ( );
-		let route = theTravelNotesData.travel.editedRoute;
-		let maneuver = route.itinerary.maneuvers.getAt ( maneuverObjId );
-		let latLng = route.itinerary.itineraryPoints.getAt ( maneuver.itineraryPointObjId ).latLng;
-		newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
-			.then (
-				osmNoteData => {
-					ourNewNoteFromOsmData ( osmNoteData, route );
-					route.notes.sort (
-						( first, second ) => first.distance - second.distance
-					);
-					route.itinerary.maneuvers.remove ( maneuverObjId );
-					theEventDispatcher.dispatch ( 'showitinerary' );
-					theEventDispatcher.dispatch ( 'roadbookupdate' );
-					ourWaitUI.close ( );
-					ourWaitUI = null;
+	async newSearchNote ( data ) {
+		let routeObjId = INVALID_OBJ_ID;
+		let note = new Note ( );
+		if ( data.isTravelNote ) {
+			note.latLng = [ data.osmElement.lat, data.osmElement.lon ];
+		}
+		else {
+			let nearestRouteData = this.#getNearestRouteData ( [ data.osmElement.lat, data.osmElement.lon ] );
+			if ( ! nearestRouteData.route ) {
+				theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
+				return;
+			}
+			note.latLng = nearestRouteData.latLngOnRoute;
+			note.distance = nearestRouteData.distanceOnRoute;
+			routeObjId = nearestRouteData.route.objId;
+		}
+		note.iconLatLng = [ data.osmElement.lat, data.osmElement.lon ];
+		note.iconHeight = ICON_DIMENSIONS.height;
+		note.iconWidth = ICON_DIMENSIONS.width;
+		if ( data.osmElement.tags.rcn_ref ) {
+			note.iconContent =
+				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
+				'<svg viewBox=\'0 0 20 20\'><text x=\'10\' y=\'14\'>' +
+				data.osmElement.tags.rcn_ref +
+				'</text></svg></div>';
+		}
+		else {
+			note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
+		}
+		note.url = data.osmElement.tags.website || '';
+		note.phone = data.osmElement.tags.phone || '';
+		note.tooltipContent = data.osmElement.description || '';
+		note.popupContent = data.osmElement.tags.name || '';
+		if (
+			! data.osmElement.tags [ 'addr:street' ]
+			||
+			! data.osmElement.tags [ 'addr:city' ]
+		) {
+			this.#waitUI = newWaitUI ( );
+			this.#waitUI.createUI ( );
+			this.#waitUI.showInfo ( 'Creating address' );
+			let geoCoderData = null;
+			try {
+				geoCoderData = await newGeoCoder ( ).getPromiseAddress ( [ data.osmElement.lat, data.osmElement.lon ] );
+			}
+			catch ( err ) {
+				console.error ( err );
+			}
+			this.#waitUI.close ( );
+			if ( geoCoderData ) {
+				note.address = geoCoderData.street;
+				if ( '' !== geoCoderData.city ) {
+					note.address +=
+						' <span class="TravelNotes-NoteHtml-Address-City">' + geoCoderData.city + '</span>';
 				}
-			)
-			.catch (
-				err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-					ourWaitUI.close ( );
-					ourWaitUI = null;
-				}
-			);
+			}
+		}
+		else {
+			note.address =
+				( data.osmElement.tags [ 'addr:housenumber' ] ? data.osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
+				data.osmElement.tags [ 'addr:street' ] +
+				' <span class="TravelNotes-NoteHtml-Address-City">' + data.osmElement.tags [ 'addr:city' ] + '</span>';
+		}
+		if ( this.osmSearchNoteDialog || '' === note.iconContent ) {
+			this.#noteDialog ( note, routeObjId, true );
+		}
+		else {
+			this.#addNote ( note, routeObjId, true );
+		}
 	}
 
 	/**
@@ -604,8 +501,8 @@ class NoteEditor {
 	*/
 
 	newTravelNote ( latLng ) {
-		let note = ourNewNote ( latLng );
-		ourNoteDialog ( note, INVALID_OBJ_ID, true );
+		let note = this.#newNote ( latLng );
+		this.#noteDialog ( note, INVALID_OBJ_ID, true );
 	}
 
 	/**
@@ -620,7 +517,7 @@ class NoteEditor {
 	editNote ( noteObjId ) {
 		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( noteObjId );
 		let routeObjId = null === noteAndRoute.route ? INVALID_OBJ_ID : noteAndRoute.route.objId;
-		ourNoteDialog ( noteAndRoute.note, routeObjId, false );
+		this.#noteDialog ( noteAndRoute.note, routeObjId, false );
 	}
 
 	/**
@@ -727,7 +624,7 @@ class NoteEditor {
 
 	attachNoteToRoute ( noteObjId ) {
 		let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
-		let nearestRouteData = ourGetNearestRouteData ( note.latLng );
+		let nearestRouteData = this.#getNearestRouteData ( note.latLng );
 
 		if ( nearestRouteData.route ) {
 			theTravelNotesData.travel.notes.remove ( noteObjId );
@@ -789,23 +686,20 @@ class NoteEditor {
 	}
 }
 
-const OUR_NOTE_EDITOR = new NoteEditor ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of NoteEditor class
+@type {NoteEditor}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of NoteEditor class
-	@type {NoteEditor}
-	@constant
-	@global
+const theNoteEditor = new NoteEditor ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_NOTE_EDITOR as theNoteEditor
-};
+export default theNoteEditor;
 
 /*
 --- End of NoteEditor.js file -------------------------------------------------------------------------------------------------

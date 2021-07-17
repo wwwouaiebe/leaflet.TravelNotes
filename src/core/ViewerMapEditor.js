@@ -73,177 +73,40 @@ const OUR_DEFAULT_MAX_ZOOM = 18;
 const OUR_DEFAULT_MIN_ZOOM = 0;
 const OUR_NOTE_Z_INDEX_OFFSET = 100;
 
-let ourCurrentLayer = null;
-let ourGeolocationCircle = null;
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourOnRouteMouseOverOrMove
-@desc Event listener for a Route
-@listens mouseover
-@listens mousemove
-@private
+@class
+@classdesc This class contains the event listeners for the routes
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourOnRouteMouseOverOrMove ( mapEvent ) {
-	let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
-	let distance = theGeometry.getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
-		.distance;
-	distance += route.chainedDistance;
-	distance = theUtilities.formatDistance ( distance );
-	let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
-	polyline.closeTooltip ( );
-	let tooltipText = route.computedName;
-	if ( ! theTravelNotesData.travel.readOnly ) {
-		tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
-		tooltipText += distance;
-	}
-	polyline.setTooltipContent ( tooltipText );
-	polyline.openTooltip ( mapEvent.latlng );
-}
+class RouteEvents {
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+	/**
+	mouse over and mousemove event listeners
+	@listens mouseover
+	@listens mousemove
+	*/
 
-@function ourAddTo
-@desc Add a Leaflet object to the map
-@param {!number} objId The objId to use
-@param {Object} leafletObject The Leaflet object to add
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddTo ( objId, leafletObject ) {
-	leafletObject.objId = objId;
-	leafletObject.addTo ( theTravelNotesData.map );
-	theTravelNotesData.mapObjects.set ( objId, leafletObject );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddNote
-@desc Add a Note to the map
-@param {!number} objId The objId of the note to add
-@return {NoteLeafletObjects} An object with a reference to the Leaflet objects of the note
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddNote ( noteObjId ) {
-
-	let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
-
-	// first a marker is created at the note position. This marker is empty and transparent, so
-	// not visible on the map but the marker can be dragged
-	let bullet = window.L.marker (
-		note.latLng,
-		{
-			icon : window.L.divIcon (
-				{
-					iconSize : [ theConfig.note.grip.size, theConfig.note.grip.size ],
-					iconAnchor : [ theConfig.note.grip.size / TWO, theConfig.note.grip.size / TWO ],
-					html : '<div></div>',
-					className : 'TravelNotes-Map-Note-Bullet'
-				}
-			),
-			opacity : theConfig.note.grip.opacity,
-			draggable : ! theTravelNotesData.travel.readOnly
+	static onMouseOverOrMove ( mapEvent ) {
+		let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
+		let distance = theGeometry.getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
+			.distance;
+		distance += route.chainedDistance;
+		distance = theUtilities.formatDistance ( distance );
+		let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
+		polyline.closeTooltip ( );
+		let tooltipText = route.computedName;
+		if ( ! theTravelNotesData.travel.readOnly ) {
+			tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
+			tooltipText += distance;
 		}
-	);
-	bullet.objId = note.objId;
-
-	// a second marker is now created. The icon created by the user is used for this marker
-	let icon = window.L.divIcon (
-		{
-			iconSize : [ note.iconWidth, note.iconHeight ],
-			iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
-			popupAnchor : [ ZERO, -note.iconHeight / TWO ],
-			html : note.iconContent,
-			className : 'TravelNotes-Map-AllNotes '
-		}
-	);
-
-	let marker = window.L.marker (
-		note.iconLatLng,
-		{
-			zIndexOffset : OUR_NOTE_Z_INDEX_OFFSET,
-			icon : icon,
-			draggable : ! theTravelNotesData.travel.readOnly
-		}
-	);
-	marker.objId = note.objId;
-
-	// a popup is binded to the the marker...
-	marker.bindPopup (
-		layer => theHTMLViewsFactory.getNoteTextHTML (
-			'TravelNotes-Map-',
-			theDataSearchEngine.getNoteAndRoute ( layer.objId )
-		)
-	);
-
-	// ... and also a tooltip
-	if ( ZERO !== note.tooltipContent.length ) {
-		marker.bindTooltip (
-			layer => theDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
-		);
-		marker.getTooltip ( ).options.offset [ ZERO ] = note.iconWidth / TWO;
+		polyline.setTooltipContent ( tooltipText );
+		polyline.openTooltip ( mapEvent.latlng );
 	}
-
-	// Finally a polyline is created between the 2 markers
-	let polyline = window.L.polyline ( [ note.latLng, note.iconLatLng ], theConfig.note.polyline );
-	polyline.objId = note.objId;
-
-	// The 3 objects are added to a layerGroup
-	let layerGroup = window.L.layerGroup ( [ marker, polyline, bullet ] );
-	layerGroup.markerId = window.L.Util.stamp ( marker );
-	layerGroup.polylineId = window.L.Util.stamp ( polyline );
-	layerGroup.bulletId = window.L.Util.stamp ( bullet );
-
-	// and the layerGroup added to the leaflet map and JavaScript map
-	ourAddTo ( note.objId, layerGroup );
-
-	if ( theConfig.note.haveBackground ) {
-		document.querySelectorAll ( '.TravelNotes-MapNote,.TravelNotes-SvgIcon' ).forEach (
-			noteIcon => noteIcon.classList.add ( 'TravelNotes-Map-Note-Background' )
-		);
-	}
-	return Object.freeze ( { marker : marker, polyline : polyline, bullet : bullet } );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourGetDashArray
-@desc This method compute the dashArray to use for a route
-@param {Route} route The route for witch the dashArray must be computed
-@return {string} the dashArray to use for the route
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourGetDashArray ( route ) {
-	if ( route.dashArray >= theConfig.route.dashChoices.length ) {
-		route.dashArray = ZERO;
-	}
-	let iDashArray = theConfig.route.dashChoices [ route.dashArray ].iDashArray;
-	if ( iDashArray ) {
-		let dashArray = '';
-		let dashCounter = ZERO;
-		for ( dashCounter = ZERO; dashCounter < iDashArray.length - ONE; dashCounter ++ ) {
-			dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
-		}
-		dashArray += iDashArray [ dashCounter ] * route.width;
-
-		return dashArray;
-	}
-	return null;
 }
 
 /**
@@ -251,7 +114,6 @@ function ourGetDashArray ( route ) {
 
 @class
 @classdesc This class performs all the readonly updates on the map
-@see {@link theViewerMapEditor} for the one and only one instance of this class
 @see {@link theMapEditor} for read/write updates on the map
 @hideconstructor
 
@@ -260,8 +122,138 @@ function ourGetDashArray ( route ) {
 
 class ViewerMapEditor {
 
+	#currentLayer = null;
+
+	#geolocationCircle = null;
+
+	/**
+	This method compute the dashArray to use for a route
+	@param {Route} route The route for witch the dashArray must be computed
+	@return {string} the dashArray to use for the route
+	@private
+	*/
+
+	#getDashArray ( route ) {
+		if ( route.dashArray >= theConfig.route.dashChoices.length ) {
+			route.dashArray = ZERO;
+		}
+		let iDashArray = theConfig.route.dashChoices [ route.dashArray ].iDashArray;
+		if ( iDashArray ) {
+			let dashArray = '';
+			let dashCounter = ZERO;
+			for ( dashCounter = ZERO; dashCounter < iDashArray.length - ONE; dashCounter ++ ) {
+				dashArray += ( iDashArray [ dashCounter ] * route.width ) + ',';
+			}
+			dashArray += iDashArray [ dashCounter ] * route.width;
+
+			return dashArray;
+		}
+		return null;
+	}
+
+	/**
+	Add a Note to the map
+	@param {!number} objId The objId of the note to add
+	@return {NoteLeafletObjects} An object with a reference to the Leaflet objects of the note
+	@private
+	*/
+
+	#addNote ( noteObjId ) {
+
+		let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
+
+		// first a marker is created at the note position. This marker is empty and transparent, so
+		// not visible on the map but the marker can be dragged
+		let bullet = window.L.marker (
+			note.latLng,
+			{
+				icon : window.L.divIcon (
+					{
+						iconSize : [ theConfig.note.grip.size, theConfig.note.grip.size ],
+						iconAnchor : [ theConfig.note.grip.size / TWO, theConfig.note.grip.size / TWO ],
+						html : '<div></div>',
+						className : 'TravelNotes-Map-Note-Bullet'
+					}
+				),
+				opacity : theConfig.note.grip.opacity,
+				draggable : ! theTravelNotesData.travel.readOnly
+			}
+		);
+		bullet.objId = note.objId;
+
+		// a second marker is now created. The icon created by the user is used for this marker
+		let icon = window.L.divIcon (
+			{
+				iconSize : [ note.iconWidth, note.iconHeight ],
+				iconAnchor : [ note.iconWidth / TWO, note.iconHeight / TWO ],
+				popupAnchor : [ ZERO, -note.iconHeight / TWO ],
+				html : note.iconContent,
+				className : 'TravelNotes-Map-AllNotes '
+			}
+		);
+
+		let marker = window.L.marker (
+			note.iconLatLng,
+			{
+				zIndexOffset : OUR_NOTE_Z_INDEX_OFFSET,
+				icon : icon,
+				draggable : ! theTravelNotesData.travel.readOnly
+			}
+		);
+		marker.objId = note.objId;
+
+		// a popup is binded to the the marker...
+		marker.bindPopup (
+			layer => theHTMLViewsFactory.getNoteTextHTML (
+				'TravelNotes-Map-',
+				theDataSearchEngine.getNoteAndRoute ( layer.objId )
+			)
+		);
+
+		// ... and also a tooltip
+		if ( ZERO !== note.tooltipContent.length ) {
+			marker.bindTooltip (
+				layer => theDataSearchEngine.getNoteAndRoute ( layer.objId ).note.tooltipContent
+			);
+			marker.getTooltip ( ).options.offset [ ZERO ] = note.iconWidth / TWO;
+		}
+
+		// Finally a polyline is created between the 2 markers
+		let polyline = window.L.polyline ( [ note.latLng, note.iconLatLng ], theConfig.note.polyline );
+		polyline.objId = note.objId;
+
+		// The 3 objects are added to a layerGroup
+		let layerGroup = window.L.layerGroup ( [ marker, polyline, bullet ] );
+		layerGroup.markerId = window.L.Util.stamp ( marker );
+		layerGroup.polylineId = window.L.Util.stamp ( polyline );
+		layerGroup.bulletId = window.L.Util.stamp ( bullet );
+
+		// and the layerGroup added to the leaflet map and JavaScript map
+		this.addToMap ( note.objId, layerGroup );
+
+		if ( theConfig.note.haveBackground ) {
+			document.querySelectorAll ( '.TravelNotes-MapNote,.TravelNotes-SvgIcon' ).forEach (
+				noteIcon => noteIcon.classList.add ( 'TravelNotes-Map-Note-Background' )
+			);
+		}
+		return Object.freeze ( { marker : marker, polyline : polyline, bullet : bullet } );
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
+	}
+
+	/**
+	Add a Leaflet object to the map
+	@param {!number} objId The objId to use
+	@param {Object} leafletObject The Leaflet object to add
+	@private
+	*/
+
+	addToMap ( objId, leafletObject ) {
+		leafletObject.objId = objId;
+		leafletObject.addTo ( theTravelNotesData.map );
+		theTravelNotesData.mapObjects.set ( objId, leafletObject );
 	}
 
 	/**
@@ -289,10 +281,10 @@ class ViewerMapEditor {
 			{
 				color : route.color,
 				weight : route.width,
-				dashArray : ourGetDashArray ( route )
+				dashArray : this.#getDashArray ( route )
 			}
 		);
-		ourAddTo ( route.objId, polyline );
+		this.addToMap ( route.objId, polyline );
 
 		// tooltip and popup are created
 		if ( ROUTE_EDITION_STATUS.notEdited === route.editionStatus ) {
@@ -300,8 +292,8 @@ class ViewerMapEditor {
 				route.computedName,
 				{ sticky : true, direction : 'right' }
 			);
-			polyline.on ( 'mouseover', ourOnRouteMouseOverOrMove );
-			polyline.on ( 'mousemove', ourOnRouteMouseOverOrMove );
+			polyline.on ( 'mouseover', RouteEvents.onMouseOverOrMove );
+			polyline.on ( 'mousemove', RouteEvents.onMouseOverOrMove );
 		}
 
 		polyline.bindPopup (
@@ -317,7 +309,7 @@ class ViewerMapEditor {
 		// notes are added
 		let notesIterator = route.notes.iterator;
 		while ( ! notesIterator.done ) {
-			ourAddNote ( notesIterator.value.objId );
+			this.#addNote ( notesIterator.value.objId );
 		}
 
 		return route;
@@ -332,7 +324,7 @@ class ViewerMapEditor {
 	@listens noteupdated
 	*/
 
-	addNote ( noteObjId ) { return ourAddNote ( noteObjId ); }
+	addNote ( noteObjId ) { return this.#addNote ( noteObjId ); }
 
 	/**
 	This method compute the dashArray to use for a route
@@ -340,7 +332,7 @@ class ViewerMapEditor {
 	@return {string} the dashArray to use for the route
 	*/
 
-	getDashArray ( route ) { return ourGetDashArray ( route ); }
+	getDashArray ( route ) { return this.#getDashArray ( route ); }
 
 	/**
 	This method zoom to a point or an array of points
@@ -365,6 +357,7 @@ class ViewerMapEditor {
 	This method is called by the 'layerchange' event listener of the viewer
 	and by the MapEditor.setLayer( ) method
 	@param {Layer} layer The layer to set
+	@param {string} url The url to use for this layer (reminder: url !== layer.url !!! See MapEditor.setLayer)
 	@listens layerchange
 	*/
 
@@ -377,11 +370,11 @@ class ViewerMapEditor {
 			leafletLayer = window.L.tileLayer.wms ( url, layer.wmsOptions );
 		}
 
-		if ( ourCurrentLayer ) {
-			theTravelNotesData.map.removeLayer ( ourCurrentLayer );
+		if ( this.#currentLayer ) {
+			theTravelNotesData.map.removeLayer ( this.#currentLayer );
 		}
 		theTravelNotesData.map.addLayer ( leafletLayer );
-		ourCurrentLayer = leafletLayer;
+		this.#currentLayer = leafletLayer;
 		if ( ! theTravelNotesData.travel.readOnly ) {
 
 			// strange... see issue #79 ... zoom is not correct on read only file
@@ -423,9 +416,9 @@ class ViewerMapEditor {
 		if ( GEOLOCATION_STATUS.active === geoLocationStatus ) {
 			return;
 		}
-		if ( ourGeolocationCircle ) {
-			theTravelNotesData.map.removeLayer ( ourGeolocationCircle );
-			ourGeolocationCircle = null;
+		if ( this.#geolocationCircle ) {
+			theTravelNotesData.map.removeLayer ( this.#geolocationCircle );
+			this.#geolocationCircle = null;
 		}
 	}
 
@@ -437,12 +430,12 @@ class ViewerMapEditor {
 
 	onGeolocationPositionChanged ( position ) {
 		let zoomToPosition = theConfig.geoLocation.zoomToPosition;
-		if ( ourGeolocationCircle ) {
-			theTravelNotesData.map.removeLayer ( ourGeolocationCircle );
+		if ( this.#geolocationCircle ) {
+			theTravelNotesData.map.removeLayer ( this.#geolocationCircle );
 			zoomToPosition = false;
 		}
 
-		ourGeolocationCircle = window.L.circleMarker (
+		this.#geolocationCircle = window.L.circleMarker (
 			window.L.latLng ( position.coords.latitude, position.coords.longitude ),
 			theConfig.geoLocation.marker
 		)
@@ -461,23 +454,7 @@ class ViewerMapEditor {
 
 }
 
-const OUR_VIEWER_MAP_EDITOR = new ViewerMapEditor ( );
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@desc The one and only one instance of ViewerMapEditor class
-	@type {ViewerMapEditor}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_VIEWER_MAP_EDITOR as theViewerMapEditor
-};
+export default ViewerMapEditor;
 
 /*
 --- End of ViewerMapEditor.js file --------------------------------------------------------------------------------------------

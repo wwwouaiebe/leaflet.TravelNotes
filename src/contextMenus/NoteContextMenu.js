@@ -49,7 +49,7 @@ Tests ...
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
+import theNoteEditor from '../core/NoteEditor.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';

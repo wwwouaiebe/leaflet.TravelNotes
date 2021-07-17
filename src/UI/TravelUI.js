@@ -72,7 +72,7 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { newFileLoader } from '../core/FileLoader.js';
+import FileLoader from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
@@ -290,7 +290,7 @@ function ourCreateSaveAsTravelButton ( ) {
 
 function ourOnOpenTravelInputChange ( changeEvent ) {
 	changeEvent.stopPropagation ( );
-	newFileLoader ( ).openLocalFile ( changeEvent );
+	new FileLoader ( ).openLocalFile ( changeEvent );
 }
 
 /**
@@ -362,7 +362,7 @@ function ourCreateOpenTravelButton ( ) {
 
 function ourOnImportTravelInputChange ( changeEvent ) {
 	changeEvent.stopPropagation ( );
-	newFileLoader ( ).mergeLocalFile ( changeEvent );
+	new FileLoader ( ).mergeLocalFile ( changeEvent );
 }
 
 /**

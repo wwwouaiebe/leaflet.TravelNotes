@@ -63,7 +63,7 @@ import { theUtilities } from '../util/Utilities.js';
 import { theConfig } from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { newProfileFactory } from '../core/ProfileFactory.js';
+import ProfileFactory from '../core/ProfileFactory.js';
 import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 
 const OUR_LINKS_MAX_LENGTH = 40;
@@ -745,7 +745,7 @@ function ourGetTravelFooterHTML ( classPrefix ) {
 function ourGetRouteProfileHTML ( classPrefix, route ) {
 	let profileDiv = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'RouteProfile' } );
 	theHTMLSanitizer.sanitizeToHtmlElement ( theTranslator.getText ( 'HTMLViewsFactory - Profile' ), profileDiv );
-	profileDiv.appendChild ( newProfileFactory ( ).createSvg ( route ) );
+	profileDiv.appendChild ( new ProfileFactory ( ).createSvg ( route ) );
 
 	return profileDiv;
 }

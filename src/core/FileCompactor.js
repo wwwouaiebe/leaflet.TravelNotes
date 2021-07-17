@@ -23,7 +23,9 @@ Changes:
 		- issue #89 : Add elevation graph
 	- v2.1.0:
 		- issue #151 : Add itineraries elevations distances and ObjIds to the compressed data...
-Doc reviewed 20200801
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 */
 
@@ -53,31 +55,27 @@ import Travel from '../data/Travel.js';
 import { ROUTE_EDITION_STATUS, ELEV, ZERO, ONE, TWO, INVALID_OBJ_ID, LAT_LNG, DISTANCE } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewFileCompactor
-@desc constructor for FileCompactor objects
-@return {FileCompactor} an instance of FileCompactor object
-@private
+@class FileCompactor
+@classdesc This class compress the travel to reduce the size of the file when saved to a file or decompress the
+travel when reading from a file. Each route of a compressed file have the ItineraryPoints in only one object
+and the lat and lng of	the ItineraryPoints are encoded with the polyline.encode algorithm
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewFileCompactor ( ) {
+class FileCompactor {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCompressRoute
-	@desc Compress a route
+	Compress a route
 	@param {Object} routeObject the route to compress. routeObject is not a Route instance!
 	It's an Object created with Route.jsonObject ( ).
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCompressRoute ( routeObject ) {
+	#compressRoute ( routeObject ) {
 		let objType = {};
 		if ( ZERO !== routeObject.itinerary.itineraryPoints.length ) {
 			objType = routeObject.itinerary.itineraryPoints [ ZERO ].objType;
@@ -106,18 +104,13 @@ function ourNewFileCompactor ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myDecompressRoute
-	@desc Decompress a route
+	Decompress a route
 	@param {Object} routeObject the compressed route. routeObject is not a Route instance!
 	It's an Object created with JSON.parse ( ).
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myDecompressRoute ( routeObject ) {
+	#decompressRoute ( routeObject ) {
 		let decompressedItineraryPoints = [];
 
 		// routeObject.itinerary.itineraryPoints have values since version 2.1.0 ,
@@ -176,120 +169,83 @@ function ourNewFileCompactor ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myDecompressTravel
-	@desc Decompress a travel
+	Decompress a travel
 	@param {Object} travelObject the compressed travel. travelObject is not a Travel instance!
 	It's an Object created with JSON.parse ( ).
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myDecompressTravel ( travelObject ) {
-		travelObject.routes.forEach ( myDecompressRoute );
+	#decompressTravel ( travelObject ) {
+		travelObject.routes.forEach ( this.#decompressRoute );
 		if ( travelObject.editedRoute ) {
 
 			// don't remove the if statment... files created with version < 1.5.0 don't have editedRoute...
-			myDecompressRoute ( travelObject.editedRoute );
+			this.#decompressRoute ( travelObject.editedRoute );
+		}
+	}
+	
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
+	/**
+	Decompress a file
+	@param {Object} travelObject the compressed travel as read from the file. travelObject is not a Travel instance!
+	It's an Object created with JSON.parse ( ).
+	*/
+
+	decompress ( travelObject ) {
+		this.#decompressTravel ( travelObject );
+		theTravelNotesData.travel.jsonObject = travelObject;
+		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
+		theTravelNotesData.travel.routes.forEach (
+			route => {
+				if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
+					theTravelNotesData.editedRouteObjId = route.objId;
+				}
+			}
+		);
+	}
+
+	/**
+	Decompress a file and merge this travel with the currently edited travel
+	@param {Object} travelObject the compressed travel as read from the file. travelObject is not a Travel instance!
+	It's an Object created with JSON.parse ( ).
+	*/
+
+	decompressMerge ( travelObject ) {
+		this.#decompressTravel ( travelObject );
+		let mergedTravel = new Travel ( );
+		mergedTravel.jsonObject = travelObject;
+
+		// routes are added with their notes
+		let routesIterator = mergedTravel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			theTravelNotesData.travel.routes.add ( routesIterator.value );
+		}
+
+		// travel notes are added
+		let notesIterator = mergedTravel.notes.iterator;
+		while ( ! notesIterator.done ) {
+			theTravelNotesData.travel.notes.add ( notesIterator.value );
 		}
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class FileCompactor
-	@classdesc This class compress the travel to reduce the size of the file when saved to a file or decompress the
-	travel when reading from a file. Each route of a compressed file have the ItineraryPoints in only one object
-	and the lat and lng of	the ItineraryPoints are encoded with the polyline.encode algorithm
-	@see {@link newFileCompactor} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Compress the currently edited travel
+	@return a copy of the currently edited travel compressed and ready to be written in a file
 	*/
 
-	class FileCompactor {
+	compress ( travel ) {
+		let compressedTravelObject = travel.jsonObject;
+		compressedTravelObject.routes.forEach ( this.#compressRoute );
+		this.#compressRoute ( compressedTravelObject.editedRoute );
 
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		Decompress a file
-		@param {Object} travelObject the compressed travel as read from the file. travelObject is not a Travel instance!
-		It's an Object created with JSON.parse ( ).
-		*/
-
-		decompress ( travelObject ) {
-			myDecompressTravel ( travelObject );
-			theTravelNotesData.travel.jsonObject = travelObject;
-			theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-			theTravelNotesData.travel.routes.forEach (
-				route => {
-					if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
-						theTravelNotesData.editedRouteObjId = route.objId;
-					}
-				}
-			);
-		}
-
-		/**
-		Decompress a file and merge this travel with the currently edited travel
-		@param {Object} travelObject the compressed travel as read from the file. travelObject is not a Travel instance!
-		It's an Object created with JSON.parse ( ).
-		*/
-
-		decompressMerge ( travelObject ) {
-			myDecompressTravel ( travelObject );
-			let mergedTravel = new Travel ( );
-			mergedTravel.jsonObject = travelObject;
-
-			// routes are added with their notes
-			let routesIterator = mergedTravel.routes.iterator;
-			while ( ! routesIterator.done ) {
-				theTravelNotesData.travel.routes.add ( routesIterator.value );
-			}
-
-			// travel notes are added
-			let notesIterator = mergedTravel.notes.iterator;
-			while ( ! notesIterator.done ) {
-				theTravelNotesData.travel.notes.add ( notesIterator.value );
-			}
-		}
-
-		/**
-		Compress the currently edited travel
-		@return a copy of the currently edited travel compressed and ready to be written in a file
-		*/
-
-		compress ( travel ) {
-			let compressedTravelObject = travel.jsonObject;
-			compressedTravelObject.routes.forEach ( myCompressRoute );
-			myCompressRoute ( compressedTravelObject.editedRoute );
-
-			return compressedTravelObject;
-		}
+		return compressedTravelObject;
 	}
-
-	return new FileCompactor ( );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newFileCompactor
-	@desc constructor for FileCompactor objects
-	@return {FileCompactor} an instance of FileCompactor object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewFileCompactor as newFileCompactor
-};
+export default FileCompactor;
 
 /*
 --- End of FileCompactor.js file ----------------------------------------------------------------------------------------------

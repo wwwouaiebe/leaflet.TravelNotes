@@ -49,7 +49,7 @@ Tests ...
 
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newFileCompactor } from '../core/FileCompactor.js';
+import FileCompactor from '../core/FileCompactor.js';
 import { newZoomer } from '../core/Zoomer.js';
 import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -89,7 +89,7 @@ function ourNewViewerFileLoader ( ) {
 		*/
 
 		openDistantFile ( fileContent ) {
-			newFileCompactor ( ).decompress ( fileContent );
+			new FileCompactor ( ).decompress ( fileContent );
 			theTravelNotesData.travel.readOnly = true;
 			this.display ( );
 		}

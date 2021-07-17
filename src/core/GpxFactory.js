@@ -22,7 +22,9 @@ Changes:
 		- created
 	- v2.0.0:
 		- Issue #147 : Add the travel name to gpx file name #147
-Doc reviewed 20200807
+	- v3.0.0:
+		- Issue #175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 */
 
@@ -56,237 +58,157 @@ const OUR_TAB_2 = '\n\t\t';
 const OUR_TAB_3 = '\n\t\t\t';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewGpxFactory
-@desc constructor of GpxFactory object
-@return {GpxFactory} an instance of GpxFactory object
-@private
+@class
+@classdesc This class is used to create gpx files
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewGpxFactory ( ) {
+class GpxFactory {
 
-	let myGpxString = '';
-	let myTimeStamp = '';
-	let myRoute = null;
+	#myGpxString = '';
+	#timeStamp = '';
+	#route = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddHeader
-	@desc Creates the header of the gpx file
+	Creates the header of the gpx file
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddHeader ( ) {
-		myTimeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
+	#addHeader ( ) {
+		
 
 		// header
-		myGpxString = '<?xml version="1.0"?>' + OUR_TAB_0;
-		myGpxString += '<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+		this.#myGpxString = '<?xml version="1.0"?>' + OUR_TAB_0;
+		this.#myGpxString += '<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
 		'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
 		'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" ' +
 		'version="1.1" creator="leaflet.TravelNotes">';
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddWayPoints
-	@desc Add the waypoints to the gpx file
+	Add the waypoints to the gpx file
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddWayPoints ( ) {
-		let wayPointsIterator = myRoute.wayPoints.iterator;
+	#addWayPoints ( ) {
+		let wayPointsIterator = this.#route.wayPoints.iterator;
 		while ( ! wayPointsIterator.done ) {
-			myGpxString +=
+			this.#myGpxString +=
 				OUR_TAB_1 + '<wpt lat="' + wayPointsIterator.value.lat + '" lon="' + wayPointsIterator.value.lng + '" ' +
-				myTimeStamp + '/>';
+				this.#timeStamp + '/>';
 
 		}
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddRoute
-	@desc Add the route to the gpx file
+	Add the route to the gpx file
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddRoute ( ) {
-		myGpxString += OUR_TAB_1 + '<rte>';
-		let maneuverIterator = myRoute.itinerary.maneuvers.iterator;
+	#addRoute ( ) {
+		this.#myGpxString += OUR_TAB_1 + '<rte>';
+		let maneuverIterator = this.#route.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
-			let wayPoint = myRoute.itinerary.itineraryPoints.getAt (
+			let wayPoint = this.#route.itinerary.itineraryPoints.getAt (
 				maneuverIterator.value.itineraryPointObjId
 			);
 			let instruction = maneuverIterator.value.instruction
-
-			/*
-				.replace ( '&', '&amp;' )
-				.replace ( '"', '&apos;' )
-				.replace ( '"', '&quote;' )
-				.replace ( '>', '&gt;' )
-				.replace ( '<', '&lt;' );
-				*/
-
 				.replaceAll ( /\u0027/g, '&apos;' )
 				.replaceAll ( /"/g, '&quot;' )
 				.replaceAll ( /</g, '&lt;' )
 				.replaceAll ( />/g, '&gt;' );
-			myGpxString +=
+			this.#myGpxString +=
 				OUR_TAB_2 +
 				'<rtept lat="' +
 				wayPoint.lat +
 				'" lon="' +
 				wayPoint.lng +
 				'" ' +
-				myTimeStamp +
+				this.#timeStamp +
 				'desc="' +
 				instruction + '" />';
 		}
-		myGpxString += OUR_TAB_1 + '</rte>';
+		this.#myGpxString += OUR_TAB_1 + '</rte>';
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddTrack
-	@desc Add the track to the gpx file
+	Add the track to the gpx file
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddTrack ( ) {
-		myGpxString += OUR_TAB_1 + '<trk>';
-		myGpxString += OUR_TAB_2 + '<trkseg>';
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+	#addTrack ( ) {
+		this.#myGpxString += OUR_TAB_1 + '<trk>';
+		this.#myGpxString += OUR_TAB_2 + '<trkseg>';
+		let itineraryPointsIterator = this.#route.itinerary.itineraryPoints.iterator;
 		while ( ! itineraryPointsIterator.done ) {
-			myGpxString +=
+			this.#myGpxString +=
 				OUR_TAB_3 +
 				'<trkpt lat="' + itineraryPointsIterator.value.lat +
 				'" lon="' +
 				itineraryPointsIterator.value.lng +
 				'" ' +
-				myTimeStamp +
+				this.#timeStamp +
 				' />';
 		}
-		myGpxString += OUR_TAB_2 + '</trkseg>';
-		myGpxString += OUR_TAB_1 + '</trk>';
+		this.#myGpxString += OUR_TAB_2 + '</trkseg>';
+		this.#myGpxString += OUR_TAB_1 + '</trk>';
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddFooter
-	@desc Add the footer to the gpx file
+	Add the footer to the gpx file
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myAddFooter ( ) {
-		myGpxString += OUR_TAB_0 + '</gpx>';
+	#addFooter ( ) {
+		this.#myGpxString += OUR_TAB_0 + '</gpx>';
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function mySaveGpxToFile
-	@desc save the gpx string to a file
+	Save the gpx string to a file
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySaveGpxToFile ( ) {
+	#saveGpxToFile ( ) {
 		let fileName =
-			( '' === theTravelNotesData.travel.name ? '' : theTravelNotesData.travel.name + ' - ' ) + myRoute.computedName;
+			( '' === theTravelNotesData.travel.name ? '' : theTravelNotesData.travel.name + ' - ' ) + this.#route.computedName;
 		if ( '' === fileName ) {
 			fileName = 'TravelNote';
 		}
 		fileName += '.gpx';
-		theUtilities.saveFile ( fileName, myGpxString );
+		theUtilities.saveFile ( fileName, this.#myGpxString );
+	}
+
+	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function mySaveGpxToFile
-	@desc Transform a route into a gpx file
+	Transform a route into a gpx file
 	@param {!number} routeObjId the objId of the route to save in a gpx file
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myRouteToGpx ( routeObjId ) {
-		myRoute = theDataSearchEngine.getRoute ( routeObjId );
-		if ( ! myRoute ) {
+	routeToGpx ( routeObjId ) {
+		this.#route = theDataSearchEngine.getRoute ( routeObjId );
+		if ( ! this.#route ) {
 			return;
 		}
+		this.#timeStamp = 'time="' + new Date ( ).toISOString ( ) + '" ';
 
-		myAddHeader ( );
-		myAddWayPoints ( );
-		myAddRoute ( );
-		myAddTrack ( );
-		myAddFooter ( );
-		mySaveGpxToFile ( );
+		this.#addHeader ( );
+		this.#addWayPoints ( );
+		this.#addRoute ( );
+		this.#addTrack ( );
+		this.#addFooter ( );
+		this.#saveGpxToFile ( );
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This class is used to create gpx files
-	@see {@link newGpxFactory} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class GpxFactory {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		Transform a route into a gpx file
-		@param {!number} routeObjId the objId of the route to save in a gpx file
-		*/
-
-		routeToGpx ( routeObjId ) {
-			myRouteToGpx ( routeObjId );
-		}
-	}
-
-	return new GpxFactory ( );
 }
 
-export {
+export default GpxFactory;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newGpxFactory
-	@desc constructor of GpxFactory object
-	@return {GpxFactory} an instance of GpxFactory object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewGpxFactory as newGpxFactory
-};
+/*
+--- End of GpxFactory.js file -------------------------------------------------------------------------------------------------
+*/

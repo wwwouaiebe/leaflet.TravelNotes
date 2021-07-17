@@ -73,8 +73,8 @@ import { theUtilities } from '../util/Utilities.js';
 import Route from '../data/Route.js';
 import Travel from '../data/Travel.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newFileCompactor } from '../core/FileCompactor.js';
-import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import FileCompactor from '../core/FileCompactor.js';
+import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { newSaveAsDialog } from '../dialogs/SaveAsDialog.js';
@@ -114,7 +114,7 @@ function ourSaveAsTravel ( removeData ) {
 			routesIterator.value.itinerary.maneuvers.removeAll ( );
 		}
 	}
-	let compressedSaveAsTravel = newFileCompactor ( ).compress ( saveAsTravel );
+	let compressedSaveAsTravel = new FileCompactor ( ).compress ( saveAsTravel );
 	theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
 }
 
@@ -194,7 +194,7 @@ class TravelEditor {
 		while ( ! routesIterator.done ) {
 			routesIterator.value.hidden = false;
 		}
-		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
+		let compressedTravel = new FileCompactor ( ).compress ( theTravelNotesData.travel );
 		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
 		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}

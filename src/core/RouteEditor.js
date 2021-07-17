@@ -71,19 +71,19 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import theAPIKeysManager from '../core/APIKeysManager.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theDataSearchEngine } from '../data/DataSearchEngine.js';
 import Route from '../data/Route.js';
-import { newGpxFactory } from '../core/GpxFactory.js';
+import GpxFactory from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { newZoomer } from '../core/Zoomer.js';
-import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { newPrintFactory } from '../printMap/PrintFactory.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -503,7 +503,7 @@ class RouteEditor {
 	*/
 
 	saveGpx ( routeObjId ) {
-		newGpxFactory ( ).routeToGpx ( routeObjId );
+		new GpxFactory ( ).routeToGpx ( routeObjId );
 	}
 
 	/**

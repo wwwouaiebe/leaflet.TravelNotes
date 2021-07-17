@@ -73,9 +73,8 @@ Tests ...
 import { theConfig } from '../data/Config.js';
 import { theTravelNotesData } from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theMapEditor } from '../core/MapEditor.js';
-import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
+import theMapEditor from '../core/MapEditor.js';
+import theAPIKeysManager from '../core/APIKeysManager.js';
 import { theUI } from '../UI/UI.js';
 import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
@@ -92,7 +91,7 @@ import { theMouseUI } from '../UI/MouseUI.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
-import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { theTranslator } from '../UI/Translator.js';
 import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 
@@ -160,7 +159,7 @@ function ourAddEventsListeners ( ) {
 		'zoomto',
 		zoomToEvent => {
 			if ( zoomToEvent.data ) {
-				theViewerMapEditor.zoomTo (
+				theMapEditor.zoomTo (
 					zoomToEvent.data.latLng,
 					zoomToEvent.data.geometry
 				);
@@ -230,7 +229,7 @@ function ourAddEventsListeners ( ) {
 		'geolocationpositionchanged',
 		geoLocationPositionChangedEvent => {
 			if ( geoLocationPositionChangedEvent.data ) {
-				theViewerMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
+				theMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
 			}
 		},
 		false
@@ -239,7 +238,7 @@ function ourAddEventsListeners ( ) {
 		'geolocationstatuschanged',
 		geoLocationStatusChangedEvent => {
 			if ( geoLocationStatusChangedEvent.data ) {
-				theViewerMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+				theMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
 			}
 		},
 		false

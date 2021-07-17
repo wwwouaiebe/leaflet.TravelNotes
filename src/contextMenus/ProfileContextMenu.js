@@ -46,7 +46,7 @@ Tests ...
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theTranslator } from '../UI/Translator.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
+import theNoteEditor from '../core/NoteEditor.js';
 import { newZoomer } from '../core/Zoomer.js';
 
 /**
