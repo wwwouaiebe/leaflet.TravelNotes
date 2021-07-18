@@ -20,14 +20,14 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.10.0:
-		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
+		- Issue ♯107 : Add a button to reload the APIKeys file in the API keys dialog
 	- v1.11.0:
-		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
+		- Issue ♯108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 	- v1.11.0:
-		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+		- Issue ♯113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #137 : Remove html tags from json files
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯137 : Remove html tags from json files
 Doc reviewed 20200812
 Tests ...
 */

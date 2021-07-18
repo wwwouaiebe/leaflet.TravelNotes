@@ -21,13 +21,13 @@ Changes:
 	- v1.4.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯68 : Review all existing promises.
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #136 : Remove html entities from js string
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #145 : Merge svg icon and knoopunt icon
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯136 : Remove html entities from js string
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯145 : Merge svg icon and knoopunt icon
 Doc reviewed 20200808
 Tests ...
 */

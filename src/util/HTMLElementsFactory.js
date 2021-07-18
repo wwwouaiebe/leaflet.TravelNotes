@@ -21,9 +21,9 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 Doc reviewed 20200846
 Tests ...
 */

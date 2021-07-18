@@ -23,12 +23,12 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯68 : Review all existing promises.
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 Doc reviewed 20200812
 Tests ...
 

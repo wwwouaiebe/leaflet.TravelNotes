@@ -20,9 +20,9 @@ Changes:
 	- v1.4.0:
 		- Initialization changed
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210714
 Tests ...
 */

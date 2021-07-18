@@ -20,9 +20,9 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.11.0:
-		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+		- Issue ♯113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 	- v2.0.0:
-		- Issue #137 : Remove html tags from json files
+		- Issue ♯137 : Remove html tags from json files
 Doc reviewed 20200815
 Tests ...
 */

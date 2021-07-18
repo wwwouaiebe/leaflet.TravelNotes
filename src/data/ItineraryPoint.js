@@ -21,13 +21,13 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.7.0:
-		- issue #89 : Add elevation graph
+		- Issue ♯89 : Add elevation graph
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210714
 Tests ...
 */

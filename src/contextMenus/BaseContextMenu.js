@@ -20,14 +20,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v1.13.0:
-		- Issue #128 : Unify osmSearch and notes icons and data
+		- Issue ♯128 : Unify osmSearch and notes icons and data
 	- v2.0.0:
-		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue ♯135 : Remove innerHTML from code
 Doc reviewed 20200727
 Tests ...
  */
@@ -131,7 +131,7 @@ Keyboard events listeners must be 'module global' otherwise the events are not r
 closing the menu by clicking outside the menu (in this case the event listeners are duplicated
 in each instance of the menu and so, it's not the same function that is passed to addEventListener
 and removeEventListener). If keyboard event listeners are not removed, keyboard is unavailable
-for others elements. See issue #83
+for others elements. See issue ♯83
 */
 
 function ourOnKeyDown ( keyBoardEvent ) {

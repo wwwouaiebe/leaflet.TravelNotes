@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 Changes:
 	- v2.1.0:
-		- issue #150 : Merge travelNotes and plugins
+		- Issue ♯150 : Merge travelNotes and plugins
 Doc reviewed ...
 Tests ...
 

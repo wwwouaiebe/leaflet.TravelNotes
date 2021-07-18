@@ -20,9 +20,9 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #146 : Add the travel name in the document title...
+		- Issue ♯146 : Add the travel name in the document title...
 Doc reviewed 20200810
 Tests ...
 */

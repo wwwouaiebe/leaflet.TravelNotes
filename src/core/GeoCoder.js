@@ -24,15 +24,15 @@ Changes:
 		- Working with Promise
 		- returning the complete Nominatim responce in place of a computed address
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯68 : Review all existing promises.
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #148 : Nominatim gives bad responses for cities... find a temporary solution.
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯148 : Nominatim gives bad responses for cities... find a temporary solution.
 	- v2.2.0:
-		- Issue #64 : Improve geocoding
+		- Issue ♯64 : Improve geocoding
 Doc reviewed 20200802
 Tests ...
 

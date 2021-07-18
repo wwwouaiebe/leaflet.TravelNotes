@@ -21,7 +21,7 @@ Changes:
 	- v1.11.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯135 : Remove innerHTML from code
 Doc reviewed 20200822
 Tests ...
 */

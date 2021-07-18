@@ -21,28 +21,28 @@ Changes:
 	- v1.0.0:
 		- created
 	-v1.1.0:
-		- Issue #29 : added tooltip to startpoint, waypoints and endpoint
-		- Issue #30: Add a context menu with delete command to the waypoints
-		- Issue #36: Add a linetype property to route
+		- Issue ♯29 : added tooltip to startpoint, waypoints and endpoint
+		- Issue ♯30: Add a context menu with delete command to the waypoints
+		- Issue ♯36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- added redrawNote, zoomToNote, addRectangle and addSearchPointMarker methods
 		- removed partial distance in the tooltip when readOnly
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
-		- Issue #70 : Put the get...HTML functions outside of the editors
-		- Issue #75 : Merge Maps and TravelNotes
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear
+		- Issue ♯70 : Put the get...HTML functions outside of the editors
+		- Issue ♯75 : Merge Maps and TravelNotes
 	- v1.8.0:
-		- issue #97 : Improve adding a new waypoint to a route
+		- Issue ♯97 : Improve adding a new waypoint to a route
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
+		- Issue ♯142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210715
 Tests ...
 */

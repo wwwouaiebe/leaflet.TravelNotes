@@ -21,27 +21,27 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #26 : added confirmation message before leaving the page when data modified.
-		- Issue #31 : Add a command to import from others maps
+		- Issue ♯26 : added confirmation message before leaving the page when data modified.
+		- Issue ♯31 : Add a command to import from others maps
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
-		- modified event listener for cancel travel button ( issue #45 )
+		- modified event listener for cancel travel button ( Issue ♯45 )
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
-		- Issue #60 : Add translations for roadbook
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯60 : Add translations for roadbook
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #63 : Find a better solution for provider keys upload
-		- Issue #75 : Merge Maps and TravelNotes
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯63 : Find a better solution for provider keys upload
+		- Issue ♯75 : Merge Maps and TravelNotes
 	- v1.7.0:
-		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
+		- Issue ♯90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #146 : Add the travel name in the document title...
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯146 : Add the travel name in the document title...
 Doc reviewed 20200817
 Tests ...
 */

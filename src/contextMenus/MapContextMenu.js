@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 Doc reviewed 20200727
 Tests ...
 */

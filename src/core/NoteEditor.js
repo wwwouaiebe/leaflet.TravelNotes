@@ -24,23 +24,23 @@ Changes:
 		- added newSearchNote method and modified endNoteDialog for update of the travel note pane
 		- added attachNoteToRoute and detachNoteFromRoute methods
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #70 : Put the get...HTML functions outside of the editors
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯70 : Put the get...HTML functions outside of the editors
+		- Issue ♯68 : Review all existing promises.
 	- v1.11.0:
-		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+		- Issue ♯110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v1.13.0:
-		- Issue #128 : Unify osmSearch and notes icons and data
+		- Issue ♯128 : Unify osmSearch and notes icons and data
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210715
 Tests ...
 */

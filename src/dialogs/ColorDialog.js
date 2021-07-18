@@ -21,10 +21,10 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
 	- v2.0.0:
-		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue ♯134 : Remove node.setAttribute ( 'style', blablabla) in the code
 Doc reviewed 20200814
 Tests ...
 

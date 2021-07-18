@@ -21,11 +21,11 @@ Changes:
 		- created
 	-v1.7.0:
 		- modified way of working for myPointsDistance ( )
-		- issue #89 : Add elevation graph => new method getLatLngElevAtDist ( )
+		- Issue ♯89 : Add elevation graph => new method getLatLngElevAtDist ( )
 	- v1.9.0:
-		- issue #101 : Add a print command for a route
+		- Issue ♯101 : Add a print command for a route
 	- v1.13.0:
-		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
 Doc reviewed 20200824
 Tests ...
 */

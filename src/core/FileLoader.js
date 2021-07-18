@@ -20,20 +20,20 @@ Changes:
 	- v1.4.0:
 		- created from TravelEditor
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
-		- Issue #61 : Disable right context menu when readonly travel.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯61 : Disable right context menu when readonly travel.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.7.0:
-		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
+		- Issue ♯90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
 	-v2.3.0:
-		- Issue #171 : Add a warning when opening a file with invalid version
+		- Issue ♯171 : Add a warning when opening a file with invalid version
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210715
 Tests ...
 */

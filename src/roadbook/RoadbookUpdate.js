@@ -21,7 +21,7 @@ Changes:
 	- v1.6.0:
 		- created
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200825
 Tests ...
 */

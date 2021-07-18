@@ -21,8 +21,8 @@ Changes:
 	- v1.7.0:
 		- created
 	- v2.0.0:
-		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue ♯135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */

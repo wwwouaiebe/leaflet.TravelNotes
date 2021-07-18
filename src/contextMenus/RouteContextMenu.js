@@ -20,17 +20,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.7.0:
-		- issue #89 : Add elevation graph
+		- Issue ♯89 : Add elevation graph
 	- v1.8.0:
-		- issue #97 : Improve adding a new waypoint to a route
+		- Issue ♯97 : Improve adding a new waypoint to a route
 	- v1.9.0:
-		- issue #101 : Add a print command for a route
+		- Issue ♯101 : Add a print command for a route
 	- v1.11.0:
-		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+		- Issue ♯110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 Doc reviewed 20200727
 Tests ...
 */

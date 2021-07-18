@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	- v1.6.0:
 		- created
 	- v1.13.0:
-		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
 	- v2.0.0:
-		- Issue #133 : Outphase reading the APIKeys with the url
+		- Issue ♯133 : Outphase reading the APIKeys with the url
 Doc reviewed 20200823
 Tests ...
 */

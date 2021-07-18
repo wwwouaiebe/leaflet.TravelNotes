@@ -21,10 +21,10 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 Doc reviewed 20200821
 Tests ...
 */

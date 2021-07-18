@@ -20,8 +20,8 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #26 : added confirmation message before leaving the page when data modified.
-		- Issue #27 : push directly the route in the editor when starting a new travel
+		- Issue ♯26 : added confirmation message before leaving the page when data modified.
+		- Issue ♯27 : push directly the route in the editor when starting a new travel
 	- v1.3.0:
 		- Improved myReadURL method
 		- Working with Promise at startup
@@ -32,20 +32,20 @@ Changes:
 		- moving file functions from TravelEditor to the new FileLoader
 		- added loading of osmSearch
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
-		- Issue #63 : Find a better solution for provider keys upload
-		- Issue #75 : Merge Maps and TravelNotes
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear
+		- Issue ♯63 : Find a better solution for provider keys upload
+		- Issue ♯75 : Merge Maps and TravelNotes
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #137 : Remove html tags from json files
-		- Issue #139 : Remove Globals
-		- Issue #140 : Remove userData
+		- Issue ♯137 : Remove html tags from json files
+		- Issue ♯139 : Remove Globals
+		- Issue ♯140 : Remove userData
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200824
 Tests ...
 */

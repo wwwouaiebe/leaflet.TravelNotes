@@ -21,9 +21,9 @@ Changes:
 	- v1.5.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #146 : Add the travel name in the document title...
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯146 : Add the travel name in the document title...
 Doc reviewed 20200825
 Tests ...
 */

@@ -20,12 +20,12 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.9.0:
-		- issue #101 : Add a print command for a route
-		- issue #103 : Review the attributions
+		- Issue ♯101 : Add a print command for a route
+		- Issue ♯103 : Review the attributions
 	- v2.0.0:
-		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
-		- Issue #135 : Remove innerHTML from code
-		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
+		- Issue ♯134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 Doc reviewed 20200821
 Tests ...
 */

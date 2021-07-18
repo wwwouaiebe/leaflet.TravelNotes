@@ -20,11 +20,11 @@ Changes:
 	- v1.6.0:
 		- created from MapEditor
 	- v1.8.0:
-		- issue #97 : Improve adding a new waypoint to a route
+		- Issue ♯97 : Improve adding a new waypoint to a route
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
+		- Issue ♯142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 Doc reviewed 20200803
 Tests ...
 */
@@ -377,7 +377,7 @@ class ViewerMapEditor {
 		this.#currentLayer = leafletLayer;
 		if ( ! theTravelNotesData.travel.readOnly ) {
 
-			// strange... see issue #79 ... zoom is not correct on read only file
+			// strange... see Issue ♯79 ... zoom is not correct on read only file
 			// when the background map have bounds...
 			if ( theTravelNotesData.map.getZoom ( ) < ( layer.minZoom || OUR_DEFAULT_MIN_ZOOM ) ) {
 				theTravelNotesData.map.setZoom ( layer.minZoom || OUR_DEFAULT_MIN_ZOOM );

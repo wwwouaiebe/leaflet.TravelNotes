@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 Changes:
 	- v1.13.0:
-		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯138 : Protect the app - control html entries done by user.
 Doc reviewed 20200901
 Tests ...
 */

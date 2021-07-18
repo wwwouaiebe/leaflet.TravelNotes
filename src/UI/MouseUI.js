@@ -20,11 +20,11 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯135 : Remove innerHTML from code
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200822
 Tests ...
 */

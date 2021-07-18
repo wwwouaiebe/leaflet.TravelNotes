@@ -20,14 +20,14 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.10.0:
-		- Issue #107 : Add a button to reload the APIKeys file in the API keys dialog
+		- Issue ♯107 : Add a button to reload the APIKeys file in the API keys dialog
 	- v1.11.0:
-		- Issue #108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
+		- Issue ♯108 : Add a warning when an error occurs when reading the APIKeys file at startup reopened
 	- v2.0.0:
-		- Issue #133 : Outphase reading the APIKeys with the url
-		- Issue #137 : Remove html tags from json files
+		- Issue ♯133 : Outphase reading the APIKeys with the url
+		- Issue ♯137 : Remove html tags from json files
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210715
 Tests ...
 

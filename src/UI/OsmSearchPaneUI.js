@@ -21,16 +21,16 @@ Changes:
 	- v1.4.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v1.13.0:
-		- Issue #125 : Outphase osmSearch and add it to TravelNotes
-		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
-		- Issue #128 : Unify osmSearch and notes icons and data
+		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
+		- Issue ♯126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
+		- Issue ♯128 : Unify osmSearch and notes icons and data
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 Doc reviewed 20200818
 Tests ...
 */

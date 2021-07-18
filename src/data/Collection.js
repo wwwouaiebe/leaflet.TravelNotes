@@ -21,11 +21,11 @@ Changes:
 	- v1.4.0:
 		- added next and previous method
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.8.0:
-		- Issue #100 : Fix circular dependancies with Collection
+		- Issue ♯100 : Fix circular dependancies with Collection
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210714
 Tests ...
 */

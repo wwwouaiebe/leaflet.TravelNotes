@@ -20,11 +20,11 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.7.0:
-		- issue #89 : Add elevation graph
+		- Issue ♯89 : Add elevation graph
 	- v2.1.0:
-		- issue #151 : Add itineraries elevations distances and ObjIds to the compressed data...
+		- Issue ♯151 : Add itineraries elevations distances and ObjIds to the compressed data...
 	- v3.0.0:
-		- Issue #175 : Private and static fields and methods are coming
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210715
 Tests ...
 */

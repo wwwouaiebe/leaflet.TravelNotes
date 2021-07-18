@@ -20,17 +20,17 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #36: Add a linetype property to route
+		- Issue ♯36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #63 : Find a better solution for provider keys upload
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯63 : Find a better solution for provider keys upload
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯135 : Remove innerHTML from code
 Doc reviewed 20200815
 Tests ...
 */

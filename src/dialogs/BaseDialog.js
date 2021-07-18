@@ -24,19 +24,19 @@ Changes:
 		- added the possibility to have an event listener on the cancel button and escape key in
 		the derived dialog boxes
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #68 : Review all existing promises.
-		- Issue #63 : Find a better solution for provider keys upload
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯68 : Review all existing promises.
+		- Issue ♯63 : Find a better solution for provider keys upload
 	- v1.11.0:
-		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
-		- Issue #113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
+		- Issue ♯110 : Add a command to create a SVG icon from osm for each maneuver
+		- Issue ♯113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 	- v2.0.0:
-		- Issue #134 : Remove node.setAttribute ( 'style', blablabla) in the code
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯134 : Remove node.setAttribute ( 'style', blablabla) in the code
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v2.2.0:
-		- Issue #155 : Enable pan and zoom on the map when a dialog is displayed
+		- Issue ♯155 : Enable pan and zoom on the map when a dialog is displayed
 Doc reviewed 20200811
 Tests ...
 */

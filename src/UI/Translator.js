@@ -18,9 +18,9 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v2.0.0:
-		- Issue #137 : Remove html tags from json files
+		- Issue ♯137 : Remove html tags from json files
 Doc reviewed 20200822
 Tests ...
 */

@@ -28,20 +28,20 @@ Changes:
 		- reviewed code
 		- added language for TravelNotesDialogXX.json file
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #68 : Review all existing promises.
-		- Issue #76 : Add a devil button in the noteDialog.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯68 : Review all existing promises.
+		- Issue ♯76 : Add a devil button in the noteDialog.
 	- v1.11.0:
-		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+		- Issue ♯110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯144 : Add an error message when a bad json file is loaded from the noteDialog
 	- v2.2.0:
-		- Issue #64 : Improve geocoding
+		- Issue ♯64 : Improve geocoding
 Doc reviewed 20200815
 Tests ...
 */

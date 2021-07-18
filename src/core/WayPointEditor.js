@@ -21,18 +21,18 @@ Changes:
 	- v1.4.0:
 		- created from RouteEditor
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯68 : Review all existing promises.
 	- v1.8.0:
-		- issue #97 : Improve adding a new waypoint to a route
+		- Issue ♯97 : Improve adding a new waypoint to a route
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.2.0:
-		- Issue #64 : Improve geocoding
+		- Issue ♯64 : Improve geocoding
 	- v2.3.0:
-		- Issue #170 : The apps crash when renaming a waypoint and then saving the route before the end of the renaming...
+		- Issue ♯170 : The apps crash when renaming a waypoint and then saving the route before the end of the renaming...
 
 Doc reviewed 20200810
 Tests ...

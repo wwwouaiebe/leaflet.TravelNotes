@@ -20,10 +20,10 @@ Changes:
 	- v1.12.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
 Doc reviewed 20200825
 Tests ...
 */

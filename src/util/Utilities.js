@@ -16,9 +16,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 Changes:
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v2.4.0:
-		- Issue #174 : UUID generator is not rfc 4122 compliant
+		- Issue ♯174 : UUID generator is not rfc 4122 compliant
 Doc reviewed 20200825
 Tests ...
 */

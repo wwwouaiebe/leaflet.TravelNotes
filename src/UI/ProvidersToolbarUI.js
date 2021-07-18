@@ -23,15 +23,15 @@ Changes:
 	- v1.5.0:
 		- code review
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #63 : Find a better solution for provider keys upload
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯63 : Find a better solution for provider keys upload
 	- v1.7.0:
 		- added line and circle icons
 		- modified bike, pedestrian and car icons
 	- v1.6.0:
-		- Issue #102 : Sometime the provider toolbar is incomplete at startup
+		- Issue ♯102 : Sometime the provider toolbar is incomplete at startup
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 Doc reviewed 20200820
 Tests ...
 */

@@ -20,7 +20,7 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 Doc reviewed 20200824
 Tests ...
 */

@@ -21,8 +21,8 @@ Changes:
 	- v1.12.0:
 		- created
 	- v1.13.0:
-		- Issue #126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
-		- Issue #128 : Unify osmSearch and notes icons and data
+		- Issue ♯126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
+		- Issue ♯128 : Unify osmSearch and notes icons and data
 Doc reviewed 20200727
 Tests ...
 */

@@ -20,10 +20,10 @@ Changes:
 	- v1.12.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v2.2.0:
-		- Issue #64 : Improve geocoding
+		- Issue ♯64 : Improve geocoding
 Doc reviewed 20200816
 Tests ...
 */

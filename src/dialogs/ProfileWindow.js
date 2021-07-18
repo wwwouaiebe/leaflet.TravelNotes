@@ -21,9 +21,9 @@ Changes:
 	- v1.7.0:
 		- created
 	- v1.8.0:
-		- Issue #99 : Add distance in the elevation window
+		- Issue ♯99 : Add distance in the elevation window
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */

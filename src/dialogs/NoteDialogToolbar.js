@@ -20,11 +20,11 @@ Changes:
 	- v1.6.0:
 		- created
 	- v1.13.0:
-		- Issue #128 : Unify osmSearch and notes icons and data
+		- Issue ♯128 : Unify osmSearch and notes icons and data
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯144 : Add an error message when a bad json file is loaded from the noteDialog
 Doc reviewed 20200815
 Tests ...
 */

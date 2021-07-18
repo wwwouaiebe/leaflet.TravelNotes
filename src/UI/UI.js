@@ -21,17 +21,17 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #31 : Add a command to import from others maps
+		- Issue ♯31 : Add a command to import from others maps
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #63 : Find a better solution for provider keys upload
-		- Issue #75 : Merge Maps and TravelNotes
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯63 : Find a better solution for provider keys upload
+		- Issue ♯75 : Merge Maps and TravelNotes
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v1.13.0:
-		- Issue #125 : Outphase osmSearch and add it to TravelNotes
+		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
+		- Issue ♯135 : Remove innerHTML from code
 Doc reviewed 20200816
 Tests ...
 */
