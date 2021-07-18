@@ -63,11 +63,11 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
+import theRouteEditor from '../core/RouteEditor.js';
 import FileCompactor from '../core/FileCompactor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 
 import { INVALID_OBJ_ID, ROUTE_EDITION_STATUS, SAVE_STATUS } from '../util/Constants.js';
 
@@ -137,7 +137,7 @@ class FileLoader {
 				}
 			);
 		}
-		newZoomer ( ).zoomToTravel ( );
+		new Zoomer ( ).zoomToTravel ( );
 
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 

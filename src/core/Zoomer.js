@@ -22,7 +22,9 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue ♯120 : Review the UserInterface
-Doc reviewed 20200810
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 */
 
@@ -51,185 +53,144 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
+
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewZoomer
-@desc constructor for Zoomer objects
-@return {Zoomer} an instance of Zoomer object
-@private
+@class Zoomer
+@classdesc This class implements a zoom command on multiple objects
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewZoomer ( ) {
+class Zoomer {
 
-	let myGeometry = [];
+	#geometry = [];
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myPushNoteGeometry
-	@desc This method push the latitude and longitude of a note in the myGeometry array
+	This method push the latitude and longitude of a note in the #geometry array
 	@param {Note} note the note to push
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myPushNoteGeometry ( note ) {
-		myGeometry.push ( note.latLng );
-		myGeometry.push ( note.iconLatLng );
+	#pushNoteGeometry ( note ) {
+		this.#geometry.push ( note.latLng );
+		this.#geometry.push ( note.iconLatLng );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myPushRouteGeometry
-	@desc This method push the latitude and longitude of a route in the myGeometry array
+	This method push the latitude and longitude of a route in the #geometry array
 	@param {Route} route the route to push
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myPushRouteGeometry ( route ) {
-		route.itinerary.itineraryPoints.forEach ( itineraryPoint => myGeometry.push ( itineraryPoint.latLng ) );
+	#pushRouteGeometry ( route ) {
+		route.itinerary.itineraryPoints.forEach ( itineraryPoint => this.#geometry.push ( itineraryPoint.latLng ) );
 		route.notes.forEach (
-			note => myPushNoteGeometry ( note )
+			note => this.#pushNoteGeometry ( note )
+		);
+	}
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
+	/**
+	Performs a zoom on a point
+	@param {Array.<number>} latLng The latitude and longitude of the point
+	@fires zoomto
+	*/
+
+	zoomToLatLng ( latLng ) {
+		theEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
+	}
+
+	/**
+	Performs a zoom on a maneuver
+	@param {!number} maneuverObjId the objId of the maneuver on witch the zoom must be performed
+	@fires zoomto
+	*/
+
+	zoomToManeuver ( maneuverObjId ) {
+		let itineraryPointObjId =
+			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId ).itineraryPointObjId;
+		let latLng =
+			theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng;
+		theEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
+	}
+
+	/**
+	Performs a zoom on a note
+	@param {!number} noteObjId the objId of the note on witch the zoom must be performed
+	@fires zoomto
+	*/
+
+	zoomToNote ( noteObjId ) {
+		this.#geometry = [];
+		this.#pushNoteGeometry ( theDataSearchEngine.getNoteAndRoute ( noteObjId ).note );
+		theEventDispatcher.dispatch (
+			'zoomto',
+			{
+				geometry : [ this.#geometry ]
+			}
 		);
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class Zoomer
-	@classdesc This class implements a zoom command on multiple objects
-	@see {@link newZoomer} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Performs a zoom on a route
+	@param {!number} routeObjId the objId of the route on witch the zoom must be performed
+	@fires zoomto
 	*/
 
-	class Zoomer {
+	zoomToRoute ( routeObjId ) {
+		this.#geometry = [];
 
-		constructor ( ) {
-			Object.freeze ( this );
-		}
+		this.#pushRouteGeometry ( theDataSearchEngine.getRoute ( routeObjId ) );
 
-		/**
-		Performs a zoom on a point
-		@param {Array.<number>} latLng The latitude and longitude of the point
-		@fires zoomto
-		*/
-
-		zoomToLatLng ( latLng ) {
-			theEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
-		}
-
-		/**
-		Performs a zoom on a maneuver
-		@param {!number} maneuverObjId the objId of the maneuver on witch the zoom must be performed
-		@fires zoomto
-		*/
-
-		zoomToManeuver ( maneuverObjId ) {
-			let itineraryPointObjId =
-				theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId ).itineraryPointObjId;
-			let latLng =
-				theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.getAt ( itineraryPointObjId ).latLng;
-			theEventDispatcher.dispatch ( 'zoomto', { latLng : latLng } );
-		}
-
-		/**
-		Performs a zoom on a note
-		@param {!number} noteObjId the objId of the note on witch the zoom must be performed
-		@fires zoomto
-		*/
-
-		zoomToNote ( noteObjId ) {
-			myGeometry = [];
-			myPushNoteGeometry ( theDataSearchEngine.getNoteAndRoute ( noteObjId ).note );
-			theEventDispatcher.dispatch (
-				'zoomto',
-				{
-					geometry : [ myGeometry ]
-				}
-			);
-		}
-
-		/**
-		Performs a zoom on a route
-		@param {!number} routeObjId the objId of the route on witch the zoom must be performed
-		@fires zoomto
-		*/
-
-		zoomToRoute ( routeObjId ) {
-			myGeometry = [];
-
-			myPushRouteGeometry ( theDataSearchEngine.getRoute ( routeObjId ) );
-
-			theEventDispatcher.dispatch (
-				'zoomto',
-				{
-					geometry : [ myGeometry ]
-				}
-			);
-		}
-
-		/**
-		Performs a zoom on a complete travel
-		@fires zoomto
-		*/
-
-		zoomToTravel ( ) {
-			myGeometry = [];
-			theTravelNotesData.travel.routes.forEach (
-				route => myPushRouteGeometry ( route )
-			);
-			if ( INVALID_OBJ_ID !== theTravelNotesData.travel.editedRouteObjId ) {
-				myPushRouteGeometry ( theTravelNotesData.travel.editedRoute );
+		theEventDispatcher.dispatch (
+			'zoomto',
+			{
+				geometry : [ this.#geometry ]
 			}
-			theTravelNotesData.travel.notes.forEach (
-				note => myPushNoteGeometry ( note )
-			);
-			theEventDispatcher.dispatch (
-				'zoomto',
-				{
-					geometry : [ myGeometry ]
-				}
-			);
-		}
-
-		/**
-		Performs a zoom on a poi (point of interest = a search result from osm)
-		@param {Object} poi Poi on witch the zoom must be performed
-		@fires zoomto
-		*/
-
-		zoomToPoi ( poi ) {
-			theEventDispatcher.dispatch ( 'zoomto', poi );
-		}
+		);
 	}
 
-	return new Zoomer ( );
-}
+	/**
+	Performs a zoom on a complete travel
+	@fires zoomto
+	*/
 
-export {
+	zoomToTravel ( ) {
+		this.#geometry = [];
+		theTravelNotesData.travel.routes.forEach (
+			route => this.#pushRouteGeometry ( route )
+		);
+		if ( INVALID_OBJ_ID !== theTravelNotesData.travel.editedRouteObjId ) {
+			this.#pushRouteGeometry ( theTravelNotesData.travel.editedRoute );
+		}
+		theTravelNotesData.travel.notes.forEach (
+			note => this.#pushNoteGeometry ( note )
+		);
+		theEventDispatcher.dispatch (
+			'zoomto',
+			{
+				geometry : [ this.#geometry ]
+			}
+		);
+	}
 
 	/**
-@------------------------------------------------------------------------------------------------------------------------------
+	Performs a zoom on a poi (point of interest = a search result from osm)
+	@param {Object} poi Poi on witch the zoom must be performed
+	@fires zoomto
+	*/
 
-@function newZoomer
-@desc constructor for Zoomer objects
-@return {Zoomer} an instance of Zoomer object
-@global
+	zoomToPoi ( poi ) {
+		theEventDispatcher.dispatch ( 'zoomto', poi );
+	}
+}
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-	ourNewZoomer as newZoomer
-};
+export default Zoomer;
 
 /*
 --- End of Zoomer.js file -----------------------------------------------------------------------------------------------------

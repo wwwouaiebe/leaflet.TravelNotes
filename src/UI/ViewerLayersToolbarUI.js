@@ -50,7 +50,7 @@ import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import theGeoLocator from '../core/GeoLocator.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 import { ZERO } from '../util/Constants.js';
 
 let ourLayersToolbar = null;
@@ -115,7 +115,7 @@ function ourOnGeoLocationButtonClick ( clickEvent ) {
 
 function ourOnZoomButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
-	newZoomer ( ).zoomToTravel ( );
+	new Zoomer ( ).zoomToTravel ( );
 }
 
 /**

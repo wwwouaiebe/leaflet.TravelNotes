@@ -25,7 +25,9 @@ Changes:
 		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
 		- Issue ♯142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
-Doc reviewed 20200803
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 */
 

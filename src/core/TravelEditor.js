@@ -40,7 +40,9 @@ Changes:
 		- Issue ♯120 : Review the UserInterface
 	-v2.2.0:
 		- Issue ♯129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200810
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 */
 
@@ -68,7 +70,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
+import theRouteEditor from '../core/RouteEditor.js';
 import { theUtilities } from '../util/Utilities.js';
 import Route from '../data/Route.js';
 import Travel from '../data/Travel.js';
@@ -78,45 +80,6 @@ import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { newSaveAsDialog } from '../dialogs/SaveAsDialog.js';
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourSaveAsTravel
-@desc This function save the travel to a file, removing notes and maneuvers, depending of the user choice.
-@param {Object} removeData an object describing witch data must be saved
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourSaveAsTravel ( removeData ) {
-
-	let saveAsTravel = new Travel ( );
-	saveAsTravel.jsonObject = theTravelNotesData.travel.jsonObject;
-	saveAsTravel.name += '-partial';
-	let routesIterator = saveAsTravel.routes.iterator;
-	while ( ! routesIterator.done ) {
-		routesIterator.value.hidden = false;
-	}
-	if ( removeData.removeTravelNotes ) {
-		saveAsTravel.notes.removeAll ( );
-	}
-	if ( removeData.removeRoutesNotes ) {
-		routesIterator = saveAsTravel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			routesIterator.value.notes.removeAll ( );
-		}
-	}
-	if ( removeData.removeManeuvers ) {
-		routesIterator = saveAsTravel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			routesIterator.value.itinerary.maneuvers.removeAll ( );
-		}
-	}
-	let compressedSaveAsTravel = new FileCompactor ( ).compress ( saveAsTravel );
-	theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
-}
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -131,6 +94,40 @@ function ourSaveAsTravel ( removeData ) {
 
 class TravelEditor {
 
+	/**
+	This function save the travel to a file, removing notes and maneuvers, depending of the user choice.
+	@param {Object} removeData an object describing witch data must be saved
+	@private
+	*/
+
+	#saveAsTravel ( removeData ) {
+
+		let saveAsTravel = new Travel ( );
+		saveAsTravel.jsonObject = theTravelNotesData.travel.jsonObject;
+		saveAsTravel.name += '-partial';
+		let routesIterator = saveAsTravel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			routesIterator.value.hidden = false;
+		}
+		if ( removeData.removeTravelNotes ) {
+			saveAsTravel.notes.removeAll ( );
+		}
+		if ( removeData.removeRoutesNotes ) {
+			routesIterator = saveAsTravel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.notes.removeAll ( );
+			}
+		}
+		if ( removeData.removeManeuvers ) {
+			routesIterator = saveAsTravel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.itinerary.maneuvers.removeAll ( );
+			}
+		}
+		let compressedSaveAsTravel = new FileCompactor ( ).compress ( saveAsTravel );
+		theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
+	}
+	
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -171,7 +168,7 @@ class TravelEditor {
 
 		let saveAsDialog = newSaveAsDialog ( );
 		saveAsDialog.show ( )
-			.then ( removeData => ourSaveAsTravel ( removeData ) )
+			.then ( removeData => { this.#saveAsTravel ( removeData );} )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {
@@ -231,26 +228,22 @@ class TravelEditor {
 		}
 		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
-
 }
 
-const OUR_TRAVEL_EDITOR = new TravelEditor ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of TravelEditor class
+@type {TravelEditor}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of TravelEditor class
-	@type {TravelEditor}
-	@constant
-	@global
+const theTravelEditor = new TravelEditor ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRAVEL_EDITOR as theTravelEditor
-};
+export default theTravelEditor;
 
 /*
 --- End of TravelEditor.js file -----------------------------------------------------------------------------------------------

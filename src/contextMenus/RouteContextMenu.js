@@ -58,11 +58,11 @@ Tests ...
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import theConfig from '../data/Config.js';
 import theNoteEditor from '../core/NoteEditor.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
-import { theWayPointEditor } from '../core/WayPointEditor.js';
+import theRouteEditor from '../core/RouteEditor.js';
+import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 
@@ -87,7 +87,7 @@ function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myRouteObjId = contextMenuEvent.target.objId;
 	let myRoute = theDataSearchEngine.getRoute ( myRouteObjId );
-	let myZoomer = newZoomer ( );
+	let myZoomer = new Zoomer ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------

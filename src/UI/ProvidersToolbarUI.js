@@ -58,7 +58,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
+import theRouteEditor from '../core/RouteEditor.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { ZERO } from '../util/Constants.js';
 

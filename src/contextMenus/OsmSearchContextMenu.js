@@ -49,9 +49,9 @@ Tests ...
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import theNoteEditor from '../core/NoteEditor.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 import { theTranslator } from '../UI/Translator.js';
-import { theWayPointEditor } from '../core/WayPointEditor.js';
+import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -72,7 +72,7 @@ When null, the body of the html page is selected
 
 function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
 
-	let myZoomer = newZoomer ( );
+	let myZoomer = new Zoomer ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------

@@ -48,13 +48,13 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { theWayPointEditor } from '../core/WayPointEditor.js';
+import theWayPointEditor from '../core/WayPointEditor.js';
 import theNoteEditor from '../core/NoteEditor.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
+import theRouteEditor from '../core/RouteEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
@@ -73,7 +73,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 function ourNewMapContextMenu ( contextMenuEvent ) {
 
 	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
-	let myZoomer = newZoomer ( );
+	let myZoomer = new Zoomer ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------

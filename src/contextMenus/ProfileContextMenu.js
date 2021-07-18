@@ -47,7 +47,7 @@ Tests ...
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theTranslator } from '../UI/Translator.js';
 import theNoteEditor from '../core/NoteEditor.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ import { newZoomer } from '../core/Zoomer.js';
 
 function ourNewProfileContextMenu ( contextMenuEvent ) {
 
-	let zoomer = newZoomer ( );
+	let zoomer = new Zoomer ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------

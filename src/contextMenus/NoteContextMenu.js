@@ -50,7 +50,7 @@ Tests ...
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theNoteEditor from '../core/NoteEditor.js';
-import { newZoomer } from '../core/Zoomer.js';
+import Zoomer from '../core/Zoomer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 
@@ -74,7 +74,7 @@ When null, the body of the html page is selected
 function ourNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
 
 	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
-	let myZoomer = newZoomer ( );
+	let myZoomer = new Zoomer ( );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
