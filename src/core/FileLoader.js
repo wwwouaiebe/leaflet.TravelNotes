@@ -68,7 +68,7 @@ import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import FileCompactor from '../core/FileCompactor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import { ZERO, INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
+import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ class FileLoader {
 			theErrorsUI.showError ( 'An error occurs when reading the file : ' + err.message );
 		}
 	}
-	
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

@@ -302,9 +302,8 @@ function ourOnOpenTravelInputChange ( changeEvent ) {
 			if ( err instanceof Error ) {
 				console.error ( err );
 			}
-			return;
 		}
-	}
+	};
 
 	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 }
@@ -390,9 +389,8 @@ function ourOnImportTravelInputChange ( changeEvent ) {
 			if ( err instanceof Error ) {
 				console.error ( err );
 			}
-			return;
 		}
-	}
+	};
 
 	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 }

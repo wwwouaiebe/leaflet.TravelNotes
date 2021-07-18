@@ -62,12 +62,7 @@ import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 
 class GeoLocator {
 	
-	static #status =
-		( 'geolocation' in navigator )
-			?
-			GEOLOCATION_STATUS.inactive
-			:
-			GEOLOCATION_STATUS.disabled;
+	static #status = ( 'geolocation' in navigator ) ? GEOLOCATION_STATUS.inactive : GEOLOCATION_STATUS.disabled;
 			
 	static #watchId = null;
 

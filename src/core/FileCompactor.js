@@ -183,7 +183,7 @@ class FileCompactor {
 			this.#decompressRoute ( travelObject.editedRoute );
 		}
 	}
-	
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

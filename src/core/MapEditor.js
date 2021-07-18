@@ -200,7 +200,7 @@ class WayPointEvents {
 */
 
 class NoteBulletEvents {
-	
+
 	/**
 	dragend event listener
 	@listens dragend
@@ -288,14 +288,14 @@ class NoteBulletEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc This class contains the event listeners for the notes markers 
+@classdesc This class contains the event listeners for the notes markers
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 class NoteMarkerEvents {
-	
+
 	/**
 	contextmenu event listener
 	@listens contextmenu
@@ -627,7 +627,7 @@ class MapEditor	extends ViewerMapEditor {
 	@listens addwaypoint
 	*/
 
-	addWayPoint ( wayPoint, letter ) { 
+	addWayPoint ( wayPoint, letter ) {
 		if ( ( LAT_LNG.defaultValue === wayPoint.lat ) && ( LAT_LNG.defaultValue === wayPoint.lng ) ) {
 			return;
 		}
@@ -762,8 +762,6 @@ class MapEditor	extends ViewerMapEditor {
 		super.setLayer ( layer, url );
 	}
 }
-
-
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -431,7 +431,8 @@ function ourMain ( ) {
 	document.querySelector ( '#TravelNotes-Routes-ShowNotes' ).checked = ourShowRouteNotes;
 	document.querySelector ( '#TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', ourOnShowRouteNotesChange );
 	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' ).checked = ourShowManeuversNotes;
-	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' ).addEventListener ( 'change', ourOnShowManeuverNotesChange );
+	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' )
+		.addEventListener ( 'change', ourOnShowManeuverNotesChange );
 
 	if ( ourPageId ) {
 		ourAddSaveButton ( );
