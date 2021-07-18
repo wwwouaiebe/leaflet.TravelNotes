@@ -78,7 +78,7 @@ import theAPIKeysManager from '../core/APIKeysManager.js';
 import { theUI } from '../UI/UI.js';
 import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
-import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
+import ViewerFileLoader from '../core/ViewerFileLoader.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import Maneuver from '../data/Maneuver.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
@@ -318,7 +318,7 @@ async function ourLoadDistantTravel ( travelUrl ) {
 	let travelResponse = fetch ( travelUrl );
 	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
 		let travelContent = await travelResponse.json ( );
-		newViewerFileLoader ( ).openDistantFile ( travelContent );
+		new ViewerFileLoader ( ).openDistantFile ( travelContent );
 	}
 	else {
 		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO	);

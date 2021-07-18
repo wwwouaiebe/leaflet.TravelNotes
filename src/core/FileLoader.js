@@ -64,11 +64,12 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import FileCompactor from '../core/FileCompactor.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
+import { newZoomer } from '../core/Zoomer.js';
+
+import { INVALID_OBJ_ID, ROUTE_EDITION_STATUS, SAVE_STATUS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -102,7 +103,41 @@ class FileLoader {
 		// the map is cleaned
 		theEventDispatcher.dispatch ( 'removeallobjects' );
 
-		newViewerFileLoader ( ).display ( );
+		document.title =
+			'Travel & Notes' +
+			( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			if ( ROUTE_EDITION_STATUS.notEdited === routesIterator.value.editionStatus ) {
+				theEventDispatcher.dispatch (
+					'routeupdated',
+					{
+						removedRouteObjId : INVALID_OBJ_ID,
+						addedRouteObjId : routesIterator.value.objId
+					}
+				);
+			}
+		}
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+			theEventDispatcher.dispatch (
+				'routeupdated',
+				{
+					removedRouteObjId : INVALID_OBJ_ID,
+					addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
+				}
+			);
+		}
+		let notesIterator = theTravelNotesData.travel.notes.iterator;
+		while ( ! notesIterator.done ) {
+			theEventDispatcher.dispatch (
+				'noteupdated',
+				{
+					removedNoteObjId : INVALID_OBJ_ID,
+					addedNoteObjId : notesIterator.value.objId
+				}
+			);
+		}
+		newZoomer ( ).zoomToTravel ( );
 
 		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 

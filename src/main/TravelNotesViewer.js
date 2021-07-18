@@ -45,7 +45,7 @@ Tests ...
 
 import theTravelNotesData from '../data/TravelNotesData.js';
 import ViewerMapEditor from '../core/ViewerMapEditor.js';
-import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
+import ViewerFileLoader from '../core/ViewerFileLoader.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 import theGeoLocator from '../core/GeoLocator.js';
@@ -160,7 +160,7 @@ async function ourLoadDistantTravel ( travelUrl ) {
 	let travelResponse = await fetch ( travelUrl );
 	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
 		let travelContent = await travelResponse.json ( );
-		newViewerFileLoader ( ).openDistantFile ( travelContent );
+		new ViewerFileLoader ( ).openDistantFile ( travelContent );
 	}
 	else {
 		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO );
