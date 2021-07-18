@@ -67,7 +67,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';

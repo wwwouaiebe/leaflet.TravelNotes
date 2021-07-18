@@ -71,7 +71,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { ZERO, ONE, TWO, HTTP_STATUS_OK, OSM_COUNTRY_ADMIN_LEVEL } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';

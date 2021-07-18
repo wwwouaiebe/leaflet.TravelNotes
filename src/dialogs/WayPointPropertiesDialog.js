@@ -51,7 +51,7 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newGeoCoder } from '../core/GeoCoder.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

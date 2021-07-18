@@ -50,7 +50,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, DISTANCE } from '../util/Constants.js';
 
 const TEN = 10;

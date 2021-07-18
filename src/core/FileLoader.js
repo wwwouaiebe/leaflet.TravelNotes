@@ -59,7 +59,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
@@ -149,38 +149,23 @@ class FileLoader {
 	@private
 	*/
 
-	#openFile ( changeEvent, mustMerge ) {
-		let fileReader = new FileReader ( );
-		fileReader.onload = function ( ) {
-			let fileContent = {};
-			try {
-				fileContent = JSON.parse ( fileReader.result );
+	#openFile ( fileContent, mustMerge ) {
+		try {
+			if ( mustMerge ) {
+				new FileCompactor ( ).decompressMerge ( fileContent );
 			}
-			catch ( err ) {
-				if ( err instanceof Error ) {
-					console.error ( err );
-				}
-				return;
+			else {
+				theProfileWindowsManager.deleteAllProfiles ( );
+				new FileCompactor ( ).decompress ( fileContent );
 			}
-			try {
-				if ( mustMerge ) {
-					new FileCompactor ( ).decompressMerge ( fileContent );
-				}
-				else {
-					theProfileWindowsManager.deleteAllProfiles ( );
-					new FileCompactor ( ).decompress ( fileContent );
-				}
-				this.#display ( );
-				if ( ! mustMerge ) {
-					theMouseUI.saveStatus = SAVE_STATUS.saved;
-				}
+			this.#display ( );
+			if ( ! mustMerge ) {
+				theMouseUI.saveStatus = SAVE_STATUS.saved;
 			}
-			catch ( err ) {
-				theErrorsUI.showError ( 'An error occurs when reading the file : ' + err.message );
-			}
-
-		};
-		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
+		}
+		catch ( err ) {
+			theErrorsUI.showError ( 'An error occurs when reading the file : ' + err.message );
+		}
 	}
 	
 	constructor ( ) {
@@ -202,7 +187,7 @@ class FileLoader {
 	@fires roadbookupdate
 	*/
 
-	openLocalFile ( changeEvent ) { this.#openFile ( changeEvent, false ); }
+	openLocalFile ( fileContent ) { this.#openFile ( fileContent, false ); }
 
 	/**
 	Open a local file and merge the content of the file with the current travel
@@ -219,7 +204,7 @@ class FileLoader {
 	@fires roadbookupdate
 	*/
 
-	mergeLocalFile ( changeEvent ) { this.#openFile ( changeEvent, true ); }
+	mergeLocalFile ( fileContent ) { this.#openFile ( fileContent, true ); }
 }
 
 export default FileLoader;

@@ -61,7 +61,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +154,9 @@ class DataSearchEngine {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-export const theDataSearchEngine = new DataSearchEngine ( );
+const theDataSearchEngine = new DataSearchEngine ( );
+
+export default theDataSearchEngine;
 
 /*
 --- End of DataSearchEngine.js file -------------------------------------------------------------------------------------------

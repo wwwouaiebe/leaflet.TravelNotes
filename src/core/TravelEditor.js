@@ -65,8 +65,8 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theConfig } from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theUtilities } from '../util/Utilities.js';

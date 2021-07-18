@@ -70,8 +70,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog.js';
 import { newGeoCoder } from '../core/GeoCoder.js';

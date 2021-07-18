@@ -68,8 +68,8 @@ Tests ...
 
 import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
 import { theUtilities } from '../util/Utilities.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theConfig } from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newDataEncryptor } from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';

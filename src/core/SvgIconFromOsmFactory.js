@@ -69,8 +69,8 @@ This will be used for the note address
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import theConfig from '../data/Config.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { theTranslator } from '../UI/Translator.js';

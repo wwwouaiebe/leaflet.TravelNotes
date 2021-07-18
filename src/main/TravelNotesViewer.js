@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import ViewerMapEditor from '../core/ViewerMapEditor.js';
 import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';

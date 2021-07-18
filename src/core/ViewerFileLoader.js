@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import FileCompactor from '../core/FileCompactor.js';
 import { newZoomer } from '../core/Zoomer.js';

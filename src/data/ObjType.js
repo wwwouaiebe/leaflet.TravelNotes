@@ -49,7 +49,7 @@ Tests ...
 */
 
 import { NOT_FOUND } from '../util/Constants.js';
-import { theCurrentVersion } from '../data/Version.js';
+import theCurrentVersion from '../data/Version.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

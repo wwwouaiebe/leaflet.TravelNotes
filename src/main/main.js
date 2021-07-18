@@ -48,10 +48,10 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';

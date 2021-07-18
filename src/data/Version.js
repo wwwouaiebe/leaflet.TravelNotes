@@ -76,7 +76,9 @@ And change the version in the package.json file and run npm audit fix.
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-export const theCurrentVersion = '2.3.0';
+const theCurrentVersion = '2.3.0';
+
+export default theCurrentVersion;
 
 /*
 --- End of Version.js file ----------------------------------------------------------------------------------------------------

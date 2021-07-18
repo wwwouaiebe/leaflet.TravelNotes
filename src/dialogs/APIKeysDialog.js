@@ -53,7 +53,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';

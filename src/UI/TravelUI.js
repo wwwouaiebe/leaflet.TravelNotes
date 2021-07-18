@@ -67,8 +67,8 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theTravelEditor } from '../core/TravelEditor.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
@@ -290,7 +290,23 @@ function ourCreateSaveAsTravelButton ( ) {
 
 function ourOnOpenTravelInputChange ( changeEvent ) {
 	changeEvent.stopPropagation ( );
-	new FileLoader ( ).openLocalFile ( changeEvent );
+
+	let fileReader = new FileReader ( );
+	fileReader.onload = function ( ) {
+		let fileContent = {};
+		try {
+			fileContent = JSON.parse ( fileReader.result );
+			new FileLoader ( ).openLocalFile ( fileContent );
+		}
+		catch ( err ) {
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
+			return;
+		}
+	}
+
+	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 }
 
 /**
@@ -362,7 +378,23 @@ function ourCreateOpenTravelButton ( ) {
 
 function ourOnImportTravelInputChange ( changeEvent ) {
 	changeEvent.stopPropagation ( );
-	new FileLoader ( ).mergeLocalFile ( changeEvent );
+
+	let fileReader = new FileReader ( );
+	fileReader.onload = function ( ) {
+		let fileContent = {};
+		try {
+			fileContent = JSON.parse ( fileReader.result );
+			new FileLoader ( ).mergeLocalFile ( fileContent );
+		}
+		catch ( err ) {
+			if ( err instanceof Error ) {
+				console.error ( err );
+			}
+			return;
+		}
+	}
+
+	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 }
 
 /**

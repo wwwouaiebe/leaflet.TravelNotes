@@ -56,7 +56,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelUI } from '../UI/TravelUI.js';
 import { thePanesManagerUI } from '../UI/PanesManagerUI.js';

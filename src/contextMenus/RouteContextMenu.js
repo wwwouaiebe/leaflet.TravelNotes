@@ -56,15 +56,15 @@ Tests ...
 */
 
 import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newZoomer } from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
 
 import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
 

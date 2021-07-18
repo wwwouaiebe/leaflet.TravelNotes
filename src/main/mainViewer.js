@@ -46,10 +46,10 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';

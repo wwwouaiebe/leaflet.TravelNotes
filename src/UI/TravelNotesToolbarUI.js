@@ -50,7 +50,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';

@@ -88,6 +88,12 @@ module.exports = function(grunt) {
 		},	
 		cssmin: {
 			options: {
+				// don't remove this. Colors must not be changed in cssto avois problems with data uri
+				compatibility : {
+					properties : {
+						colors : false
+					}
+				},
 				mergeIntoShorthands: false,
 				roundingPrecision: -1
 			},
@@ -436,7 +442,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.registerTask('doc', [ 'clean:doc','jsdoc' ]);
-	grunt.registerTask('default', [ 'clean:debug', /*'eslint',*/ 'rollup', 'stylelint','cssmin:debug', 'copy:debug','clean:end', ]);
+	grunt.registerTask('default', [ 'clean:debug', /*'eslint',*/ 'rollup', 'stylelint','cssmin:debug','copy:debug','clean:end', ]);
 	grunt.registerTask('docs', [ 'clean:debug', /*'eslint',*/ 'rollup', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
 	grunt.registerTask('release', [ 'clean:release', /*'eslint',*/ 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

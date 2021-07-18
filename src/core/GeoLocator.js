@@ -46,7 +46,7 @@ Tests ...
 */
 
 import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 
 /**

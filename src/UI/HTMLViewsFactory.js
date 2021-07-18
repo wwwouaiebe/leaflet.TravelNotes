@@ -60,9 +60,9 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import ObjId from '../data/ObjId.js';
 import { theUtilities } from '../util/Utilities.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import ProfileFactory from '../core/ProfileFactory.js';
 import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE } from '../util/Constants.js';
 

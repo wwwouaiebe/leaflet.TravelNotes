@@ -66,15 +66,15 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import Note from '../data/Note.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';

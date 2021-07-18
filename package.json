@@ -20,6 +20,7 @@
     "rollup": "latest",
     "terser": "latest",
     "jsdoc": "latest",
+    "clean-css": "latest",
     "osrm-text-instructions": "latest",
     "stylelint": "latest",
     "stylelint-config-standard": "latest"

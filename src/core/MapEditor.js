@@ -67,10 +67,10 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';

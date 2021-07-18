@@ -180,7 +180,9 @@ class TravelNotesData {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-export const theTravelNotesData = new TravelNotesData ( );
+const theTravelNotesData = new TravelNotesData ( );
+
+export default theTravelNotesData;
 
 /*
 --- End of TravelNotesData.js file --------------------------------------------------------------------------------------------

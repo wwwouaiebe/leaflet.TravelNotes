@@ -47,10 +47,10 @@ Tests ...
 */
 
 import ObjId from '../data/ObjId.js';
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 

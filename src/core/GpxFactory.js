@@ -48,8 +48,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theUtilities } from '../util/Utilities.js';
 
 const OUR_TAB_0 = '\n';

@@ -70,8 +70,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
 import theMapEditor from '../core/MapEditor.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
@@ -82,7 +82,7 @@ import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import Maneuver from '../data/Maneuver.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
-import { theCurrentVersion } from '../data/Version.js';
+import theCurrentVersion from '../data/Version.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';

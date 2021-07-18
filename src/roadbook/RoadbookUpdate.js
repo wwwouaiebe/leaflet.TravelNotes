@@ -39,7 +39,7 @@ Tests ...
 
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
 import { theUtilities } from '../util/Utilities.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import { SAVE_STATUS } from '../util/Constants.js';

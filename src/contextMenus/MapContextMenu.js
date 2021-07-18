@@ -51,7 +51,7 @@ import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
 import { theWayPointEditor } from '../core/WayPointEditor.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import { theRouteEditor } from '../core/RouteEditor.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 import { newZoomer } from '../core/Zoomer.js';
