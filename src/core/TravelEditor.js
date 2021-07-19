@@ -127,7 +127,7 @@ class TravelEditor {
 		let compressedSaveAsTravel = new FileCompactor ( ).compress ( saveAsTravel );
 		theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
 	}
-	
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -168,7 +168,7 @@ class TravelEditor {
 
 		let saveAsDialog = newSaveAsDialog ( );
 		saveAsDialog.show ( )
-			.then ( removeData => { this.#saveAsTravel ( removeData );} )
+			.then ( removeData => { this.#saveAsTravel ( removeData ); } )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {

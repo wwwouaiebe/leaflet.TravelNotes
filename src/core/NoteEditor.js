@@ -95,11 +95,11 @@ import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS, LAT_LNG } from '.
 */
 
 class NoteEditor {
-	
+
 	#waitUI = null;
-	
+
 	#showSearchNoteDialog = null;
-	
+
 	#maneuverCounter = ZERO;
 
 	/**
@@ -162,7 +162,7 @@ class NoteEditor {
 
 			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
 			await newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
-				.then ( 
+				.then (
 					osmNoteData => {
 						this.#newNoteFromOsmData ( osmNoteData, route );
 					}
@@ -181,7 +181,6 @@ class NoteEditor {
 		this.#waitUI.close ( );
 		this.#waitUI = null;
 	}
-
 
 	/**
 	This method add or update a note to theTravelNotesData and to the map
@@ -256,21 +255,21 @@ class NoteEditor {
 	@return {Note} A new note object with the lat and lng completed
 	@private
 	*/
-	
+
 	#newNote ( latLng ) {
 		let note = new Note ( );
 		note.latLng = latLng;
 		note.iconLatLng = latLng;
 		return note;
 	}
-	
+
 	/**
 	This method search route data for the nearest route of a given point
 	@param {Array.<number>} latLng The latitude and longitude of the point
 	@return {RouteData} A routeData object
 	@private
 	*/
-	
+
 	#getNearestRouteData ( latLng ) {
 		let nearestRouteData = {
 			distance : Number.MAX_VALUE,
@@ -304,7 +303,7 @@ class NoteEditor {
 
 		return Object.freeze ( nearestRouteData );
 	}
-	
+
 	/**
 	This method construct a new search note object
 	@param {Object} data The search data coming from osm
@@ -377,7 +376,7 @@ class NoteEditor {
 			}
 		)
 			.show ( )
-			.then ( ( ) => {this.#addAllManeuverNotes ( route, maneuverLength ) } )
+			.then ( ( ) => { this.#addAllManeuverNotes ( route, maneuverLength ); } )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {

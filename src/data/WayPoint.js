@@ -73,9 +73,9 @@ const OUR_OBJ_TYPE = new ObjType ( 'WayPoint' );
 */
 
 class WayPoint {
-	
+
 	#objId = INVALID_OBJ_ID;;
-	
+
 	/**
 	performs the upgrade from previous versions
 	@param {Object} wayPoint a wayPoint to upgrade
@@ -120,7 +120,7 @@ class WayPoint {
 	@throws {Error} when the parameter is invalid
 	@private
 	*/
-	
+
 	static #validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
@@ -169,7 +169,7 @@ class WayPoint {
 		*/
 
 		this.lng = LAT_LNG.defaultValue;
-		
+
 		this.#objId = ObjId.nextObjId;
 
 		Object.seal ( this );
@@ -197,7 +197,7 @@ class WayPoint {
 	*/
 
 	get latLng ( ) { return [ this.lat, this.lng ]; }
-	
+
 	set latLng ( LatLng ) {
 		this.lat = LatLng [ ZERO ];
 		this.lng = LatLng [ ONE ];
@@ -235,7 +235,7 @@ class WayPoint {
 			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
-	
+
 	set jsonObject ( something ) {
 		let otherthing = WayPoint.#validateObject ( something );
 		this.address = otherthing.address || '';
@@ -269,6 +269,7 @@ class WayPoint {
 }
 
 export default WayPoint;
+
 /*
 --- End of WayPoint.js file ---------------------------------------------------------------------------------------------------
 */

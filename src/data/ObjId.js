@@ -59,20 +59,20 @@ import { ZERO } from '../util/Constants.js';
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-
 class ObjId {
 
 	static #objId = ZERO;
-	
+
 	/**
 	get a unique objId
 	*/
-	
+
 	static get nextObjId ( ) { return ( ++ ObjId.#objId ); }
 
 }
 
 export default ObjId;
+
 /*
 --- End of ObjId.js file ------------------------------------------------------------------------------------------------------
 */

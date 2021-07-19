@@ -92,7 +92,7 @@ import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 class APIKeysManager {
 
 	static #haveAPIKeysFile = false;
-	
+
 	static #APIKeysMap = new Map;
 
 	/**
@@ -296,6 +296,7 @@ class APIKeysManager {
 	*/
 
 	setKeysFromDialog ( ) {
+
 		// preparing a list of providers and provider keys for the dialog
 		let ApiKeys = [];
 		APIKeysManager.#APIKeysMap.forEach (
@@ -307,7 +308,13 @@ class APIKeysManager {
 		newAPIKeysDialog ( ApiKeys, APIKeysManager.#haveAPIKeysFile )
 			.show ( )
 			.then ( APIKeys => APIKeysManager.#resetAPIKeys ( APIKeys ) )
-			.catch ( err => { if ( err instanceof Error ) { console.error ( err );} } );
+			.catch (
+				err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
 	}
 
 	/**

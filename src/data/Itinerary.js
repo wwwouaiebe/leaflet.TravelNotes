@@ -76,7 +76,7 @@ const OUR_OBJ_TYPE = new ObjType ( 'Itinerary' );
 class Itinerary	{
 
 	#objId = INVALID_OBJ_ID;;
-	
+
 	/**
 	Performs the upgrade
 	@param {Object} itinerary an itinerary to upgrade
@@ -148,7 +148,7 @@ class Itinerary	{
 		);
 		return something;
 	}
-	
+
 	constructor ( ) {
 
 		/**

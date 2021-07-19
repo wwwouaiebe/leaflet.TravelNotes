@@ -214,7 +214,7 @@ class Maneuver {
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing =  Maneuver.#validateObject ( something );
+		let otherthing = Maneuver.#validateObject ( something );
 		this.iconName = otherthing.iconName || '';
 		this.instruction = otherthing.instruction || '';
 		this.distance = otherthing.distance || DISTANCE.defaultValue;

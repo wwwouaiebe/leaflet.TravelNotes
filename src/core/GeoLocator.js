@@ -61,11 +61,10 @@ import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 */
 
 class GeoLocator {
-	
-	static #status = ( 'geolocation' in navigator ) ? GEOLOCATION_STATUS.inactive : GEOLOCATION_STATUS.disabled;
-			
-	static #watchId = null;
 
+	static #status = ( 'geolocation' in navigator ) ? GEOLOCATION_STATUS.inactive : GEOLOCATION_STATUS.disabled;
+
+	static #watchId = null;
 
 	/**
 	Send an event to show the current position on the map
@@ -89,7 +88,11 @@ class GeoLocator {
 			GeoLocator.#status = GEOLOCATION_STATUS.inactive;
 		}
 
-		// if ( GeoLocator.#watchId ) FF: the GeoLocator.#watchId is always 0 so we cannot use GeoLocator.#watchId to see if the geolocation is running
+		/*
+			if ( GeoLocator.#watchId )
+			FF: the GeoLocator.#watchId is always 0 so we cannot use GeoLocator.#watchId to see if the geolocation is running
+		*/
+
 		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : GeoLocator.#status } );
 		navigator.geolocation.clearWatch ( GeoLocator.#watchId );
 		GeoLocator.#watchId = null;
@@ -118,9 +121,13 @@ class GeoLocator {
 		GeoLocator.#status = GEOLOCATION_STATUS.active;
 		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : GeoLocator.#status } );
 		navigator.geolocation.getCurrentPosition ( this.#showPosition, this.#error, theConfig.geoLocation.options );
-		GeoLocator.#watchId = navigator.geolocation.watchPosition ( this.#showPosition, this.#error, theConfig.geoLocation.options );
+		GeoLocator.#watchId = navigator.geolocation.watchPosition (
+			this.#showPosition,
+			this.#error,
+			theConfig.geoLocation.options
+		);
 	}
-	
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -171,6 +178,7 @@ class GeoLocator {
 const theGeoLocator = new GeoLocator ( );
 
 export default theGeoLocator;
+
 /*
 --- End of GeoLocator.js file -------------------------------------------------------------------------------------------------
 */

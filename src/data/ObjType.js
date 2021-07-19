@@ -61,12 +61,13 @@ import theCurrentVersion from '../data/Version.js';
 */
 
 class ObjType {
-	
+
 	#objTypeName = '';
-	
+	#validObjTypeNames = [ 'Itinerary', 'ItineraryPoint', 'Maneuver', 'Note', 'Route', 'Travel', 'WayPoint' ];
+
 	constructor ( objTypeName ) {
-		if ( NOT_FOUND === ['Itinerary', 'ItineraryPoint','Maneuver', 'Note', 'Route', 'Travel', 'WayPoint'].indexOf ( objTypeName ) ) {
-			throw new Error ( 'Invalid ObjType name : ' + objTypeName  );
+		if ( NOT_FOUND === this.#validObjTypeNames.indexOf ( objTypeName ) ) {
+			throw new Error ( 'Invalid ObjType name : ' + objTypeName );
 		}
 		this.#objTypeName = objTypeName;
 		Object.freeze ( this );

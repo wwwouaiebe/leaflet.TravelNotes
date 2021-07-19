@@ -89,7 +89,6 @@ import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { newPrintFactory } from '../printMap/PrintFactory.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -102,7 +101,7 @@ import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '.
 */
 
 class RouteEditor {
-	
+
 	#zoomToRouteAfterRouting = false;
 	#routingRequestStarted = false;
 
@@ -481,8 +480,8 @@ class RouteEditor {
 			theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
 			theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
 			routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
-				.then ( ( ) => { this.#onRoutingOk ( );} )
-				.catch ( ( ) => { this.#onRoutingError ( );} );
+				.then ( ( ) => { this.#onRoutingOk ( ); } )
+				.catch ( ( ) => { this.#onRoutingError ( ); } );
 		}
 	}
 

@@ -72,8 +72,6 @@ import { ROUTE_EDITION_STATUS, DISTANCE, ZERO, INVALID_OBJ_ID } from '../util/Co
 
 const OUR_OBJ_TYPE = new ObjType ( 'Route' );
 
-
-
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
@@ -87,7 +85,7 @@ const OUR_OBJ_TYPE = new ObjType ( 'Route' );
 class Route {
 
 	#objId = INVALID_OBJ_ID;;
-	
+
 	/**
 	Performs the upgrade
 	@param {Object} route a route to upgrade
@@ -170,7 +168,7 @@ class Route {
 		);
 		return something;
 	}
-	
+
 	constructor ( ) {
 
 		/**

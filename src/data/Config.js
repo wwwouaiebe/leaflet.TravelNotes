@@ -74,11 +74,11 @@ import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 */
 
 class Config {
-	
+
 	/**
 	The default configuration
 	*/
-	
+
 	/* eslint-disable no-magic-numbers */
 	#config = {
 		APIKeys : {
@@ -360,7 +360,9 @@ class Config {
 				else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
 					if ( 'string' === typeof ( target [ property ] ) ) {
 						if ( 'color' === property ) {
-							target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] ) || target [ property ];
+							target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] )
+								||
+								target [ property ];
 						}
 						else if ( 'url' === property ) {
 							target [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
@@ -616,7 +618,7 @@ class Config {
 	/**
 	Overload the default config with another config. The config can be overloaded only once!
 	*/
-	
+
 	overload ( source ) {
 		this.#copyObjectTo ( source, this.#config );
 		this.#config = this.#freeze ( this.#config );

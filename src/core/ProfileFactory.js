@@ -65,7 +65,6 @@ const OUR_RIGHT_TEXT_PROFILE = ( SVG_PROFILE.margin + SVG_PROFILE.width + SVG_PR
 const OUR_LEFT_TEXT_PROFILE = ( SVG_PROFILE.margin - SVG_PROFILE.xDeltaText ).toFixed ( ZERO );
 const OUR_BOTTOM_TEXT_PROFILE = SVG_PROFILE.margin + SVG_PROFILE.height + ( SVG_PROFILE.margin / TWO );
 
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -142,7 +141,7 @@ class ProfileFactory {
 
 		return tmpPoints;
 	}
-	
+
 	/**
 	Create a map from the tmppoints with smooth elevation
 	@private
@@ -370,7 +369,8 @@ class ProfileFactory {
 	@param {Route} route The Route to smooth
 	*/
 
-	smooth ( route ) { 
+	smooth ( route ) {
+
 		// some computations to prepare the job...
 		this.#route = route;
 		let itineraryPointsIterator = this.#route.itinerary.itineraryPoints.iterator;
@@ -423,7 +423,8 @@ class ProfileFactory {
 	@return the svg element with the profile
 	*/
 
-	createSvg ( route ) { 
+	createSvg ( route ) {
+
 		// Doing some computations for min and max elev and scale...
 		this.#route = route;
 		this.#minElev = Number.MAX_VALUE;

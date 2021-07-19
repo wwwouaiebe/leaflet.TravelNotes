@@ -71,9 +71,9 @@ const OUR_OBJ_TYPE = new ObjType ( 'Note' );
 */
 
 class Note {
-	
+
 	#objId = INVALID_OBJ_ID;;
-	
+
 	/**
 	Transform a style attribute to a class attribute for conversion from 1.13.0 to 2.0.0 version
 	@param {string} somethingText
@@ -94,7 +94,7 @@ class Note {
 			.replaceAll ( /style='fill:none;stroke:green;stroke-width:10;'/g, '' );
 		return returnValue;
 	}
-	
+
 	/**
 	Performs the upgrade
 	@param {Object} note a note to upgrade
@@ -184,7 +184,7 @@ class Note {
 		);
 		return something;
 	}
-	
+
 	constructor ( ) {
 
 		/**

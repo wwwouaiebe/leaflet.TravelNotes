@@ -68,19 +68,19 @@ const OUR_PREVIOUS = -1;
 */
 
 class CollectionIterator {
-	
+
 	/**
 	The collection used by the iterator
 	*/
-	
+
 	#collection = null;
-	
+
 	/**
 	The current index
 	*/
-	
+
 	#index = NOT_FOUND;
-	
+
 	constructor ( collection ) {
 		this.#collection = collection;
 		Object.freeze ( this );
@@ -93,7 +93,7 @@ class CollectionIterator {
 	*/
 
 	get value ( ) { return this.#index < this.#collection.length ? this.#collection.at ( this.#index ) : null; }
-	
+
 	/**
 	The object before the object pointed by the iterator or null if iterator is on the first object
 	@type {Object}
@@ -101,29 +101,29 @@ class CollectionIterator {
 	*/
 
 	get previous ( ) { return ZERO >= this.#index ? null : this.#collection.at ( this.#index - ONE ); }
-	
+
 	/**
 	The object after the object pointed by the iterator or null if iterator is on the last object
 	@type {Object}
 	@readonly
 	*/
-	
+
 	get next ( ) { return this.#index < this.#collection.length - ONE ? this.#collection.at ( this.#index + ONE ) : null; }
-	
+
 	/**
 	Move the iterator to the next object and return true when the end of the Collection is reached
 	@type {boolean}
 	@readonly
 	*/
-	
+
 	get done ( ) { return ++ this.#index >= this.#collection.length; }
-	
+
 	/**
 	returns true when the iterator is on the first object
 	@type {boolean}
 	@readonly
 	*/
-	
+
 	get first ( ) { return ZERO === this.#index; }
 
 	/**
@@ -133,13 +133,13 @@ class CollectionIterator {
 	*/
 
 	get last ( ) { return this.#index >= this.#collection.length - ONE; }
-	
+
 	/**
 	returns The position of the iterator in the Collection
 	@type {number}
 	@readonly
 	*/
-	
+
 	get index ( ) { return this.#index; }
 }
 
@@ -159,21 +159,21 @@ class Collection {
 	The array where objects are stored
 	@private
 	*/
-	
+
 	#array = [];
-	
+
 	/**
 	The class name of objects stored in the collection
 	@private
 	*/
-	
+
 	#objName = '';
-	
+
 	/*
 	The class definition of objects stored in the collection
 	@private
 	*/
-	
+
 	#classCollection = null;
 
 	/**
@@ -224,7 +224,7 @@ class Collection {
 
 		return this.#array [ index ];
 	}
-	
+
 	constructor ( classCollection ) {
 		this.#classCollection = classCollection;
 		let tmpObject = new classCollection ( );
@@ -241,13 +241,13 @@ class Collection {
 	@throws when the object type is invalid
 	*/
 
-	add ( object ) { 
+	add ( object ) {
 		if ( ( ! object.objType ) || ( ! object.objType.name ) || ( object.objType.name !== this.#objName ) ) {
 			throw new Error ( 'invalid object name for add function' );
 		}
 		this.#array.push ( object );
 	}
-	
+
 	/**
 	Search an object in the collection with the index
 	@param {!number} index The position of the desired object in the array
@@ -260,7 +260,7 @@ class Collection {
 		}
 		return null;
 	}
-	
+
 	/**
 	Executes a function on each object of the Collection and returns the final result
 	@param {function} funct The function to execute
@@ -431,7 +431,8 @@ class Collection {
 	@readonly
 	@see {@link module:Collection~CollectionIterator}
 	*/
-	get iterator ( ) { 
+
+	get iterator ( ) {
 		return new CollectionIterator ( this );
 	}
 
@@ -480,6 +481,7 @@ class Collection {
 }
 
 export default Collection;
+
 /*
 --- End of Collection.js file -------------------------------------------------------------------------------------------------
 */

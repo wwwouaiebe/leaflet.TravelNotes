@@ -68,8 +68,6 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Travel' );
 
-
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -82,7 +80,7 @@ const OUR_OBJ_TYPE = new ObjType ( 'Travel' );
 class Travel {
 
 	#objId = INVALID_OBJ_ID;
-	
+
 	/**
 	Performs the upgrade
 	@param {Object} travel a travel to upgrade
@@ -299,6 +297,7 @@ class Travel {
 }
 
 export default Travel;
+
 /*
 --- End of Travel.js file -----------------------------------------------------------------------------------------------------
 */

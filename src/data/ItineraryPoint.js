@@ -166,7 +166,7 @@ class ItineraryPoint {
 		*/
 
 		this.elev = ELEV.defaultValue;
-		
+
 		this.#objId = ObjId.nextObjId;
 
 		Object.seal ( this );
@@ -250,6 +250,7 @@ class ItineraryPoint {
 }
 
 export default ItineraryPoint;
+
 /*
 --- End of ItineraryPoint.js file ---------------------------------------------------------------------------------------------
 */

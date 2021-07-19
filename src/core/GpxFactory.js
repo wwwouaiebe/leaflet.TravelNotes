@@ -79,7 +79,6 @@ class GpxFactory {
 	*/
 
 	#addHeader ( ) {
-		
 
 		// header
 		this.#myGpxString = '<?xml version="1.0"?>' + OUR_TAB_0;
