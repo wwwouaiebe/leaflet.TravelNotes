@@ -12,6 +12,10 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"requireConfigFile": false
+	},
     "rules": {
 		"curly" : [ "warn" ],
 		"complexity" : [ "warn", 20 ],

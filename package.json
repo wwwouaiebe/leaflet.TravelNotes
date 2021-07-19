@@ -16,6 +16,8 @@
     "grunt-rollup": "latest",
     "grunt-stylelint": "latest",
     "grunt-terser": "latest",
+    "@babel/core": "latest",
+    "@babel/eslint-parser": "latest",
     "eslint": "latest",
     "rollup": "latest",
     "terser": "latest",
