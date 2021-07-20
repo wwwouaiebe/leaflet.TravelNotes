@@ -60,7 +60,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import ObjId from '../data/ObjId.js';
-import { theOsmSearchEngine } from '../core/OsmSearchEngine.js';
+import theOsmSearchEngine from '../core/OsmSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';

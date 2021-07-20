@@ -72,7 +72,7 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { newSvgIconFromOsmFactory } from '../core/SvgIconFromOsmFactory.js';
-import { newGeoCoder } from '../core/GeoCoder.js';
+import GeoCoder from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import Note from '../data/Note.js';
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
@@ -100,7 +100,7 @@ at the dialog opening
 function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	let myFocusControl = null;
-	let myGeoCoder = newGeoCoder ( );
+	let myGeoCoder = new GeoCoder ( );
 	let myLatLng = note.latLng;
 	let myPreviewNote = null;
 
@@ -270,11 +270,15 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnAddressButtonClick ( ) {
+	async function myOnAddressButtonClick ( ) {
 		myNoteDialog.okButton.classList.add ( 'TravelNotes-Hidden' );
-		myGeoCoder.getPromiseAddress ( note.latLng )
-			.then ( myOnGeocoderSucces )
-			.catch ( myOnGeocoderError );
+		let address = await myGeoCoder.getAddress ( note.latLng );
+		if ( address.statusOk ) {
+			myOnGeocoderSucces ( address );
+		}
+		else {
+			myOnGeocoderError ( );
+		}
 	}
 
 	/**

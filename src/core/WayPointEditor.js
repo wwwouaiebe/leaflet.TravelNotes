@@ -75,7 +75,7 @@ import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog.js';
-import { newGeoCoder } from '../core/GeoCoder.js';
+import GeoCoder from '../core/GeoCoder.js';
 import WayPoint from '../data/WayPoint.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
@@ -129,7 +129,7 @@ class WayPointEditor {
 	@private
 	*/
 
-	#renameWayPointWithGeocoder ( latLng, wayPointObjId ) {
+	async #renameWayPointWithGeocoder ( latLng, wayPointObjId ) {
 		if ( ! theConfig.wayPoint.reverseGeocoding ) {
 			theEventDispatcher.dispatch ( 'setrouteslist' );
 			theEventDispatcher.dispatch ( 'showitinerary' );
@@ -137,28 +137,18 @@ class WayPointEditor {
 			return;
 		}
 
-		let geoCoder = newGeoCoder ( );
-		geoCoder.getPromiseAddress ( latLng )
-			.then (
-				geoCoderData => {
-					let address = geoCoderData.street;
-					if ( '' !== geoCoderData.city ) {
-						address += ' ' + geoCoderData.city;
-					}
-					let wayPointName = '';
-					if ( theConfig.wayPoint.geocodingIncludeName ) {
-						wayPointName = geoCoderData.name;
-					}
-					this.#renameWayPoint ( Object.seal ( { name : wayPointName, address : address } ), wayPointObjId );
-				}
-			)
-			.catch (
-				err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-				}
-			);
+		let address = await new GeoCoder ( ).getAddress ( latLng );
+		if ( address.statusOk ) {
+			let addressString = address.street;
+			if ( '' !== address.city ) {
+				addressString += ' ' + address.city;
+			}
+			let wayPointName = '';
+			if ( theConfig.wayPoint.geocodingIncludeName ) {
+				wayPointName = address.name;
+			}
+			this.#renameWayPoint ( Object.seal ( { name : wayPointName, address : addressString } ), wayPointObjId );
+		}
 	}
 
 	constructor ( ) {

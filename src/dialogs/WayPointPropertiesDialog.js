@@ -50,7 +50,7 @@ Tests ...
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
-import { newGeoCoder } from '../core/GeoCoder.js';
+import GeoCoder from '../core/GeoCoder.js';
 import theConfig from '../data/Config.js';
 
 /**
@@ -120,36 +120,26 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnResetAddressButtonClick ( clickEvent ) {
+	async function myOnResetAddressButtonClick ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		if ( ! theConfig.wayPoint.reverseGeocoding ) {
 			return;
 		}
 
 		myWayPointPropertiesDialog.okButton.classList.add ( 'TravelNotes-Hidden' );
-		let geoCoder = newGeoCoder ( );
-		geoCoder.getPromiseAddress ( wayPoint.latLng )
-			.then (
-				geoCoderData => {
-					myWayPointPropertiesDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
-					if ( theConfig.wayPoint.geocodingIncludeName ) {
-						myNameInput.value = geoCoderData.name;
-					}
-					let address = geoCoderData.street;
-					if ( '' !== geoCoderData.city ) {
-						address += ' ' + geoCoderData.city;
-					}
-					myAddressInput.value = address;
-				}
-			)
-			.catch (
-				err => {
-					myWayPointPropertiesDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-				}
-			);
+		let geoCoder = new GeoCoder ( );
+		let address = await geoCoder.getAddress ( wayPoint.latLng );
+		myWayPointPropertiesDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
+		if ( address.statusOk ) {
+			if ( theConfig.wayPoint.geocodingIncludeName ) {
+				myNameInput.value = address.name;
+			}
+			let addressString = address.street;
+			if ( '' !== address.city ) {
+				addressString += ' ' + address.city;
+			}
+			myAddressInput.value = addressString;
+		}
 	}
 
 	/**

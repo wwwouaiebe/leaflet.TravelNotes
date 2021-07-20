@@ -79,7 +79,7 @@ import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
-import { newGeoCoder } from '../core/GeoCoder.js';
+import GeoCoder from '../core/GeoCoder.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS, LAT_LNG } from '../util/Constants.js';
 
@@ -463,13 +463,13 @@ class NoteEditor {
 			this.#waitUI.showInfo ( 'Creating address' );
 			let geoCoderData = null;
 			try {
-				geoCoderData = await newGeoCoder ( ).getPromiseAddress ( [ data.osmElement.lat, data.osmElement.lon ] );
+				geoCoderData = await new GeoCoder ( ).getAddress ( [ data.osmElement.lat, data.osmElement.lon ] );
 			}
 			catch ( err ) {
 				console.error ( err );
 			}
 			this.#waitUI.close ( );
-			if ( geoCoderData ) {
+			if ( geoCoderData.statusOk ) {
 				note.address = geoCoderData.street;
 				if ( '' !== geoCoderData.city ) {
 					note.address +=
