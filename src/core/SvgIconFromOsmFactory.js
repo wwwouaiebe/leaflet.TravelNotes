@@ -74,16 +74,10 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { theTranslator } from '../UI/Translator.js';
+import SvgMapBuilder from '../core/SvgMapBuilder.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
-import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, DEGREES } from '../util/Constants.js';
+import { ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, DEGREES } from '../util/Constants.js';
 
-let ourRequestStarted = false;
-const OUR_QUERY_DISTANCE = Math.max (
-	theConfig.geoCoder.distances.hamlet,
-	theConfig.geoCoder.distances.village,
-	theConfig.geoCoder.distances.city,
-	theConfig.geoCoder.distances.town
-);
 const OUR_ICON_POSITION = Object.freeze ( {
 	atStart : -ONE,
 	onRoute : ZERO,
@@ -115,7 +109,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	let myNearestItineraryPoint = null;
 	let myRoute = null;
 
-	let mySvg = null;
 	let myPositionOnRoute = OUR_ICON_POSITION.onRoute;
 	let myTranslation = [ ZERO, ZERO ];
 	let myRotation = ZERO;
@@ -590,234 +583,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myCreateRoute
-	@desc This function create the SVG polyline for the route
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateRoute ( ) {
-
-		// to avoid a big svg, all points outside the svg viewBox are not added
-		let index = -ONE;
-		let firstPointIndex = NOT_FOUND;
-		let lastPointIndex = NOT_FOUND;
-		let points = [];
-		myRoute.itinerary.itineraryPoints.forEach (
-			itineraryPoint => {
-				index ++;
-				let point = theGeometry.addPoints ( theGeometry.project ( itineraryPoint.latLng, mySvgZoom ), myTranslation );
-				points.push ( point );
-				let pointIsInside =
-					point [ ZERO ] >= ZERO && point [ ONE ] >= ZERO
-					&&
-					point [ ZERO ] <= ICON_DIMENSIONS.svgViewboxDim
-					&&
-					point [ ONE ] <= ICON_DIMENSIONS.svgViewboxDim;
-				if ( pointIsInside ) {
-					if ( NOT_FOUND === firstPointIndex ) {
-						firstPointIndex = index;
-					}
-					lastPointIndex = index;
-				}
-			}
-		);
-		if ( NOT_FOUND !== firstPointIndex && NOT_FOUND !== lastPointIndex ) {
-			if ( ZERO < firstPointIndex ) {
-				firstPointIndex --;
-			}
-			if ( myRoute.itinerary.itineraryPoints.length - ONE > lastPointIndex ) {
-				lastPointIndex ++;
-			}
-			let pointsAttribute = '';
-			for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-				pointsAttribute += points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
-					points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
-			}
-			let polyline = document.createElementNS ( SVG_NS, 'polyline' );
-			polyline.setAttributeNS ( null, 'points', pointsAttribute );
-			polyline.setAttributeNS ( null, 'class', 'TravelNotes-OSM-Itinerary' );
-			polyline.setAttributeNS (
-				null,
-				'transform',
-				'rotate(' + myRotation +
-					',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO ) +
-					',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO )
-					+ ')'
-			);
-			mySvg.appendChild ( polyline );
-		}
-
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateWays
-	@desc This function creates the ways from OSM
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateWays ( ) {
-
-		// to avoid a big svg, all points outside the svg viewBox are not added
-		myOverpassAPIDataLoader.ways.forEach (
-			way => {
-				let firstPointIndex = NOT_FOUND;
-				let lastPointIndex = NOT_FOUND;
-				let index = -ONE;
-				let points = [ ];
-				way.nodes.forEach (
-					nodeId => {
-						index ++;
-						let node = myOverpassAPIDataLoader.nodes.get ( nodeId );
-						let point = theGeometry.addPoints (
-							theGeometry.project ( [ node.lat, node.lon ], mySvgZoom ),
-							myTranslation
-						);
-						points.push ( point );
-						let pointIsInside =
-							point [ ZERO ] >= ZERO
-							&&
-							point [ ONE ] >= ZERO
-							&&
-							point [ ZERO ] <= ICON_DIMENSIONS.svgViewboxDim
-							&&
-							point [ ONE ] <= ICON_DIMENSIONS.svgViewboxDim;
-						if ( pointIsInside ) {
-							if ( NOT_FOUND === firstPointIndex ) {
-								firstPointIndex = index;
-							}
-							lastPointIndex = index;
-						}
-					}
-				);
-				if ( NOT_FOUND !== firstPointIndex && NOT_FOUND !== lastPointIndex ) {
-					if ( ZERO < firstPointIndex ) {
-						firstPointIndex --;
-					}
-					if ( way.nodes.length - ONE > lastPointIndex ) {
-						lastPointIndex ++;
-					}
-					let pointsAttribute = '';
-					for ( index = firstPointIndex; index <= lastPointIndex; index ++ ) {
-						pointsAttribute +=
-							points[ index ] [ ZERO ].toFixed ( ZERO ) + ',' +
-							points[ index ] [ ONE ].toFixed ( ZERO ) + ' ';
-					}
-
-					let polyline = document.createElementNS ( SVG_NS, 'polyline' );
-					polyline.setAttributeNS ( null, 'points', pointsAttribute );
-					polyline.setAttributeNS (
-						null,
-						'class',
-						'TravelNotes-OSM-Highway TravelNotes-OSM-Highway-' + way.tags.highway
-					);
-					polyline.setAttributeNS (
-						null,
-						'transform',
-						'rotate(' + myRotation +
-							',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO ) +
-							',' + ( ICON_DIMENSIONS.svgViewboxDim / TWO ) +
-							')'
-					);
-
-					mySvg.appendChild ( polyline );
-				}
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateRcnRef
-	@desc This function creates the RcnRef from OSM
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateRcnRef ( ) {
-		const Y_TEXT = 0.6;
-		if ( '' === myRcnRef ) {
-			return;
-		}
-		let svgText = document.createElementNS ( SVG_NS, 'text' );
-		svgText.textContent = myRcnRef;
-		svgText.setAttributeNS ( null, 'x', String ( ICON_DIMENSIONS.svgViewboxDim / TWO ) );
-		svgText.setAttributeNS ( null, 'y', String ( ICON_DIMENSIONS.svgViewboxDim * Y_TEXT ) );
-		svgText.setAttributeNS ( null, 'class', 'TravelNotes-OSM-RcnRef' );
-		mySvg.appendChild ( svgText );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateSvg
-	@desc This function creates the SVG
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateSvg ( ) {
-		const FOUR = 4;
-		mySvg = document.createElementNS ( SVG_NS, 'svg' );
-		mySvg.setAttributeNS (
-			null,
-			'viewBox',
-			String ( ICON_DIMENSIONS.svgViewboxDim / FOUR ) + ' ' +
-			( ICON_DIMENSIONS.svgViewboxDim / FOUR ) + ' ' +
-			( ICON_DIMENSIONS.svgViewboxDim / TWO ) + ' ' +
-			( ICON_DIMENSIONS.svgViewboxDim / TWO )
-		);
-		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-SvgIcon' );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myBuildIconAndAdress
-	@desc Search and build all the needed data
-	@param {function} onOk The success handler passed to the Promise
-	@param {function} onError The error handler passed to the Promise
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myBuildIconAndAdress ( ) {
-		myCreateSvg ( );
-		myComputeTranslation ( );
-		myComputeRotationAndDirection ( );
-		mySetDirectionArrowAndTooltip ( );
-		mySearchPassingStreets ( );
-		myCreateRoute ( );
-		myCreateWays ( );
-		myCreateRcnRef ( );
-
-		ourRequestStarted = false;
-
-		return Object.freeze (
-			{
-				statusOk : true,
-				svg : mySvg,
-				tooltip : myTooltip,
-				city : myOverpassAPIDataLoader.city,
-				place : myOverpassAPIDataLoader.place,
-				streets : myStreets,
-				latLng : myNearestItineraryPoint.latLng
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@class
 	@classdesc This class is used to create  an svg icon for a route note
 	@see {@link newSvgIconFromOsmFactory} for constructor
@@ -828,6 +593,51 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 	class SvgIconFromOsmFactory {
 
+		#queryDistance = Math.max (
+			theConfig.geoCoder.distances.hamlet,
+			theConfig.geoCoder.distances.village,
+			theConfig.geoCoder.distances.city,
+			theConfig.geoCoder.distances.town
+		);
+
+		#requestStarted = false;
+
+		/**
+		Search and build all the needed data
+		@param {function} onOk The success handler passed to the Promise
+		@param {function} onError The error handler passed to the Promise
+		@private
+		*/
+
+		#buildIconAndAdress ( ) {
+			myComputeTranslation ( );
+			myComputeRotationAndDirection ( );
+			mySetDirectionArrowAndTooltip ( );
+			mySearchPassingStreets ( );
+
+			let MapIconData = {
+				translation : myTranslation,
+				rotation : myRotation,
+				rcnRef : myRcnRef
+			};
+			let svgMapBuilder = new SvgMapBuilder ( );
+			let svgElement = svgMapBuilder.buildSvg ( myRoute, myOverpassAPIDataLoader, MapIconData );
+
+			this.#requestStarted = false;
+
+			return Object.freeze (
+				{
+					statusOk : true,
+					svg : svgElement,
+					tooltip : myTooltip,
+					city : myOverpassAPIDataLoader.city,
+					place : myOverpassAPIDataLoader.place,
+					streets : myStreets,
+					latLng : myNearestItineraryPoint.latLng
+				}
+			);
+		}
+
 		constructor ( ) {
 			Object.freeze ( this );
 		}
@@ -836,7 +646,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			mySvgLatLngDistance.latLng = iconLatLng;
 			myRoute = theDataSearchEngine.getRoute ( routeObjId );
 
-			if ( ourRequestStarted ) {
+			if ( this.#requestStarted ) {
 				return Object.freeze (
 					{
 						statusOk : false
@@ -844,9 +654,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				);
 			}
 
-			ourRequestStarted = true;
-
-			mySvg = null;
+			this.#requestStarted = true;
 			myDirectionArrow = ' ';
 			myTooltip = '';
 			myStreets = '';
@@ -859,11 +667,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
 
 			/*
-			Sample of request:
-
-			https://lz4.overpass-api.de/api/interpreter?
-			data=
-				[out:json][timeout:40];
+			Sample of query:
 				way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;
 				is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
 				node(around:1500,50.644242,5.572354)[place];out;
@@ -874,12 +678,12 @@ function ourNewSvgIconFromOsmFactory ( ) {
 				( ICON_DIMENSIONS.svgViewboxDim * OUR_SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
 				',' + queryLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
 				'is_in(' + queryLatLng + ')->.e;area.e[admin_level][boundary="administrative"];out;' +
-				'node(around:' + OUR_QUERY_DISTANCE + ',' + queryLatLng + ')[place];out;'
+				'node(around:' + this.#queryDistance + ',' + queryLatLng + ')[place];out;'
 			];
 
 			await myOverpassAPIDataLoader.loadData ( queries, mySvgLatLngDistance.latLng );
 			if ( myOverpassAPIDataLoader.statusOk ) {
-				return myBuildIconAndAdress ( );
+				return this.#buildIconAndAdress ( );
 			}
 			return Object.freeze (
 				{
