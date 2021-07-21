@@ -163,13 +163,13 @@ function ourAddHtmlEntities ( htmlString ) {
 
 function ourSanitizeToJsString ( stringToSanitize ) {
 	let parseResult = OUR_PARSER.parseFromString ( '<div>' + stringToSanitize + '</div>', 'text/html' );
-	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
+	if ( ! parseResult || '\u0023document' !== parseResult.nodeName ) {
 		return '';
 	}
 	let resultNode = parseResult.body.firstChild;
 	let sanitizedString = '';
 	for ( let nodeCounter = 0; nodeCounter < resultNode.childNodes.length; nodeCounter ++ ) {
-		if ( '#text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
+		if ( '\u0023text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
 			sanitizedString += resultNode.childNodes [ nodeCounter ].nodeValue;
 		}
 		else {
@@ -204,13 +204,13 @@ null (in this case 'href' is used as default)
 
 function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 	let parseResult = OUR_PARSER.parseFromString ( '<div>' + urlString + '</div>', 'text/html' );
-	if ( ! parseResult || '#document' !== parseResult.nodeName ) {
+	if ( ! parseResult || '\u0023document' !== parseResult.nodeName ) {
 		return { url : '', errorsString : 'Parsing error' };
 	}
 	let resultNode = parseResult.body.firstChild;
 	let newUrlString = '';
 	for ( let nodeCounter = 0; nodeCounter < resultNode.childNodes.length; nodeCounter ++ ) {
-		if ( '#text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
+		if ( '\u0023text' === resultNode.childNodes [ nodeCounter ].nodeName ) {
 			newUrlString += resultNode.childNodes [ nodeCounter ].nodeValue;
 		}
 		else {
@@ -244,7 +244,7 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 		validProtocols.push ( 'mailto:' );
 		validProtocols.push ( 'sms:' );
 		validProtocols.push ( 'tel:' );
-		let urlHash = newUrlString.match ( /^#\w*/ );
+		let urlHash = newUrlString.match ( /^\u0023\w*/ );
 		if ( urlHash && newUrlString === urlHash [ ZERO ] ) {
 			return { url : newUrlString, errorsString : '' };
 		}
@@ -263,7 +263,7 @@ function ourSanitizeUrl ( urlString, attributeName = 'href' ) {
 		return { url : '', errorsString : 'Invalid protocol ' + url.protocol };
 	}
 	if ( NOT_FOUND !== [ 'sms:', 'tel:' ].indexOf ( url.protocol ) ) {
-		if ( url.pathname.match ( /^\+[0-9,*,#]*$/ ) ) {
+		if ( url.pathname.match ( /^\+[0-9,*,\u0023]*$/ ) ) {
 			return { url : newUrlString, errorsString : '' };
 		}
 	}
@@ -356,14 +356,14 @@ function ourSanitizeToHtmlElement ( htmlString, targetNode ) {
 				newNode.appendChild ( newChildNode );
 				cloneNode ( currentNode, newChildNode );
 			}
-			else if ( '#text' === nodeName ) {
+			else if ( '\u0023text' === nodeName ) {
 				newNode.appendChild ( document.createTextNode ( currentNode.nodeValue ) );
 			}
 		}
 	}
 
 	let parseResult = OUR_PARSER.parseFromString ( '<div>' + htmlString + '</div>', 'text/html' );
-	if ( parseResult && '#document' === parseResult.nodeName ) {
+	if ( parseResult && '\u0023document' === parseResult.nodeName ) {
 		cloneNode ( parseResult.body.firstChild, targetNode );
 	}
 	else {
@@ -448,7 +448,7 @@ function ourSanitizeToHtmlString ( htmlString ) {
 				ourStringify ( currentNode );
 				targetString += '</' + nodeName + '>';
 			}
-			else if ( '#text' === nodeName ) {
+			else if ( '\u0023text' === nodeName ) {
 				targetString += ourAddHtmlEntities ( currentNode.nodeValue );
 			}
 			else {
@@ -472,7 +472,7 @@ function ourSanitizeToHtmlString ( htmlString ) {
 
 	let parseResult =
 		OUR_PARSER.parseFromString ( '<div>' + htmlString.replace ( '&nbsp;', '\u0a00' ) + '</div>', 'text/html' );
-	if ( parseResult && '#document' === parseResult.nodeName ) {
+	if ( parseResult && '\u0023document' === parseResult.nodeName ) {
 		ourStringify ( parseResult.body.firstChild );
 		return { htmlString : targetString, errorsString : errorsString };
 	}
@@ -494,13 +494,13 @@ present in the string.
 class HTMLSanitizer {
 
 	/**
-	This method verify that a string describe a css color. A valid css color must start with a # followed by 6 hex numbers
+	This method verify that a string describe a css color. A valid css color must start with a hash followed by 6 hex numbers
 	@param {string} colorString the string to test
 	@return {string} the verified color or null if the given color is invalid
 	*/
 
 	sanitizeToColor ( colorString ) {
-		let newColor = colorString.match ( /^#[0-9,A-F,a-f]{6}$/ );
+		let newColor = colorString.match ( /^\u0023[0-9,A-F,a-f]{6}$/ );
 		if ( newColor ) {
 			return newColor [ ZERO ];
 		}

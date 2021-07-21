@@ -54,8 +54,8 @@ let ourShowRouteNotes = true;
 let ourShowManeuversNotes = false;
 let OurSaveButton = null;
 let ourSaveDiv = null;
-let ourMenu = document.querySelector ( '#TravelNotes-Roadbook-Menu' );
-let ourTravelNotesDiv = document.querySelector ( '#TravelNotes' );
+let ourMenu = document.getElementById ( 'TravelNotes-Roadbook-Menu' );
+let ourTravelNotesDiv = document.getElementById ( 'TravelNotes' );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -266,11 +266,11 @@ function ourOpenIndexedDb ( ) {
 */
 
 function ourTranslatePage ( ) {
-	document.querySelector ( '#TravelNotes-Travel-ShowNotesLabel' ).textContent =
+	document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
 	theTranslator.getText ( 'Roadbook - show travel notes' );
-	document.querySelector ( '#TravelNotes-Routes-ShowManeuversLabel' ).textContent =
+	document.getElementById ( 'TravelNotes-Routes-ShowManeuversLabel' ).textContent =
 	theTranslator.getText ( 'Roadbook - show maneuver' );
-	document.querySelector ( '#TravelNotes-Routes-ShowNotesLabel' ).textContent =
+	document.getElementById ( 'TravelNotes-Routes-ShowNotesLabel' ).textContent =
 	theTranslator.getText ( 'Roadbook - show routes notes' );
 	if ( OurSaveButton ) {
 		OurSaveButton.textContent = theTranslator.getText ( 'Roadbook - Save' );
@@ -426,12 +426,12 @@ function ourOnShowManeuverNotesChange ( changeEvent ) {
 */
 
 function ourMain ( ) {
-	document.querySelector ( '#TravelNotes-Travel-ShowNotes' ).checked = ourShowTravelNotes;
-	document.querySelector ( '#TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change', ourOnShowTravelNotesChange );
-	document.querySelector ( '#TravelNotes-Routes-ShowNotes' ).checked = ourShowRouteNotes;
-	document.querySelector ( '#TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', ourOnShowRouteNotesChange );
-	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' ).checked = ourShowManeuversNotes;
-	document.querySelector ( '#TravelNotes-Routes-ShowManeuvers' )
+	document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked = ourShowTravelNotes;
+	document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).addEventListener ( 'change', ourOnShowTravelNotesChange );
+	document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked = ourShowRouteNotes;
+	document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).addEventListener ( 'change', ourOnShowRouteNotesChange );
+	document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked = ourShowManeuversNotes;
+	document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' )
 		.addEventListener ( 'change', ourOnShowManeuverNotesChange );
 
 	if ( ourPageId ) {

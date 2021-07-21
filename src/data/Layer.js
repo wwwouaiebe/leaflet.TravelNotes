@@ -194,9 +194,9 @@ class Layer	{
 			this.toolbar = jsonLayer.toolbar;
 			this.toolbar.text = theHTMLSanitizer.sanitizeToJsString ( this.toolbar.text );
 			this.toolbar.color =
-				theHTMLSanitizer.sanitizeToColor ( this.toolbar.color ) || '#000000';
+				theHTMLSanitizer.sanitizeToColor ( this.toolbar.color ) || '\u0023000000';
 			this.toolbar.backgroundColor =
-				theHTMLSanitizer.sanitizeToColor ( this.toolbar.backgroundColor ) || '#ffffff';
+				theHTMLSanitizer.sanitizeToColor ( this.toolbar.backgroundColor ) || '\u0023ffffff';
 		}
 		else {
 			throw new Error ( 'invalid toolbar for layer ' + this.name );

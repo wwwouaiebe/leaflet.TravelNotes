@@ -87,7 +87,7 @@ function ourNewWaitUI ( ) {
 		*/
 
 		createUI ( ) {
-			if ( document.querySelector ( '#TravelNotes-WaitUI' ) ) {
+			if ( document.getElementById ( 'TravelNotes-WaitUI' ) ) {
 				return;
 			}
 			myBackgroundDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-Background' }, document.body );

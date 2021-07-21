@@ -119,7 +119,7 @@ class Config {
 		},
 		geoLocation : {
 			marker : {
-				color : '#ff0000',
+				color : '\u0023ff0000',
 				radius : 11
 			},
 			options : {
@@ -137,7 +137,7 @@ class Config {
 		},
 		itineraryPoint : {
 			marker : {
-				color : '#ff0000',
+				color : '\u0023ff0000',
 				fill : false,
 				radius : 7,
 				weight : 2
@@ -176,7 +176,7 @@ class Config {
 			haveBackground : false,
 			maxManeuversNotes : 100,
 			polyline : {
-				color : '#808080',
+				color : '\u0023808080',
 				weight : 1
 			},
 			reverseGeocoding : false,
@@ -218,23 +218,23 @@ class Config {
 		},
 		osmSearch : {
 			nextSearchLimit : {
-				color : '#ff0000',
+				color : '\u0023ff0000',
 				fill : false,
 				weight : 1
 			},
 			previousSearchLimit : {
-				color : '#006400',
+				color : '\u0023006400',
 				fill : false,
 				weight : 1
 			},
 			searchPointMarker : {
-				color : '#006400',
+				color : '\u0023006400',
 				fill : false,
 				radius : 20,
 				weight : 4
 			},
 			searchPointPolyline : {
-				color : '#006400',
+				color : '\u0023006400',
 				fill : false,
 				weight : 4
 			},
@@ -255,14 +255,14 @@ class Config {
 			borderWidth : 30,
 			zoomFactor : 15,
 			entryPointMarker : {
-				color : '#00ff00',
+				color : '\u002300ff00',
 				weight : 4,
 				radius : 10,
 				fill : true,
 				fillOpacity : 1
 			},
 			exitPointMarker : {
-				color : '#ff0000',
+				color : '\u0023ff0000',
 				weight : 4,
 				radius : 10,
 				fill : true,
@@ -270,7 +270,7 @@ class Config {
 			}
 		},
 		route : {
-			color : '#ff0000',
+			color : '\u0023ff0000',
 			dashArray : 0,
 			dashChoices : [
 				{

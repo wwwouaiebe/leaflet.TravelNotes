@@ -341,7 +341,7 @@ class Route {
 		this.notes.jsonObject = otherthing.notes || [];
 		this.itinerary.jsonObject = otherthing.itinerary || new Itinerary ( ).jsonObject;
 		this.width = otherthing.width || theConfig.route.width;
-		this.color = otherthing.color || '#000000';
+		this.color = otherthing.color || '\u0023000000';
 		this.dashArray = otherthing.dashArray || ZERO;
 		this.chain = otherthing.chain || false;
 		this.distance = otherthing.distance;

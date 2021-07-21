@@ -111,7 +111,7 @@ class Color {
 	*/
 
 	get cssColor ( ) {
-		return '#' +
+		return '\u0023' +
 			this.red.toString ( HEXADECIMAL ).padStart ( TWO, '0' ) +
 			this.green.toString ( HEXADECIMAL ).padStart ( TWO, '0' ) +
 			this.blue.toString ( HEXADECIMAL ).padStart ( TWO, '0' );

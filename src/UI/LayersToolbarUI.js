@@ -72,8 +72,8 @@ let ourLayers = [
 			toolbar :
 			{
 				text : 'OSM',
-				color : '#ff0000',
-				backgroundColor : '#ffffff'
+				color : '\u0023ff0000',
+				backgroundColor : '\u0023ffffff'
 			},
 			providerName : 'OSM',
 			providerKeyNeeded : false,

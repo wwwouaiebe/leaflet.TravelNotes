@@ -21,7 +21,7 @@ Changes:
 	- v1.2.0:
 		- created
 	- v2.0.0:
-		- Issue ♯147 : Add the travel name to gpx file name #147
+		- Issue ♯147 : Add the travel name to gpx file name
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210715

@@ -142,7 +142,7 @@ function ourGetNoteTextHTML ( classPrefix, noteAndRoute ) {
 
 	if ( ZERO !== note.phone.length ) {
 		let phoneText = note.phone;
-		if ( note.phone.match ( /^\+[0-9, ,*,#]*$/ ) ) {
+		if ( note.phone.match ( /^\+[0-9, ,*,\u0023]*$/ ) ) {
 			let phoneNumber = note.phone.replaceAll ( /\u0020/g, '' );
 			let phoneNumberDisplay = note.phone.replaceAll ( /\u0020/g, '\u00a0' );
 			phoneText =
@@ -331,7 +331,7 @@ function ourGetTravelHeaderHTML ( classPrefix ) {
 				routesIterator.value;
 
 		theHTMLSanitizer.sanitizeToHtmlElement (
-			'<a href="#route' + route.objId + '" >' + route.computedName +
+			'<a href="\u0023route' + route.objId + '" >' + route.computedName +
 			'</a>\u00a0:\u00a0' + theUtilities.formatDistance ( route.distance ) + '.',
 			theHTMLElementsFactory.create (
 				'div',
