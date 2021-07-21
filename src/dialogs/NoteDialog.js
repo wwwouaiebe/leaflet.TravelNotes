@@ -340,7 +340,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnPredefinedIconListSelectChange ( changeEvent ) {
+	async function myOnPredefinedIconListSelectChange ( changeEvent ) {
 
 		let preDefinedIcon = theNoteDialogToolbar.getIconData ( changeEvent.target.selectedIndex );
 
@@ -352,9 +352,13 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			}
 			else {
 				myNoteDialog.showWait ( );
-				newSvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( note.latLng, routeObjId )
-					.then ( myOnSvgIconSuccess )
-					.catch ( myOnSvgIconError );
+				let svgIconData = await newSvgIconFromOsmFactory ( ).getIconAndAdress ( note.latLng, routeObjId );
+				if ( svgIconData.statusOk ) {
+					myOnSvgIconSuccess ( svgIconData );
+				}
+				else {
+					myOnSvgIconError ( );
+				}
 			}
 		}
 		else {

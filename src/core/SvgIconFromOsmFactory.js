@@ -74,10 +74,8 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { theTranslator } from '../UI/Translator.js';
-import {
-	SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, HTTP_STATUS_OK, DEGREES, OSM_COUNTRY_ADMIN_LEVEL
-}
-	from '../util/Constants.js';
+import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
+import { SVG_NS, ICON_DIMENSIONS, LAT_LNG, DISTANCE, ZERO, ONE, TWO, NOT_FOUND, DEGREES } from '../util/Constants.js';
 
 let ourRequestStarted = false;
 const OUR_QUERY_DISTANCE = Math.max (
@@ -108,7 +106,6 @@ const OUR_SEARCH_AROUND_FACTOR = 1.5;
 /* eslint-disable-next-line max-statements */
 function ourNewSvgIconFromOsmFactory ( ) {
 
-	let myOsmCityAdminLevel = theConfig.geoCoder.osmCityAdminLevel.DEFAULT;
 	let mySvgLatLngDistance = Object.seal (
 		{
 			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
@@ -117,12 +114,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	);
 	let myNearestItineraryPoint = null;
 	let myRoute = null;
-	let myWaysMap = new Map ( );
-	let myNodesMap = new Map ( );
-	let myAdminNames = [];
-	let myPlaces = {};
-	let myPlace = null;
-	let myCity = null;
+
 	let mySvg = null;
 	let myPositionOnRoute = OUR_ICON_POSITION.onRoute;
 	let myTranslation = [ ZERO, ZERO ];
@@ -135,134 +127,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	let myStreets = '';
 	let myRcnRef = '';
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function mySetHamletAndCity
-	@desc this function search the city and hamlet
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function mySetHamletAndCity ( ) {
-		myCity = null;
-		let adminHamlet = null;
-
-		for ( let namesCounter = TWO; namesCounter < myAdminNames.length; namesCounter ++ ) {
-			if ( 'undefined' !== typeof ( myAdminNames [ namesCounter ] ) ) {
-				if ( myOsmCityAdminLevel >= namesCounter ) {
-					myCity = myAdminNames [ namesCounter ];
-				}
-				else {
-					adminHamlet = myAdminNames [ namesCounter ];
-				}
-			}
-		}
-		myPlace = null;
-		let placeDistance = Number.MAX_VALUE;
-
-		Object.values ( myPlaces ).forEach (
-			place => {
-				if ( place.distance < placeDistance ) {
-					placeDistance = place.distance;
-					myPlace = place.name;
-				}
-			}
-		);
-
-		myPlace = adminHamlet || myPlace;
-		if ( myPlace === myCity ) {
-			myPlace = null;
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateNodesAndWaysMaps
-	@desc This function create the way and node JS maps from the overpassAPI response and extract city and myPlaces
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateNodesAndWaysMaps ( overpassAPIdata ) {
-		myWaysMap.clear ( );
-		myNodesMap.clear ( );
-		myAdminNames = [];
-		myPlaces = {
-			hamlet : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.hamlet
-			},
-			village : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.village
-			},
-			city : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.city
-			},
-			town : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.town
-			}
-		};
-		overpassAPIdata.elements.forEach (
-			element => {
-				switch ( element.type ) {
-				case 'area' :
-					{
-						let elementName = element.tags.name;
-						if (
-							theConfig.nominatim.language &&
-							'*' !== theConfig.nominatim.language &&
-							element.tags [ 'name:' + theConfig.nominatim.language ]
-						) {
-							elementName = element.tags [ 'name:' + theConfig.nominatim.language ];
-						}
-						myAdminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
-						if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
-							myOsmCityAdminLevel =
-								theConfig.geoCoder.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || myOsmCityAdminLevel;
-						}
-					}
-					break;
-				case 'way' :
-					element.nodesIds = element.nodes;
-					delete element.nodes;
-					myWaysMap.set ( element.id, element );
-					break;
-				case 'node' :
-					myNodesMap.set ( element.id, element );
-					if (
-						element.tags &&
-						element.tags.place &&
-						myPlaces [ element.tags.place ] &&
-						element.tags.name
-					) {
-						let nodeDistance = theSphericalTrigonometry.pointsDistance (
-							mySvgLatLngDistance.latLng,
-							[ element.lat, element.lon ]
-						);
-						let place = myPlaces [ element.tags.place ];
-						if ( place.maxDistance > nodeDistance && place.distance > nodeDistance ) {
-							place.distance = nodeDistance;
-							place.name = element.tags.name;
-						}
-					}
-					break;
-				default :
-					break;
-				}
-			}
-		);
-	}
+	let myOverpassAPIDataLoader = new OverpassAPIDataLoader ( { searchRelations : false } );
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -382,7 +247,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		let rcnRefNode = null;
 
 		// searching in the nodes JS map the incoming, outgoing and icon nodes
-		myNodesMap.forEach (
+		myOverpassAPIDataLoader.nodes.forEach (
 			node => {
 				if ( 'bike' === myRoute.itinerary.transitMode && node.tags && node.tags.rcn_ref ) {
 					rcnRefNode = node;
@@ -414,7 +279,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			}
 		);
 
-		let iconNode = myNodesMap.get ( svgPointId );
+		let iconNode = myOverpassAPIDataLoader.nodes.get ( svgPointId );
 
 		if ( rcnRefNode ) {
 			let rcnRefDistance = theSphericalTrigonometry.pointsDistance (
@@ -448,28 +313,28 @@ function ourNewSvgIconFromOsmFactory ( ) {
 		let isRoundaboutExit = false;
 
 		// Searching  passing streets names, incoming and outgoing streets names, roundabout entry and exit
-		myWaysMap.forEach (
+		myOverpassAPIDataLoader.ways.forEach (
 			way => {
-				if ( ! way.nodesIds.includes ( svgPointId ) ) {
+				if ( ! way.nodes.includes ( svgPointId ) ) {
 					return;
 				}
 
 				let wayName = myGetWayName ( way );
 				let haveName = '' !== wayName;
 
-				let isIncomingStreet = way.nodesIds.includes ( incomingNodeId );
-				let isOutgoingStreet = way.nodesIds.includes ( outgoingNodeId );
+				let isIncomingStreet = way.nodes.includes ( incomingNodeId );
+				let isOutgoingStreet = way.nodes.includes ( outgoingNodeId );
 
 				// the same way can enter multiple times in the intersection!
-				let streetOcurrences = way.nodesIds.filter ( nodeId => nodeId === svgPointId ).length * TWO;
+				let streetOcurrences = way.nodes.filter ( nodeId => nodeId === svgPointId ).length * TWO;
 
 				// the icon is at the begining of the street
-				if ( way.nodesIds [ ZERO ] === svgPointId ) {
+				if ( way.nodes [ ZERO ] === svgPointId ) {
 					streetOcurrences --;
 				}
 
 				// the icon is at end of the street
-				if ( way.nodesIds [ way.nodesIds.length - ONE ] === svgPointId ) {
+				if ( way.nodes [ way.nodes.length - ONE ] === svgPointId ) {
 					streetOcurrences --;
 				}
 
@@ -799,16 +664,16 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	function myCreateWays ( ) {
 
 		// to avoid a big svg, all points outside the svg viewBox are not added
-		myWaysMap.forEach (
+		myOverpassAPIDataLoader.ways.forEach (
 			way => {
 				let firstPointIndex = NOT_FOUND;
 				let lastPointIndex = NOT_FOUND;
 				let index = -ONE;
 				let points = [ ];
-				way.nodesIds.forEach (
+				way.nodes.forEach (
 					nodeId => {
 						index ++;
-						let node = myNodesMap.get ( nodeId );
+						let node = myOverpassAPIDataLoader.nodes.get ( nodeId );
 						let point = theGeometry.addPoints (
 							theGeometry.project ( [ node.lat, node.lon ], mySvgZoom ),
 							myTranslation
@@ -834,7 +699,7 @@ function ourNewSvgIconFromOsmFactory ( ) {
 					if ( ZERO < firstPointIndex ) {
 						firstPointIndex --;
 					}
-					if ( way.nodesIds.length - ONE > lastPointIndex ) {
+					if ( way.nodes.length - ONE > lastPointIndex ) {
 						lastPointIndex ++;
 					}
 					let pointsAttribute = '';
@@ -916,45 +781,6 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myGetUrl
-	@desc this function creates the full url needed to have the data fromm osm
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetUrl ( ) {
-
-		/*
-		Sample of request:
-
-		https://lz4.overpass-api.de/api/interpreter?
-		data=
-			[out:json][timeout:40];
-			way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;
-			is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
-			node(around:1500,50.644242,5.572354)[place];out;
-		*/
-
-		let requestLatLng =
-			mySvgLatLngDistance.latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) +
-			',' +
-			mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
-
-		let requestUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
-			'way[highway](around:' +
-			( ICON_DIMENSIONS.svgViewboxDim * OUR_SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
-			',' + requestLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
-			'is_in(' + requestLatLng + ')->.e;area.e[admin_level][boundary="administrative"];out;' +
-			'node(around:' + OUR_QUERY_DISTANCE + ',' + requestLatLng + ')[place];out;';
-
-		return requestUrl;
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myBuildIconAndAdress
 	@desc Search and build all the needed data
 	@param {function} onOk The success handler passed to the Promise
@@ -964,10 +790,8 @@ function ourNewSvgIconFromOsmFactory ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myBuildIconAndAdress ( overpassAPIdata, onOk /* , onError */ ) {
-		myCreateNodesAndWaysMaps ( overpassAPIdata );
+	function myBuildIconAndAdress ( ) {
 		myCreateSvg ( );
-		mySetHamletAndCity ( );
 		myComputeTranslation ( );
 		myComputeRotationAndDirection ( );
 		mySetDirectionArrowAndTooltip ( );
@@ -978,69 +802,17 @@ function ourNewSvgIconFromOsmFactory ( ) {
 
 		ourRequestStarted = false;
 
-		onOk (
-			Object.freeze (
-				{
-					svg : mySvg,
-					tooltip : myTooltip,
-					city : myCity,
-					place : myPlace,
-					streets : myStreets,
-					latLng : myNearestItineraryPoint.latLng
-				}
-			)
+		return Object.freeze (
+			{
+				statusOk : true,
+				svg : mySvg,
+				tooltip : myTooltip,
+				city : myOverpassAPIDataLoader.city,
+				place : myOverpassAPIDataLoader.place,
+				streets : myStreets,
+				latLng : myNearestItineraryPoint.latLng
+			}
 		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetIconAndAdress
-	@desc This is the entry point for the icon creation
-	@param {function} onOk The success handler passed to the Promise
-	@param {function} onError The error handler passed to the Promise
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetIconAndAdress ( onOk, onError ) {
-
-		if ( ourRequestStarted ) {
-			onError ( 'A request is already running' );
-			return;
-		}
-
-		ourRequestStarted = true;
-
-		mySvg = null;
-		myCity = null;
-		myPlace = null;
-		myDirectionArrow = ' ';
-		myTooltip = '';
-		myStreets = '';
-
-		mySearchNearestItineraryPoint ( );
-
-		fetch ( myGetUrl ( ) )
-			.then (
-				response => {
-					if ( HTTP_STATUS_OK === response.status && response.ok ) {
-						response.json ( )
-							. then ( overpassAPIdata => myBuildIconAndAdress ( overpassAPIdata, onOk, onError ) )
-							.catch (
-								err => {
-									ourRequestStarted = false;
-									onError ( err );
-								}
-							);
-					}
-					else {
-						ourRequestStarted = false;
-						onError ( new Error ( 'An error occurs when callin OverpassAPI' ) );
-					}
-				}
-			);
 	}
 
 	/**
@@ -1060,18 +832,60 @@ function ourNewSvgIconFromOsmFactory ( ) {
 			Object.freeze ( this );
 		}
 
-		/**
-		this function returns a Promise for the svg icon creation
-		@param {array.<number>} iconLatLng The lat and lng where the icon must be createDocumentFragment
-		@param {!number} routeObjId the objId of the route
-		@return {Promise} A promise that fulfill with a OsmNoteData object completed
-		*/
-
-		getPromiseIconAndAdress ( iconLatLng, routeObjId ) {
+		async getIconAndAdress ( iconLatLng, routeObjId ) {
 			mySvgLatLngDistance.latLng = iconLatLng;
 			myRoute = theDataSearchEngine.getRoute ( routeObjId );
 
-			return new Promise ( myGetIconAndAdress );
+			if ( ourRequestStarted ) {
+				return Object.freeze (
+					{
+						statusOk : false
+					}
+				);
+			}
+
+			ourRequestStarted = true;
+
+			mySvg = null;
+			myDirectionArrow = ' ';
+			myTooltip = '';
+			myStreets = '';
+
+			mySearchNearestItineraryPoint ( );
+
+			let queryLatLng =
+				mySvgLatLngDistance.latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) +
+				',' +
+				mySvgLatLngDistance.latLng [ ONE ].toFixed ( LAT_LNG.fixed );
+
+			/*
+			Sample of request:
+
+			https://lz4.overpass-api.de/api/interpreter?
+			data=
+				[out:json][timeout:40];
+				way[highway](around:300,50.489312,5.501035)->.a;(.a >;.a;)->.a;.a out;
+				is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
+				node(around:1500,50.644242,5.572354)[place];out;
+			*/
+
+			let queries = [
+				'way[highway](around:' +
+				( ICON_DIMENSIONS.svgViewboxDim * OUR_SEARCH_AROUND_FACTOR ).toFixed ( ZERO ) +
+				',' + queryLatLng + ')->.a;(.a >;.a;)->.a;.a out;' +
+				'is_in(' + queryLatLng + ')->.e;area.e[admin_level][boundary="administrative"];out;' +
+				'node(around:' + OUR_QUERY_DISTANCE + ',' + queryLatLng + ')[place];out;'
+			];
+
+			await myOverpassAPIDataLoader.loadData ( queries, mySvgLatLngDistance.latLng );
+			if ( myOverpassAPIDataLoader.statusOk ) {
+				return myBuildIconAndAdress ( );
+			}
+			return Object.freeze (
+				{
+					statusOk : false
+				}
+			);
 		}
 	}
 
