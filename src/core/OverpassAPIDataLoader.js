@@ -261,6 +261,8 @@ class OverpassAPIDataLoader {
 			}
 			else {
 				this.#statusOk = false;
+				console.error ( 'An error occurs when calling theOverpassAPI: ' );
+				console.error ( results[ counter ] );
 			}
 		}
 	}
