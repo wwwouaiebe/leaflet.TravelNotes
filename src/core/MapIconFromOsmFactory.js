@@ -83,7 +83,7 @@ const SEARCH_AROUND_FACTOR = 1.5;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class MapIconFromOsmFactory
 @classdesc This class is used to create  an svg icon for a route note
 @hideconstructor
 
@@ -93,7 +93,7 @@ const SEARCH_AROUND_FACTOR = 1.5;
 class MapIconFromOsmFactory {
 
 	#route = null;
-	#overpassAPIDataLoader = new OverpassAPIDataLoader ( { searchRelations : false } );
+	#overpassAPIDataLoader = new OverpassAPIDataLoader ( { searchRelations : false, setGeometry : false } );
 
 	#mapIconPosition = Object.seal (
 		{
@@ -184,6 +184,13 @@ class MapIconFromOsmFactory {
 	constructor ( ) {
 		Object.freeze ( this );
 	}
+
+	/**
+	get the svg and the data needed for creating the icon
+	@param {Array.<number>} iconLatLng The latitude and longitude of the icon
+	@param {!number} routeObjId The objId of the route to witch the icon will be attached.
+	@return {OsmNoteData} An object with the svg and data
+	*/
 
 	async getIconAndAdress ( iconLatLng, routeObjId ) {
 		this.#mapIconPosition.latLng = iconLatLng;

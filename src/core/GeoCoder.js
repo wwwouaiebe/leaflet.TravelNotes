@@ -232,7 +232,7 @@ class GeoCoder {
 	}
 
 	/**
-	This method search an address from a llatitude and longitude
+	This method search an address from a latitude and longitude
 	@param {Array.<number>} latLng the latitude and longitude to be used to search the address
 	@return {GeoCoderAddress} the address at the given point. The GeoCoderAddress.statusOk must be verified
 	before using the data.
@@ -242,7 +242,9 @@ class GeoCoder {
 		this.#nominatimStatusOk = true;
 		this.#latLng = latLng;
 		this.#nominatimData = null;
-		this.#overpassAPIDataLoader = new OverpassAPIDataLoader ( { searchWays : false, searchRelations : false } );
+		this.#overpassAPIDataLoader = new OverpassAPIDataLoader (
+			{ searchWays : false, searchRelations : false, setGeometry : true }
+		);
 		await this.#overpassAPIDataLoader.loadData ( this.#getOverpassQueries ( ), this.#latLng );
 		await this.#loadNominatimData ( );
 		return this.#mergeData ( );

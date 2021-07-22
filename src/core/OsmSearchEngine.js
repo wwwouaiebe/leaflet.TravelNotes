@@ -61,7 +61,7 @@ import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants
 
 @class
 @classdesc This class is used to represent a branch of the dictionary tree.
-@public
+@private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 

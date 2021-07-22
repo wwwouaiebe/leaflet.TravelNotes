@@ -95,6 +95,7 @@ let ourTempWayPointShowDragTooltip = 1;
 @class
 @classdesc This class contains the event listeners for the temp waypoint
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -162,6 +163,7 @@ class TempWayPointMarkerEvents {
 @class
 @classdesc This class contains the event listeners for the waypoints
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -195,6 +197,7 @@ class WayPointEvents {
 @class
 @classdesc This class contains the event listeners for the notes bullets
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -290,6 +293,7 @@ class NoteBulletEvents {
 @class
 @classdesc This class contains the event listeners for the notes markers
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -355,6 +359,7 @@ class NoteMarkerEvents {
 @class
 @classdesc This class contains the event listeners for the edited route
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -426,6 +431,7 @@ class EditedRouteEvents {
 @class
 @classdesc This class contains the event listeners for the routes
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -446,7 +452,7 @@ class RouteEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class MapEditor
 @classdesc This class performs all the read/write updates on the map
 @extends ViewerMapEditor
 @inheritdoc

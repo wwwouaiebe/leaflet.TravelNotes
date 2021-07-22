@@ -76,7 +76,7 @@ const ICON_POSITION = Object.freeze ( {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class MapIconDataBuilder
 @classdesc This class is used to search the data needed for the map icon creation
 @hideconstructor
 

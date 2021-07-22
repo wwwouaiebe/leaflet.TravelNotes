@@ -81,6 +81,7 @@ const OUR_NOTE_Z_INDEX_OFFSET = 100;
 @class
 @classdesc This class contains the event listeners for the routes
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

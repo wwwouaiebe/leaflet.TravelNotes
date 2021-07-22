@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module SvgMapBuilder
+@module MapIconSvgBuilder
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ import { SVG_NS, ICON_DIMENSIONS, ZERO, ONE, TWO, NOT_FOUND } from '../util/Cons
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class MapIconSvgBuilder
 @classdesc This class is used to create  the svg for a map icon
 @hideconstructor
 

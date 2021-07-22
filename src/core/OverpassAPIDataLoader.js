@@ -67,7 +67,8 @@ class OverpassAPIDataLoader {
 	#options = {
 		searchPlaces : true,
 		searchWays : true,
-		searchRelations : true
+		searchRelations : true,
+		setGeometry : true
 	}
 
 	#nodes = new Map ( );
@@ -292,6 +293,8 @@ class OverpassAPIDataLoader {
 
 	/**
 	This method launch the queries in the OverpassAPI and parse the received data
+	@param {Array.<string>} queries An array of queries to be executed in the OverpassAPI
+	@param {Array.<number>} latLng The latitude and longitude used in the queries
 	*/
 
 	async loadData ( queries, latLng ) {
@@ -331,7 +334,11 @@ class OverpassAPIDataLoader {
 		this.#relations.clear ( );
 
 		await this.#overpassAPICall ( queries );
-		this.#setGeometry ( );
+
+		if ( this.#options.setGeometry ) {
+			this.#setGeometry ( );
+		}
+
 		if ( this.#options.searchPlaces ) {
 			this.#setPlaceAndCity ( );
 		}
