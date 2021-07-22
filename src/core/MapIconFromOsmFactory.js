@@ -154,16 +154,16 @@ class MapIconFromOsmFactory {
 
 	#buildIconAndAdress ( ) {
 
-		let mapIconData = new MapIconDataBuilder ( ).buildData ( 
-			this.#route, 
-			this.#overpassAPIDataLoader, 
-			this.#mapIconPosition 
+		let mapIconData = new MapIconDataBuilder ( ).buildData (
+			this.#route,
+			this.#overpassAPIDataLoader,
+			this.#mapIconPosition
 		);
 
-		let svgElement = new MapIconSvgBuilder ( ).buildSvg ( 
-			this.#route, 
-			this.#overpassAPIDataLoader, 
-			mapIconData 
+		let svgElement = new MapIconSvgBuilder ( ).buildSvg (
+			this.#route,
+			this.#overpassAPIDataLoader,
+			mapIconData
 		);
 
 		this.#requestStarted = false;

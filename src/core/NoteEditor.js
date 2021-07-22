@@ -161,19 +161,13 @@ class NoteEditor {
 			);
 
 			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-			await new MapIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
-				.then (
-					osmNoteData => {
-						this.#newNoteFromOsmData ( osmNoteData, route );
-					}
-				)
-				.catch (
-					err => {
-						if ( err instanceof Error ) {
-							console.error ( err );
-						}
-					}
-				);
+			let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdress ( latLng, route.objId );
+			if ( svgIconData.statusOk ) {
+				this.#newNoteFromOsmData ( svgIconData, route );
+			}
+			else {
+				console.error ( 'An error occurs when creating the svg icon ' + maneuverIterator.index );
+			}
 		}
 		route.notes.sort ( ( first, second ) => first.distance - second.distance );
 		theEventDispatcher.dispatch ( 'updateitinerary' );
