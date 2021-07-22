@@ -288,6 +288,62 @@
 		"msgstr" : "Drag and drop to add a waypoint or right click for the menu"
 	},
 	{
+		"msgid" : "MapIconDataBuilder - at the small roundabout on the ground",
+		"msgstr" : " at the small roundabout on the ground"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Start",
+		"msgstr" : "Start"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Stop",
+		"msgstr" : "End"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Continue",
+		"msgstr" : "Continue"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn right",
+		"msgstr" : "Turn right"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn slight right",
+		"msgstr" : "Turn slight right"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn slight left",
+		"msgstr" : "Turn slight left"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn left",
+		"msgstr" : "Turn left"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn sharp left",
+		"msgstr" : "Turn sharp left"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn sharp right",
+		"msgstr" : "Turn sharp right"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - rcnRef",
+		"msgstr" : " (node-point {rcnRef})"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - entry roundabout",
+		"msgstr" : " to enter the roundabout"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - exit roundabout",
+		"msgstr" : " to exit the roundabout"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - continue roundabout",
+		"msgstr" : " and continue in the roundabout"
+	},
+	{
 		"msgid" : "NoteContextMenu - Attach note to route",
 		"msgstr" : "transform to route note"
 	},
@@ -678,62 +734,6 @@
 	{
 		"msgid" : "SaveAsDialog - Remove Maneuvers",
 		"msgstr" : "Remove Maneuvers"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
-		"msgstr" : " at the small roundabout on the ground"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Start",
-		"msgstr" : "Start"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Stop",
-		"msgstr" : "End"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Continue",
-		"msgstr" : "Continue"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn right",
-		"msgstr" : "Turn right"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn slight right",
-		"msgstr" : "Turn slight right"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn slight left",
-		"msgstr" : "Turn slight left"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn left",
-		"msgstr" : "Turn left"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn sharp left",
-		"msgstr" : "Turn sharp left"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn sharp right",
-		"msgstr" : "Turn sharp right"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - rcnRef",
-		"msgstr" : " (node-point {rcnRef})"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - entry roundabout",
-		"msgstr" : " to enter the roundabout"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - exit roundabout",
-		"msgstr" : " to exit the roundabout"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - continue roundabout",
-		"msgstr" : " and continue in the roundabout"
 	},
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",

@@ -71,7 +71,7 @@ import theConfig from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import SvgIconFromOsmFactory from '../core/SvgIconFromOsmFactory.js';
+import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import GeoCoder from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import Note from '../data/Note.js';
@@ -352,7 +352,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 			}
 			else {
 				myNoteDialog.showWait ( );
-				let svgIconData = await new SvgIconFromOsmFactory ( ).getIconAndAdress ( note.latLng, routeObjId );
+				let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdress ( note.latLng, routeObjId );
 				if ( svgIconData.statusOk ) {
 					myOnSvgIconSuccess ( svgIconData );
 				}

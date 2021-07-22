@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file SvgMapBuilder.js
+@file MapIconSvgBuilder.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -58,7 +58,7 @@ import { SVG_NS, ICON_DIMENSIONS, ZERO, ONE, TWO, NOT_FOUND } from '../util/Cons
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class SvgMapBuilder {
+class MapIconSvgBuilder {
 
 	#route = null;
 	#overpassAPIDataLoader = null;
@@ -266,8 +266,8 @@ class SvgMapBuilder {
 	}
 }
 
-export default SvgMapBuilder;
+export default MapIconSvgBuilder;
 
 /*
---- End of SvgMapBuilder.js file ----------------------------------------------------------------------------------------------
+--- End of MapIconSvgBuilder.js file ------------------------------------------------------------------------------------------
 */

@@ -292,44 +292,44 @@ class MapIconDataBuilder {
 	#setDirectionArrowAndTooltip ( ) {
 		if ( null !== this.#direction ) {
 			if ( this.#direction < theConfig.note.svgIcon.angleDirection.right ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn right' );
 				this.#directionArrow = '🢂';
 			}
 			else if ( this.#direction < theConfig.note.svgIcon.angleDirection.slightRight ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight right' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn slight right' );
 				this.#directionArrow = '🢅';
 			}
 			else if ( this.#direction < theConfig.note.svgIcon.angleDirection.continue ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Continue' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Continue' );
 				this.#directionArrow = '🢁';
 			}
 			else if ( this.#direction < theConfig.note.svgIcon.angleDirection.slightLeft ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn slight left' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn slight left' );
 				this.#directionArrow = '🢄';
 			}
 			else if ( this.#direction < theConfig.note.svgIcon.angleDirection.left ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn left' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn left' );
 				this.#directionArrow = '🢀';
 			}
 			else if ( this.#direction < theConfig.note.svgIcon.angleDirection.sharpLeft ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp left' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn sharp left' );
 				this.#directionArrow = '🢇';
 			}
 			else if ( this.#direction < theConfig.note.svgIcon.angleDirection.sharpRight ) {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn sharp right' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn sharp right' );
 				this.#directionArrow = '🢆';
 			}
 			else {
-				this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Turn right' );
+				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn right' );
 				this.#directionArrow = '🢂';
 			}
 		}
 
 		if ( ICON_POSITION.atStart === this.#positionOnRoute ) {
-			this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Start' );
+			this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Start' );
 		}
 		else if ( ICON_POSITION.atEnd === this.#positionOnRoute ) {
-			this.#mapIconData.tooltip = theTranslator.getText ( 'SvgIconFromOsmFactory - Stop' );
+			this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Stop' );
 		}
 	}
 
@@ -421,7 +421,7 @@ class MapIconDataBuilder {
 		) {
 			this.#mapIconData.rcnRef = iconNode.tags.rcn_ref;
 			this.#mapIconData.tooltip +=
-				theTranslator.getText ( 'SvgIconFromOsmFactory - rcnRef', { rcnRef : this.#mapIconData.rcnRef } );
+				theTranslator.getText ( 'MapIconDataBuilder - rcnRef', { rcnRef : this.#mapIconData.rcnRef } );
 		}
 
 		let incomingStreet = '';
@@ -511,18 +511,18 @@ class MapIconDataBuilder {
 
 		// adding roundabout info
 		if ( isRoundaboutEntry && ! isRoundaboutExit ) {
-			this.#mapIconData.tooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - entry roundabout' );
+			this.#mapIconData.tooltip += theTranslator.getText ( 'MapIconDataBuilder - entry roundabout' );
 		}
 		else if ( ! isRoundaboutEntry && isRoundaboutExit ) {
-			this.#mapIconData.tooltip += theTranslator.getText ( 'SvgIconFromOsmFactory - exit roundabout' );
+			this.#mapIconData.tooltip += theTranslator.getText ( 'MapIconDataBuilder - exit roundabout' );
 		}
 		else if ( isRoundaboutEntry && isRoundaboutExit ) {
 			this.#mapIconData.tooltip +=
-				theTranslator.getText ( 'SvgIconFromOsmFactory - continue roundabout' ); // strange but correct
+				theTranslator.getText ( 'MapIconDataBuilder - continue roundabout' ); // strange but correct
 		}
 		if ( isMiniRoundabout ) {
 			this.#mapIconData.tooltip +=
-				theTranslator.getText ( 'SvgIconFromOsmFactory - at the small roundabout on the ground' );
+				theTranslator.getText ( 'MapIconDataBuilder - at the small roundabout on the ground' );
 		}
 	}
 

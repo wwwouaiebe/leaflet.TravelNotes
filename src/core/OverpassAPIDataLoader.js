@@ -70,6 +70,10 @@ class OverpassAPIDataLoader {
 		searchRelations : true
 	}
 
+	#nodes = new Map ( );
+	#ways = new Map ( );
+	#relations = new Map ( );
+
 	#adminNames = null;
 	#osmCityAdminLevel = null;
 	#place = null;
@@ -90,7 +94,7 @@ class OverpassAPIDataLoader {
 	*/
 
 	#setGeometry ( ) {
-		this.ways.forEach (
+		this.#ways.forEach (
 			way => {
 				way.geometry = [ [ ] ];
 				way.lat = LAT_LNG.defaultValue;
@@ -98,7 +102,7 @@ class OverpassAPIDataLoader {
 				let nodesCounter = ZERO;
 				way.nodes.forEach (
 					nodeId => {
-						let node = this.nodes.get ( nodeId );
+						let node = this.#nodes.get ( nodeId );
 						way.geometry [ ZERO ].push ( [ node.lat, node.lon ] );
 						way.lat += node.lat;
 						way.lon += node.lon;
@@ -111,7 +115,7 @@ class OverpassAPIDataLoader {
 				}
 			}
 		);
-		this.relations.forEach (
+		this.#relations.forEach (
 			relation => {
 				relation.geometry = [ [ ] ];
 				relation.lat = LAT_LNG.defaultValue;
@@ -120,7 +124,7 @@ class OverpassAPIDataLoader {
 				relation.members.forEach (
 					member => {
 						if ( 'way' === member.type ) {
-							let way = this.ways.get ( member.ref );
+							let way = this.#ways.get ( member.ref );
 							relation.geometry.push ( way.geometry [ ZERO ] );
 							relation.lat += way.lat;
 							relation.lon += way.lon;
@@ -146,7 +150,7 @@ class OverpassAPIDataLoader {
 			osmElement => {
 				switch ( osmElement.type ) {
 				case 'node' :
-					this.nodes.set ( osmElement.id, osmElement );
+					this.#nodes.set ( osmElement.id, osmElement );
 					if (
 						osmElement.tags &&
 						this.#options.searchPlaces &&
@@ -167,12 +171,12 @@ class OverpassAPIDataLoader {
 					break;
 				case 'way' :
 					if ( this.#options.searchWays ) {
-						this.ways.set ( osmElement.id, osmElement );
+						this.#ways.set ( osmElement.id, osmElement );
 					}
 					break;
 				case 'relation' :
 					if ( this.#options.searchRelations ) {
-						this.relations.set ( osmElement.id, osmElement );
+						this.#relations.set ( osmElement.id, osmElement );
 					}
 					break;
 				case 'area' :
@@ -284,9 +288,6 @@ class OverpassAPIDataLoader {
 				this.#options [ key ] = value;
 			}
 		}
-		this.nodes = new Map ( );
-		this.ways = new Map ( );
-		this.relations = new Map ( );
 	}
 
 	/**
@@ -325,9 +326,9 @@ class OverpassAPIDataLoader {
 		this.#latLngDistance.distance = DISTANCE.defaultValue;
 		this.#city = null;
 
-		this.nodes.clear ( );
-		this.ways.clear ( );
-		this.relations.clear ( );
+		this.#nodes.clear ( );
+		this.#ways.clear ( );
+		this.#relations.clear ( );
 
 		await this.#overpassAPICall ( queries );
 		this.#setGeometry ( );
@@ -336,13 +337,60 @@ class OverpassAPIDataLoader {
 		}
 	}
 
-	/*
-	getter...
+	/**
+	A map with the osm nodes
+	@type {Map}
+	@readonly
+	*/
+
+	get nodes ( ) { return this.#nodes; }
+
+	/**
+	A map with the osm ways
+	@type {Map}
+	@readonly
+	*/
+
+	get ways ( ) { return this.#ways; }
+
+	/**
+	A map with the osm relations
+	@type {Map}
+	@readonly
+	*/
+
+	get relations ( ) { return this.#relations; }
+
+	/**
+	The osm place ( hamlet or village )
+	@type {String}
+	@readonly
 	*/
 
 	get place ( ) { return this.#place; }
+
+	/**
+	The osm city
+	@type {String}
+	@readonly
+	*/
+
 	get city ( ) { return this.#city; }
+
+	/**
+	The osm country
+	@type {String}
+	@readonly
+	*/
+
 	get country ( ) { return this.#adminNames [ OSM_COUNTRY_ADMIN_LEVEL ]; }
+
+	/**
+	The final status
+	@type {boolean}
+	@readonly
+	*/
+
 	get statusOk ( ) { return this.#statusOk; }
 }
 

@@ -73,7 +73,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { theEventDispatcher } from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
-import SvgIconFromOsmFactory from '../core/SvgIconFromOsmFactory.js';
+import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import theConfig from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
@@ -161,7 +161,7 @@ class NoteEditor {
 			);
 
 			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-			await new SvgIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
+			await new MapIconFromOsmFactory ( ).getPromiseIconAndAdress ( latLng, route.objId )
 				.then (
 					osmNoteData => {
 						this.#newNoteFromOsmData ( osmNoteData, route );

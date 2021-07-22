@@ -35,7 +35,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file SvgIconFromOsmFactory.js
+@file MapIconFromOsmFactory.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -63,7 +63,7 @@ This will be used for the note address
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module SvgIconFromOsmFactory
+@module MapIconFromOsmFactory
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ This will be used for the note address
 import theConfig from '../data/Config.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
-import SvgMapBuilder from '../core/SvgMapBuilder.js';
+import MapIconSvgBuilder from '../core/MapIconSvgBuilder.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
 import MapIconDataBuilder from '../core/MapIconDataBuilder.js';
 
@@ -90,7 +90,7 @@ const SEARCH_AROUND_FACTOR = 1.5;
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class SvgIconFromOsmFactory {
+class MapIconFromOsmFactory {
 
 	#route = null;
 	#overpassAPIDataLoader = new OverpassAPIDataLoader ( { searchRelations : false } );
@@ -154,11 +154,17 @@ class SvgIconFromOsmFactory {
 
 	#buildIconAndAdress ( ) {
 
-		let mapIconDataBuilder = new MapIconDataBuilder ( );
-		let mapIconData = mapIconDataBuilder.buildData ( this.#route, this.#overpassAPIDataLoader, this.#mapIconPosition );
+		let mapIconData = new MapIconDataBuilder ( ).buildData ( 
+			this.#route, 
+			this.#overpassAPIDataLoader, 
+			this.#mapIconPosition 
+		);
 
-		let svgMapBuilder = new SvgMapBuilder ( );
-		let svgElement = svgMapBuilder.buildSvg ( this.#route, this.#overpassAPIDataLoader, mapIconData );
+		let svgElement = new MapIconSvgBuilder ( ).buildSvg ( 
+			this.#route, 
+			this.#overpassAPIDataLoader, 
+			mapIconData 
+		);
 
 		this.#requestStarted = false;
 
@@ -227,8 +233,8 @@ class SvgIconFromOsmFactory {
 	}
 }
 
-export default SvgIconFromOsmFactory;
+export default MapIconFromOsmFactory;
 
 /*
---- End of svgIconFromOsmFactory.js file --------------------------------------------------------------------------------------
+--- End of MapIconFromOsmFactory.js file --------------------------------------------------------------------------------------
 */
