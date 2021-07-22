@@ -97,9 +97,9 @@ class MapIconFromOsmFactory {
 
 	#mapIconPosition = Object.seal (
 		{
-			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ],
-			distance : DISTANCE.defaultValue,
-			nearestItineraryPointObjId : INVALID_OBJ_ID
+			latLng : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], // = latLng of the nearest ItineraryPoint
+			distance : DISTANCE.defaultValue, // = the distance between the nearest itineraryPoint and the beginning of route
+			nearestItineraryPointObjId : INVALID_OBJ_ID // the nearest itineraryPoint objId
 		}
 	);
 
@@ -142,7 +142,6 @@ class MapIconFromOsmFactory {
 		// The coordinates of the nearest point are used as position of the SVG
 		this.#mapIconPosition.latLng = nearestItineraryPoint.latLng;
 		this.#mapIconPosition.nearestItineraryPointObjId = nearestItineraryPoint.objId;
-
 	}
 
 	/**
