@@ -58,6 +58,7 @@ Tests ...
 @property {string} name The name of the point or an empty string
 @property {string} street The house number and the street of the point or an empty string
 @property {string} city The city of the point or an empty string
+@property {boolean} statusOk A status indicating that all the requests are executed correctly
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -82,7 +83,6 @@ import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 @class GeoCoder
 @classdesc This class call Nominatim and parse the response
-@see {@link newGeoCoder} for constructor
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -106,6 +106,8 @@ class GeoCoder {
 	#nominatimData = null;
 
 	/**
+	this method merge the data from Nominatim and theOverpassAPI
+	@private
 	*/
 
 	#mergeData ( ) {
@@ -148,6 +150,8 @@ class GeoCoder {
 	}
 
 	/**
+	This method...
+	@private
 	*/
 
 	#parseNominatimData ( nominatimData ) {
@@ -176,6 +180,8 @@ class GeoCoder {
 	}
 
 	/**
+	This method...
+	@private
 	*/
 
 	async #loadNominatimData ( ) {
@@ -208,6 +214,8 @@ class GeoCoder {
 	}
 
 	/**
+	This method...
+	@private
 	*/
 
 	#getOverpassQueries ( ) {
@@ -219,14 +227,15 @@ class GeoCoder {
 		];
 	}
 
-	/**
-	*/
-
 	constructor ( ) {
 		Object.freeze ( this );
 	}
 
 	/**
+	This method search an address from a llatitude and longitude
+	@param {Array.<number>} latLng the latitude and longitude to be used to search the address
+	@return {GeoCoderAddress} the address at the given point. The GeoCoderAddress.statusOk must be verified
+	before using the data.
 	*/
 
 	async getAddress ( latLng ) {
