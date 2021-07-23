@@ -88,7 +88,7 @@ import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
-import { theAttributionsUI } from '../UI/AttributionsUI.js';
+import theAttributionsUI from '../UI/AttributionsUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';

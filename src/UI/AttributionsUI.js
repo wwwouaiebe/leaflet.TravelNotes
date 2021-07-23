@@ -25,7 +25,9 @@ Changes:
 		- Issue ♯135 : Remove innerHTML from code
 		- Issue ♯136 : Remove html entities from js string
 		- Issue ♯138 : Protect the app - control html entries done by user.
-Doc reviewed 20200821
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210724
 Tests ...
 */
 
@@ -52,8 +54,6 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
-let ourAttributionsDiv = null;
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -67,6 +67,8 @@ let ourAttributionsDiv = null;
 
 class AttributionsUI {
 
+	#attributionsDiv = null;
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -76,8 +78,9 @@ class AttributionsUI {
 	*/
 
 	createUI ( ) {
-		ourAttributionsDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-AttributionsUI' }, document.body );
-		this.attributions = '';
+		this.#attributionsDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-AttributionsUI' }, document.body );
+
+		// this.attributions = '';
 	}
 
 	/**
@@ -93,30 +96,27 @@ class AttributionsUI {
 			'| © <a href="https://github.com/wwwouaiebe" target="_blank" ' +
 			'title="https://github.com/wwwouaiebe">Travel & Notes</a>';
 
-		while ( ourAttributionsDiv.firstChild ) {
-			ourAttributionsDiv.removeChild ( ourAttributionsDiv.firstChild );
+		while ( this.#attributionsDiv.firstChild ) {
+			this.#attributionsDiv.removeChild ( this.#attributionsDiv.firstChild );
 		}
-		theHTMLSanitizer.sanitizeToHtmlElement ( attributionsString, ourAttributionsDiv );
+		theHTMLSanitizer.sanitizeToHtmlElement ( attributionsString, this.#attributionsDiv );
 	}
 }
 
-const OUR_ATTRIBUTIONS_UI = new AttributionsUI ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of AttributionsUI class
+@type {AttributionsUI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of AttributionsUI class
-	@type {AttributionsUI}
-	@constant
-	@global
+const theAttributionsUI = new AttributionsUI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_ATTRIBUTIONS_UI as theAttributionsUI
-};
+export default theAttributionsUI;
 
 /*
 --- End of AttributionsUI.js file ---------------------------------------------------------------------------------------------

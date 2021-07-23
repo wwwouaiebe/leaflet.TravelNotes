@@ -46,7 +46,7 @@ Tests ...
 import theTravelNotesData from '../data/TravelNotesData.js';
 import ViewerMapEditor from '../core/ViewerMapEditor.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
-import { theAttributionsUI } from '../UI/AttributionsUI.js';
+import theAttributionsUI from '../UI/AttributionsUI.js';
 import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import Zoomer from '../core/Zoomer.js';
