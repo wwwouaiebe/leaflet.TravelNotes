@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { thePolylineEncoder } from '../util/PolylineEncoder.js';
+import thePolylineEncoder from '../util/PolylineEncoder.js';
 import { ZERO, ONE, TWO, LAT, LNG, ELEVATION, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 const OUR_OPEN_ROUTE_LAT_LNG_ROUND = 5;

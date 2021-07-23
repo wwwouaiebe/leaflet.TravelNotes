@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { thePolylineEncoder } from '../util/PolylineEncoder.js';
+import thePolylineEncoder from '../util/PolylineEncoder.js';
 import { ZERO, TWO, LAT, LNG, ELEVATION, LAT_LNG, HTTP_STATUS_OK, DISTANCE } from '../util/Constants.js';
 
 const OUR_GRAPHHOPPER_LAT_LNG_ROUND = 5;

@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { thePolylineEncoder } from '../util/PolylineEncoder.js';
+import thePolylineEncoder from '../util/PolylineEncoder.js';
 import { ZERO, HTTP_STATUS_OK, DISTANCE } from '../util/Constants.js';
 
 const OUR_MAPZEN_LAT_LNG_ROUND = 6;

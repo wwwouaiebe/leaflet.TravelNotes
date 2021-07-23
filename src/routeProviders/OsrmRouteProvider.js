@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { thePolylineEncoder } from '../util/PolylineEncoder.js';
+import thePolylineEncoder from '../util/PolylineEncoder.js';
 import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
