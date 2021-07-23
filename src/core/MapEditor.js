@@ -75,7 +75,7 @@ import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import ViewerMapEditor from '../core/ViewerMapEditor.js';
 import { theTranslator } from '../UI/Translator.js';

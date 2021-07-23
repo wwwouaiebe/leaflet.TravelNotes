@@ -112,7 +112,7 @@ Box model
 import { theTranslator } from '../UI/Translator.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { ZERO, ONE, TWO } from '../util/Constants.js';
 

@@ -82,7 +82,7 @@ import GpxFactory from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
 import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';

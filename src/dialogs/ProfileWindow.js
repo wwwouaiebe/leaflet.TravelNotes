@@ -32,7 +32,7 @@ import { theTranslator } from '../UI/Translator.js';
 import ObjId from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import { theUtilities } from '../util/Utilities.js';
 import { newProfileContextMenu } from '../contextMenus/ProfileContextMenu.js';

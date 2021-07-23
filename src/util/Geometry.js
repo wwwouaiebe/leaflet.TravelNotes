@@ -26,7 +26,9 @@ Changes:
 		- Issue ♯101 : Add a print command for a route
 	- v1.13.0:
 		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
-Doc reviewed 20200824
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210723
 Tests ...
 */
 
@@ -286,23 +288,20 @@ class Geometry {
 	}
 }
 
-const OUR_GEOMETRY = new Geometry ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of Geometry class
+@type {Geometry}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of Geometry class
-	@type {Geometry}
-	@constant
-	@global
+const theGeometry = new Geometry ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_GEOMETRY as theGeometry
-};
+export default theGeometry;
 
 /*
 --- End of Geometry.js file ---------------------------------------------------------------------------------------------------

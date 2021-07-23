@@ -62,7 +62,7 @@ import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';

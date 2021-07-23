@@ -59,7 +59,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import { theTranslator } from '../UI/Translator.js';
 

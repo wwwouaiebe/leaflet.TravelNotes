@@ -78,7 +78,7 @@ import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog
 import GeoCoder from '../core/GeoCoder.js';
 import WayPoint from '../data/WayPoint.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import { theGeometry } from '../util/Geometry.js';
+import theGeometry from '../util/Geometry.js';
 import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 
 /**
