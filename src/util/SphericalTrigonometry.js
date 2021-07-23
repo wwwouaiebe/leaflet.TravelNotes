@@ -26,7 +26,9 @@ Changes:
 		- Issue ♯101 : Add a print command for a route
 	- v1.13.0:
 		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
-Doc reviewed 20200824
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210723
 Tests ...
 */
 
@@ -55,23 +57,7 @@ import { ZERO, ONE, DEGREES, EARTH_RADIUS } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function myNormalizeLng
-@desc This function normalize a longitude (always between -180° and 180°)
-@param {number} Lng The longitude to normalize
-@return {number} The normalized longitude
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function myNormalizeLng ( Lng ) {
-	return ( ( Lng + DEGREES.d540 ) % DEGREES.d360 ) - DEGREES.d180;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
+@class SphericalTrigonometry
 @classdesc This class contains methods for spherical trigonometry operations
 @see {@link theSphericalTrigonometry} for the one and only one instance of this class
 @hideconstructor
@@ -80,6 +66,17 @@ function myNormalizeLng ( Lng ) {
 */
 
 class SphericalTrigonometry {
+
+	/**
+	This function normalize a longitude (always between -180° and 180°)
+	@param {number} Lng The longitude to normalize
+	@return {number} The normalized longitude
+	@private
+	*/
+
+	#normalizeLng ( Lng ) {
+		return ( ( Lng + DEGREES.d540 ) % DEGREES.d360 ) - DEGREES.d180;
+	}
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -148,8 +145,8 @@ class SphericalTrigonometry {
 		let latEndPoint = latLngEndPoint [ ZERO ] * DEGREES.toRadians;
 		let deltaLng =
 			(
-				myNormalizeLng ( latLngEndPoint [ ONE ] ) -
-				myNormalizeLng ( latLngStartPoint [ ONE ] )
+				this.#normalizeLng ( latLngEndPoint [ ONE ] ) -
+				this.#normalizeLng ( latLngStartPoint [ ONE ] )
 			)
 			* DEGREES.toRadians;
 		return Math.acos (
@@ -159,23 +156,20 @@ class SphericalTrigonometry {
 	}
 }
 
-const OUR_SPHERICAL_TRIGONOMETRY = new SphericalTrigonometry ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of SphericalTrigonometry class
+@type {SphericalTrigonometry}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of SphericalTrigonometry class
-	@type {SphericalTrigonometry}
-	@constant
-	@global
+const theSphericalTrigonometry = new SphericalTrigonometry ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_SPHERICAL_TRIGONOMETRY as theSphericalTrigonometry
-};
+export default theSphericalTrigonometry;
 
 /*
 --- End of SphericalTrigonometry.js file --------------------------------------------------------------------------------------

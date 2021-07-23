@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import { ZERO, ONE, TWO, LAT, LNG, DEGREES } from '../util/Constants.js';
 
 const OUR_HALF_PI = Math.PI / TWO;

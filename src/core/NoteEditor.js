@@ -72,7 +72,7 @@ import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
-import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import theConfig from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';

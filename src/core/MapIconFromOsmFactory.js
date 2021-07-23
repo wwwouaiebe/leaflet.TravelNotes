@@ -73,7 +73,7 @@ This will be used for the note address
 
 import theConfig from '../data/Config.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import MapIconSvgBuilder from '../core/MapIconSvgBuilder.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
 import MapIconDataBuilder from '../core/MapIconDataBuilder.js';

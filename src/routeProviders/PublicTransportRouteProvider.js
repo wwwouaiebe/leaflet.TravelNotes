@@ -44,7 +44,7 @@ Tests ...
 */
 
 import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
-import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 
 /*
 
