@@ -57,7 +57,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
 let ourTranslations = new Map ( );
 

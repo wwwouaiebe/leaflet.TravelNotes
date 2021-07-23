@@ -58,7 +58,7 @@ import ObjType from '../data/ObjType.js';
 import Collection from '../data/Collection.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import Maneuver from '../data/Maneuver.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Itinerary' );

@@ -70,7 +70,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import GeoCoder from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';

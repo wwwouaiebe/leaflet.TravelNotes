@@ -57,7 +57,7 @@ Tests ...
 import ObjId from '../data/ObjId.js';
 import ObjType from '../data/ObjType.js';
 import { theUtilities } from '../util/Utilities.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
 import { LAT_LNG, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
 

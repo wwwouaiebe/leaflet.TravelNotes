@@ -76,7 +76,7 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 

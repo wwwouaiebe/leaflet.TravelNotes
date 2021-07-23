@@ -57,7 +57,7 @@ import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 const OUR_DEMO_PRINT_MAX_TILES = 120;

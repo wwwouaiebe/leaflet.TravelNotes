@@ -91,7 +91,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
 
 let ourButtons = [];

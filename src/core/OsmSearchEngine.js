@@ -53,7 +53,7 @@ import theConfig from '../data/Config.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
 
 import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants.js';

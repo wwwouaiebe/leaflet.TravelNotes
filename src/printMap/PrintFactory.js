@@ -67,7 +67,7 @@ import theConfig from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
 
 const OUR_TILE_SIZE = 256;

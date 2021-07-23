@@ -54,7 +54,7 @@ Tests ...
 
 import ObjId from '../data/ObjId.js';
 import ObjType from '../data/ObjType.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Maneuver' );
