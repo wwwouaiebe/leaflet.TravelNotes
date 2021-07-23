@@ -58,7 +58,7 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import { theUtilities } from '../util/Utilities.js';
-import { newDataEncryptor } from '../util/DataEncryptor.js';
+import DataEncryptor from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
@@ -277,7 +277,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 	*/
 
 	function myDecryptAPIKeysFile ( data ) {
-		newDataEncryptor ( ).decryptData (
+		new DataEncryptor ( ).decryptData (
 			data,
 			myOnOkDecrypt,
 			myOnErrorDecrypt,
@@ -380,7 +380,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 		}
 		myAPIKeysDialog.showWait ( );
 		myAPIKeysDialog.keyboardEventListenerEnabled = false;
-		newDataEncryptor ( ).encryptData (
+		new DataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( JSON.stringify ( myGetAPIKeys ( ) ) ),
 			myOnOkEncrypt,
 			myOnErrorEncrypt,
@@ -405,7 +405,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 		changeEvent.stopPropagation ( );
 		let fileReader = new FileReader ( );
 		fileReader.onload = function ( ) {
-			newDataEncryptor ( ).decryptData (
+			new DataEncryptor ( ).decryptData (
 				fileReader.result,
 				myOnOkDecrypt,
 				myOnErrorDecrypt,
