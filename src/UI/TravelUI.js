@@ -75,7 +75,7 @@ import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import FileLoader from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { LAT_LNG, INVALID_OBJ_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 

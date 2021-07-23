@@ -17,7 +17,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed 20200825
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210723
 Tests ...
 
 -------------------------------------------------------------------------------------------------------------------------------

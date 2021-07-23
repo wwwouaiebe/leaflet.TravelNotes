@@ -21,7 +21,9 @@ Changes:
 		- created
 	- v1.12.0:
 		- Issue ♯120 : Review the UserInterface
-Doc reviewed 20200824
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210723
 Tests ...
 */
 
@@ -282,60 +284,6 @@ and when the geolocation marker must be removed from the map
 import { NOT_FOUND } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourGetTarget
-@desc This method get the target of a event from the event name
-@param {string} eventName The name of the event
-@return {?document|HTMLElement} The target for the event name
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourGetTarget ( eventName ) {
-	if ( NOT_FOUND <
-		[
-			'showitinerary',
-			'updateitinerary',
-			'showtravelnotes',
-			'updatetravelnotes',
-			'showsearch',
-			'updatesearch',
-			'setrouteslist',
-			'setprovider',
-			'providersadded',
-			'travelnameupdated',
-			'settransitmode'
-		].indexOf ( eventName )
-	) {
-		return document.getElementById ( 'TravelNotes-UI-MainDiv' );
-	}
-	else if ( NOT_FOUND <
-		[
-			'removeobject',
-			'removeallobjects',
-			'zoomto',
-			'additinerarypointmarker',
-			'addsearchpointmarker',
-			'addrectangle',
-			'addwaypoint',
-			'layerchange',
-			'geolocationstatuschanged',
-			'geolocationpositionchanged',
-			'routeupdated',
-			'routepropertiesupdated',
-			'noteupdated',
-			'roadbookupdate',
-			'profileclosed'
-		].indexOf ( eventName )
-	) {
-		return document;
-	}
-	return null;
-}
-
-/**
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class
@@ -348,6 +296,55 @@ function ourGetTarget ( eventName ) {
 
 class EventDispatcher {
 
+	/**
+	This method get the target of a event from the event name
+	@param {string} eventName The name of the event
+	@return {?document|HTMLElement} The target for the event name
+	@private
+	*/
+
+	#getTarget ( eventName ) {
+		if ( NOT_FOUND <
+			[
+				'showitinerary',
+				'updateitinerary',
+				'showtravelnotes',
+				'updatetravelnotes',
+				'showsearch',
+				'updatesearch',
+				'setrouteslist',
+				'setprovider',
+				'providersadded',
+				'travelnameupdated',
+				'settransitmode'
+			].indexOf ( eventName )
+		) {
+			return document.getElementById ( 'TravelNotes-UI-MainDiv' );
+		}
+		else if ( NOT_FOUND <
+			[
+				'removeobject',
+				'removeallobjects',
+				'zoomto',
+				'additinerarypointmarker',
+				'addsearchpointmarker',
+				'addrectangle',
+				'addwaypoint',
+				'layerchange',
+				'geolocationstatuschanged',
+				'geolocationpositionchanged',
+				'routeupdated',
+				'routepropertiesupdated',
+				'noteupdated',
+				'roadbookupdate',
+				'profileclosed'
+			].indexOf ( eventName )
+		) {
+			return document;
+		}
+		return null;
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -359,7 +356,7 @@ class EventDispatcher {
 	*/
 
 	dispatch ( eventName, eventData ) {
-		let target = ourGetTarget ( eventName );
+		let target = this.#getTarget ( eventName );
 		if ( target ) {
 			let dispatchedEvent = new Event ( eventName );
 			if ( eventData ) {
@@ -370,23 +367,20 @@ class EventDispatcher {
 	}
 }
 
-const OUR_EVENT_DISPATCHER = new EventDispatcher ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of EventDispatcher class
+@type {EventDispatcher}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of EventDispatcher class
-	@type {EventDispatcher}
-	@constant
-	@global
+const theEventDispatcher = new EventDispatcher ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_EVENT_DISPATCHER as theEventDispatcher
-};
+export default theEventDispatcher;
 
 /*
 --- End of EventDispatcher.js file --------------------------------------------------------------------------------------------

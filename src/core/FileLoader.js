@@ -65,7 +65,7 @@ import { theMouseUI } from '../UI/MouseUI.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import FileCompactor from '../core/FileCompactor.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import Zoomer from '../core/Zoomer.js';
 

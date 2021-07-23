@@ -70,7 +70,7 @@ import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
 import { theUtilities } from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import DataEncryptor from '../util/DataEncryptor.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import { theTranslator } from '../UI/Translator.js';

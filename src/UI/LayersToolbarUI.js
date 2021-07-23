@@ -55,7 +55,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import Layer from '../data/Layer.js';
 

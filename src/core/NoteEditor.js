@@ -70,7 +70,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import { theGeometry } from '../util/Geometry.js';
 import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';

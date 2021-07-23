@@ -46,7 +46,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import { theAttributionsUI } from '../UI/AttributionsUI.js';
 import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
 import theGeoLocator from '../core/GeoLocator.js';

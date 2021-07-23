@@ -83,7 +83,7 @@ import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import Maneuver from '../data/Maneuver.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import theCurrentVersion from '../data/Version.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';

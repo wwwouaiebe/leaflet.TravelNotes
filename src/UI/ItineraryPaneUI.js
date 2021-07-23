@@ -54,7 +54,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID, LAT_LNG, PANE_ID } from '../util/Constants.js';
 
