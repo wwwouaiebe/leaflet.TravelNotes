@@ -204,6 +204,15 @@ class OverpassAPIDataLoader {
 				}
 			}
 		);
+
+		if ( this.#options.setGeometry ) {
+			this.#setGeometry ( );
+		}
+
+		if ( this.#options.searchPlaces ) {
+			this.#setPlaceAndCity ( );
+		}
+
 	}
 
 	/**
@@ -267,24 +276,6 @@ class OverpassAPIDataLoader {
 		}
 	}
 
-	/**
-	this method call the OverpassAPI
-	@private
-	*/
-
-	async #overpassAPICall ( queries ) {
-		let promises = [];
-		queries.forEach ( query => {
-			promises.push (
-				fetch ( theConfig.overpassApi.url +
-						'?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
-						query )
-			);
-		}
-		);
-		await this.#parseSearchResults ( await Promise.allSettled ( promises ) );
-	}
-
 	constructor ( options ) {
 		if ( options ) {
 			for ( const [ key, value ] of Object.entries ( options ) ) {
@@ -335,15 +326,17 @@ class OverpassAPIDataLoader {
 		this.#ways.clear ( );
 		this.#relations.clear ( );
 
-		await this.#overpassAPICall ( queries );
-
-		if ( this.#options.setGeometry ) {
-			this.#setGeometry ( );
+		let promises = [];
+		queries.forEach ( query => {
+			promises.push (
+				fetch ( theConfig.overpassApi.url +
+						'?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
+						query )
+			);
 		}
+		);
 
-		if ( this.#options.searchPlaces ) {
-			this.#setPlaceAndCity ( );
-		}
+		await Promise.allSettled ( promises ).then ( results => this.#parseSearchResults ( results ) );
 	}
 
 	/**
