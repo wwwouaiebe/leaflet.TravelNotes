@@ -49,7 +49,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';

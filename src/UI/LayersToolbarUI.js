@@ -50,7 +50,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';

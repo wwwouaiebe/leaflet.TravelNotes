@@ -71,7 +71,7 @@ import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import theTravelEditor from '../core/TravelEditor.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import FileLoader from '../core/FileLoader.js';
 import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
 import theRouteEditor from '../core/RouteEditor.js';

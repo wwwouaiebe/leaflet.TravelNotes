@@ -54,7 +54,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import theConfig from '../data/Config.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { ZERO, ONE, TWO, THREE, HEXADECIMAL } from '../util/Constants.js';
 
 const FIVE = 5;

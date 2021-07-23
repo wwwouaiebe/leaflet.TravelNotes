@@ -57,7 +57,7 @@ Tests ...
 
 import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import ObjId from '../data/ObjId.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';

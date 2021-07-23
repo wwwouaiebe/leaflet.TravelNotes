@@ -50,7 +50,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
 import { theTranslator } from '../UI/Translator.js';
 

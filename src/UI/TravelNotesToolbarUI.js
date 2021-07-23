@@ -53,7 +53,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theGeoLocator from '../core/GeoLocator.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
 let ourGeoLocationButton = null;

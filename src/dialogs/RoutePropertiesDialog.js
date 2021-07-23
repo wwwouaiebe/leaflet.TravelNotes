@@ -58,7 +58,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { ZERO } from '../util/Constants.js';
 
 const OUR_ROUTE_MIN_WIDTH = 1;

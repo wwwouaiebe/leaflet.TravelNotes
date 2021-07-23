@@ -56,7 +56,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theUtilities } from '../util/Utilities.js';
 import DataEncryptor from '../util/DataEncryptor.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';

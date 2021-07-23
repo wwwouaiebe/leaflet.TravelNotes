@@ -74,7 +74,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { MOUSE_WHEEL_FACTORS, PANE_ID } from '../util/Constants.js';
 
 let ourActivePaneId = PANE_ID.invalidPane;

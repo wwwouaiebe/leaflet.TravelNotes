@@ -28,7 +28,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { ZERO } from '../util/Constants.js';
 
