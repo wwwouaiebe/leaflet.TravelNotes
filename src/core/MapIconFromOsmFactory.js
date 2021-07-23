@@ -28,7 +28,9 @@ Changes:
 		- Issue ♯136 : Remove html entities from js string
 		- Issue ♯138 : Protect the app - control html entries done by user.
 		- Issue ♯145 : Merge svg icon and knoopunt icon
-Doc reviewed 20200808
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210722
 Tests ...
 */
 

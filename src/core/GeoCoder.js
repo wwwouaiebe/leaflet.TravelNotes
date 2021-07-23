@@ -33,7 +33,9 @@ Changes:
 		- Issue ♯148 : Nominatim gives bad responses for cities... find a temporary solution.
 	- v2.2.0:
 		- Issue ♯64 : Improve geocoding
-Doc reviewed 20200802
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210715
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
