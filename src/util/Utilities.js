@@ -19,7 +19,9 @@ Changes:
 		- Issue ♯65 : Time to go to ES6 modules?
 	- v2.4.0:
 		- Issue ♯174 : UUID generator is not rfc 4122 compliant
-Doc reviewed 20200825
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210723
 Tests ...
 */
 
@@ -49,7 +51,7 @@ import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../util/C
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class Utilities
 @classdesc This class contains utility methods
 @see {@link theUtilities} for the one and only one instance of this class
 @hideconstructor
@@ -251,23 +253,20 @@ class Utilities {
 	}
 }
 
-const OUR_UTILITIES = new Utilities ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of Utilities class
+@type {Utilities}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of Utilities class
-	@type {Utilities}
-	@constant
-	@global
+const theUtilities = new Utilities ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_UTILITIES as theUtilities
-};
+export default theUtilities;
 
 /*
 --- End of Utilities.js file --------------------------------------------------------------------------------------------------

@@ -71,7 +71,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
 import { theErrorsUI } from '../UI/ErrorsUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import { theUtilities } from '../util/Utilities.js';
+import theUtilities from '../util/Utilities.js';
 import Route from '../data/Route.js';
 import Travel from '../data/Travel.js';
 import theEventDispatcher from '../util/EventDispatcher.js';

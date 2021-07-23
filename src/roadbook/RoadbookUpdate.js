@@ -38,7 +38,7 @@ Tests ...
 */
 
 import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { theUtilities } from '../util/Utilities.js';
+import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { theMouseUI } from '../UI/MouseUI.js';

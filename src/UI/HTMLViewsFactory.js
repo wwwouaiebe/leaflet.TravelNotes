@@ -59,7 +59,7 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import ObjId from '../data/ObjId.js';
-import { theUtilities } from '../util/Utilities.js';
+import theUtilities from '../util/Utilities.js';
 import theConfig from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
