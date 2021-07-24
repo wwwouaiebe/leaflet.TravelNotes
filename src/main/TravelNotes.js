@@ -86,7 +86,7 @@ import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
-import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
+import theLayersToolbarUI from '../UI/LayersToolbarUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
 import theErrorsUI from '../UI/ErrorsUI.js';

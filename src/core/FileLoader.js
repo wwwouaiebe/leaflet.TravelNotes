@@ -62,7 +62,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
-import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
+import theLayersToolbarUI from '../UI/LayersToolbarUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import FileCompactor from '../core/FileCompactor.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
