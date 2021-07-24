@@ -113,225 +113,62 @@ const OUR_TRANSIT_MODE_IMG = {
 		'circle cx="8" cy="6" r="5" stroke="rgb(0,0,0)" /> <circle cx="12" cy="12" r="4" stroke="rgb(255,204,0)" /> <cir' +
 		'cle cx="14" cy="8" r="3" stroke="rgb(191,0,0)" /> </g> </svg>'
 };
-let ourButtonsDiv = null;
-let ourHaveActiveButton = false;
-let ourTransitModeButtons = {
-	bike : null,
-	pedestrian : null,
-	car : null,
-	train : null,
-	line : null,
-	circle : null
-};
 
+/* eslint-disable no-use-before-define */
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourSetTransitMode
-@desc This method set the transitMode
-@param {string} transitMode The transitMode to set. Must be 'bike', 'pedestrian, 'car', 'train', 'line' or 'circle'
+@class TransitModeButtonEventListeners
+@classdesc Event listeners for TransitMode buttons
+@hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourSetTransitMode ( transitMode ) {
-	theTravelNotesData.routing.transitMode = transitMode;
-	let activeTransitModeButton =
-			document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
-	if ( activeTransitModeButton ) {
-		activeTransitModeButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
-	}
-	document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton' )
-		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
-}
+class TransitModeButtonEventListeners {
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+	/**
+	click event listener
+	*/
 
-@function ourOnTransitModeButtonClick
-@desc click event listener on transitMode buttons
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnTransitModeButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	ourSetTransitMode ( clickEvent.target.transitMode );
-	theRouteEditor.startRouting ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourSetProvider
-@desc This method set the provider
-@param {string} providerName The provider name to set.
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourSetProvider ( providerName ) {
-	theTravelNotesData.routing.provider = providerName;
-	let activeProviderButton = document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
-	if ( activeProviderButton ) {
-		activeProviderButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
-	}
-	document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + providerName + 'ImgButton' )
-		.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
-
-	// activating the transit mode buttons, depending of the capabilities of the provider
-	let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
-	OUR_TRANSIT_MODES.forEach (
-		transitMode => {
-			if ( provider.transitModes [ transitMode ] ) {
-				ourTransitModeButtons [ transitMode ].classList.remove ( 'TravelNotes-ProvidersToolbarUI-InactiveImgButton' );
-			}
-			else {
-				ourTransitModeButtons [ transitMode ].classList.add ( 'TravelNotes-ProvidersToolbarUI-InactiveImgButton' );
-			}
-		}
-	);
-
-	// changing the transitMode if the provider don't have the active transit mode
-	if ( ! provider.transitModes [ theTravelNotesData.routing.transitMode ] ) {
-		let firstTransitMode = null;
-		OUR_TRANSIT_MODES.forEach (
-			transitMode => {
-				if ( provider.transitModes[ transitMode ] ) {
-					firstTransitMode = firstTransitMode || transitMode;
-				}
-			}
-		);
-		ourSetTransitMode ( firstTransitMode );
+	static onClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theProvidersToolbarUI.transitMode = clickEvent.target.transitMode;
+		theRouteEditor.startRouting ( );
 	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourOnProviderButtonClick
-@desc click event listener on provider buttons
+@class ProviderButtonEventListeners
+@classdesc Event listeners for Providers buttons
+@hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourOnProviderButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	ourSetProvider ( clickEvent.target.provider );
-	theRouteEditor.startRouting ( );
-}
+class ProviderButtonEventListeners {
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+	/**
+	click event listener
+	*/
 
-@function ourCreateProviderButton
-@desc This method create a provider button
-@param {Provider} provider The provider for witch the button will be created
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateProviderButton ( provider ) {
-	if ( ZERO === provider.providerKey ) {
-		return;
-	}
-	let providerButton = theHTMLElementsFactory.create (
-		'img',
-		{
-			src : provider.icon,
-			id : 'TravelNotes-ProvidersToolbarUI-' + provider.name + 'ImgButton',
-			className : 'TravelNotes-ProvidersToolbarUI-ImgButton',
-			title : provider.title || provider.name,
-			provider : provider.name
-		},
-		ourButtonsDiv
-	);
-	providerButton.addEventListener ( 'click', ourOnProviderButtonClick, false );
-
-	// when loading the UI, the first provider will be the active provider
-	if ( ! ourHaveActiveButton ) {
-		providerButton.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
-		theTravelNotesData.routing.provider = providerButton.provider;
-		ourHaveActiveButton = true;
-
-		// ... and the first possible transit mode will be the active transit mode
-		let firstTransitMode = null;
-		OUR_TRANSIT_MODES.forEach (
-			transitMode => {
-				if ( provider.transitModes[ transitMode ] ) {
-					firstTransitMode = firstTransitMode || transitMode;
-				}
-			}
-		);
-		ourTransitModeButtons [ firstTransitMode ].classList.add (
-			'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton'
-		);
-		theTravelNotesData.routing.transitMode = firstTransitMode;
-		OUR_TRANSIT_MODES.forEach (
-			transitMode => {
-				if ( ! provider.transitModes[ transitMode ] ) {
-					ourTransitModeButtons [ transitMode ].classList.add ( 'TravelNotes-ProvidersToolbarUI-InactiveImgButton' );
-				}
-			}
-		);
+	static onClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theProvidersToolbarUI.provider = clickEvent.target.provider;
+		theRouteEditor.startRouting ( );
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateProvidersButtons
-@desc This method create the provider buttons
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateProvidersButtons ( ) {
-	if ( theTravelNotesData.providers ) {
-		ourHaveActiveButton = false;
-		theTravelNotesData.providers.forEach ( ourCreateProviderButton );
-	}
-}
+/* eslint-enable no-use-before-define */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourCreateTransitModesButtons
-@desc This method create the transitModes buttons
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateTransitModesButtons ( ) {
-	OUR_TRANSIT_MODES.forEach (
-		transitMode => {
-			ourTransitModeButtons [ transitMode ] = theHTMLElementsFactory.create (
-				'img',
-				{
-					src : OUR_TRANSIT_MODE_IMG [ transitMode ],
-					id : 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton',
-					className : 'TravelNotes-ProvidersToolbarUI-ImgButton',
-					title : theTranslator.getText ( 'ProvidersToolbarUI - ' + transitMode ),
-					transitMode : transitMode
-				},
-				ourButtonsDiv
-			);
-			ourTransitModeButtons [ transitMode ].addEventListener ( 'click', ourOnTransitModeButtonClick, false );
-		}
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
+@class ProvidersToolbarUI
 @classdesc This class is the provider and transitModes toolbar at the bottom of the UI
 @see {@link theProvidersToolbarUI} for the one and only one instance of this class
 @hideconstructor
@@ -340,6 +177,113 @@ function ourCreateTransitModesButtons ( ) {
 */
 
 class ProvidersToolbarUI {
+
+	#buttonsDiv = null;
+	#haveActiveButton = false;
+	#transitModeButtons = {
+		bike : null,
+		pedestrian : null,
+		car : null,
+		train : null,
+		line : null,
+		circle : null
+	};
+
+	/**
+	This method create a provider button
+	@param {Provider} provider The provider for witch the button will be created
+	@private
+	*/
+
+	#createProviderButton ( provider ) {
+		if ( ZERO === provider.providerKey ) {
+			return;
+		}
+		let providerButton = theHTMLElementsFactory.create (
+			'img',
+			{
+				src : provider.icon,
+				id : 'TravelNotes-ProvidersToolbarUI-' + provider.name + 'ImgButton',
+				className : 'TravelNotes-ProvidersToolbarUI-ImgButton',
+				title : provider.title || provider.name,
+				provider : provider.name
+			},
+			this.#buttonsDiv
+		);
+		providerButton.addEventListener ( 'click', ProviderButtonEventListeners.onClick, false );
+
+		// when loading the UI, the first provider will be the active provider
+		if ( ! this.#haveActiveButton ) {
+			providerButton.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
+			theTravelNotesData.routing.provider = providerButton.provider;
+			this.#haveActiveButton = true;
+
+			// ... and the first possible transit mode will be the active transit mode
+			let firstTransitMode = null;
+			OUR_TRANSIT_MODES.forEach (
+				transitMode => {
+					if ( provider.transitModes[ transitMode ] ) {
+						firstTransitMode = firstTransitMode || transitMode;
+					}
+				}
+			);
+			this.#transitModeButtons [ firstTransitMode ].classList.add (
+				'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton'
+			);
+			theTravelNotesData.routing.transitMode = firstTransitMode;
+			OUR_TRANSIT_MODES.forEach (
+				transitMode => {
+					if ( ! provider.transitModes[ transitMode ] ) {
+						this.#transitModeButtons [ transitMode ].classList.add (
+							'TravelNotes-ProvidersToolbarUI-InactiveImgButton'
+						);
+					}
+				}
+			);
+		}
+	}
+
+	/**
+	This method create the provider buttons
+	@private
+	*/
+
+	#createProvidersButtons ( ) {
+		if ( theTravelNotesData.providers ) {
+			this.#haveActiveButton = false;
+			theTravelNotesData.providers.forEach (
+				provider => { this.#createProviderButton ( provider ); }
+			);
+		}
+	}
+
+	/**
+	This method create the transitModes buttons
+	@private
+	*/
+
+	#createTransitModesButtons ( ) {
+		OUR_TRANSIT_MODES.forEach (
+			transitMode => {
+				this.#transitModeButtons [ transitMode ] = theHTMLElementsFactory.create (
+					'img',
+					{
+						src : OUR_TRANSIT_MODE_IMG [ transitMode ],
+						id : 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton',
+						className : 'TravelNotes-ProvidersToolbarUI-ImgButton',
+						title : theTranslator.getText ( 'ProvidersToolbarUI - ' + transitMode ),
+						transitMode : transitMode
+					},
+					this.#buttonsDiv
+				);
+				this.#transitModeButtons [ transitMode ].addEventListener (
+					'click',
+					TransitModeButtonEventListeners.onClick,
+					false
+				);
+			}
+		);
+	}
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -351,15 +295,15 @@ class ProvidersToolbarUI {
 	*/
 
 	createUI ( uiMainDiv ) {
-		ourButtonsDiv = theHTMLElementsFactory.create (
+		this.#buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv TravelNotes-ProvidersToolbarUI-ImgButtonsDiv'
 			},
 			uiMainDiv
 		);
-		ourCreateTransitModesButtons ( );
-		ourCreateProvidersButtons ( );
+		this.#createTransitModesButtons ( );
+		this.#createProvidersButtons ( );
 	}
 
 	/**
@@ -368,7 +312,43 @@ class ProvidersToolbarUI {
 	*/
 
 	set provider ( providerName ) {
-		ourSetProvider ( providerName );
+		theTravelNotesData.routing.provider = providerName;
+		let activeProviderButton = document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
+		if ( activeProviderButton ) {
+			activeProviderButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
+		}
+		document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + providerName + 'ImgButton' )
+			.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveProviderImgButton' );
+
+		// activating the transit mode buttons, depending of the capabilities of the provider
+		let provider = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) );
+		OUR_TRANSIT_MODES.forEach (
+			transitMode => {
+				if ( provider.transitModes [ transitMode ] ) {
+					this.#transitModeButtons [ transitMode ].classList.remove (
+						'TravelNotes-ProvidersToolbarUI-InactiveImgButton'
+					);
+				}
+				else {
+					this.#transitModeButtons [ transitMode ].classList.add (
+						'TravelNotes-ProvidersToolbarUI-InactiveImgButton'
+					);
+				}
+			}
+		);
+
+		// changing the transitMode if the provider don't have the active transit mode
+		if ( ! provider.transitModes [ theTravelNotesData.routing.transitMode ] ) {
+			let firstTransitMode = null;
+			OUR_TRANSIT_MODES.forEach (
+				transitMode => {
+					if ( provider.transitModes[ transitMode ] ) {
+						firstTransitMode = firstTransitMode || transitMode;
+					}
+				}
+			);
+			this.transitMode = firstTransitMode;
+		}
 	}
 
 	/**
@@ -377,7 +357,14 @@ class ProvidersToolbarUI {
 	*/
 
 	set transitMode ( transitMode ) {
-		ourSetTransitMode ( transitMode );
+		theTravelNotesData.routing.transitMode = transitMode;
+		let activeTransitModeButton =
+				document.querySelector ( '.TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
+		if ( activeTransitModeButton ) {
+			activeTransitModeButton.classList.remove ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
+		}
+		document.getElementById ( 'TravelNotes-ProvidersToolbarUI-' + transitMode + 'ImgButton' )
+			.classList.add ( 'TravelNotes-ProvidersToolbarUI-ActiveTransitModeImgButton' );
 	}
 
 	/**
@@ -385,31 +372,28 @@ class ProvidersToolbarUI {
 	*/
 
 	providersAdded ( ) {
-		while ( ourButtonsDiv.firstChild ) {
-			ourButtonsDiv.removeChild ( ourButtonsDiv.firstChild );
+		while ( this.#buttonsDiv.firstChild ) {
+			this.#buttonsDiv.removeChild ( this.#buttonsDiv.firstChild );
 		}
-		ourCreateTransitModesButtons ( );
-		ourCreateProvidersButtons ( );
+		this.#createTransitModesButtons ( );
+		this.#createProvidersButtons ( );
 	}
 }
 
-const OUR_PROVIDERS_TOOLBAR_UI = new ProvidersToolbarUI ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of ProvidersToolbarUI class
+@type {ProvidersToolbarUI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of ProvidersToolbarUI class
-	@type {ProvidersToolbarUI}
-	@constant
-	@global
+const theProvidersToolbarUI = new ProvidersToolbarUI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_PROVIDERS_TOOLBAR_UI as theProvidersToolbarUI
-};
+export default theProvidersToolbarUI;
 
 /*
 --- End of ProvidersToolbarUI.js file -----------------------------------------------------------------------------------------
