@@ -57,7 +57,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
-import Layer from '../data/Layer.js';
+import MapLayer from '../data/MapLayer.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
 
@@ -65,7 +65,7 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 
 let ourLayers = [
 
-	new Layer (
+	new MapLayer (
 		{
 			service : 'wmts',
 			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -423,7 +423,7 @@ class LayersToolbarUI {
 
 	addLayers ( jsonLayers ) {
 		jsonLayers.forEach (
-			jsonLayer => { ourLayers.push ( new Layer ( jsonLayer ) ); }
+			jsonLayer => { ourLayers.push ( new MapLayer ( jsonLayer ) ); }
 		);
 	}
 }

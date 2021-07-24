@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file Layer.js
+@file MapLayer.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -50,7 +50,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Layer
+@module MapLayer
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class Layer
+@class MapLayer
 @classdesc This class represent a background map
 @desc A background map with all the properties
 @hideconstructor
@@ -70,7 +70,7 @@ import { ZERO, ONE } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class Layer	{
+class MapLayer	{
 
 	/* eslint-disable-next-line complexity, max-statements */
 	constructor ( jsonLayer ) {
@@ -239,7 +239,7 @@ class Layer	{
 			this.attribution = theHTMLSanitizer.sanitizeToHtmlString ( jsonLayer.attribution ).htmlString;
 		}
 		else {
-			throw new Error ( 'invalid attribution for layer ' + this.name );
+			throw new Error ( 'invalid attribution for map layer ' + this.name );
 		}
 		if ( jsonLayer.getCapabilitiesUrl && 'string' === typeof ( jsonLayer.getCapabilitiesUrl ) ) {
 
@@ -250,7 +250,7 @@ class Layer	{
 
 			this.getCapabilitiesUrl = theHTMLSanitizer.sanitizeToUrl ( jsonLayer.getCapabilitiesUrl ).url;
 			if ( '' === this.getCapabilitiesUrl ) {
-				throw new Error ( 'invalid getCapabilitiesUrl for layer ' + this.name );
+				throw new Error ( 'invalid getCapabilitiesUrl for map layer ' + this.name );
 			}
 		}
 
@@ -258,8 +258,8 @@ class Layer	{
 	}
 }
 
-export default Layer;
+export default MapLayer;
 
 /**
---- End of Layer.js file ------------------------------------------------------------------------------------------------------
+--- End of MapLayer.js file ---------------------------------------------------------------------------------------------------
 */
