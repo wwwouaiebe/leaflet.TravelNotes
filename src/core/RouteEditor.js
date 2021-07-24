@@ -75,7 +75,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
+import theErrorsUI from '../UI/ErrorsUI.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import Route from '../data/Route.js';
 import GpxFactory from '../core/GpxFactory.js';

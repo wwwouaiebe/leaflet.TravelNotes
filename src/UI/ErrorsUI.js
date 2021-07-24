@@ -25,7 +25,9 @@ Changes:
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
 		- Issue ♯138 : Protect the app - control html entries done by user.
-Doc reviewed 20200821
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210724
 Tests ...
 */
 
@@ -54,159 +56,6 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { theTranslator } from '../UI/Translator.js';
 
-let ourErrorDiv = null;
-let ourTimerId = null;
-let ourShowHelpInput = null;
-let ourShowHelpDiv = null;
-let ourShowHelp = theConfig.errorsUI.showHelp;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnHelpInputChange
-@desc Event listener for the input change for the show help checkbox
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnHelpInputChange ( ) {
-	ourShowHelp = ! ourShowHelpInput.checked;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnTimer
-@desc Event listener for timer end
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnTimer ( ) {
-	if ( ourTimerId ) {
-		clearTimeout ( ourTimerId );
-		ourTimerId = null;
-	}
-	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Error' );
-	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Warning' );
-	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Info' );
-	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Help' );
-	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-Hidden' );
-	if ( ourShowHelpInput ) {
-		ourShowHelpInput.removeEventListener ( 'change', ourOnHelpInputChange, false );
-		ourShowHelpInput = null;
-		ourShowHelpDiv = null;
-	}
-	ourErrorDiv.textContent = '';
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddHelpCheckbox
-@desc This method add the show help checkbox in the help windows
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddHelpCheckbox ( ) {
-	ourShowHelpDiv = theHTMLElementsFactory.create (
-		'div',
-		{
-			id : 'TravelNotes-ErrorsUI-HelpInputDiv'
-		},
-		ourErrorDiv
-	);
-	ourShowHelpInput = theHTMLElementsFactory.create (
-		'input',
-		{
-			id : 'TravelNotes-ErrorsUI-HelpInput',
-			type : 'checkbox'
-		},
-		ourShowHelpDiv
-	);
-	ourShowHelpInput.addEventListener ( 'change', ourOnHelpInputChange, false );
-	theHTMLElementsFactory.create (
-		'label',
-		{
-			id : 'TravelNotes-ErrorsUI-HelpInputLabel',
-			for : 'TravelNotes-ErrorsUI-HelpInput',
-			textContent : theTranslator.getText ( 'ErrorUI - Dont show again' )
-		},
-		ourShowHelpDiv
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourShow
-@desc This method show the windows
-@param {string} message The message to be displayed
-@param {string} errorLevel The tpe of window to display
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourShow ( message, errorLevel ) {
-	if (
-		( 'Error' === errorLevel && ! theConfig.errorsUI.showError )
-		||
-		( 'Warning' === errorLevel && ! theConfig.errorsUI.showWarning )
-		||
-		( 'Info' === errorLevel && ! theConfig.errorsUI.showInfo )
-		||
-		( 'Help' === errorLevel && ! theConfig.errorsUI.showHelp )
-		||
-		( 'Help' === errorLevel && ! ourShowHelp )
-	) {
-		return;
-	}
-	if ( ourTimerId ) {
-		ourOnTimer ( );
-	}
-	let headerDiv = theHTMLElementsFactory.create (
-		'div',
-		{
-			id : 'TravelNotes-ErrorsUI-Header'
-		},
-		ourErrorDiv
-	);
-	theHTMLElementsFactory.create (
-		'span',
-		{
-			id : 'TravelNotes-ErrorsUI-CancelButton',
-			textContent : '❌'
-		},
-		headerDiv
-	)
-		.addEventListener ( 'click', ourOnTimer, false );
-
-	theHTMLSanitizer.sanitizeToHtmlElement (
-		message,
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-ErrorsUI-Message'
-			},
-			ourErrorDiv
-		)
-	);
-
-	ourErrorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
-	let timeOutDuration = theConfig.errorsUI.timeOut;
-	if ( 'Help' === errorLevel ) {
-		ourAddHelpCheckbox ( );
-		timeOutDuration = theConfig.errorsUI.helpTimeOut;
-	}
-	ourErrorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Hidden' );
-	ourTimerId = setTimeout ( ourOnTimer, timeOutDuration );
-}
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -220,6 +69,139 @@ function ourShow ( message, errorLevel ) {
 
 class ErrorsUI {
 
+	static #errorDiv = null;
+	static #timerId = null;
+	static #showHelpInput = null;
+	static #showHelpDiv = null;
+	static #showHelp = theConfig.errorsUI.showHelp;
+
+	/**
+	Event listener for the input change for the show help checkbox
+	@private
+	*/
+
+	static #onHelpInputChange ( ) {
+		ErrorsUI.#showHelp = ! ErrorsUI.#showHelpInput.checked;
+	}
+
+	/**
+	Event listener for timer end
+	@private
+	*/
+
+	static #onTimer ( ) {
+		if ( ErrorsUI.#timerId ) {
+			clearTimeout ( ErrorsUI.#timerId );
+			ErrorsUI.#timerId = null;
+		}
+		ErrorsUI.#errorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Error' );
+		ErrorsUI.#errorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Warning' );
+		ErrorsUI.#errorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Info' );
+		ErrorsUI.#errorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Help' );
+		ErrorsUI.#errorDiv.classList.add ( 'TravelNotes-ErrorsUI-Hidden' );
+		if ( ErrorsUI.#showHelpInput ) {
+			ErrorsUI.#showHelpInput.removeEventListener ( 'change', ErrorsUI.#onHelpInputChange, false );
+			ErrorsUI.#showHelpInput = null;
+			ErrorsUI.#showHelpDiv = null;
+		}
+		ErrorsUI.#errorDiv.textContent = '';
+	}
+
+	/**
+	This method add the show help checkbox in the help windows
+	@private
+	*/
+
+	#addHelpCheckbox ( ) {
+		ErrorsUI.#showHelpDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-ErrorsUI-HelpInputDiv'
+			},
+			ErrorsUI.#errorDiv
+		);
+		ErrorsUI.#showHelpInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				id : 'TravelNotes-ErrorsUI-HelpInput',
+				type : 'checkbox'
+			},
+			ErrorsUI.#showHelpDiv
+		);
+		ErrorsUI.#showHelpInput.addEventListener ( 'change', ErrorsUI.#onHelpInputChange, false );
+		theHTMLElementsFactory.create (
+			'label',
+			{
+				id : 'TravelNotes-ErrorsUI-HelpInputLabel',
+				for : 'TravelNotes-ErrorsUI-HelpInput',
+				textContent : theTranslator.getText ( 'ErrorUI - Dont show again' )
+			},
+			ErrorsUI.#showHelpDiv
+		);
+	}
+
+	/**
+	This method show the windows
+	@param {string} message The message to be displayed
+	@param {string} errorLevel The tpe of window to display
+	@private
+	*/
+
+	#show ( message, errorLevel ) {
+		if (
+			( 'Error' === errorLevel && ! theConfig.errorsUI.showError )
+			||
+			( 'Warning' === errorLevel && ! theConfig.errorsUI.showWarning )
+			||
+			( 'Info' === errorLevel && ! theConfig.errorsUI.showInfo )
+			||
+			( 'Help' === errorLevel && ! theConfig.errorsUI.showHelp )
+			||
+			( 'Help' === errorLevel && ! ErrorsUI.#showHelp )
+		) {
+			return;
+		}
+		if ( ErrorsUI.#timerId ) {
+			ErrorsUI.#onTimer ( );
+		}
+		let headerDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-ErrorsUI-Header'
+			},
+			ErrorsUI.#errorDiv
+		);
+		theHTMLElementsFactory.create (
+			'span',
+			{
+				id : 'TravelNotes-ErrorsUI-CancelButton',
+				textContent : '❌'
+			},
+			headerDiv
+		)
+			.addEventListener ( 'click', ErrorsUI.#onTimer, false );
+
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			message,
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-ErrorsUI-Message'
+				},
+				ErrorsUI.#errorDiv
+			)
+		);
+
+		ErrorsUI.#errorDiv.classList.add ( 'TravelNotes-ErrorsUI-' + errorLevel );
+		let timeOutDuration = theConfig.errorsUI.timeOut;
+		if ( 'Help' === errorLevel ) {
+			this.#addHelpCheckbox ( );
+			timeOutDuration = theConfig.errorsUI.helpTimeOut;
+		}
+		ErrorsUI.#errorDiv.classList.remove ( 'TravelNotes-ErrorsUI-Hidden' );
+		ErrorsUI.#timerId = setTimeout ( ErrorsUI.#onTimer, timeOutDuration );
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -229,10 +211,10 @@ class ErrorsUI {
 	*/
 
 	createUI ( ) {
-		if ( ourErrorDiv ) {
+		if ( ErrorsUI.#errorDiv ) {
 			return;
 		}
-		ourErrorDiv = theHTMLElementsFactory.create (
+		ErrorsUI.#errorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ErrorsUI',
@@ -248,7 +230,7 @@ class ErrorsUI {
 	@param {string} error The error message to display
 	*/
 
-	showError ( error ) { ourShow ( error, 'Error' ); }
+	showError ( error ) { this.#show ( error, 'Error' ); }
 
 	/**
 	Show an warning message ( a black text on an orange background )
@@ -256,7 +238,7 @@ class ErrorsUI {
 	@param {string} warning The warning message to display
 	*/
 
-	showWarning ( warning ) { ourShow ( warning, 'Warning' ); }
+	showWarning ( warning ) { this.#show ( warning, 'Warning' ); }
 
 	/**
 	Show an info message ( a black text on a white background )
@@ -264,7 +246,7 @@ class ErrorsUI {
 	@param {string} info The info message to display
 	*/
 
-	showInfo ( info ) { ourShow ( info, 'Info' ); }
+	showInfo ( info ) { this.#show ( info, 'Info' ); }
 
 	/**
 	Show a help message ( a black text on a white background )
@@ -273,27 +255,24 @@ class ErrorsUI {
 	@param {string} help The help message to display
 	*/
 
-	showHelp ( help ) { ourShow ( help, 'Help' ); }
+	showHelp ( help ) { this.#show ( help, 'Help' ); }
 
 }
 
-const OUR_ERRORS_UI = new ErrorsUI ( );
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of ErrorsUI class
+@type {ErrorsUI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of ErrorsUI class
-	@type {ErrorsUI}
-	@constant
-	@global
+const theErrorsUI = new ErrorsUI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_ERRORS_UI as theErrorsUI
-};
+export default theErrorsUI;
 
 /*
 --- End of ErrorsUI.js file ---------------------------------------------------------------------------------------------------

@@ -69,7 +69,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
+import theErrorsUI from '../UI/ErrorsUI.js';
 import theTravelEditor from '../core/TravelEditor.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import FileLoader from '../core/FileLoader.js';

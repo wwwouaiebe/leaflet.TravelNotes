@@ -77,7 +77,7 @@ import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import theConfig from '../data/Config.js';
 import { newWaitUI } from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
+import theErrorsUI from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import GeoCoder from '../core/GeoCoder.js';
 

@@ -54,7 +54,7 @@ import { theTravelNotes } from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
 import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
+import theErrorsUI from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';

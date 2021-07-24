@@ -59,7 +59,7 @@ import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theUtilities from '../util/Utilities.js';
 import DataEncryptor from '../util/DataEncryptor.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
+import theErrorsUI from '../UI/ErrorsUI.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
