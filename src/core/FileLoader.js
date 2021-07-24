@@ -58,7 +58,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import theMouseUI from '../UI/MouseUI.js';

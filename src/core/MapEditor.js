@@ -78,7 +78,7 @@ import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import ViewerMapEditor from '../core/ViewerMapEditor.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 
 import { ROUTE_EDITION_STATUS, LAT_LNG, NOT_FOUND, INVALID_OBJ_ID, ZERO, ONE, TWO } from '../util/Constants.js';
 

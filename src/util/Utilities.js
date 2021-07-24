@@ -45,7 +45,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../util/Constants.js';
 
 /**

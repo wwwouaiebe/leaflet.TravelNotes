@@ -55,7 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theCurrentVersion from '../data/Version.js';

@@ -28,7 +28,7 @@ Doc reviewed 20200816
 Tests ...
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import ObjId from '../data/ObjId.js';
 import { newFloatWindow } from '../dialogs/FloatWindow.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';

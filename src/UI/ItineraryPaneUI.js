@@ -50,7 +50,7 @@ Tests ...
 
 import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';

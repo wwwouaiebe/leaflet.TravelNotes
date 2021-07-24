@@ -64,7 +64,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theMapLayersCollection from '../UI/MapLayersToolbarUI.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';

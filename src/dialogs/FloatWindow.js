@@ -27,7 +27,7 @@ Doc reviewed 20200816
 Tests ...
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { ZERO } from '../util/Constants.js';

@@ -52,7 +52,7 @@ import theWayPointEditor from '../core/WayPointEditor.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 import Zoomer from '../core/Zoomer.js';
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';

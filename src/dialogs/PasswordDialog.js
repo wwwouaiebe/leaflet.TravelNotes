@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 

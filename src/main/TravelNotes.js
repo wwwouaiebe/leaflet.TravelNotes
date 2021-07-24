@@ -92,7 +92,7 @@ import theAttributionsUI from '../UI/AttributionsUI.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;

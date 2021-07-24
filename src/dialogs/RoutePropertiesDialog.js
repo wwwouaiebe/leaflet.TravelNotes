@@ -55,7 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newColorDialog } from '../dialogs/ColorDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';

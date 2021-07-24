@@ -21,7 +21,9 @@ Changes:
 		- Issue ♯65 : Time to go to ES6 modules?
 	- v2.0.0:
 		- Issue ♯137 : Remove html tags from json files
-Doc reviewed 20200822
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210724
 Tests ...
 */
 
@@ -59,8 +61,6 @@ Tests ...
 
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
-let ourTranslations = new Map ( );
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -74,6 +74,8 @@ let ourTranslations = new Map ( );
 
 class Translator {
 
+	#translations = new Map ( );
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -85,7 +87,7 @@ class Translator {
 
 	setTranslations ( translations ) {
 		translations.forEach (
-			translation => ourTranslations.set (
+			translation => this.#translations.set (
 				translation.msgid,
 				theHTMLSanitizer.sanitizeToJsString ( translation.msgstr )
 			)
@@ -101,7 +103,7 @@ class Translator {
 	*/
 
 	getText ( msgid, params ) {
-		let translation = ourTranslations.get ( msgid );
+		let translation = this.#translations.get ( msgid );
 		if ( params && translation ) {
 			Object.getOwnPropertyNames ( params ).forEach (
 				propertyName => translation = translation.replace ( '{' + propertyName + '}', params [ propertyName ] )
@@ -111,23 +113,20 @@ class Translator {
 	}
 }
 
-const OUR_TRANSLATOR = new Translator ( );
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of Translator class
+@type {Translator}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of Translator class
-	@type {Translator}
-	@constant
-	@global
+const theTranslator = new Translator ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRANSLATOR as theTranslator
-};
+export default theTranslator;
 
 /*
 --- End of Translator.js file -----------------------------------------------------------------------------------------

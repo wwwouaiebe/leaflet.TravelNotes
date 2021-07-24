@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';

@@ -52,7 +52,7 @@ import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';

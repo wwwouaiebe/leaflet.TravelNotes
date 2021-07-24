@@ -61,7 +61,7 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theGeometry from '../util/Geometry.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 
 import { ICON_DIMENSIONS, DISTANCE, INVALID_OBJ_ID, ZERO, ONE, TWO, NOT_FOUND, DEGREES } from '../util/Constants.js';
 

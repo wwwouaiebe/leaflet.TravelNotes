@@ -68,7 +68,7 @@ but not active
 */
 
 import theConfig from '../data/Config.js';
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 

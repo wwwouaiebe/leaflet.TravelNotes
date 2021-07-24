@@ -42,7 +42,7 @@ save button
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
