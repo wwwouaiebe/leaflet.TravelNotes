@@ -57,34 +57,11 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
-import MapLayer from '../data/MapLayer.js';
+import theMapLayersCollection from '../data/MapLayersCollection.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
 
 const OUR_MIN_BUTTONS_VISIBLE = 3;
-
-let ourLayers = [
-
-	new MapLayer (
-		{
-			service : 'wmts',
-			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-			name : 'OSM - Color',
-			toolbar :
-			{
-				text : 'OSM',
-				color : '\u0023ff0000',
-				backgroundColor : '\u0023ffffff'
-			},
-			providerName : 'OSM',
-			providerKeyNeeded : false,
-			attribution : ''
-		}
-	)
-
-];
-
-let ourLayersToolbar = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -182,6 +159,8 @@ class ToolbarEvents {
 	static #buttonTop = ZERO;
 	static #timerId = null;
 	static #layersToolbarButtonsDiv = null;
+
+	static #getMapLayersToolbar ( ) { return document.getElementById ( 'TravelNotes-MapLayersToolbarUI' ); }
 
 	/**
 	Create a button for a layer on the toolbar
@@ -285,11 +264,11 @@ class ToolbarEvents {
 			{
 				id : 'TravelNotes-MapLayersToolbarUI-Buttons'
 			},
-			ourLayersToolbar
+			ToolbarEvents.#getMapLayersToolbar ( )
 		);
-		ToolbarEvents.#buttonTop = ourLayersToolbar.clientHeight;
+		ToolbarEvents.#buttonTop = ToolbarEvents.#getMapLayersToolbar ( ).clientHeight;
 		ToolbarEvents.#buttonsHeight = ZERO;
-		ourLayers.forEach ( layer => ToolbarEvents.#createLayerButton ( layer ) );
+		theMapLayersCollection.forEach ( layer => ToolbarEvents.#createLayerButton ( layer ) );
 		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
 			ToolbarEvents.#createLinkButton (
 				'https://www.google.com/maps/@' +
@@ -327,7 +306,7 @@ class ToolbarEvents {
 			}
 		}
 		ToolbarEvents.#layersToolbarButtonsDiv.removeEventListener ( 'wheel', ToolbarEvents.onWheel, false );
-		ourLayersToolbar.removeChild ( ToolbarEvents.#layersToolbarButtonsDiv );
+		ToolbarEvents.#getMapLayersToolbar ( ).removeChild ( ToolbarEvents.#layersToolbarButtonsDiv );
 		ToolbarEvents.#timerId = null;
 	}
 
@@ -364,67 +343,33 @@ class MapLayersToolbarUI {
 	*/
 
 	createUI ( ) {
-		ourLayersToolbar = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MapLayersToolbarUI' }, document.body );
+		let layersToolbar = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MapLayersToolbarUI' }, document.body );
 		theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-MapLayersToolbarUI-Header',
 				textContent : theTranslator.getText ( 'MapLayersToolbarUI - Layers' )
 			},
-			ourLayersToolbar
+			layersToolbar
 		);
-		ourLayersToolbar.addEventListener ( 'mouseenter', ToolbarEvents.onMouseEnter, false );
-		ourLayersToolbar.addEventListener ( 'mouseleave', ToolbarEvents.onMouseLeave, false );
-		theEventDispatcher.dispatch ( 'layerchange', { layer : ourLayers [ ZERO ] } );
-		theAttributionsUI.attributions = ourLayers [ ZERO ].attribution;
+		layersToolbar.addEventListener ( 'mouseenter', ToolbarEvents.onMouseEnter, false );
+		layersToolbar.addEventListener ( 'mouseleave', ToolbarEvents.onMouseLeave, false );
+		theEventDispatcher.dispatch ( 'layerchange', { layer : theMapLayersCollection.defaultMapLayer } );
+		theAttributionsUI.attributions = theMapLayersCollection.defaultMapLayer.attribution;
 	}
 
 	/**
-	gives a layer object
-	@param {string} layerName the name of the layer to given
-	@return {Layer} The asked layer. If a provider key is needed and the key not available
-	the 'OSM - Color' layer is returned. If the layer is not found, the 'OSM - Color' layer
-	is returned
-	*/
-
-	getLayer ( layerName ) {
-		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
-		if ( theLayer.providerKeyNeeded ) {
-			if ( ! theAPIKeysManager.hasKey ( theLayer.providerName.toLowerCase ( ) ) ) {
-				theLayer = ourLayers [ ZERO ];
-			}
-		}
-		return theLayer;
-	}
-
-	/**
-	Set a layer as background map. If a provider key is needed and the key not available
-	the 'OSM - Color' layer is set. If the layer is not found, the 'OSM - Color' layer
+	Set a mapLayer as background map. If a provider key is needed and the key not available
+	the 'OSM - Color' mapLayer is set. If the mapLayer is not found, the 'OSM - Color' mapLayer
 	is set
-	@param {string} layerName the name of the layer to set
+	@param {string} mapLayerName the name of the mapLayer to set
 	*/
 
-	setLayer ( layerName ) {
-		let theLayer = ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
-		if ( theLayer.providerKeyNeeded ) {
-			if ( ! theAPIKeysManager.hasKey ( theLayer.providerName.toLowerCase ( ) ) ) {
-				theLayer = ourLayers [ ZERO ];
-			}
-		}
+	setMapLayer ( mapLayerName ) {
+		let theLayer = theMapLayersCollection.getMapLayer ( mapLayerName );
 		theEventDispatcher.dispatch ( 'layerchange', { layer : theLayer } );
 		theAttributionsUI.attributions = theLayer.attribution;
 		theTravelNotesData.travel.layerName = theLayer.name;
-	}
-
-	/**
-	Add a layer list to the list of available layers
-	@param {Array.<Layer>} layers the layer list to add
-	*/
-
-	addLayers ( jsonLayers ) {
-		jsonLayers.forEach (
-			jsonLayer => { ourLayers.push ( new MapLayer ( jsonLayer ) ); }
-		);
 	}
 }
 

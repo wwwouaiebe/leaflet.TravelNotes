@@ -358,7 +358,7 @@ class TravelNotes {
 			theTravelNotesData.map = map;
 		}
 		theAttributionsUI.createUI ( );
-		theMapLayersToolbarUI.setLayer ( 'OSM - Color' );
+		theMapLayersToolbarUI.setMapLayer ( 'OSM - Color' );
 		ourLoadDistantTravel ( travelUrl );
 	}
 
@@ -387,7 +387,7 @@ class TravelNotes {
 			theMapLayersToolbarUI.createUI ( );
 		}
 		else {
-			theMapLayersToolbarUI.setLayer ( 'OSM - Color' );
+			theMapLayersToolbarUI.setMapLayer ( 'OSM - Color' );
 		}
 
 		if ( theConfig.mouseUI.haveMouseUI ) {

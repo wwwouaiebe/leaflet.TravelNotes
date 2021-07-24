@@ -53,7 +53,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theTranslator } from '../UI/Translator.js';
-import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
+import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
@@ -205,7 +205,7 @@ function ourMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@function myLoadLayers
-	@desc This function load the content of the TravelNotesLayers.json file into theMapLayersToolbarUI object
+	@desc This function load the content of the TravelNotesLayers.json file into theMapLayersCollection object
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ function ourMain ( ) {
 			&&
 			layersPromiseResult.value.ok
 		) {
-			theMapLayersToolbarUI.addLayers ( await layersPromiseResult.value.json ( ) );
+			theMapLayersCollection.addMapLayers ( await layersPromiseResult.value.json ( ) );
 			return '';
 		}
 		return 'Not possible to load the TravelNotesLayers.json file. Only the OpenStreetMap background will be available. ';

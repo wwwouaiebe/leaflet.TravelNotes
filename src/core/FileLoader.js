@@ -139,7 +139,7 @@ class FileLoader {
 		}
 		new Zoomer ( ).zoomToTravel ( );
 
-		theMapLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
+		theMapLayersToolbarUI.setMapLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and HTML pages are filled
 		theEventDispatcher.dispatch ( 'setrouteslist' );

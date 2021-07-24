@@ -65,7 +65,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
 import { theTranslator } from '../UI/Translator.js';
-import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
+import theMapLayersCollection from '../UI/MapLayersToolbarUI.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
@@ -505,7 +505,7 @@ function ourNewPrintFactory ( ) {
 	*/
 
 	function myGetLayer ( ) {
-		let layer = theMapLayersToolbarUI.getLayer ( theTravelNotesData.travel.layerName );
+		let layer = theMapLayersCollection.getMapLayer ( theTravelNotesData.travel.layerName );
 		let url = theAPIKeysManager.getUrl ( layer );
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
