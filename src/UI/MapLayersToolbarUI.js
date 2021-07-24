@@ -66,7 +66,7 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LayerButtonEvents
+@class LayerButtonEventListeners
 @classdesc This class contains the event listeners for the layer buttons
 @hideconstructor
 @private
@@ -74,7 +74,7 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LayerButtonEvents {
+class LayerButtonEventListeners {
 
 	/**
 	Mouse enter event listener. Inverse the button color
@@ -110,7 +110,7 @@ class LayerButtonEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LinkButtonEvents
+@class LinkButtonEventListeners
 @classdesc This class contains the event listeners for the link buttons
 @hideconstructor
 @private
@@ -118,7 +118,7 @@ class LayerButtonEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LinkButtonEvents {
+class LinkButtonEventListeners {
 
 	/**
 	Mouse enter event listener. Inverse the button color
@@ -143,7 +143,7 @@ class LinkButtonEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ToolbarEvents
+@class ToolbarEventListeners
 @classdesc This class contains the event listeners for the toolbar
 @hideconstructor
 @private
@@ -151,7 +151,7 @@ class LinkButtonEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ToolbarEvents {
+class ToolbarEventListeners {
 
 	static #marginTop = ZERO;
 	static #buttonHeight = ZERO;
@@ -182,13 +182,13 @@ class ToolbarEvents {
 				textContent : layer.toolbar.text,
 				style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
 			},
-			ToolbarEvents.#layersToolbarButtonsDiv
+			ToolbarEventListeners.#layersToolbarButtonsDiv
 		);
-		layerButton.addEventListener ( 'mouseenter', LayerButtonEvents.onMouseEnter, false );
-		layerButton.addEventListener ( 'mouseleave', LayerButtonEvents.onMouseLeave, false );
-		layerButton.addEventListener ( 'click', LayerButtonEvents.onClick, false );
-		ToolbarEvents.#buttonHeight = layerButton.clientHeight;
-		ToolbarEvents.#buttonsHeight += ToolbarEvents.#buttonHeight;
+		layerButton.addEventListener ( 'mouseenter', LayerButtonEventListeners.onMouseEnter, false );
+		layerButton.addEventListener ( 'mouseleave', LayerButtonEventListeners.onMouseLeave, false );
+		layerButton.addEventListener ( 'click', LayerButtonEventListeners.onClick, false );
+		ToolbarEventListeners.#buttonHeight = layerButton.clientHeight;
+		ToolbarEventListeners.#buttonsHeight += ToolbarEventListeners.#buttonHeight;
 	}
 
 	/**
@@ -206,7 +206,7 @@ class ToolbarEvents {
 				type : 'link',
 				className : 'TravelNotes-MapLayersToolbarUI-Button TravelNotes-MapLayersToolbarUI-LinkButton-Leave'
 			},
-			ToolbarEvents.#layersToolbarButtonsDiv
+			ToolbarEventListeners.#layersToolbarButtonsDiv
 		);
 		theHTMLElementsFactory.create (
 			'a',
@@ -219,9 +219,9 @@ class ToolbarEvents {
 			linkButton
 		);
 
-		linkButton.addEventListener ( 'mouseenter', LinkButtonEvents.onMouseEnter, false );
-		linkButton.addEventListener ( 'mouseleave', LinkButtonEvents.onMouseLeave, false );
-		ToolbarEvents.#buttonsHeight += linkButton.clientHeight;
+		linkButton.addEventListener ( 'mouseenter', LinkButtonEventListeners.onMouseEnter, false );
+		linkButton.addEventListener ( 'mouseleave', LinkButtonEventListeners.onMouseLeave, false );
+		ToolbarEventListeners.#buttonsHeight += linkButton.clientHeight;
 	}
 
 	/**
@@ -230,21 +230,25 @@ class ToolbarEvents {
 
 	static onWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
-			ToolbarEvents.#marginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
-			ToolbarEvents.#marginTop =
-				ToolbarEvents.#marginTop > ToolbarEvents.#buttonTop ? ToolbarEvents.#buttonTop : ToolbarEvents.#marginTop;
-			ToolbarEvents.#marginTop =
-				ToolbarEvents.#marginTop < ToolbarEvents.#buttonTop - ToolbarEvents.#buttonsHeight +
-				( OUR_MIN_BUTTONS_VISIBLE * ToolbarEvents.#buttonHeight )
+			ToolbarEventListeners.#marginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
+			ToolbarEventListeners.#marginTop =
+				ToolbarEventListeners.#marginTop > ToolbarEventListeners.#buttonTop
+					?
+					ToolbarEventListeners.#buttonTop
+					:
+					ToolbarEventListeners.#marginTop;
+			ToolbarEventListeners.#marginTop =
+				ToolbarEventListeners.#marginTop < ToolbarEventListeners.#buttonTop - ToolbarEventListeners.#buttonsHeight +
+				( OUR_MIN_BUTTONS_VISIBLE * ToolbarEventListeners.#buttonHeight )
 					?
 					(
-						ToolbarEvents.#buttonTop -
-						ToolbarEvents.#buttonsHeight +
-						( OUR_MIN_BUTTONS_VISIBLE * ToolbarEvents.#buttonHeight )
+						ToolbarEventListeners.#buttonTop -
+						ToolbarEventListeners.#buttonsHeight +
+						( OUR_MIN_BUTTONS_VISIBLE * ToolbarEventListeners.#buttonHeight )
 					)
 					:
-					ToolbarEvents.#marginTop;
-			ToolbarEvents.#layersToolbarButtonsDiv.style.marginTop = String ( ToolbarEvents.#marginTop ) + 'px';
+					ToolbarEventListeners.#marginTop;
+			ToolbarEventListeners.#layersToolbarButtonsDiv.style.marginTop = String ( ToolbarEventListeners.#marginTop ) + 'px';
 		}
 		wheelEvent.stopPropagation ( );
 	}
@@ -254,23 +258,23 @@ class ToolbarEvents {
 	*/
 
 	static onMouseEnter ( ) {
-		if ( ToolbarEvents.#timerId ) {
-			clearTimeout ( ToolbarEvents.#timerId );
-			ToolbarEvents.#timerId = null;
+		if ( ToolbarEventListeners.#timerId ) {
+			clearTimeout ( ToolbarEventListeners.#timerId );
+			ToolbarEventListeners.#timerId = null;
 			return;
 		}
-		ToolbarEvents.#layersToolbarButtonsDiv = theHTMLElementsFactory.create (
+		ToolbarEventListeners.#layersToolbarButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-MapLayersToolbarUI-Buttons'
 			},
-			ToolbarEvents.#getMapLayersToolbar ( )
+			ToolbarEventListeners.#getMapLayersToolbar ( )
 		);
-		ToolbarEvents.#buttonTop = ToolbarEvents.#getMapLayersToolbar ( ).clientHeight;
-		ToolbarEvents.#buttonsHeight = ZERO;
-		theMapLayersCollection.forEach ( layer => ToolbarEvents.#createLayerButton ( layer ) );
+		ToolbarEventListeners.#buttonTop = ToolbarEventListeners.#getMapLayersToolbar ( ).clientHeight;
+		ToolbarEventListeners.#buttonsHeight = ZERO;
+		theMapLayersCollection.forEach ( layer => ToolbarEventListeners.#createLayerButton ( layer ) );
 		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
-			ToolbarEvents.#createLinkButton (
+			ToolbarEventListeners.#createLinkButton (
 				'https://www.google.com/maps/@' +
 					theTravelNotesData.map.getCenter ( ).lat +
 					',' +
@@ -282,10 +286,10 @@ class ToolbarEvents {
 				'👿'
 			);
 		}
-		ToolbarEvents.#buttonTop += ToolbarEvents.#buttonHeight;
-		ToolbarEvents.#marginTop = ToolbarEvents.#buttonTop;
-		ToolbarEvents.#layersToolbarButtonsDiv.style.marginTop = String ( ToolbarEvents.#marginTop ) + 'px';
-		ToolbarEvents.#layersToolbarButtonsDiv.addEventListener ( 'wheel', ToolbarEvents.onWheel, false );
+		ToolbarEventListeners.#buttonTop += ToolbarEventListeners.#buttonHeight;
+		ToolbarEventListeners.#marginTop = ToolbarEventListeners.#buttonTop;
+		ToolbarEventListeners.#layersToolbarButtonsDiv.style.marginTop = String ( ToolbarEventListeners.#marginTop ) + 'px';
+		ToolbarEventListeners.#layersToolbarButtonsDiv.addEventListener ( 'wheel', ToolbarEventListeners.onWheel, false );
 	}
 
 	/**
@@ -293,21 +297,21 @@ class ToolbarEvents {
 	*/
 
 	static onTimeout ( ) {
-		let buttons = ToolbarEvents.#layersToolbarButtonsDiv.childNodes;
+		let buttons = ToolbarEventListeners.#layersToolbarButtonsDiv.childNodes;
 		for ( let counter = 0; counter < buttons.length; counter ++ ) {
 			if ( 'layer' === buttons [ counter ].type ) {
-				buttons [ counter ].removeEventListener ( 'mouseenter', LayerButtonEvents.onMouseEnter, false );
-				buttons [ counter ].removeEventListener ( 'mouseleave', LayerButtonEvents.onMouseLeave, false );
-				buttons [ counter ].removeEventListener ( 'click', LayerButtonEvents.onClick, false );
+				buttons [ counter ].removeEventListener ( 'mouseenter', LayerButtonEventListeners.onMouseEnter, false );
+				buttons [ counter ].removeEventListener ( 'mouseleave', LayerButtonEventListeners.onMouseLeave, false );
+				buttons [ counter ].removeEventListener ( 'click', LayerButtonEventListeners.onClick, false );
 			}
 			else {
-				buttons [ counter ].removeEventListener ( 'mouseenter', LinkButtonEvents.onMouseEnter, false );
-				buttons [ counter ].removeEventListener ( 'mouseleave', LinkButtonEvents.onMouseEnter, false );
+				buttons [ counter ].removeEventListener ( 'mouseenter', LinkButtonEventListeners.onMouseEnter, false );
+				buttons [ counter ].removeEventListener ( 'mouseleave', LinkButtonEventListeners.onMouseEnter, false );
 			}
 		}
-		ToolbarEvents.#layersToolbarButtonsDiv.removeEventListener ( 'wheel', ToolbarEvents.onWheel, false );
-		ToolbarEvents.#getMapLayersToolbar ( ).removeChild ( ToolbarEvents.#layersToolbarButtonsDiv );
-		ToolbarEvents.#timerId = null;
+		ToolbarEventListeners.#layersToolbarButtonsDiv.removeEventListener ( 'wheel', ToolbarEventListeners.onWheel, false );
+		ToolbarEventListeners.#getMapLayersToolbar ( ).removeChild ( ToolbarEventListeners.#layersToolbarButtonsDiv );
+		ToolbarEventListeners.#timerId = null;
 	}
 
 	/**
@@ -315,7 +319,8 @@ class ToolbarEvents {
 	*/
 
 	static onMouseLeave ( ) {
-		ToolbarEvents.#timerId = setTimeout ( ToolbarEvents.onTimeout, theConfig.layersToolbarUI.toolbarTimeOut );
+		ToolbarEventListeners.#timerId =
+			setTimeout ( ToolbarEventListeners.onTimeout, theConfig.layersToolbarUI.toolbarTimeOut );
 	}
 
 }
@@ -352,8 +357,8 @@ class MapLayersToolbarUI {
 			},
 			layersToolbar
 		);
-		layersToolbar.addEventListener ( 'mouseenter', ToolbarEvents.onMouseEnter, false );
-		layersToolbar.addEventListener ( 'mouseleave', ToolbarEvents.onMouseLeave, false );
+		layersToolbar.addEventListener ( 'mouseenter', ToolbarEventListeners.onMouseEnter, false );
+		layersToolbar.addEventListener ( 'mouseleave', ToolbarEventListeners.onMouseLeave, false );
 		theEventDispatcher.dispatch ( 'layerchange', { layer : theMapLayersCollection.defaultMapLayer } );
 		theAttributionsUI.attributions = theMapLayersCollection.defaultMapLayer.attribution;
 	}
