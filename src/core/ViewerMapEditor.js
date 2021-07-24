@@ -68,7 +68,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const OUR_DEFAULT_MAX_ZOOM = 18;

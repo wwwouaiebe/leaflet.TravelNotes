@@ -48,7 +48,7 @@ Tests ...
 */
 
 import { theTranslator } from '../UI/Translator.js';
-import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { LAT_LNG, ZERO, PANE_ID } from '../util/Constants.js';

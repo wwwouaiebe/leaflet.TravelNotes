@@ -75,7 +75,7 @@ import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import GeoCoder from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import Note from '../data/Note.js';
-import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
+import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
