@@ -33,7 +33,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file LayersToolbarUI.js
+@file MapLayersToolbarUI.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -44,7 +44,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module LayersToolbarUI
+@module MapLayersToolbarUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -148,8 +148,8 @@ class LinkButtonEvents {
 	*/
 
 	static onMouseEnter ( mouseEnterEvent ) {
-		mouseEnterEvent.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
-		mouseEnterEvent.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
+		mouseEnterEvent.target.classList.add ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Enter' );
+		mouseEnterEvent.target.classList.remove ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Leave' );
 	}
 
 	/**
@@ -157,8 +157,8 @@ class LinkButtonEvents {
 	*/
 
 	static onMouseLeave ( mouseLeaveEvent ) {
-		mouseLeaveEvent.target.classList.add ( 'TravelNotes-LayersToolbarUI-LinkButton-Leave' );
-		mouseLeaveEvent.target.classList.remove ( 'TravelNotes-LayersToolbarUI-LinkButton-Enter' );
+		mouseLeaveEvent.target.classList.add ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Leave' );
+		mouseLeaveEvent.target.classList.remove ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Enter' );
 	}
 
 }
@@ -197,7 +197,7 @@ class ToolbarEvents {
 			'div',
 			{
 				type : 'layer',
-				className : 'TravelNotes-LayersToolbarUI-Button',
+				className : 'TravelNotes-MapLayersToolbarUI-Button',
 				title : layer.name,
 				layer : layer,
 				textContent : layer.toolbar.text,
@@ -225,7 +225,7 @@ class ToolbarEvents {
 			'div',
 			{
 				type : 'link',
-				className : 'TravelNotes-LayersToolbarUI-Button TravelNotes-LayersToolbarUI-LinkButton-Leave'
+				className : 'TravelNotes-MapLayersToolbarUI-Button TravelNotes-MapLayersToolbarUI-LinkButton-Leave'
 			},
 			ToolbarEvents.#layersToolbarButtonsDiv
 		);
@@ -283,7 +283,7 @@ class ToolbarEvents {
 		ToolbarEvents.#layersToolbarButtonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-LayersToolbarUI-Buttons'
+				id : 'TravelNotes-MapLayersToolbarUI-Buttons'
 			},
 			ourLayersToolbar
 		);
@@ -347,13 +347,13 @@ class ToolbarEvents {
 @class
 @classdesc This class is the Layer Toolbar on the left of the screen.
 Displays buttons to change the background maps and manages the background maps list
-@see {@link theLayersToolbarUI} for the one and only one instance of this class
+@see {@link theMapLayersToolbarUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LayersToolbarUI {
+class MapLayersToolbarUI {
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -364,12 +364,12 @@ class LayersToolbarUI {
 	*/
 
 	createUI ( ) {
-		ourLayersToolbar = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-LayersToolbarUI' }, document.body );
+		ourLayersToolbar = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MapLayersToolbarUI' }, document.body );
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-LayersToolbarUI-Header',
-				textContent : theTranslator.getText ( 'LayersToolbarUI - Layers' )
+				id : 'TravelNotes-MapLayersToolbarUI-Header',
+				textContent : theTranslator.getText ( 'MapLayersToolbarUI - Layers' )
 			},
 			ourLayersToolbar
 		);
@@ -431,18 +431,18 @@ class LayersToolbarUI {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@desc The one and only one instance of LayersToolbarUI class
-@type {LayersToolbarUI}
+@desc The one and only one instance of MapLayersToolbarUI class
+@type {MapLayersToolbarUI}
 @constant
 @global
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-const theLayersToolbarUI = new LayersToolbarUI ( );
+const theMapLayersToolbarUI = new MapLayersToolbarUI ( );
 
-export default theLayersToolbarUI;
+export default theMapLayersToolbarUI;
 
 /*
---- End of LayersToolbarUI.js file --------------------------------------------------------------------------------------------
+--- End of MapLayersToolbarUI.js file -----------------------------------------------------------------------------------------
 */

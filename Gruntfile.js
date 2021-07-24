@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 		'src/dialogs/PrintRouteMapDialog.css', 'src/dialogs/RoutePropertiesDialog.css', 'src/dialogs/TwoButtonsDialog.css', 'src/dialogs/WayPointPropertiesDialog.css',
 		'src/dialogs/FloatWindow.css',
 		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css',
-		'src/UI/ItineraryPaneUI.css', 'src/UI/LayersToolbarUI.css', 'src/UI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
+		'src/UI/ItineraryPaneUI.css', 'src/UI/MapLayersToolbarUI.css', 'src/UI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
 		'src/UI/ProvidersToolbarUI.css', 'src/UI/TravelNotesPaneUI.css', 'src/UI/TravelNotesToolbarUI.css', 'src/UI/TravelUI.css', 'src/UI/UI.css', 'src/UI/WaitUI.css',
 		'src/css/Hidden.css' // must always be the last css
 	];

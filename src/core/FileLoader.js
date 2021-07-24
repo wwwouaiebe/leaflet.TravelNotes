@@ -62,7 +62,7 @@ import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
-import theLayersToolbarUI from '../UI/LayersToolbarUI.js';
+import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import FileCompactor from '../core/FileCompactor.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
@@ -139,7 +139,7 @@ class FileLoader {
 		}
 		new Zoomer ( ).zoomToTravel ( );
 
-		theLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
+		theMapLayersToolbarUI.setLayer ( theTravelNotesData.travel.layerName );
 
 		// Editors and HTML pages are filled
 		theEventDispatcher.dispatch ( 'setrouteslist' );

@@ -224,10 +224,6 @@
 		"msgstr" : "Maneuvers"
 	},
 	{
-		"msgid" : "LayersToolbarUI - Layers",
-		"msgstr" : "Maps"
-	},
-	{
 		"msgid" : "ManeuverContextMenu - Replace with a maneuver note",
 		"msgstr" : "Replace with a maneuver note"
 	},
@@ -342,6 +338,10 @@
 	{
 		"msgid" : "MapIconDataBuilder - continue roundabout",
 		"msgstr" : " and continue in the roundabout"
+	},
+	{
+		"msgid" : "MapLayersToolbarUI - Layers",
+		"msgstr" : "Maps"
 	},
 	{
 		"msgid" : "NoteContextMenu - Attach note to route",

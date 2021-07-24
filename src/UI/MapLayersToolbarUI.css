@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file LayersToolbarUI.css
-@desc CSS for the LayersToolbarUI
+@file MapLayersToolbarUI.css
+@desc CSS for the MapLayersToolbarUI
 Changes:
 	- v1.0.0:
 		- created
@@ -28,7 +28,7 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-#TravelNotes-LayersToolbarUI {
+#TravelNotes-MapLayersToolbarUI {
 	position: absolute;
 	width: 3em;
 	top: 0;
@@ -40,7 +40,7 @@ Changes:
 	max-height: 100vh;
 }
 
-#TravelNotes-LayersToolbarUI-Header {
+#TravelNotes-MapLayersToolbarUI-Header {
 	transform-origin: bottom right;
 	transform: rotateZ(-90deg) translateY(-6em) translateX(4em);
 	text-align: center;
@@ -55,7 +55,7 @@ Changes:
 	flex-shrink: 0;
 }
 
-#TravelNotes-LayersToolbarUI-Buttons {
+#TravelNotes-MapLayersToolbarUI-Buttons {
 	background-color: white;
 	color: black;
 	flex-shrink: 2;
@@ -63,7 +63,7 @@ Changes:
 	overflow: hidden;
 }
 
-.TravelNotes-LayersToolbarUI-Button {
+.TravelNotes-MapLayersToolbarUI-Button {
 	padding: 0.5em;
 	text-align: center;
 	margin: 0;
@@ -71,28 +71,28 @@ Changes:
 	height: 1.1em;
 }
 
-.TravelNotes-LayersToolbarUI-LinkButton-Enter {
+.TravelNotes-MapLayersToolbarUI-LinkButton-Enter {
 	color: white;
 	background-color: black;
 }
 
-.TravelNotes-LayersToolbarUI-LinkButton-Leave {
+.TravelNotes-MapLayersToolbarUI-LinkButton-Leave {
 	color: black;
 	background-color: white;
 }
 
-.TravelNotes-LayersToolbarUI-Button > a {
+.TravelNotes-MapLayersToolbarUI-Button > a {
 	text-decoration: none;
 }
 
-.TravelNotes-LayersToolbarUI-Button > a:hover {
+.TravelNotes-MapLayersToolbarUI-Button > a:hover {
 	text-decoration: none;
 }
 
-.TravelNotes-LayersToolbarUI-Button:hover {
+.TravelNotes-MapLayersToolbarUI-Button:hover {
 	cursor: pointer;
 }
 
 /*
---- End of LayersToolbarUI.css ------------------------------------------------------------------------------------------------
+--- End of MapLayersToolbarUI.css ---------------------------------------------------------------------------------------------
 */

@@ -86,7 +86,7 @@ import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
-import theLayersToolbarUI from '../UI/LayersToolbarUI.js';
+import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
 import { theMouseUI } from '../UI/MouseUI.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
@@ -358,7 +358,7 @@ class TravelNotes {
 			theTravelNotesData.map = map;
 		}
 		theAttributionsUI.createUI ( );
-		theLayersToolbarUI.setLayer ( 'OSM - Color' );
+		theMapLayersToolbarUI.setLayer ( 'OSM - Color' );
 		ourLoadDistantTravel ( travelUrl );
 	}
 
@@ -384,10 +384,10 @@ class TravelNotes {
 		theAttributionsUI.createUI ( );
 		theAPIKeysManager.setKeysFromServerFile ( );
 		if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
-			theLayersToolbarUI.createUI ( );
+			theMapLayersToolbarUI.createUI ( );
 		}
 		else {
-			theLayersToolbarUI.setLayer ( 'OSM - Color' );
+			theMapLayersToolbarUI.setLayer ( 'OSM - Color' );
 		}
 
 		if ( theConfig.mouseUI.haveMouseUI ) {
