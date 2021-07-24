@@ -55,83 +55,76 @@ import theConfig from '../data/Config.js';
 import theUtilities from '../util/Utilities.js';
 import { SAVE_STATUS } from '../util/Constants.js';
 
-const OUR_SAVE_TIME = 300000;
+const OUR_SAVE_TIME = 10000;
 
-let ourMouseDiv = null;
-let ourMousePos = null;
-let ourZoom = null;
-let ourSaveStatus = SAVE_STATUS.saved;
-let ourSaveTimer = null;
+class MouseUIUpdater {
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+	#mouseUISpan = null;
 
-@function ourUpdate
-@desc This method update the UI after an event
-@private
+	#saveStatus = SAVE_STATUS.saved;
+	#mousePosition = '';
+	#zoom = ''
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
+	#saveTimer = null;
 
-function ourUpdate ( ) {
-	if ( ourMouseDiv ) {
-		ourMouseDiv.textContent = ourSaveStatus + '\u00a0' + ourMousePos + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + ourZoom;
+	#updateUI ( ) {
+		if ( this.#mouseUISpan ) {
+			this.#mouseUISpan.textContent =
+				this.#saveStatus + '\u00a0' + this.#mousePosition + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + this.#zoom;
+		}
 	}
+	#onTimer ( mouseUIUpdater ) {
+		console.log ( 'onTimer' );
+		mouseUIUpdater.#saveStatus = SAVE_STATUS.notSaved;
+		mouseUIUpdater.#updateUI ( );
+	}
+
+	constructor ( ) {
+	}
+
+	set mouseUISpan ( MouseUISpan ) { this.#mouseUISpan = MouseUISpan; }
+
+	set mousePosition ( MousePosition ) {
+		this.#mousePosition = MousePosition;
+		this.#updateUI ( );
+	}
+
+	set zoom ( Zoom ) {
+		this.#zoom = Zoom;
+		this.#updateUI ( );
+	}
+
+	set saveStatus ( SaveStatus ) {
+		if ( SAVE_STATUS.modified === SaveStatus && SAVE_STATUS.notSaved === this.#saveStatus ) {
+			return;
+		}
+		this.#saveStatus = SaveStatus;
+		if ( SAVE_STATUS.modified === SaveStatus && ! this.#saveTimer ) {
+			console.log ( 'setTimer' );
+			this.#saveTimer = setTimeout ( this.#onTimer, OUR_SAVE_TIME, this );
+		}
+		if ( SAVE_STATUS.saved === SaveStatus && this.#saveTimer ) {
+			clearTimeout ( this.#saveTimer );
+			this.#saveTimer = null;
+		}
+		this.#updateUI ( );
+	}
+
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+const theMouseUIUpdater = new MouseUIUpdater ( );
 
-@function ourSetSaveStatus
-@desc This method change the saveStatus and update the UI with the saveStatus
-@private
+class MapEventListeners {
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourSetSaveStatus ( saveStatus ) {
-	if ( SAVE_STATUS.modified === saveStatus && SAVE_STATUS.notSaved === ourSaveStatus ) {
-		return;
+	static onMouseMove ( mouseMoveEvent ) {
+		theMouseUIUpdater.mousePosition =
+			theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
 	}
-	ourSaveStatus = saveStatus;
-	if ( SAVE_STATUS.modified === saveStatus && ! ourSaveTimer ) {
-		ourSaveTimer = setTimeout ( ourSetSaveStatus, OUR_SAVE_TIME, SAVE_STATUS.notSaved );
+
+	static onZoomEnd ( ) {
+		theMouseUIUpdater.zoom = String ( theTravelNotesData.map.getZoom ( ) );
 	}
-	if ( SAVE_STATUS.saved === saveStatus && ourSaveTimer ) {
-		clearTimeout ( ourSaveTimer );
-		ourSaveTimer = null;
-	}
-	ourUpdate ( );
-}
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMapMouseMove
-@desc Event listener for the mouse move on the map
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMapMouseMove ( mouseMoveEvent ) {
-	ourMousePos = theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
-	ourUpdate ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMapZoomEnd
-@desc Event listener for zoom end on the map
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMapZoomEnd ( ) {
-	ourZoom = String ( theTravelNotesData.map.getZoom ( ) );
-	ourUpdate ( );
 }
 
 /**
@@ -155,26 +148,26 @@ class MouseUI {
 	change the save status on the UI
 	*/
 
-	set saveStatus ( SaveStatus ) { ourSetSaveStatus ( SaveStatus ); }
+	set saveStatus ( SaveStatus ) { theMouseUIUpdater.saveStatus = SaveStatus; }
 
 	/**
 	creates the user interface
 	*/
 
 	createUI ( ) {
-		ourZoom = theTravelNotesData.map.getZoom ( );
-		ourMousePos =
-			theUtilities.formatLat ( theConfig.map.center.lat ) +
-			'\u00a0-\u00a0' +
-			theUtilities.formatLng ( theConfig.map.center.lng );
-		ourMouseDiv =
+		theMouseUIUpdater.mouseUISpan =
 			theHTMLElementsFactory.create (
 				'span',
 				null,
 				theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MouseUI' }, document.body )
 			);
-		theTravelNotesData.map.on ( 'mousemove', ourOnMapMouseMove );
-		theTravelNotesData.map.on ( 'zoomend', ourOnMapZoomEnd );
+		theMouseUIUpdater.zoom = theTravelNotesData.map.getZoom ( );
+		theMouseUIUpdater.position =
+			theUtilities.formatLat ( theConfig.map.center.lat ) +
+			'\u00a0-\u00a0' +
+			theUtilities.formatLng ( theConfig.map.center.lng );
+		theTravelNotesData.map.on ( 'mousemove', MapEventListeners.onMouseMove );
+		theTravelNotesData.map.on ( 'zoomend', MapEventListeners.onZoomEnd );
 	}
 }
 
