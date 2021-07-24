@@ -87,7 +87,7 @@ import theEventDispatcher from '../util/EventDispatcher.js';
 import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
-import { theMouseUI } from '../UI/MouseUI.js';
+import theMouseUI from '../UI/MouseUI.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';

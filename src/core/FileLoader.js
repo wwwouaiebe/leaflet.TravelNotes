@@ -61,7 +61,7 @@ Tests ...
 import { theTranslator } from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
-import { theMouseUI } from '../UI/MouseUI.js';
+import theMouseUI from '../UI/MouseUI.js';
 import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import FileCompactor from '../core/FileCompactor.js';

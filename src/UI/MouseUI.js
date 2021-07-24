@@ -55,12 +55,67 @@ import theConfig from '../data/Config.js';
 import theUtilities from '../util/Utilities.js';
 import { SAVE_STATUS } from '../util/Constants.js';
 
-const OUR_SAVE_TIME = 10000;
+const OUR_SAVE_TIME = 300000;
 
-class MouseUIUpdater {
+/* eslint-disable no-use-before-define */
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class MapEventListeners
+@classdesc Map event listeners
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MapEventListeners {
+
+	static onMouseMove ( mouseMoveEvent ) {
+		theMouseUI.mousePosition =
+			theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
+	}
+
+	static onZoomEnd ( ) {
+		theMouseUI.zoom = String ( theTravelNotesData.map.getZoom ( ) );
+	}
+
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class TimerEventListeners
+@classdesc timer event listeners
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TimerEventListeners {
+	static onTimer ( ) {
+		theMouseUI.saveStatus = SAVE_STATUS.notSaved;
+	}
+}
+
+/* eslint-enable no-use-before-define */
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class MouseUI
+@classdesc This class show the mouse position and the zoom on the screen
+@see {@link theMouseUI} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MouseUI {
 
 	#mouseUISpan = null;
-
 	#saveStatus = SAVE_STATUS.saved;
 	#mousePosition = '';
 	#zoom = ''
@@ -73,26 +128,32 @@ class MouseUIUpdater {
 				this.#saveStatus + '\u00a0' + this.#mousePosition + '\u00a0-\u00a0Zoom\u00a0:\u00a0' + this.#zoom;
 		}
 	}
-	#onTimer ( mouseUIUpdater ) {
-		console.log ( 'onTimer' );
-		mouseUIUpdater.#saveStatus = SAVE_STATUS.notSaved;
-		mouseUIUpdater.#updateUI ( );
-	}
 
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
-	set mouseUISpan ( MouseUISpan ) { this.#mouseUISpan = MouseUISpan; }
+	/**
+	set the mouse position on the UI
+	*/
 
 	set mousePosition ( MousePosition ) {
 		this.#mousePosition = MousePosition;
 		this.#updateUI ( );
 	}
 
+	/**
+	set the zoom on the UI
+	*/
+
 	set zoom ( Zoom ) {
 		this.#zoom = Zoom;
 		this.#updateUI ( );
 	}
+
+	/**
+	change the save status on the UI
+	*/
 
 	set saveStatus ( SaveStatus ) {
 		if ( SAVE_STATUS.modified === SaveStatus && SAVE_STATUS.notSaved === this.#saveStatus ) {
@@ -100,8 +161,7 @@ class MouseUIUpdater {
 		}
 		this.#saveStatus = SaveStatus;
 		if ( SAVE_STATUS.modified === SaveStatus && ! this.#saveTimer ) {
-			console.log ( 'setTimer' );
-			this.#saveTimer = setTimeout ( this.#onTimer, OUR_SAVE_TIME, this );
+			this.#saveTimer = setTimeout ( TimerEventListeners.onTimer, OUR_SAVE_TIME );
 		}
 		if ( SAVE_STATUS.saved === SaveStatus && this.#saveTimer ) {
 			clearTimeout ( this.#saveTimer );
@@ -110,19 +170,24 @@ class MouseUIUpdater {
 		this.#updateUI ( );
 	}
 
-}
+	/**
+	creates the user interface
+	*/
 
-const theMouseUIUpdater = new MouseUIUpdater ( );
-
-class MapEventListeners {
-
-	static onMouseMove ( mouseMoveEvent ) {
-		theMouseUIUpdater.mousePosition =
-			theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
-	}
-
-	static onZoomEnd ( ) {
-		theMouseUIUpdater.zoom = String ( theTravelNotesData.map.getZoom ( ) );
+	createUI ( ) {
+		this.#mouseUISpan =
+			theHTMLElementsFactory.create (
+				'span',
+				null,
+				theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MouseUI' }, document.body )
+			);
+		this.zoom = theTravelNotesData.map.getZoom ( );
+		this.mousePosition =
+			theUtilities.formatLat ( theConfig.map.center.lat ) +
+			'\u00a0-\u00a0' +
+			theUtilities.formatLng ( theConfig.map.center.lng );
+		theTravelNotesData.map.on ( 'mousemove', MapEventListeners.onMouseMove );
+		theTravelNotesData.map.on ( 'zoomend', MapEventListeners.onZoomEnd );
 	}
 
 }
@@ -130,64 +195,17 @@ class MapEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
-@classdesc This class show the mouse position and the zoom on the screen
-@see {@link theMouseUI} for the one and only one instance of this class
-@hideconstructor
+@desc The one and only one instance of MouseUI class
+@type {MouseUI}
+@constant
+@global
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseUI {
+const theMouseUI = new MouseUI ( );
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	change the save status on the UI
-	*/
-
-	set saveStatus ( SaveStatus ) { theMouseUIUpdater.saveStatus = SaveStatus; }
-
-	/**
-	creates the user interface
-	*/
-
-	createUI ( ) {
-		theMouseUIUpdater.mouseUISpan =
-			theHTMLElementsFactory.create (
-				'span',
-				null,
-				theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MouseUI' }, document.body )
-			);
-		theMouseUIUpdater.zoom = theTravelNotesData.map.getZoom ( );
-		theMouseUIUpdater.position =
-			theUtilities.formatLat ( theConfig.map.center.lat ) +
-			'\u00a0-\u00a0' +
-			theUtilities.formatLng ( theConfig.map.center.lng );
-		theTravelNotesData.map.on ( 'mousemove', MapEventListeners.onMouseMove );
-		theTravelNotesData.map.on ( 'zoomend', MapEventListeners.onZoomEnd );
-	}
-}
-
-const OUR_MOUSE_UI = new MouseUI ( );
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@desc The one and only one instance of MouseUI class
-	@type {MouseUI}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_MOUSE_UI as theMouseUI
-};
+export default theMouseUI;
 
 /*
 --- End of MouseUI.js file ----------------------------------------------------------------------------------------------------
