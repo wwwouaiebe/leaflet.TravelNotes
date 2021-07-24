@@ -424,7 +424,7 @@ module.exports = function(grunt) {
 				src: ['src/**/*.js'],
 				options: {
 					destination : 'TechDoc',
-					configure : "JSDocConf/JSDocConf.json" /*,
+					configure : "JSDocConf/JSDocConf.json"/*,
 					private : true*/
 				}
 			}

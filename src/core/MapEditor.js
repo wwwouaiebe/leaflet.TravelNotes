@@ -92,7 +92,7 @@ let ourTempWayPointShowDragTooltip = 1;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class TempWayPointMarkerEventListeners
 @classdesc This class contains the event listeners for the temp waypoint
 @hideconstructor
 @private
@@ -100,7 +100,7 @@ let ourTempWayPointShowDragTooltip = 1;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TempWayPointMarkerEvents {
+class TempWayPointMarkerEventListeners {
 
 	/**
 	mouseout event listener
@@ -121,7 +121,7 @@ class TempWayPointMarkerEvents {
 	*/
 
 	static onDragStart ( ) {
-		window.L.DomEvent.off ( ourTempWayPointMarker, 'mouseout', TempWayPointMarkerEvents.onMouseOut );
+		window.L.DomEvent.off ( ourTempWayPointMarker, 'mouseout', TempWayPointMarkerEventListeners.onMouseOut );
 	}
 
 	/**
@@ -148,9 +148,9 @@ class TempWayPointMarkerEvents {
 			[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
 		);
 		if ( ourTempWayPointMarker ) {
-			window.L.DomEvent.off ( ourTempWayPointMarker, 'dragstart', TempWayPointMarkerEvents.onDragStart );
-			window.L.DomEvent.off ( ourTempWayPointMarker, 'dragend', TempWayPointMarkerEvents.onDragEnd );
-			window.L.DomEvent.off ( ourTempWayPointMarker, 'contextmenu', TempWayPointMarkerEvents.onContextMenu );
+			window.L.DomEvent.off ( ourTempWayPointMarker, 'dragstart', TempWayPointMarkerEventListeners.onDragStart );
+			window.L.DomEvent.off ( ourTempWayPointMarker, 'dragend', TempWayPointMarkerEventListeners.onDragEnd );
+			window.L.DomEvent.off ( ourTempWayPointMarker, 'contextmenu', TempWayPointMarkerEventListeners.onContextMenu );
 			theTravelNotesData.map.removeLayer ( ourTempWayPointMarker );
 			ourTempWayPointMarker = null;
 		}
@@ -160,7 +160,7 @@ class TempWayPointMarkerEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class WayPointEventListeners
 @classdesc This class contains the event listeners for the waypoints
 @hideconstructor
 @private
@@ -168,7 +168,7 @@ class TempWayPointMarkerEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class WayPointEvents {
+class WayPointEventListeners {
 
 	/**
 	contextmenu event listener
@@ -194,7 +194,7 @@ class WayPointEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class NoteBulletEventListeners
 @classdesc This class contains the event listeners for the notes bullets
 @hideconstructor
 @private
@@ -202,7 +202,7 @@ class WayPointEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteBulletEvents {
+class NoteBulletEventListeners {
 
 	/**
 	dragend event listener
@@ -290,7 +290,7 @@ class NoteBulletEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class NoteMarkerEventListeners
 @classdesc This class contains the event listeners for the notes markers
 @hideconstructor
 @private
@@ -298,7 +298,7 @@ class NoteBulletEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteMarkerEvents {
+class NoteMarkerEventListeners {
 
 	/**
 	contextmenu event listener
@@ -356,7 +356,7 @@ class NoteMarkerEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class EditedRouteEventListeners
 @classdesc This class contains the event listeners for the edited route
 @hideconstructor
 @private
@@ -364,7 +364,7 @@ class NoteMarkerEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class EditedRouteEvents {
+class EditedRouteEventListeners {
 
 	/**
 	mouseover event listener
@@ -416,10 +416,10 @@ class EditedRouteEvents {
 
 				}
 				ourTempWayPointMarker.addTo ( theTravelNotesData.map );
-				window.L.DomEvent.on ( ourTempWayPointMarker, 'mouseout', TempWayPointMarkerEvents.onMouseOut );
-				window.L.DomEvent.on ( ourTempWayPointMarker, 'dragstart', TempWayPointMarkerEvents.onDragStart );
-				window.L.DomEvent.on ( ourTempWayPointMarker, 'dragend', TempWayPointMarkerEvents.onDragEnd );
-				window.L.DomEvent.on ( ourTempWayPointMarker, 'contextmenu', TempWayPointMarkerEvents.onContextMenu );
+				window.L.DomEvent.on ( ourTempWayPointMarker, 'mouseout', TempWayPointMarkerEventListeners.onMouseOut );
+				window.L.DomEvent.on ( ourTempWayPointMarker, 'dragstart', TempWayPointMarkerEventListeners.onDragStart );
+				window.L.DomEvent.on ( ourTempWayPointMarker, 'dragend', TempWayPointMarkerEventListeners.onDragEnd );
+				window.L.DomEvent.on ( ourTempWayPointMarker, 'contextmenu', TempWayPointMarkerEventListeners.onContextMenu );
 			}
 		}
 	}
@@ -428,7 +428,7 @@ class EditedRouteEvents {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class RouteEventListeners
 @classdesc This class contains the event listeners for the routes
 @hideconstructor
 @private
@@ -436,7 +436,7 @@ class EditedRouteEvents {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteEvents {
+class RouteEventListeners {
 
 	/**
 	contextmenu event listener
@@ -514,21 +514,21 @@ class MapEditor	extends ViewerMapEditor {
 			let polyline = theTravelNotesData.mapObjects.get ( addedRouteObjId );
 
 			if ( ! theTravelNotesData.travel.readOnly ) {
-				window.L.DomEvent.on ( polyline, 'contextmenu', RouteEvents.onContextMenu );
-				window.L.DomEvent.on ( polyline, 'mouseover', EditedRouteEvents.onMouseOver );
+				window.L.DomEvent.on ( polyline, 'contextmenu', RouteEventListeners.onContextMenu );
+				window.L.DomEvent.on ( polyline, 'mouseover', EditedRouteEventListeners.onMouseOver );
 
 				let notesIterator = route.notes.iterator;
 				while ( ! notesIterator.done ) {
 					let layerGroup = theTravelNotesData.mapObjects.get ( notesIterator.value.objId );
 					let marker = layerGroup.getLayer ( layerGroup.markerId );
 					let bullet = layerGroup.getLayer ( layerGroup.bulletId );
-					window.L.DomEvent.on ( bullet, 'dragend', NoteBulletEvents.onDragEnd );
-					window.L.DomEvent.on ( bullet, 'drag',	NoteBulletEvents.onDrag );
-					window.L.DomEvent.on ( bullet, 'mouseenter', NoteBulletEvents.onMouseEnter );
-					window.L.DomEvent.on ( bullet, 'mouseleave', NoteBulletEvents.onMouseLeave );
-					window.L.DomEvent.on ( marker, 'contextmenu', NoteMarkerEvents.onContextMenu );
-					window.L.DomEvent.on ( marker, 'dragend', NoteMarkerEvents.onDragEnd );
-					window.L.DomEvent.on ( marker, 'drag', NoteMarkerEvents.onDrag );
+					window.L.DomEvent.on ( bullet, 'dragend', NoteBulletEventListeners.onDragEnd );
+					window.L.DomEvent.on ( bullet, 'drag',	NoteBulletEventListeners.onDrag );
+					window.L.DomEvent.on ( bullet, 'mouseenter', NoteBulletEventListeners.onMouseEnter );
+					window.L.DomEvent.on ( bullet, 'mouseleave', NoteBulletEventListeners.onMouseLeave );
+					window.L.DomEvent.on ( marker, 'contextmenu', NoteMarkerEventListeners.onContextMenu );
+					window.L.DomEvent.on ( marker, 'dragend', NoteMarkerEventListeners.onDragEnd );
+					window.L.DomEvent.on ( marker, 'drag', NoteMarkerEventListeners.onDrag );
 				}
 			}
 
@@ -589,13 +589,13 @@ class MapEditor	extends ViewerMapEditor {
 				noteObjects.marker.openPopup ( );
 			}
 			if ( ! theTravelNotesData.travel.readOnly ) {
-				window.L.DomEvent.on ( noteObjects.bullet, 'dragend', NoteBulletEvents.onDragEnd );
-				window.L.DomEvent.on ( noteObjects.bullet, 'drag',	NoteBulletEvents.onDrag );
-				window.L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	NoteBulletEvents.onMouseEnter );
-				window.L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	NoteBulletEvents.onMouseLeave );
-				window.L.DomEvent.on ( noteObjects.marker, 'contextmenu', NoteMarkerEvents.onContextMenu );
-				window.L.DomEvent.on ( noteObjects.marker, 'dragend', NoteMarkerEvents.onDragEnd );
-				window.L.DomEvent.on ( noteObjects.marker, 'drag', NoteMarkerEvents.onDrag );
+				window.L.DomEvent.on ( noteObjects.bullet, 'dragend', NoteBulletEventListeners.onDragEnd );
+				window.L.DomEvent.on ( noteObjects.bullet, 'drag',	NoteBulletEventListeners.onDrag );
+				window.L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	NoteBulletEventListeners.onMouseEnter );
+				window.L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	NoteBulletEventListeners.onMouseLeave );
+				window.L.DomEvent.on ( noteObjects.marker, 'contextmenu', NoteMarkerEventListeners.onContextMenu );
+				window.L.DomEvent.on ( noteObjects.marker, 'dragend', NoteMarkerEventListeners.onDragEnd );
+				window.L.DomEvent.on ( noteObjects.marker, 'drag', NoteMarkerEventListeners.onDrag );
 			}
 		}
 	}
@@ -670,14 +670,14 @@ class MapEditor	extends ViewerMapEditor {
 			-OUR_WAY_POINT_ICON_SIZE / TWO
 		];
 
-		window.L.DomEvent.on ( marker, 'contextmenu', WayPointEvents.onContextMenu );
+		window.L.DomEvent.on ( marker, 'contextmenu', WayPointEventListeners.onContextMenu );
 
 		// ... and added to the map...
 		marker.objId = wayPoint.objId;
 		this.addToMap ( wayPoint.objId, marker );
 
 		// ... and a dragend event listener is created
-		window.L.DomEvent.on ( marker, 'dragend', WayPointEvents.onDragEnd );
+		window.L.DomEvent.on ( marker, 'dragend', WayPointEventListeners.onDragEnd );
 	}
 
 	/**

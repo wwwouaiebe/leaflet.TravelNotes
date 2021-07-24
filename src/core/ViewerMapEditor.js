@@ -78,7 +78,7 @@ const OUR_NOTE_Z_INDEX_OFFSET = 100;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class RouteEventListeners
 @classdesc This class contains the event listeners for the routes
 @hideconstructor
 @private
@@ -86,7 +86,7 @@ const OUR_NOTE_Z_INDEX_OFFSET = 100;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteEvents {
+class RouteEventListeners {
 
 	/**
 	mouse over and mousemove event listeners
@@ -295,8 +295,8 @@ class ViewerMapEditor {
 				route.computedName,
 				{ sticky : true, direction : 'right' }
 			);
-			polyline.on ( 'mouseover', RouteEvents.onMouseOverOrMove );
-			polyline.on ( 'mousemove', RouteEvents.onMouseOverOrMove );
+			polyline.on ( 'mouseover', RouteEventListeners.onMouseOverOrMove );
+			polyline.on ( 'mousemove', RouteEventListeners.onMouseOverOrMove );
 		}
 
 		polyline.bindPopup (
