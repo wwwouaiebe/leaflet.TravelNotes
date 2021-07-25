@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file RouteListUI.js
+@file RoutesListUI.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RouteListUI
+@module RoutesListUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -164,15 +164,15 @@ class RoutesEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RouteListUI
+@class RoutesListUI
 @classdesc This class is the Routes List part of the UI
-@see {@link theRouteListUI} for the one and only one instance of this class
+@see {@link theRoutesListUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteListUI {
+class RoutesListUI {
 
 	#routesList = null;
 
@@ -185,7 +185,7 @@ class RouteListUI {
 		this.#routesList = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-TravelUI-RoutesListDiv'
+				className : 'List'
 			},
 			uiMainDiv
 		);
@@ -270,18 +270,18 @@ class RouteListUI {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@desc The one and only one instance of RouteListUI class
-@type {RouteListUI}
+@desc The one and only one instance of RoutesListUI class
+@type {RoutesListUI}
 @constant
 @global
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-const theRouteListUI = new RouteListUI ( );
+const theRoutesListUI = new RoutesListUI ( );
 
-export default theRouteListUI;
+export default theRoutesListUI;
 
 /*
---- End of RouteListUI.js file ------------------------------------------------------------------------------------------------
+--- End of RoutesListUI.js file ------------------------------------------------------------------------------------------------
 */

@@ -65,7 +65,7 @@ import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newOsmSearchPaneUI } from '../UI/OsmSearchPaneUI.js';
-import theRouteListUI from '../UI/RouteListUI.js';
+import theRoutesListUI from '../UI/RoutesListUI.js';
 import { PANE_ID } from '../util/Constants.js';
 
 let ourMainDiv = null;
@@ -85,7 +85,7 @@ let ourTitleDiv = null;
 
 function ourAddTravelNotesEventListeners ( ) {
 	ourMainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
-	ourMainDiv.addEventListener ( 'setrouteslist', ( ) => theRouteListUI.setRoutesList ( ), false );
+	ourMainDiv.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
 	ourMainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ), false );
 	ourMainDiv.addEventListener (
 		'updateitinerary',

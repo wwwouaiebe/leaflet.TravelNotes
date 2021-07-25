@@ -75,7 +75,7 @@ import theRouteEditor from '../core/RouteEditor.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTravelToolbarUI from '../UI/TravelToolbarUI.js';
-import theRouteListUI from '../UI/RouteListUI.js';
+import theRoutesListUI from '../UI/RoutesListUI.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ class ExpandRoutesButtonEventListeners {
 
 	static onClick ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		let hiddenList = theRouteListUI.toogleExpand ( );
+		let hiddenList = theRoutesListUI.toogleExpand ( );
 		clickEvent.target.textContent =
 			hiddenList ? '▶' : '▼'; // 25b6 = '▶'  25bc = ▼
 		clickEvent.target.title =
@@ -263,7 +263,7 @@ class TravelUI {
 		this.#createTravelNameDiv ( uiMainDiv );
 		theTravelToolbarUI.createUI ( uiMainDiv );
 		this.#createRoutesListHeaderDiv ( uiMainDiv );
-		theRouteListUI.createUI ( uiMainDiv );
+		theRoutesListUI.createUI ( uiMainDiv );
 	}
 
 	/**
