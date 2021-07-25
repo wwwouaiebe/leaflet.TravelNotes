@@ -393,6 +393,11 @@ class TravelToolbarUI {
 		Object.freeze ( this );
 	}
 
+	/**
+	creates the user interface
+	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
+	*/
+
 	createUI ( uiMainDiv ) {
 
 		if ( this.#buttonsDiv ) {
