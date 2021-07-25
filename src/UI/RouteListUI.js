@@ -62,7 +62,7 @@ import { LAT_LNG, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 class RoutesListDragEventListeners {
 
-	draggedRouteObjId = ZERO;
+	static #draggedRouteObjId = ZERO;
 
 	/**
 	@function ourOnRouteDragStart
@@ -81,7 +81,7 @@ class RoutesListDragEventListeners {
 				console.error ( err );
 			}
 		}
-		RoutesListDragEventListeners.draggedRouteObjId = dragEvent.target.objId;
+		RoutesListDragEventListeners.#draggedRouteObjId = dragEvent.target.objId;
 	}
 
 	/**
@@ -104,7 +104,7 @@ class RoutesListDragEventListeners {
 		}
 		let clientRect = element.getBoundingClientRect ( );
 		theTravelEditor.routeDropped (
-			RoutesListDragEventListeners.draggedRouteObjId,
+			RoutesListDragEventListeners.#draggedRouteObjId,
 			element.objId,
 			( dropEvent.clientY - clientRect.top < clientRect.bottom - dropEvent.clientY )
 		);
