@@ -47,40 +47,18 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
 import { LAT_LNG, ZERO, PANE_ID } from '../util/Constants.js';
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+class travelNotesDivDragEventListeners {
 
-@function ourNewTravelNotesPaneUI
-@desc constructor for TravelNotesPaneUI objects
-@return {TravelNotesPaneUI} an instance of TravelNotesPaneUI object
-@private
+	static #noteObjId = ZERO;
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewTravelNotesPaneUI ( ) {
-
-	let myNoteObjId = ZERO;
-	let myPaneDataDiv = null;
-	let myTravelNotesDiv = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnNoteDragStart
-	@desc drag start event listener for the notes
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnNoteDragStart ( dragEvent ) {
+	static onDragStart ( dragEvent ) {
 		dragEvent.stopPropagation ( );
 		try {
 			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
@@ -92,34 +70,14 @@ function ourNewTravelNotesPaneUI ( ) {
 			}
 		}
 
-		myNoteObjId = dragEvent.target.noteObjId;
+		travelNotesDivDragEventListeners.#noteObjId = dragEvent.target.noteObjId;
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnNotesListDragOver
-	@desc drag over event listener for the notes
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnNotesListDragOver ( dragEvent ) {
+	static onDragOver ( dragEvent ) {
 		dragEvent.preventDefault ( );
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnNoteDrop
-	@desc drop event listener for the notes
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnNoteDrop ( dragEvent ) {
+	static onDrop ( dragEvent ) {
 		dragEvent.preventDefault ( );
 		let element = dragEvent.target;
 
@@ -129,137 +87,117 @@ function ourNewTravelNotesPaneUI ( ) {
 		let clientRect = element.getBoundingClientRect ( );
 
 		theNoteEditor.travelNoteDropped (
-			myNoteObjId,
+			travelNotesDivDragEventListeners.#noteObjId,
 			element.noteObjId,
 			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
 		);
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnNoteContextMenu
-	@desc drop event listener for the notes
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnNoteContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.stopPropagation ( );
-		contextMenuEvent.preventDefault ( );
-		let element = contextMenuEvent.target;
-		while ( ! element.noteObjId ) {
-			element = element.parentNode;
-		}
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.fromUI = true;
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY,
-				latLng : element.latLng
-			};
-		if ( element.noteObjId ) {
-			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu ( contextMenuEvent, myPaneDataDiv.parentNode ).show ( );
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class TravelNotesPaneUI
-	@classdesc This class manages the travel notes pane UI
-	@see {@link newTravelNotesPaneUI} for constructor
-	@see {@link PanesManagerUI} for pane UI management
-	@implements {PaneUI}
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class TravelNotesPaneUI {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		This function removes all the elements from the data div and control div
-		*/
-
-		remove ( ) {
-			if ( myTravelNotesDiv ) {
-				myTravelNotesDiv.childNodes.forEach (
-					childNode => {
-						childNode.removeEventListener ( 'contextmenu', myOnNoteContextMenu, false );
-						childNode.removeEventListener ( 'dragstart', myOnNoteDragStart, false );
-					}
-				);
-				myPaneDataDiv.removeChild ( myTravelNotesDiv );
-			}
-			myTravelNotesDiv = null;
-		}
-
-		/**
-		This function add the travel notes to the data div
-		*/
-
-		add ( ) {
-			myTravelNotesDiv = theHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-TravelNotesPaneUI-' );
-			myTravelNotesDiv.addEventListener ( 'drop', myOnNoteDrop, false );
-			myTravelNotesDiv.addEventListener ( 'dragover', myOnNotesListDragOver, false );
-			myPaneDataDiv.appendChild ( myTravelNotesDiv );
-			myTravelNotesDiv.childNodes.forEach (
-				childNode => {
-					childNode.draggable = true;
-					childNode.addEventListener ( 'contextmenu', myOnNoteContextMenu, false );
-					childNode.addEventListener ( 'dragstart', myOnNoteDragStart, false );
-					childNode.classList.add ( 'TravelNotes-UI-MoveCursor' );
-				}
-			);
-		}
-
-		/**
-		This function returns the pane id
-		*/
-
-		getId ( ) { return PANE_ID.travelNotesPane; }
-
-		/**
-		This function returns the text to add in the pane button
-		*/
-
-		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Travel notes' ); }
-
-		/**
-		Set the pane data div and pane control div
-		*/
-
-		setPaneDivs ( paneDataDiv ) {
-			myPaneDataDiv = paneDataDiv;
-		}
-	}
-
-	return new TravelNotesPaneUI ( );
 }
 
-export {
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@function myOnNoteContextMenu
+@desc drop event listener for the notes
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+function myOnNoteContextMenu ( contextMenuEvent ) {
+	contextMenuEvent.stopPropagation ( );
+	contextMenuEvent.preventDefault ( );
+	let element = contextMenuEvent.target;
+	while ( ! element.noteObjId ) {
+		element = element.parentNode;
+	}
+	contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
+	contextMenuEvent.fromUI = true;
+	contextMenuEvent.originalEvent =
+		{
+			clientX : contextMenuEvent.clientX,
+			clientY : contextMenuEvent.clientY,
+			latLng : element.latLng
+		};
+	if ( element.noteObjId ) {
+		contextMenuEvent.noteObjId = element.noteObjId;
+		newNoteContextMenu ( contextMenuEvent, this.paneDataDiv.parentNode ).show ( );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class TravelNotesPaneUI
+@classdesc This class manages the travel notes pane UI
+@see {@link newTravelNotesPaneUI} for constructor
+@see {@link PanesManagerUI} for pane UI management
+@implements {PaneUI}
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TravelNotesPaneUI extends PaneUI {
+
+	#travelNotesDiv = null;
+
+	constructor ( ) {
+		super ( );
+		Object.seal ( this );
+	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newTravelNotesPaneUI
-	@desc constructor for TravelNotesPaneUI objects
-	@return {TravelNotesPaneUI} an instance of TravelNotesPaneUI object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This function removes all the elements from the data div and control div
 	*/
 
-	ourNewTravelNotesPaneUI as newTravelNotesPaneUI
-};
+	remove ( ) {
+		if ( this.#travelNotesDiv ) {
+			this.#travelNotesDiv.childNodes.forEach (
+				childNode => {
+					childNode.removeEventListener ( 'contextmenu', myOnNoteContextMenu, false );
+					childNode.removeEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
+				}
+			);
+			this.paneDataDiv.removeChild ( this.#travelNotesDiv );
+		}
+		this.#travelNotesDiv = null;
+	}
+
+	/**
+	This function add the travel notes to the data div
+	*/
+
+	add ( ) {
+		this.#travelNotesDiv = theHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-TravelNotesPaneUI-' );
+		this.#travelNotesDiv.addEventListener ( 'drop', travelNotesDivDragEventListeners.onDrop, false );
+		this.#travelNotesDiv.addEventListener ( 'dragover', travelNotesDivDragEventListeners.onDragOver, false );
+		this.paneDataDiv.appendChild ( this.#travelNotesDiv );
+		this.#travelNotesDiv.childNodes.forEach (
+			childNode => {
+				childNode.draggable = true;
+				childNode.addEventListener ( 'contextmenu', myOnNoteContextMenu, false );
+				childNode.addEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
+				childNode.classList.add ( 'TravelNotes-UI-MoveCursor' );
+			}
+		);
+	}
+
+	/**
+	This function returns the pane id
+	*/
+
+	getId ( ) { return PANE_ID.travelNotesPane; }
+
+	/**
+	This function returns the text to add in the pane button
+	*/
+
+	getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Travel notes' ); }
+
+}
+
+export default TravelNotesPaneUI;
 
 /*
 --- End of TravelNotesPaneUI.js file ------------------------------------------------------------------------------------------

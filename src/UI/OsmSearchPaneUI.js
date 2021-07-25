@@ -55,6 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
@@ -686,9 +687,10 @@ function ourNewOsmSearchPaneUI ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	class OsmSearchPaneUI {
+	class OsmSearchPaneUI extends PaneUI {
 
 		constructor ( ) {
+			super ( );
 			Object.freeze ( this );
 		}
 

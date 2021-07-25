@@ -48,6 +48,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import PaneUI from '../UI/PaneUI.js';
 import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
@@ -331,9 +332,10 @@ function ourNewItineraryPaneUI ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	class ItineraryPaneUI {
+	class ItineraryPaneUI extends PaneUI {
 
 		constructor ( ) {
+			super ( );
 			Object.freeze ( this );
 		}
 
