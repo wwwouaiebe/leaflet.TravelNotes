@@ -281,6 +281,15 @@ and when the geolocation marker must be removed from the map
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@event uipinned
+@desc fired when a the pin button in the UI is clicked
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import { NOT_FOUND } from '../util/Constants.js';
 
 /**
@@ -337,7 +346,8 @@ class EventDispatcher {
 				'routepropertiesupdated',
 				'noteupdated',
 				'roadbookupdate',
-				'profileclosed'
+				'profileclosed',
+				'uipinned'
 			].indexOf ( eventName )
 		) {
 			return document;

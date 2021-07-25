@@ -25,7 +25,9 @@ Changes:
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
 		- Issue ♯138 : Protect the app - control html entries done by user.
-Doc reviewed 20200816
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210725
 Tests ...
 */
 
@@ -54,237 +56,61 @@ import theConfig from '../data/Config.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
 import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
-let ourGeoLocationButton = null;
-let ourButtonsDiv = null;
-let ourMainDiv = null;
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourCreateHomeButton
-@desc This method creates the home button
+@class ApiKeysButtonEventListeners
+@classdesc ApiKeys button event listeners
+@hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourCreateHomeButton ( ) {
-	theHTMLElementsFactory.create (
-		'text',
-		{
-			value : '🏠'
-		},
-		theHTMLElementsFactory.create (
-			'a',
-			{
-				className : 'TravelNotes-UI-LinkButton',
-				href : window.location.origin,
-				target : '_blank'
-			},
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : 'Home'
-				},
-				ourButtonsDiv
-			)
-		)
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateHelpButton
-@desc This method creates the help button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateHelpButton ( ) {
-	theHTMLElementsFactory.create (
-		'text',
-		{
-			value : '?'
-		},
-		theHTMLElementsFactory.create (
-			'a',
-			{
-				className : 'TravelNotes-UI-LinkButton',
-				href : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides',
-				target : '_blank'
-			},
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : 'Help'
-				},
-				ourButtonsDiv
-			)
-		)
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateContactButton
-@desc This method creates the contact button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateContactButton ( ) {
-	theHTMLElementsFactory.create (
-		'text',
-		{
-			value : '@'
-		},
-		theHTMLElementsFactory.create (
-			'a',
-			{
-				className : 'TravelNotes-UI-LinkButton',
-				href : ( theConfig.travelNotesToolbarUI.contactMail.url || window.location.origin ),
-				target : '_blank'
-			},
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : 'Contact'
-				},
-				ourButtonsDiv
-			)
-		)
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnApiKeysButtonClick
-@desc Event listener for the mouse click on the show APIKeys dialog button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnApiKeysButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	theAPIKeysManager.setKeysFromDialog ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateApiKeysButton
-@desc This method creates the show APIKeys dialog button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateApiKeysButton ( ) {
-	if ( theConfig.APIKeysDialog.showButton ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
-				textContent : '🔑'
-			},
-			ourButtonsDiv
-		)
-			.addEventListener ( 'click', ourOnApiKeysButtonClick, false );
+class ApiKeysButtonEventListeners {
+	static onClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theAPIKeysManager.setKeysFromDialog ( );
 	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourOnGeoLocationButtonClick
-@desc Event listener for the mouse click on geo location button
+@class GeoLocatorButtonEventListeners
+@classdesc GeoLocator button event listeners
+@hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourOnGeoLocationButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	theGeoLocator.switch ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateGeoLocationButton
-@desc This method creates the geo location button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateGeoLocationButton ( ) {
-
-	// Don't test the https protocol. On some mobile devices with an integreted GPS
-	// the geolocation is working also on http protocol
-	if ( GEOLOCATION_STATUS.disabled < theGeoLocator.status ) {
-		ourGeoLocationButton = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
-				textContent : '🌐'
-			},
-			ourButtonsDiv
-		);
-		ourGeoLocationButton.addEventListener ( 'click', ourOnGeoLocationButtonClick, false );
+class GeoLocatorButtonEventListeners {
+	static onClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theGeoLocator.switch ( );
 	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourOnPinButtonClick
-@desc Event listener for the mouse click on pin button
+@class PinButtonEventListeners
+@classdesc GeoLocator button event listeners
+@hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourOnPinButtonClick ( clickEvent ) {
-
-	clickEvent.target.textContent =
-		'📌' === clickEvent.target.textContent ? '❌' : '📌';
-	ourMainDiv.pin ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreatePinButton
-@desc This method creates the pin UI button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreatePinButton ( ) {
-	let pinButton = theHTMLElementsFactory.create (
-		'div',
-		{
-			textContent : theConfig.travelEditor.startMinimized ? '📌' : '❌',
-			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton'
-		},
-		ourButtonsDiv
-	);
-	pinButton.addEventListener ( 'click', ourOnPinButtonClick, false );
+class PinButtonEventListeners {
+	static onClick ( clickEvent ) {
+		clickEvent.target.textContent = '📌' === clickEvent.target.textContent ? '❌' : '📌';
+		theEventDispatcher.dispatch ( 'uipinned' );
+	}
 }
 
 /**
@@ -300,6 +126,159 @@ function ourCreatePinButton ( ) {
 
 class TravelNotesToolbarUI {
 
+	#geoLocationButton = null;
+	#buttonsDiv = null;
+
+	/**
+	This method creates the home button
+	@private
+	*/
+
+	#createHomeButton ( ) {
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : '🏠'
+			},
+			theHTMLElementsFactory.create (
+				'a',
+				{
+					className : 'TravelNotes-UI-LinkButton',
+					href : window.location.origin,
+					target : '_blank'
+				},
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-UI-Button',
+						title : 'Home'
+					},
+					this.#buttonsDiv
+				)
+			)
+		);
+	}
+
+	/**
+	This method creates the help button
+	@private
+	*/
+
+	#createHelpButton ( ) {
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : '?'
+			},
+			theHTMLElementsFactory.create (
+				'a',
+				{
+					className : 'TravelNotes-UI-LinkButton',
+					href : 'https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages/TravelNotesGuides',
+					target : '_blank'
+				},
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-UI-Button',
+						title : 'Help'
+					},
+					this.#buttonsDiv
+				)
+			)
+		);
+	}
+
+	/**
+	This method creates the contact button
+	@private
+	*/
+
+	#createContactButton ( ) {
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : '@'
+			},
+			theHTMLElementsFactory.create (
+				'a',
+				{
+					className : 'TravelNotes-UI-LinkButton',
+					href : ( theConfig.travelNotesToolbarUI.contactMail.url || window.location.origin ),
+					target : '_blank'
+				},
+				theHTMLElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-UI-Button',
+						title : 'Contact'
+					},
+					this.#buttonsDiv
+				)
+			)
+		);
+	}
+
+	/**
+	This method creates the show APIKeys dialog button
+	@private
+	*/
+
+	#createApiKeysButton ( ) {
+		if ( theConfig.APIKeysDialog.showButton ) {
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'TravelNotesToolbarUI - API keys' ),
+					textContent : '🔑'
+				},
+				this.#buttonsDiv
+			)
+				.addEventListener ( 'click', ApiKeysButtonEventListeners.onClick, false );
+		}
+	}
+
+	/**
+	This method creates the geo location button
+	@private
+	*/
+
+	#createGeoLocationButton ( ) {
+
+		// Don't test the https protocol. On some mobile devices with an integreted GPS
+		// the geolocation is working also on http protocol
+		if ( GEOLOCATION_STATUS.disabled < theGeoLocator.status ) {
+			this.#geoLocationButton = theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'TravelNotesToolbarUI - Geo location' ),
+					textContent : '🌐'
+				},
+				this.#buttonsDiv
+			);
+			this.#geoLocationButton.addEventListener ( 'click', GeoLocatorButtonEventListeners.onClick, false );
+		}
+	}
+
+	/**
+	This method creates the pin UI button
+	@private
+	*/
+
+	#createPinButton ( ) {
+		let pinButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				textContent : theConfig.travelEditor.startMinimized ? '📌' : '❌',
+				className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton'
+			},
+			this.#buttonsDiv
+		);
+		pinButton.addEventListener ( 'click', PinButtonEventListeners.onClick, false );
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -310,8 +289,7 @@ class TravelNotesToolbarUI {
 	*/
 
 	createUI ( uiMainDiv ) {
-		ourMainDiv = uiMainDiv;
-		ourButtonsDiv = theHTMLElementsFactory.create (
+		this.#buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -319,12 +297,12 @@ class TravelNotesToolbarUI {
 			uiMainDiv
 		);
 
-		ourCreateHomeButton ( );
-		ourCreateHelpButton ( );
-		ourCreateContactButton ( );
-		ourCreateApiKeysButton ( );
-		ourCreateGeoLocationButton ( );
-		ourCreatePinButton ( );
+		this.#createHomeButton ( );
+		this.#createHelpButton ( );
+		this.#createContactButton ( );
+		this.#createApiKeysButton ( );
+		this.#createGeoLocationButton ( );
+		this.#createPinButton ( );
 	}
 
 	/**
@@ -335,38 +313,35 @@ class TravelNotesToolbarUI {
 	geoLocationStatusChanged ( geoLocationStatus ) {
 		switch ( geoLocationStatus ) {
 		case GEOLOCATION_STATUS.inactive :
-			ourGeoLocationButton.classList.remove ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
+			this.#geoLocationButton.classList.remove ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
 			break;
 		case GEOLOCATION_STATUS.active :
-			ourGeoLocationButton.classList.add ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
+			this.#geoLocationButton.classList.add ( 'TravelNotes-TravelNotesToolbarUI-GeoLocationButton-Striked' );
 			break;
 		default :
-			if ( ourGeoLocationButton ) {
-				ourGeoLocationButton.parentNode.removeChild ( ourGeoLocationButton );
-				ourGeoLocationButton = null;
+			if ( this.#geoLocationButton ) {
+				this.#geoLocationButton.parentNode.removeChild ( this.#geoLocationButton );
+				this.#geoLocationButton = null;
 			}
 			break;
 		}
 	}
 }
 
-const OUR_TRAVEL_NOTES_TOOLBAR_UI = new TravelNotesToolbarUI ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of TravelNotesToolbarUI class
+@type {TravelNotesToolbarUI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of TravelNotesToolbarUI class
-	@type {TravelNotesToolbarUI}
-	@constant
-	@global
+const theTravelNotesToolbarUI = new TravelNotesToolbarUI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRAVEL_NOTES_TOOLBAR_UI as theTravelNotesToolbarUI
-};
+export default theTravelNotesToolbarUI;
 
 /*
 --- End of TravelNotesToolbarUI.js file ---------------------------------------------------------------------------------------

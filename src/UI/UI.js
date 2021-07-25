@@ -61,7 +61,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelUI } from '../UI/TravelUI.js';
 import { thePanesManagerUI } from '../UI/PanesManagerUI.js';
 import theProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
-import { theTravelNotesToolbarUI } from '../UI/TravelNotesToolbarUI.js';
+import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';
 import { newTravelNotesPaneUI } from '../UI/TravelNotesPaneUI.js';
 import { newOsmSearchPaneUI } from '../UI/OsmSearchPaneUI.js';
@@ -278,6 +278,10 @@ class UI {
 		Object.freeze ( this );
 	}
 
+	pin ( ) {
+		ourPinUI ( );
+	}
+
 	/**
 	creates the user interface
 	@param {HTMLElement} uiDiv The HTML element in witch the UI have to be created
@@ -288,7 +292,6 @@ class UI {
 			return;
 		}
 		ourMainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
-		ourMainDiv.pin = ourPinUI;
 
 		ourTitleDiv = theHTMLElementsFactory.create (
 			'div',

@@ -257,6 +257,11 @@ function ourAddEventsListeners ( ) {
 		},
 		false
 	);
+	document.addEventListener (
+		'uipinned',
+		( ) => theUI.pin ( ),
+		false
+	);
 }
 
 /**
