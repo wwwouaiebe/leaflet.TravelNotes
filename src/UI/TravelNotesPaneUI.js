@@ -23,7 +23,9 @@ Changes:
 		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.12.0:
 		- Issue ♯120 : Review the UserInterface
-Doc reviewed 20200818
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210725
 Tests ...
 */
 
@@ -130,9 +132,8 @@ function myOnNoteContextMenu ( contextMenuEvent ) {
 
 @class TravelNotesPaneUI
 @classdesc This class manages the travel notes pane UI
-@see {@link newTravelNotesPaneUI} for constructor
 @see {@link PanesManagerUI} for pane UI management
-@implements {PaneUI}
+@extends PaneUI
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------

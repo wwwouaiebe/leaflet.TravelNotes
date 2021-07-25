@@ -50,26 +50,6 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@typedef {Object} PaneUI
-@interface
-@see {@link PanesManagerUI} for pane UI management
-@see {@link ItineraryPaneUI} for existing panes
-@see {@link TravelNotesPaneUI} for existing panes
-@see {@link OsmSearchPaneUI} for existing panes
-@desc An object that can be displayed as a pane
-@property {function} remove A function that do the cleaning of the pane data div
-@property {function} add A function that add all the needed HTMLElements in the pane data div
-@property {function} getId A function that gives a unique identifier for the PaneUI
-@property {function} getButtonText A function that return the text to be displayed in the pane button
-@property {function} setPaneDivs A function that set the pane data div and pane control div
-@public
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
 @module PanesManagerUI
 @private
 

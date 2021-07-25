@@ -691,7 +691,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 		constructor ( ) {
 			super ( );
-			Object.freeze ( this );
+			Object.seal ( this );
 		}
 
 		/**
