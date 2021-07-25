@@ -59,7 +59,7 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTravelUI from '../UI/TravelUI.js';
-import { thePanesManagerUI } from '../UI/PanesManagerUI.js';
+import thePanesManagerUI from '../UI/PanesManagerUI.js';
 import theProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
 import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import { newItineraryPaneUI } from '../UI/ItineraryPaneUI.js';

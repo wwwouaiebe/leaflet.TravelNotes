@@ -30,7 +30,9 @@ Changes:
 		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200817
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210725
 Tests ...
 */
 
@@ -77,85 +79,45 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { MOUSE_WHEEL_FACTORS, PANE_ID } from '../util/Constants.js';
 
-let ourActivePaneId = PANE_ID.invalidPane;
-let ourPanes = new Map ( );
-let ourPaneDataDiv = null;
-let ourPaneControlDiv = null;
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourRemoveActivePane
-@desc This method remove the content of the Data Pane Div
+@class PaneButtonsEventListeners
+@classdesc This class contains the event listeners for the Pane buttons
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourRemoveActivePane ( ) {
-	if ( PANE_ID.invalidPane !== ourActivePaneId ) {
-		ourPanes.get ( ourActivePaneId ).remove ( );
-		ourPaneDataDiv.textContent = '';
+class PaneButtonsEventListeners {
+
+	/* eslint-disable no-use-before-define */
+	static onClick ( clickEvent ) {
+		thePanesManagerUI.showPane ( clickEvent.target.paneId );
 	}
+	/* eslint-enable no-use-before-define */
+
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourShowPane
-@desc Show a pane
-@param paneId the pane id to show
+@class PaneDataDivEventListeners
+@classdesc This class contains the event listeners for the PaneDataDiv
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourShowPane ( paneId ) {
-	ourRemoveActivePane ( );
-	ourActivePaneId = paneId;
-	ourPanes.get ( ourActivePaneId ).add ( );
-	document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
-		paneButton => {
-			if ( paneButton.paneId === ourActivePaneId ) {
-				paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
-			}
-			else {
-				paneButton.classList.remove ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
-			}
+class PaneDataDivEventListeners {
+
+	static onWheel ( wheelEvent ) {
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop +=
+				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 		}
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnPaneButtonClick
-@desc click event listener for the pane buttons
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnPaneButtonClick ( clickEvent ) {
-	ourShowPane ( clickEvent.target.paneId );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnPaneDataDivWheel
-@desc Wheel event listener for Data Pane Div
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnPaneDataDivWheel ( wheelEvent ) {
-	if ( wheelEvent.deltaY ) {
-		wheelEvent.target.scrollTop +=
-			wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
+		wheelEvent.stopPropagation ( );
 	}
-	wheelEvent.stopPropagation ( );
 }
 
 /**
@@ -171,6 +133,23 @@ function ourOnPaneDataDivWheel ( wheelEvent ) {
 
 class PanesManagerUI {
 
+	#activePaneId = PANE_ID.invalidPane;
+	#panes = new Map ( );
+	#paneDataDiv = null;
+	#paneControlDiv = null;
+
+	/**
+	This method remove the content of the Data Pane Div
+	@private
+	*/
+
+	#removeActivePane ( ) {
+		if ( PANE_ID.invalidPane !== this.#activePaneId ) {
+			this.#panes.get ( this.#activePaneId ).remove ( );
+			this.#paneDataDiv.textContent = '';
+		}
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -181,7 +160,7 @@ class PanesManagerUI {
 	*/
 
 	createUI ( uiMainDiv ) {
-		if ( ourPaneDataDiv ) {
+		if ( this.#paneDataDiv ) {
 			return;
 		}
 		let headerDiv = theHTMLElementsFactory.create (
@@ -192,7 +171,7 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 
-		ourPaneControlDiv = theHTMLElementsFactory.create (
+		this.#paneControlDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PanesManagerUI-PaneControlsDiv'
@@ -200,15 +179,15 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 
-		ourPaneDataDiv = theHTMLElementsFactory.create (
+		this.#paneDataDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PanesManagerUI-PaneDataDiv'
 			},
 			uiMainDiv
 		);
-		ourPaneDataDiv.addEventListener ( 'wheel', ourOnPaneDataDivWheel, false );
-		ourPanes.forEach (
+		this.#paneDataDiv.addEventListener ( 'wheel', PaneDataDivEventListeners.onWheel, false );
+		this.#panes.forEach (
 			pane => {
 				theHTMLElementsFactory.create (
 					'div',
@@ -218,8 +197,8 @@ class PanesManagerUI {
 						paneId : pane.getId ( )
 					},
 					headerDiv
-				).addEventListener ( 'click', ourOnPaneButtonClick, false );
-				pane.setPaneDivs ( ourPaneDataDiv, ourPaneControlDiv );
+				).addEventListener ( 'click', PaneButtonsEventListeners.onClick, false );
+				pane.setPaneDivs ( this.#paneDataDiv, this.#paneControlDiv );
 			}
 		);
 	}
@@ -230,7 +209,7 @@ class PanesManagerUI {
 	*/
 
 	addPane ( paneUI ) {
-		ourPanes.set ( paneUI.getId ( ), paneUI );
+		this.#panes.set ( paneUI.getId ( ), paneUI );
 	}
 
 	/**
@@ -239,7 +218,19 @@ class PanesManagerUI {
 	*/
 
 	showPane ( paneId ) {
-		ourShowPane ( paneId );
+		this.#removeActivePane ( );
+		this.#activePaneId = paneId;
+		this.#panes.get ( this.#activePaneId ).add ( );
+		document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
+			paneButton => {
+				if ( paneButton.paneId === this.#activePaneId ) {
+					paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
+				}
+				else {
+					paneButton.classList.remove ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
+				}
+			}
+		);
 	}
 
 	/**
@@ -248,29 +239,26 @@ class PanesManagerUI {
 	*/
 
 	updatePane ( paneId ) {
-		if ( paneId === ourActivePaneId ) {
-			ourShowPane ( paneId );
+		if ( paneId === this.#activePaneId ) {
+			this.showPane ( paneId );
 		}
 	}
 }
 
-const OUR_PANES_MANAGER_UI = new PanesManagerUI ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of PanesManagerUI class
+@type {PanesManagerUI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of PanesManagerUI class
-	@type {PanesManagerUI}
-	@constant
-	@global
+const thePanesManagerUI = new PanesManagerUI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_PANES_MANAGER_UI as thePanesManagerUI
-};
+export default thePanesManagerUI;
 
 /*
 --- End of dataPanesUI.js file ------------------------------------------------------------------------------------------------
