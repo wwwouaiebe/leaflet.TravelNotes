@@ -82,7 +82,7 @@ let ourRoutesList = null;
 let ourTravelNameInput = null;
 let ourUIMainDiv = null;
 let ourDraggedRouteObjId = ZERO;
-let ourRoutesHeaderDiv = null;
+let this.#routesHeaderDiv = null;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -147,28 +147,6 @@ function ourOnExpandRoutesButtonClick ( clickEvent ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourCreateExpandRoutesButton
-@desc This method creates the expand routes list button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateExpandRoutesButton ( ) {
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			textContent : '▼',
-			className : 'TravelNotes-TravelUI-RouteList-ExpandButton'
-		},
-		ourRoutesHeaderDiv
-	)
-		.addEventListener ( 'click', ourOnExpandRoutesButtonClick, false );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
 @function ourOnExpandRoutesButtonClick
 @desc click event listener for the add route button
 @private
@@ -179,58 +157,6 @@ function ourCreateExpandRoutesButton ( ) {
 function ourOnAddRouteButtonClick ( clickEvent ) {
 	clickEvent.stopPropagation ( );
 	theRouteEditor.addRoute ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateAddRouteButton
-@desc This method creates the add route button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateAddRouteButton ( ) {
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton',
-			title : theTranslator.getText ( 'TravelUI - Add a route' ),
-			textContent : '+'
-		},
-		ourRoutesHeaderDiv
-	)
-		.addEventListener ( 'click', ourOnAddRouteButtonClick, false );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateRoutesListHeaderDiv
-@desc This method creates the routes list header div
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateRoutesListHeaderDiv ( ) {
-	ourRoutesHeaderDiv = theHTMLElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-UI-FlexRowDiv'
-		},
-		ourUIMainDiv
-	);
-	ourCreateExpandRoutesButton ( ourRoutesHeaderDiv );
-	theHTMLElementsFactory.create (
-		'span',
-		{
-			textContent : theTranslator.getText ( 'TravelUI - Travel routes' )
-		},
-		ourRoutesHeaderDiv
-	);
-	ourCreateAddRouteButton ( ourRoutesHeaderDiv );
 }
 
 /**
@@ -299,7 +225,7 @@ function ourOnRouteDrop ( dropEvent ) {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourCreateRoutesListHeaderDiv
+@function ourCreateRouteListDiv
 @desc This method creates the routes list header div
 @private
 
@@ -355,6 +281,8 @@ function ourOnRouteContextMenu ( contextMenuEvent ) {
 
 class TravelUI {
 
+	#routesHeaderDiv = null;
+
 	/**
 	This method creates the travel name div
 	@private
@@ -386,6 +314,70 @@ class TravelUI {
 		);
 		ourTravelNameInput.addEventListener ( 'change', ourOnTravelNameInputChange, false );
 	}
+	
+
+	/**
+	This method creates the expand routes list button
+	@private
+	*/
+
+	#createExpandRoutesButton ( ) {
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				textContent : '▼',
+				className : 'TravelNotes-TravelUI-RouteList-ExpandButton'
+			},
+			this.#routesHeaderDiv
+		)
+			.addEventListener ( 'click', ourOnExpandRoutesButtonClick, false );
+	}
+
+	/**
+	This method creates the add route button
+	@private
+	*/
+
+	#createAddRouteButton ( ) {
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-UI-Button TravelNotes-UI-FlexRow-RightButton',
+				title : theTranslator.getText ( 'TravelUI - Add a route' ),
+				textContent : '+'
+			},
+			this.#routesHeaderDiv
+		)
+			.addEventListener ( 'click', ourOnAddRouteButtonClick, false );
+	}
+
+	/**
+	This method creates the routes list header div
+	@private
+	*/
+
+	#createRoutesListHeaderDiv ( ) {
+		this.#routesHeaderDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-UI-FlexRowDiv'
+			},
+			ourUIMainDiv
+		);
+		
+		this.#createExpandRoutesButton ( this.#routesHeaderDiv );
+		
+		theHTMLElementsFactory.create (
+			'span',
+			{
+				textContent : theTranslator.getText ( 'TravelUI - Travel routes' )
+			},
+			this.#routesHeaderDiv
+		);
+		
+		this.#createAddRouteButton ( this.#routesHeaderDiv );
+	}
+	
 
 	/**
 	creates the user interface
@@ -399,7 +391,7 @@ class TravelUI {
 		ourUIMainDiv = uiMainDiv;
 		this.#createTravelNameDiv ( );
 		theTravelToolbarUI.createUI ( uiMainDiv );
-		ourCreateRoutesListHeaderDiv ( );
+		this.#createRoutesListHeaderDiv ( );
 		ourCreateRouteListDiv ( );
 	}
 
