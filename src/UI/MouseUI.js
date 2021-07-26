@@ -25,7 +25,9 @@ Changes:
 		- Issue ♯135 : Remove innerHTML from code
 	-v2.2.0:
 		- Issue ♯129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200822
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210726
 Tests ...
 */
 
