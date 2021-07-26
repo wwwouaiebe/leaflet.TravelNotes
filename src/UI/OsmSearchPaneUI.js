@@ -57,15 +57,10 @@ Tests ...
 
 import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
-import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import ObjId from '../data/ObjId.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
-import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
-import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
-import { LAT_LNG, PANE_ID, ZERO, MOUSE_WHEEL_FACTORS, INVALID_OBJ_ID } from '../util/Constants.js';
+import OsmSearchPaneDataManager from '../UI/OsmSearchPaneDataManager.js';
+import { PANE_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -79,81 +74,10 @@ import { LAT_LNG, PANE_ID, ZERO, MOUSE_WHEEL_FACTORS, INVALID_OBJ_ID } from '../
 */
 
 function ourNewOsmSearchPaneUI ( ) {
-	let myPaneDataDiv = null;
-	let myPaneControlDiv = null;
 	let mySearchToolbar = null;
 	let myWaitDiv = null;
 	let mySearchTreeDiv = null;
-	let	mySearchResultMarkerObjId = INVALID_OBJ_ID;
 	let myDeepTree = 0;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnSearchResultContextMenu
-	@desc context menu event listener for the search result
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSearchResultContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.stopPropagation ( );
-		contextMenuEvent.preventDefault ( );
-		let searchResultDiv = contextMenuEvent.target;
-		while ( ! searchResultDiv.osmElement ) {
-			searchResultDiv = searchResultDiv.parentNode;
-		}
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.fromUI = true;
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY,
-				latLng : [ searchResultDiv.osmElement.lat, searchResultDiv.osmElement.lon ],
-				osmElement : searchResultDiv.osmElement,
-				geometry : searchResultDiv.osmElement.geometry
-			};
-		newOsmSearchContextMenu ( contextMenuEvent, myPaneDataDiv ).show ( );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnSearchResultMouseEnter
-	@desc mouse enter event listener for the search result
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSearchResultMouseEnter ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		mySearchResultMarkerObjId = mouseEvent.target.objId;
-		theEventDispatcher.dispatch (
-			'addsearchpointmarker',
-			{
-				objId : mouseEvent.target.objId,
-				latLng : [ mouseEvent.target.osmElement.lat, mouseEvent.target.osmElement.lon ],
-				geometry : mouseEvent.target.osmElement.geometry
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnSearchResultMouseLeave
-	@desc mouse leave event listener for the search result
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSearchResultMouseLeave ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		theEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
-	}
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -169,7 +93,7 @@ function ourNewOsmSearchPaneUI ( ) {
 		myWaitDiv = theHTMLElementsFactory.create (
 			'div',
 			{ className : 'TravelNotes-WaitAnimation' },
-			myPaneControlDiv
+			this.paneControlDiv
 		);
 		theHTMLElementsFactory.create (
 			'div',
@@ -177,28 +101,6 @@ function ourNewOsmSearchPaneUI ( ) {
 				className : 'TravelNotes-WaitAnimationBullet'
 			},
 			myWaitDiv
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClearPaneDataDiv
-	@desc Remove all search results from the pane data div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClearPaneDataDiv ( ) {
-		let searchResultsDivs = document.querySelectorAll ( '.TravelNotes-OsmSearchPaneUI-SearchResult' );
-		searchResultsDivs.forEach (
-			searchResultDiv => {
-				searchResultDiv.removeEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
-				searchResultDiv.removeEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
-				searchResultDiv.removeEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
-				myPaneDataDiv.removeChild ( searchResultDiv );
-			}
 		);
 	}
 
@@ -297,11 +199,13 @@ function ourNewOsmSearchPaneUI ( ) {
 	*/
 
 	function myStartSearch ( ) {
-		myClearPaneDataDiv ( );
+
+		// tmp moved myClearPaneDataDiv ( );
 		theOsmSearchEngine.dictionary.isExpanded = false;
 		mySearchTreeDiv.textContent = '';
 		myAddItem ( theOsmSearchEngine.dictionary );
-		myAddWait ( );
+
+		// tmp moved myAddWait ( );
 		theOsmSearchEngine.search ( );
 
 		// Notice: theOsmSearchEngine send a 'showsearch' event when the search is succesfully done
@@ -405,30 +309,6 @@ function ourNewOsmSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myClearPaneControlDiv
-	@desc Clear the pane control div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClearPaneControlDiv ( ) {
-		if ( mySearchTreeDiv ) {
-			myPaneControlDiv.removeChild ( mySearchTreeDiv );
-			mySearchTreeDiv = null;
-		}
-		if ( mySearchToolbar ) {
-			myPaneControlDiv.removeChild ( mySearchToolbar );
-		}
-		if ( myWaitDiv ) {
-			myPaneControlDiv.removeChild ( myWaitDiv );
-			myWaitDiv = null;
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@function myOnSearchTreeWheel
 	@desc Wheel event listener for the search tree div
 	@private
@@ -447,236 +327,6 @@ function ourNewOsmSearchPaneUI ( ) {
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myAddControls
-	@desc Create the controls div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddControls ( ) {
-		mySearchToolbar = theHTMLElementsFactory.create (
-			'div',
-			null,
-			myPaneControlDiv
-		);
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
-				textContent : '🔎'
-			},
-			mySearchToolbar
-		)
-			.addEventListener ( 'click', myStartSearch, false );
-
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'OsmSearchPaneUI - Expand tree' ),
-				textContent : '▼'
-			},
-			mySearchToolbar
-		)
-			.addEventListener ( 'click', myOnExpandButtonClick, false );
-
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'OsmSearchPaneUI - Collapse tree' ),
-				textContent : '▶'
-			},
-			mySearchToolbar
-		)
-			.addEventListener ( 'click', myOnCollapseButtonClick, false );
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-OsmSearchPaneUI-ClearAllButton',
-				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'OsmSearchPaneUI - Clear tree' ),
-				textContent : '❌'
-			},
-			mySearchToolbar
-		)
-			.addEventListener ( 'click', myOnClearButtonClick, false );
-		mySearchTreeDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-OsmSearchPaneUI-SearchTree'
-			},
-			myPaneControlDiv
-		);
-		mySearchTreeDiv.addEventListener ( 'wheel', myOnSearchTreeWheel, false );
-
-		// theOsmSearchEngine.dictionary.name = theTranslator.getText ( 'OsmSearchPaneUI - dictionary name' );
-		theOsmSearchEngine.dictionary.name = '';
-		myAddItem ( theOsmSearchEngine.dictionary );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddHTMLParagraphElement
-	@desc Add a HTMLParagraphElement as child of another html element and add a Text to
-	this  HTMLParagraphElement
-	@param {HTMLElement} parentElement The parent HTML element
-	@param {string} paragraphText The text to add in the HTMLParagraphElement
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddHTMLParagraphElement ( parentElement, paragraphText ) {
-		if ( paragraphText ) {
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					textContent : paragraphText
-				},
-				parentElement
-			);
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddHTMLParagraphElement
-	@desc Concat the house number, strret, post code and city name in one string
-	@param {Object} osmElement The osm element
-	@return {?string} the address or null if nothing found
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetAddress ( osmElement ) {
-		let street =
-			osmElement.tags [ 'addr:street' ]
-				?
-				( osmElement.tags [ 'addr:housenumber' ] ? osmElement.tags [ 'addr:housenumber' ] + ' ' : '' ) +
-					osmElement.tags [ 'addr:street' ] + ' '
-				:
-				'';
-		let city =
-			osmElement.tags [ 'addr:city' ]
-				?
-				( osmElement.tags [ 'addr:postcode' ] ? ( osmElement.tags [ 'addr:postcode' ] + ' ' ) : '' ) +
-				osmElement.tags [ 'addr:city' ]
-				:
-				'';
-		let address = street + city;
-		return '' === address ? null : address;
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddSearchResultDiv
-	@desc Create a <div> and  <p> elements with the tags found in the osmElement and add this
-	<div> to to search <div>
-	@param {Object} osmElement
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddSearchResultDiv ( osmElement ) {
-		let searchResultDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Row',
-				osmElement : osmElement,
-				objId : ObjId.nextObjId
-			},
-			myPaneDataDiv
-		);
-		let iconContent = '';
-		if ( osmElement.tags.rcn_ref ) {
-			iconContent =
-				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
-				'<svg viewBox=\'0 0 20 20\'><text class=\'\' x=10 y=14>' +
-				osmElement.tags.rcn_ref +
-				'</text></svg></div>';
-		}
-		else {
-			iconContent = theNoteDialogToolbar.getIconDataFromName ( osmElement.description ) || '';
-		}
-		let iconCell = theHTMLElementsFactory.create (
-			'div',
-			{
-				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-IconCell'
-			},
-			searchResultDiv
-		);
-		theHTMLSanitizer.sanitizeToHtmlElement ( iconContent, iconCell );
-
-		let searchResultCell = theHTMLElementsFactory.create (
-			'div',
-			{
-				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Cell'
-			},
-			searchResultDiv
-		);
-
-		myAddHTMLParagraphElement ( searchResultCell, osmElement.description );
-		myAddHTMLParagraphElement ( searchResultCell, osmElement.tags.name );
-		myAddHTMLParagraphElement ( searchResultCell, osmElement.tags.rcn_ref );
-		myAddHTMLParagraphElement ( searchResultCell, myGetAddress ( osmElement ) );
-		if ( osmElement.tags.phone ) {
-			myAddHTMLParagraphElement ( searchResultCell, '☎️ : ' + osmElement.tags.phone );
-		}
-		if ( osmElement.tags.email ) {
-			theHTMLElementsFactory.create (
-				'a',
-				{
-					href : 'mailto:' + osmElement.tags.email,
-					textContent : osmElement.tags.email
-				},
-				theHTMLElementsFactory.create ( 'div', { textContent : '📧 : ' }, searchResultCell )
-			);
-		}
-		if ( osmElement.tags.website ) {
-			theHTMLElementsFactory.create (
-				'a',
-				{
-					href : osmElement.tags.website,
-					target : '_blank',
-					textContent : osmElement.tags.website
-				},
-				theHTMLElementsFactory.create ( 'div', null, searchResultCell )
-			);
-		}
-		searchResultDiv.title = '';
-		for ( const [ KEY, VALUE ] of Object.entries ( osmElement.tags ) ) {
-			searchResultDiv.title += KEY + '=' + VALUE + '\n';
-		}
-		searchResultDiv.addEventListener ( 'contextmenu', myOnSearchResultContextMenu, false );
-		searchResultDiv.addEventListener ( 'mouseenter', myOnSearchResultMouseEnter, false );
-		searchResultDiv.addEventListener ( 'mouseleave', myOnSearchResultMouseLeave, false );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddData
-	@desc Create the pane data div content
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddData ( ) {
-		theTravelNotesData.searchData.forEach ( myAddSearchResultDiv );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
 	@class OsmSearchPaneUI
 	@classdesc This class manages the search pane UI
 	@see {@link newOsmSearchPaneUI} for constructor
@@ -689,6 +339,113 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	class OsmSearchPaneUI extends PaneUI {
 
+		#osmSearchPaneDataManager = new OsmSearchPaneDataManager ( );
+
+		/**
+		Create the controls div
+		@private
+		*/
+
+		#addControls ( ) {
+			mySearchToolbar = theHTMLElementsFactory.create (
+				'div',
+				null,
+				this.paneControlDiv
+			);
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
+					textContent : '🔎'
+				},
+				mySearchToolbar
+			)
+				.addEventListener ( 'click', myStartSearch, false );
+
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'OsmSearchPaneUI - Expand tree' ),
+					textContent : '▼'
+				},
+				mySearchToolbar
+			)
+				.addEventListener ( 'click', myOnExpandButtonClick, false );
+
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'OsmSearchPaneUI - Collapse tree' ),
+					textContent : '▶'
+				},
+				mySearchToolbar
+			)
+				.addEventListener ( 'click', myOnCollapseButtonClick, false );
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-OsmSearchPaneUI-ClearAllButton',
+					className : 'TravelNotes-UI-Button',
+					title : theTranslator.getText ( 'OsmSearchPaneUI - Clear tree' ),
+					textContent : '❌'
+				},
+				mySearchToolbar
+			)
+				.addEventListener ( 'click', myOnClearButtonClick, false );
+			mySearchTreeDiv = theHTMLElementsFactory.create (
+				'div',
+				{
+					id : 'TravelNotes-OsmSearchPaneUI-SearchTree'
+				},
+				this.paneControlDiv
+			);
+			mySearchTreeDiv.addEventListener ( 'wheel', myOnSearchTreeWheel, false );
+
+			// theOsmSearchEngine.dictionary.name = theTranslator.getText ( 'OsmSearchPaneUI - dictionary name' );
+			theOsmSearchEngine.dictionary.name = '';
+			myAddItem ( theOsmSearchEngine.dictionary );
+		}
+
+		/**
+		Create the pane data div content
+		@private
+		*/
+
+		#addData ( ) {
+			this.#osmSearchPaneDataManager.addData ( this.paneDataDiv );
+		}
+
+		/**
+		Clear the pane control div
+		@private
+		*/
+
+		#clearPaneControlDiv ( ) {
+			if ( mySearchTreeDiv ) {
+				this.paneControlDiv.removeChild ( mySearchTreeDiv );
+				mySearchTreeDiv = null;
+			}
+			if ( mySearchToolbar ) {
+				this.paneControlDiv.removeChild ( mySearchToolbar );
+			}
+			if ( myWaitDiv ) {
+				this.paneControlDiv.removeChild ( myWaitDiv );
+				myWaitDiv = null;
+			}
+		}
+
+		/**
+		Remove all search results from the pane data div
+		@private
+		*/
+
+		#clearPaneDataDiv ( ) {
+			this.#osmSearchPaneDataManager.clearData ( this.paneDataDiv );
+		}
+
 		constructor ( ) {
 			super ( );
 			Object.seal ( this );
@@ -700,9 +457,10 @@ function ourNewOsmSearchPaneUI ( ) {
 
 		remove ( ) {
 			theOsmSearchEngine.hide ( );
-			myClearPaneDataDiv ( );
-			myClearPaneControlDiv ( );
-			theEventDispatcher.dispatch ( 'removeobject', { objId : mySearchResultMarkerObjId } );
+			this.#clearPaneDataDiv ( );
+			this.#clearPaneControlDiv ( );
+
+			// theEventDispatcher.dispatch ( 'removeobject', { objId : mySearchResultMarkerObjId } );
 		}
 
 		/**
@@ -711,8 +469,8 @@ function ourNewOsmSearchPaneUI ( ) {
 
 		add ( ) {
 			theOsmSearchEngine.show ( );
-			myAddControls ( );
-			myAddData ( );
+			this.#addControls ( );
+			this.#addData ( );
 		}
 
 		/**
@@ -727,14 +485,6 @@ function ourNewOsmSearchPaneUI ( ) {
 
 		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Search' ); }
 
-		/**
-		Set the pane data div and pane control div
-		*/
-
-		setPaneDivs ( paneDataDiv, paneControlDiv ) {
-			myPaneDataDiv = paneDataDiv;
-			myPaneControlDiv = paneControlDiv;
-		}
 	}
 
 	return new OsmSearchPaneUI ( );
