@@ -1,12 +1,68 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+Changes:
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210726
+Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file OsmSearchPaneDataManager.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module OsmSearchPaneDataManager
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
+import ObjId from '../data/ObjId.js';
+
 import { LAT_LNG } from '../util/Constants.js';
 
-import ObjId from '../data/ObjId.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class SearchResultEventListeners
+@classdesc This class contains the event listeners for the search results
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 class SearchResultEventListeners {
 
@@ -60,9 +116,21 @@ class SearchResultEventListeners {
 	}
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchPaneDataManager
+@classdesc This class add or remove the search data on the pane data
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class OsmSearchPaneDataManager {
 
-	#searchResultCell = null;
+	/**
+	Icon builder
+	*/
 
 	#buildIcon ( htmlElement ) {
 		let iconContent = '';
@@ -86,13 +154,21 @@ class OsmSearchPaneDataManager {
 		theHTMLSanitizer.sanitizeToHtmlElement ( iconContent, iconCell );
 	}
 
-	#addOsmTag ( osmTagValue ) {
+	/**
+	generic builder
+	*/
+
+	#addOsmTag ( osmTagValue, searchResultCell ) {
 		if ( osmTagValue ) {
-			theHTMLElementsFactory.create ( 'div', { textContent : osmTagValue }, this.#searchResultCell	);
+			theHTMLElementsFactory.create ( 'div', { textContent : osmTagValue }, searchResultCell	);
 		}
 	}
 
-	#addAddress ( htmlElement ) {
+	/**
+	Address builder
+	*/
+
+	#addAddress ( htmlElement, searchResultCell ) {
 		let street =
 			htmlElement.osmElement.tags [ 'addr:street' ]
 				?
@@ -121,17 +197,25 @@ class OsmSearchPaneDataManager {
 				'';
 		let address = street + city;
 		if ( '' !== address ) {
-			this.#addOsmTag ( address );
+			this.#addOsmTag ( address, searchResultCell );
 		}
 	}
 
-	#addPhone ( htmlElement ) {
+	/**
+	Phone builder
+	*/
+
+	#addPhone ( htmlElement, searchResultCell ) {
 		if ( htmlElement.osmElement.tags.phone ) {
-			this.#addOsmTag ( '☎️ : ' + htmlElement.osmElement.tags.phone );
+			this.#addOsmTag ( '☎️ : ' + htmlElement.osmElement.tags.phone, searchResultCell );
 		}
 	}
 
-	#addMail ( htmlElement ) {
+	/**
+	Mail builder
+	*/
+
+	#addMail ( htmlElement, searchResultCell ) {
 		if ( htmlElement.osmElement.tags.email ) {
 			theHTMLElementsFactory.create (
 				'a',
@@ -139,12 +223,16 @@ class OsmSearchPaneDataManager {
 					href : 'mailto:' + htmlElement.osmElement.tags.email,
 					textContent : htmlElement.osmElement.tags.email
 				},
-				theHTMLElementsFactory.create ( 'div', { textContent : '📧 : ' }, this.#searchResultCell )
+				theHTMLElementsFactory.create ( 'div', { textContent : '📧 : ' }, searchResultCell )
 			);
 		}
 	}
 
-	#addWebSite ( htmlElement ) {
+	/**
+	Web site builder
+	*/
+
+	#addWebSite ( htmlElement, searchResultCell ) {
 		if ( htmlElement.osmElement.tags.website ) {
 			theHTMLElementsFactory.create (
 				'a',
@@ -153,27 +241,31 @@ class OsmSearchPaneDataManager {
 					target : '_blank',
 					textContent : htmlElement.osmElement.tags.website
 				},
-				theHTMLElementsFactory.create ( 'div', null, this.#searchResultCell )
+				theHTMLElementsFactory.create ( 'div', null, searchResultCell )
 			);
 		}
 	}
 
 	#addOsmData ( htmlElement ) {
-		this.#searchResultCell = theHTMLElementsFactory.create (
+		let searchResultCell = theHTMLElementsFactory.create (
 			'div',
 			{ className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Cell'	},
 			htmlElement
 		);
 
-		this.#addOsmTag ( htmlElement.osmElement.description );
-		this.#addOsmTag ( htmlElement.osmElement.tags.name );
-		this.#addOsmTag ( htmlElement.osmElement.tags.rcn_ref );
-		this.#addAddress ( htmlElement );
-		this.#addPhone ( htmlElement );
-		this.#addMail ( htmlElement );
-		this.#addWebSite ( htmlElement );
+		this.#addOsmTag ( htmlElement.osmElement.description, searchResultCell );
+		this.#addOsmTag ( htmlElement.osmElement.tags.name, searchResultCell );
+		this.#addOsmTag ( htmlElement.osmElement.tags.rcn_ref, searchResultCell );
+		this.#addAddress ( htmlElement, searchResultCell );
+		this.#addPhone ( htmlElement, searchResultCell );
+		this.#addMail ( htmlElement, searchResultCell );
+		this.#addWebSite ( htmlElement, searchResultCell );
 
 	}
+
+	/**
+	Title builder
+	*/
 
 	#addTitle ( htmlElement ) {
 		for ( const [ KEY, VALUE ] of Object.entries ( htmlElement.osmElement.tags ) ) {
@@ -182,11 +274,19 @@ class OsmSearchPaneDataManager {
 
 	}
 
+	/**
+	event listeners
+	*/
+
 	#addEventListeners ( htmlElement ) {
 		htmlElement.addEventListener ( 'contextmenu', SearchResultEventListeners.onContextMenu, false );
 		htmlElement.addEventListener ( 'mouseenter', SearchResultEventListeners.onMouseEnter, false );
 		htmlElement.addEventListener ( 'mouseleave', SearchResultEventListeners.onMouseLeave, false );
 	}
+
+	/**
+	Element builder
+	*/
 
 	#buildHtmlElement ( osmElement ) {
 		let htmlElement = theHTMLElementsFactory.create (
@@ -207,6 +307,10 @@ class OsmSearchPaneDataManager {
 	constructor ( ) {
 	}
 
+	/**
+	Add data to the pane data
+	*/
+
 	addData ( dataDiv ) {
 		theTravelNotesData.searchData.forEach (
 			osmElement => {
@@ -214,6 +318,10 @@ class OsmSearchPaneDataManager {
 			}
 		);
 	}
+
+	/**
+	Remove data from the pane data
+	*/
 
 	clearData ( dataDiv ) {
 
@@ -227,3 +335,7 @@ class OsmSearchPaneDataManager {
 }
 
 export default OsmSearchPaneDataManager;
+
+/*
+--- End of OsmSearchPaneDataManager.js file -----------------------------------------------------------------------------------
+*/

@@ -64,145 +64,127 @@ import OsmSearchPaneControlManager from '../UI/OsmSearchPaneControlManager.js';
 import { PANE_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewSearchPaneUI
-@desc constructor for OsmSearchPaneUI objects
-@return {OsmSearchPaneUI} an instance of OsmSearchPaneUI object
+@function myAddWait
+@desc show a wait animation
 @private
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+/*
+function myAddWait ( ) {
+	myWaitDiv = theHTMLElementsFactory.create (
+		'div',
+		{ className : 'TravelNotes-WaitAnimation' },
+		this.paneControlDiv
+	);
+	theHTMLElementsFactory.create (
+		'div',
+		{
+			className : 'TravelNotes-WaitAnimationBullet'
+		},
+		myWaitDiv
+	);
+}
 */
 
-function ourNewOsmSearchPaneUI ( ) {
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchPaneUI
+@classdesc This class manages the search pane UI
+@see {@link newOsmSearchPaneUI} for constructor
+@see {@link PanesManagerUI} for pane UI management
+@implements {PaneUI}
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class OsmSearchPaneUI extends PaneUI {
+
+	#osmSearchPaneDataManager = new OsmSearchPaneDataManager ( );
+	#osmSearchPaneControlManager = new OsmSearchPaneControlManager ( );
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddWait
-	@desc show a wait animation
+	Create the controls div
 	@private
+	*/
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-	/*
-	function myAddWait ( ) {
-		myWaitDiv = theHTMLElementsFactory.create (
-			'div',
-			{ className : 'TravelNotes-WaitAnimation' },
-			this.paneControlDiv
-		);
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-WaitAnimationBullet'
-			},
-			myWaitDiv
-		);
+	#addControls ( ) {
+		this.#osmSearchPaneControlManager.addToolbar ( this.paneControlDiv );
+		this.#osmSearchPaneControlManager.addTree ( this.paneControlDiv );
 	}
-	*/
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class OsmSearchPaneUI
-	@classdesc This class manages the search pane UI
-	@see {@link newOsmSearchPaneUI} for constructor
-	@see {@link PanesManagerUI} for pane UI management
-	@implements {PaneUI}
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Create the pane data div content
+	@private
 	*/
 
-	class OsmSearchPaneUI extends PaneUI {
-
-		#osmSearchPaneDataManager = new OsmSearchPaneDataManager ( );
-		#osmSearchPaneControlManager = new OsmSearchPaneControlManager ( );
-
-		/**
-		Create the controls div
-		@private
-		*/
-
-		#addControls ( ) {
-			this.#osmSearchPaneControlManager.addToolbar ( this.paneControlDiv );
-			this.#osmSearchPaneControlManager.addTree ( this.paneControlDiv );
-		}
-
-		/**
-		Create the pane data div content
-		@private
-		*/
-
-		#addData ( ) {
-			this.#osmSearchPaneDataManager.addData ( this.paneDataDiv );
-		}
-
-		/**
-		Clear the pane control div
-		@private
-		*/
-
-		#clearPaneControlDiv ( ) {
-			this.#osmSearchPaneControlManager.removeToolbar ( this.paneControlDiv );
-			this.#osmSearchPaneControlManager.removeTree ( this.paneControlDiv );
-		}
-
-		/**
-		Remove all search results from the pane data div
-		@private
-		*/
-
-		#clearPaneDataDiv ( ) {
-			this.#osmSearchPaneDataManager.clearData ( this.paneDataDiv );
-		}
-
-		constructor ( ) {
-			super ( );
-			Object.seal ( this );
-		}
-
-		/**
-		This function removes all the elements from the data div and control div
-		*/
-
-		remove ( ) {
-			theOsmSearchEngine.hide ( );
-			this.#clearPaneDataDiv ( );
-			this.#clearPaneControlDiv ( );
-
-			// theEventDispatcher.dispatch ( 'removeobject', { objId : mySearchResultMarkerObjId } );
-		}
-
-		/**
-		This function add the search data to the data div and controls to the controls div
-		*/
-
-		add ( ) {
-			theOsmSearchEngine.show ( );
-			this.#addControls ( );
-			this.#addData ( );
-		}
-
-		/**
-		This function returns the pane id
-		*/
-
-		getId ( ) { return PANE_ID.searchPane; }
-
-		/**
-		This function returns the text to add in the pane button
-		*/
-
-		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Search' ); }
-
+	#addData ( ) {
+		this.#osmSearchPaneDataManager.addData ( this.paneDataDiv );
 	}
 
-	return new OsmSearchPaneUI ( );
+	/**
+	Clear the pane control div
+	@private
+	*/
+
+	#clearPaneControlDiv ( ) {
+		this.#osmSearchPaneControlManager.removeToolbar ( this.paneControlDiv );
+		this.#osmSearchPaneControlManager.removeTree ( this.paneControlDiv );
+	}
+
+	/**
+	Remove all search results from the pane data div
+	@private
+	*/
+
+	#clearPaneDataDiv ( ) {
+		this.#osmSearchPaneDataManager.clearData ( this.paneDataDiv );
+	}
+
+	constructor ( ) {
+		super ( );
+		Object.seal ( this );
+	}
+
+	/**
+	This function removes all the elements from the data div and control div
+	*/
+
+	remove ( ) {
+		theOsmSearchEngine.hide ( );
+		this.#clearPaneDataDiv ( );
+		this.#clearPaneControlDiv ( );
+	}
+
+	/**
+	This function add the search data to the data div and controls to the controls div
+	*/
+
+	add ( ) {
+		theOsmSearchEngine.show ( );
+		this.#addControls ( );
+		this.#addData ( );
+	}
+
+	/**
+	This function returns the pane id
+	*/
+
+	getId ( ) { return PANE_ID.searchPane; }
+
+	/**
+	This function returns the text to add in the pane button
+	*/
+
+	getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Search' ); }
+
 }
 
-export { ourNewOsmSearchPaneUI as newOsmSearchPaneUI };
+export default OsmSearchPaneUI;
 
 /*
 --- End of OsmSearchPaneUI.js file ---------------------------------------------------------------------------------------

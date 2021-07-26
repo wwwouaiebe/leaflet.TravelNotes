@@ -64,7 +64,7 @@ import theProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
 import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import ItineraryPaneUI from '../UI/ItineraryPaneUI.js';
 import TravelNotesPaneUI from '../UI/TravelNotesPaneUI.js';
-import { newOsmSearchPaneUI } from '../UI/OsmSearchPaneUI.js';
+import OsmSearchPaneUI from '../UI/OsmSearchPaneUI.js';
 import theRoutesListUI from '../UI/RoutesListUI.js';
 import { PANE_ID } from '../util/Constants.js';
 
@@ -307,7 +307,7 @@ class UI {
 		theTravelUI.createUI ( ourMainDiv );
 		thePanesManagerUI.addPane ( new ItineraryPaneUI ( ) );
 		thePanesManagerUI.addPane ( new TravelNotesPaneUI ( ) );
-		thePanesManagerUI.addPane ( newOsmSearchPaneUI ( ) );
+		thePanesManagerUI.addPane ( new OsmSearchPaneUI ( ) );
 		thePanesManagerUI.createUI ( ourMainDiv );
 		theProvidersToolbarUI.createUI ( ourMainDiv );
 

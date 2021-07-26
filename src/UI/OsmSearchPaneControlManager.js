@@ -1,12 +1,78 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+Changes:
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210726
+Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file OsmSearchPaneControlManager.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module OsmSearchPaneControlManager
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 
 import { ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchTreeEventListeners
+@classdesc This class contains the event listeners for the tree
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class OsmSearchTreeEventListeners {
 
+	/**
+	A reference to the OsmSearchTree object
+	*/
+
 	static osmSearchTree = null;
+
+	/**
+	Helper function to select or unselected all the items childrens of a given item
+	*/
 
 	static selectItem ( item, isSelected ) {
 		item.isSelected = isSelected;
@@ -15,10 +81,18 @@ class OsmSearchTreeEventListeners {
 		);
 	}
 
+	/**
+	change event listener for the tree checkboxes
+	*/
+
 	static onCheckboxChange ( changeEvent ) {
 		OsmSearchTreeEventListeners.selectItem ( changeEvent.target.parentNode.dictItem, changeEvent.target.checked );
 		OsmSearchTreeEventListeners.osmSearchTree.redraw ( );
 	}
+
+	/**
+	wheel event listener for the tree
+	*/
 
 	static onWheel ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
@@ -28,47 +102,89 @@ class OsmSearchTreeEventListeners {
 		wheelEvent.stopPropagation ( );
 	}
 
+	/**
+	click event listener for tree arrows
+	*/
+
 	static onArrowClick ( clickEvent ) {
 		clickEvent.target.parentNode.dictItem.isExpanded = ! clickEvent.target.parentNode.dictItem.isExpanded;
 		OsmSearchTreeEventListeners.osmSearchTree.redraw ( );
 	}
 
-
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchToolbar
+@classdesc This class build the search toolbar and contains also the event listeners for the toolbar
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 class OsmSearchToolbar {
 
+	/**
+	A reference to the OsmSearchTree object
+	*/
+
 	static osmSearchTree = null;
+
+	/**
+	A reference to the toolbar htmlElement
+	*/
+
+	#toolbarHTMLElement = null;
+
+	/**
+	click event listener for the search button
+	*/
 
 	static onSearchClick ( ) {
 
 		// tmp moved myClearPaneDataDiv ( );
 		theOsmSearchEngine.dictionary.isExpanded = false;
 		OsmSearchToolbar.osmSearchTree.redraw ( );
+		theTravelNotesData.searchData.length = ZERO;
+		theEventDispatcher.dispatch ( 'showsearch' );
+
 		// tmp moved myAddWait ( );
 		theOsmSearchEngine.search ( );
+
 		// Notice: theOsmSearchEngine send a 'showsearch' event when the search is succesfully done
 	}
+
+	/**
+	click event listener for the expand button
+	*/
 
 	static onExpandButtonClick ( ) {
 		OsmSearchToolbar.osmSearchTree.expandSearchTree ( theOsmSearchEngine.dictionary );
 		OsmSearchToolbar.osmSearchTree.redraw ( );
 	}
 
+	/**
+	click event listener for the collapse button
+	*/
+
 	static onCollapseButtonClick ( ) {
 		OsmSearchToolbar.osmSearchTree.collapseSearchTree ( theOsmSearchEngine.dictionary );
 		OsmSearchToolbar.osmSearchTree.redraw ( );
 	}
+
+	/**
+	click event listener for the clear button
+	*/
 
 	static onClearButtonClick ( ) {
 		OsmSearchToolbar.osmSearchTree.clearSearchTree ( theOsmSearchEngine.dictionary );
 		OsmSearchToolbar.osmSearchTree.redraw ( );
 	}
 
-	#osmSearchToolbar = null;
-
 	constructor ( ) {
-		this.#osmSearchToolbar = theHTMLElementsFactory.create (
+
+		this.#toolbarHTMLElement = theHTMLElementsFactory.create (
 			'div'
 		);
 		theHTMLElementsFactory.create (
@@ -78,7 +194,7 @@ class OsmSearchToolbar {
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
 				textContent : '🔎'
 			},
-			this.#osmSearchToolbar
+			this.#toolbarHTMLElement
 		)
 			.addEventListener ( 'click', OsmSearchToolbar.onSearchClick, false );
 
@@ -89,7 +205,7 @@ class OsmSearchToolbar {
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Expand tree' ),
 				textContent : '▼'
 			},
-			this.#osmSearchToolbar
+			this.#toolbarHTMLElement
 		)
 			.addEventListener ( 'click', OsmSearchToolbar.onExpandButtonClick, false );
 
@@ -100,7 +216,7 @@ class OsmSearchToolbar {
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Collapse tree' ),
 				textContent : '▶'
 			},
-			this.#osmSearchToolbar
+			this.#toolbarHTMLElement
 		)
 			.addEventListener ( 'click', OsmSearchToolbar.onCollapseButtonClick, false );
 		theHTMLElementsFactory.create (
@@ -111,19 +227,42 @@ class OsmSearchToolbar {
 				title : theTranslator.getText ( 'OsmSearchPaneUI - Clear tree' ),
 				textContent : '❌'
 			},
-			this.#osmSearchToolbar
+			this.#toolbarHTMLElement
 		)
 			.addEventListener ( 'click', OsmSearchToolbar.onClearButtonClick, false );
 
 	}
 
-	get toolbar ( ) { return this.#osmSearchToolbar; }
+	/**
+	toolbar htmlElement getter
+	*/
+
+	get toolbarHTMLElement ( ) { return this.#toolbarHTMLElement; }
 
 }
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchTree
+@classdesc This class build the search tree and contains also methods to modify this tree
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class OsmSearchTree {
 
-	#osmSearchTree = null;
+	/**
+	A reference to the tree HTMLElementsFactory
+	*/
+
+	#treeHTMLElement = null;
+
+	/**
+	Recursivity counter for the #addItem method
+	*/
+
 	#deepTree = ZERO;
 
 	/**
@@ -141,7 +280,7 @@ class OsmSearchTree {
 					'TravelNotes-OsmSearchPaneUI-SearchItemMargin' + this.#deepTree,
 				dictItem : item
 			},
-			this.#osmSearchTree
+			this.#treeHTMLElement
 		);
 		if ( ! item.isRoot ) {
 			let itemCheckbox = theHTMLElementsFactory.create (
@@ -179,13 +318,13 @@ class OsmSearchTree {
 	}
 
 	constructor ( ) {
-		this.#osmSearchTree = theHTMLElementsFactory.create (
+		this.#treeHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-OsmSearchPaneUI-SearchTree'
 			}
 		);
-		this.#osmSearchTree.addEventListener ( 'wheel', OsmSearchTreeEventListeners.onWheel, false );
+		this.#treeHTMLElement.addEventListener ( 'wheel', OsmSearchTreeEventListeners.onWheel, false );
 
 		// theOsmSearchEngine.dictionary.name = theTranslator.getText ( 'OsmSearchPaneUI - dictionary name' );
 		theOsmSearchEngine.dictionary.name = '';
@@ -195,12 +334,20 @@ class OsmSearchTree {
 		OsmSearchTreeEventListeners.osmSearchTree = this;
 	}
 
+	/**
+	rebuild completely the #treeHTMLElement
+	*/
+
 	redraw ( ) {
 
 		// theOsmSearchEngine.dictionary.isExpanded = false;
-		this.#osmSearchTree.textContent = '';
+		this.#treeHTMLElement.textContent = '';
 		this.#addItem ( theOsmSearchEngine.dictionary );
 	}
+
+	/**
+	Expand the complete tree
+	*/
 
 	expandSearchTree ( item ) {
 		item.items.forEach (
@@ -208,6 +355,10 @@ class OsmSearchTree {
 		);
 		item.isExpanded = true;
 	}
+
+	/**
+	Collapse the complete tree
+	*/
 
 	collapseSearchTree ( item ) {
 		item.items.forEach (
@@ -218,6 +369,10 @@ class OsmSearchTree {
 		}
 	}
 
+	/**
+	Unselect all the items in the tree
+	*/
+
 	clearSearchTree ( item ) {
 		item.items.forEach (
 			tmpItem => { this.clearSearchTree ( tmpItem ); }
@@ -225,34 +380,73 @@ class OsmSearchTree {
 		item.isSelected = false;
 	}
 
-	get tree ( ) { return this.#osmSearchTree; }
+	get treeHTMLElement ( ) { return this.#treeHTMLElement; }
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchPaneControlManager
+@classdesc This class add or remove the search toolbar and search tree on the pane control
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 class OsmSearchPaneControlManager {
 
+	/**
+	A reference to the OsmSearchTree object
+	*/
+
 	#osmSearchTree = null;
-	#toolbar = null;
+
+	/**
+	A reference to the OsmSearchToolbar object
+	*/
+
+	#osmSearchToolbar = null;
 
 	constructor ( ) {
-		this.#toolbar = new OsmSearchToolbar ( );
+		this.#osmSearchToolbar = new OsmSearchToolbar ( );
 		this.#osmSearchTree = new OsmSearchTree ( );
 	}
 
+	/**
+	Add the treeHTMLElement to the paneControl
+	*/
+
 	addTree ( paneControl ) {
-		paneControl.appendChild ( this.#osmSearchTree.tree );
+		paneControl.appendChild ( this.#osmSearchTree.treeHTMLElement );
 	}
+
+	/**
+	Remove thetreeHTMLElement from the paneControl
+	*/
 
 	removeTree ( paneControl ) {
-		paneControl.removeChild ( this.#osmSearchTree.tree );
+		paneControl.removeChild ( this.#osmSearchTree.treeHTMLElement );
 	}
+
+	/**
+	Add the toolbarHTMLElement to the paneControl
+	*/
 
 	addToolbar ( paneControl ) {
-		paneControl.appendChild ( this.#toolbar.toolbar );
+		paneControl.appendChild ( this.#osmSearchToolbar.toolbarHTMLElement );
 	}
 
+	/**
+	remove the toolbarHTMLElement from the paneControl
+	*/
+
 	removeToolbar ( paneControl ) {
-		paneControl.removeChild ( this.#toolbar.toolbar );
+		paneControl.removeChild ( this.#osmSearchToolbar.toolbarHTMLElement );
 	}
 }
 
 export default OsmSearchPaneControlManager;
+
+/*
+--- End of OsmSearchPaneControlManager.js file --------------------------------------------------------------------------------
+*/
