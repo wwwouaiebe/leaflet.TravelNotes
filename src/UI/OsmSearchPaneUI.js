@@ -57,10 +57,11 @@ Tests ...
 
 import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
 import OsmSearchPaneDataManager from '../UI/OsmSearchPaneDataManager.js';
-import { PANE_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
+import OsmSearchPaneControlManager from '../UI/OsmSearchPaneControlManager.js';
+
+import { PANE_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -74,10 +75,6 @@ import { PANE_ID, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 */
 
 function ourNewOsmSearchPaneUI ( ) {
-	let mySearchToolbar = null;
-	let myWaitDiv = null;
-	let mySearchTreeDiv = null;
-	let myDeepTree = 0;
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +85,7 @@ function ourNewOsmSearchPaneUI ( ) {
 
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
-
+	/*
 	function myAddWait ( ) {
 		myWaitDiv = theHTMLElementsFactory.create (
 			'div',
@@ -103,226 +100,7 @@ function ourNewOsmSearchPaneUI ( ) {
 			myWaitDiv
 		);
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-	@function mySelectItem
-	@desc changes the isSelected property of an item in the tree dictionary and do the same for all descendants
-	@private
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
-
-	function mySelectItem ( item, isSelected ) {
-		item.isSelected = isSelected;
-		item.items.forEach (
-			subItem => {
-				mySelectItem ( subItem, isSelected );
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-	@function myAddItem
-	@desc add a dictionary item in the SearchTreeDiv and do the same for all descendants
-	@private
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddItem ( item ) {
-
-		function myOnItemCheckboxChange ( changeEvent ) {
-			mySelectItem ( changeEvent.target.parentNode.dictItem, changeEvent.target.checked );
-			mySearchTreeDiv.textContent = '';
-			myAddItem ( theOsmSearchEngine.dictionary );
-		}
-
-		function myOnItemArrowClick ( clickEvent ) {
-			clickEvent.target.parentNode.dictItem.isExpanded = ! clickEvent.target.parentNode.dictItem.isExpanded;
-			mySearchTreeDiv.textContent = '';
-			myAddItem ( theOsmSearchEngine.dictionary );
-		}
-
-		myDeepTree ++;
-		let itemDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-OsmSearchPaneUI-SearchItem ' +
-					'TravelNotes-OsmSearchPaneUI-SearchItemMargin' + myDeepTree,
-				dictItem : item
-			},
-			mySearchTreeDiv
-		);
-		if ( ! item.isRoot ) {
-			let itemCheckbox = theHTMLElementsFactory.create (
-				'input',
-				{
-					type : 'checkbox',
-					checked : item.isSelected
-				},
-				itemDiv
-			);
-			itemCheckbox.addEventListener ( 'change', myOnItemCheckboxChange, false );
-		}
-		if ( ZERO === item.filterTagsArray.length ) {
-			let itemArrow = theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button TravelNotes-OsmSearchPaneUI-TreeArrow',
-					textContent : item.isExpanded ? '▼' : '▶'
-				},
-				itemDiv
-			);
-			itemArrow.addEventListener ( 'click', myOnItemArrowClick, false );
-		}
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : item.name
-			},
-			itemDiv
-		);
-		if ( item.isExpanded ) {
-			item.items.forEach ( myAddItem );
-		}
-		myDeepTree --;
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myStartSearch
-	@desc start the search, collapsing the search tree div and showing a wait animation
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myStartSearch ( ) {
-
-		// tmp moved myClearPaneDataDiv ( );
-		theOsmSearchEngine.dictionary.isExpanded = false;
-		mySearchTreeDiv.textContent = '';
-		myAddItem ( theOsmSearchEngine.dictionary );
-
-		// tmp moved myAddWait ( );
-		theOsmSearchEngine.search ( );
-
-		// Notice: theOsmSearchEngine send a 'showsearch' event when the search is succesfully done
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClearSearchTree
-	@desc unselect an item in the search tree and do the same for alldescendants
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClearSearchTree ( item ) {
-		item.items.forEach ( myClearSearchTree );
-		item.isSelected = false;
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnClearButtonClick
-	@desc click event listener for the clear button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnClearButtonClick ( ) {
-		myClearSearchTree ( theOsmSearchEngine.dictionary );
-		mySearchTreeDiv.textContent = '';
-		myAddItem ( theOsmSearchEngine.dictionary );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myExpandSearchTree
-	@desc Expand an item in the search tree and do the same for all descendants
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myExpandSearchTree ( item ) {
-		item.items.forEach ( myExpandSearchTree );
-		item.isExpanded = true;
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnExpandButtonClick
-	@desc click event listener for the expand tree button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnExpandButtonClick ( ) {
-		myExpandSearchTree ( theOsmSearchEngine.dictionary );
-		mySearchTreeDiv.textContent = '';
-		myAddItem ( theOsmSearchEngine.dictionary );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCollapseSearchTree
-	@desc Collapse an item in the tree, except the root item, and do the same for all descendants
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCollapseSearchTree ( item ) {
-		item.items.forEach ( myCollapseSearchTree );
-		if ( ! item.isRoot ) {
-			item.isExpanded = false;
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnExpandButtonClick
-	@desc click event listener for the collapse button
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnCollapseButtonClick ( ) {
-		myCollapseSearchTree ( theOsmSearchEngine.dictionary );
-		mySearchTreeDiv.textContent = '';
-		myAddItem ( theOsmSearchEngine.dictionary );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnSearchTreeWheel
-	@desc Wheel event listener for the search tree div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSearchTreeWheel ( wheelEvent ) {
-		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop +=
-				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
-		}
-		wheelEvent.stopPropagation ( );
-	}
 
 	/**
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -340,6 +118,7 @@ function ourNewOsmSearchPaneUI ( ) {
 	class OsmSearchPaneUI extends PaneUI {
 
 		#osmSearchPaneDataManager = new OsmSearchPaneDataManager ( );
+		#osmSearchPaneControlManager = new OsmSearchPaneControlManager ( );
 
 		/**
 		Create the controls div
@@ -347,66 +126,8 @@ function ourNewOsmSearchPaneUI ( ) {
 		*/
 
 		#addControls ( ) {
-			mySearchToolbar = theHTMLElementsFactory.create (
-				'div',
-				null,
-				this.paneControlDiv
-			);
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : theTranslator.getText ( 'OsmSearchPaneUI - Search OpenStreetMap' ),
-					textContent : '🔎'
-				},
-				mySearchToolbar
-			)
-				.addEventListener ( 'click', myStartSearch, false );
-
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : theTranslator.getText ( 'OsmSearchPaneUI - Expand tree' ),
-					textContent : '▼'
-				},
-				mySearchToolbar
-			)
-				.addEventListener ( 'click', myOnExpandButtonClick, false );
-
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-UI-Button',
-					title : theTranslator.getText ( 'OsmSearchPaneUI - Collapse tree' ),
-					textContent : '▶'
-				},
-				mySearchToolbar
-			)
-				.addEventListener ( 'click', myOnCollapseButtonClick, false );
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-OsmSearchPaneUI-ClearAllButton',
-					className : 'TravelNotes-UI-Button',
-					title : theTranslator.getText ( 'OsmSearchPaneUI - Clear tree' ),
-					textContent : '❌'
-				},
-				mySearchToolbar
-			)
-				.addEventListener ( 'click', myOnClearButtonClick, false );
-			mySearchTreeDiv = theHTMLElementsFactory.create (
-				'div',
-				{
-					id : 'TravelNotes-OsmSearchPaneUI-SearchTree'
-				},
-				this.paneControlDiv
-			);
-			mySearchTreeDiv.addEventListener ( 'wheel', myOnSearchTreeWheel, false );
-
-			// theOsmSearchEngine.dictionary.name = theTranslator.getText ( 'OsmSearchPaneUI - dictionary name' );
-			theOsmSearchEngine.dictionary.name = '';
-			myAddItem ( theOsmSearchEngine.dictionary );
+			this.#osmSearchPaneControlManager.addToolbar ( this.paneControlDiv );
+			this.#osmSearchPaneControlManager.addTree ( this.paneControlDiv );
 		}
 
 		/**
@@ -424,17 +145,8 @@ function ourNewOsmSearchPaneUI ( ) {
 		*/
 
 		#clearPaneControlDiv ( ) {
-			if ( mySearchTreeDiv ) {
-				this.paneControlDiv.removeChild ( mySearchTreeDiv );
-				mySearchTreeDiv = null;
-			}
-			if ( mySearchToolbar ) {
-				this.paneControlDiv.removeChild ( mySearchToolbar );
-			}
-			if ( myWaitDiv ) {
-				this.paneControlDiv.removeChild ( myWaitDiv );
-				myWaitDiv = null;
-			}
+			this.#osmSearchPaneControlManager.removeToolbar ( this.paneControlDiv );
+			this.#osmSearchPaneControlManager.removeTree ( this.paneControlDiv );
 		}
 
 		/**

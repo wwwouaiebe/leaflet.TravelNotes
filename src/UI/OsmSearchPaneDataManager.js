@@ -51,7 +51,7 @@ class SearchResultEventListeners {
 	}
 
 	/**
-	mouse leave event listener 
+	mouse leave event listener
 	*/
 
 	static onMouseLeave ( mouseEvent ) {
