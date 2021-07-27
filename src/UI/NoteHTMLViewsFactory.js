@@ -164,7 +164,7 @@ class NoteHTMLViewsFactory {
 
 		if ( ZERO !== note.address.length ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
-				'<span>' + theTranslator.getText ( 'HTMLViewsFactory - Address' ) + '</span>' +
+				'<span>' + theTranslator.getText ( 'NoteNoteHTMLViewsFactory - Address' ) + '</span>' +
 				'\u00a0:\u00a0' + note.address,
 				theHTMLElementsFactory.create (
 					'div',
@@ -178,7 +178,7 @@ class NoteHTMLViewsFactory {
 
 		if ( ZERO !== note.url.length ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
-				'<span>' + theTranslator.getText ( 'HTMLViewsFactory - Link' ) +
+				'<span>' + theTranslator.getText ( 'NoteNoteHTMLViewsFactory - Link' ) +
 					'</span><a href=' +
 					note.url +
 					' target="_blank" >' +
@@ -194,14 +194,14 @@ class NoteHTMLViewsFactory {
 				let phoneNumber = note.phone.replaceAll ( /\u0020/g, '' );
 				let phoneNumberDisplay = note.phone.replaceAll ( /\u0020/g, '\u00a0' );
 				phoneText =
-					theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' +
-					theTranslator.getText ( 'HTMLViewsFactory - call' ) +
+					theTranslator.getText ( 'NoteNoteHTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' +
+					theTranslator.getText ( 'NoteHTMLViewsFactory - call' ) +
 					'<a target="_blank" href="tel:' + phoneNumber + '" >' + phoneNumberDisplay + '</a>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Send a sms to' ) +
+					theTranslator.getText ( 'NoteHTMLViewsFactory - Send a sms to' ) +
 					'<a target="_blank" href="sms:' + phoneNumber + '" >' + phoneNumberDisplay + '</a>';
 			}
 			else {
-				phoneText = theTranslator.getText ( 'HTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone;
+				phoneText = theTranslator.getText ( 'NoteNoteHTMLViewsFactory - Phone' ) + '\u00a0:\u00a0' + note.phone;
 			}
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				phoneText,
@@ -230,7 +230,7 @@ class NoteHTMLViewsFactory {
 			if ( noteAndRoute.route.chain ) {
 				theHTMLSanitizer.sanitizeToHtmlElement (
 					'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
+					theTranslator.getText ( 'NoteHTMLViewsFactory - Distance from start of travel' ) +
 					'</span>\u00a0:\u00a0' +
 					theUtilities.formatDistance ( note.chainedDistance + note.distance ),
 					theHTMLElementsFactory.create (
@@ -245,7 +245,7 @@ class NoteHTMLViewsFactory {
 
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
+				theTranslator.getText ( 'NoteHTMLViewsFactory - Distance from start of route' ) +
 				'</span>\u00a0:\u00a0' +
 				theUtilities.formatDistance ( note.distance ),
 				theHTMLElementsFactory.create (
@@ -263,7 +263,7 @@ class NoteHTMLViewsFactory {
 				if ( OUR_MIN_NOTES_DISTANCE < nextDistance ) {
 					theHTMLSanitizer.sanitizeToHtmlElement (
 						'<span>' +
-						theTranslator.getText ( 'HTMLViewsFactory - Next note after' ) +
+						theTranslator.getText ( 'NoteHTMLViewsFactory - Next note after' ) +
 						'</span>\u00a0:\u00a0' +
 						theUtilities.formatDistance ( nextDistance ),
 						theHTMLElementsFactory.create (

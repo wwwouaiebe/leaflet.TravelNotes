@@ -139,7 +139,7 @@ class TravelHTMLViewsFactory {
 
 		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<span>' +
-				theTranslator.getText ( 'HTMLViewsFactory - Travel distance' ) +
+				theTranslator.getText ( 'TravelHTMLViewsFactory - Travel distance' ) +
 				'</span>\u00A0:\u00A0' +
 				theUtilities.formatDistance ( travelDistance ),
 			theHTMLElementsFactory.create (
@@ -154,7 +154,7 @@ class TravelHTMLViewsFactory {
 		if ( ZERO !== travelAscent ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Travel ascent' ) +
+					theTranslator.getText ( 'travelHTMLViewsFactory - Travel ascent' ) +
 					'</span>\u00A0:\u00A0' +
 					String ( travelAscent.toFixed ( ZERO ) ) +
 					' m.',
@@ -171,7 +171,7 @@ class TravelHTMLViewsFactory {
 		if ( ZERO !== travelDescent ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Travel descent' ) +
+					theTranslator.getText ( 'TravelHTMLViewsFactory - Travel descent' ) +
 					'</span>\u00A0:\u00A0' +
 					String ( travelDescent.toFixed ( ZERO ) ) +
 					' m.',
@@ -196,14 +196,14 @@ class TravelHTMLViewsFactory {
 
 	#getTravelFooterHTML ( classPrefix ) {
 		let footerText =
-			theTranslator.getText ( 'HTMLViewsFactory - Travel footer' ) +
+			theTranslator.getText ( 'TravelHTMLViewsFactory - Travel footer' ) +
 			'<a href="https://github.com/wwwouaiebe/leaflet.TravelNotes"' +
 			' target="_blank" title="https://github.com/wwwouaiebe/leaflet.TravelNotes" >Travel & Notes</a>, © ' +
 			'<a href="https://www.ouaie.be/"' +
 			' target="_blank" title="https://www.ouaie.be/" >wwwouaiebe 2017 2021</a> © ' +
 			'<a href="https://www.openstreetmap.org/copyright"' +
 			' target="_blank" title="https://www.openstreetmap.org/copyright">' +
-			theTranslator.getText ( 'HTMLViewsFactory - OpenStreetMap contributors' ) + '</a>';
+			theTranslator.getText ( 'TravelHTMLViewsFactory - OpenStreetMap contributors' ) + '</a>';
 		let footerHTML = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'TravelFooter' } );
 
 		theHTMLSanitizer.sanitizeToHtmlElement ( footerText, footerHTML );

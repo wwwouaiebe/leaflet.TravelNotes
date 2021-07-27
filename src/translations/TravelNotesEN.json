@@ -120,99 +120,107 @@
 		"msgstr" : "Not possible to select {provider}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Address",
+		"msgid" : "NoteNoteHTMLViewsFactory - Address",
 		"msgstr" : "Address"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Ascent",
+		"msgid" : "RouteHTMLViewsFactory - Ascent",
 		"msgstr" : "Ascent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Descent",
+		"msgid" : "RouteHTMLViewsFactory - Descent",
 		"msgstr" : "Descent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance from start of travel",
+		"msgid" : "NoteHTMLViewsFactory - Distance from start of travel",
 		"msgstr" : "Distance from start of travel"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance from start of route",
+		"msgid" : "NoteHTMLViewsFactory - Distance from start of route",
 		"msgstr" : "Distance from start of route"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Duration",
+		"msgid" : "RouteHTMLViewsFactory - Distance from start of travel",
+		"msgstr" : "Distance from start of travel"
+	},
+	{
+		"msgid" : "RouteHTMLViewsFactory - Distance from start of route",
+		"msgstr" : "Distance from start of route"
+	},
+	{
+		"msgid" : "RouteHTMLViewsFactory - Duration",
 		"msgstr" : "Time"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
+		"msgid" : "RouteHTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Itinerary computed by {provider} and optimized for {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Link",
+		"msgid" : "NoteNoteHTMLViewsFactory - Link",
 		"msgstr" : "Link\u00A0:\u00A0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after",
+		"msgid" : "RouteHTMLViewsFactory - Next maneuver after",
 		"msgstr" : "Next maneuver after"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next note after",
+		"msgid" : "NoteHTMLViewsFactory - Next note after",
 		"msgstr" : "Next note after"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - OpenStreetMap contributors",
+		"msgid" : "TravelHTMLViewsFactory - OpenStreetMap contributors",
 		"msgstr" : "OpenStreetMap contributors"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Phone",
+		"msgid" : "NoteNoteHTMLViewsFactory - Phone",
 		"msgstr" : "☎️"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Send a sms to",
+		"msgid" : "NoteHTMLViewsFactory - Send a sms to",
 		"msgstr" : " or send a sms to "
 	},
 	{
-		"msgid" : "HTMLViewsFactory - call",
+		"msgid" : "NoteHTMLViewsFactory - call",
 		"msgstr" : "Call "
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Profile",
+		"msgid" : "RouteHTMLViewsFactory - Profile",
 		"msgstr" : "Profile"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Route distance",
+		"msgid" : "RouteHTMLViewsFactory - Route distance",
 		"msgstr" : "Route distance"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode bike",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode bike",
 		"msgstr" : "a bike"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode car",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode car",
 		"msgstr" : "a car"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode pedestrian",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode pedestrian",
 		"msgstr" : "a pedestrian"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode train",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode train",
 		"msgstr" : "the train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent",
+		"msgid" : "travelHTMLViewsFactory - Travel ascent",
 		"msgstr" : "Travel ascent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent",
+		"msgid" : "TravelHTMLViewsFactory - Travel descent",
 		"msgstr" : "Travel descent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance",
+		"msgid" : "TravelHTMLViewsFactory - Travel distance",
 		"msgstr" : "Travel distance"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel footer",
+		"msgid" : "TravelHTMLViewsFactory - Travel footer",
 		"msgstr" : "Done with "
 	},
 	{

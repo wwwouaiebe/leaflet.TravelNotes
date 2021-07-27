@@ -104,7 +104,7 @@ class RouteHTMLViewsFactory {
 		if ( routeAndManeuver.route.chain ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Distance from start of travel' ) +
+					theTranslator.getText ( 'RouteHTMLViewsFactory - Distance from start of travel' ) +
 					'</span>\u00a0:\u00a0' +
 					theUtilities.formatDistance ( routeAndManeuver.route.chainedDistance + routeAndManeuver.maneuverDistance ),
 				theHTMLElementsFactory.create (
@@ -119,7 +119,7 @@ class RouteHTMLViewsFactory {
 
 		theHTMLSanitizer.sanitizeToHtmlElement (
 			'<span>' +
-				theTranslator.getText ( 'HTMLViewsFactory - Distance from start of route' ) +
+				theTranslator.getText ( 'RouteHTMLViewsFactory - Distance from start of route' ) +
 				'</span>\u00a0:\u00a0' +
 				theUtilities.formatDistance ( routeAndManeuver.maneuverDistance ),
 			theHTMLElementsFactory.create (
@@ -134,7 +134,7 @@ class RouteHTMLViewsFactory {
 		if ( DISTANCE.defaultValue < routeAndManeuver.maneuver.distance ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Next maneuver after' ) +
+					theTranslator.getText ( 'RouteHTMLViewsFactory - Next maneuver after' ) +
 					'</span>\u00a0:\u00a0' +
 					theUtilities.formatDistance ( routeAndManeuver.maneuver.distance ),
 				theHTMLElementsFactory.create (
@@ -161,7 +161,7 @@ class RouteHTMLViewsFactory {
 
 	getRouteProfileHTML ( classPrefix, route ) {
 		let profileDiv = theHTMLElementsFactory.create ( 'div', { className : classPrefix + 'RouteProfile' } );
-		theHTMLSanitizer.sanitizeToHtmlElement ( theTranslator.getText ( 'HTMLViewsFactory - Profile' ), profileDiv );
+		theHTMLSanitizer.sanitizeToHtmlElement ( theTranslator.getText ( 'RouteHTMLViewsFactory - Profile' ), profileDiv );
 		profileDiv.appendChild ( new ProfileFactory ( ).createSvg ( route ) );
 
 		return profileDiv;
@@ -253,7 +253,7 @@ class RouteHTMLViewsFactory {
 		if ( ZERO !== route.distance ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Route distance' ) +
+					theTranslator.getText ( 'RouteHTMLViewsFactory - Route distance' ) +
 					'</span>\u00a0:\u00a0' +
 					theUtilities.formatDistance ( route.distance ),
 				theHTMLElementsFactory.create (
@@ -269,7 +269,7 @@ class RouteHTMLViewsFactory {
 		if ( ! theTravelNotesData.travel.readOnly && 'bike' !== route.itinerary.transitMode ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Duration' ) +
+					theTranslator.getText ( 'RouteHTMLViewsFactory - Duration' ) +
 					'</span>\u00a0:\u00a0' +
 					theUtilities.formatTime ( route.duration ),
 				theHTMLElementsFactory.create (
@@ -285,7 +285,7 @@ class RouteHTMLViewsFactory {
 		if ( route.itinerary.hasProfile ) {
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Ascent' ) +
+					theTranslator.getText ( 'RouteHTMLViewsFactory - Ascent' ) +
 					'</span>\u00a0:\u00a0' +
 					String ( route.itinerary.ascent.toFixed ( ZERO ) ) +
 					' m.',
@@ -299,7 +299,7 @@ class RouteHTMLViewsFactory {
 			);
 			theHTMLSanitizer.sanitizeToHtmlElement (
 				'<span>' +
-					theTranslator.getText ( 'HTMLViewsFactory - Descent' ) +
+					theTranslator.getText ( 'RouteHTMLViewsFactory - Descent' ) +
 					'</span>\u00a0:\u00a0' +
 					String ( route.itinerary.descent.toFixed ( ZERO ) ) +
 					' m.',
@@ -326,10 +326,12 @@ class RouteHTMLViewsFactory {
 		let footerText = '';
 		if ( ( '' !== route.itinerary.provider ) && ( '' !== route.itinerary.transitMode ) ) {
 			footerText = theTranslator.getText (
-				'HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}',
+				'RouteHTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}',
 				{
 					provider : route.itinerary.provider,
-					transitMode : theTranslator.getText ( 'HTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode )
+					transitMode : theTranslator.getText (
+						'RouteHTMLViewsFactory - TransitMode ' +	route.itinerary.transitMode
+					)
 				}
 			);
 		}
