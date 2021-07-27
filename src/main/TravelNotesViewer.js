@@ -47,7 +47,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import ViewerMapEditor from '../core/ViewerMapEditor.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
-import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
+import theViewerLayersToolbarUI from '../UI/ViewerLayersToolbarUI.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import Zoomer from '../core/Zoomer.js';
 import { ZERO, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
@@ -67,7 +67,7 @@ function ourOnKeyDown ( keyBoardEvent ) {
 		let charCode = keyBoardEvent.key.charCodeAt ( ZERO );
 		/* eslint-disable-next-line no-magic-numbers */
 		if ( 47 < charCode && 58 > charCode ) {
-			theViewerLayersToolbarUI.setLayer ( keyBoardEvent.key );
+			theViewerLayersToolbarUI.setMapLayer ( keyBoardEvent.key );
 		}
 	}
 }
@@ -200,7 +200,7 @@ class TravelNotesViewer {
 		if ( addLayerToolbar ) {
 			theViewerLayersToolbarUI.createUI ( );
 		}
-		theViewerLayersToolbarUI.setLayer ( 'OSM - Color' );
+		theViewerLayersToolbarUI.setMapLayer ( 'OSM - Color' );
 		if ( travelUrl ) {
 			ourLoadDistantTravel ( travelUrl );
 		}

@@ -75,7 +75,7 @@ import theGeometry from '../util/Geometry.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import theConfig from '../data/Config.js';
-import { newWaitUI } from '../UI/WaitUI.js';
+import WaitUI from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
@@ -149,7 +149,7 @@ class NoteEditor {
 	*/
 
 	async #addAllManeuverNotes ( route, maneuverLength ) {
-		this.#waitUI = newWaitUI ( );
+		this.#waitUI = new WaitUI ( );
 		this.#waitUI.createUI ( );
 		let maneuverIterator = route.itinerary.maneuvers.iterator;
 		while ( ! maneuverIterator.done ) {
@@ -452,7 +452,7 @@ class NoteEditor {
 			||
 			! data.osmElement.tags [ 'addr:city' ]
 		) {
-			this.#waitUI = newWaitUI ( );
+			this.#waitUI = new WaitUI ( );
 			this.#waitUI.createUI ( );
 			this.#waitUI.showInfo ( 'Creating address' );
 			let geoCoderData = null;

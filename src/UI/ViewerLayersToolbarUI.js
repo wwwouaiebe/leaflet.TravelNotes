@@ -22,7 +22,9 @@ Changes:
 		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200822
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210727
 Tests ...
 */
 
@@ -53,97 +55,6 @@ import theGeoLocator from '../core/GeoLocator.js';
 import Zoomer from '../core/Zoomer.js';
 import { ZERO } from '../util/Constants.js';
 
-let ourLayersToolbar = null;
-
-let ourLayers = [
-	{
-		service : 'wmts',
-		url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-		name : 'OSM - Color',
-		toolbar :
-		{
-			text : 'OSM',
-			color : 'red',
-			backgroundColor : 'white'
-		},
-		providerName : 'OSM',
-		providerKeyNeeded : false,
-		attribution : ''
-	}
-];
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnLayerButtonClick
-@desc Click event listener for the layer buttons
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnLayerButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
-	theAttributionsUI.attributions = clickEvent.target.layer.attribution;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnGeoLocationButtonClick
-@desc Click event listener for the geo location button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnGeoLocationButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	theGeoLocator.switch ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnZoomButtonClick
-@desc Click event listener for the zoom to travel button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnZoomButtonClick ( clickEvent ) {
-	clickEvent.stopPropagation ( );
-	new Zoomer ( ).zoomToTravel ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateLayerButton
-@desc This method creates a layer button
-@param {Layer} layer The layer for witch the button must be created
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateLayerButton ( layer ) {
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-ViewerLayersToolbarUI-Button',
-			title : layer.name,
-			layer : layer,
-			textContent : layer.toolbar.text,
-			style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
-		},
-		ourLayersToolbar
-	)
-		.addEventListener ( 'click', ourOnLayerButtonClick, false );
-}
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -159,6 +70,76 @@ function ourCreateLayerButton ( layer ) {
 
 class ViewerLayersToolbarUI {
 
+	#mapLayersToolbar = null;
+
+	#mapLayers = [
+		{
+			service : 'wmts',
+			url : 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+			name : 'OSM - Color',
+			toolbar :
+			{
+				text : 'OSM',
+				color : 'red',
+				backgroundColor : 'white'
+			},
+			providerName : 'OSM',
+			providerKeyNeeded : false,
+			attribution : ''
+		}
+	];
+
+	/**
+	Click event listener for the layer buttons
+	*/
+
+	static #onMapLayerButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
+		theAttributionsUI.attributions = clickEvent.target.layer.attribution;
+	}
+
+	/**
+	Click event listener for the geo location button
+	@private
+	*/
+
+	static #onGeoLocationButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theGeoLocator.switch ( );
+	}
+
+	/**
+	Click event listener for the zoom to travel button
+	@private
+	*/
+
+	static #onZoomButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		new Zoomer ( ).zoomToTravel ( );
+	}
+
+	/**
+	This method creates a layer button
+	@param {Layer} layer The layer for witch the button must be created
+	@private
+	*/
+
+	#createMapLayerButton ( layer ) {
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
+				title : layer.name,
+				layer : layer,
+				textContent : layer.toolbar.text,
+				style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
+			},
+			this.#mapLayersToolbar
+		)
+			.addEventListener ( 'click', ViewerLayersToolbarUI.#onMapLayerButtonClick, false );
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -168,7 +149,7 @@ class ViewerLayersToolbarUI {
 	*/
 
 	createUI ( ) {
-		ourLayersToolbar = theHTMLElementsFactory.create (
+		this.#mapLayersToolbar = theHTMLElementsFactory.create (
 			'div',
 			{ id : 'TravelNotes-ViewerLayersToolbarUI' },
 			document.body
@@ -184,9 +165,9 @@ class ViewerLayersToolbarUI {
 				textContent : '🌐',
 				style : 'color:black;background-color:white'
 			},
-			ourLayersToolbar
+			this.#mapLayersToolbar
 		);
-		geoLocationButton.addEventListener ( 'click', ourOnGeoLocationButtonClick, false );
+		geoLocationButton.addEventListener ( 'click', ViewerLayersToolbarUI.#onGeoLocationButtonClick, false );
 		let zoomButton = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -195,10 +176,12 @@ class ViewerLayersToolbarUI {
 				textContent : '🔍',
 				style : 'color:black;background-color:white'
 			},
-			ourLayersToolbar
+			this.#mapLayersToolbar
 		);
-		zoomButton.addEventListener ( 'click', ourOnZoomButtonClick, false );
-		ourLayers.forEach ( ourCreateLayerButton );
+		zoomButton.addEventListener ( 'click', ViewerLayersToolbarUI.onZoomButtonClick, false );
+		this.#mapLayers.forEach (
+			mapLayer => { this.#createMapLayerButton ( mapLayer ); }
+		);
 	}
 
 	/**
@@ -206,13 +189,13 @@ class ViewerLayersToolbarUI {
 	@param {string} layerName the name of the layer to set
 	*/
 
-	setLayer ( layerName ) {
+	setMapLayer ( layerName ) {
 		let newLayer =
 			( layerName.match ( /^[0-9]$/ ) )
 				?
-				ourLayers [ Number.parseInt ( layerName ) ] || ourLayers [ ZERO ]
+				this.#mapLayers [ Number.parseInt ( layerName ) ] || this.#mapLayers [ ZERO ]
 				:
-				ourLayers.find ( layer => layer.name === layerName ) || ourLayers [ ZERO ];
+				this.#mapLayers.find ( layer => layer.name === layerName ) || this.#mapLayers [ ZERO ];
 		theEventDispatcher.dispatch ( 'layerchange', { layer : newLayer } );
 		theAttributionsUI.attributions = newLayer.attribution;
 	}
@@ -222,34 +205,31 @@ class ViewerLayersToolbarUI {
 	@param {Array.<Layer>} layers the layer list to add
 	*/
 
-	addLayers ( layers ) {
-		layers.forEach (
-			layer => {
-				if ( ! layer.providerKeyNeeded ) {
-					ourLayers.push ( layer );
+	addMapLayers ( mapLayers ) {
+		mapLayers.forEach (
+			mapLayer => {
+				if ( ! mapLayer.providerKeyNeeded ) {
+					this.#mapLayers.push ( mapLayer );
 				}
 			}
 		);
 	}
 }
 
-const OUR_VIEWER_LAYERS_TOOLBAR_UI = new ViewerLayersToolbarUI ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of ViewerLayersToolbarUI class
+@type {ViewerLayersToolbarUI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of ViewerLayersToolbarUI class
-	@type {ViewerLayersToolbarUI}
-	@constant
-	@global
+const theViewerLayersToolbarUI = new ViewerLayersToolbarUI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_VIEWER_LAYERS_TOOLBAR_UI as theViewerLayersToolbarUI
-};
+export default theViewerLayersToolbarUI;
 
 /*
 --- End of ViewerLayersToolbarUI.js file --------------------------------------------------------------------------------------

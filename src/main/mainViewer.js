@@ -51,7 +51,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
-import { theViewerLayersToolbarUI } from '../UI/ViewerLayersToolbarUI.js';
+import theViewerLayersToolbarUI from '../UI/ViewerLayersToolbarUI.js';
 import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 const OUR_VIEWER_DEFAULT_ZOOM = 2;
@@ -178,7 +178,7 @@ function ourMainViewer ( ) {
 	async function myLoadLayers ( ) {
 		let layersResponse = await fetch ( myOriginAndPath +	'Layers.json' );
 		if ( HTTP_STATUS_OK === layersResponse.status && layersResponse.ok ) {
-			theViewerLayersToolbarUI.addLayers ( await layersResponse.json ( ) );
+			theViewerLayersToolbarUI.addMapLayers ( await layersResponse.json ( ) );
 			return true;
 		}
 		return false;

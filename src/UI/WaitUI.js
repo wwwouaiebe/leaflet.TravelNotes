@@ -22,7 +22,9 @@ Changes:
 		- created
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200822
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210727
 Tests ...
 */
 
@@ -51,95 +53,62 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewWaitUI
-@desc Constructor for a WaitUI object. Notice that, even if you can construct more than one WaitUI, only one
-can be displayed on the screen
-@return {WaitUI} an instance of a WaitUI object
-@private
+@class
+@classdesc This class display a Wait window on the screen with a message and an animation
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewWaitUI ( ) {
+class WaitUI {
 
-	let myBackgroundDiv = null;
-	let myMessageDiv = null;
+	#backgroundDiv = null;
+	#messageDiv = null;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This class display a Wait window on the screen with a message and an animation
-	@see {@link newWaitUI} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class WaitUI {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		creates the user interface
-		*/
-
-		createUI ( ) {
-			if ( document.getElementById ( 'TravelNotes-WaitUI' ) ) {
-				return;
-			}
-			myBackgroundDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-Background' }, document.body );
-			let waitDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-WaitUI' }, myBackgroundDiv );
-			myMessageDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-WaitUI-MessageDiv' }, waitDiv );
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-WaitAnimationBullet'
-				},
-				theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-WaitAnimation' }, waitDiv ) );
-		}
-
-		/**
-		Show an info in the WaitUI
-		@param {string} info The info to be displayed
-		*/
-
-		showInfo ( info ) {
-			myMessageDiv.textContent = info;
-		}
-
-		/**
-		Close the WaitUI
-		*/
-
-		close ( ) {
-			document.body.removeChild ( myBackgroundDiv );
-			myBackgroundDiv = null;
-		}
+	constructor ( ) {
+		Object.freeze ( this );
 	}
 
-	return new WaitUI ( );
-}
-
-export {
-
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newWaitUI
-	@desc Constructor for a WaitUI object. Notice that, even if you can construct more than one WaitUI, only one
-	can be displayed on the screen
-	@return {WaitUI} an instance of a WaitUI object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	creates the user interface
 	*/
 
-	ourNewWaitUI as newWaitUI
-};
+	createUI ( ) {
+		if ( document.getElementById ( 'TravelNotes-WaitUI' ) ) {
+			return;
+		}
+		this.#backgroundDiv = theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-Background' }, document.body );
+		let waitDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-WaitUI' }, this.#backgroundDiv );
+		this.#messageDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-WaitUI-MessageDiv' }, waitDiv );
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-WaitAnimationBullet'
+			},
+			theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-WaitAnimation' }, waitDiv ) );
+	}
+
+	/**
+	Show an info in the WaitUI
+	@param {string} info The info to be displayed
+	*/
+
+	showInfo ( info ) {
+		this.#messageDiv.textContent = info;
+	}
+
+	/**
+	Close the WaitUI
+	*/
+
+	close ( ) {
+		document.body.removeChild ( this.#backgroundDiv );
+		this.#backgroundDiv = null;
+	}
+}
+
+export default WaitUI;
 
 /*
---- End of WaitUI.js file ---------------------------------------------------------------------------------------------
+--- End of WaitUI.js file -----------------------------------------------------------------------------------------------------
 */
