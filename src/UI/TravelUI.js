@@ -25,7 +25,7 @@ Changes:
 		- Issue ♯31 : Add a command to import from others maps
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-		- moving file functions from TravelEditor to the new FileLoader
+		- moving file fcts from TravelEditor to the new FileLoader
 		- modified event listener for cancel travel button ( Issue ♯45 )
 	- v1.5.0:
 		- Issue ♯52 : when saving the travel to the file, save also the edited route.

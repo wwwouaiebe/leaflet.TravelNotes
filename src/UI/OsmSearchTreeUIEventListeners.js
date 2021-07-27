@@ -65,7 +65,7 @@ class OsmSearchTreeUIEventListeners {
 	static osmSearchTreeUI = null;
 
 	/**
-	Helper function to select or unselected all the items childrens of a given item
+	Helper method to select or unselected all the items childrens of a given item
 	*/
 
 	static selectItem ( item, isSelected ) {

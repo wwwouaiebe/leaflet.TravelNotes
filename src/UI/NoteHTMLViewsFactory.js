@@ -71,8 +71,7 @@ class NoteHTMLViewsFactory {
 	}
 
 	/**
-	@function getNoteTextAndIconHTML
-	@desc Gives an HTMLElement with the note icon and sames values than the this.getNoteTextHTML function
+	Gives an HTMLElement with the note icon and sames values than the this.getNoteTextHTML method
 	@param {string} classPrefix A string that will be added to all the className of the created HTMLElement
 	@param {NoteAndRoute} noteAndRoute A NoteAndRoute object with the note and the route to witch the note is attached
 	@return {HTMLElement}

@@ -65,7 +65,6 @@ class RoutesListDragEventListeners {
 	static #draggedRouteObjId = ZERO;
 
 	/**
-	@function ourOnRouteDragStart
 	@desc dragstart event listener
 	*/
 

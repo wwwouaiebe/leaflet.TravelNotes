@@ -288,7 +288,7 @@ class ItineraryPaneUI extends PaneUI {
 	}
 
 	/**
-	This function removes all the elements from the data div and control div
+	This method removes all the elements from the data div and control div
 	*/
 
 	remove ( ) {
@@ -297,7 +297,7 @@ class ItineraryPaneUI extends PaneUI {
 	}
 
 	/**
-	This function add the  maneuver and notes to the data div and controls to the controls div
+	This method add the  maneuver and notes to the data div and controls to the controls div
 	*/
 
 	add ( ) {
@@ -308,13 +308,13 @@ class ItineraryPaneUI extends PaneUI {
 	}
 
 	/**
-	This function returns the pane id
+	This method returns the pane id
 	*/
 
 	getId ( ) { return PANE_ID.itineraryPane; }
 
 	/**
-	This function returns the text to add in the pane button
+	This method returns the text to add in the pane button
 	*/
 
 	getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Itinerary' ); }

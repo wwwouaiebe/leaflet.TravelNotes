@@ -96,34 +96,32 @@ class travelNotesDivDragEventListeners {
 	}
 }
 
-/**
-@--------------------------------------------------------------------------------------------------------------------------
 
-@function myOnNoteContextMenu
-@desc drop event listener for the notes
-@private
+class NotesEventsListeners {
 
-@--------------------------------------------------------------------------------------------------------------------------
-*/
+	/**
+	@private
+	*/
 
-function myOnNoteContextMenu ( contextMenuEvent ) {
-	contextMenuEvent.stopPropagation ( );
-	contextMenuEvent.preventDefault ( );
-	let element = contextMenuEvent.target;
-	while ( ! element.noteObjId ) {
-		element = element.parentNode;
-	}
-	contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-	contextMenuEvent.fromUI = true;
-	contextMenuEvent.originalEvent =
-		{
-			clientX : contextMenuEvent.clientX,
-			clientY : contextMenuEvent.clientY,
-			latLng : element.latLng
-		};
-	if ( element.noteObjId ) {
-		contextMenuEvent.noteObjId = element.noteObjId;
-		newNoteContextMenu ( contextMenuEvent, this.paneDataDiv.parentNode ).show ( );
+	static onContextMenu ( contextMenuEvent ) {
+		contextMenuEvent.stopPropagation ( );
+		contextMenuEvent.preventDefault ( );
+		let element = contextMenuEvent.target;
+		while ( ! element.noteObjId ) {
+			element = element.parentNode;
+		}
+		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
+		contextMenuEvent.fromUI = true;
+		contextMenuEvent.originalEvent =
+			{
+				clientX : contextMenuEvent.clientX,
+				clientY : contextMenuEvent.clientY,
+				latLng : element.latLng
+			};
+		if ( element.noteObjId ) {
+			contextMenuEvent.noteObjId = element.noteObjId;
+			newNoteContextMenu ( contextMenuEvent, this.paneDataDiv.parentNode ).show ( );
+		}
 	}
 }
 
@@ -149,14 +147,14 @@ class TravelNotesPaneUI extends PaneUI {
 	}
 
 	/**
-	This function removes all the elements from the data div and control div
+	This method removes all the elements from the data div and control div
 	*/
 
 	remove ( ) {
 		if ( this.#travelNotesDiv ) {
 			this.#travelNotesDiv.childNodes.forEach (
 				childNode => {
-					childNode.removeEventListener ( 'contextmenu', myOnNoteContextMenu, false );
+					childNode.removeEventListener ( 'contextmenu', NotesEventsListeners.onContextMenu, false );
 					childNode.removeEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
 				}
 			);
@@ -166,7 +164,7 @@ class TravelNotesPaneUI extends PaneUI {
 	}
 
 	/**
-	This function add the travel notes to the data div
+	This method add the travel notes to the data div
 	*/
 
 	add ( ) {
@@ -177,7 +175,7 @@ class TravelNotesPaneUI extends PaneUI {
 		this.#travelNotesDiv.childNodes.forEach (
 			childNode => {
 				childNode.draggable = true;
-				childNode.addEventListener ( 'contextmenu', myOnNoteContextMenu, false );
+				childNode.addEventListener ( 'contextmenu', NotesEventsListeners.onContextMenu, false );
 				childNode.addEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
 				childNode.classList.add ( 'TravelNotes-UI-MoveCursor' );
 			}
@@ -185,13 +183,13 @@ class TravelNotesPaneUI extends PaneUI {
 	}
 
 	/**
-	This function returns the pane id
+	This method returns the pane id
 	*/
 
 	getId ( ) { return PANE_ID.travelNotesPane; }
 
 	/**
-	This function returns the text to add in the pane button
+	This method returns the text to add in the pane button
 	*/
 
 	getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Travel notes' ); }

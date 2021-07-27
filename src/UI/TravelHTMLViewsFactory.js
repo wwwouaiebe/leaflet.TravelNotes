@@ -21,12 +21,12 @@ Changes:
 		- created
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
-		- Added noteObjId in the this.#getNoteTextAndIconHTML function
+		- Added noteObjId in the this.#getNoteTextAndIconHTML method
 	- v1.5.0:
 		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
 		- Issue ♯65 : Time to go to ES6 modules?
-		- Issue ♯70 : Put the get...HTML functions outside of the editors
+		- Issue ♯70 : Put the get...HTML fcts outside of the editors
 	- v1.12.0:
 		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
