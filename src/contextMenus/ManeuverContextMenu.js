@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import Zoomer from '../core/Zoomer.js';
 import theTranslator from '../UI/Translator.js';
 
@@ -108,7 +108,7 @@ function ourNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
+	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
 export {

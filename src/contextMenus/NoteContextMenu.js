@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import Zoomer from '../core/Zoomer.js';
@@ -143,7 +143,7 @@ function ourNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
+	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
 export {

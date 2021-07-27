@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
@@ -181,7 +181,7 @@ function ourNewMapContextMenu ( contextMenuEvent ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
+	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
 export {

@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
@@ -113,7 +113,7 @@ function ourNewWayPointContextMenu ( contextMenuEvent ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
+	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
 export {

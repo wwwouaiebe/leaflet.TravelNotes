@@ -55,7 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
+import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theConfig from '../data/Config.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
@@ -271,7 +271,7 @@ function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
+	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
 export {
