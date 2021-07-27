@@ -96,7 +96,6 @@ class travelNotesDivDragEventListeners {
 	}
 }
 
-
 class NotesEventsListeners {
 
 	/**
