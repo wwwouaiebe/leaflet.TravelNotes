@@ -75,7 +75,7 @@ import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import GeoCoder from '../core/GeoCoder.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
 import Note from '../data/Note.js';
-import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
+import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
 
 import { LAT_LNG, ZERO, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
@@ -213,7 +213,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		myPreviewNote.iconHeight = myHeightInput.value;
 		myPreviewDiv.textContent = '';
 		myPreviewDiv.appendChild (
-			theHTMLViewsFactory.getNoteTextAndIconHTML (
+			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
 				'TravelNotes-NoteDialog-',
 				{ note : myPreviewNote, route : null }
 			)
@@ -866,7 +866,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 		);
 
 		myPreviewDiv.appendChild (
-			theHTMLViewsFactory.getNoteTextAndIconHTML (
+			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
 				'TravelNotes-NoteDialog-',
 				{ note : myPreviewNote, route : null }
 			)

@@ -51,8 +51,8 @@ Tests ...
 */
 
 import PaneUI from '../UI/PaneUI.js';
-import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
@@ -192,7 +192,7 @@ class ItineraryPaneUI extends PaneUI {
 			this.#checkBoxesDiv
 		);
 		this.#showManeuversCheckBox.addEventListener ( 'click', ShowManeuversCheckboxEventListeners.onClick, false );
-		this.#routeHeader = theHTMLViewsFactory.getRouteHeaderHTML (
+		this.#routeHeader = theRouteHTMLViewsFactory.getRouteHeaderHTML (
 			'TravelNotes-ItineraryPaneUI-',
 			theTravelNotesData.travel.editedRoute
 		);
@@ -206,7 +206,10 @@ class ItineraryPaneUI extends PaneUI {
 
 	#addData ( ) {
 		this.paneDataDiv.appendChild (
-			theHTMLViewsFactory.getEditedRouteManeuversAndNotesHTML ( 'TravelNotes-ItineraryPaneUI-' )
+			theRouteHTMLViewsFactory.getRouteManeuversAndNotesHTML (
+				'TravelNotes-ItineraryPaneUI-',
+				theTravelNotesData.travel.editedRoute
+			)
 		);
 
 		document.querySelectorAll (

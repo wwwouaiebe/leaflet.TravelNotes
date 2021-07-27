@@ -37,7 +37,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLViewsFactory from '../UI/HTMLViewsFactory.js';
+import theTravelHTMLViewsFactory from '../UI/TravelHTMLViewsFactory.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
@@ -65,7 +65,7 @@ function newRoadbookUpdate ( ) {
 			.then ( ( ) => {
 				theIndexedDb.getWritePromise (
 					theTravelNotesData.UUID,
-					theHTMLViewsFactory.getTravelHTML ( 'TravelNotes-Roadbook-' ).outerHTML
+					theTravelHTMLViewsFactory.getTravelHTML ( 'TravelNotes-Roadbook-' ).outerHTML
 				);
 			} )
 			.then ( ( ) => localStorage.setItem ( theTravelNotesData.UUID, Date.now ( ) ) )

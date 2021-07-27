@@ -417,6 +417,7 @@ class TravelToolbarUI {
 		this.#createSaveTravelButton ( );
 		this.#createOpenTravelButton ( );
 		this.#createImportTravelButton ( );
+		this.#createRoadbookButton ( );
 	}
 }
 
