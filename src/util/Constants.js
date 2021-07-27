@@ -312,6 +312,8 @@ export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export const EARTH_RADIUS = 6371e3;
 
+export const WAY_POINT_ICON_SIZE = 20;
+
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------
 */

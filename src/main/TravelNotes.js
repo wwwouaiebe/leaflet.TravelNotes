@@ -73,7 +73,7 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import theMapEditor from '../core/MapEditor.js';
+import theMapEditor from '../mapEditor/MapEditor.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theUI from '../UI/UI.js';
 import Travel from '../data/Travel.js';
