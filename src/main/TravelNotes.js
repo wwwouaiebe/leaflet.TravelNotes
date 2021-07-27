@@ -75,7 +75,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theMapEditor from '../core/MapEditor.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
-import { theUI } from '../UI/UI.js';
+import theUI from '../UI/UI.js';
 import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';

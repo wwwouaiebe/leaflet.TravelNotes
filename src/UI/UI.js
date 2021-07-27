@@ -32,7 +32,9 @@ Changes:
 		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200816
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210724
 Tests ...
 */
 
@@ -68,200 +70,6 @@ import OsmSearchPaneUI from '../UI/OsmSearchPaneUI.js';
 import theRoutesListUI from '../UI/RoutesListUI.js';
 import { PANE_ID } from '../util/Constants.js';
 
-let ourMainDiv = null;
-let ourUiIsPinned = false;
-let ourTimerId = null;
-let ourTitleDiv = null;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddTravelNotesEventListeners
-@desc This method add the TravelNotes events listeners
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddTravelNotesEventListeners ( ) {
-	ourMainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
-	ourMainDiv.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
-	ourMainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ), false );
-	ourMainDiv.addEventListener (
-		'updateitinerary',
-		( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
-		false
-	);
-	ourMainDiv.addEventListener (
-		'showtravelnotes',
-		( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
-		false
-	);
-	ourMainDiv.addEventListener (
-		'updatetravelnotes',
-		( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
-		false
-	);
-	ourMainDiv.addEventListener ( 'showsearch', ( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ), false );
-	ourMainDiv.addEventListener ( 'updatesearch', ( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ), false );
-	ourMainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
-	ourMainDiv.addEventListener (
-		'setprovider',
-		setProviderEvent => {
-			if ( setProviderEvent.data && setProviderEvent.data.provider ) {
-				theProvidersToolbarUI.provider = setProviderEvent.data.provider;
-			}
-		},
-		false
-	);
-	ourMainDiv.addEventListener (
-		'settransitmode',
-		setTransitModeEvent => {
-			if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
-				theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'geolocationstatuschanged',
-		geoLocationStatusChangedEvent => {
-			theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
-		},
-		false
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddMouseEventListeners
-@desc This method add the mouse events listeners
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddMouseEventListeners ( ) {
-	ourMainDiv.addEventListener (
-		'click',
-		clickEvent => {
-			if ( clickEvent.target.id && 'TravelNotes-UI-MainDiv' === clickEvent.target.id ) {
-				clickEvent.stopPropagation ( );
-				clickEvent.preventDefault ( );
-			}
-		},
-		false
-	);
-
-	ourMainDiv.addEventListener (
-		'dblclick',
-		dblClickEvent => {
-			dblClickEvent.stopPropagation ( );
-			dblClickEvent.preventDefault ( );
-		},
-		false
-	);
-
-	ourMainDiv.addEventListener (
-		'contextmenu',
-		conextMenuEvent => {
-			conextMenuEvent.stopPropagation ( );
-			conextMenuEvent.preventDefault ( );
-		},
-		false
-	);
-
-	ourMainDiv.addEventListener (
-		'wheel',
-		wheelEvent => {
-			wheelEvent.stopPropagation ( );
-			wheelEvent.preventDefault ( );
-		},
-		false
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMouseEnterUI
-@desc Event listener for the mouse enter on the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMouseEnterUI ( ) {
-	if ( ourTimerId ) {
-		clearTimeout ( ourTimerId );
-		ourTimerId = null;
-	}
-	ourMainDiv.classList.remove ( 'TravelNotes-UI-Minimized' );
-
-	ourTitleDiv.classList.add ( 'TravelNotes-Hidden' );
-	let children = ourMainDiv.childNodes;
-	for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
-		children[ childrenCounter ].classList.remove ( 'TravelNotes-Hidden' );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnTimeOutMouseLeave
-@desc Event listener for the timer on mouse leave on the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnTimeOutMouseLeave ( ) {
-	ourMainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
-
-	ourTitleDiv.classList.remove ( 'TravelNotes-Hidden' );
-	let children = ourMainDiv.childNodes;
-	for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
-		children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMouseLeaveUI
-@desc Event listener for the mouse leave on the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMouseLeaveUI ( ) {
-	ourTimerId = setTimeout ( ourOnTimeOutMouseLeave, theConfig.travelEditor.timeout );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourPinUI
-@desc this function switch the pin status of the UI
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourPinUI ( ) {
-	if ( ourUiIsPinned ) {
-		ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-		ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-	}
-	else {
-		ourMainDiv.removeEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-		ourMainDiv.removeEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-	}
-	ourUiIsPinned = ! ourUiIsPinned;
-}
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -275,12 +83,172 @@ function ourPinUI ( ) {
 
 class UI {
 
+	static #mainDiv = null;
+	static #timerId = null;
+	static #titleDiv = null;
+
+	#isPinned = false;
+
+	/**
+	Event listener for the mouse enter on the UI
+	@private
+	*/
+
+	static #onMouseEnter ( ) {
+		if ( UI.#timerId ) {
+			clearTimeout ( UI.#timerId );
+			UI.#timerId = null;
+		}
+		UI.#mainDiv.classList.remove ( 'TravelNotes-UI-Minimized' );
+
+		UI.#titleDiv.classList.add ( 'TravelNotes-Hidden' );
+		let children = UI.#mainDiv.childNodes;
+		for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
+			children[ childrenCounter ].classList.remove ( 'TravelNotes-Hidden' );
+		}
+	}
+
+	/**
+	Event listener for the timer on mouse leave on the UI
+	@private
+	*/
+
+	static #onTimeOut ( ) {
+		UI.#mainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
+
+		UI.#titleDiv.classList.remove ( 'TravelNotes-Hidden' );
+		let children = UI.#mainDiv.childNodes;
+		for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
+			children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
+		}
+	}
+
+	/**
+	Event listener for the mouse leave on the UI
+	@private
+	*/
+
+	static #onMouseLeave ( ) {
+		UI.#timerId = setTimeout ( UI.#onTimeOut, theConfig.travelEditor.timeout );
+	}
+
+	/**
+	This method add the TravelNotes events listeners
+	@private
+	*/
+
+	#addTravelNotesEventListeners ( ) {
+		UI.#mainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
+		UI.#mainDiv.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
+		UI.#mainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ), false );
+		UI.#mainDiv.addEventListener (
+			'updateitinerary',
+			( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
+			false
+		);
+		UI.#mainDiv.addEventListener (
+			'showtravelnotes',
+			( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
+			false
+		);
+		UI.#mainDiv.addEventListener (
+			'updatetravelnotes',
+			( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
+			false
+		);
+		UI.#mainDiv.addEventListener ( 'showsearch', ( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ), false );
+		UI.#mainDiv.addEventListener ( 'updatesearch', ( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ), false );
+		UI.#mainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
+		UI.#mainDiv.addEventListener (
+			'setprovider',
+			setProviderEvent => {
+				if ( setProviderEvent.data && setProviderEvent.data.provider ) {
+					theProvidersToolbarUI.provider = setProviderEvent.data.provider;
+				}
+			},
+			false
+		);
+		UI.#mainDiv.addEventListener (
+			'settransitmode',
+			setTransitModeEvent => {
+				if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
+					theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
+				}
+			},
+			false
+		);
+		document.addEventListener (
+			'geolocationstatuschanged',
+			geoLocationStatusChangedEvent => {
+				theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+			},
+			false
+		);
+	}
+
+	/**
+	@desc This method add the mouse events listeners
+	@private
+	*/
+
+	#addMouseEventListeners ( ) {
+		UI.#mainDiv.addEventListener (
+			'click',
+			clickEvent => {
+				if ( clickEvent.target.id && 'TravelNotes-UI-MainDiv' === clickEvent.target.id ) {
+					clickEvent.stopPropagation ( );
+					clickEvent.preventDefault ( );
+				}
+			},
+			false
+		);
+
+		UI.#mainDiv.addEventListener (
+			'dblclick',
+			dblClickEvent => {
+				dblClickEvent.stopPropagation ( );
+				dblClickEvent.preventDefault ( );
+			},
+			false
+		);
+
+		UI.#mainDiv.addEventListener (
+			'contextmenu',
+			conextMenuEvent => {
+				conextMenuEvent.stopPropagation ( );
+				conextMenuEvent.preventDefault ( );
+			},
+			false
+		);
+
+		UI.#mainDiv.addEventListener (
+			'wheel',
+			wheelEvent => {
+				wheelEvent.stopPropagation ( );
+				wheelEvent.preventDefault ( );
+			},
+			false
+		);
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
 
+	/**
+	Change the pinned status of the UI
+	*/
+
 	pin ( ) {
-		ourPinUI ( );
+		if ( this.#isPinned ) {
+			UI.#mainDiv.addEventListener ( 'mouseenter', UI.#onMouseEnter, false );
+			UI.#mainDiv.addEventListener ( 'mouseleave', UI.#onMouseLeave, false );
+		}
+		else {
+			UI.#mainDiv.removeEventListener ( 'mouseenter', UI.#onMouseEnter, false );
+			UI.#mainDiv.removeEventListener ( 'mouseleave', UI.#onMouseLeave, false );
+		}
+		this.#isPinned = ! this.#isPinned;
 	}
 
 	/**
@@ -289,64 +257,61 @@ class UI {
 	*/
 
 	createUI ( uiDiv ) {
-		if ( ourMainDiv ) {
+		if ( UI.#mainDiv ) {
 			return;
 		}
-		ourMainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
+		UI.#mainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
 
-		ourTitleDiv = theHTMLElementsFactory.create (
+		UI.#titleDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-UI-MainDiv-Title',
 				textContent : 'Travel\u00A0\u0026\u00A0Notes'
 			},
-			ourMainDiv
+			UI.#mainDiv
 		);
 
-		theTravelNotesToolbarUI.createUI ( ourMainDiv );
-		theTravelUI.createUI ( ourMainDiv );
+		theTravelNotesToolbarUI.createUI ( UI.#mainDiv );
+		theTravelUI.createUI ( UI.#mainDiv );
 		thePanesManagerUI.addPane ( new ItineraryPaneUI ( ) );
 		thePanesManagerUI.addPane ( new TravelNotesPaneUI ( ) );
 		thePanesManagerUI.addPane ( new OsmSearchPaneUI ( ) );
-		thePanesManagerUI.createUI ( ourMainDiv );
-		theProvidersToolbarUI.createUI ( ourMainDiv );
+		thePanesManagerUI.createUI ( UI.#mainDiv );
+		theProvidersToolbarUI.createUI ( UI.#mainDiv );
 
 		if ( theConfig.travelEditor.startMinimized ) {
-			ourMainDiv.addEventListener ( 'mouseenter', ourOnMouseEnterUI, false );
-			ourMainDiv.addEventListener ( 'mouseleave', ourOnMouseLeaveUI, false );
-			ourMainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
-			let children = ourMainDiv.childNodes;
+			UI.#mainDiv.addEventListener ( 'mouseenter', UI.#onMouseEnter, false );
+			UI.#mainDiv.addEventListener ( 'mouseleave', UI.#onMouseLeave, false );
+			UI.#mainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
+			let children = UI.#mainDiv.childNodes;
 			for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
 				children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
 			}
 		}
 		else {
-			ourTitleDiv.classList.add ( 'TravelNotes-Hidden' );
-			ourUiIsPinned = true;
+			UI.#titleDiv.classList.add ( 'TravelNotes-Hidden' );
+			this.#isPinned = true;
 		}
 
-		ourAddTravelNotesEventListeners ( );
-		ourAddMouseEventListeners ( );
+		this.#addTravelNotesEventListeners ( );
+		this.#addMouseEventListeners ( );
 	}
 }
 
-const OUR_UI = new UI ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of UI class
+@type {UI}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of UI class
-	@type {UI}
-	@constant
-	@global
+const theUI = new UI ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_UI as theUI
-};
+export default theUI;
 
 /*
 --- End of UI.js file ---------------------------------------------------------------------------------------------------------
