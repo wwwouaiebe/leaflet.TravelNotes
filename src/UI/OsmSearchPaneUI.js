@@ -60,8 +60,8 @@ Tests ...
 import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
-import OsmSearchPaneDataManager from '../UI/OsmSearchPaneDataManager.js';
-import OsmSearchPaneControlManager from '../UI/OsmSearchPaneControlManager.js';
+import OsmSearchDataUI from '../UI/OsmSearchDataUI.js';
+import OsmSearchControlUI from '../UI/OsmSearchControlUI.js';
 
 import { PANE_ID } from '../util/Constants.js';
 
@@ -106,8 +106,8 @@ function myAddWait ( ) {
 
 class OsmSearchPaneUI extends PaneUI {
 
-	#osmSearchPaneDataManager = new OsmSearchPaneDataManager ( );
-	#osmSearchPaneControlManager = new OsmSearchPaneControlManager ( );
+	#osmSearchDataUI = new OsmSearchDataUI ( );
+	#osmSearchControlUI = new OsmSearchControlUI ( );
 
 	/**
 	Create the controls div
@@ -115,8 +115,7 @@ class OsmSearchPaneUI extends PaneUI {
 	*/
 
 	#addControls ( ) {
-		this.#osmSearchPaneControlManager.addToolbar ( this.paneControlDiv );
-		this.#osmSearchPaneControlManager.addTree ( this.paneControlDiv );
+		this.#osmSearchControlUI.addControl ( this.paneControlDiv );
 	}
 
 	/**
@@ -125,7 +124,7 @@ class OsmSearchPaneUI extends PaneUI {
 	*/
 
 	#addData ( ) {
-		this.#osmSearchPaneDataManager.addData ( this.paneDataDiv );
+		this.#osmSearchDataUI.addData ( this.paneDataDiv );
 	}
 
 	/**
@@ -134,8 +133,7 @@ class OsmSearchPaneUI extends PaneUI {
 	*/
 
 	#clearPaneControlDiv ( ) {
-		this.#osmSearchPaneControlManager.removeToolbar ( this.paneControlDiv );
-		this.#osmSearchPaneControlManager.removeTree ( this.paneControlDiv );
+		this.#osmSearchControlUI.clearControl ( this.paneControlDiv );
 	}
 
 	/**
@@ -144,7 +142,7 @@ class OsmSearchPaneUI extends PaneUI {
 	*/
 
 	#clearPaneDataDiv ( ) {
-		this.#osmSearchPaneDataManager.clearData ( this.paneDataDiv );
+		this.#osmSearchDataUI.clearData ( this.paneDataDiv );
 	}
 
 	constructor ( ) {

@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file OsmSearchPaneDataManager.js
+@file OsmSearchDataUI.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchPaneDataManager
+@module OsmSearchDataUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -119,14 +119,14 @@ class SearchResultEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class OsmSearchPaneDataManager
+@class OsmSearchDataUI
 @classdesc This class add or remove the search data on the pane data
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class OsmSearchPaneDataManager {
+class OsmSearchDataUI {
 
 	/**
 	Icon builder
@@ -334,8 +334,8 @@ class OsmSearchPaneDataManager {
 	}
 }
 
-export default OsmSearchPaneDataManager;
+export default OsmSearchDataUI;
 
 /*
---- End of OsmSearchPaneDataManager.js file -----------------------------------------------------------------------------------
+--- End of OsmSearchDataUI.js file --------------------------------------------------------------------------------------------
 */
