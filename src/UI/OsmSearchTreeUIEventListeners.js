@@ -20,14 +20,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210726
+Doc reviewed 20210727
 Tests ...
 */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file osmSearchControlUI.js
+@file OsmSearchTreeUIEventListeners.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,76 +38,81 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module osmSearchControlUI
+@module OsmSearchTreeUIEventListeners
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import OsmSearchToolbarUI from '../UI/OsmSearchToolbarUI.js';
-import OsmSearchTreeUI from '../UI/OsmSearchTreeUI.js';
-import OsmSearchWaitUI from '../UI/OsmSearchWaitUI.js';
+import { MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class osmSearchControlUI
-@classdesc This class add or remove the search toolbar and search tree on the pane control
-@hideconstructor
+@class OsmSearchTreeUIEventListeners
+@classdesc This class contains the event listeners for the tree
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class osmSearchControlUI {
+class OsmSearchTreeUIEventListeners {
 
 	/**
 	A reference to the OsmSearchTreeUI object
 	*/
 
-	#osmSearchTreeUI = null;
+	static osmSearchTreeUI = null;
 
 	/**
-	A reference to the OsmSearchToolbarUI object
+	Helper function to select or unselected all the items childrens of a given item
 	*/
 
-	#osmSearchToolbar = null;
-
-	/**
-	A reference to the OsmSearchWaitUI Object
-	*/
-
-	#osmSearchWaitUI = null;
-
-	constructor ( ) {
-		this.#osmSearchToolbar = new OsmSearchToolbarUI ( );
-		this.#osmSearchTreeUI = new OsmSearchTreeUI ( );
-		this.#osmSearchWaitUI = new OsmSearchWaitUI ( );
+	static selectItem ( item, isSelected ) {
+		item.isSelected = isSelected;
+		item.items.forEach (
+			subItem => { OsmSearchTreeUIEventListeners.selectItem ( subItem, isSelected ); }
+		);
 	}
 
 	/**
-	Add the treeHTMLElement to the paneControl
+	change event listener for the tree checkboxes
 	*/
 
-	addControl ( paneControl ) {
-		paneControl.appendChild ( this.#osmSearchToolbar.toolbarHTMLElement );
-		paneControl.appendChild ( this.#osmSearchTreeUI.treeHTMLElement );
-		paneControl.appendChild ( this.#osmSearchWaitUI.waitHTMLElement );
+	static onCheckboxChange ( changeEvent ) {
+		OsmSearchTreeUIEventListeners.selectItem ( changeEvent.target.parentNode.dictItem, changeEvent.target.checked );
+		OsmSearchTreeUIEventListeners.osmSearchTreeUI.redraw ( );
 	}
 
 	/**
-	Remove thetreeHTMLElement from the paneControl
+	wheel event listener for the tree
 	*/
 
-	clearControl ( paneControl ) {
-		paneControl.removeChild ( this.#osmSearchTreeUI.treeHTMLElement );
-		paneControl.removeChild ( this.#osmSearchToolbar.toolbarHTMLElement );
-		this.#osmSearchWaitUI.hideWait ( );
-		paneControl.removeChild ( this.#osmSearchWaitUI.waitHTMLElement );
+	static onWheel ( wheelEvent ) {
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop +=
+				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
+		}
+		wheelEvent.stopPropagation ( );
 	}
+
+	/**
+	click event listener for tree arrows
+	*/
+
+	static onArrowClick ( clickEvent ) {
+		clickEvent.target.parentNode.dictItem.isExpanded = ! clickEvent.target.parentNode.dictItem.isExpanded;
+		OsmSearchTreeUIEventListeners.osmSearchTreeUI.redraw ( );
+	}
+
 }
 
-export default osmSearchControlUI;
+export default OsmSearchTreeUIEventListeners;
 
 /*
---- End of osmSearchControlUI.js file -----------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+
+end of OsmSearchTreeUIEventListeners.js file
+
+@------------------------------------------------------------------------------------------------------------------------------
 */

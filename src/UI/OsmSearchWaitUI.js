@@ -18,16 +18,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-	- v3.0.0:
-		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210726
+Doc reviewed ...
 Tests ...
 */
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file osmSearchControlUI.js
+@file OsmSearchWaitUI.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,76 +36,74 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module osmSearchControlUI
+@module OsmSearchWaitUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import OsmSearchToolbarUI from '../UI/OsmSearchToolbarUI.js';
-import OsmSearchTreeUI from '../UI/OsmSearchTreeUI.js';
-import OsmSearchWaitUI from '../UI/OsmSearchWaitUI.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class osmSearchControlUI
-@classdesc This class add or remove the search toolbar and search tree on the pane control
+@class OsmSearchWaitUI
+@classdesc This the waitUI for the OsmSearch
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class osmSearchControlUI {
+class OsmSearchWaitUI {
 
-	/**
-	A reference to the OsmSearchTreeUI object
-	*/
-
-	#osmSearchTreeUI = null;
-
-	/**
-	A reference to the OsmSearchToolbarUI object
-	*/
-
-	#osmSearchToolbar = null;
-
-	/**
-	A reference to the OsmSearchWaitUI Object
-	*/
-
-	#osmSearchWaitUI = null;
+	#waitDiv = null;
+	#waitBullet = null;
 
 	constructor ( ) {
-		this.#osmSearchToolbar = new OsmSearchToolbarUI ( );
-		this.#osmSearchTreeUI = new OsmSearchTreeUI ( );
-		this.#osmSearchWaitUI = new OsmSearchWaitUI ( );
+		this.#waitDiv = theHTMLElementsFactory.create (
+			'div',
+			{ className : 'TravelNotes-WaitAnimation' },
+		);
+		OsmSearchToolbarUI.osmSearchWaitUI = this;
+		this.#waitDiv.classList.add ( 'TravelNotes-Hidden' );
 	}
 
 	/**
-	Add the treeHTMLElement to the paneControl
+	show the wait UI
 	*/
 
-	addControl ( paneControl ) {
-		paneControl.appendChild ( this.#osmSearchToolbar.toolbarHTMLElement );
-		paneControl.appendChild ( this.#osmSearchTreeUI.treeHTMLElement );
-		paneControl.appendChild ( this.#osmSearchWaitUI.waitHTMLElement );
+	showWait ( ) {
+		this.#waitBullet = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-WaitAnimationBullet'
+			},
+			this.#waitDiv
+		);
+		this.#waitDiv.classList.remove ( 'TravelNotes-Hidden' );
 	}
 
 	/**
-	Remove thetreeHTMLElement from the paneControl
+	hide the wait UI
 	*/
 
-	clearControl ( paneControl ) {
-		paneControl.removeChild ( this.#osmSearchTreeUI.treeHTMLElement );
-		paneControl.removeChild ( this.#osmSearchToolbar.toolbarHTMLElement );
-		this.#osmSearchWaitUI.hideWait ( );
-		paneControl.removeChild ( this.#osmSearchWaitUI.waitHTMLElement );
+	hideWait ( ) {
+		if ( this.#waitBullet ) {
+			this.#waitDiv.removeChild ( this.#waitBullet );
+		}
+		this.#waitDiv.classList.add ( 'TravelNotes-Hidden' );
 	}
+
+	get waitHTMLElement ( ) { return this.#waitDiv; }
 }
 
-export default osmSearchControlUI;
+export default OsmSearchWaitUI;
 
 /*
---- End of osmSearchControlUI.js file -----------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+
+end of OsmSearchWaitUI.js file
+
+@------------------------------------------------------------------------------------------------------------------------------
 */

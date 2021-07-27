@@ -130,6 +130,7 @@ class OsmSearchDataUI {
 
 	/**
 	Icon builder
+	@private
 	*/
 
 	#buildIcon ( htmlElement ) {
@@ -156,6 +157,7 @@ class OsmSearchDataUI {
 
 	/**
 	generic builder
+	@private
 	*/
 
 	#addOsmTag ( osmTagValue, searchResultCell ) {
@@ -166,6 +168,7 @@ class OsmSearchDataUI {
 
 	/**
 	Address builder
+	@private
 	*/
 
 	#addAddress ( htmlElement, searchResultCell ) {
@@ -203,6 +206,7 @@ class OsmSearchDataUI {
 
 	/**
 	Phone builder
+	@private
 	*/
 
 	#addPhone ( htmlElement, searchResultCell ) {
@@ -213,6 +217,7 @@ class OsmSearchDataUI {
 
 	/**
 	Mail builder
+	@private
 	*/
 
 	#addMail ( htmlElement, searchResultCell ) {
@@ -230,6 +235,7 @@ class OsmSearchDataUI {
 
 	/**
 	Web site builder
+	@private
 	*/
 
 	#addWebSite ( htmlElement, searchResultCell ) {
@@ -245,6 +251,10 @@ class OsmSearchDataUI {
 			);
 		}
 	}
+
+	/**
+	@private
+	*/
 
 	#addOsmData ( htmlElement ) {
 		let searchResultCell = theHTMLElementsFactory.create (
@@ -265,6 +275,7 @@ class OsmSearchDataUI {
 
 	/**
 	Title builder
+	@private
 	*/
 
 	#addTitle ( htmlElement ) {
@@ -276,6 +287,7 @@ class OsmSearchDataUI {
 
 	/**
 	event listeners
+	@private
 	*/
 
 	#addEventListeners ( htmlElement ) {
@@ -286,6 +298,7 @@ class OsmSearchDataUI {
 
 	/**
 	Element builder
+	@private
 	*/
 
 	#buildHtmlElement ( osmElement ) {
