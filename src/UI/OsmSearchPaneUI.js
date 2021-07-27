@@ -68,32 +68,6 @@ import { PANE_ID } from '../util/Constants.js';
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@function myAddWait
-@desc show a wait animation
-@private
-
-@--------------------------------------------------------------------------------------------------------------------------
-*/
-/*
-function myAddWait ( ) {
-	myWaitDiv = theHTMLElementsFactory.create (
-		'div',
-		{ className : 'TravelNotes-WaitAnimation' },
-		this.paneControlDiv
-	);
-	theHTMLElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-WaitAnimationBullet'
-		},
-		myWaitDiv
-	);
-}
-*/
-
-/**
-@--------------------------------------------------------------------------------------------------------------------------
-
 @class OsmSearchPaneUI
 @classdesc This class manages the search pane UI
 @see {@link newOsmSearchPaneUI} for constructor

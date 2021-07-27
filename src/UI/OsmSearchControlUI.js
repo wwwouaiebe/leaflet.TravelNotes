@@ -131,6 +131,8 @@ class OsmSearchToolbarUI {
 
 	static osmSearchTreeUI = null;
 
+	static osmSearchWaitUI = null;
+
 	/**
 	A reference to the toolbar htmlElement
 	*/
@@ -143,13 +145,13 @@ class OsmSearchToolbarUI {
 
 	static onSearchClick ( ) {
 
-		// tmp moved myClearPaneDataDiv ( );
 		theOsmSearchEngine.dictionary.isExpanded = false;
 		OsmSearchToolbarUI.osmSearchTreeUI.redraw ( );
 		theTravelNotesData.searchData.length = ZERO;
 		theEventDispatcher.dispatch ( 'showsearch' );
 
-		// tmp moved myAddWait ( );
+		OsmSearchToolbarUI.osmSearchWaitUI.showWait ( );
+
 		theOsmSearchEngine.search ( );
 
 		// Notice: theOsmSearchEngine send a 'showsearch' event when the search is succesfully done
@@ -383,6 +385,41 @@ class OsmSearchTreeUI {
 	get treeHTMLElement ( ) { return this.#treeHTMLElement; }
 }
 
+class OsmSearchWaitUI {
+
+	#waitDiv = null;
+	#waitBullet = null;
+
+	constructor ( ) {
+		this.#waitDiv = theHTMLElementsFactory.create (
+			'div',
+			{ className : 'TravelNotes-WaitAnimation' },
+		);
+		OsmSearchToolbarUI.osmSearchWaitUI = this;
+		this.#waitDiv.classList.add ( 'TravelNotes-Hidden' );
+	}
+
+	showWait ( ) {
+		this.#waitBullet = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-WaitAnimationBullet'
+			},
+			this.#waitDiv
+		);
+		this.#waitDiv.classList.remove ( 'TravelNotes-Hidden' );
+	}
+	
+	hideWait ( ) {
+		if ( this.#waitBullet ) {
+			this.#waitDiv.removeChild ( this.#waitBullet );
+		}
+		this.#waitDiv.classList.add ( 'TravelNotes-Hidden' );
+	}
+
+	get waitHTMLElement ( ) { return this.#waitDiv; }
+}
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -407,9 +444,16 @@ class osmSearchControlUI {
 
 	#osmSearchToolbar = null;
 
+	/**
+	A reference to the OsmSearchWaitUI Object
+	*/
+
+	#osmSearchWaitUI = null;
+
 	constructor ( ) {
 		this.#osmSearchToolbar = new OsmSearchToolbarUI ( );
 		this.#osmSearchTreeUI = new OsmSearchTreeUI ( );
+		this.#osmSearchWaitUI = new OsmSearchWaitUI ( );
 	}
 
 	/**
@@ -419,6 +463,7 @@ class osmSearchControlUI {
 	addControl ( paneControl ) {
 		paneControl.appendChild ( this.#osmSearchToolbar.toolbarHTMLElement );
 		paneControl.appendChild ( this.#osmSearchTreeUI.treeHTMLElement );
+		paneControl.appendChild ( this.#osmSearchWaitUI.waitHTMLElement );
 	}
 
 	/**
@@ -428,6 +473,8 @@ class osmSearchControlUI {
 	clearControl ( paneControl ) {
 		paneControl.removeChild ( this.#osmSearchTreeUI.treeHTMLElement );
 		paneControl.removeChild ( this.#osmSearchToolbar.toolbarHTMLElement );
+		this.#osmSearchWaitUI.hideWait ( );
+		paneControl.removeChild ( this.#osmSearchWaitUI.waitHTMLElement );
 	}
 }
 
