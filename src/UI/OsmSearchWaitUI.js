@@ -91,6 +91,7 @@ class OsmSearchWaitUI {
 	hideWait ( ) {
 		if ( this.#waitBullet ) {
 			this.#waitDiv.removeChild ( this.#waitBullet );
+			this.#waitBullet = null;
 		}
 		this.#waitDiv.classList.add ( 'TravelNotes-Hidden' );
 	}
