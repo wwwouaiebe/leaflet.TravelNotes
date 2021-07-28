@@ -102,6 +102,7 @@ class NoteContextMenu extends BaseContextMenu {
 				doAction : INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
 			}
 		];
+		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */

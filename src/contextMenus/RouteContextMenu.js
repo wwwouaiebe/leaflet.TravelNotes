@@ -167,6 +167,7 @@ class RouteContextMenu extends BaseContextMenu {
 				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
 			}
 		];
+		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */

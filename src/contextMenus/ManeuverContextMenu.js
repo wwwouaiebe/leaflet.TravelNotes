@@ -77,6 +77,7 @@ class ManeuverContextMenu extends BaseContextMenu {
 				doAction : true
 			}
 		];
+		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
