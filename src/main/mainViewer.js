@@ -47,6 +47,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
+import ConfigOverloader from '../data/ConfigOverloader.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelNotesViewer } from '../main/TravelNotesViewer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
@@ -140,7 +141,7 @@ function ourMainViewer ( ) {
 			if ( 'wwwouaiebe.github.io' === window.location.hostname ) {
 				config.note.haveBackground = true;
 			}
-			theConfig.overload ( config );
+			new ConfigOverloader ( ).overload ( config );
 			return true;
 		}
 		return false;

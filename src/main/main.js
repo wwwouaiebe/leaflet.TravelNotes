@@ -49,6 +49,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
+import ConfigOverloader from '../data/ConfigOverloader.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { theTravelNotes } from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
@@ -152,7 +153,7 @@ function ourMain ( ) {
 				config.printRouteMap.maxTiles = OUR_DEMO_PRINT_MAX_TILES;
 				config.route.showDragTooltip = NOT_FOUND;
 			}
-			theConfig.overload ( config );
+			new ConfigOverloader ( ).overload ( config );
 			theTravelNotesData.providers.forEach (
 				provider => {
 					provider.userLanguage = theConfig.travelNotes.language;
