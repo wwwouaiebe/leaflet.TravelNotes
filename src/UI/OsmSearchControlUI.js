@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file osmSearchControlUI.js
+@file OsmSearchControlUI.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module osmSearchControlUI
+@module OsmSearchControlUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,14 +51,14 @@ import OsmSearchWaitUI from '../UI/OsmSearchWaitUI.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class osmSearchControlUI
+@class OsmSearchControlUI
 @classdesc This class add or remove the search toolbar and search tree on the pane control
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class osmSearchControlUI {
+class OsmSearchControlUI {
 
 	/**
 	A reference to the OsmSearchTreeUI object
@@ -106,7 +106,7 @@ class osmSearchControlUI {
 	}
 }
 
-export default osmSearchControlUI;
+export default OsmSearchControlUI;
 
 /*
 --- End of osmSearchControlUI.js file -----------------------------------------------------------------------------------------

@@ -119,9 +119,9 @@ class NotesEventsListeners {
 			};
 		if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
-			new NoteContextMenu ( 
-				contextMenuEvent, 
-				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' ) 
+			new NoteContextMenu (
+				contextMenuEvent,
+				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
 			).show ( );
 		}
 	}

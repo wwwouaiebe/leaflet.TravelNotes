@@ -23,7 +23,9 @@ Changes:
 		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
 		- Issue ♯120 : Review the UserInterface
-Doc reviewed 20200727
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210728
 Tests ...
 */
 

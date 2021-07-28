@@ -23,7 +23,9 @@ Changes:
 	- v1.13.0:
 		- Issue ♯126 : Add a command "select as start/end/intermediate point" in the osmSearch context menu
 		- Issue ♯128 : Unify osmSearch and notes icons and data
-Doc reviewed 20200727
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210728
 Tests ...
 */
 
@@ -54,6 +56,17 @@ import theTranslator from '../UI/Translator.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OsmSearchContextMenu
+@classdesc this class implements the BaseContextMenu class for the OsmSearch data
+@implements {BaseContextMenu}
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class OsmSearchContextMenu extends BaseContextMenu {
 
