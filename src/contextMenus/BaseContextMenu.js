@@ -106,20 +106,23 @@ class BaseContextMenuEvents {
 
 	static #setFocusOnItem ( isKeyboardEvent ) {
 		if ( INVALID_OBJ_ID !== BaseContextMenuEvents.#currentFocusItem ) {
-			BaseContextMenuEvents.container.childNodes [ BaseContextMenuEvents.#currentFocusItem + ONE ].firstChild.classList.remove (
-				'TravelNotes-ContextMenu-ItemSelected'
-			);
+			BaseContextMenuEvents.container.childNodes [ BaseContextMenuEvents.#currentFocusItem + ONE ]
+				.firstChild.classList.remove (
+					'TravelNotes-ContextMenu-ItemSelected'
+				);
 		}
 		if ( isKeyboardEvent ) {
-			BaseContextMenuEvents.container.childNodes [ BaseContextMenuEvents.#keyboardFocusIsOnItem + ONE ].firstChild.classList.add (
-				'TravelNotes-ContextMenu-ItemSelected'
-			);
+			BaseContextMenuEvents.container.childNodes [ BaseContextMenuEvents.#keyboardFocusIsOnItem + ONE ]
+				.firstChild.classList.add (
+					'TravelNotes-ContextMenu-ItemSelected'
+				);
 			BaseContextMenuEvents.#currentFocusItem = BaseContextMenuEvents.#keyboardFocusIsOnItem;
 		}
 		else {
-			BaseContextMenuEvents.container.childNodes [ BaseContextMenuEvents.#mouseFocusIsOnItem + ONE ].firstChild.classList.add (
-				'TravelNotes-ContextMenu-ItemSelected'
-			);
+			BaseContextMenuEvents.container.childNodes [ BaseContextMenuEvents.#mouseFocusIsOnItem + ONE ]
+				.firstChild.classList.add (
+					'TravelNotes-ContextMenu-ItemSelected'
+				);
 			BaseContextMenuEvents.#currentFocusItem = BaseContextMenuEvents.#mouseFocusIsOnItem;
 			BaseContextMenuEvents.#keyboardFocusIsOnItem = BaseContextMenuEvents.#mouseFocusIsOnItem;
 		}
@@ -211,7 +214,8 @@ class BaseContextMenuEvents {
 			) {
 				keyBoardEvent.stopPropagation ( );
 				BaseContextMenuEvents.#setFocusOnItem ( true );
-				BaseContextMenuEvents.container.childNodes[ BaseContextMenuEvents.#currentFocusItem + ONE ].firstChild.click ( );
+				BaseContextMenuEvents.container.childNodes[ BaseContextMenuEvents.#currentFocusItem + ONE ].firstChild
+					.click ( );
 			}
 		}
 	}

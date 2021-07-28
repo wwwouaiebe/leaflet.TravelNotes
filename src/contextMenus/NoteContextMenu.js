@@ -47,7 +47,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
+import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import Zoomer from '../core/Zoomer.js';

@@ -55,7 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import newBaseContextMenu from '../contextMenus/BaseContextMenu.js';
+import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theConfig from '../data/Config.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
