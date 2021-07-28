@@ -47,12 +47,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @typedef {Object} MenuItem
-@desc An object to represent a context menu line
-@property {Object} context the object to witch the this pointer refers when calling the action function
-@property {string} name the string displayed in the menu
-@property {?function} action the function to be executed when clicking on the menu item. If null the item is displayed
-but not active
-@property {any} param a parameter to be passed to the action function. Can be any type...
+@desc An object with data used to display the menu
+@property {string} itemText The text to display in the menu
+@property {boolean} doAction When true the menu item is selectable
 @public
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -74,33 +71,93 @@ import { INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 
 const OUR_MENU_MARGIN = 20;
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class BaseContextMenuEvents
+@classdesc This class contains the static methods and variables needed for the BaseContextMenu class
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class BaseContextMenuEvents {
 
-	static #keyboardFocusIsOnItem = INVALID_OBJ_ID;
-	static #mouseFocusIsOnItem = INVALID_OBJ_ID;
-	static #currentFocusItem = INVALID_OBJ_ID;
-	static #timerId = null;
+	/**
+	Last item objId
+	*/
+
+	static lastItemObjId = INVALID_OBJ_ID;
+
+	/**
+	The HTMLElement in with the menu is located
+	*/
 
 	static container = null;
+
+	/**
+	The parentNode of the container
+	*/
+
 	static parentDiv = null;
-	static menuItems = [];
+
+	/**
+	A reference to the contextMenu Object
+	*/
+
+	static contextMenu = null;
+
+	/**
+	The objId of the item that have the keyboard focus
+	@private
+	*/
+
+	static #keyboardFocusIsOnItem = INVALID_OBJ_ID;
+
+	/**
+	The objId of the item that have the mouse focus
+	@private
+	*/
+
+	static #mouseFocusIsOnItem = INVALID_OBJ_ID;
+
+	/**
+	The objId of the item that have the focus
+	@private
+	*/
+
+	static #currentFocusItem = INVALID_OBJ_ID;
+
+	/**
+	The timerId of the timer used by the mouseleave event listener
+	@private
+	*/
+
+	static #timerId = null;
+
+	/**
+	Reset the static variables and timer
+	*/
 
 	static reset ( ) {
 		BaseContextMenuEvents.#keyboardFocusIsOnItem = INVALID_OBJ_ID;
 		BaseContextMenuEvents.#mouseFocusIsOnItem = INVALID_OBJ_ID;
 		BaseContextMenuEvents.#currentFocusItem = INVALID_OBJ_ID;
+		BaseContextMenuEvents.lastItemObjId = INVALID_OBJ_ID;
 		BaseContextMenuEvents.container = null;
 		if ( BaseContextMenuEvents.#timerId ) {
 			clearTimeout ( BaseContextMenuEvents.#timerId );
 			BaseContextMenuEvents.#timerId = null;
 		}
+		BaseContextMenuEvents.parentDiv = null;
+		BaseContextMenuEvents.contextMenu = null;
 
-		// BaseContextMenuEvents.parentDiv = null;
-		// BaseContextMenuEvents.menuItems = [];
+		// removing event listeners
+		document.removeEventListener ( 'keydown', BaseContextMenuEvents.onKeyDown, true );
 	}
 
 	/**
-	hightlight the item selected by the mouse or the keyboard
+	Hightlight the item selected by the mouse or the keyboard
 	@private
 	*/
 
@@ -128,40 +185,16 @@ class BaseContextMenuEvents {
 		}
 	}
 
-	/**
-	click event listener on the close button and on the timer
-	*/
-
-	static onCloseMenu ( ) {
-		if ( BaseContextMenuEvents.#timerId ) {
-			clearTimeout ( BaseContextMenuEvents.#timerId );
-			BaseContextMenuEvents.#timerId = null;
-		}
-
-		// removing event listeners
-		document.removeEventListener ( 'keydown', BaseContextMenuEvents.onKeyDown, true );
-
-		// removing the menu container
-		BaseContextMenuEvents.parentDiv.removeChild ( BaseContextMenuEvents.container );
-
-		// reset global vars
-		// tmp removed? this.#contextMenuEvent = null;
-		BaseContextMenuEvents.reset ( );
-
-		BaseContextMenuEvents.menuItems = [];
-		BaseContextMenuEvents.parentDiv = null;
-	}
-
-	/**
-	Keyboard event listener
-	 */
-
 	/*
 	Keyboard events listeners must be 'module global' otherwise the events are not removed when
 	closing the menu by clicking outside the menu (in this case the event listeners are duplicated
 	in each instance of the menu and so, it's not the same function that is passed to addEventListener
 	and removeEventListener). If keyboard event listeners are not removed, keyboard is unavailable
 	for others elements. See issue ♯83
+	*/
+
+	/**
+	Keyboard event listener
 	*/
 
 	static onKeyDown ( keyBoardEvent ) {
@@ -176,7 +209,7 @@ class BaseContextMenuEvents {
 				BaseContextMenuEvents.#keyboardFocusIsOnItem =
 						INVALID_OBJ_ID === BaseContextMenuEvents.#keyboardFocusIsOnItem
 						||
-						BaseContextMenuEvents.menuItems.length - ONE === BaseContextMenuEvents.#keyboardFocusIsOnItem
+						BaseContextMenuEvents.lastItemObjId === BaseContextMenuEvents.#keyboardFocusIsOnItem
 							?
 							ZERO
 							:
@@ -190,7 +223,7 @@ class BaseContextMenuEvents {
 						||
 						ZERO === BaseContextMenuEvents.#keyboardFocusIsOnItem
 							?
-							BaseContextMenuEvents.menuItems.length - ONE
+							BaseContextMenuEvents.lastItemObjId
 							:
 							-- BaseContextMenuEvents.#keyboardFocusIsOnItem;
 				BaseContextMenuEvents.#setFocusOnItem ( true );
@@ -202,7 +235,7 @@ class BaseContextMenuEvents {
 			}
 			else if ( 'End' === keyBoardEvent.key ) {
 				keyBoardEvent.stopPropagation ( );
-				BaseContextMenuEvents.#keyboardFocusIsOnItem = BaseContextMenuEvents.menuItems.length - ONE;
+				BaseContextMenuEvents.#keyboardFocusIsOnItem = BaseContextMenuEvents.lastItemObjId;
 				BaseContextMenuEvents.#setFocusOnItem ( true );
 			}
 			else if (
@@ -210,48 +243,51 @@ class BaseContextMenuEvents {
 					&&
 					( BaseContextMenuEvents.#keyboardFocusIsOnItem >= ZERO )
 					&&
-					( BaseContextMenuEvents.menuItems[ BaseContextMenuEvents.#keyboardFocusIsOnItem ].action )
+					( BaseContextMenuEvents.contextMenu.itemHaveAction ( BaseContextMenuEvents.#keyboardFocusIsOnItem ) )
 			) {
 				keyBoardEvent.stopPropagation ( );
 				BaseContextMenuEvents.#setFocusOnItem ( true );
-				BaseContextMenuEvents.container.childNodes[ BaseContextMenuEvents.#currentFocusItem + ONE ].firstChild
-					.click ( );
+				BaseContextMenuEvents.contextMenu.onSelectedItem ( BaseContextMenuEvents.#keyboardFocusIsOnItem );
+				BaseContextMenuEvents.onCloseMenu ( );
 			}
 		}
 	}
 
 	/**
-	Click event on a menu item listener
-	@private
+	This method close the menu
+	*/
+
+	static onCloseMenu ( ) {
+
+		// removing the menu container
+		BaseContextMenuEvents.parentDiv.removeChild ( BaseContextMenuEvents.container );
+
+		// reset global vars
+		BaseContextMenuEvents.reset ( );
+	}
+
+	/**
+	Click event listener for the items
 	*/
 
 	static onClickItem ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		let menuItem = BaseContextMenuEvents.menuItems[ clickEvent.target.menuItem ];
-
+		BaseContextMenuEvents.contextMenu.onSelectedItem ( clickEvent.target.objId );
 		BaseContextMenuEvents.onCloseMenu ( );
-		if ( menuItem.param ) {
-			menuItem.action.call (
-				menuItem.context,
-				menuItem.param
-			);
-		}
-		else {
-			menuItem.action.call (
-				menuItem.context
-			);
-		}
 	}
 
 	/**
-	Mouseenter event on a menu item listener
-	@private
+	Mouse enter event listener for the items
 	*/
 
 	static onMouseEnterMenuItem ( mouseEnterEvent ) {
 		BaseContextMenuEvents.#mouseFocusIsOnItem = mouseEnterEvent.target.objId;
 		BaseContextMenuEvents.#setFocusOnItem ( false );
 	}
+
+	/**
+	Mouse enter event listener for the container
+	*/
 
 	static onMouseEnterContainer ( ) {
 		if ( BaseContextMenuEvents.#timerId ) {
@@ -260,10 +296,13 @@ class BaseContextMenuEvents {
 		}
 	}
 
+	/**
+	Mouse leave event listener for the container
+	*/
+
 	static onMouseLeaveContainer ( ) {
 		BaseContextMenuEvents.#timerId = setTimeout ( BaseContextMenuEvents.onCloseMenu, theConfig.contextMenu.timeout );
 	}
-
 }
 
 /**
@@ -280,10 +319,12 @@ class BaseContextMenuEvents {
 class BaseContextMenu {
 
 	#contextMenuEvent = null;
-	#parentDiv = null;
+	#haveParentDiv = null;
+	#onOk = null;
+	#onError = null;
 
 	/**
-	Build the main html element for the menu and add event listeners
+	Build the menu container and add event listeners
 	@private
 	*/
 
@@ -330,7 +371,50 @@ class BaseContextMenu {
 	}
 
 	/**
-	Move the menu container on the screen, so the menu is always completely visible
+	Add the menu items and event listeners to the container
+	@private
+	*/
+
+	#addMenuItems ( ) {
+		let menuItemCounter = ZERO;
+		this.menuItems.forEach (
+			menuItem => {
+				let itemContainer = theHTMLElementsFactory.create (
+					'div',
+					{
+						className : 'TravelNotes-ContextMenu-ItemContainer'
+					},
+					BaseContextMenuEvents.container
+				);
+				let itemButton = theHTMLElementsFactory.create (
+					'div',
+					{
+						textContent : menuItem.itemText,
+						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
+						objId : menuItemCounter,
+						className :
+							menuItem.doAction
+								?
+								'TravelNotes-ContextMenu-Item'
+								:
+								'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
+					},
+					itemContainer
+				);
+
+				itemButton.addEventListener ( 'mouseenter', BaseContextMenuEvents.onMouseEnterMenuItem, false );
+				if ( menuItem.doAction ) {
+					itemButton.addEventListener ( 'click', BaseContextMenuEvents.onClickItem, false );
+				}
+
+				++ menuItemCounter;
+			}
+		);
+		BaseContextMenuEvents.lastItemObjId = menuItemCounter - ONE;
+	}
+
+	/**
+	Move the menu container on the screen, so the menu is always completely visible and near the selected point
 	@private
 	*/
 
@@ -352,7 +436,7 @@ class BaseContextMenu {
 			this.#contextMenuEvent.originalEvent.clientX,
 			screenWidth - BaseContextMenuEvents.container.clientWidth - OUR_MENU_MARGIN
 		);
-		if ( this.#parentDiv ) {
+		if ( this.#haveParentDiv ) {
 			BaseContextMenuEvents.container.style.top = String ( menuTop ) + 'px';
 			BaseContextMenuEvents.container.style.right = String ( OUR_MENU_MARGIN ) + 'px';
 		}
@@ -363,61 +447,41 @@ class BaseContextMenu {
 	}
 
 	/**
-	Build and add the menu items to the container
-	@private
+	Takes action when an item is selected in the menu
+	@param {number} selectedItemObjId the objId of the selected item
 	*/
 
-	#addMenuItems ( ) {
-		let menuItemCounter = ZERO;
-		BaseContextMenuEvents.menuItems.forEach (
-			menuItem => {
-				let itemContainer = theHTMLElementsFactory.create (
-					'div',
-					{
-						className : 'TravelNotes-ContextMenu-ItemContainer'
-					},
-					BaseContextMenuEvents.container
-				);
-				let itemButton = theHTMLElementsFactory.create (
-					'div',
-					{
-						textContent : menuItem.name,
-						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
-						objId : menuItemCounter,
-						className :
-							menuItem.action
-								?
-								'TravelNotes-ContextMenu-Item'
-								:
-								'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
-					},
-					itemContainer
-				);
-				itemButton.addEventListener ( 'mouseenter', BaseContextMenuEvents.onMouseEnterMenuItem, false );
-				if ( menuItem.action ) {
-					itemButton.addEventListener ( 'click', BaseContextMenuEvents.onClickItem, false );
-				}
-				itemButton.menuItem = menuItemCounter;
-				++ menuItemCounter;
-			}
-		);
-	}
-
-	constructor ( contextMenuEvent, menuItems, parentDiv ) {
-
-		this.#contextMenuEvent = contextMenuEvent;
-		BaseContextMenuEvents.menuItems = menuItems;
-		BaseContextMenuEvents.parentDiv = parentDiv || document.body;
-		this.#parentDiv = parentDiv;
-
-		Object.freeze ( this );
+	onSelectedItem ( selectedItemObjId ) {
+		this.#onOk ( selectedItemObjId );
 	}
 
 	/**
-	Show the menu on the screen.
+	Verify that an item can performs an action
+	@param {number} selectedItemObjId the objId of the selected item
+	@return {boolean} true when the item can performs an action
 	*/
 
-	show ( ) {
+	itemHaveAction ( itemObjId ) {
+		return this.menuItems [ itemObjId ].doAction;
+	}
+
+	/**
+	build and show the menu
+	@private
+	*/
+
+	#show ( onOk, onError ) {
+		this.#onOk = onOk;
+		this.#onError = onError;
+		this.#buildContainer ( );
+		this.#addCloseButton ( );
+		this.#addMenuItems ( );
+		this.#moveContainer ( );
+		document.addEventListener ( 'keydown', BaseContextMenuEvents.onKeyDown, true );
+	}
+
+	constructor ( contextMenuEvent, parentDiv ) {
+
 		if ( BaseContextMenuEvents.container ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
@@ -425,14 +489,40 @@ class BaseContextMenu {
 			return;
 		}
 
-		// BaseContextMenuEvents.reset ( );
+		BaseContextMenuEvents.contextMenu = this;
+		this.#contextMenuEvent = contextMenuEvent;
+		BaseContextMenuEvents.parentDiv = parentDiv || document.body;
+		this.#haveParentDiv = null !== parentDiv;
 
-		this.#buildContainer ( );
-		this.#addCloseButton ( );
-		this.#addMenuItems ( );
-		this.#moveContainer ( );
-		document.addEventListener ( 'keydown', BaseContextMenuEvents.onKeyDown, true );
+		new Promise (
+			( onOk, onError ) => { this.#show ( onOk, onError ); }
+		)
+			.then ( selection => this.doAction ( selection ) )
+			.catch (
+				err => {
+					console.error ( err );
+					BaseContextMenuEvents.reset ( );
+				}
+			);
+
 	}
+
+	/**
+	Execute the action for the selected item. Must be implemented in the derived classes
+	@param {number} selectedItemObjId The selected item objId
+	*/
+
+	doAction ( /* selectedItemObjId */ ) {
+	}
+
+	/**
+	The menuItems to be used by the menu.  Must be implemented in the derived classes
+	*/
+
+	get menuItems ( ) {
+		return [ ];
+	}
+
 }
 
 export default BaseContextMenu;

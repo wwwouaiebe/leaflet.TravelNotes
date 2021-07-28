@@ -84,7 +84,9 @@ import Maneuver from '../data/Maneuver.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
+
+// import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
+import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
 import theMouseUI from '../UI/MouseUI.js';
@@ -305,7 +307,7 @@ function ourAddUnloadEventsListeners ( ) {
 
 function ourOnMapContextMenu ( contextMenuEvent ) {
 	if ( ! theTravelNotesData.travel.readOnly ) {
-		newMapContextMenu ( contextMenuEvent ).show ( );
+		new MapContextMenu ( contextMenuEvent );
 	}
 }
 

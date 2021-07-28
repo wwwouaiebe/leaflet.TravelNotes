@@ -49,158 +49,136 @@ Tests ...
 
 import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
+import theTranslator from '../UI/Translator.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../UI/Translator.js';
 import { newAboutDialog } from '../dialogs/AboutDialog.js';
 import Zoomer from '../core/Zoomer.js';
+
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewMapContextMenu
-@desc constructor of MapContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@return {MapContextMenu} an instance of a MapContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class MapContextMenu
+@classdesc this class implements the BaseContextMenu class for the map menu
+@implements {BaseContextMenu}
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewMapContextMenu ( contextMenuEvent ) {
+class MapContextMenu extends BaseContextMenu {
 
-	let myLatLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
-	let myZoomer = new Zoomer ( );
+	#latLng = LAT_LNG.defaultValue;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#latLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
+	}
 
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
+	/* eslint-disable no-magic-numbers */
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theWayPointEditor.setStartPoint ( this.#latLng );
+			break;
+		case 1 :
+			theWayPointEditor.addWayPoint ( this.#latLng );
+			break;
+		case 2 :
+			theWayPointEditor.setEndPoint ( this.#latLng );
+			break;
+		case 3 :
+			theRouteEditor.addRoute ( );
+			break;
+		case 4 :
+			theRouteEditor.hideRoutes ( );
+			break;
+		case 5 :
+			theRouteEditor.showRoutes ( );
+			break;
+		case 6 :
+			theNoteEditor.newTravelNote ( this.#latLng );
+			break;
+		case 7 :
+			theNoteEditor.hideNotes ( );
+			break;
+		case 8 :
+			theNoteEditor.showNotes ( );
+			break;
+		case 9 :
+			new Zoomer ( ).zoomToTravel ( );
+			break;
+		case 10 :
+			newAboutDialog ( );
+			break;
+		default :
+			break;
+		}
+	}
 
-	function myGetMenuItems ( ) {
+	/* eslint-enable no-magic-numbers */
+
+	get menuItems ( ) {
 		return [
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
-				action :
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
+				doAction :
 					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
 					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
-						?
-						theWayPointEditor.setStartPoint
-						:
-						null,
-				param : myLatLng
 			},
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
-				action :
-					( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId )
-						?
-						null
-						:
-						theWayPointEditor.addWayPoint,
-				param : myLatLng
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
+				doAction : ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 			},
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
-				action :
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
+				doAction :
 					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
 					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
-						?
-						theWayPointEditor.setEndPoint
-						:
-						null,
-				param : myLatLng
 			},
 			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Add a route' ),
-				action : theRouteEditor.addRoute
+				itemText : theTranslator.getText ( 'MapContextMenu - Add a route' ),
+				doAction : true
 			},
 			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Hide all routes' ),
-				action : theRouteEditor.hideRoutes
+				itemText : theTranslator.getText ( 'MapContextMenu - Hide all routes' ),
+				doAction : true
 			},
 			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Show all routes' ),
-				action : theRouteEditor.showRoutes
+				itemText : theTranslator.getText ( 'MapContextMenu - Show all routes' ),
+				doAction : true
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - New travel note' ),
-				action : theNoteEditor.newTravelNote,
-				param : myLatLng
+				itemText : theTranslator.getText ( 'MapContextMenu - New travel note' ),
+				doAction : true
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Hide all notes' ),
-				action : theNoteEditor.hideNotes
+				itemText : theTranslator.getText ( 'MapContextMenu - Hide all notes' ),
+				doAction : true
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Show all notes' ),
-				action : theNoteEditor.showNotes
+				itemText : theTranslator.getText ( 'MapContextMenu - Show all notes' ),
+				doAction : true
 			},
 			{
-				context : myZoomer,
-				name : theTranslator.getText ( 'MapContextMenu - Zoom to travel' ),
-				action : myZoomer.zoomToTravel
+				itemText : theTranslator.getText ( 'MapContextMenu - Zoom to travel' ),
+				doAction : true
 			},
 			{
-				context : null,
-				name : theTranslator.getText ( 'MapContextMenu - About Travel & Notes' ),
-				action : newAboutDialog
+				itemText : theTranslator.getText ( 'MapContextMenu - About Travel & Notes' ),
+				doAction : true
 			}
 		];
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class MapContextMenu
-	@classdesc a BaseContextMenu object with items completed for maps
-	@see {@link newMapContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newMapContextMenu
-	@desc constructor of MapContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@return {MapContextMenu} an instance of a MapContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewMapContextMenu as newMapContextMenu
-};
+export default MapContextMenu;
 
 /*
 --- End of MapContextMenu.js file ---------------------------------------------------------------------------------------------
