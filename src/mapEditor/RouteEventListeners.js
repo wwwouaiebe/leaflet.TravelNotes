@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
+import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ class RouteEventListeners {
 
 	static onContextMenu ( contextMenuEvent ) {
 		window.L.DomEvent.stopPropagation ( contextMenuEvent );
-		newRouteContextMenu ( contextMenuEvent ).show ( );
+		new RouteContextMenu ( contextMenuEvent ).show ( );
 	}
 }
 

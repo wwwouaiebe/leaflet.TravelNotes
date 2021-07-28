@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theWayPointEditor from '../core/WayPointEditor.js';
-import { newWayPointContextMenu } from '../contextMenus/WayPointContextMenu.js';
+import WayPointContextMenu from '../contextMenus/WayPointContextMenu.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
 /**
@@ -67,7 +67,7 @@ class WayPointEventListeners {
 	*/
 
 	static onContextMenu ( contextMenuEvent ) {
-		newWayPointContextMenu ( contextMenuEvent ).show ( );
+		new WayPointContextMenu ( contextMenuEvent ).show ( );
 	}
 
 	/**

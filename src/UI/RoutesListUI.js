@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
+import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTravelEditor from '../core/TravelEditor.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
@@ -156,7 +156,7 @@ class RoutesEventListeners {
 				clientX : contextMenuEvent.clientX,
 				clientY : contextMenuEvent.clientY
 			};
-		newRouteContextMenu ( contextMenuEvent, contextMenuEvent.target.parentNode ).show ( );
+		new RouteContextMenu ( contextMenuEvent, contextMenuEvent.target.parentNode ).show ( );
 	}
 }
 

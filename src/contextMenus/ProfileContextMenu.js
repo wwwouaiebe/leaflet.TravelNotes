@@ -50,84 +50,59 @@ import theNoteEditor from '../core/NoteEditor.js';
 import Zoomer from '../core/Zoomer.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewProfileContextMenu
-@desc constructor of WayPointContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@return {ProfileContextMenu} an instance of a ProfileContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class ProfileContextMenu
+@classdesc this class implements the BaseContextMenu class for the profiles
+@implements {BaseContextMenu}
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewProfileContextMenu ( contextMenuEvent ) {
+class ProfileContextMenu extends BaseContextMenu {
 
-	let zoomer = new Zoomer ( );
+	#contextMenuEvent = null;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetMenuItems ( ) {
-		return [
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#contextMenuEvent = contextMenuEvent;
+		this.menuItems =
+		[
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'ProfileContextMenu - Add a note to the route at this point' ),
-				action : theNoteEditor.newRouteNote,
-				param : {
-					routeObjId : contextMenuEvent.routeObjId,
-					lat : contextMenuEvent.latlng.lat,
-					lng : contextMenuEvent.latlng.lng
-				}
+				itemText : theTranslator.getText ( 'ProfileContextMenu - Add a note to the route at this point' ),
+				doAction : true
 			},
 			{
-				context : zoomer,
-				name : theTranslator.getText ( 'ProfileContextMenu - Zoom to this point' ),
-				action : zoomer.zoomToLatLng,
-				param : [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ]
+				itemText : theTranslator.getText ( 'ProfileContextMenu - Zoom to this point' ),
+				doAction : true
 			}
 		];
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	/* eslint-disable no-magic-numbers */
 
-	@class ProfileContextMenu
-	@classdesc a BaseContextMenu object with items completed for ProfileWindows
-	@see {@link newProfileContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theNoteEditor.newRouteNote (
+				{
+					routeObjId : this.#contextMenuEvent.routeObjId,
+					lat : this.#contextMenuEvent.latlng.lat,
+					lng : this.#contextMenuEvent.latlng.lng
+				}
+			);
+			break;
+		case 1 :
+			new Zoomer ( ).zoomToLatLng ( [ this.#contextMenuEvent.latlng.lat, this.#contextMenuEvent.latlng.lng ] );
+			break;
+		default :
+			break;
+		}
+	}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	/* eslint-enable no-magic-numbers */
 
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newProfileContextMenu
-	@desc constructor of ProfileContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@return {ProfileContextMenu} an instance of a ProfileContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	*/
-
-	ourNewProfileContextMenu as newProfileContextMenu
-};
+export default ProfileContextMenu;

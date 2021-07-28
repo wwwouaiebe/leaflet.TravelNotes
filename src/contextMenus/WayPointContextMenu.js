@@ -51,90 +51,62 @@ import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewWayPointContextMenu
-@desc constructor of WayPointContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@return {WayPointContextMenu} an instance of a WayPointContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class ManeuverContextMenu
+@classdesc this class implements the BaseContextMenu class for the maneuvers
+@implements {BaseContextMenu}
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewWayPointContextMenu ( contextMenuEvent ) {
+class WayPointContextMenu extends BaseContextMenu {
 
-	let myWayPointObjId = contextMenuEvent.target.objId;
+	#wayPointObjId = INVALID_OBJ_ID;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetMenuItems ( ) {
-		let isMidWayPoint =
-			theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== myWayPointObjId
-			&&
-			theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== myWayPointObjId;
-		return [
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#wayPointObjId = contextMenuEvent.target.objId;
+		this.menuItems =
+		[
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
-				action : isMidWayPoint ? theWayPointEditor.removeWayPoint : null,
-				param : myWayPointObjId
+				itemText : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
+				doAction :
+					theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== this.#wayPointObjId
+					&&
+					theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== this.#wayPointObjId
 			},
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
-				action : theWayPointEditor.wayPointProperties,
-				param : myWayPointObjId
+				itemText : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
+				doAction : true
 			}
 		];
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	/* eslint-disable no-magic-numbers */
 
-	@class WayPointContextMenu
-	@classdesc a BaseContextMenu object with items completed for wayPoints
-	@see {@link newWayPointContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theWayPointEditor.removeWayPoint ( this.#wayPointObjId );
+			break;
+		case 1 :
+			theWayPointEditor.wayPointProperties ( this.#wayPointObjId );
+			break;
+		default :
+			break;
+		}
+	}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	/* eslint-enable no-magic-numbers */
 
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ) );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newWayPointContextMenu
-	@desc constructor of WayPointContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@return {WayPointContextMenu} an instance of a WayPointContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	*/
-
-	ourNewWayPointContextMenu as newWayPointContextMenu
-
-};
+export default WayPointContextMenu;
 
 /*
 --- End of WayPointContextMenu.js file ----------------------------------------------------------------------------------------

@@ -53,7 +53,7 @@ import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
 import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
 import theNoteEditor from '../core/NoteEditor.js';
-import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
+import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 import { LAT_LNG, ZERO, PANE_ID } from '../util/Constants.js';
 
 class travelNotesDivDragEventListeners {
@@ -119,7 +119,7 @@ class NotesEventsListeners {
 			};
 		if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu ( contextMenuEvent, this.paneDataDiv.parentNode ).show ( );
+			new NoteContextMenu ( contextMenuEvent, this.paneDataDiv.parentNode ).show ( );
 		}
 	}
 }

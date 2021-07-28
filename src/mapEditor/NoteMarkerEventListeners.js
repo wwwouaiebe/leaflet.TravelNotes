@@ -37,7 +37,7 @@ Tests ...
 
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
+import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ class NoteMarkerEventListeners {
 	*/
 
 	static onContextMenu ( contextMenuEvent ) {
-		newNoteContextMenu ( contextMenuEvent ).show ( );
+		new NoteContextMenu ( contextMenuEvent ).show ( );
 	}
 
 	/**

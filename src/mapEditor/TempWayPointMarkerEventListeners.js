@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { newRouteContextMenu } from '../contextMenus/RouteContextMenu.js';
+import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 
 import { ZERO, ONE } from '../util/Constants.js';
@@ -100,7 +100,7 @@ class TempWayPointMarkerEventListeners {
 		contextMenuEvent.latlng.lat = TempWayPointMarkerEventListeners.tempWayPointInitialLatLng [ ZERO ];
 		contextMenuEvent.latlng.lng = TempWayPointMarkerEventListeners.tempWayPointInitialLatLng [ ONE ];
 		contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
-		newRouteContextMenu ( contextMenuEvent ).show ( );
+		new RouteContextMenu ( contextMenuEvent ).show ( );
 	}
 
 	/**

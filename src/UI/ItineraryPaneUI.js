@@ -55,8 +55,8 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
-import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';
+import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
+import ManeuverContextMenu from '../contextMenus/ManeuverContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID, LAT_LNG, PANE_ID } from '../util/Constants.js';
@@ -80,14 +80,14 @@ class ManeuverOrNoteEventListeners {
 			};
 		if ( element.maneuverObjId ) {
 			contextMenuEvent.maneuverObjId = element.maneuverObjId;
-			newManeuverContextMenu (
+			new ManeuverContextMenu (
 				contextMenuEvent,
 				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
 			).show ( );
 		}
 		else if ( element.noteObjId ) {
 			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu (
+			new NoteContextMenu (
 				contextMenuEvent,
 				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
 			).show ( );

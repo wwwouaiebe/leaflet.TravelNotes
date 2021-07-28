@@ -62,7 +62,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class MapContextMenu
-@classdesc this class implements the BaseContextMenu class for the map menu
+@classdesc this class implements the BaseContextMenu class for the map
 @implements {BaseContextMenu}
 @hideconstructor
 
@@ -76,54 +76,8 @@ class MapContextMenu extends BaseContextMenu {
 	constructor ( contextMenuEvent, parentDiv = null ) {
 		super ( contextMenuEvent, parentDiv );
 		this.#latLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
-	}
 
-	/* eslint-disable no-magic-numbers */
-
-	doAction ( selectedItemObjId ) {
-		switch ( selectedItemObjId ) {
-		case 0 :
-			theWayPointEditor.setStartPoint ( this.#latLng );
-			break;
-		case 1 :
-			theWayPointEditor.addWayPoint ( this.#latLng );
-			break;
-		case 2 :
-			theWayPointEditor.setEndPoint ( this.#latLng );
-			break;
-		case 3 :
-			theRouteEditor.addRoute ( );
-			break;
-		case 4 :
-			theRouteEditor.hideRoutes ( );
-			break;
-		case 5 :
-			theRouteEditor.showRoutes ( );
-			break;
-		case 6 :
-			theNoteEditor.newTravelNote ( this.#latLng );
-			break;
-		case 7 :
-			theNoteEditor.hideNotes ( );
-			break;
-		case 8 :
-			theNoteEditor.showNotes ( );
-			break;
-		case 9 :
-			new Zoomer ( ).zoomToTravel ( );
-			break;
-		case 10 :
-			newAboutDialog ( );
-			break;
-		default :
-			break;
-		}
-	}
-
-	/* eslint-enable no-magic-numbers */
-
-	get menuItems ( ) {
-		return [
+		this.menuItems = [
 			{
 				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
 				doAction :
@@ -176,6 +130,50 @@ class MapContextMenu extends BaseContextMenu {
 			}
 		];
 	}
+
+	/* eslint-disable no-magic-numbers */
+
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theWayPointEditor.setStartPoint ( this.#latLng );
+			break;
+		case 1 :
+			theWayPointEditor.addWayPoint ( this.#latLng );
+			break;
+		case 2 :
+			theWayPointEditor.setEndPoint ( this.#latLng );
+			break;
+		case 3 :
+			theRouteEditor.addRoute ( );
+			break;
+		case 4 :
+			theRouteEditor.hideRoutes ( );
+			break;
+		case 5 :
+			theRouteEditor.showRoutes ( );
+			break;
+		case 6 :
+			theNoteEditor.newTravelNote ( this.#latLng );
+			break;
+		case 7 :
+			theNoteEditor.hideNotes ( );
+			break;
+		case 8 :
+			theNoteEditor.showNotes ( );
+			break;
+		case 9 :
+			new Zoomer ( ).zoomToTravel ( );
+			break;
+		case 10 :
+			newAboutDialog ( );
+			break;
+		default :
+			break;
+		}
+	}
+
+	/* eslint-enable no-magic-numbers */
 }
 
 export default MapContextMenu;

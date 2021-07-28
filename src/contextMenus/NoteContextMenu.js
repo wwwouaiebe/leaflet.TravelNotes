@@ -54,117 +54,84 @@ import Zoomer from '../core/Zoomer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewNoteContextMenu
-@desc constructor of NoteContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-When null, the body of the html page is selected
-@return {NoteContextMenu} an instance of a NoteContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class NoteContextMenu
+@classdesc this class implements the BaseContextMenu class for the notes
+@implements {BaseContextMenu}
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
+class NoteContextMenu extends BaseContextMenu {
 
-	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
-	let myZoomer = new Zoomer ( );
+	#noteObjId = INVALID_OBJ_ID;
+	#route = null;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetMenuItems ( ) {
-
-		let route = theDataSearchEngine.getNoteAndRoute ( myNoteObjId ).route;
-
-		return [
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#noteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
+		this.#route = theDataSearchEngine.getNoteAndRoute ( this.#noteObjId ).route;
+		this.menuItems = [
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
-				action : theNoteEditor.editNote,
-				param : myNoteObjId
+				itemText : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
+				doAction : true
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
-				action : theNoteEditor.removeNote,
-				param : myNoteObjId
+				itemText : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
+				doAction : true
 			},
 			{
-				context : myZoomer,
-				name : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
-				action : myZoomer.zoomToNote,
-				param : myNoteObjId
+				itemText : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
+				doAction : true
 			},
 			{
-				context : theNoteEditor,
-				name :
-					route
+				itemText : theTranslator.getText (
+					this.#route
 						?
-						theTranslator.getText ( 'NoteContextMenu - Detach note from route' )
+						'NoteContextMenu - Detach note from route'
 						:
-						theTranslator.getText ( 'NoteContextMenu - Attach note to route' ),
-				action :
-					theTravelNotesData.travel.routes.length !== ZERO
-					&&
-					INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
-						?
-						( route ? theNoteEditor.detachNoteFromRoute : theNoteEditor.attachNoteToRoute )
-						:
-						null,
-				param : myNoteObjId
+						'NoteContextMenu - Attach note to route'
+				),
+				doAction : INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
 			}
 		];
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	/* eslint-disable no-magic-numbers */
 
-	@class NoteContextMenu
-	@classdesc a BaseContextMenu object with items completed for Notes
-	@see {@link newNoteContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theNoteEditor.editNote ( this.#noteObjId );
+			break;
+		case 1 :
+			theNoteEditor.removeNote ( this.#noteObjId );
+			break;
+		case 2 :
+			new Zoomer ( ).zoomToNote ( this.#noteObjId );
+			break;
+		case 3 :
+			if ( this.#route ) {
+				theNoteEditor.detachNoteFromRoute ( this.#noteObjId );
+			}
+			else {
+				theNoteEditor.attachNoteToRoute ( this.#noteObjId );
+			}
+			break;
+		default :
+			break;
+		}
+	}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
+	/* eslint-enable no-magic-numbers */
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newNoteContextMenu
-	@desc constructor of NoteContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-	When null, the body of the html page is selected
-	@return {NoteContextMenu} an instance of a NoteContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewNoteContextMenu as newNoteContextMenu
-};
+export default NoteContextMenu;
 
 /*
 --- End of NoteContextMenu.js file --------------------------------------------------------------------------------------------

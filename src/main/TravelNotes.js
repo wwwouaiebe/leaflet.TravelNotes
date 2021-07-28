@@ -307,7 +307,7 @@ function ourAddUnloadEventsListeners ( ) {
 
 function ourOnMapContextMenu ( contextMenuEvent ) {
 	if ( ! theTravelNotesData.travel.readOnly ) {
-		new MapContextMenu ( contextMenuEvent );
+		new MapContextMenu ( contextMenuEvent ) .show ( );
 	}
 }
 

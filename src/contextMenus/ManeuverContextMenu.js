@@ -48,88 +48,52 @@ import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import Zoomer from '../core/Zoomer.js';
 import theTranslator from '../UI/Translator.js';
 
-/*
-import theNoteEditor from '../core/NoteEditor.js';
-import theRouteEditor from '../core/RouteEditor.js';
-*/
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewManeuverContextMenu
-@desc constructor of ManeuverContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-When null, the body of the html page is selected
-@return {ManeuverContextMenu} an instance of a ManeuverContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class ManeuverContextMenu
+@classdesc this class implements the BaseContextMenu class for the maneuvers
+@implements {BaseContextMenu}
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewManeuverContextMenu ( contextMenuEvent, parentDiv ) {
+class ManeuverContextMenu extends BaseContextMenu {
 
-	let myManeuverObjId = contextMenuEvent.maneuverObjId;
-	let myZoomer = new Zoomer ( );
+	#maneuverObjId = INVALID_OBJ_ID;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetMenuItems ( ) {
-
-		return [
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#maneuverObjId = contextMenuEvent.maneuverObjId;
+		this.menuItems =
+		[
 			{
-				context : myZoomer,
-				name : theTranslator.getText ( 'ManeuverContextMenu - Zoom to this maneuver' ),
-				action : myZoomer.zoomToManeuver,
-				param : myManeuverObjId
+				itemText : theTranslator.getText ( 'ManeuverContextMenu - Zoom to this maneuver' ),
+				doAction : true
 			}
 		];
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	/* eslint-disable no-magic-numbers */
 
-	@class ManeuverContextMenu
-	@classdesc a BaseContextMenu object with items completed for maneuvers
-	@see {@link newManeuverContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			new Zoomer ( ).zoomToManeuver ( this.#maneuverObjId );
+			break;
+		default :
+			break;
+		}
+	}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	/* eslint-enable no-magic-numbers */
 
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newManeuverContextMenu
-	@desc constructor of ManeuverContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-	When null, the body of the html page is selected
-	@return {ManeuverContextMenu} an instance of a ManeuverContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewManeuverContextMenu as newManeuverContextMenu
-};
+export default ManeuverContextMenu;
 
 /*
 --- End of ManeuverContextMenu.js file ----------------------------------------------------------------------------------------

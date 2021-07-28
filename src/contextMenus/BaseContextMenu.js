@@ -322,6 +322,7 @@ class BaseContextMenu {
 	#haveParentDiv = null;
 	#onOk = null;
 	#onError = null;
+	#menuItems = null;
 
 	/**
 	Build the menu container and add event listeners
@@ -494,6 +495,9 @@ class BaseContextMenu {
 		BaseContextMenuEvents.parentDiv = parentDiv || document.body;
 		this.#haveParentDiv = null !== parentDiv;
 
+	}
+
+	show ( ) {
 		new Promise (
 			( onOk, onError ) => { this.#show ( onOk, onError ); }
 		)
@@ -519,8 +523,14 @@ class BaseContextMenu {
 	The menuItems to be used by the menu.  Must be implemented in the derived classes
 	*/
 
+	set menuItems ( MenuItems ) {
+		if ( ! this.#menuItems ) {
+			this.#menuItems = MenuItems;
+		}
+	}
+
 	get menuItems ( ) {
-		return [ ];
+		return this.#menuItems;
 	}
 
 }

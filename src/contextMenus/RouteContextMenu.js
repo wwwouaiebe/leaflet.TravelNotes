@@ -66,233 +66,171 @@ import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 
-import { ROUTE_EDITION_STATUS, ZERO } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewRouteContextMenu
-@desc constructor of RouteContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-When null, the body of the html page is selected
-@return {RouteContextMenu} an instance of a RouteContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class RouteContextMenu
+@classdesc this class implements the BaseContextMenu class for the routes
+@implements {BaseContextMenu}
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewRouteContextMenu ( contextMenuEvent, parentDiv ) {
+class RouteContextMenu extends BaseContextMenu {
 
-	let myRouteObjId = contextMenuEvent.target.objId;
-	let myRoute = theDataSearchEngine.getRoute ( myRouteObjId );
-	let myZoomer = new Zoomer ( );
+	#routeObjId = INVALID_OBJ_ID;
+	#route = null;
+	#contextMenuEvent = null;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetMenuItems ( ) {
-		let menuItems = [
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#routeObjId = contextMenuEvent.target.objId;
+		this.#route = theDataSearchEngine.getRoute ( this.#routeObjId );
+		this.#contextMenuEvent = contextMenuEvent;
+		this.menuItems =
+		[
 			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'RouteContextMenu - Edit this route' ),
-				action :
+				itemText : theTranslator.getText ( 'RouteContextMenu - Edit this route' ),
+				doAction :
 					(
-						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
-						|| ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus )
-					) ?
-						null
-						:
-						theRouteEditor.editRoute,
-				param : myRouteObjId
-			},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
-				action :
-					(
-						( myRouteObjId === theTravelNotesData.travel.editedRoute.objId )
+						( this.#routeObjId !== theTravelNotesData.travel.editedRoute.objId )
 						&&
-						( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus )
+						( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus )
 					)
-						?
-						null
-						:
-						theRouteEditor.removeRoute,
-				param : myRouteObjId
-			},
-			myRoute.hidden
-				?
-				{
-					context : theRouteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Show this route' ),
-					action : theRouteEditor.showRoute,
-					param : myRouteObjId
-				}
-				:
-				{
-					context : theRouteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Hide this route' ),
-					action :
-							( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
-								?
-								null :
-								theRouteEditor.hideRoute,
-					param : myRouteObjId
-				},
-			{
-				context : theRouteEditor,
-				name : theTranslator.getText ( 'RouteContextMenu - Properties' ),
-				action :
-					myRoute.hidden
-						?
-						null
-						:
-						theRouteEditor.routeProperties,
-				param : myRouteObjId
 			},
 			{
-				context : myZoomer,
-				name : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
-				action : myRoute.hidden ? null : myZoomer.zoomToRoute,
-				param : myRouteObjId
+				itemText : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
+				doAction :
+					(
+						( this.#routeObjId !== theTravelNotesData.travel.editedRoute.objId )
+						||
+						( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus )
+					)
 			},
 			{
-				context : theProfileWindowsManager,
-				name : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
-				action :
-					myRoute.itinerary.hasProfile
-						?
-						theProfileWindowsManager.showProfile
-						:
-						null,
-				param : myRouteObjId
+				itemText :
+					theTranslator.getText (
+						this.#route.hidden
+							?
+							'RouteContextMenu - Show this route'
+							:
+							'RouteContextMenu - Hide this route'
+					),
+				doAction :
+					this.#route.hidden
+					||
+					theTravelNotesData.travel.editedRoute.objId !== this.#routeObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Properties' ),
+				doAction : ! this.#route.hidden
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
+				doAction : ! this.#route.hidden
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
+				doAction : this.#route.itinerary.hasProfile
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Print route map' ),
+				doAction : theConfig.printRouteMap.isEnabled
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Save this route in a GPX file' ),
+				doAction : ( ZERO < this.#route.itinerary.itineraryPoints.length )
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Invert waypoints' ),
+				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
+				doAction : ! contextMenuEvent.fromUI
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
+				doAction : ! this.#route.hidden
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Save modifications on this route' ),
+				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Cancel modifications on this route' ),
+				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
 			}
 		];
-		if ( theConfig.printRouteMap.isEnabled ) {
-			menuItems.push (
-				{
-					context : theRouteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Print route map' ),
-					action : theRouteEditor.printRouteMap,
-					param : myRouteObjId
-				}
-			);
-		}
-		menuItems = menuItems.concat (
-			[
-				{
-					context : theRouteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Save this route in a GPX file' ),
-					action : ( ZERO < myRoute.itinerary.itineraryPoints.length )
-						?
-						theRouteEditor.saveGpx
-						:
-						null,
-					param : myRouteObjId
-				},
-				{
-					context : theWayPointEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Invert waypoints' ),
-					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
-						?
-						theWayPointEditor.reverseWayPoints
-						:
-						null
-				},
-				{
-					context : theNoteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
-					action :
-						contextMenuEvent.fromUI
-							?
-							null
-							:
-							theNoteEditor.newRouteNote,
-					param : {
-						routeObjId : myRouteObjId,
-						lat : contextMenuEvent.latlng.lat,
-						lng : contextMenuEvent.latlng.lng
-					}
-				},
-				{
-					context : theNoteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
-					action :
-						myRoute.hidden
-							?
-							null
-							:
-							theNoteEditor.addAllManeuverNotes,
-					param : myRouteObjId
-				},
-				{
-					context : theRouteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Save modifications on this route' ),
-					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
-						?
-						theRouteEditor.saveEdition
-						:
-						null
-				},
-				{
-					context : theRouteEditor,
-					name : theTranslator.getText ( 'RouteContextMenu - Cancel modifications on this route' ),
-					action : ( theTravelNotesData.travel.editedRoute.objId === myRouteObjId )
-						?
-						theRouteEditor.cancelEdition
-						:
-						null
-				}
-			]
-		);
-
-		return menuItems;
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	/* eslint-disable no-magic-numbers */
 
-	@class RouteContextMenu
-	@classdesc a BaseContextMenu object with items completed for routes
-	@see {@link newRouteContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theRouteEditor.editRoute ( this.#routeObjId );
+			break;
+		case 1 :
+			theRouteEditor.removeRoute ( this.#routeObjId );
+			break;
+		case 2 :
+			if ( this.#route.hidden ) {
+				theRouteEditor.showRoute ( this.#routeObjId );
+			}
+			else {
+				theRouteEditor.hideRoute ( this.#routeObjId );
+			}
+			break;
+		case 3 :
+			theRouteEditor.routeProperties ( this.#routeObjId );
+			break;
+		case 4 :
+			new Zoomer ( ).zoomToRoute ( this.#routeObjId );
+			break;
+		case 5 :
+			theProfileWindowsManager.showProfile ( this.#routeObjId );
+			break;
+		case 6 :
+			theRouteEditor.printRouteMap ( this.#routeObjId );
+			break;
+		case 7 :
+			theRouteEditor.saveGpx ( this.#routeObjId );
+			break;
+		case 8 :
+			theWayPointEditor.reverseWayPoints ( );
+			break;
+		case 9 :
+			theNoteEditor.newRouteNote (
+				{
+					routeObjId : this.#routeObjId,
+					lat : this.#contextMenuEvent.latlng.lat,
+					lng : this.#contextMenuEvent.latlng.lng
+				}
+			);
+			break;
+		case 10 :
+			theNoteEditor.addAllManeuverNotes ( this.#routeObjId );
+			break;
+		case 11 :
+			theRouteEditor.saveEdition ( );
+			break;
+		case 12 :
+			theRouteEditor.cancelEdition ( );
+			break;
+		default :
+			break;
+		}
+	}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	/* eslint-enable no-magic-numbers */
 
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newRouteContextMenu
-	@desc constructor of RouteContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-	When null, the body of the html page is selected
-	@return {RouteContextMenu} an instance of a RouteContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewRouteContextMenu as newRouteContextMenu
-};
+export default RouteContextMenu;
 
 /*
 --- End of RouteContextMenu.js file -------------------------------------------------------------------------------------------
