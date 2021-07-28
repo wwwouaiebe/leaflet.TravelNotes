@@ -55,145 +55,102 @@ import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
+class OsmSearchContextMenu extends BaseContextMenu {
 
-@function ourNewOsmSearchContextMenu
-@desc constructor of OsmSearchContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-When null, the body of the html page is selected
-@return {OsmSearchContextMenu} an instance of a OsmSearchContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+	#latLng = LAT_LNG.defaultValue;
+	#osmElement = null;
+	#geometry = null;
 
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewOsmSearchContextMenu ( contextMenuEvent, parentDiv ) {
-
-	let myZoomer = new Zoomer ( );
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetMenuItems ( ) {
-
-		let latLng = contextMenuEvent.originalEvent.latLng;
-
-		return [
+	constructor ( contextMenuEvent, parentDiv = null ) {
+		super ( contextMenuEvent, parentDiv );
+		this.#latLng = contextMenuEvent.originalEvent.latLng;
+		this.#osmElement = contextMenuEvent.originalEvent.osmElement;
+		this.#geometry = contextMenuEvent.originalEvent.geometry;
+		this.menuItems =
+		[
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
-				action :
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
+				doAction :
 					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
 					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
-						?
-						theWayPointEditor.setStartPoint
-						:
-						null,
-				param : latLng
 			},
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
-				action :
-					( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId )
-						?
-						null
-						:
-						theWayPointEditor.addWayPoint,
-				param : latLng
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
+				doAction : ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 			},
 			{
-				context : theWayPointEditor,
-				name : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
-				action :
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
+				doAction :
 					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
 					&&
 					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+			},
+			{
+				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Create a route note with this result' ),
+				doAction : true
+			},
+			{
+				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
+				doAction : true
+			},
+			{
+				itemText : theTranslator.getText (
+					theNoteEditor.osmSearchNoteDialog
 						?
-						theWayPointEditor.setEndPoint
+						'OsmSearchContextMenu - Hide note dialog'
 						:
-						null,
-				param : latLng
+						'OsmSearchContextMenu - Show note dialog'
+				),
+				doAction : true
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a route note with this result' ),
-				action : theNoteEditor.newSearchNote,
-				param : { osmElement : contextMenuEvent.originalEvent.osmElement, isTravelNote : false }
-			},
-			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
-				action : theNoteEditor.newSearchNote,
-				param : { osmElement : contextMenuEvent.originalEvent.osmElement, isTravelNote : true }
-			},
-			{
-				context : theNoteEditor,
-				name : theNoteEditor.osmSearchNoteDialog
-					?
-					theTranslator.getText ( 'OsmSearchContextMenu - Hide note dialog' )
-					:
-					theTranslator.getText ( 'OsmSearchContextMenu - Show note dialog' ),
-				action : theNoteEditor.changeOsmSearchNoteDialog
-			},
-			{
-				context : myZoomer,
-				name : theTranslator.getText ( 'OsmSearchContextMenu - Zoom to this result' ),
-				action : myZoomer.zoomToPoi,
-				param : {
-					latLng : contextMenuEvent.originalEvent.latLng,
-					geometry : contextMenuEvent.originalEvent.geometry
-				}
+				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Zoom to this result' ),
+				doAction : true
 			}
 		];
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	/* eslint-disable no-magic-numbers */
 
-	@class OsmSearchContextMenu
-	@classdesc a BaseContextMenu object with items completed for OsmSearch items
-	@see {@link newOsmSearchContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theWayPointEditor.setStartPoint ( this.#latLng );
+			break;
+		case 1 :
+			theWayPointEditor.addWayPoint ( this.#latLng );
+			break;
+		case 2 :
+			theWayPointEditor.setEndPoint ( this.#latLng );
+			break;
+		case 3 :
+			theNoteEditor.newSearchNote ( { osmElement : this.#osmElement, isTravelNote : false } );
+			break;
+		case 4 :
+			theNoteEditor.newSearchNote ( { osmElement : this.#osmElement, isTravelNote : true } );
+			break;
+		case 5 :
+			theNoteEditor.changeOsmSearchNoteDialog ( );
+			break;
+		case 6 :
+			new Zoomer ( ).zoomToPoi (
+				{
+					latLng : this.#latLng,
+					geometry : this.#geometry
+				}
+			);
+			break;
+		default :
+			break;
+		}
+	}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	/* eslint-enable no-magic-numbers */
 
-	return new BaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newOsmSearchContextMenu
-	@desc constructor of OsmSearchContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-	When null, the body of the html page is selected
-	@return {OsmSearchContextMenu} an instance of a OsmSearchContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewOsmSearchContextMenu as newOsmSearchContextMenu
-};
+export default OsmSearchContextMenu;
 
 /*
 --- End of OsmSearchContextMenu.js file ---------------------------------------------------------------------------------------

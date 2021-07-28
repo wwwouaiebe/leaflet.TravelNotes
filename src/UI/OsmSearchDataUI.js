@@ -48,7 +48,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
-import { newOsmSearchContextMenu } from '../contextMenus/OsmSearchContextMenu.js';
+import OsmSearchContextMenu from '../contextMenus/OsmSearchContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import ObjId from '../data/ObjId.js';
 
@@ -87,7 +87,7 @@ class SearchResultEventListeners {
 				osmElement : searchResultDiv.osmElement,
 				geometry : searchResultDiv.osmElement.geometry
 			};
-		newOsmSearchContextMenu ( contextMenuEvent, this.paneDataDiv ).show ( );
+		new OsmSearchContextMenu ( contextMenuEvent, this.paneDataDiv ).show ( );
 	}
 
 	/**
