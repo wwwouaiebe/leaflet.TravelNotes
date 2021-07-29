@@ -67,7 +67,9 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { newNoteDialog } from '../dialogs/NoteDialog.js';
+
+// import { newNoteDialog } from '../dialogs/NoteDialog.js';
+import NoteDialogV3 from '../dialogs/NoteDialogV3.js';
 import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
@@ -231,14 +233,12 @@ class NoteEditor {
 	*/
 
 	#noteDialog ( note, routeObjId, isNewNote ) {
-		newNoteDialog ( note, routeObjId, isNewNote )
+		new NoteDialogV3 ( note, routeObjId, isNewNote )
 			.show ( )
 			.then ( ( ) => { this.#addNote ( note, routeObjId, isNewNote ); } )
 			.catch (
 				err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
+					console.error ( err );
 				}
 			);
 	}
