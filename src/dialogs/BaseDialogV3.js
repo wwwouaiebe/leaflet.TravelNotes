@@ -1,6 +1,7 @@
-import { ZERO, TWO } from '../util/Constants.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
+
+import { ZERO, TWO } from '../util/Constants.js';
 
 const OUR_DRAG_MARGIN = 20;
 
@@ -325,6 +326,7 @@ class BaseDialogV3 {
 			},
 			BaseDialogEvents.containerDiv
 		);
+		this.content.forEach ( content => BaseDialogEvents.containerDiv.contentDiv.appendChild ( content ) );
 		BaseDialogEvents.containerDiv.errorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -342,6 +344,10 @@ class BaseDialogV3 {
 		BaseDialogEvents.reset ( );
 		BaseDialogEvents.baseDialog = this;
 
+	}
+
+	get content ( ) {
+		return [];
 	}
 
 	/**

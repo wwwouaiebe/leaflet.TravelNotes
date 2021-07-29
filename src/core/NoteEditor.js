@@ -238,6 +238,7 @@ class NoteEditor {
 			.then ( ( ) => { this.#addNote ( note, routeObjId, isNewNote ); } )
 			.catch (
 				err => {
+					console.log ( note );
 					console.error ( err );
 				}
 			);
