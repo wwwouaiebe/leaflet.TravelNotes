@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file newClass.js
+@file NoteDialogToolbarData.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,32 +36,67 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module newClass
+@module NoteDialogToolbarData
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+
+import { ZERO, ICON_DIMENSIONS } from '../util/Constants.js';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class newClass
+@class NoteDialogToolbarData
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class newClass {
-	
+class NoteDialogToolbarData {
+
+	#editionButtons = [];
+	#preDefinedIcons = new Map ( );
+
+	constructor ( ) {
+	}
+
+	get buttons ( ) { return this.#editionButtons; }
+
+	get icons ( ) {
+		return Array.from ( this.#preDefinedIcons ).sort (
+			( first, second ) => first [ ZERO ].localeCompare ( second [ ZERO ] )
+		);
+	}
+
+	loadJson ( jsonData ) {
+		if ( jsonData.editionButtons ) {
+			this.#editionButtons = this.#editionButtons.concat ( jsonData.editionButtons );
+		}
+		jsonData.preDefinedIconsList.forEach (
+			predefinedIcon => {
+				predefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( predefinedIcon.name ) || '?';
+				predefinedIcon.icon = theHTMLSanitizer.sanitizeToHtmlString ( predefinedIcon.icon ) || '?';
+				predefinedIcon.tooltip = theHTMLSanitizer.sanitizeToJsString ( predefinedIcon.tooltip ) || '?';
+				predefinedIcon.width = predefinedIcon.width || ICON_DIMENSIONS.width;
+				predefinedIcon.height = predefinedIcon.height || ICON_DIMENSIONS.height;
+				this.#preDefinedIcons.set ( predefinedIcon.name, predefinedIcon );
+			}
+		);
+	}
 }
 
-export default newClass;
+const theNoteDialogToolbarData = new NoteDialogToolbarData ( );
+
+export default theNoteDialogToolbarData;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of newClass.js file
+end of NoteDialogToolbarData.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

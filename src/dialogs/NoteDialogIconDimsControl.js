@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file newClass.js
+@file NoteDialogIconDimsControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,32 +36,91 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module newClass
+@module NoteDialogIconDimsControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UI/Translator.js';
+import { ZERO, ICON_DIMENSIONS } from '../util/Constants.js';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class newClass
+@class NoteDialogIconDimsControl
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class newClass {
-	
+class NoteDialogIconDimsControl {
+
+	#iconDimsDiv = null;
+	#iconWidthInput = null;
+	#iconHeightInput = null;
+
+	constructor ( note ) {
+		this.#iconDimsDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv'
+			}
+		);
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'NoteDialog - Icon width' )
+			},
+			this.#iconDimsDiv
+		);
+		this.#iconWidthInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-NoteDialog-NumberInput',
+				value : ZERO === note.iconWidth ? ICON_DIMENSIONS.width : note.iconWidth
+			},
+			this.#iconDimsDiv
+		);
+
+		this.#iconWidthInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : theTranslator.getText ( 'NoteDialog - Icon height' )
+			},
+			this.#iconDimsDiv
+		);
+		this.#iconHeightInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'number',
+				className : 'TravelNotes-NoteDialog-NumberInput',
+				value : ZERO === note.iconHeight ? ICON_DIMENSIONS.height : note.iconHeight
+			},
+			this.#iconDimsDiv
+		);
+
+		this.#iconHeightInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+	}
+
+	get content ( ) { return [ this.#iconDimsDiv ]; }
+
+	get value ( ) { return [ this.#iconWidthInput.value, this.#iconHeightInput.value ]; }
+
 }
 
-export default newClass;
+export default NoteDialogIconDimsControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of newClass.js file
+end of NoteDialogIconDimsControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

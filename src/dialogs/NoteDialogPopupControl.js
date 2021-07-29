@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file newClass.js
+@file NoteDialogPopupControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,32 +36,66 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module newClass
+@module NoteDialogPopupControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UI/Translator.js';
+import theConfig from '../data/Config.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class newClass
+@class NoteDialogPopupControl
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class newClass {
-	
+class NoteDialogPopupControl {
+
+	#popupDiv = null;
+	#popupTextArea = null;
+
+	constructor ( popupContent ) {
+		this.#popupDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				textContent : theTranslator.getText ( 'NoteDialog - Text' )
+			}
+		);
+		this.#popupTextArea = theHTMLElementsFactory.create (
+			'textarea',
+			{
+				className : 'TravelNotes-NoteDialog-TextArea',
+				value : popupContent,
+				rows : theConfig.noteDialog.areaHeight.popupContent
+			},
+			this.#popupDiv
+		);
+
+		this.#popupTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
+		this.#popupTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+	}
+
+	get content ( ) { return [ this.#popupDiv ]; }
+
+	get value ( ) { return this.#popupTextArea.value; }
+
 }
 
-export default newClass;
+export default NoteDialogPopupControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of newClass.js file
+end of NoteDialogPopupControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

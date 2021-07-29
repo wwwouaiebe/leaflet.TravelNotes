@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file newClass.js
+@file NoteDialogTooltipControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,32 +36,65 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module newClass
+@module NoteDialogTooltipControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UI/Translator.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class newClass
+@class NoteDialogTooltipControl
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class newClass {
-	
+class NoteDialogTooltipControl {
+
+	#tooltipDiv = null;
+	#tooltipInput = null
+
+	constructor ( tooltipContent ) {
+		this.#tooltipDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				textContent : theTranslator.getText ( 'NoteDialog - Tooltip content' )
+			}
+		);
+		this.#tooltipInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'text',
+				className : 'TravelNotes-NoteDialog-InputText',
+				value : tooltipContent
+			},
+			this.#tooltipDiv
+		);
+
+		this.#tooltipInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
+		this.#tooltipInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+	}
+
+	get content ( ) { return [ this.#tooltipDiv ]; }
+
+	get value ( ) { return this.#tooltipInput.value; }
+
 }
 
-export default newClass;
+export default NoteDialogTooltipControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of newClass.js file
+end of NoteDialogTooltipControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

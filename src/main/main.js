@@ -56,9 +56,8 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
-import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 const OUR_DEMO_PRINT_MAX_TILES = 120;
@@ -245,11 +244,7 @@ function ourMain ( ) {
 			noteDialogPromiseResult.value.ok
 		) {
 			let noteDialogData = await noteDialogPromiseResult.value.json ( );
-			theNoteDialogToolbar.selectOptions = noteDialogData.preDefinedIconsList;
-			noteDialogData.preDefinedIconsList.forEach (
-				preDefinedIcon => { preDefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( preDefinedIcon.name ); }
-			);
-			theNoteDialogToolbar.buttons = noteDialogData.editionButtons;
+			theNoteDialogToolbarData.loadJson ( noteDialogData );
 			return '';
 		}
 		if (
@@ -260,11 +255,7 @@ function ourMain ( ) {
 			defaultNoteDialogPromiseResult.value.ok
 		) {
 			let defaultNoteDialogData = await defaultNoteDialogPromiseResult.value.json ( );
-			theNoteDialogToolbar.selectOptions = defaultNoteDialogData.preDefinedIconsList;
-			defaultNoteDialogData.preDefinedIconsList.forEach (
-				preDefinedIcon => { preDefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( preDefinedIcon.name ); }
-			);
-			theNoteDialogToolbar.buttons = defaultNoteDialogData.editionButtons;
+			theNoteDialogToolbarData.loadJson ( defaultNoteDialogData );
 			return (
 				'Not possible to load the TravelNotesNoteDialog' +
 				myLanguage.toUpperCase ( ) +

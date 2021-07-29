@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file newClass.js
+@file NoteDialogIconControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,32 +36,69 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module newClass
+@module NoteDialogIconControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UI/Translator.js';
+import theConfig from '../data/Config.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+
+const OUR_DEFAULT_ICON = '?????';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class newClass
+@class NoteDialogIconControl
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class newClass {
-	
+class NoteDialogIconControl {
+
+	#iconDiv = null;
+	#iconTextArea = null;
+
+	constructor ( iconContent ) {
+		this.#iconDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				textContent : theTranslator.getText ( 'NoteDialog - Icon content' )
+			}
+		);
+		this.#iconTextArea = theHTMLElementsFactory.create (
+			'textarea',
+			{
+				className : 'TravelNotes-NoteDialog-TextArea',
+				value : iconContent,
+				placeholder : OUR_DEFAULT_ICON,
+				rows : theConfig.noteDialog.areaHeight.icon
+			},
+			this.#iconDiv
+		);
+
+		this.#iconTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
+		this.#iconTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+	}
+
+	get content ( ) { return [ this.#iconDiv ]; }
+
+	get value ( ) { return this.#iconTextArea.value; }
+
 }
 
-export default newClass;
+export default NoteDialogIconControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of newClass.js file
+end of NoteDialogIconControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
