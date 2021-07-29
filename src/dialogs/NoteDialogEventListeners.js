@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogPhoneContent.js
+@file NoteDialogEventListeners.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,84 +36,88 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogPhoneContent
+@module NoteDialogEventListeners
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogPhoneContent
+@class NoteDialogEventListeners
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogPhoneContent {
+class NoteDialogEventListeners {
 
-	#phoneHeaderDiv = null;
-	#phoneInputDiv = null;
-	#phoneInput = null;
+	static focusControl = null;
 
-	constructor ( phone ) {
+	static noteDialog = null;
 
-		this.#phoneHeaderDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
-			}
-		);
+	static onFocusControl ( focusEvent ) {
+		NoteDialogEventListeners.focusControl = focusEvent.target;
+	}
 
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : '\u00a0' + theTranslator.getText ( 'NoteDialog - Phone' )
-			},
-			this.#phoneHeaderDiv
-		);
+	static onClearFocusControl ( ) {
+		NoteDialogEventListeners.focusControl = null;
+	}
 
-		this.#phoneInputDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
-			}
-		);
+	static onBlurUrlInput ( blurEvent ) {
+		if ( '' === blurEvent.target.value ) {
+			return;
+		}
 
-		this.#phoneInput = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				value : phone
-			},
-			this.#phoneInputDiv
-		);
+		let verifyResult = theHTMLSanitizer.sanitizeToUrl ( blurEvent.target.value );
+		if ( '' === verifyResult.errorsString ) {
+			NoteDialogEventListeners.noteDialog.hideError ( );
+		}
+		else {
+			NoteDialogEventListeners.noteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
+		}
+	}
+
+	static onInputControl ( ) {
 
 		/*
-		this.#phoneInput.addEventListener ( 'focus', myOnFocusControl, false );
-		this.#phoneInput.addEventListener ( 'input', myOnInputControl, false );
+		if ( '' === myIconHtmlContent.value ) {
+			myPreviewNote.iconContent = OUR_DEFAULT_ICON;
+		}
+		else {
+			myPreviewNote.iconContent = myIconHtmlContent.value;
+		}
+		myPreviewNote.popupContent = myPopupContent.value;
+		myPreviewNote.tooltipContent = myTooltipContent.value;
+		myPreviewNote.address = myAddressInput.value;
+		myPreviewNote.url = myLinkInput.value;
+		myPreviewNote.phone = myPhoneInput.value;
+		myPreviewNote.iconWidth = myWidthInput.value;
+		myPreviewNote.iconHeight = myHeightInput.value;
+		myPreviewDiv.textContent = '';
+		myPreviewDiv.appendChild (
+			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
+				'TravelNotes-NoteDialog-',
+				{ note : myPreviewNote, route : null }
+			)
+		);
 		*/
 
 	}
 
-	get content ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
-
-	get value ( ) { return this.#phoneInput.value; }
-
 }
 
-export default NoteDialogPhoneContent;
+export default NoteDialogEventListeners;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogPhoneContent.js file
+end of NoteDialogEventListeners.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

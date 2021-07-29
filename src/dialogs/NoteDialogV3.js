@@ -1,30 +1,37 @@
 import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
-import NoteDialogPhoneContent from '../dialogs/NoteDialogPhoneContent.js';
-import NoteDialogLinkContent from '../dialogs/NoteDialogLinkContent.js';
+import NoteDialogAddressControl from '../dialogs/NoteDialogAddressControl.js';
+import NoteDialogLinkControl from '../dialogs/NoteDialogLinkControl.js';
+import NoteDialogPhoneControl from '../dialogs/NoteDialogPhoneControl.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 class NoteDialogV3 extends BaseDialogV3 {
 
 	#note = null
-	#linkContent = null;
-	#phoneContent = null;
+	#addressControl = null;
+	#linkControl = null;
+	#phoneControl = null;
 
 	constructor ( note ) {
 		super ( );
 		this.#note = note;
-		this.#linkContent = new NoteDialogLinkContent ( note );
-		this.#phoneContent = new NoteDialogPhoneContent ( note.phone );
+		this.#addressControl = new NoteDialogAddressControl ( note );
+		this.#linkControl = new NoteDialogLinkControl ( note );
+		this.#phoneControl = new NoteDialogPhoneControl ( note.phone );
+		NoteDialogEventListeners.noteDialog = this;
 	}
 
 	get content ( ) {
 		return [].concat (
-			this.#linkContent.content,
-			this.#phoneContent.content
+			this.#addressControl.content,
+			this.#linkControl.content,
+			this.#phoneControl.content
 		);
 	}
 
 	onOk ( ) {
-		this.#note.url = this.#linkContent.value;
-		this.#note.phone = this.#phoneContent.value;
+		this.#note.address = this.#addressControl.value;
+		this.#note.url = this.#linkControl.value;
+		this.#note.phone = this.#phoneControl.value;
 
 		super.onOk ( );
 	}

@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogLinkContent.js
+@file NoteDialogLinkControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,7 +36,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogLinkContent
+@module NoteDialogLinkControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -45,20 +45,21 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 import { LAT_LNG } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogLinkContent
+@class NoteDialogLinkControl
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogLinkContent {
+class NoteDialogLinkControl {
 
 	#linkHeaderDiv = null;
 	#linkInputDiv = null;
@@ -125,15 +126,9 @@ class NoteDialogLinkContent {
 			this.#linkInputDiv
 		);
 
-		/*
-		myLinkInput.addEventListener (
-			'focus',
-			( ) => { myFocusControl = null; },
-			false
-		);
-		myLinkInput.addEventListener ( 'blur', myOnBlurUrlInput, false );
-		myLinkInput.addEventListener ( 'input', myOnInputControl, false );
-		*/
+		this.#linkInput.addEventListener ( 'focus', NoteDialogEventListeners.onClearFocusControl, false );
+		this.#linkInput.addEventListener ( 'blur', NoteDialogEventListeners.onBlurUrlInput, false );
+		this.#linkInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
 
 	}
 
@@ -143,12 +138,12 @@ class NoteDialogLinkContent {
 
 }
 
-export default NoteDialogLinkContent;
+export default NoteDialogLinkControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogLinkContent.js file
+end of NoteDialogLinkControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

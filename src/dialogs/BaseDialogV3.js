@@ -357,6 +357,24 @@ class BaseDialogV3 {
 		return new Promise ( ( onOk, onError ) => this.#show ( onOk, onError ) );
 	}
 
+	hideOkButton ( ) {
+		BaseDialogEvents.containerDiv.footerDiv.okButton.classList.add ( 'TravelNotes-Hidden' );
+	}
+
+	showOkButton ( ) {
+		BaseDialogEvents.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
+	}
+
+	showError ( errorText ) {
+		BaseDialogEvents.containerDiv.errorDiv.textContent = errorText;
+		BaseDialogEvents.containerDiv.errorDiv.classList.remove ( 'TravelNotes-Hidden' );
+	}
+
+	hideError ( ) {
+		BaseDialogEvents.containerDiv.errorDiv.textContent = '';
+		BaseDialogEvents.containerDiv.errorDiv.classList.add ( 'TravelNotes-Hidden' );
+	}
+
 }
 
 export default BaseDialogV3;
