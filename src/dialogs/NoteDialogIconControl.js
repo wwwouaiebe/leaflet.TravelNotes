@@ -83,7 +83,8 @@ class NoteDialogIconControl {
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				placeholder : OUR_DEFAULT_ICON,
-				rows : theConfig.noteDialog.areaHeight.icon
+				rows : theConfig.noteDialog.areaHeight.icon,
+				dataName : 'iconContent'
 			},
 			this.#iconDiv
 		);

@@ -44,6 +44,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -95,14 +96,13 @@ class NoteDialogPhoneControl {
 			'input',
 			{
 				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText'
+				className : 'TravelNotes-NoteDialog-InputText',
+				dataName : 'phone'
 			},
 			this.#phoneInputDiv
 		);
 
-		/*
 		this.#phoneInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		*/
 
 		this.#phoneInput.addEventListener (
 			'input',

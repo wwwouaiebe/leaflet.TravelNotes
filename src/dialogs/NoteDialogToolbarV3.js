@@ -46,6 +46,7 @@ import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 import { NOT_FOUND, ZERO } from '../util/Constants.js';
 
@@ -131,11 +132,7 @@ class NoteDialogToolbarV3 {
 					this.#toolbarDiv
 				);
 				theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
-
-				/*
-				newButton.addEventListener ( 'click', ourDialogFunctions.onButtonClickEventListener, false );
-				*/
-
+				newButton.addEventListener ( 'click', NoteDialogEventListeners.onClickEditionButton, false );
 			}
 		);
 	}

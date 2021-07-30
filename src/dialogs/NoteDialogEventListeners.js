@@ -45,6 +45,8 @@ Tests ...
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
 
+import { ZERO } from '../util/Constants.js';
+
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -92,31 +94,43 @@ class NoteDialogEventListeners {
 		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
-	static onInputControl ( ) {
+	static onClickEditionButton ( clickEvent ) {
+		if ( ! NoteDialogEventListeners.focusControl ) {
+			return;
+		}
+		let button = clickEvent.target;
+		while ( ! button.htmlBefore ) {
+			button = button.parentNode;
+		}
+		let selectionStart = NoteDialogEventListeners.focusControl.selectionStart;
+		let selectionEnd = NoteDialogEventListeners.focusControl.selectionEnd;
 
-		/*
-		if ( '' === myIconHtmlContent.value ) {
-			myPreviewNote.iconContent = OUR_DEFAULT_ICON;
+		NoteDialogEventListeners.focusControl.value =
+			NoteDialogEventListeners.focusControl.value.slice ( ZERO, selectionStart ) +
+			button.htmlBefore +
+			( 
+				ZERO === button.htmlAfter.length 
+				? 
+				'' 
+				: 
+				NoteDialogEventListeners.focusControl.value.slice ( selectionStart, selectionEnd ) 
+			) +
+			button.htmlAfter +
+			NoteDialogEventListeners.focusControl.value.slice ( selectionEnd );
+
+		if ( selectionStart === selectionEnd || ZERO === button.htmlAfter.length ) {
+			selectionStart += button.htmlBefore.length;
+			selectionEnd = selectionStart;
 		}
 		else {
-			myPreviewNote.iconContent = myIconHtmlContent.value;
+			selectionEnd += button.htmlBefore.length + button.htmlAfter.length;
 		}
-		myPreviewNote.popupContent = myPopupContent.value;
-		myPreviewNote.tooltipContent = myTooltipContent.value;
-		myPreviewNote.address = myAddressInput.value;
-		myPreviewNote.url = myLinkInput.value;
-		myPreviewNote.phone = myPhoneInput.value;
-		myPreviewNote.iconWidth = myWidthInput.value;
-		myPreviewNote.iconHeight = myHeightInput.value;
-		myPreviewDiv.textContent = '';
-		myPreviewDiv.appendChild (
-			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
-				'TravelNotes-NoteDialog-',
-				{ note : myPreviewNote, route : null }
-			)
-		);
-		*/
+		NoteDialogEventListeners.focusControl.setSelectionRange ( selectionStart, selectionEnd );
+		NoteDialogEventListeners.focusControl.focus ( );
+		NoteDialogEventListeners.previewNote [ NoteDialogEventListeners.focusControl.dataName ] =
+			NoteDialogEventListeners.focusControl.value;
 
+		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
 }

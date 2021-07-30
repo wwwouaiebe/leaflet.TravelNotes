@@ -79,7 +79,8 @@ class NoteDialogTooltipControl {
 			'input',
 			{
 				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText'
+				className : 'TravelNotes-NoteDialog-InputText',
+				dataName : 'tooltipContent'
 			},
 			this.#tooltipDiv
 		);

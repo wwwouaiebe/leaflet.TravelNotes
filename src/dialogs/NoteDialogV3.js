@@ -60,7 +60,6 @@ class NoteDialogV3 extends BaseDialogV3 {
 	}
 
 	get content ( ) {
-
 		return [].concat (
 			new NoteDialogToolbarV3 ( ).content,
 			this.#iconDimsControl.content,
