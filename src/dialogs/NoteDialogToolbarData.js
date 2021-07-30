@@ -44,7 +44,7 @@ Tests ...
 
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
-import { ZERO, ICON_DIMENSIONS } from '../util/Constants.js';
+import { ZERO, ONE, ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -59,7 +59,8 @@ import { ZERO, ICON_DIMENSIONS } from '../util/Constants.js';
 class NoteDialogToolbarData {
 
 	#editionButtons = [];
-	#preDefinedIcons = new Map ( );
+	#preDefinedIconsMap = new Map ( );
+	#preDefinedIcons = [];
 
 	constructor ( ) {
 	}
@@ -67,9 +68,11 @@ class NoteDialogToolbarData {
 	get buttons ( ) { return this.#editionButtons; }
 
 	get icons ( ) {
-		return Array.from ( this.#preDefinedIcons ).sort (
-			( first, second ) => first [ ZERO ].localeCompare ( second [ ZERO ] )
-		);
+		return this.#preDefinedIcons;
+	}
+
+	getIconData ( index ) {
+		return this.#preDefinedIcons [ index ] [ ONE ];
 	}
 
 	loadJson ( jsonData ) {
@@ -79,12 +82,15 @@ class NoteDialogToolbarData {
 		jsonData.preDefinedIconsList.forEach (
 			predefinedIcon => {
 				predefinedIcon.name = theHTMLSanitizer.sanitizeToJsString ( predefinedIcon.name ) || '?';
-				predefinedIcon.icon = theHTMLSanitizer.sanitizeToHtmlString ( predefinedIcon.icon ) || '?';
+				predefinedIcon.icon = theHTMLSanitizer.sanitizeToHtmlString ( predefinedIcon.icon ).htmlString || '?';
 				predefinedIcon.tooltip = theHTMLSanitizer.sanitizeToJsString ( predefinedIcon.tooltip ) || '?';
 				predefinedIcon.width = predefinedIcon.width || ICON_DIMENSIONS.width;
 				predefinedIcon.height = predefinedIcon.height || ICON_DIMENSIONS.height;
-				this.#preDefinedIcons.set ( predefinedIcon.name, predefinedIcon );
+				this.#preDefinedIconsMap.set ( predefinedIcon.name, predefinedIcon );
 			}
+		);
+		this.#preDefinedIcons = Array.from ( this.#preDefinedIconsMap ).sort (
+			( first, second ) => first [ ZERO ].localeCompare ( second [ ZERO ] )
 		);
 	}
 }

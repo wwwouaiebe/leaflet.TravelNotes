@@ -44,6 +44,8 @@ Tests ...
 
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
+import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 import { ZERO } from '../util/Constants.js';
 
@@ -136,6 +138,81 @@ class NoteDialogEventListeners {
 		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
+	static onToogleContentsButtonClick ( clickEvent ) {
+		clickEvent.target.textContent = '▼' === clickEvent.target.textContent ? '▶' : '▼';
+		NoteDialogEventListeners.noteDialog.toogleContents ( );
+	}
+
+	static #onOpenFileInputChange ( changeEvent ) {
+		changeEvent.stopPropagation ( );
+		let fileReader = new FileReader ( );
+		fileReader.onload = ( ) => {
+			let fileContent = {};
+			try {
+				fileContent = JSON.parse ( fileReader.result );
+				theNoteDialogToolbarData.loadJson ( fileContent );
+			}
+			catch ( err ) {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+		};
+		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
+	}
+
+	static onOpenFileButtonCkick ( ) {
+		let openFileInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'file',
+				accept : '.json'
+			}
+		);
+		openFileInput.addEventListener ( 'change', NoteDialogEventListeners.#onOpenFileInputChange, false );
+		openFileInput.click ( );
+	}
+
+	static onIconSelectChange ( changeEvent ) {
+		let preDefinedIcon = theNoteDialogToolbarData.getIconData ( changeEvent.target.selectedIndex );
+
+		/*
+		if ( 'SvgIcon' === preDefinedIcon.icon ) {
+			if ( INVALID_OBJ_ID === routeObjId ) {
+				myNoteDialog.showError (
+					theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
+				);
+			}
+
+			else {
+				myNoteDialog.showWait ( );
+				let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdress ( note.latLng, routeObjId );
+				if ( svgIconData.statusOk ) {
+					myOnSvgIconSuccess ( svgIconData );
+				}
+				else {
+					myOnSvgIconError ( );
+				}
+			}
+		}
+		else {
+			*/
+
+		let iconData = {
+			iconContent : preDefinedIcon.icon,
+			iconHeight : preDefinedIcon.height,
+			iconWidth : preDefinedIcon.width,
+			tooltipContent : preDefinedIcon.tooltip
+		};
+		NoteDialogEventListeners.noteDialog.setControlsValues ( iconData );
+		for ( const property in iconData ) {
+			NoteDialogEventListeners.previewNote [ property ] = iconData [ property ];
+		}
+		NoteDialogEventListeners.noteDialog.updatePreview ( );
+
+		// }
+
+	}
 }
 
 export default NoteDialogEventListeners;

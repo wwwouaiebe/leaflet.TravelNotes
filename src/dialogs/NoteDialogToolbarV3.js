@@ -63,10 +63,9 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 class NoteDialogToolbarV3 {
 
 	#toolbarDiv = null;
-	#iconSelect = null;
 
 	#addIconsSelector ( ) {
-		this.#iconSelect = theHTMLElementsFactory.create (
+		let iconSelect = theHTMLElementsFactory.create (
 			'select',
 			{
 				className : 'TravelNotes-NoteDialog-Select',
@@ -75,21 +74,19 @@ class NoteDialogToolbarV3 {
 			this.#toolbarDiv
 		);
 
-		/*
-		ourIconsSelect.addEventListener ( 'change', ourDialogFunctions.onSelectEventListener, false );
-		*/
+		iconSelect.addEventListener ( 'change', NoteDialogEventListeners.onIconSelectChange, false );
 
 		theNoteDialogToolbarData.icons.forEach (
 			selectOption => {
-				this.#iconSelect.add ( theHTMLElementsFactory.create ( 'option', { text : selectOption [ ZERO ] } ) );
+				iconSelect.add ( theHTMLElementsFactory.create ( 'option', { text : selectOption [ ZERO ] } ) );
 			}
 		);
-		this.#iconSelect.selectedIndex = NOT_FOUND;
+		iconSelect.selectedIndex = NOT_FOUND;
 	}
 
 	#addToolbarButtons ( ) {
 
-		theHTMLElementsFactory.create (
+		let toogleContentsButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -98,10 +95,7 @@ class NoteDialogToolbarV3 {
 			},
 			this.#toolbarDiv
 		);
-
-		/*
-		toggleContentsButton.addEventListener ( 'click', ourToggleContentsButtonClick, false );
-		*/
+		toogleContentsButton.addEventListener ( 'click', NoteDialogEventListeners.onToogleContentsButtonClick, false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -111,12 +105,7 @@ class NoteDialogToolbarV3 {
 				textContent : '📂'
 			},
 			this.#toolbarDiv
-		);
-
-		/*
-		openFileButton.addEventListener ( 'click', ourOnOpenFileButtonClick, false );
-		*/
-
+		).addEventListener ( 'click', NoteDialogEventListeners.onOpenFileButtonCkick, false );
 	}
 
 	#addEditionButtons ( ) {

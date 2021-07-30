@@ -9,8 +9,10 @@ import NoteDialogLinkControl from '../dialogs/NoteDialogLinkControl.js';
 import NoteDialogPhoneControl from '../dialogs/NoteDialogPhoneControl.js';
 import NoteDialogPreviewControl from '../dialogs/NoteDialogPreviewControl.js';
 import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
-
 import Note from '../data/Note.js';
+import theConfig from '../data/Config.js';
+
+import { ZERO, ONE } from '../util/Constants.js';
 
 class NoteDialogV3 extends BaseDialogV3 {
 
@@ -56,6 +58,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 		if ( this.#startGeoCoder ) {
 			this.#addressControl.startGeoCoder ( );
 		}
+		this.toogleContents ( );
 	}
 
 	get content ( ) {
@@ -97,6 +100,33 @@ class NoteDialogV3 extends BaseDialogV3 {
 	onOk ( ) {
 		this.getControlsValues ( this.#note );
 		super.onOk ( );
+	}
+
+	toogleContents ( ) {
+		if ( theConfig.noteDialog.mask.iconsDimension ) {
+			this.#iconDimsControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
+		if ( theConfig.noteDialog.mask.iconTextArea ) {
+			this.#iconControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
+		if ( theConfig.noteDialog.mask.popupContent ) {
+			this.#popupControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
+		if ( theConfig.noteDialog.mask.tooltip ) {
+			this.#tooltipControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
+		if ( theConfig.noteDialog.mask.address ) {
+			this.#addressControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#addressControl.content [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
+		if ( theConfig.noteDialog.mask.link ) {
+			this.#linkControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#linkControl.content [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
+		if ( theConfig.noteDialog.mask.phone ) {
+			this.#phoneControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#phoneControl.content [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
+		}
 	}
 
 }
