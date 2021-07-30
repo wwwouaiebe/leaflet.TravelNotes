@@ -338,6 +338,7 @@ class BaseDialogV3 {
 
 		document.body.appendChild ( BaseDialogEvents.backgroundDiv );
 		this.#centerDialog ( );
+		this.onShow ( );
 	}
 
 	constructor ( ) {
@@ -346,9 +347,11 @@ class BaseDialogV3 {
 
 	}
 
-	get content ( ) {
-		return [];
-	}
+	onShow ( ) {}
+
+	get content ( ) { return []; }
+
+	get container ( ) { return BaseDialogEvents.containerDiv; }
 
 	/**
 	*/

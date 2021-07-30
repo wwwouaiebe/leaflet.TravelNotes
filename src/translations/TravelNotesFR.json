@@ -120,7 +120,7 @@
 		"msgstr" : "Impossible de sélectionner {provider}"
 	},
 	{
-		"msgid" : "NoteNoteHTMLViewsFactory - Address",
+		"msgid" : "NoteHTMLViewsFactory - Address",
 		"msgstr" : "Adresse"
 	},
 	{
@@ -156,7 +156,7 @@
 		"msgstr" : "Cet itinéraire à été calculé par {provider} et optimisé pour {transitMode}"
 	},
 	{
-		"msgid" : "NoteNoteHTMLViewsFactory - Link",
+		"msgid" : "NoteHTMLViewsFactory - Link",
 		"msgstr" : "Lien\u00a0:\u00a0"
 	},
 	{
@@ -172,7 +172,7 @@
 		"msgstr" : "les contributeurs de OpenStreetMap"
 	},
 	{
-		"msgid" : "NoteNoteNoteHTMLViewsFactory - Phone",
+		"msgid" : "NoteHTMLViewsFactory - Phone",
 		"msgstr" : "☎️"
 	},
 	{

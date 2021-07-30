@@ -25,7 +25,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogPhoneControl.js
+@file NoteDialogPreviewControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -36,95 +36,67 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogPhoneControl
+@module NoteDialogPreviewControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../UI/Translator.js';
+import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogPhoneControl
+@class NoteDialogPreviewControl
 @classdesc coming soon...
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogPhoneControl {
+class NoteDialogPreviewControl {
 
-	#phoneHeaderDiv = null;
-	#phoneInputDiv = null;
-	#phoneInput = null;
-
-	#onInputControl ( ) {
-		let dispatchedEvent = new Event ( 'inputupdated' );
-		dispatchedEvent.data = { phone : this.#phoneInput.value };
-		this.#phoneHeaderDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
+	#previewDiv = null;
 
 	constructor ( ) {
 
-		this.#phoneHeaderDiv = theHTMLElementsFactory.create (
+		this.#previewDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
+				className : 'TravelNotes-NoteDialog-PreviewDiv'
 			}
 		);
 
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : '\u00a0' + theTranslator.getText ( 'NoteDialog - Phone' )
-			},
-			this.#phoneHeaderDiv
-		);
-
-		this.#phoneInputDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
-			}
-		);
-
-		this.#phoneInput = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText'
-			},
-			this.#phoneInputDiv
-		);
-
-		/*
-		this.#phoneInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		*/
-
-		this.#phoneInput.addEventListener (
-			'input',
-			( ) => { this.#onInputControl ( ); },
-			false
+		this.#previewDiv.appendChild (
+			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
+				'TravelNotes-NoteDialog-',
+				{ note : NoteDialogEventListeners.previewNote, route : null }
+			)
 		);
 	}
 
-	get content ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
+	update ( ) {
+		this.#previewDiv.textContent = '';
+		this.#previewDiv.appendChild (
+			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
+				'TravelNotes-NoteDialog-',
+				{ note : NoteDialogEventListeners.previewNote, route : null }
+			)
+		);
+	}
 
-	get phone ( ) { return this.#phoneInput.value; }
-
-	set phone ( Value ) { this.#phoneInput.value = Value; }
+	get content ( ) { return [ this.#previewDiv ]; }
 
 }
 
-export default NoteDialogPhoneControl;
+export default NoteDialogPreviewControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogPhoneControl.js file
+end of NoteDialogPreviewControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

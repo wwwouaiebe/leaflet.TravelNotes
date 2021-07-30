@@ -61,6 +61,12 @@ class NoteDialogTooltipControl {
 	#tooltipDiv = null;
 	#tooltipInput = null
 
+	#onInputControl ( ) {
+		let dispatchedEvent = new Event ( 'inputupdated' );
+		dispatchedEvent.data = { tooltipContent : this.#tooltipInput.value };
+		this.#tooltipDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
+
 	constructor ( ) {
 		this.#tooltipDiv = theHTMLElementsFactory.create (
 			'div',
@@ -79,7 +85,11 @@ class NoteDialogTooltipControl {
 		);
 
 		this.#tooltipInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#tooltipInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+		this.#tooltipInput.addEventListener (
+			'input',
+			( ) => { this.#onInputControl ( ); },
+			false
+		);
 	}
 
 	get content ( ) { return [ this.#tooltipDiv ]; }

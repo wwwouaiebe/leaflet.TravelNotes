@@ -7,11 +7,17 @@ import NoteDialogPopupControl from '../dialogs/NoteDialogPopupControl.js';
 import NoteDialogAddressControl from '../dialogs/NoteDialogAddressControl.js';
 import NoteDialogLinkControl from '../dialogs/NoteDialogLinkControl.js';
 import NoteDialogPhoneControl from '../dialogs/NoteDialogPhoneControl.js';
+import NoteDialogPreviewControl from '../dialogs/NoteDialogPreviewControl.js';
 import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+
+import Note from '../data/Note.js';
 
 class NoteDialogV3 extends BaseDialogV3 {
 
-	#note = null
+	#note = null;
+	#startGeoCoder = false;
+	#previewNote = null;
+
 	#iconDimsControl = null;
 	#iconControl = null;
 	#tooltipControl = null;
@@ -19,22 +25,42 @@ class NoteDialogV3 extends BaseDialogV3 {
 	#addressControl = null;
 	#linkControl = null;
 	#phoneControl = null;
+	#previewControl = null;
 
-	constructor ( note ) {
+	constructor ( note, routeObjId, startGeoCoder ) {
 		super ( );
 		this.#note = note;
+		this.#startGeoCoder = startGeoCoder;
+		NoteDialogEventListeners.previewNote = new Note ( );
+		NoteDialogEventListeners.previewNote.jsonObject = note.jsonObject;
+
 		this.#iconDimsControl = new NoteDialogIconDimsControl ( );
 		this.#iconControl = new NoteDialogIconControl ( );
 		this.#tooltipControl = new NoteDialogTooltipControl ( );
 		this.#popupControl = new NoteDialogPopupControl ( );
-		this.#addressControl = new NoteDialogAddressControl ( note.latLng );
+		this.#addressControl = new NoteDialogAddressControl ( note.latLng, startGeoCoder );
 		this.#linkControl = new NoteDialogLinkControl ( note.latLng );
 		this.#phoneControl = new NoteDialogPhoneControl ( );
+
+		this.#previewControl = new NoteDialogPreviewControl ( );
+
 		NoteDialogEventListeners.noteDialog = this;
 		this.setControlsValues ( note );
 	}
 
+	updatePreview ( ) {
+		this.#previewControl.update ( );
+	}
+
+	onShow ( ) {
+		this.container.addEventListener ( 'inputupdated', NoteDialogEventListeners.onInputUpdated );
+		if ( this.#startGeoCoder ) {
+			this.#addressControl.startGeoCoder ( );
+		}
+	}
+
 	get content ( ) {
+
 		return [].concat (
 			new NoteDialogToolbarV3 ( ).content,
 			this.#iconDimsControl.content,
@@ -43,7 +69,8 @@ class NoteDialogV3 extends BaseDialogV3 {
 			this.#popupControl.content,
 			this.#addressControl.content,
 			this.#linkControl.content,
-			this.#phoneControl.content
+			this.#phoneControl.content,
+			this.#previewControl.content
 		);
 	}
 

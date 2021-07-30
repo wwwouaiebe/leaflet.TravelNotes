@@ -62,6 +62,12 @@ class NoteDialogPopupControl {
 	#popupDiv = null;
 	#popupTextArea = null;
 
+	#onInputControl ( ) {
+		let dispatchedEvent = new Event ( 'inputupdated' );
+		dispatchedEvent.data = { popupContent : this.#popupTextArea.value };
+		this.#popupDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
+
 	constructor ( ) {
 		this.#popupDiv = theHTMLElementsFactory.create (
 			'div',
@@ -80,7 +86,11 @@ class NoteDialogPopupControl {
 		);
 
 		this.#popupTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#popupTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+		this.#popupTextArea.addEventListener (
+			'input',
+			( ) => { this.#onInputControl ( ); },
+			false
+		);
 	}
 
 	get content ( ) { return [ this.#popupDiv ]; }

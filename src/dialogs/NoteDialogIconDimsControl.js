@@ -42,10 +42,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { ZERO, ICON_DIMENSIONS } from '../util/Constants.js';
+import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,6 +62,16 @@ class NoteDialogIconDimsControl {
 	#iconWidthInput = null;
 	#iconHeightInput = null;
 
+	#onHeightInputControl ( ) {
+		let dispatchedEvent = new Event ( 'inputupdated' );
+		dispatchedEvent.data = { iconHeight : this.#iconHeightInput.value };
+		this.#iconDimsDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
+	#onWidthInputControl ( ) {
+		let dispatchedEvent = new Event ( 'inputupdated' );
+		dispatchedEvent.data = { iconWidth : this.#iconWidthInput.value };
+		this.#iconDimsDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
 	constructor ( ) {
 		this.#iconDimsDiv = theHTMLElementsFactory.create (
 			'div',
@@ -82,12 +91,16 @@ class NoteDialogIconDimsControl {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				value : ZERO === ICON_DIMENSIONS.width
+				value : ICON_DIMENSIONS.width
 			},
 			this.#iconDimsDiv
 		);
 
-		this.#iconWidthInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+		this.#iconWidthInput.addEventListener (
+			'input',
+			( ) => { this.#onWidthInputControl ( ); },
+			false
+		);
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -106,7 +119,11 @@ class NoteDialogIconDimsControl {
 			this.#iconDimsDiv
 		);
 
-		this.#iconHeightInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+		this.#iconHeightInput.addEventListener (
+			'input',
+			( ) => { this.#onHeightInputControl ( ); },
+			false
+		);
 	}
 
 	get content ( ) { return [ this.#iconDimsDiv ]; }

@@ -64,6 +64,12 @@ class NoteDialogIconControl {
 	#iconDiv = null;
 	#iconTextArea = null;
 
+	#onInputControl ( ) {
+		let dispatchedEvent = new Event ( 'inputupdated' );
+		dispatchedEvent.data = { iconContent : this.#iconTextArea.value };
+		this.#iconDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
+
 	constructor ( ) {
 		this.#iconDiv = theHTMLElementsFactory.create (
 			'div',
@@ -83,7 +89,11 @@ class NoteDialogIconControl {
 		);
 
 		this.#iconTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#iconTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+		this.#iconTextArea.addEventListener (
+			'input',
+			( ) => { this.#onInputControl ( ); },
+			false
+		);
 	}
 
 	get content ( ) { return [ this.#iconDiv ]; }

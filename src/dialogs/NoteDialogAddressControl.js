@@ -64,7 +64,13 @@ class NoteDialogAddressControl {
 	#addressInput = null;
 	#latLng = null;
 
-	async #onAddressButtonClick ( ) {
+	#onInputControl ( ) {
+		let dispatchedEvent = new Event ( 'inputupdated' );
+		dispatchedEvent.data = { address : this.#addressInput.value };
+		this.#addressHeaderDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
+
+	async #setAddressWithGeoCoder ( ) {
 		NoteDialogEventListeners.noteDialog.hideOkButton ( );
 		let address = await new GeoCoder ( ).getAddress ( this.#latLng );
 		NoteDialogEventListeners.noteDialog.showOkButton ( );
@@ -81,7 +87,7 @@ class NoteDialogAddressControl {
 				theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' )
 			);
 		}
-		NoteDialogEventListeners.onInputControl ( );
+		this.#onInputControl ( );
 	}
 
 	constructor ( latLng ) {
@@ -101,7 +107,7 @@ class NoteDialogAddressControl {
 			},
 			this.#addressHeaderDiv
 		)
-			.addEventListener ( 'click', ( ) => { this.#onAddressButtonClick ( ); }, false );
+			.addEventListener ( 'click', ( ) => { this.#setAddressWithGeoCoder ( ); }, false );
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -127,15 +133,23 @@ class NoteDialogAddressControl {
 		);
 
 		this.#addressInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#addressInput.addEventListener ( 'input', NoteDialogEventListeners.onInputControl, false );
+		this.#addressInput.addEventListener (
+			'input',
+			( ) => { this.#onInputControl ( ); },
+			false
+		);
 
 	}
 
-	get content ( ) { return [ this.#addressHeaderDiv, this.#addressInputDiv ]; }
+	get content ( ) {
+		return [ this.#addressHeaderDiv, this.#addressInputDiv ];
+	}
 
 	get address ( ) { return this.#addressInput.value; }
 
 	set address ( Value ) { this.#addressInput.value = Value; }
+
+	startGeoCoder ( ) { this.#setAddressWithGeoCoder ( ); }
 
 }
 

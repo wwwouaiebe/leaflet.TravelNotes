@@ -57,6 +57,8 @@ import theTranslator from '../UI/Translator.js';
 
 class NoteDialogEventListeners {
 
+	static previewNote = null;
+
 	static focusControl = null;
 
 	static noteDialog = null;
@@ -81,6 +83,13 @@ class NoteDialogEventListeners {
 		else {
 			NoteDialogEventListeners.noteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
 		}
+	}
+
+	static onInputUpdated ( inputUpdatedEvent ) {
+		for ( const property in inputUpdatedEvent.data ) {
+			NoteDialogEventListeners.previewNote [ property ] = inputUpdatedEvent.data [ property ];
+		}
+		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
 	static onInputControl ( ) {
