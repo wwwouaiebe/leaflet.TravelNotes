@@ -62,12 +62,6 @@ class NoteDialogPhoneControl {
 	#phoneInputDiv = null;
 	#phoneInput = null;
 
-	#onInputControl ( ) {
-		let dispatchedEvent = new Event ( 'inputupdated' );
-		dispatchedEvent.data = { phone : this.#phoneInput.value };
-		this.#phoneHeaderDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
-
 	constructor ( ) {
 
 		this.#phoneHeaderDiv = theHTMLElementsFactory.create (
@@ -103,12 +97,7 @@ class NoteDialogPhoneControl {
 		);
 
 		this.#phoneInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-
-		this.#phoneInput.addEventListener (
-			'input',
-			( ) => { this.#onInputControl ( ); },
-			false
-		);
+		this.#phoneInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
 
 	get content ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }

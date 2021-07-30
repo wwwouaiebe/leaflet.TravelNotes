@@ -65,12 +65,6 @@ class NoteDialogLinkControl {
 	#linkInputDiv = null;
 	#linkInput = null;
 
-	#onInputControl ( ) {
-		let dispatchedEvent = new Event ( 'inputupdated' );
-		dispatchedEvent.data = { url : this.#linkInput.value };
-		this.#linkHeaderDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
-
 	constructor ( latLng ) {
 		this.#linkHeaderDiv = theHTMLElementsFactory.create (
 			'div',
@@ -126,18 +120,15 @@ class NoteDialogLinkControl {
 			'input',
 			{
 				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText'
+				className : 'TravelNotes-NoteDialog-InputText',
+				dataName : 'url'
 			},
 			this.#linkInputDiv
 		);
 
 		this.#linkInput.addEventListener ( 'focus', NoteDialogEventListeners.onClearFocusControl, false );
 		this.#linkInput.addEventListener ( 'blur', NoteDialogEventListeners.onBlurUrlInput, false );
-		this.#linkInput.addEventListener (
-			'input',
-			( ) => { this.#onInputControl ( ); },
-			false
-		);
+		this.#linkInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 
 	}
 

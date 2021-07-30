@@ -44,6 +44,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**
@@ -91,16 +92,13 @@ class NoteDialogIconDimsControl {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				value : ICON_DIMENSIONS.width
+				value : ICON_DIMENSIONS.width,
+				dataName : 'iconWidth'
 			},
 			this.#iconDimsDiv
 		);
 
-		this.#iconWidthInput.addEventListener (
-			'input',
-			( ) => { this.#onWidthInputControl ( ); },
-			false
-		);
+		this.#iconWidthInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -114,16 +112,13 @@ class NoteDialogIconDimsControl {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				value : ICON_DIMENSIONS.height
+				value : ICON_DIMENSIONS.height,
+				dataName : 'iconHeight'
 			},
 			this.#iconDimsDiv
 		);
 
-		this.#iconHeightInput.addEventListener (
-			'input',
-			( ) => { this.#onHeightInputControl ( ); },
-			false
-		);
+		this.#iconHeightInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
 
 	get content ( ) { return [ this.#iconDimsDiv ]; }

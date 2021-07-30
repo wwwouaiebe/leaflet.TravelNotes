@@ -87,10 +87,13 @@ class NoteDialogEventListeners {
 		}
 	}
 
+	static onAddressUpdatedByGeoCoder ( newAddress ) {
+		NoteDialogEventListeners.previewNote.address = newAddress;
+		NoteDialogEventListeners.noteDialog.updatePreview ( );
+	}
+
 	static onInputUpdated ( inputUpdatedEvent ) {
-		for ( const property in inputUpdatedEvent.data ) {
-			NoteDialogEventListeners.previewNote [ property ] = inputUpdatedEvent.data [ property ];
-		}
+		NoteDialogEventListeners.previewNote [ inputUpdatedEvent.target.dataName ] = inputUpdatedEvent.target.value;
 		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
@@ -108,12 +111,12 @@ class NoteDialogEventListeners {
 		NoteDialogEventListeners.focusControl.value =
 			NoteDialogEventListeners.focusControl.value.slice ( ZERO, selectionStart ) +
 			button.htmlBefore +
-			( 
-				ZERO === button.htmlAfter.length 
-				? 
-				'' 
-				: 
-				NoteDialogEventListeners.focusControl.value.slice ( selectionStart, selectionEnd ) 
+			(
+				ZERO === button.htmlAfter.length
+					?
+					''
+					:
+					NoteDialogEventListeners.focusControl.value.slice ( selectionStart, selectionEnd )
 			) +
 			button.htmlAfter +
 			NoteDialogEventListeners.focusControl.value.slice ( selectionEnd );

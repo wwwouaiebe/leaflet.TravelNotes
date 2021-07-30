@@ -64,12 +64,6 @@ class NoteDialogAddressControl {
 	#addressInput = null;
 	#latLng = null;
 
-	#onInputControl ( ) {
-		let dispatchedEvent = new Event ( 'inputupdated' );
-		dispatchedEvent.data = { address : this.#addressInput.value };
-		this.#addressHeaderDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
-
 	async #setAddressWithGeoCoder ( ) {
 		NoteDialogEventListeners.noteDialog.hideOkButton ( );
 		let address = await new GeoCoder ( ).getAddress ( this.#latLng );
@@ -80,14 +74,13 @@ class NoteDialogAddressControl {
 				addressString += ' <span class="TravelNotes-NoteHtml-Address-City">' + address.city + '</span>';
 			}
 			this.#addressInput.value = addressString;
-
+			NoteDialogEventListeners.onAddressUpdatedByGeoCoder ( addressString );
 		}
 		else {
 			NoteDialogEventListeners.noteDialog.showError (
 				theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' )
 			);
 		}
-		this.#onInputControl ( );
 	}
 
 	constructor ( latLng ) {
@@ -134,12 +127,7 @@ class NoteDialogAddressControl {
 		);
 
 		this.#addressInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#addressInput.addEventListener (
-			'input',
-			( ) => { this.#onInputControl ( ); },
-			false
-		);
-
+		this.#addressInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
 
 	get content ( ) {
