@@ -63,7 +63,7 @@ class NoteDialogIconDimsControl {
 	#iconWidthInput = null;
 	#iconHeightInput = null;
 
-	constructor ( note ) {
+	constructor ( ) {
 		this.#iconDimsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -82,7 +82,7 @@ class NoteDialogIconDimsControl {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				value : ZERO === note.iconWidth ? ICON_DIMENSIONS.width : note.iconWidth
+				value : ZERO === ICON_DIMENSIONS.width
 			},
 			this.#iconDimsDiv
 		);
@@ -101,7 +101,7 @@ class NoteDialogIconDimsControl {
 			{
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
-				value : ZERO === note.iconHeight ? ICON_DIMENSIONS.height : note.iconHeight
+				value : ICON_DIMENSIONS.height
 			},
 			this.#iconDimsDiv
 		);
@@ -111,7 +111,13 @@ class NoteDialogIconDimsControl {
 
 	get content ( ) { return [ this.#iconDimsDiv ]; }
 
-	get value ( ) { return [ this.#iconWidthInput.value, this.#iconHeightInput.value ]; }
+	get iconWidth ( ) { return this.#iconWidthInput.value; }
+
+	get iconHeight ( ) { return this.#iconHeightInput.value; }
+
+	set iconWidth ( Value ) { this.#iconWidthInput.value = Value; }
+
+	set iconHeight ( Value ) { this.#iconHeightInput.value = Value; }
 
 }
 

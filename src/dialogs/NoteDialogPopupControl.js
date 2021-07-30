@@ -62,7 +62,7 @@ class NoteDialogPopupControl {
 	#popupDiv = null;
 	#popupTextArea = null;
 
-	constructor ( popupContent ) {
+	constructor ( ) {
 		this.#popupDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -74,7 +74,6 @@ class NoteDialogPopupControl {
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
-				value : popupContent,
 				rows : theConfig.noteDialog.areaHeight.popupContent
 			},
 			this.#popupDiv
@@ -86,7 +85,9 @@ class NoteDialogPopupControl {
 
 	get content ( ) { return [ this.#popupDiv ]; }
 
-	get value ( ) { return this.#popupTextArea.value; }
+	get popupContent ( ) { return this.#popupTextArea.value; }
+
+	set popupContent ( Value ) { this.#popupTextArea.value = Value; }
 
 }
 

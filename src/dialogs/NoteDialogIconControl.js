@@ -64,7 +64,7 @@ class NoteDialogIconControl {
 	#iconDiv = null;
 	#iconTextArea = null;
 
-	constructor ( iconContent ) {
+	constructor ( ) {
 		this.#iconDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -76,7 +76,6 @@ class NoteDialogIconControl {
 			'textarea',
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
-				value : iconContent,
 				placeholder : OUR_DEFAULT_ICON,
 				rows : theConfig.noteDialog.areaHeight.icon
 			},
@@ -89,7 +88,9 @@ class NoteDialogIconControl {
 
 	get content ( ) { return [ this.#iconDiv ]; }
 
-	get value ( ) { return this.#iconTextArea.value; }
+	get iconContent ( ) { return this.#iconTextArea.value; }
+
+	set iconContent ( Value ) { this.#iconTextArea.value = Value; }
 
 }
 

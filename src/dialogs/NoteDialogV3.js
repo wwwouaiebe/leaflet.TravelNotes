@@ -23,14 +23,15 @@ class NoteDialogV3 extends BaseDialogV3 {
 	constructor ( note ) {
 		super ( );
 		this.#note = note;
-		this.#iconDimsControl = new NoteDialogIconDimsControl ( note );
-		this.#iconControl = new NoteDialogIconControl ( note.iconContent );
-		this.#tooltipControl = new NoteDialogTooltipControl ( note.tooltipContent );
-		this.#popupControl = new NoteDialogPopupControl ( note.popupContent );
-		this.#addressControl = new NoteDialogAddressControl ( note );
-		this.#linkControl = new NoteDialogLinkControl ( note );
-		this.#phoneControl = new NoteDialogPhoneControl ( note.phone );
+		this.#iconDimsControl = new NoteDialogIconDimsControl ( );
+		this.#iconControl = new NoteDialogIconControl ( );
+		this.#tooltipControl = new NoteDialogTooltipControl ( );
+		this.#popupControl = new NoteDialogPopupControl ( );
+		this.#addressControl = new NoteDialogAddressControl ( note.latLng );
+		this.#linkControl = new NoteDialogLinkControl ( note.latLng );
+		this.#phoneControl = new NoteDialogPhoneControl ( );
 		NoteDialogEventListeners.noteDialog = this;
+		this.setControlsValues ( note );
 	}
 
 	get content ( ) {
@@ -46,15 +47,30 @@ class NoteDialogV3 extends BaseDialogV3 {
 		);
 	}
 
-	onOk ( ) {
-		[ this.#note.iconWidth, this.#note.iconHeight ] = this.#iconDimsControl.value;
-		this.#note.iconContent = this.#iconControl.value;
-		this.#note.tooltipContent = this.#tooltipControl.value;
-		this.#note.popupContent = this.#popupControl.value;
-		this.#note.address = this.#addressControl.value;
-		this.#note.url = this.#linkControl.value;
-		this.#note.phone = this.#phoneControl.value;
+	setControlsValues ( source ) {
+		this.#iconDimsControl.iconHeight = source.iconHeight || this.#iconDimsControl.iconHeight;
+		this.#iconDimsControl.iconWidth = source.iconWidth || this.#iconDimsControl.iconWidth;
+		this.#iconControl.iconContent = source.iconContent || this.#iconControl.iconContent;
+		this.#tooltipControl.tooltipContent = source.tooltipContent || this.#tooltipControl.tooltipContent;
+		this.#popupControl.popupContent = source.popupContent || this.#popupControl.popupContent;
+		this.#addressControl.address = source.address || this.#addressControl.address;
+		this.#linkControl.url = source.url || this.#linkControl.url;
+		this.#phoneControl.phone = source.phone || this.#phoneControl.phone;
+	}
 
+	getControlsValues ( destination ) {
+		destination.iconWidth = this.#iconDimsControl.iconHeight;
+		destination.iconHeight = this.#iconDimsControl.iconWidth;
+		destination.iconContent = this.#iconControl.iconContent;
+		destination.tooltipContent = this.#tooltipControl.tooltipContent;
+		destination.popupContent = this.#popupControl.popupContent;
+		destination.address = this.#addressControl.address;
+		destination.url = this.#linkControl.url;
+		destination.phone = this.#phoneControl.phone;
+	}
+
+	onOk ( ) {
+		this.getControlsValues ( this.#note );
 		super.onOk ( );
 	}
 

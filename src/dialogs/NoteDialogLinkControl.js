@@ -47,7 +47,7 @@ import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
-import { LAT_LNG } from '../util/Constants.js';
+import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ class NoteDialogLinkControl {
 	#linkInputDiv = null;
 	#linkInput = null;
 
-	constructor ( note ) {
+	constructor ( latLng ) {
 		this.#linkHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -83,8 +83,8 @@ class NoteDialogLinkControl {
 					'a',
 					{
 						href : 'https://www.google.com/maps/@' +
-							note.lat.toFixed ( LAT_LNG.fixed ) + ',' +
-							note.lng.toFixed ( LAT_LNG.fixed ) + ',' +
+							latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) + ',' +
+							latLng [ ONE ].toFixed ( LAT_LNG.fixed ) + ',' +
 							theConfig.noteDialog.theDevil.zoomFactor + 'z',
 						target : '_blank',
 						title : 'Reminder! The devil will know everything about you'
@@ -120,8 +120,7 @@ class NoteDialogLinkControl {
 			'input',
 			{
 				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				value : note.url
+				className : 'TravelNotes-NoteDialog-InputText'
 			},
 			this.#linkInputDiv
 		);
@@ -134,7 +133,9 @@ class NoteDialogLinkControl {
 
 	get content ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
 
-	get value ( ) { return this.#linkInput.value; }
+	get url ( ) { return this.#linkInput.value; }
+
+	set url ( Value ) { this.#linkInput.value = Value; }
 
 }
 

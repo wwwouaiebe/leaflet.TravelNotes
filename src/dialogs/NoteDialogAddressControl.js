@@ -62,11 +62,11 @@ class NoteDialogAddressControl {
 	#addressHeaderDiv = null;
 	#addressInputDiv = null;
 	#addressInput = null;
-	#note = null;
+	#latLng = null;
 
 	async #onAddressButtonClick ( ) {
 		NoteDialogEventListeners.noteDialog.hideOkButton ( );
-		let address = await new GeoCoder ( ).getAddress ( this.#note.latLng );
+		let address = await new GeoCoder ( ).getAddress ( this.#latLng );
 		NoteDialogEventListeners.noteDialog.showOkButton ( );
 		if ( address.statusOk ) {
 			let addressString = address.street;
@@ -84,8 +84,8 @@ class NoteDialogAddressControl {
 		NoteDialogEventListeners.onInputControl ( );
 	}
 
-	constructor ( note ) {
-		this.#note = note;
+	constructor ( latLng ) {
+		this.#latLng = latLng;
 		this.#addressHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -121,7 +121,6 @@ class NoteDialogAddressControl {
 			'input',
 			{
 				type : 'text',
-				value : note.address,
 				className : 'TravelNotes-NoteDialog-InputText'
 			},
 			this.#addressInputDiv
@@ -134,7 +133,9 @@ class NoteDialogAddressControl {
 
 	get content ( ) { return [ this.#addressHeaderDiv, this.#addressInputDiv ]; }
 
-	get value ( ) { return this.#addressInput.value; }
+	get address ( ) { return this.#addressInput.value; }
+
+	set address ( Value ) { this.#addressInput.value = Value; }
 
 }
 

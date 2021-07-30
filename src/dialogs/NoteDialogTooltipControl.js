@@ -61,7 +61,7 @@ class NoteDialogTooltipControl {
 	#tooltipDiv = null;
 	#tooltipInput = null
 
-	constructor ( tooltipContent ) {
+	constructor ( ) {
 		this.#tooltipDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -73,8 +73,7 @@ class NoteDialogTooltipControl {
 			'input',
 			{
 				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				value : tooltipContent
+				className : 'TravelNotes-NoteDialog-InputText'
 			},
 			this.#tooltipDiv
 		);
@@ -85,7 +84,9 @@ class NoteDialogTooltipControl {
 
 	get content ( ) { return [ this.#tooltipDiv ]; }
 
-	get value ( ) { return this.#tooltipInput.value; }
+	get tooltipContent ( ) { return this.#tooltipInput.value; }
+
+	set tooltipContent ( Value ) { this.#tooltipInput.value = Value; }
 
 }
 

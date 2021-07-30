@@ -62,7 +62,7 @@ class NoteDialogPhoneControl {
 	#phoneInputDiv = null;
 	#phoneInput = null;
 
-	constructor ( phone ) {
+	constructor ( ) {
 
 		this.#phoneHeaderDiv = theHTMLElementsFactory.create (
 			'div',
@@ -90,8 +90,7 @@ class NoteDialogPhoneControl {
 			'input',
 			{
 				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				value : phone
+				className : 'TravelNotes-NoteDialog-InputText'
 			},
 			this.#phoneInputDiv
 		);
@@ -103,7 +102,9 @@ class NoteDialogPhoneControl {
 
 	get content ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
 
-	get value ( ) { return this.#phoneInput.value; }
+	get phone ( ) { return this.#phoneInput.value; }
+
+	set phone ( Value ) { this.#phoneInput.value = Value; }
 
 }
 
