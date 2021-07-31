@@ -101,7 +101,13 @@ class NoteDialogV3 extends BaseDialogV3 {
 
 	onOk ( ) {
 		this.getControlsValues ( this.#note );
+		NoteDialogEventListeners.reset ( );
 		super.onOk ( );
+	}
+
+	onCancel ( ) {
+		NoteDialogEventListeners.reset ( );
+		super.onCancel ( );
 	}
 
 	toogleContents ( ) {

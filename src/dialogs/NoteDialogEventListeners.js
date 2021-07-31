@@ -54,7 +54,16 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogEventListeners
-@classdesc coming soon...
+@classdesc container for the NoteDialog event listeners, static functions and static variables
+@see NoteDialogAddressControl
+@see NoteDialogIconControl
+@see NoteDialogIconDimsControl
+@see NoteDialogLinkControl
+@see NoteDialogPhoneControl
+@see NoteDialogPopupControl
+@see NoteDialogToolbarV3
+@see NoteDialogTooltipControl
+@see NoteDialogV3
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -62,21 +71,60 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 class NoteDialogEventListeners {
 
+	/**
+	The Note used for preview
+	*/
+
 	static previewNote = null;
+
+	/**
+	The dialog control that have the focus. Used for toolbar edition buttons
+	*/
 
 	static focusControl = null;
 
+	/**
+	A reference to the NoteDiaog object
+	*/
+
 	static noteDialog = null;
 
+	/**
+	The routeObjId of the route on witch the note is attached
+	*/
+
 	static routeObjId = INVALID_OBJ_ID;
+
+	/**
+	Rest static vars function. Must be called when the dialog is closed ( cancel or ok... )
+	*/
+
+	static reset ( ) {
+		NoteDialogEventListeners.previewNote = null;
+		NoteDialogEventListeners.focusControl = null;
+		NoteDialogEventListeners.noteDialog = null;
+		NoteDialogEventListeners.routeObjId = INVALID_OBJ_ID;
+	}
+
+	/**
+	focus event listener for controls
+	*/
 
 	static onFocusControl ( focusEvent ) {
 		NoteDialogEventListeners.focusControl = focusEvent.target;
 	}
 
+	/**
+	focus event listener for controls when the toolbar editions buttons cannot be used
+	*/
+
 	static onClearFocusControl ( ) {
 		NoteDialogEventListeners.focusControl = null;
 	}
+
+	/**
+	blur event listener for the url input. Verify that the url is a valid url.
+	*/
 
 	static onBlurUrlInput ( blurEvent ) {
 		if ( '' === blurEvent.target.value ) {
@@ -92,15 +140,26 @@ class NoteDialogEventListeners {
 		}
 	}
 
+	/**
+	This method update the address in the preview after geocoding.
+	*/
+
 	static onAddressUpdatedByGeoCoder ( newAddress ) {
 		NoteDialogEventListeners.previewNote.address = newAddress;
 		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
+	/**
+	Input event listeners for controls
+	*/
+
 	static onInputUpdated ( inputUpdatedEvent ) {
 		NoteDialogEventListeners.previewNote [ inputUpdatedEvent.target.dataName ] = inputUpdatedEvent.target.value;
 		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
+
+	/**
+	click event listener fot the toolbar edition buttons. Update the current control value*/
 
 	static onClickEditionButton ( clickEvent ) {
 		if ( ! NoteDialogEventListeners.focusControl ) {
@@ -141,10 +200,19 @@ class NoteDialogEventListeners {
 		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
+	/**
+	click event listener for the toogle button on the toolbar
+	*/
+
 	static onToogleContentsButtonClick ( clickEvent ) {
 		clickEvent.target.textContent = '▼' === clickEvent.target.textContent ? '▶' : '▼';
 		NoteDialogEventListeners.noteDialog.toogleContents ( );
 	}
+
+	/**
+	Change event listener for the input associated on the open file button
+	@private
+	*/
 
 	static #onOpenFileInputChange ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -164,6 +232,10 @@ class NoteDialogEventListeners {
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
 
+	/**
+	click event listener for the open file button on the toolbar
+	*/
+
 	static onOpenFileButtonCkick ( ) {
 		let openFileInput = theHTMLElementsFactory.create (
 			'input',
@@ -176,60 +248,73 @@ class NoteDialogEventListeners {
 		openFileInput.click ( );
 	}
 
+	/**
+	Helper method for the onIconSelectChange mehod
+	@private
+	*/
+
+	#updatePreviewAndControls ( noteData )	{
+		NoteDialogEventListeners.noteDialog.setControlsValues ( noteData );
+		for ( const property in noteData ) {
+			NoteDialogEventListeners.previewNote [ property ] = noteData [ property ];
+		}
+		NoteDialogEventListeners.noteDialog.updatePreview ( );
+	}
+
+	/**
+	Svg Map icon creation
+	@private
+	*/
+
+	static #onMapIcon ( ) {
+		if ( INVALID_OBJ_ID === NoteDialogEventListeners.routeObjId ) {
+			NoteDialogEventListeners.noteDialog.showError (
+				theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
+			);
+			return;
+		}
+
+		NoteDialogEventListeners.noteDialog.showWait ( );
+		new MapIconFromOsmFactory ( ).getIconAndAdressWithPromise (
+			NoteDialogEventListeners.previewNote.latLng,
+			NoteDialogEventListeners.routeObjId
+		)
+			.then (
+				mapIconData => {
+					NoteDialogEventListeners.noteDialog.hideWait ( );
+					NoteDialogEventListeners.#updatePreviewAndControls ( mapIconData.noteData );
+				}
+			)
+			.catch (
+				( ) => {
+					NoteDialogEventListeners.noteDialog.hideWait ( );
+					NoteDialogEventListeners.noteDialog.showError (
+						theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' )
+					);
+				}
+			);
+	}
+
+	/**
+	Change event listener for the select icon on the toolbar
+	*/
+
 	static onIconSelectChange ( changeEvent ) {
 		let preDefinedIcon = theNoteDialogToolbarData.getIconData ( changeEvent.target.selectedIndex );
 
 		if ( 'SvgIcon' === preDefinedIcon.icon ) {
-			if ( INVALID_OBJ_ID === NoteDialogEventListeners.routeObjId ) {
-				NoteDialogEventListeners.noteDialog.showError (
-					theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
-				);
-
-				return;
-			}
-
-			NoteDialogEventListeners.noteDialog.showWait ( );
-			new MapIconFromOsmFactory ( ).getIconAndAdressWithPromise (
-				NoteDialogEventListeners.previewNote.latLng,
-				NoteDialogEventListeners.routeObjId
-			)
-				.then (
-					mapIconData => {
-						NoteDialogEventListeners.noteDialog.hideWait ( );
-						NoteDialogEventListeners.noteDialog.setControlsValues ( mapIconData.noteData );
-						for ( const property in mapIconData.noteData ) {
-							NoteDialogEventListeners.previewNote [ property ] = mapIconData.noteData [ property ];
-						}
-						NoteDialogEventListeners.noteDialog.updatePreview ( );
-					}
-				)
-				.catch (
-					( ) => {
-						NoteDialogEventListeners.noteDialog.hideWait ( );
-						NoteDialogEventListeners.noteDialog.showError (
-							theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' )
-						);
-					}
-				);
-
+			NoteDialogEventListeners.#onMapIcon ( );
 			return;
-
 		}
 
-		let iconData = {
-			iconContent : preDefinedIcon.icon,
-			iconHeight : preDefinedIcon.height,
-			iconWidth : preDefinedIcon.width,
-			tooltipContent : preDefinedIcon.tooltip
-		};
-		NoteDialogEventListeners.noteDialog.setControlsValues ( iconData );
-		for ( const property in iconData ) {
-			NoteDialogEventListeners.previewNote [ property ] = iconData [ property ];
-		}
-		NoteDialogEventListeners.noteDialog.updatePreview ( );
-
-		// }
-
+		NoteDialogEventListeners.#updatePreviewAndControls (
+			{
+				iconContent : preDefinedIcon.icon,
+				iconHeight : preDefinedIcon.height,
+				iconWidth : preDefinedIcon.width,
+				tooltipContent : preDefinedIcon.tooltip
+			}
+		);
 	}
 }
 
