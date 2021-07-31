@@ -171,10 +171,7 @@ class BaseDialogV3 {
 	*/
 
 	onOk ( ) {
-
 		this.#onPromiseOkFct ( );
-
-		// this.#onPromiseErrorFct ( 'Ok by user' );
 	}
 
 	/**

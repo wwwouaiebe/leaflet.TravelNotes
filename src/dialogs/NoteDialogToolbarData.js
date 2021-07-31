@@ -89,6 +89,10 @@ class NoteDialogToolbarData {
 		return this.#preDefinedIcons [ index ] [ ONE ];
 	}
 
+	/**
+	get and icon from the icon name
+	*/
+
 	getIconContentFromName ( iconName ) {
 		let preDefinedIcon = this.#preDefinedIconsMap.get ( iconName );
 		return preDefinedIcon ? preDefinedIcon.icon : '';

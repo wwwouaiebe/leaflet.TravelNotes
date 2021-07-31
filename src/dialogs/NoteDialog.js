@@ -194,7 +194,7 @@ class NoteDialog extends BaseDialogV3 {
 	}
 
 	/**
-	Overload of the BaseDialog.onOk ( ) method. Called when the ok button is clicked
+	Overload of the BaseDialog.beforeOk ( ) method. Called when the ok button is clicked but before closing the dialog
 	*/
 
 	beforeOk ( ) {
@@ -210,9 +210,9 @@ class NoteDialog extends BaseDialogV3 {
 		}
 
 		// saving values in the note.
-		// note.latLng = myLatLng;
-
+		// latLng can change for map icons, so we save the value from the preview note
 		this.getControlsValues ( this.#note );
+		this.#note.latLng = NoteDialogEventListeners.previewNote.latLng;
 		this.#note.validateData ( );
 		NoteDialogEventListeners.reset ( );
 		return true;
