@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210730
 Tests ...
 */
 
@@ -246,7 +248,7 @@ class NoteDialogEventListeners {
 	@private
 	*/
 
-	#updatePreviewAndControls ( noteData )	{
+	static #updatePreviewAndControls ( noteData )	{
 		NoteDialogEventListeners.noteDialog.setControlsValues ( noteData );
 		for ( const property in noteData ) {
 			NoteDialogEventListeners.previewNote [ property ] = noteData [ property ];
@@ -321,10 +323,7 @@ class NoteDialogEventListeners {
 		if ( '' !== address.city ) {
 			addressString += ' <span class="TravelNotes-NoteHtml-Address-City">' + address.city + '</span>';
 		}
-
-		NoteDialogEventListeners.previewNote.address = addressString;
-		NoteDialogEventListeners.noteDialog.updatePreview ( );
-		NoteDialogEventListeners.noteDialog.setControlsValues ( { address : addressString } );
+		NoteDialogEventListeners.#updatePreviewAndControls ( { address : addressString } );
 	}
 
 	/**

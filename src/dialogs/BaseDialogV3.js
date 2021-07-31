@@ -40,9 +40,12 @@ class BaseDialogEventListeners {
 	*/
 
 	static onOkButtonClick ( ) {
-		BaseDialogEventListeners.onCloseDialog ( );
-		document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
-		BaseDialogEventListeners.baseDialog.onOk ( );
+		if ( BaseDialogEventListeners.baseDialog.beforeOk ( ) ) {
+			BaseDialogEventListeners.onCloseDialog ( );
+			document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
+			BaseDialogEventListeners.baseDialog.onOk ( );
+			BaseDialogEventListeners.reset ( );
+		}
 	}
 
 	/**
@@ -53,6 +56,7 @@ class BaseDialogEventListeners {
 		BaseDialogEventListeners.onCloseDialog ( );
 		document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
 		BaseDialogEventListeners.baseDialog.onCancel ( );
+		BaseDialogEventListeners.reset ( );
 	}
 
 	/**
@@ -78,6 +82,7 @@ class BaseDialogEventListeners {
 			BaseDialogEventListeners.onTopBarDragEnd,
 			false
 		);
+
 	}
 
 	/**
@@ -140,8 +145,8 @@ class BaseDialogEventListeners {
 
 class BaseDialogV3 {
 
-	#onOk = null;
-	#onError = null;
+	#onPromiseOkFct = null;
+	#onPromiseErrorFct = null;
 
 	/**
 	Cancel button handler
@@ -149,7 +154,16 @@ class BaseDialogV3 {
 
 	onCancel ( ) {
 		BaseDialogEventListeners.reset ( );
-		this.#onError ( 'Canceled by user' );
+		this.#onPromiseErrorFct ( 'Canceled by user' );
+	}
+
+	/**
+	Called before the dialog will be closed with the ok button. Can be overloaded in the derived classes
+	@return {boolean} true when the dialog can be closed, false otherwise.
+	*/
+
+	beforeOk ( ) {
+		return true;
 	}
 
 	/**
@@ -158,10 +172,9 @@ class BaseDialogV3 {
 
 	onOk ( ) {
 
-		BaseDialogEventListeners.reset ( );
+		this.#onPromiseOkFct ( );
 
-		// this.#onOk ( );
-		this.#onError ( 'Ok by user' );
+		// this.#onPromiseErrorFct ( 'Ok by user' );
 	}
 
 	/**
@@ -305,6 +318,8 @@ class BaseDialogV3 {
 			BaseDialogEventListeners.onOkButtonClick,
 			false
 		);
+
+		this.footer.forEach ( footer => BaseDialogEventListeners.containerDiv.footerDiv.appendChild ( footer ) );
 	}
 
 	/**
@@ -341,9 +356,9 @@ class BaseDialogV3 {
 	Build and show the dialog
 	*/
 
-	#show ( onOk, onError ) {
-		this.#onOk = onOk;
-		this.#onError = onError;
+	#show ( onPromiseOkFct, onPromiseErrorFct ) {
+		this.#onPromiseOkFct = onPromiseOkFct;
+		this.#onPromiseErrorFct = onPromiseErrorFct;
 
 		this.#createBackgroundDiv ( );
 		this.#CreateContainerDiv ( );
@@ -355,6 +370,7 @@ class BaseDialogV3 {
 			},
 			BaseDialogEventListeners.containerDiv
 		);
+
 		BaseDialogEventListeners.containerDiv.contentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -363,6 +379,7 @@ class BaseDialogV3 {
 			BaseDialogEventListeners.containerDiv
 		);
 		this.content.forEach ( content => BaseDialogEventListeners.containerDiv.contentDiv.appendChild ( content ) );
+
 		BaseDialogEventListeners.containerDiv.errorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -387,6 +404,14 @@ class BaseDialogV3 {
 	onShow ( ) {}
 
 	get content ( ) { return []; }
+
+	/**
+	return the footer of the dialog box.
+	*/
+
+	get footer ( ) {
+		return [];
+	}
 
 	get container ( ) { return BaseDialogEventListeners.containerDiv; }
 

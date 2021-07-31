@@ -54,10 +54,9 @@ Tests ...
 
 import ObjId from '../data/ObjId.js';
 import ObjType from '../data/ObjType.js';
-import { LAT_LNG, DISTANCE, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
+import { LAT_LNG, DISTANCE, ZERO, ONE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
-const OUR_DEFAULT_ICON_SIZE = 0;
 const OUR_OBJ_TYPE = new ObjType ( 'Note' );
 
 /**
@@ -192,14 +191,14 @@ class Note {
 		@type {!number}
 		*/
 
-		this.iconHeight = OUR_DEFAULT_ICON_SIZE;
+		this.iconHeight = ICON_DIMENSIONS.height;
 
 		/**
 		the width of the icon associated to the note
 		@type {!number}
 		*/
 
-		this.iconWidth = OUR_DEFAULT_ICON_SIZE;
+		this.iconWidth = ICON_DIMENSIONS.width;
 
 		/**
 		the html needed to display the icon
@@ -366,8 +365,8 @@ class Note {
 	}
 	set jsonObject ( something ) {
 		let otherthing = Note.#validateObject ( something );
-		this.iconHeight = otherthing.iconHeight || OUR_DEFAULT_ICON_SIZE;
-		this.iconWidth = otherthing.iconWidth || OUR_DEFAULT_ICON_SIZE;
+		this.iconHeight = otherthing.iconHeight || ICON_DIMENSIONS.height;
+		this.iconWidth = otherthing.iconWidth || ICON_DIMENSIONS.width;
 		this.iconContent = otherthing.iconContent || '';
 		this.popupContent = otherthing.popupContent || '';
 		this.tooltipContent = otherthing.tooltipContent || '';
@@ -394,10 +393,10 @@ class Note {
 	/* eslint-disable-next-line complexity, max-statements */
 	validateData ( verbose ) {
 		if ( 'number' !== typeof ( this.iconHeight ) ) {
-			this.iconHeight = OUR_DEFAULT_ICON_SIZE;
+			this.iconHeight = ICON_DIMENSIONS.height;
 		}
 		if ( 'number' !== typeof ( this.iconWidth ) ) {
-			this.iconWidth = OUR_DEFAULT_ICON_SIZE;
+			this.iconWidth = ICON_DIMENSIONS.width;
 		}
 		if ( 'string' === typeof ( this.iconContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );

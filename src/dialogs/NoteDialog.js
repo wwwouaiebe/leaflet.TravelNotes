@@ -42,7 +42,9 @@ Changes:
 		- Issue ♯144 : Add an error message when a bad json file is loaded from the noteDialog
 	- v2.2.0:
 		- Issue ♯64 : Improve geocoding
-Doc reviewed 20200815
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210730
 Tests ...
 */
 
@@ -77,16 +79,51 @@ import NoteDialogLinkControl from '../dialogs/NoteDialogLinkControl.js';
 import NoteDialogPhoneControl from '../dialogs/NoteDialogPhoneControl.js';
 import NoteDialogPreviewControl from '../dialogs/NoteDialogPreviewControl.js';
 import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theTranslator from '../UI/Translator.js';
 import Note from '../data/Note.js';
 import theConfig from '../data/Config.js';
 
 import { ZERO, ONE } from '../util/Constants.js';
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class NoteDialog
+@classdesc This class create and manage the NoteDialog
+@extends BaseDialogV3
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class NoteDialog extends BaseDialogV3 {
 
+	/**
+	the currently edited note
+	@private
+	*/
+
 	#note = null;
+
+	/**
+	A boolean indicating to start the geocoder when opening the dialog box.
+	@private
+	*/
+
 	#startGeoCoder = false;
+
+	/**
+	A clone of the #note used to store the modifications and display the preview
+	@private
+	*/
+
 	#previewNote = null;
+
+	/**
+	Controls
+	@private
+	*/
 
 	#iconDimsControl = null;
 	#iconControl = null;
@@ -96,6 +133,12 @@ class NoteDialog extends BaseDialogV3 {
 	#linkControl = null;
 	#phoneControl = null;
 	#previewControl = null;
+
+	/**
+	the toolbar
+	@private
+	*/
+
 	#toolbar = null;
 
 	constructor ( note, routeObjId, startGeoCoder ) {
@@ -103,6 +146,7 @@ class NoteDialog extends BaseDialogV3 {
 		this.#note = note;
 		this.#startGeoCoder = startGeoCoder;
 		NoteDialogEventListeners.routeObjId = routeObjId;
+
 		NoteDialogEventListeners.previewNote = new Note ( );
 		NoteDialogEventListeners.previewNote.jsonObject = note.jsonObject;
 
@@ -121,13 +165,25 @@ class NoteDialog extends BaseDialogV3 {
 		this.setControlsValues ( note );
 	}
 
+	/**
+	Update the toolbar. Called when new toolbar buttons and predefined icons are loaded
+	*/
+
 	updateToolbar ( ) {
 		this.#toolbar.update ( );
 	}
 
+	/**
+	Update the preview of the icons. Used by event listeners
+	*/
+
 	updatePreview ( ) {
 		this.#previewControl.update ( );
 	}
+
+	/**
+	Overload of the BaseDialog.onShow ( ) method. Called by the show ( ) method
+	*/
 
 	onShow ( ) {
 		if ( this.#startGeoCoder ) {
@@ -136,6 +192,44 @@ class NoteDialog extends BaseDialogV3 {
 
 		this.toogleContents ( );
 	}
+
+	/**
+	Overload of the BaseDialog.onOk ( ) method. Called when the ok button is clicked
+	*/
+
+	beforeOk ( ) {
+		if ( '' === this.#iconControl.iconContent ) {
+			this.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
+			return false;
+		}
+		if ( '' !== this.#linkControl.url ) {
+			if ( '' === theHTMLSanitizer.sanitizeToUrl ( this.#linkControl.url ).url ) {
+				this.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
+				return false;
+			}
+		}
+
+		// saving values in the note.
+		// note.latLng = myLatLng;
+
+		this.getControlsValues ( this.#note );
+		this.#note.validateData ( );
+		NoteDialogEventListeners.reset ( );
+		return true;
+	}
+
+	/**
+	Overload of the BaseDialog.onCancel ( ) method. Called when the cancel button is clicked
+	*/
+
+	onCancel ( ) {
+		NoteDialogEventListeners.reset ( );
+		super.onCancel ( );
+	}
+
+	/**
+	return the content of the dialog box. Overload of the BaseDialog.content property
+	*/
 
 	get content ( ) {
 		return [].concat (
@@ -151,6 +245,21 @@ class NoteDialog extends BaseDialogV3 {
 		);
 	}
 
+	/**
+	return the footer of the dialog box. Overload of the BaseDialog.footer property
+	*/
+
+	get footer ( ) {
+		return [].concat (
+			this.#previewControl.content
+		);
+	}
+
+	/**
+	set the control values
+	@param {Object} source An object with all the properties to update
+	*/
+
 	setControlsValues ( source ) {
 		this.#iconDimsControl.iconHeight = source.iconHeight || this.#iconDimsControl.iconHeight;
 		this.#iconDimsControl.iconWidth = source.iconWidth || this.#iconDimsControl.iconWidth;
@@ -161,6 +270,11 @@ class NoteDialog extends BaseDialogV3 {
 		this.#linkControl.url = source.url || this.#linkControl.url;
 		this.#phoneControl.phone = source.phone || this.#phoneControl.phone;
 	}
+
+	/**
+	put all the control values in the destination object
+	@param {Object} destination. The object in witch the values will be added
+	*/
 
 	getControlsValues ( destination ) {
 		destination.iconWidth = this.#iconDimsControl.iconHeight;
@@ -173,16 +287,9 @@ class NoteDialog extends BaseDialogV3 {
 		destination.phone = this.#phoneControl.phone;
 	}
 
-	onOk ( ) {
-		this.getControlsValues ( this.#note );
-		NoteDialogEventListeners.reset ( );
-		super.onOk ( );
-	}
-
-	onCancel ( ) {
-		NoteDialogEventListeners.reset ( );
-		super.onCancel ( );
-	}
+	/**
+	Show or hide the dialog controls
+	*/
 
 	toogleContents ( ) {
 		if ( theConfig.noteDialog.mask.iconsDimension ) {

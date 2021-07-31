@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210730
 Tests ...
 */
 
@@ -117,9 +119,9 @@ class NoteDialogIconDimsControl {
 
 	get content ( ) { return [ this.#iconDimsDiv ]; }
 
-	get iconWidth ( ) { return this.#iconWidthInput.value; }
+	get iconWidth ( ) { return Number.parseInt ( this.#iconWidthInput.value ); }
 
-	get iconHeight ( ) { return this.#iconHeightInput.value; }
+	get iconHeight ( ) { return Number.parseInt ( this.#iconHeightInput.value ); }
 
 	set iconWidth ( Value ) { this.#iconWidthInput.value = Value; }
 
