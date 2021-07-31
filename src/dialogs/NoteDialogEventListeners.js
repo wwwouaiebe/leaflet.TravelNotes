@@ -62,9 +62,9 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 @see NoteDialogLinkControl
 @see NoteDialogPhoneControl
 @see NoteDialogPopupControl
-@see NoteDialogToolbarV3
+@see NoteDialogToolbar
 @see NoteDialogTooltipControl
-@see NoteDialogV3
+@see NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------

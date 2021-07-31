@@ -69,7 +69,7 @@ import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
 // import { newNoteDialog } from '../dialogs/NoteDialog.js';
-import NoteDialogV3 from '../dialogs/NoteDialogV3.js';
+import NoteDialog from '../dialogs/NoteDialog.js';
 import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
@@ -80,7 +80,7 @@ import theConfig from '../data/Config.js';
 import WaitUI from '../UI/WaitUI.js';
 import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
-import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import GeoCoder from '../core/GeoCoder.js';
 
 import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS, LAT_LNG } from '../util/Constants.js';
@@ -224,7 +224,7 @@ class NoteEditor {
 	*/
 
 	#noteDialog ( note, routeObjId, isNewNote ) {
-		new NoteDialogV3 ( note, routeObjId, isNewNote )
+		new NoteDialog ( note, routeObjId, isNewNote )
 			.show ( )
 			.then ( ( ) => { this.#addNote ( note, routeObjId, isNewNote ); } )
 			.catch (
@@ -433,7 +433,7 @@ class NoteEditor {
 				'</text></svg></div>';
 		}
 		else {
-			note.iconContent = theNoteDialogToolbar.getIconDataFromName ( data.osmElement.description ) || '';
+			note.iconContent = theNoteDialogToolbarData.getIconContentFromName ( data.osmElement.description );
 		}
 		note.url = data.osmElement.tags.website || '';
 		note.phone = data.osmElement.tags.phone || '';

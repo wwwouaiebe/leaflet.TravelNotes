@@ -25,7 +25,9 @@ Changes:
 		- Issue ♯135 : Remove innerHTML from code
 		- Issue ♯138 : Protect the app - control html entries done by user.
 		- Issue ♯144 : Add an error message when a bad json file is loaded from the noteDialog
-Doc reviewed 20200815
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210730
 Tests ...
 */
 
@@ -89,233 +91,19 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import { ZERO, ONE, NOT_FOUND } from '../util/Constants.js';
+import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
-let ourButtons = [];
-let ourSelectOptions = [];
-let ourToolbarDiv = null;
-let ourIconsSelect = null;
-let ourOpenFileInput = null;
-
-let ourDialogFunctions = null;
+import { NOT_FOUND, ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourAddSelectOptions
-@desc This function add options to the select input
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddSelectOptions ( ) {
-	ourSelectOptions.forEach (
-		selectOption => ourIconsSelect.add (
-			theHTMLElementsFactory.create (
-				'option',
-				{
-					text : theHTMLSanitizer.sanitizeToJsString ( selectOption.name )
-				}
-			)
-		)
-	);
-	ourIconsSelect.selectedIndex = NOT_FOUND;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddButtons
-@desc This function add buttons on the toolbar
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddButtons ( ) {
-	ourButtons.forEach (
-		editionButton => {
-			let newButton = theHTMLElementsFactory.create (
-				'div',
-				{
-					htmlBefore : editionButton.htmlBefore || '',
-					htmlAfter : editionButton.htmlAfter || '',
-					className : 'TravelNotes-NoteDialog-EditorButton'
-				},
-				ourToolbarDiv
-			);
-
-			theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
-
-			newButton.addEventListener ( 'click', ourDialogFunctions.onButtonClickEventListener, false );
-		}
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnOpenFileInputChange
-@desc Event listener for the open file input
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnOpenFileInputChange ( changeEvent ) {
-	let fileReader = new FileReader ( );
-	fileReader.onload = function ( ) {
-		try {
-			let newButtonsAndIcons = JSON.parse ( fileReader.result );
-			ourButtons = ourButtons.concat ( newButtonsAndIcons.editionButtons );
-
-			ourSelectOptions =
-				ourSelectOptions.concat ( newButtonsAndIcons.preDefinedIconsList );
-			ourSelectOptions.sort (
-				( first, second ) => first.name.localeCompare ( second.name )
-			);
-
-			document.querySelectorAll ( '.TravelNotes-NoteDialog-EditorButton' ).forEach (
-				oldButton => {
-					oldButton.removeEventListener ( 'click', ourDialogFunctions.onButtonClickEventListener, false );
-					ourToolbarDiv.removeChild ( oldButton );
-				}
-			);
-			ourAddButtons ( );
-			for (
-				let elementCounter = ourIconsSelect.length - ONE;
-				elementCounter >= ZERO;
-				elementCounter --
-			) {
-				ourIconsSelect.remove ( elementCounter );
-			}
-			ourAddSelectOptions ( );
-			ourDialogFunctions.hideError ( );
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-			ourDialogFunctions.showError (
-				theTranslator.getText (
-					'NoteDialogToolbar - An error was found in the json file',
-					{ error : err.message }
-				)
-			);
-		}
-	};
-	fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnOpenFileButtonClick
-@desc Event listener for the open file button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnOpenFileButtonClick ( ) {
-	ourOpenFileInput.click ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourToggleContentsButtonClick
-@desc Event listener for the toggle contents button
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourToggleContentsButtonClick ( clickEvent ) {
-	ourDialogFunctions.toggleContents ( );
-	clickEvent.target.textContent = '▼' === clickEvent.target.textContent ? '▶' : '▼';
-
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateToolbarButtons
-@desc This function creates the open file button and add the others buttons on the toolbar
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateToolbarButtons ( ) {
-	ourOpenFileInput = theHTMLElementsFactory.create (
-		'input',
-		{
-			className : 'TravelNotes-BaseDialog-OpenFileInput',
-			type : 'file'
-		},
-		ourToolbarDiv
-	);
-	ourOpenFileInput.addEventListener ( 'change', ourOnOpenFileInputChange,	false );
-
-	let toggleContentsButton = theHTMLElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-BaseDialog-Button',
-			title : theTranslator.getText ( 'NoteDialog - show hidden contents' ),
-			textContent : '▼' // 25b6 = '▶'  25bc = ▼
-		},
-		ourToolbarDiv
-	);
-	toggleContentsButton.addEventListener ( 'click', ourToggleContentsButtonClick, false );
-
-	let openFileButton = theHTMLElementsFactory.create (
-		'div',
-		{
-			className : 'TravelNotes-BaseDialog-Button',
-			title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
-			textContent : '📂'
-		},
-		ourToolbarDiv
-	);
-	openFileButton.addEventListener ( 'click', ourOnOpenFileButtonClick, false );
-
-	ourAddButtons ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCreateToolbarButtons
-@desc This function creates the select input on the toolbar and add the options to the select input
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourCreateToolbarSelect ( ) {
-	ourIconsSelect = theHTMLElementsFactory.create (
-		'select',
-		{
-			className : 'TravelNotes-NoteDialog-Select',
-			id : 'TravelNotes-NoteDialog-IconSelect'
-		},
-		ourToolbarDiv
-	);
-	ourIconsSelect.addEventListener ( 'change', ourDialogFunctions.onSelectEventListener, false );
-	ourAddSelectOptions ( );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
-@classdesc A helper class to creates the toolbar in the NoteDialog and manages the select and buttons on this toolbar
-@see {@link theNoteDialogToolbar} for the one and only one instance of this class
+@class NoteDialogToolbar
+@classdesc This class is the toolbar of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -323,53 +111,99 @@ function ourCreateToolbarSelect ( ) {
 
 class NoteDialogToolbar {
 
+	#toolbarDiv = null;
+
+	/**
+	Add the icon selector to the toolbar
+	@private
+	*/
+
+	#addIconsSelector ( ) {
+		let iconSelect = theHTMLElementsFactory.create (
+			'select',
+			{
+				className : 'TravelNotes-NoteDialog-Select',
+				id : 'TravelNotes-NoteDialog-IconSelect'
+			},
+			this.#toolbarDiv
+		);
+
+		iconSelect.addEventListener ( 'change', NoteDialogEventListeners.onIconSelectChange, false );
+
+		theNoteDialogToolbarData.icons.forEach (
+			selectOption => {
+				iconSelect.add ( theHTMLElementsFactory.create ( 'option', { text : selectOption [ ZERO ] } ) );
+			}
+		);
+		iconSelect.selectedIndex = NOT_FOUND;
+	}
+
+	/**
+	Add the toolbar buttons to the toolbar ( toogle and open file )
+	@private
+	*/
+
+	#addToolbarButtons ( ) {
+
+		let toogleContentsButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'NoteDialog - show hidden contents' ),
+				textContent : '▼' // 25b6 = '▶'  25bc = ▼
+			},
+			this.#toolbarDiv
+		);
+		toogleContentsButton.addEventListener ( 'click', NoteDialogEventListeners.onToogleContentsButtonClick, false );
+
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
+				textContent : '📂'
+			},
+			this.#toolbarDiv
+		).addEventListener ( 'click', NoteDialogEventListeners.onOpenFileButtonCkick, false );
+	}
+
+	/**
+	Add the edition buttons to the toolbar
+	@private
+	*/
+
+	#addEditionButtons ( ) {
+		theNoteDialogToolbarData.buttons.forEach (
+			editionButton => {
+				let newButton = theHTMLElementsFactory.create (
+					'div',
+					{
+						htmlBefore : editionButton.htmlBefore || '',
+						htmlAfter : editionButton.htmlAfter || '',
+						className : 'TravelNotes-NoteDialog-EditorButton'
+					},
+					this.#toolbarDiv
+				);
+				theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
+				newButton.addEventListener ( 'click', NoteDialogEventListeners.onClickEditionButton, false );
+			}
+		);
+	}
+
+	/**
+	Add elements to the toolbar
+	@private
+	*/
+
+	#addToolbarElements ( ) {
+		this.#addIconsSelector ( );
+		this.#addToolbarButtons ( );
+		this.#addEditionButtons ( );
+	}
+
 	constructor ( ) {
-		Object.freeze ( this );
-	}
 
-	/**
-	Options added to the select input
-	@param {Array.<NoteDialogToolbarSelectOption>} selectOptions An array of NoteDialogToolbarSelectOptions
-	*/
-
-	set selectOptions ( selectOptions ) {
-		ourSelectOptions = ourSelectOptions.concat ( selectOptions );
-		ourSelectOptions.sort ( ( first, second ) => first.name.localeCompare ( second.name ) );
-	}
-
-	/**
-	Buttons added to the toolbar
-	@param {Array.<NoteDialogToolbarButton>} buttons An array of NoteDialogToolbarButtons
-	*/
-
-	set buttons ( buttons ) {
-		ourButtons = ourButtons.concat ( buttons );
-	}
-
-	/**
-	Gives the data needed to creates the icon corresponding to a select option
-	@param {number} Index the position in the preDefinedIconsList
-	@return {NoteDialogToolbarSelectOption} the icon data
-	*/
-
-	getIconData ( index ) {
-		return ourSelectOptions [ index ];
-	}
-
-	getIconDataFromName ( selectOptionName ) {
-		let selectOption = ourSelectOptions.find ( selOption => selOption.name === selectOptionName );
-		return selectOption ? selectOption.icon : null;
-	}
-
-	/**
-	Creates the toolbar
-	@param {function} onSelectEventListener the event listener to be activated when the user select an option
-	@param {function} onButtonClickEventListener the event listener to be activated when the user click on a button
-	*/
-
-	createToolbar ( dialogFunctions ) {
-		ourDialogFunctions = dialogFunctions;
-		ourToolbarDiv = theHTMLElementsFactory.create (
+		this.#toolbarDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
@@ -377,29 +211,30 @@ class NoteDialogToolbar {
 			}
 		);
 
-		ourCreateToolbarSelect ( );
-		ourCreateToolbarButtons ( );
-		return ourToolbarDiv;
+		this.#addToolbarElements ( );
+
 	}
-}
-
-const OUR_NOTE_DIALOG_TOOLBAR = new NoteDialogToolbar ( );
-
-export {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@desc The one and only one instance of NoteDialogToolbar class
-	@type {NoteDialogToolbar}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Refresh the toolbar - needed after a file upload.
 	*/
 
-	OUR_NOTE_DIALOG_TOOLBAR as theNoteDialogToolbar
-};
+	update ( ) {
+		this.#toolbarDiv.innerText = '';
+		this.#addToolbarElements ( );
+	}
+
+	/**
+	get the control HTML
+	*/
+
+	get content ( ) {
+		return [ this.#toolbarDiv ];
+	}
+
+}
+
+export default NoteDialogToolbar;
 
 /*
 --- End of NoteDialogToolbar.js file ------------------------------------------------------------------------------------------
