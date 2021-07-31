@@ -28,6 +28,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 	#linkControl = null;
 	#phoneControl = null;
 	#previewControl = null;
+	#toolbar = null;
 
 	constructor ( note, routeObjId, startGeoCoder ) {
 		super ( );
@@ -37,6 +38,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 		NoteDialogEventListeners.previewNote = new Note ( );
 		NoteDialogEventListeners.previewNote.jsonObject = note.jsonObject;
 
+		this.#toolbar = new NoteDialogToolbarV3 ( );
 		this.#iconDimsControl = new NoteDialogIconDimsControl ( );
 		this.#iconControl = new NoteDialogIconControl ( );
 		this.#tooltipControl = new NoteDialogTooltipControl ( );
@@ -49,6 +51,10 @@ class NoteDialogV3 extends BaseDialogV3 {
 
 		NoteDialogEventListeners.noteDialog = this;
 		this.setControlsValues ( note );
+	}
+
+	updateToolbar ( ) {
+		this.#toolbar.update ( );
 	}
 
 	updatePreview ( ) {
@@ -65,7 +71,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 
 	get content ( ) {
 		return [].concat (
-			new NoteDialogToolbarV3 ( ).content,
+			this.#toolbar.content,
 			this.#iconDimsControl.content,
 			this.#iconControl.content,
 			this.#tooltipControl.content,

@@ -51,7 +51,7 @@ import { ICON_DIMENSIONS } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogIconDimsControl
-@classdesc coming soon...
+@classdesc This class is the icnWidth and iconHeight control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,16 +63,6 @@ class NoteDialogIconDimsControl {
 	#iconWidthInput = null;
 	#iconHeightInput = null;
 
-	#onHeightInputControl ( ) {
-		let dispatchedEvent = new Event ( 'inputupdated' );
-		dispatchedEvent.data = { iconHeight : this.#iconHeightInput.value };
-		this.#iconDimsDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
-	#onWidthInputControl ( ) {
-		let dispatchedEvent = new Event ( 'inputupdated' );
-		dispatchedEvent.data = { iconWidth : this.#iconWidthInput.value };
-		this.#iconDimsDiv.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
 	constructor ( ) {
 		this.#iconDimsDiv = theHTMLElementsFactory.create (
 			'div',
@@ -120,6 +110,10 @@ class NoteDialogIconDimsControl {
 
 		this.#iconHeightInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) { return [ this.#iconDimsDiv ]; }
 

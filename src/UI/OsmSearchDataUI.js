@@ -47,7 +47,7 @@ Tests ...
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import { theNoteDialogToolbar } from '../dialogs/NoteDialogToolbar.js';
+import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import OsmSearchContextMenu from '../contextMenus/OsmSearchContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import ObjId from '../data/ObjId.js';
@@ -143,7 +143,7 @@ class OsmSearchDataUI {
 				'</text></svg></div>';
 		}
 		else {
-			iconContent = theNoteDialogToolbar.getIconDataFromName ( htmlElement.osmElement.description ) || '';
+			iconContent = theNoteDialogToolbarData.getIconContentFromName ( htmlElement.osmElement.description ) || '';
 		}
 		let iconCell = theHTMLElementsFactory.create (
 			'div',

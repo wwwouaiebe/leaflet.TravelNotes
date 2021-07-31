@@ -50,7 +50,7 @@ import { ZERO, ONE, ICON_DIMENSIONS } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogToolbarData
-@classdesc coming soon...
+@classdesc This class is a container for the edition buttons and predefined icons
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -65,15 +65,36 @@ class NoteDialogToolbarData {
 	constructor ( ) {
 	}
 
+	/**
+	the edition buttons
+	*/
+
 	get buttons ( ) { return this.#editionButtons; }
+
+	/**
+	the predefined icons
+	*/
 
 	get icons ( ) {
 		return this.#preDefinedIcons;
 	}
 
+	/**
+	get and icon from the icon position in the array
+	*/
+
 	getIconData ( index ) {
 		return this.#preDefinedIcons [ index ] [ ONE ];
 	}
+
+	getIconContentFromName ( iconName ) {
+		let preDefinedIcon = this.#preDefinedIconsMap.get ( iconName );
+		return preDefinedIcon ? preDefinedIcon.icon : '';
+	}
+
+	/**
+	Load a json file with predefined icons and / or edition buttons
+	*/
 
 	loadJson ( jsonData ) {
 		if ( jsonData.editionButtons ) {
@@ -94,6 +115,17 @@ class NoteDialogToolbarData {
 		);
 	}
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@desc The one and only one instance of NoteDialogToolbarData class
+@type {NoteDialogToolbarData}
+@constant
+@global
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 const theNoteDialogToolbarData = new NoteDialogToolbarData ( );
 

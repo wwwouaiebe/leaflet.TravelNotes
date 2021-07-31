@@ -50,7 +50,7 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogAddressControl
-@classdesc coming soon...
+@classdesc This class is the address control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -109,6 +109,10 @@ class NoteDialogAddressControl {
 		this.#addressInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
 		this.#addressInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) {
 		return [ this.#addressHeaderDiv, this.#addressInputDiv ];

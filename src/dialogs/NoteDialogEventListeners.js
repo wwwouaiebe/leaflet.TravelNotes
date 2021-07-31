@@ -214,6 +214,7 @@ class NoteDialogEventListeners {
 			try {
 				fileContent = JSON.parse ( fileReader.result );
 				theNoteDialogToolbarData.loadJson ( fileContent );
+				NoteDialogEventListeners.noteDialog.updateToolbar ( );
 			}
 			catch ( err ) {
 				if ( err instanceof Error ) {
@@ -308,9 +309,9 @@ class NoteDialogEventListeners {
 			}
 		);
 	}
-	
+
 	/**
-	Geocoder success event listener 
+	Geocoder success event listener
 	@private
 	*/
 
@@ -322,8 +323,8 @@ class NoteDialogEventListeners {
 		}
 
 		NoteDialogEventListeners.previewNote.address = addressString;
-		NoteDialogEventListeners.noteDialog.updatePreview ( );	
-		NoteDialogEventListeners.noteDialog.setControlsValues ( { address : addressString } ) 
+		NoteDialogEventListeners.noteDialog.updatePreview ( );
+		NoteDialogEventListeners.noteDialog.setControlsValues ( { address : addressString } );
 	}
 
 	/**
@@ -335,7 +336,7 @@ class NoteDialogEventListeners {
 		new GeoCoder ( ).getAddressWithPromise ( NoteDialogEventListeners.previewNote.latLng )
 			.then ( NoteDialogEventListeners.#onAddressUpdatedByGeoCoder )
 			.catch (
-				( err ) => {
+				err => {
 					if ( err ) {
 						console.error ( err );
 					}

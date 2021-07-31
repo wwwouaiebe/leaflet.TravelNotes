@@ -51,7 +51,7 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogPopupControl
-@classdesc coming soon...
+@classdesc This class is the popupContent control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -83,6 +83,10 @@ class NoteDialogPopupControl {
 		this.#popupTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
 		this.#popupTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) { return [ this.#popupDiv ]; }
 

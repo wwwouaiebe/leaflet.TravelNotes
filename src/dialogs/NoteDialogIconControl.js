@@ -53,7 +53,7 @@ const OUR_DEFAULT_ICON = '?????';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogIconControl
-@classdesc coming soon...
+@classdesc This class is the iconContent control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,6 +86,10 @@ class NoteDialogIconControl {
 		this.#iconTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
 		this.#iconTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) { return [ this.#iconDiv ]; }
 

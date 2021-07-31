@@ -50,7 +50,7 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogTooltipControl
-@classdesc coming soon...
+@classdesc This class is the tooltipContent control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -82,6 +82,10 @@ class NoteDialogTooltipControl {
 		this.#tooltipInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
 		this.#tooltipInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) { return [ this.#tooltipDiv ]; }
 

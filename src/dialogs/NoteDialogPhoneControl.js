@@ -50,7 +50,7 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogPhoneControl
-@classdesc coming soon...
+@classdesc This class is the phone control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -99,6 +99,10 @@ class NoteDialogPhoneControl {
 		this.#phoneInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
 		this.#phoneInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
 

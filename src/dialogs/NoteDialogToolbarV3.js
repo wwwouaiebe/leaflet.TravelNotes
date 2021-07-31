@@ -54,7 +54,7 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogToolbarV3
-@classdesc coming soon...
+@classdesc This class is the toolbar of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,6 +63,11 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 class NoteDialogToolbarV3 {
 
 	#toolbarDiv = null;
+
+	/**
+	Add the icon selector to the toolbar
+	@private
+	*/
 
 	#addIconsSelector ( ) {
 		let iconSelect = theHTMLElementsFactory.create (
@@ -83,6 +88,11 @@ class NoteDialogToolbarV3 {
 		);
 		iconSelect.selectedIndex = NOT_FOUND;
 	}
+
+	/**
+	Add the toolbar buttons to the toolbar ( toogle and open file )
+	@private
+	*/
 
 	#addToolbarButtons ( ) {
 
@@ -108,6 +118,11 @@ class NoteDialogToolbarV3 {
 		).addEventListener ( 'click', NoteDialogEventListeners.onOpenFileButtonCkick, false );
 	}
 
+	/**
+	Add the edition buttons to the toolbar
+	@private
+	*/
+
 	#addEditionButtons ( ) {
 		theNoteDialogToolbarData.buttons.forEach (
 			editionButton => {
@@ -126,6 +141,17 @@ class NoteDialogToolbarV3 {
 		);
 	}
 
+	/**
+	Add elements to the toolbar
+	@private
+	*/
+
+	#addToolbarElements ( ) {
+		this.#addIconsSelector ( );
+		this.#addToolbarButtons ( );
+		this.#addEditionButtons ( );
+	}
+
 	constructor ( ) {
 
 		this.#toolbarDiv = theHTMLElementsFactory.create (
@@ -136,10 +162,22 @@ class NoteDialogToolbarV3 {
 			}
 		);
 
-		this.#addIconsSelector ( );
-		this.#addToolbarButtons ( );
-		this.#addEditionButtons ( );
+		this.#addToolbarElements ( );
+
 	}
+
+	/**
+	Refresh the toolbar - needed after a file upload.
+	*/
+
+	update ( ) {
+		this.#toolbarDiv.innerText = '';
+		this.#addToolbarElements ( );
+	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) {
 		return [ this.#toolbarDiv ];

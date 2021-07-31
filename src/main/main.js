@@ -229,7 +229,7 @@ function ourMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@function myLoadNoteDialogConfig
-	@desc This function load the content of the TravelNotesNoteDialogXX.json file into theNoteDialogToolbar object
+	@desc This function load the content of the TravelNotesNoteDialogXX.json file into theNoteDialogToolbarData object
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------

@@ -53,7 +53,7 @@ import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogLinkControl
-@classdesc coming soon...
+@classdesc This class is the url control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -131,6 +131,10 @@ class NoteDialogLinkControl {
 		this.#linkInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
 
 	}
+
+	/**
+	get the control HTML
+	*/
 
 	get content ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
 

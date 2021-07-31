@@ -50,7 +50,7 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogPreviewControl
-@classdesc coming soon...
+@classdesc This class is the notePreview control of the NotDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
