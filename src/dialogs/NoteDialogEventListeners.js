@@ -46,8 +46,9 @@ import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 
-import { ZERO } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -66,6 +67,8 @@ class NoteDialogEventListeners {
 	static focusControl = null;
 
 	static noteDialog = null;
+
+	static routeObjId = INVALID_OBJ_ID;
 
 	static onFocusControl ( focusEvent ) {
 		NoteDialogEventListeners.focusControl = focusEvent.target;
@@ -176,27 +179,42 @@ class NoteDialogEventListeners {
 	static onIconSelectChange ( changeEvent ) {
 		let preDefinedIcon = theNoteDialogToolbarData.getIconData ( changeEvent.target.selectedIndex );
 
-		/*
 		if ( 'SvgIcon' === preDefinedIcon.icon ) {
-			if ( INVALID_OBJ_ID === routeObjId ) {
-				myNoteDialog.showError (
+			if ( INVALID_OBJ_ID === NoteDialogEventListeners.routeObjId ) {
+				NoteDialogEventListeners.noteDialog.showError (
 					theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
 				);
+
+				return;
 			}
 
-			else {
-				myNoteDialog.showWait ( );
-				let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdress ( note.latLng, routeObjId );
-				if ( svgIconData.statusOk ) {
-					myOnSvgIconSuccess ( svgIconData );
-				}
-				else {
-					myOnSvgIconError ( );
-				}
-			}
+			NoteDialogEventListeners.noteDialog.showWait ( );
+			new MapIconFromOsmFactory ( ).getIconAndAdressWithPromise (
+				NoteDialogEventListeners.previewNote.latLng,
+				NoteDialogEventListeners.routeObjId
+			)
+				.then (
+					mapIconData => {
+						NoteDialogEventListeners.noteDialog.hideWait ( );
+						NoteDialogEventListeners.noteDialog.setControlsValues ( mapIconData.noteData );
+						for ( const property in mapIconData.noteData ) {
+							NoteDialogEventListeners.previewNote [ property ] = mapIconData.noteData [ property ];
+						}
+						NoteDialogEventListeners.noteDialog.updatePreview ( );
+					}
+				)
+				.catch (
+					( ) => {
+						NoteDialogEventListeners.noteDialog.hideWait ( );
+						NoteDialogEventListeners.noteDialog.showError (
+							theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' )
+						);
+					}
+				);
+
+			return;
+
 		}
-		else {
-			*/
 
 		let iconData = {
 			iconContent : preDefinedIcon.icon,

@@ -33,6 +33,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 		super ( );
 		this.#note = note;
 		this.#startGeoCoder = startGeoCoder;
+		NoteDialogEventListeners.routeObjId = routeObjId;
 		NoteDialogEventListeners.previewNote = new Note ( );
 		NoteDialogEventListeners.previewNote.jsonObject = note.jsonObject;
 
@@ -58,6 +59,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 		if ( this.#startGeoCoder ) {
 			this.#addressControl.startGeoCoder ( );
 		}
+
 		this.toogleContents ( );
 	}
 

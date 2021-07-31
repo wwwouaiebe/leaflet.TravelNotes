@@ -169,38 +169,35 @@ class MapIconFromOsmFactory {
 
 		this.#requestStarted = false;
 
+		let address = mapIconData.streets;
+		if ( '' !== this.#overpassAPIDataLoader.city ) {
+			address += ' <span class="TravelNotes-NoteHtml-Address-City">' + this.#overpassAPIDataLoader.city + '</span>';
+		}
+		if ( this.#overpassAPIDataLoader.place && this.#overpassAPIDataLoader.place !== this.#overpassAPIDataLoader.city ) {
+			address += ' (' + this.#overpassAPIDataLoader.place + ')';
+		}
+
 		return Object.freeze (
 			{
 				statusOk : true,
-				svg : svgElement,
-				tooltip : mapIconData.tooltip,
-				city : this.#overpassAPIDataLoader.city,
-				place : this.#overpassAPIDataLoader.place,
-				streets : mapIconData.streets,
-				latLng : this.#mapIconPosition.latLng
+				noteData : {
+					iconContent : svgElement.outerHTML,
+					tooltipContent : mapIconData.tooltip,
+					address : address,
+					iconWidth : ICON_DIMENSIONS.width,
+					iconHeight : ICON_DIMENSIONS.height,
+					latLng : this.#mapIconPosition.latLng
+				}
 			}
 		);
 	}
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	get the svg and the data needed for creating the icon
-	@param {Array.<number>} iconLatLng The latitude and longitude of the icon
-	@param {!number} routeObjId The objId of the route to witch the icon will be attached.
-	@return {OsmNoteData} An object with the svg and data
-	*/
-
-	async getIconAndAdress ( iconLatLng, routeObjId ) {
-		this.#mapIconPosition.latLng = iconLatLng;
-		this.#route = theDataSearchEngine.getRoute ( routeObjId );
-
+	async #exeGetIconAndAdress ( ) {
 		if ( this.#requestStarted ) {
 			return Object.freeze (
 				{
-					statusOk : false
+					statusOk : false,
+					noteData : null
 				}
 			);
 		}
@@ -239,6 +236,50 @@ class MapIconFromOsmFactory {
 			}
 		);
 	}
+
+	async #exeGetIconAndAdressWithPromise ( onOk, onError ) {
+		let result = await this.#exeGetIconAndAdress ( );
+
+		if ( result.statusOk ) {
+			onOk ( result );
+		}
+		else {
+			onError ( 'An error occurs...' );
+		}
+	}
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
+	/**
+	get the svg and the data needed for creating the icon, using an async function
+	@param {Array.<number>} iconLatLng The latitude and longitude of the icon
+	@param {!number} routeObjId The objId of the route to witch the icon will be attached.
+	@return {OsmNoteData} An object with the svg and data
+	*/
+
+	async getIconAndAdressAsync ( iconLatLng, routeObjId ) {
+		this.#mapIconPosition.latLng = iconLatLng;
+		this.#route = theDataSearchEngine.getRoute ( routeObjId );
+
+		return this.#exeGetIconAndAdress ( );
+	}
+
+	/**
+	get the svg and the data needed for creating the icon, using a promise
+	@param {Array.<number>} iconLatLng The latitude and longitude of the icon
+	@param {!number} routeObjId The objId of the route to witch the icon will be attached.
+	@return {Promise} A Promise fullfilled with the svg data
+	*/
+
+	getIconAndAdressWithPromise ( iconLatLng, routeObjId ) {
+		this.#mapIconPosition.latLng = iconLatLng;
+		this.#route = theDataSearchEngine.getRoute ( routeObjId );
+
+		return new Promise ( ( onOk, onError ) => this.#exeGetIconAndAdressWithPromise ( onOk, onError ) );
+	}
+
 }
 
 export default MapIconFromOsmFactory;

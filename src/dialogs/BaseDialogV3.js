@@ -233,17 +233,17 @@ class BaseDialogV3 {
 		theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-WaitAnimationBullet TravelNotes-Hidden'
+				className : 'TravelNotes-WaitAnimationBullet'
 			},
 			theHTMLElementsFactory.create (
 				'div',
 				{
-					className : 'TravelNotes-WaitAnimation TravelNotes-Hidden'
+					className : 'TravelNotes-WaitAnimation'
 				},
 				BaseDialogEvents.containerDiv.waitDiv = theHTMLElementsFactory.create (
 					'div',
 					{
-						className : 'TravelNotes-BaseDialog-WaitDiv'
+						className : 'TravelNotes-BaseDialog-WaitDiv  TravelNotes-Hidden'
 					},
 					BaseDialogEvents.containerDiv
 				)
@@ -334,6 +334,7 @@ class BaseDialogV3 {
 			},
 			BaseDialogEvents.containerDiv
 		);
+		this.#createWaitDiv ( );
 		this.#createFooterDiv ( );
 
 		document.body.appendChild ( BaseDialogEvents.backgroundDiv );
@@ -360,12 +361,14 @@ class BaseDialogV3 {
 		return new Promise ( ( onOk, onError ) => this.#show ( onOk, onError ) );
 	}
 
-	hideOkButton ( ) {
-		BaseDialogEvents.containerDiv.footerDiv.okButton.classList.add ( 'TravelNotes-Hidden' );
+	hideWait ( ) {
+		BaseDialogEvents.containerDiv.waitDiv.classList.add ( 'TravelNotes-Hidden' );
+		BaseDialogEvents.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
 	}
 
-	showOkButton ( ) {
-		BaseDialogEvents.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
+	showWait ( ) {
+		BaseDialogEvents.containerDiv.waitDiv.classList.remove ( 'TravelNotes-Hidden' );
+		BaseDialogEvents.containerDiv.footerDiv.okButton.classList.add ( 'TravelNotes-Hidden' );
 	}
 
 	showError ( errorText ) {

@@ -65,9 +65,9 @@ class NoteDialogAddressControl {
 	#latLng = null;
 
 	async #setAddressWithGeoCoder ( ) {
-		NoteDialogEventListeners.noteDialog.hideOkButton ( );
+		NoteDialogEventListeners.noteDialog.showWait ( );
 		let address = await new GeoCoder ( ).getAddress ( this.#latLng );
-		NoteDialogEventListeners.noteDialog.showOkButton ( );
+		NoteDialogEventListeners.noteDialog.hideWait ( );
 		if ( address.statusOk ) {
 			let addressString = address.street;
 			if ( '' !== address.city ) {

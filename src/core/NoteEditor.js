@@ -112,22 +112,13 @@ class NoteEditor {
 	@private
 	*/
 
-	#newNoteFromOsmData ( osmNoteData, route ) {
+	#newNoteFromOsmData ( noteData, route ) {
 		let note = new Note ( );
-		note.iconContent = osmNoteData.svg.outerHTML;
-		note.popupContent = '';
-		note.iconWidth = ICON_DIMENSIONS.width;
-		note.iconHeight = ICON_DIMENSIONS.height;
-		note.tooltipContent = osmNoteData.tooltip;
-		note.address = osmNoteData.streets;
-		if ( '' !== osmNoteData.city ) {
-			note.address += ' ' + '<span class="TravelNotes-NoteHtml-Address-City">' + osmNoteData.city + '</span>';
+		for ( const property in noteData ) {
+			note [ property ] = noteData [ property ];
 		}
-		if ( osmNoteData.place && osmNoteData.place !== osmNoteData.city ) {
-			note.address += ' (' + osmNoteData.place + ')';
-		}
-		note.latLng = osmNoteData.latLng;
-		note.iconLatLng = osmNoteData.latLng;
+
+		note.iconLatLng = note.latLng;
 		note.distance = theGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
 		note.chainedDistance = route.chainedDistance;
 		route.notes.add ( note );
@@ -163,9 +154,9 @@ class NoteEditor {
 			);
 
 			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-			let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdress ( latLng, route.objId );
+			let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdressAsync ( latLng, route.objId );
 			if ( svgIconData.statusOk ) {
-				this.#newNoteFromOsmData ( svgIconData, route );
+				this.#newNoteFromOsmData ( svgIconData.noteData, route );
 			}
 			else {
 				console.error ( 'An error occurs when creating the svg icon ' + maneuverIterator.index );
