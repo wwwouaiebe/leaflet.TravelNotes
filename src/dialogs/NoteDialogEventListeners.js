@@ -47,6 +47,7 @@ import theTranslator from '../UI/Translator.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
+import GeoCoder from '../core/GeoCoder.js';
 
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -138,15 +139,6 @@ class NoteDialogEventListeners {
 		else {
 			NoteDialogEventListeners.noteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
 		}
-	}
-
-	/**
-	This method update the address in the preview after geocoding.
-	*/
-
-	static onAddressUpdatedByGeoCoder ( newAddress ) {
-		NoteDialogEventListeners.previewNote.address = newAddress;
-		NoteDialogEventListeners.noteDialog.updatePreview ( );
 	}
 
 	/**
@@ -316,6 +308,46 @@ class NoteDialogEventListeners {
 			}
 		);
 	}
+	
+	/**
+	Geocoder success event listener 
+	@private
+	*/
+
+	static #onAddressUpdatedByGeoCoder ( address ) {
+		NoteDialogEventListeners.noteDialog.hideWait ( );
+		let addressString = address.street;
+		if ( '' !== address.city ) {
+			addressString += ' <span class="TravelNotes-NoteHtml-Address-City">' + address.city + '</span>';
+		}
+
+		NoteDialogEventListeners.previewNote.address = addressString;
+		NoteDialogEventListeners.noteDialog.updatePreview ( );	
+		NoteDialogEventListeners.noteDialog.setControlsValues ( { address : addressString } ) 
+	}
+
+	/**
+	click event listener for the reset address button. Also called when a new note is created
+	*/
+
+	static setAddressWithGeoCoder ( ) {
+		NoteDialogEventListeners.noteDialog.showWait ( );
+		new GeoCoder ( ).getAddressWithPromise ( NoteDialogEventListeners.previewNote.latLng )
+			.then ( NoteDialogEventListeners.#onAddressUpdatedByGeoCoder )
+			.catch (
+				( err ) => {
+					if ( err ) {
+						console.error ( err );
+					}
+					NoteDialogEventListeners.noteDialog.hideWait ( );
+					NoteDialogEventListeners.noteDialog.showError (
+						theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' )
+					);
+				}
+			);
+
+	}
+
 }
 
 export default NoteDialogEventListeners;

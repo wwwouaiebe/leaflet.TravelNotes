@@ -272,7 +272,7 @@ function ourNewNoteDialog ( note, routeObjId, startGeoCoder ) {
 
 	async function myOnAddressButtonClick ( ) {
 		myNoteDialog.okButton.classList.add ( 'TravelNotes-Hidden' );
-		let address = await myGeoCoder.getAddress ( note.latLng );
+		let address = await myGeoCoder.getAddressAsync ( note.latLng );
 		if ( address.statusOk ) {
 			myOnGeocoderSucces ( address );
 		}

@@ -137,7 +137,7 @@ class WayPointEditor {
 			return;
 		}
 
-		let address = await new GeoCoder ( ).getAddress ( latLng );
+		let address = await new GeoCoder ( ).getAddressAsync ( latLng );
 		if ( address.statusOk ) {
 			let addressString = address.street;
 			if ( '' !== address.city ) {

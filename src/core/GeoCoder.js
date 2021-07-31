@@ -229,6 +229,27 @@ class GeoCoder {
 		];
 	}
 
+	async #execGetAddress ( ) {
+		this.#nominatimStatusOk = true;
+		this.#nominatimData = null;
+		this.#overpassAPIDataLoader = new OverpassAPIDataLoader (
+			{ searchWays : false, searchRelations : false, setGeometry : true }
+		);
+		await this.#overpassAPIDataLoader.loadData ( this.#getOverpassQueries ( ), this.#latLng );
+		await this.#loadNominatimData ( );
+		return this.#mergeData ( );
+	}
+
+	async #exeGetAdressWithPromise ( onOk, onError ) {
+		let result = await this.#execGetAddress ( );
+		if ( result.statusOk ) {
+			onOk ( result );
+		}
+		else {
+			onError ( 'An error occurs...' );
+		}
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -240,16 +261,14 @@ class GeoCoder {
 	before using the data.
 	*/
 
-	async getAddress ( latLng ) {
-		this.#nominatimStatusOk = true;
+	async getAddressAsync ( latLng ) {
 		this.#latLng = latLng;
-		this.#nominatimData = null;
-		this.#overpassAPIDataLoader = new OverpassAPIDataLoader (
-			{ searchWays : false, searchRelations : false, setGeometry : true }
-		);
-		await this.#overpassAPIDataLoader.loadData ( this.#getOverpassQueries ( ), this.#latLng );
-		await this.#loadNominatimData ( );
-		return this.#mergeData ( );
+		return this.#execGetAddress ( );
+	}
+
+	getAddressWithPromise ( latLng ) {
+		this.#latLng = latLng;
+		return new Promise ( ( onOk, onError ) => this.#exeGetAdressWithPromise ( onOk, onError ) );
 	}
 
 }

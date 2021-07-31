@@ -449,7 +449,7 @@ class NoteEditor {
 			this.#waitUI.showInfo ( 'Creating address' );
 			let geoCoderData = null;
 			try {
-				geoCoderData = await new GeoCoder ( ).getAddress ( [ data.osmElement.lat, data.osmElement.lon ] );
+				geoCoderData = await new GeoCoder ( ).getAddressAsync ( [ data.osmElement.lat, data.osmElement.lon ] );
 			}
 			catch ( err ) {
 				console.error ( err );

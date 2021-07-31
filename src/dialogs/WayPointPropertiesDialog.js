@@ -128,7 +128,7 @@ function ourNewWayPointPropertiesDialog ( wayPoint ) {
 
 		myWayPointPropertiesDialog.okButton.classList.add ( 'TravelNotes-Hidden' );
 		let geoCoder = new GeoCoder ( );
-		let address = await geoCoder.getAddress ( wayPoint.latLng );
+		let address = await geoCoder.getAddressAsync ( wayPoint.latLng );
 		myWayPointPropertiesDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
 		if ( address.statusOk ) {
 			if ( theConfig.wayPoint.geocodingIncludeName ) {

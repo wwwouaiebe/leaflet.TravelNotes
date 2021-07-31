@@ -45,7 +45,6 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
-import GeoCoder from '../core/GeoCoder.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -64,25 +63,6 @@ class NoteDialogAddressControl {
 	#addressInput = null;
 	#latLng = null;
 
-	async #setAddressWithGeoCoder ( ) {
-		NoteDialogEventListeners.noteDialog.showWait ( );
-		let address = await new GeoCoder ( ).getAddress ( this.#latLng );
-		NoteDialogEventListeners.noteDialog.hideWait ( );
-		if ( address.statusOk ) {
-			let addressString = address.street;
-			if ( '' !== address.city ) {
-				addressString += ' <span class="TravelNotes-NoteHtml-Address-City">' + address.city + '</span>';
-			}
-			this.#addressInput.value = addressString;
-			NoteDialogEventListeners.onAddressUpdatedByGeoCoder ( addressString );
-		}
-		else {
-			NoteDialogEventListeners.noteDialog.showError (
-				theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' )
-			);
-		}
-	}
-
 	constructor ( latLng ) {
 		this.#latLng = latLng;
 		this.#addressHeaderDiv = theHTMLElementsFactory.create (
@@ -100,7 +80,7 @@ class NoteDialogAddressControl {
 			},
 			this.#addressHeaderDiv
 		)
-			.addEventListener ( 'click', ( ) => { this.#setAddressWithGeoCoder ( ); }, false );
+			.addEventListener ( 'click', NoteDialogEventListeners.setAddressWithGeoCoder, false );
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -137,8 +117,6 @@ class NoteDialogAddressControl {
 	get address ( ) { return this.#addressInput.value; }
 
 	set address ( Value ) { this.#addressInput.value = Value; }
-
-	startGeoCoder ( ) { this.#setAddressWithGeoCoder ( ); }
 
 }
 

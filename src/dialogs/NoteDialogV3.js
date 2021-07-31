@@ -57,7 +57,7 @@ class NoteDialogV3 extends BaseDialogV3 {
 
 	onShow ( ) {
 		if ( this.#startGeoCoder ) {
-			this.#addressControl.startGeoCoder ( );
+			NoteDialogEventListeners.setAddressWithGeoCoder ( );
 		}
 
 		this.toogleContents ( );
