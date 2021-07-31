@@ -35,10 +35,6 @@ Changes:
 	max-width: 44em;
 }
 
-#TravelNotes-NoteDialog-MainDataDiv {
-	width: 43em;
-}
-
 #TravelNotes-NoteDialog-ToolbarDiv {
 	max-width: 39em;
 }
@@ -64,11 +60,6 @@ Changes:
 
 .TravelNotes-NoteDialog-EditorButton:hover {
 	border-color: black;
-}
-
-.TravelNotes-NoteDialog-DataDiv {
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
 }
 
 .TravelNotes-NoteDialog-TextArea {

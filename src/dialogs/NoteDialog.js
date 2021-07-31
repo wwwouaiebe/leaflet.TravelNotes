@@ -163,6 +163,7 @@ class NoteDialog extends BaseDialogV3 {
 
 		NoteDialogEventListeners.noteDialog = this;
 		this.setControlsValues ( note );
+		Object.seal ( this );
 	}
 
 	/**
@@ -182,7 +183,7 @@ class NoteDialog extends BaseDialogV3 {
 	}
 
 	/**
-	Overload of the BaseDialog.onShow ( ) method. Called by the show ( ) method
+	Overload of the BaseDialog.onShow ( ) method.
 	*/
 
 	onShow ( ) {
@@ -194,10 +195,10 @@ class NoteDialog extends BaseDialogV3 {
 	}
 
 	/**
-	Overload of the BaseDialog.beforeOk ( ) method. Called when the ok button is clicked but before closing the dialog
+	Overload of the BaseDialog.canClose ( ) method.
 	*/
 
-	beforeOk ( ) {
+	canClose ( ) {
 		if ( '' === this.#iconControl.iconContent ) {
 			this.showError ( theTranslator.getText ( 'Notedialog - The icon content cannot be empty' ) );
 			return false;
@@ -210,11 +211,14 @@ class NoteDialog extends BaseDialogV3 {
 		}
 
 		// saving values in the note.
-		// latLng can change for map icons, so we save the value from the preview note
 		this.getControlsValues ( this.#note );
+
+		// latLng can change for map icons, so we save the value from the preview note
 		this.#note.latLng = NoteDialogEventListeners.previewNote.latLng;
+
+		// Sanitizing the html code entered by the user
 		this.#note.validateData ( );
-		NoteDialogEventListeners.reset ( );
+
 		return true;
 	}
 
@@ -228,7 +232,17 @@ class NoteDialog extends BaseDialogV3 {
 	}
 
 	/**
+	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked
+	*/
+
+	onOk ( ) {
+		NoteDialogEventListeners.reset ( );
+		super.onOk ( );
+	}
+
+	/**
 	return the content of the dialog box. Overload of the BaseDialog.content property
+	@readonly
 	*/
 
 	get content ( ) {
@@ -247,6 +261,7 @@ class NoteDialog extends BaseDialogV3 {
 
 	/**
 	return the footer of the dialog box. Overload of the BaseDialog.footer property
+	@readonly
 	*/
 
 	get footer ( ) {

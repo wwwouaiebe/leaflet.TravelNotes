@@ -1,136 +1,8 @@
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
+import BaseDialogEventListeners from '../dialogs/BaseDialogEventListeners.js';
 
-import { ZERO, TWO } from '../util/Constants.js';
-
-const OUR_DRAG_MARGIN = 20;
-
-/**
-@--------------------------------------------------------------------------------------------------------------------------
-
-@class BaseDialogEventListeners
-@classdesc This class contains static methods, static variables and event listeners for the BaseDialog class
-@hideconstructor
-
-@--------------------------------------------------------------------------------------------------------------------------
-*/
-
-class BaseDialogEventListeners {
-	static backgroundDiv = null;
-	static containerDiv = null;
-
-	static #dragStartX = ZERO;
-	static #dragStartY = ZERO;
-	static baseDialog = null;
-
-	/**
-	Reset the variables
-	*/
-
-	static reset ( ) {
-		BaseDialogEventListeners.backgroundDiv = null;
-		BaseDialogEventListeners.containerDiv = null;
-		BaseDialogEventListeners.#dragStartX = ZERO;
-		BaseDialogEventListeners.#dragStartY = ZERO;
-		BaseDialogEventListeners.baseDialog = null;
-	}
-
-	/**
-	Ok button click event listener
-	*/
-
-	static onOkButtonClick ( ) {
-		if ( BaseDialogEventListeners.baseDialog.beforeOk ( ) ) {
-			BaseDialogEventListeners.onCloseDialog ( );
-			document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
-			BaseDialogEventListeners.baseDialog.onOk ( );
-			BaseDialogEventListeners.reset ( );
-		}
-	}
-
-	/**
-	Cancel button click event listener
-	*/
-
-	static onCancelButtonClick ( ) {
-		BaseDialogEventListeners.onCloseDialog ( );
-		document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
-		BaseDialogEventListeners.baseDialog.onCancel ( );
-		BaseDialogEventListeners.reset ( );
-	}
-
-	/**
-	Event listener removing on close dialog
-	*/
-
-	static onCloseDialog ( ) {
-		BaseDialogEventListeners.containerDiv.topBar.cancelButton.removeEventListener (
-			'click', BaseDialogEventListeners.onCancelButtonClick, false
-		);
-		BaseDialogEventListeners.containerDiv.footerDiv.okButton.addEventListener (
-			'click',
-			BaseDialogEventListeners.onOkButtonClick,
-			false
-		);
-		BaseDialogEventListeners.containerDiv.topBar.removeEventListener (
-			'dragstart',
-			BaseDialogEventListeners.onTopBarDragStart,
-			false
-		);
-		BaseDialogEventListeners.containerDiv.topBar.removeEventListener (
-			'dragend',
-			BaseDialogEventListeners.onTopBarDragEnd,
-			false
-		);
-
-	}
-
-	/**
-	Top bar dragstart event listener
-	*/
-
-	static onTopBarDragStart ( dragStartEvent ) {
-		try {
-			dragStartEvent.dataTransfer.setData ( 'Text', '1' );
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
-		BaseDialogEventListeners.#dragStartX = dragStartEvent.screenX;
-		BaseDialogEventListeners.#dragStartX = dragStartEvent.screenY;
-	}
-
-	/**
-	Top bar dragend event listener
-	*/
-
-	static onTopBarDragEnd ( dragEndEvent ) {
-		BaseDialogEventListeners.containerDiv.dialogX += dragEndEvent.screenX - BaseDialogEventListeners.#dragStartX;
-		BaseDialogEventListeners.containerDiv.dialogX =
-			Math.min (
-				Math.max ( BaseDialogEventListeners.containerDiv.dialogX, OUR_DRAG_MARGIN ),
-				BaseDialogEventListeners.backgroundDiv.clientWidth -
-					BaseDialogEventListeners.containerDiv.clientWidth -
-					OUR_DRAG_MARGIN
-			);
-
-		BaseDialogEventListeners.containerDiv.dialogY += dragEndEvent.screenY - BaseDialogEventListeners.#dragStartX;
-		BaseDialogEventListeners.containerDiv.dialogY =
-			Math.max ( BaseDialogEventListeners.containerDiv.dialogY, OUR_DRAG_MARGIN );
-
-		let dialogMaxHeight =
-			BaseDialogEventListeners.backgroundDiv.clientHeight -
-			Math.max ( BaseDialogEventListeners.containerDiv.dialogY, ZERO ) -
-			OUR_DRAG_MARGIN;
-
-		BaseDialogEventListeners.containerDiv.style.left = String ( BaseDialogEventListeners.containerDiv.dialogX ) + 'px';
-		BaseDialogEventListeners.containerDiv.style.top = String ( BaseDialogEventListeners.containerDiv.dialogY ) + 'px';
-		BaseDialogEventListeners.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
-	}
-
-}
+import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -145,37 +17,23 @@ class BaseDialogEventListeners {
 
 class BaseDialogV3 {
 
+	/**
+	onOk promise function
+	@private
+	*/
+
 	#onPromiseOkFct = null;
+
+	/**
+	onError promise function
+	@private
+	*/
+
 	#onPromiseErrorFct = null;
 
 	/**
-	Cancel button handler
-	*/
-
-	onCancel ( ) {
-		BaseDialogEventListeners.reset ( );
-		this.#onPromiseErrorFct ( 'Canceled by user' );
-	}
-
-	/**
-	Called before the dialog will be closed with the ok button. Can be overloaded in the derived classes
-	@return {boolean} true when the dialog can be closed, false otherwise.
-	*/
-
-	beforeOk ( ) {
-		return true;
-	}
-
-	/**
-	Ok button handler
-	*/
-
-	onOk ( ) {
-		this.#onPromiseOkFct ( );
-	}
-
-	/**
-	create the background
+	Create the background
+	@private
 	*/
 
 	#createBackgroundDiv ( ) {
@@ -188,18 +46,36 @@ class BaseDialogV3 {
 		BaseDialogEventListeners.backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
 		BaseDialogEventListeners.backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
 
-		/*
-		myBackgroundDiv.addEventListener ( 'mousedown', myOnMouseDownBackground, false );
-		myBackgroundDiv.addEventListener ( 'mouseup', myOnMouseUpBackground, false );
-		myBackgroundDiv.addEventListener ( 'mousemove', myOnMouseMoveBackground, false );
-		myBackgroundDiv.addEventListener ( 'wheel', myOnMouseWheelBackground, false );
-		myBackgroundDiv.addEventListener ( 'contextmenu', myOnContextMenu, false );
-		*/
-
+		BaseDialogEventListeners.backgroundDiv.addEventListener (
+			'mousedown',
+			BaseDialogEventListeners.onMouseDownBackground,
+			false
+		);
+		BaseDialogEventListeners.backgroundDiv.addEventListener (
+			'mouseup',
+			BaseDialogEventListeners.onMouseUpBackground,
+			false
+		);
+		BaseDialogEventListeners.backgroundDiv.addEventListener (
+			'mousemove',
+			BaseDialogEventListeners.onMouseMoveBackground,
+			false
+		);
+		BaseDialogEventListeners.backgroundDiv.addEventListener (
+			'wheel',
+			BaseDialogEventListeners.onMouseWheelBackground,
+			false
+		);
+		BaseDialogEventListeners.backgroundDiv.addEventListener (
+			'contextmenu',
+			BaseDialogEventListeners.onContextMenuBackground,
+			false
+		);
 	}
 
 	/**
-	create the dialog container
+	Create the dialog container
+	@private
 	*/
 
 	#CreateContainerDiv ( ) {
@@ -223,7 +99,8 @@ class BaseDialogV3 {
 	}
 
 	/**
-	create the animation top bar
+	Create the animation top bar
+	@private
 	*/
 
 	#CreateTopBar ( ) {
@@ -263,7 +140,8 @@ class BaseDialogV3 {
 	}
 
 	/**
-	create the dialog wait animation
+	Create the dialog wait animation
+	@private
 	*/
 
 	#createWaitDiv ( ) {
@@ -289,7 +167,8 @@ class BaseDialogV3 {
 	}
 
 	/**
-	create the dialog footer
+	Create the dialog footer
+	@private
 	*/
 
 	#createFooterDiv ( ) {
@@ -321,6 +200,7 @@ class BaseDialogV3 {
 
 	/**
 	Center the dialog o the screen
+	@private
 	*/
 
 	#centerDialog ( ) {
@@ -330,20 +210,20 @@ class BaseDialogV3 {
 			( BaseDialogEventListeners.backgroundDiv.clientHeight - BaseDialogEventListeners.containerDiv.clientHeight ) / TWO;
 
 		BaseDialogEventListeners.containerDiv.dialogX = Math.min (
-			Math.max ( BaseDialogEventListeners.containerDiv.dialogX, OUR_DRAG_MARGIN ),
+			Math.max ( BaseDialogEventListeners.containerDiv.dialogX, DIALOG_DRAG_MARGIN ),
 			BaseDialogEventListeners.backgroundDiv.clientWidth -
 				BaseDialogEventListeners.containerDiv.clientWidth -
-				OUR_DRAG_MARGIN
+				DIALOG_DRAG_MARGIN
 		);
 		BaseDialogEventListeners.containerDiv.dialogY = Math.max (
 			BaseDialogEventListeners.containerDiv.dialogY,
-			OUR_DRAG_MARGIN
+			DIALOG_DRAG_MARGIN
 		);
 
 		let dialogMaxHeight =
 			BaseDialogEventListeners.backgroundDiv.clientHeight -
 			Math.max ( BaseDialogEventListeners.containerDiv.dialogY, ZERO ) -
-			OUR_DRAG_MARGIN;
+			DIALOG_DRAG_MARGIN;
 		BaseDialogEventListeners.containerDiv.style.top = String ( BaseDialogEventListeners.containerDiv.dialogY ) + 'px';
 		BaseDialogEventListeners.containerDiv.style.left = String ( BaseDialogEventListeners.containerDiv.dialogX ) + 'px';
 		BaseDialogEventListeners.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
@@ -351,6 +231,7 @@ class BaseDialogV3 {
 
 	/**
 	Build and show the dialog
+	@private
 	*/
 
 	#show ( onPromiseOkFct, onPromiseErrorFct ) {
@@ -389,6 +270,7 @@ class BaseDialogV3 {
 
 		document.body.appendChild ( BaseDialogEventListeners.backgroundDiv );
 		this.#centerDialog ( );
+		document.addEventListener ( 'keydown', BaseDialogEventListeners.onKeyDown, true );
 		this.onShow ( );
 	}
 
@@ -398,41 +280,92 @@ class BaseDialogV3 {
 
 	}
 
+	/**
+	Cancel button handler. Can be overloaded in the derived classes
+	*/
+
+	onCancel ( ) {
+		this.#onPromiseErrorFct ( 'Canceled by user' );
+	}
+
+	/**
+	Called after the ok button will be clicked and before the dialog will be closed.
+	Can be overloaded in the derived classes
+	@return {boolean} true when the dialog can be closed, false otherwise.
+	*/
+
+	canClose ( ) {
+		return true;
+	}
+
+	/**
+	Ok button handler. Can be overloaded in the derived classes
+	*/
+
+	onOk ( ) {
+		this.#onPromiseOkFct ( );
+	}
+
+	/**
+	Called when the dialog is show. Can be overloaded in the derived classes
+	*/
+
 	onShow ( ) {}
+
+	/**
+	Get the HTML content section of the dialog is show. Can be overloaded in the derived classes
+	@readonly
+	*/
 
 	get content ( ) { return []; }
 
 	/**
-	return the footer of the dialog box.
+	Get the HTML footer section of the dialog is show. Can be overloaded in the derived classes
+	@readonly
 	*/
 
 	get footer ( ) {
 		return [];
 	}
 
-	get container ( ) { return BaseDialogEventListeners.containerDiv; }
-
 	/**
+	Show the dialog
 	*/
 
 	show ( ) {
 		return new Promise ( ( onOk, onError ) => this.#show ( onOk, onError ) );
 	}
 
-	hideWait ( ) {
-		BaseDialogEventListeners.containerDiv.waitDiv.classList.add ( 'TravelNotes-Hidden' );
-		BaseDialogEventListeners.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
-	}
+	/**
+	Show the wait section of the dialog and hide the okbutton
+	*/
 
 	showWait ( ) {
 		BaseDialogEventListeners.containerDiv.waitDiv.classList.remove ( 'TravelNotes-Hidden' );
 		BaseDialogEventListeners.containerDiv.footerDiv.okButton.classList.add ( 'TravelNotes-Hidden' );
 	}
 
+	/**
+	Hide the wait section of the dialog and show the okbutton
+	*/
+
+	hideWait ( ) {
+		BaseDialogEventListeners.containerDiv.waitDiv.classList.add ( 'TravelNotes-Hidden' );
+		BaseDialogEventListeners.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
+	}
+
+	/**
+	Show the error section of the dialog
+	*/
+
 	showError ( errorText ) {
 		BaseDialogEventListeners.containerDiv.errorDiv.textContent = errorText;
 		BaseDialogEventListeners.containerDiv.errorDiv.classList.remove ( 'TravelNotes-Hidden' );
 	}
+
+	/**
+	Hide the error section of the dialog
+	*/
 
 	hideError ( ) {
 		BaseDialogEventListeners.containerDiv.errorDiv.textContent = '';
