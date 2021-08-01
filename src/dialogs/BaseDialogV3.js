@@ -229,15 +229,7 @@ class BaseDialogV3 {
 		BaseDialogEventListeners.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
-	/**
-	Build and show the dialog
-	@private
-	*/
-
-	#show ( onPromiseOkFct, onPromiseErrorFct ) {
-		this.#onPromiseOkFct = onPromiseOkFct;
-		this.#onPromiseErrorFct = onPromiseErrorFct;
-
+	#createHTML ( ) {
 		this.#createBackgroundDiv ( );
 		this.#CreateContainerDiv ( );
 		this.#CreateTopBar ( );
@@ -268,16 +260,29 @@ class BaseDialogV3 {
 		this.#createWaitDiv ( );
 		this.#createFooterDiv ( );
 
+	}
+
+	/**
+	Build and show the dialog
+	@private
+	*/
+
+	#show ( onPromiseOkFct, onPromiseErrorFct ) {
+
+		this.#onPromiseOkFct = onPromiseOkFct;
+		this.#onPromiseErrorFct = onPromiseErrorFct;
+
+		this.#createHTML ( );
 		document.body.appendChild ( BaseDialogEventListeners.backgroundDiv );
 		this.#centerDialog ( );
 		document.addEventListener ( 'keydown', BaseDialogEventListeners.onKeyDown, true );
+
 		this.onShow ( );
 	}
 
 	constructor ( ) {
 		BaseDialogEventListeners.reset ( );
 		BaseDialogEventListeners.baseDialog = this;
-
 	}
 
 	/**
@@ -327,6 +332,12 @@ class BaseDialogV3 {
 	get footer ( ) {
 		return [];
 	}
+
+	/**
+	Set the title of the dialog box. Must be called from the OnShow method or later
+	*/
+
+	set title ( Title ) { BaseDialogEventListeners.containerDiv.headerDiv.textContent = Title; }
 
 	/**
 	Show the dialog

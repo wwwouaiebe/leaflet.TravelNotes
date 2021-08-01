@@ -55,7 +55,7 @@ import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import { newAboutDialog } from '../dialogs/AboutDialog.js';
+import AboutDialog from '../dialogs/AboutDialog.js';
 import Zoomer from '../core/Zoomer.js';
 
 import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
@@ -169,7 +169,7 @@ class MapContextMenu extends BaseContextMenu {
 			new Zoomer ( ).zoomToTravel ( );
 			break;
 		case 10 :
-			newAboutDialog ( );
+			new AboutDialog ( ).show ( );
 			break;
 		default :
 			break;

@@ -187,6 +187,7 @@ class NoteDialog extends BaseDialogV3 {
 	*/
 
 	onShow ( ) {
+		this.title = theTranslator.getText ( 'NoteDialog - Note' );
 		if ( this.#startGeoCoder ) {
 			NoteDialogEventListeners.setAddressWithGeoCoder ( );
 		}

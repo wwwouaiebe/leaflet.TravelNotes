@@ -55,83 +55,68 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
+import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theCurrentVersion from '../data/Version.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function myNewAboutDialog
-@desc constructor for AboutDialog objects
-@return {AboutDialog} an instance of AboutDialog object
-@private
+@class AboutDialog
+@classdesc This class is the 'About' dialog
+@augments BaseDialogV3
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewAboutDialog ( ) {
+class AboutDialog extends BaseDialogV3 {
+
+	#aboutDiv = null;
+
+	constructor ( ) {
+
+		super ( );
+
+		this.#aboutDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-AboutDialog-AboutDiv' } );
+
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
+				'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
+				'or any later version.</p>' +
+				'<p>Copyright - 2017 2021 - wwwouaiebe</p>' +
+				'<p>Contact : <a href="https://www.ouaie.be/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
+				'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
+				'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
+				'<p>Version : ' + theCurrentVersion + '.' +
+				'<p>This program uses:' +
+				' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
+				' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
+				'Project-OSRM/osrm-text-instructions</a> and ' +
+				' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p>',
+			this.#aboutDiv
+		);
+	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class AboutDialog
-	@classdesc a BaseDialog object adapted for the About dialog
-	@see {@link newAboutDialog} for constructor
-	@augments BaseDialog
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	return the content of the dialog box. Overload of the BaseDialog.content property
+	@readonly
 	*/
 
-	let aboutDialog = newBaseDialog ( );
-	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
+	get content ( ) { return [ this.#aboutDiv ]; }
 
-	let aboutString =
-		'<div id="TravelNotes-AboutDialog-AboutDiv">' +
-		'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
-		'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
-		'or any later version.</p>' +
-		'<p>Copyright - 2017 2021 - wwwouaiebe</p>' +
-		'<p>Contact : <a href="https://www.ouaie.be/blog/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
-		'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
-		'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
-		'<p>Version : ' + theCurrentVersion + '.' +
-		'<p>This program uses:' +
-		' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
-		' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
-		'Project-OSRM/osrm-text-instructions</a> and ' +
-		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
+	/**
+	Overload of the BaseDialog.onShow ( ) method.
+	*/
 
-	theHTMLSanitizer.sanitizeToHtmlElement ( aboutString, aboutDialog.content );
-
-	aboutDialog.show ( )
-		.then ( )
-		.catch (
-			err => {
-				if ( err instanceof Error ) {
-					console.error ( err );
-				}
-			}
-		);
+	onShow ( ) {
+		this.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
+	}
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newAboutDialog
-	@desc constructor for AboutDialog objects
-	@return {AboutDialog} an instance of AboutDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	myNewAboutDialog as newAboutDialog
-};
+export default AboutDialog;
 
 /*
 --- End of AboutDialog.js file ------------------------------------------------------------------------------------------------
