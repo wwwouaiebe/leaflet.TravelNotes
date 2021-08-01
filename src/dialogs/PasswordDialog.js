@@ -125,10 +125,12 @@ class PasswordDialog extends BaseDialogV3 {
 		this.#passwordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, this.#passwordDiv );
 		this.#eyeSpan = theHTMLElementsFactory.create (
 			'span',
-			{ id : 'TravelNotes-PasswordDialog-EyeSpan' },
+			{
+				id : 'TravelNotes-PasswordDialog-EyeSpan',
+				textContent : '👁️'
+			},
 			this.#passwordDiv
 		);
-		this.#eyeSpan.textContent = '👁️';
 		this.#eyeSpan.addEventListener (
 			'mousedown',
 			( ) => { this.#onMouseDownEye ( ); },

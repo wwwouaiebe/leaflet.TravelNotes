@@ -104,6 +104,45 @@ class BaseDialogEventListeners {
 	};
 
 	/**
+	stack to push and pop the global vars when more than one dialog is opened
+	*/
+
+	static #globalVarsStack = [];
+
+	/**
+	Push the global vars on the stack
+	*/
+
+	static globalVarsPush ( ) {
+		BaseDialogEventListeners.#globalVarsStack.push (
+			{
+				backgroundDiv : BaseDialogEventListeners.backgroundDiv,
+				containerDiv : BaseDialogEventListeners.containerDiv,
+				dragStartX : BaseDialogEventListeners.#dragStartX,
+				dragStartY : BaseDialogEventListeners.#dragStartY,
+				baseDialog : BaseDialogEventListeners.baseDialog,
+				panMapData : BaseDialogEventListeners.#panMapData
+			}
+		);
+		BaseDialogEventListeners.reset ( );
+	}
+
+	/**
+	Pop the global vars from the stack
+	*/
+
+	static globalVarsPop ( ) {
+		let globalVars = BaseDialogEventListeners.#globalVarsStack.pop ( );
+
+		BaseDialogEventListeners.backgroundDiv = globalVars.backgroundDiv;
+		BaseDialogEventListeners.containerDiv = globalVars.containerDiv;
+		BaseDialogEventListeners.#dragStartX = globalVars.dragStartX;
+		BaseDialogEventListeners.#dragStartY = globalVars.dragStartY;
+		BaseDialogEventListeners.baseDialog = globalVars.baseDialog;
+		BaseDialogEventListeners.#panMapData = globalVars.panMapData;
+	}
+
+	/**
 	Reset the variables
 	*/
 
@@ -113,8 +152,6 @@ class BaseDialogEventListeners {
 		BaseDialogEventListeners.#dragStartX = ZERO;
 		BaseDialogEventListeners.#dragStartY = ZERO;
 		BaseDialogEventListeners.baseDialog = null;
-		BaseDialogEventListeners.#dragStartX = ZERO;
-		BaseDialogEventListeners.#dragStartY = ZERO;
 		BaseDialogEventListeners.#panMapData = {
 			panOngoing : false,
 			startPanX : ZERO,
@@ -132,7 +169,7 @@ class BaseDialogEventListeners {
 			BaseDialogEventListeners.onCloseDialog ( );
 			document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
 			BaseDialogEventListeners.baseDialog.onOk ( );
-			BaseDialogEventListeners.reset ( );
+			BaseDialogEventListeners.globalVarsPop ( );
 		}
 	}
 
@@ -144,7 +181,7 @@ class BaseDialogEventListeners {
 		BaseDialogEventListeners.onCloseDialog ( );
 		document.body.removeChild ( BaseDialogEventListeners.backgroundDiv );
 		BaseDialogEventListeners.baseDialog.onCancel ( );
-		BaseDialogEventListeners.reset ( );
+		BaseDialogEventListeners.globalVarsPop ( );
 	}
 
 	/**

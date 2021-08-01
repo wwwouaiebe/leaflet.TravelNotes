@@ -66,7 +66,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newAPIKeysDialog } from '../dialogs/APIKeysDialog.js';
+import APIKeysDialogV3 from '../dialogs/APIKeysDialogV3.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
@@ -305,7 +305,7 @@ class APIKeysManager {
 		ApiKeys.sort ( ( first, second ) => first.providerName.localeCompare ( second.providerName ) );
 
 		// showing dialog
-		newAPIKeysDialog ( ApiKeys, APIKeysManager.#haveAPIKeysFile )
+		new APIKeysDialogV3 ( ApiKeys, APIKeysManager.#haveAPIKeysFile )
 			.show ( )
 			.then ( APIKeys => APIKeysManager.#resetAPIKeys ( APIKeys ) )
 			.catch (

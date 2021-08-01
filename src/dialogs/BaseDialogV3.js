@@ -321,7 +321,7 @@ class BaseDialogV3 {
 	}
 
 	constructor ( ) {
-		BaseDialogEventListeners.reset ( );
+		BaseDialogEventListeners.globalVarsPush ( );
 		BaseDialogEventListeners.baseDialog = this;
 	}
 
