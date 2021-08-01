@@ -55,7 +55,7 @@ Tests ...
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newPasswordDialog } from '../dialogs/PasswordDialog.js';
+import PasswordDialog from '../dialogs/PasswordDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theUtilities from '../util/Utilities.js';
 import DataEncryptor from '../util/DataEncryptor.js';
@@ -281,7 +281,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 			data,
 			myOnOkDecrypt,
 			myOnErrorDecrypt,
-			newPasswordDialog ( false ).show ( )
+			new PasswordDialog ( false ).show ( )
 		);
 	}
 
@@ -384,7 +384,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 			new window.TextEncoder ( ).encode ( JSON.stringify ( myGetAPIKeys ( ) ) ),
 			myOnOkEncrypt,
 			myOnErrorEncrypt,
-			newPasswordDialog ( true ).show ( )
+			new PasswordDialog ( true ).show ( )
 		);
 	}
 
@@ -409,7 +409,7 @@ function ourNewAPIKeysDialog ( APIKeys, haveAPIKeysFile ) {
 				fileReader.result,
 				myOnOkDecrypt,
 				myOnErrorDecrypt,
-				newPasswordDialog ( false ).show ( )
+				new PasswordDialog ( false ).show ( )
 			);
 		};
 		fileReader.readAsArrayBuffer ( changeEvent.target.files [ ZERO ] );

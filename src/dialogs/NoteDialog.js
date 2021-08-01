@@ -187,7 +187,6 @@ class NoteDialog extends BaseDialogV3 {
 	*/
 
 	onShow ( ) {
-		this.title = theTranslator.getText ( 'NoteDialog - Note' );
 		if ( this.#startGeoCoder ) {
 			NoteDialogEventListeners.setAddressWithGeoCoder ( );
 		}
@@ -240,6 +239,13 @@ class NoteDialog extends BaseDialogV3 {
 		NoteDialogEventListeners.reset ( );
 		super.onOk ( );
 	}
+
+	/**
+	Return the dialog title. Overload of the BaseDialog.title property
+	@readonly
+	*/
+
+	get title ( ) { return theTranslator.getText ( 'NoteDialog - Note' ); }
 
 	/**
 	return the content of the dialog box. Overload of the BaseDialog.content property

@@ -1,6 +1,7 @@
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import BaseDialogEventListeners from '../dialogs/BaseDialogEventListeners.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
 import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
@@ -140,6 +141,62 @@ class BaseDialogV3 {
 	}
 
 	/**
+	Create the header div
+	@private
+	*/
+
+	#createHeaderDiv ( ) {
+		BaseDialogEventListeners.containerDiv.headerDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-HeaderDiv'
+			},
+			BaseDialogEventListeners.containerDiv
+		);
+
+		theHTMLElementsFactory.create (
+			'text',
+			{
+				value : this.title
+			}
+			,
+			BaseDialogEventListeners.containerDiv.headerDiv
+		);
+	}
+
+	/**
+	Create the content div
+	@private
+	*/
+
+	#createContentDiv ( ) {
+		BaseDialogEventListeners.containerDiv.contentDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-ContentDiv'
+			},
+			BaseDialogEventListeners.containerDiv
+		);
+
+		this.content.forEach ( content => BaseDialogEventListeners.containerDiv.contentDiv.appendChild ( content ) );
+	}
+
+	/**
+	Create the error div
+	@private
+	*/
+
+	#createErrorDiv ( ) {
+		BaseDialogEventListeners.containerDiv.errorDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-Hidden'
+			},
+			BaseDialogEventListeners.containerDiv
+		);
+	}
+
+	/**
 	Create the dialog wait animation
 	@private
 	*/
@@ -199,6 +256,22 @@ class BaseDialogV3 {
 	}
 
 	/**
+	Create the HTML dialog
+	@private
+	*/
+
+	#createHTML ( ) {
+		this.#createBackgroundDiv ( );
+		this.#CreateContainerDiv ( );
+		this.#CreateTopBar ( );
+		this.#createHeaderDiv ( );
+		this.#createContentDiv ( );
+		this.#createErrorDiv ( );
+		this.#createWaitDiv ( );
+		this.#createFooterDiv ( );
+	}
+
+	/**
 	Center the dialog o the screen
 	@private
 	*/
@@ -227,39 +300,6 @@ class BaseDialogV3 {
 		BaseDialogEventListeners.containerDiv.style.top = String ( BaseDialogEventListeners.containerDiv.dialogY ) + 'px';
 		BaseDialogEventListeners.containerDiv.style.left = String ( BaseDialogEventListeners.containerDiv.dialogX ) + 'px';
 		BaseDialogEventListeners.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
-	}
-
-	#createHTML ( ) {
-		this.#createBackgroundDiv ( );
-		this.#CreateContainerDiv ( );
-		this.#CreateTopBar ( );
-		BaseDialogEventListeners.containerDiv.headerDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-HeaderDiv'
-			},
-			BaseDialogEventListeners.containerDiv
-		);
-
-		BaseDialogEventListeners.containerDiv.contentDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-ContentDiv'
-			},
-			BaseDialogEventListeners.containerDiv
-		);
-		this.content.forEach ( content => BaseDialogEventListeners.containerDiv.contentDiv.appendChild ( content ) );
-
-		BaseDialogEventListeners.containerDiv.errorDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-Hidden'
-			},
-			BaseDialogEventListeners.containerDiv
-		);
-		this.#createWaitDiv ( );
-		this.#createFooterDiv ( );
-
 	}
 
 	/**
@@ -304,11 +344,12 @@ class BaseDialogV3 {
 	}
 
 	/**
-	Ok button handler. Can be overloaded in the derived classes
+	Ok button handler. Can be overloaded in the derived classes, but you have always to call super.onOk ( ).
+	@param {} returnValue a value that will be returned to the onOk handler of the Promise
 	*/
 
-	onOk ( ) {
-		this.#onPromiseOkFct ( );
+	onOk ( returnValue ) {
+		this.#onPromiseOkFct ( returnValue );
 	}
 
 	/**
@@ -322,6 +363,8 @@ class BaseDialogV3 {
 	@readonly
 	*/
 
+	get title ( ) { return ''; }
+
 	get content ( ) { return []; }
 
 	/**
@@ -332,12 +375,6 @@ class BaseDialogV3 {
 	get footer ( ) {
 		return [];
 	}
-
-	/**
-	Set the title of the dialog box. Must be called from the OnShow method or later
-	*/
-
-	set title ( Title ) { BaseDialogEventListeners.containerDiv.headerDiv.textContent = Title; }
 
 	/**
 	Show the dialog
@@ -370,7 +407,11 @@ class BaseDialogV3 {
 	*/
 
 	showError ( errorText ) {
-		BaseDialogEventListeners.containerDiv.errorDiv.textContent = errorText;
+
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			errorText,
+			BaseDialogEventListeners.containerDiv.errorDiv
+		);
 		BaseDialogEventListeners.containerDiv.errorDiv.classList.remove ( 'TravelNotes-Hidden' );
 	}
 

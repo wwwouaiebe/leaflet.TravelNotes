@@ -23,7 +23,9 @@ Changes:
 		- Issue ♯113 : When more than one dialog is opened, using thr Esc or Return key close all the dialogs
 	- v2.0.0:
 		- Issue ♯137 : Remove html tags from json files
-Doc reviewed 20200815
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210801
 Tests ...
 */
 
@@ -48,75 +50,115 @@ Tests ...
 */
 
 import theTranslator from '../UI/Translator.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
+import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 const OUR_PSWD_MIN_LENGTH = 12;
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewPasswordDialog
-@desc constructor for PasswordDialog objects
-@param {boolean} verifyPassword When true the password must follow the password rules
-@return {PasswordDialog} an instance of PasswordDialog object
-@private
+@class
+@classdesc This class is the password dialog
+@extends BaseDialogV3
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewPasswordDialog ( verifyPassword ) {
+class PasswordDialog extends BaseDialogV3 {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class PasswordDialog
-	@classdesc A BaseDialog object completed for passwords.
-	Create an instance of the dialog, then execute the show ( ) method. The typed password, encoded in an UInt8Array with
-	window.TextEncoder ( ).encode ( ) is given as parameter of the succes handler of the Promise returned by
-	the show ( ) method.
-	@example
-	newPasswordDialog ( true )
-		.show ( )
-		.then ( password => doSomethingWithThePassword )
-		.catch ( error => doSomethingWithTheError );
-	@see {@link newPasswordDialog} for constructor
-	@augments BaseDialog
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	let myPasswordDialog = null;
-	let myPasswordDataDiv = null;
-	let myPasswordInput = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnOkButtonClick
-	@desc Event listener for the ok button
+	The password html div
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOkButtonClick ( ) {
+	#passwordDiv = null;
 
-		myPasswordDialog.hideError ( );
-		if ( verifyPassword ) {
+	/**
+	the password html input
+	@private
+	*/
+
+	#passwordInput = null;
+
+	/** the eye html span
+	@private
+	*/
+
+	#eyeSpan = null;
+
+	/**
+	the verifyPassword constructor parameter
+	@private
+	*/
+
+	#verifyPassword = false;
+
+	/**
+	mousedown event listener for the eyeSpan
+	@private
+	*/
+
+	#onMouseDownEye ( ) {
+		this.#passwordInput.type = 'text';
+	}
+
+	/**
+	mouseup event listener for the eyeSpan
+	@private
+	*/
+
+	#onMouseUpEye ( ) {
+		this.#passwordInput.type = 'password';
+		this.#passwordInput.focus ( );
+	}
+
+	/**
+	The constructor
+	@param {boolean} verifyPassword When true the password must be conform to the password rules
+	*/
+
+	constructor ( verifyPassword ) {
+		super ( );
+		this.#verifyPassword = verifyPassword;
+		this.#passwordDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-PasswordDialog-PasswordDiv' } );
+		this.#passwordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, this.#passwordDiv );
+		this.#eyeSpan = theHTMLElementsFactory.create (
+			'span',
+			{ id : 'TravelNotes-PasswordDialog-EyeSpan' },
+			this.#passwordDiv
+		);
+		this.#eyeSpan.textContent = '👁️';
+		this.#eyeSpan.addEventListener (
+			'mousedown',
+			( ) => { this.#onMouseDownEye ( ); },
+			false );
+		this.#eyeSpan.addEventListener (
+			'mouseup',
+			( ) => { this.#onMouseUpEye ( ); },
+			false
+		);
+	}
+
+	/**
+	Overload of the BaseDialog.canClose ( ) method.
+	*/
+
+	canClose ( ) {
+		this.hideError ( );
+		if ( this.#verifyPassword ) {
 			if (
-				( myPasswordInput.value.length < OUR_PSWD_MIN_LENGTH )
+				( this.#passwordInput.value.length < OUR_PSWD_MIN_LENGTH )
 				||
-				! myPasswordInput.value.match ( RegExp ( '[0-9]+' ) )
+				! this.#passwordInput.value.match ( /[0-9]+/ )
 				||
-				! myPasswordInput.value.match ( RegExp ( '[a-z]+' ) )
+				! this.#passwordInput.value.match ( /[a-z]+/ )
 				||
-				! myPasswordInput.value.match ( RegExp ( '[A-Z]+' ) )
+				! this.#passwordInput.value.match ( /[A-Z]+/ )
 				||
-				! myPasswordInput.value.match ( RegExp ( '[^0-9a-zA-Z]' ) )
+				! this.#passwordInput.value.match ( /[^0-9a-zA-Z]/ )
 			) {
-				myPasswordDialog.showError (
+				this.showError (
 					'<p>' + theTranslator.getText ( 'PasswordDialog - Password rules1' ) + '</p><ul>' +
 					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules2' ) + '</li>' +
 					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules3' ) + '</li>' +
@@ -124,82 +166,47 @@ function ourNewPasswordDialog ( verifyPassword ) {
 					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules5' ) + '</li>' +
 					'<li>' + theTranslator.getText ( 'PasswordDialog - Password rules6' ) + '</li></ul>'
 				);
-				myPasswordInput.focus ( );
-				return;
+				this.#passwordInput.focus ( );
+				return false;
 			}
 		}
-
-		return new window.TextEncoder ( ).encode ( myPasswordInput.value );
+		return true;
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDialog
-	@desc This method creates the dialog
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Overload of the BaseDialog.onOk ( ) method.
+	@return the password encoded with TextEncoder
 	*/
 
-	function myCreateDialog ( ) {
-		myPasswordDialog = newBaseDialog ( );
-		myPasswordDialog.title = theTranslator.getText ( 'PasswordDialog - password' );
-		myPasswordDialog.okButtonListener = myOnOkButtonClick;
+	onOk ( ) {
+		super.onOk ( new window.TextEncoder ( ).encode ( this.#passwordInput.value ) );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateContent
-	@desc This method creates the dialog content
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Overload of the BaseDialog.onShow ( ) method.
 	*/
 
-	function myCreateContent ( ) {
-		myPasswordDataDiv = theHTMLElementsFactory.create ( 'div', null, myPasswordDialog.content );
-		myPasswordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, myPasswordDataDiv );
+	onShow ( ) {
+		this.#passwordInput.focus ( );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnShow
-	@desc This method is executed when the show method is called
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	return the content of the dialog box. Overload of the BaseDialog.content property
+	@readonly
 	*/
 
-	function myOnShow ( ) {
-		myPasswordInput.focus ( );
-	}
+	get content ( ) { return [ this.#passwordDiv ]; }
 
-	myCreateDialog ( );
-	myCreateContent ( );
-	myPasswordDialog.onShow = myOnShow;
+	/**
+	Return the dialog title. Overload of the BaseDialog.title property
+	@readonly
+	*/
 
-	return myPasswordDialog;
+	get title ( ) { return theTranslator.getText ( 'PasswordDialog - password' ); }
+
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newPasswordDialog
-	@desc constructor for PasswordDialog objects
-	@param {boolean} verifyPassword When true the password must follow the password rules
-	@return {PasswordDialog} an instance of PasswordDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewPasswordDialog as newPasswordDialog
-};
+export default PasswordDialog;
 
 /*
 --- End of PasswordDialog.js file ---------------------------------------------------------------------------------------------

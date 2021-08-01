@@ -107,13 +107,8 @@ class AboutDialog extends BaseDialogV3 {
 
 	get content ( ) { return [ this.#aboutDiv ]; }
 
-	/**
-	Overload of the BaseDialog.onShow ( ) method.
-	*/
+	get title ( ) { return theTranslator.getText ( 'AboutDialog - About Travel & Notes' ); }
 
-	onShow ( ) {
-		this.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
-	}
 }
 
 export default AboutDialog;
