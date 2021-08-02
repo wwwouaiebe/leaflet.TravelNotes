@@ -163,11 +163,11 @@ class APIKeysDialog extends BaseDialogV3 {
 	get title ( ) { return theTranslator.getText ( 'APIKeysDialog - API keys' ); }
 
 	/**
-	return the content of the dialog box. Overload of the BaseDialog.content property
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
 	@readonly
 	*/
 
-	get content ( ) {
+	get contentHTMLElements ( ) {
 		return [ this.#toolbar.rootHTMLElement, this.#APIKeysControlsContainer ];
 	}
 }

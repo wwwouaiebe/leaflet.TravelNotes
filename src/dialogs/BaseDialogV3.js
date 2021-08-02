@@ -178,7 +178,9 @@ class BaseDialogV3 {
 			BaseDialogEventListeners.containerDiv
 		);
 
-		this.content.forEach ( content => BaseDialogEventListeners.containerDiv.contentDiv.appendChild ( content ) );
+		this.contentHTMLElements.forEach (
+			contentHTMLElement => BaseDialogEventListeners.containerDiv.contentDiv.appendChild ( contentHTMLElement )
+		);
 	}
 
 	/**
@@ -252,7 +254,9 @@ class BaseDialogV3 {
 			false
 		);
 
-		this.footer.forEach ( footer => BaseDialogEventListeners.containerDiv.footerDiv.appendChild ( footer ) );
+		this.footerHTMLElements.forEach (
+			footerHTMLElement => BaseDialogEventListeners.containerDiv.footerDiv.appendChild ( footerHTMLElement )
+		);
 	}
 
 	/**
@@ -365,14 +369,21 @@ class BaseDialogV3 {
 
 	get title ( ) { return ''; }
 
-	get content ( ) { return []; }
-
 	/**
-	Get the HTML footer section of the dialog is show. Can be overloaded in the derived classes
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
+	Can be overloaded in the derived classes
 	@readonly
 	*/
 
-	get footer ( ) {
+	get contentHTMLElements ( ) { return []; }
+
+	/**
+	Get an array with the HTMLElements that have to be added in the footer of the dialog
+	Can be overloaded in the derived classes
+	@readonly
+	*/
+
+	get footerHTMLElements ( ) {
 		return [];
 	}
 

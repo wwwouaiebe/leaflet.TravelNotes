@@ -248,11 +248,11 @@ class NoteDialog extends BaseDialogV3 {
 	get title ( ) { return theTranslator.getText ( 'NoteDialog - Note' ); }
 
 	/**
-	return the content of the dialog box. Overload of the BaseDialog.content property
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
 	@readonly
 	*/
 
-	get content ( ) {
+	get contentHTMLElements ( ) {
 		return [].concat (
 			this.#toolbar.rootHTMLElement,
 			this.#iconDimsControl.HTMLElements,
@@ -261,20 +261,17 @@ class NoteDialog extends BaseDialogV3 {
 			this.#popupControl.HTMLElements,
 			this.#addressControl.HTMLElements,
 			this.#linkControl.HTMLElements,
-			this.#phoneControl.HTMLElements,
-			this.#previewControl.HTMLElements
+			this.#phoneControl.HTMLElements
 		);
 	}
 
 	/**
-	return the footer of the dialog box. Overload of the BaseDialog.footer property
+	Get an array with the HTMLElements that have to be added in the footer of the dialog
 	@readonly
 	*/
 
-	get footer ( ) {
-		return [].concat (
-			this.#previewControl.HTMLElements
-		);
+	get footerHTMLElements ( ) {
+		return this.#previewControl.HTMLElements;
 	}
 
 	/**

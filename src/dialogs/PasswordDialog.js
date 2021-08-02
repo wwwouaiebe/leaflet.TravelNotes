@@ -193,11 +193,11 @@ class PasswordDialog extends BaseDialogV3 {
 	}
 
 	/**
-	return the content of the dialog box. Overload of the BaseDialog.content property
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
 	@readonly
 	*/
 
-	get content ( ) { return [ this.#passwordDiv ]; }
+	get contentHTMLElements ( ) { return [ this.#passwordDiv ]; }
 
 	/**
 	Return the dialog title. Overload of the BaseDialog.title property

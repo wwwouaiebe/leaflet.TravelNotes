@@ -101,11 +101,11 @@ class AboutDialog extends BaseDialogV3 {
 	}
 
 	/**
-	return the content of the dialog box. Overload of the BaseDialog.content property
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
 	@readonly
 	*/
 
-	get content ( ) { return [ this.#aboutDiv ]; }
+	get contentHTMLElements ( ) { return [ this.#aboutDiv ]; }
 
 	get title ( ) { return theTranslator.getText ( 'AboutDialog - About Travel & Notes' ); }
 
