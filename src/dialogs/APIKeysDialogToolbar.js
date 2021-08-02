@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210802
 Tests ...
 */
 
@@ -51,7 +53,7 @@ import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class APIKeysDialogToolbar
-@classdesc coming soon...
+@classdesc This is the toolbar for the APIKeysDialog. Display 5 buttons on top of dialog.
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -59,11 +61,22 @@ import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.
 
 class APIKeysDialogToolbar {
 
-	#toolbarDiv = null;
+	/**
+	The root HTML element of the control
+	@private
+	*/
+
+	#rootHTMLElement = null;
+
+	/**
+	Store the status of the APIKeys file
+	@private
+	*/
+
 	#haveAPIKeysFile = false
 
 	/**
-	Create the ... Button
+	Create the ReloadKeysFromServerFile Button
 	@private
 	*/
 
@@ -76,13 +89,13 @@ class APIKeysDialogToolbar {
 					title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
 					textContent : '🔄'
 				},
-				this.#toolbarDiv
+				this.#rootHTMLElement
 			).addEventListener ( 'click', APIKeysDialogEventListeners.onReloadAPIKeysFromServerButtonClick, false );
 		}
 	}
 
 	/**
-	Create the ... Button
+	Create the SaveKeysToSecureFile Button
 	@private
 	*/
 
@@ -94,14 +107,14 @@ class APIKeysDialogToolbar {
 				title : theTranslator.getText ( 'APIKeysDialog - Save to file' ),
 				textContent : '💾'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		)
 			.addEventListener ( 'click', APIKeysDialogEventListeners.onSaveKeysToSecureFileButtonClick, false );
 
 	}
 
 	/**
-	Create the ... Button
+	Create the RestoreKeysFromSecureFile Button
 	@private
 	*/
 
@@ -113,13 +126,13 @@ class APIKeysDialogToolbar {
 				title : theTranslator.getText ( 'APIKeysDialog - Open file' ),
 				textContent : '📂'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		)
 			.addEventListener ( 'click', APIKeysDialogEventListeners.onOpenSecureFileButtonClick, false );
 	}
 
 	/**
-	Create the ... Button
+	Create the AddNewAPIKey Button
 	@private
 	*/
 
@@ -131,13 +144,13 @@ class APIKeysDialogToolbar {
 				title : theTranslator.getText ( 'APIKeysDialog - new API key' ),
 				textContent : '+'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		)
-			.addEventListener ( 'click', APIKeysDialogEventListeners.onAddNewAPIKeyClick, false );
+			.addEventListener ( 'click', APIKeysDialogEventListeners.onAddNewAPIKeyButtonClick, false );
 	}
 
 	/**
-	Create the ... Button
+	Create the SaveKeysToUnsecureFile Button
 	@private
 	*/
 
@@ -149,12 +162,12 @@ class APIKeysDialogToolbar {
 				title : theTranslator.getText ( 'APIKeysDialog - Save to json file' ),
 				textContent : '💾'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		).addEventListener ( 'click', APIKeysDialogEventListeners.onSaveKeysToUnsecureFileButtonClick, false );
 	}
 
 	/**
-	Create the ... Button
+	Create the RestoreKeysFromUnsecureFile Button
 	@private
 	*/
 
@@ -166,7 +179,7 @@ class APIKeysDialogToolbar {
 				title : theTranslator.getText ( 'APIKeysDialog - Open json file' ),
 				textContent : '📂'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		).addEventListener ( 'click', APIKeysDialogEventListeners.onOpenUnsecureFileButtonClick, false );
 	}
 
@@ -190,9 +203,14 @@ class APIKeysDialogToolbar {
 		}
 	}
 
+	/**
+	constructor
+	@param {boolean} haveAPIKeysFile A boolean indicating if a APIKeys file was found on the server whenthe apps is launching
+	*/
+
 	constructor ( haveAPIKeysFile ) {
 		this.#haveAPIKeysFile = haveAPIKeysFile;
-		this.#toolbarDiv = theHTMLElementsFactory.create (
+		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-APIKeysDialog-ToolbarDiv'
@@ -203,8 +221,13 @@ class APIKeysDialogToolbar {
 
 	}
 
-	get content ( ) {
-		return [ this.#toolbarDiv ];
+	/**
+	return an array with the root HTML element of the toolbar
+	@readonly
+	*/
+
+	get rootHTMLElement ( ) {
+		return this.#rootHTMLElement;
 	}
 
 }

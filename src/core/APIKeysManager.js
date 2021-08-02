@@ -66,7 +66,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import APIKeysDialogV3 from '../dialogs/APIKeysDialogV3.js';
+import APIKeysDialog from '../dialogs/APIKeysDialog.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
@@ -300,12 +300,14 @@ class APIKeysManager {
 		// preparing a list of providers and provider keys for the dialog
 		let ApiKeys = [];
 		APIKeysManager.#APIKeysMap.forEach (
-			( providerKey, providerName ) => ApiKeys.push ( { providerName : providerName, providerKey : providerKey } )
+			( providerKey, providerName ) => {
+				ApiKeys.push ( Object.seal ( { providerName : providerName, providerKey : providerKey } ) );
+			}
 		);
 		ApiKeys.sort ( ( first, second ) => first.providerName.localeCompare ( second.providerName ) );
 
 		// showing dialog
-		new APIKeysDialogV3 ( ApiKeys, APIKeysManager.#haveAPIKeysFile )
+		new APIKeysDialog ( ApiKeys, APIKeysManager.#haveAPIKeysFile )
 			.show ( )
 			.then ( APIKeys => APIKeysManager.#resetAPIKeys ( APIKeys ) )
 			.catch (

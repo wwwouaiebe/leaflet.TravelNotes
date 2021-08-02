@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210802
 Tests ...
 */
 
@@ -52,7 +54,8 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class APIKeysDialogKeyControl
-@classdesc coming soon...
+@classdesc  the APIKey control for the APIKeysDialog. Display  HTML input elements for the providerName and the providerKey
+and a button to remove the APIKey from the dialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -60,10 +63,39 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 class APIKeysDialogKeyControl {
 
-	#APIKeyDiv = null;
+	/**
+	The root HTML element of the control
+	@private
+	*/
+
+	#rootHTMLElement = null;
+
+	/**
+	The providerName HTML input element
+	@private
+	*/
+
 	#providerNameInput = null;
+
+	/**
+	The providerKey HTML input element
+	@private
+	*/
+
 	#providerKeyInput = null;
+
+	/**
+	A unique ObjId given to the control
+	@private
+	*/
+
 	#objId = INVALID_OBJ_ID;
+
+	/**
+	Event listener for the deleteAPIKey button.
+	Dispatch a new event to the APIKeyDialog.#APIKeysControlsContainer object
+	@private
+	*/
 
 	static #onDeleteNewAPIKeyClick ( clickEvent ) {
 		let dispatchedEvent = new Event ( 'apikeydeleted' );
@@ -75,7 +107,7 @@ class APIKeysDialogKeyControl {
 
 		this.#objId = ObjId.nextObjId;
 
-		this.#APIKeyDiv = theHTMLElementsFactory.create (
+		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-APIKeysDialog-ApiKeyRow'
@@ -89,7 +121,7 @@ class APIKeysDialogKeyControl {
 				value : APIKey.providerName,
 				placeholder : theTranslator.getText ( 'APIKeysDialog - provider name' )
 			},
-			this.#APIKeyDiv
+			this.#rootHTMLElement
 		);
 
 		this.#providerKeyInput = theHTMLElementsFactory.create (
@@ -100,7 +132,7 @@ class APIKeysDialogKeyControl {
 				placeholder : theTranslator.getText ( 'APIKeysDialog - API key' ),
 				type : theConfig.APIKeysDialog.showAPIKeys ? 'text' : 'password'
 			},
-			this.#APIKeyDiv
+			this.#rootHTMLElement
 		);
 
 		theHTMLElementsFactory.create (
@@ -113,26 +145,53 @@ class APIKeysDialogKeyControl {
 				textContent : '❌',
 				objId : this.#objId
 			},
-			this.#APIKeyDiv
+			this.#rootHTMLElement
 		)
 			.addEventListener ( 'click', APIKeysDialogKeyControl.#onDeleteNewAPIKeyClick, false );
 	}
 
+	/**
+	return the ObjId of the control
+	@readonly
+	*/
+
 	get objId ( ) { return this.#objId; }
 
-	get content ( ) {
-		return this.#APIKeyDiv;
+	/**
+	return the root HTML element of the control
+	@readonly
+	*/
+
+	get rootHTMLElement ( ) {
+		return this.#rootHTMLElement;
 	}
+
+	/**
+	return the providerName
+	@readonly
+	*/
 
 	get providerName ( ) { return this.#providerNameInput.value; }
 
+	/**
+	return the providerKey
+	@readonly
+	*/
+
 	get providerKey ( ) { return this.#providerKeyInput.value; }
 
+	/**
+	return the APIKey
+	@readonly
+	*/
+
 	get APIKey ( ) {
-		return {
-			providerName : this.#providerNameInput.value,
-			providerKey : this.#providerKeyInput.value
-		};
+		return Object.seal (
+			{
+				providerName : this.#providerNameInput.value,
+				providerKey : this.#providerKeyInput.value
+			}
+		);
 	}
 
 }
