@@ -58,6 +58,7 @@ import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
 import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';
+import { ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -120,7 +121,7 @@ class APIKeysDialog extends BaseDialogV3 {
 			this.#APIKeysControlsContainer.removeChild ( this.#APIKeysControlsContainer.firstChild );
 		}
 		APIKeysDialogEventListeners.APIKeysControls.forEach (
-			APIKeyControl => { this.#APIKeysControlsContainer.appendChild ( APIKeyControl.rootHTMLElement ); }
+			APIKeyControl => { this.#APIKeysControlsContainer.appendChild ( APIKeyControl.HTMLElements [ ZERO ] ); }
 		);
 	}
 

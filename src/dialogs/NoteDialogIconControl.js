@@ -90,10 +90,11 @@ class NoteDialogIconControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) { return [ this.#iconDiv ]; }
+	get HTMLElements ( ) { return [ this.#iconDiv ]; }
 
 	get iconContent ( ) { return this.#iconTextArea.value; }
 

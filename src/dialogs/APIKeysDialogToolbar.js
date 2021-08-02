@@ -222,7 +222,7 @@ class APIKeysDialogToolbar {
 	}
 
 	/**
-	return an array with the root HTML element of the toolbar
+	get the rootHTMLElement of the toolbar
 	@readonly
 	*/
 

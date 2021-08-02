@@ -89,7 +89,12 @@ class NoteDialogPreviewControl {
 		);
 	}
 
-	get content ( ) { return [ this.#previewDiv ]; }
+	/**
+	return an array with the HTML elements of the control
+	@readonly
+	*/
+
+	get HTMLElements ( ) { return [ this.#previewDiv ]; }
 
 }
 

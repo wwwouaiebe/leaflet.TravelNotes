@@ -86,10 +86,11 @@ class NoteDialogTooltipControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) { return [ this.#tooltipDiv ]; }
+	get HTMLElements ( ) { return [ this.#tooltipDiv ]; }
 
 	get tooltipContent ( ) { return this.#tooltipInput.value; }
 

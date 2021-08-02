@@ -114,10 +114,11 @@ class NoteDialogIconDimsControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) { return [ this.#iconDimsDiv ]; }
+	get HTMLElements ( ) { return [ this.#iconDimsDiv ]; }
 
 	get iconWidth ( ) { return Number.parseInt ( this.#iconWidthInput.value ); }
 

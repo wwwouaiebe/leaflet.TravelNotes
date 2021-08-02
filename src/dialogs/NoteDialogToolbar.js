@@ -111,7 +111,7 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 
 class NoteDialogToolbar {
 
-	#toolbarDiv = null;
+	#rootHTMLElement = null;
 
 	/**
 	Add the icon selector to the toolbar
@@ -125,7 +125,7 @@ class NoteDialogToolbar {
 				className : 'TravelNotes-NoteDialog-Select',
 				id : 'TravelNotes-NoteDialog-IconSelect'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		);
 
 		iconSelect.addEventListener ( 'change', NoteDialogEventListeners.onIconSelectChange, false );
@@ -152,7 +152,7 @@ class NoteDialogToolbar {
 				title : theTranslator.getText ( 'NoteDialog - show hidden contents' ),
 				textContent : '▼' // 25b6 = '▶'  25bc = ▼
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		);
 		toogleContentsButton.addEventListener ( 'click', NoteDialogEventListeners.onToogleContentsButtonClick, false );
 
@@ -163,7 +163,7 @@ class NoteDialogToolbar {
 				title : theTranslator.getText ( 'NoteDialog - Open a configuration file' ),
 				textContent : '📂'
 			},
-			this.#toolbarDiv
+			this.#rootHTMLElement
 		).addEventListener ( 'click', NoteDialogEventListeners.onOpenFileButtonCkick, false );
 	}
 
@@ -182,7 +182,7 @@ class NoteDialogToolbar {
 						htmlAfter : editionButton.htmlAfter || '',
 						className : 'TravelNotes-NoteDialog-EditorButton'
 					},
-					this.#toolbarDiv
+					this.#rootHTMLElement
 				);
 				theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
 				newButton.addEventListener ( 'click', NoteDialogEventListeners.onClickEditionButton, false );
@@ -203,7 +203,7 @@ class NoteDialogToolbar {
 
 	constructor ( ) {
 
-		this.#toolbarDiv = theHTMLElementsFactory.create (
+		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-ToolbarDiv',
@@ -220,17 +220,16 @@ class NoteDialogToolbar {
 	*/
 
 	update ( ) {
-		this.#toolbarDiv.innerText = '';
+		this.#rootHTMLElement.innerText = '';
 		this.#addToolbarElements ( );
 	}
 
 	/**
-	get the control HTML
+	get the rootHTMLElement of the toolbar
+	@readonly
 	*/
 
-	get content ( ) {
-		return [ this.#toolbarDiv ];
-	}
+	get rootHTMLElement ( ) { return this.#rootHTMLElement;	}
 
 }
 

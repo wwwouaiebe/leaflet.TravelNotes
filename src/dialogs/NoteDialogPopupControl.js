@@ -87,10 +87,11 @@ class NoteDialogPopupControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) { return [ this.#popupDiv ]; }
+	get HTMLElements ( ) { return [ this.#popupDiv ]; }
 
 	get popupContent ( ) { return this.#popupTextArea.value; }
 

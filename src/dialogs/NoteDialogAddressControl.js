@@ -113,10 +113,11 @@ class NoteDialogAddressControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) {
+	get HTMLElements ( ) {
 		return [ this.#addressHeaderDiv, this.#addressInputDiv ];
 	}
 

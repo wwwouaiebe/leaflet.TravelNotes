@@ -135,10 +135,11 @@ class NoteDialogLinkControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
+	get HTMLElements ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
 
 	get url ( ) { return this.#linkInput.value; }
 

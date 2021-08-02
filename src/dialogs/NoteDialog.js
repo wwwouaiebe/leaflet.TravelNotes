@@ -254,15 +254,15 @@ class NoteDialog extends BaseDialogV3 {
 
 	get content ( ) {
 		return [].concat (
-			this.#toolbar.content,
-			this.#iconDimsControl.content,
-			this.#iconControl.content,
-			this.#tooltipControl.content,
-			this.#popupControl.content,
-			this.#addressControl.content,
-			this.#linkControl.content,
-			this.#phoneControl.content,
-			this.#previewControl.content
+			this.#toolbar.rootHTMLElement,
+			this.#iconDimsControl.HTMLElements,
+			this.#iconControl.HTMLElements,
+			this.#tooltipControl.HTMLElements,
+			this.#popupControl.HTMLElements,
+			this.#addressControl.HTMLElements,
+			this.#linkControl.HTMLElements,
+			this.#phoneControl.HTMLElements,
+			this.#previewControl.HTMLElements
 		);
 	}
 
@@ -273,7 +273,7 @@ class NoteDialog extends BaseDialogV3 {
 
 	get footer ( ) {
 		return [].concat (
-			this.#previewControl.content
+			this.#previewControl.HTMLElements
 		);
 	}
 
@@ -315,28 +315,28 @@ class NoteDialog extends BaseDialogV3 {
 
 	toogleContents ( ) {
 		if ( theConfig.noteDialog.mask.iconsDimension ) {
-			this.#iconDimsControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#iconDimsControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.mask.iconTextArea ) {
-			this.#iconControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#iconControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.mask.popupContent ) {
-			this.#popupControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#popupControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.mask.tooltip ) {
-			this.#tooltipControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#tooltipControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.mask.address ) {
-			this.#addressControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
-			this.#addressControl.content [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#addressControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#addressControl.HTMLElements [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.mask.link ) {
-			this.#linkControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
-			this.#linkControl.content [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#linkControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#linkControl.HTMLElements [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 		if ( theConfig.noteDialog.mask.phone ) {
-			this.#phoneControl.content [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
-			this.#phoneControl.content [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#phoneControl.HTMLElements [ ZERO ].classList.toggle ( 'TravelNotes-Hidden' );
+			this.#phoneControl.HTMLElements [ ONE ].classList.toggle ( 'TravelNotes-Hidden' );
 		}
 	}
 

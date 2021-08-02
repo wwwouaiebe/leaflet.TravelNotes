@@ -103,10 +103,11 @@ class NoteDialogPhoneControl {
 	}
 
 	/**
-	get the control HTML
+	return an array with the HTML elements of the control
+	@readonly
 	*/
 
-	get content ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
+	get HTMLElements ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
 
 	get phone ( ) { return this.#phoneInput.value; }
 

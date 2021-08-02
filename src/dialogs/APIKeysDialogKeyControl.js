@@ -158,13 +158,11 @@ class APIKeysDialogKeyControl {
 	get objId ( ) { return this.#objId; }
 
 	/**
-	return the root HTML element of the control
+	return an array with the HTML elements of the control
 	@readonly
 	*/
 
-	get rootHTMLElement ( ) {
-		return this.#rootHTMLElement;
-	}
+	get HTMLElements ( ) { return [ this.#rootHTMLElement ]; }
 
 	/**
 	return the providerName
