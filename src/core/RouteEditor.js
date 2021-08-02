@@ -79,7 +79,7 @@ import theErrorsUI from '../UI/ErrorsUI.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import Route from '../data/Route.js';
 import GpxFactory from '../core/GpxFactory.js';
-import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
+import RoutePropertiesDialogV3 from '../dialogs/RoutePropertiesDialogV3.js';
 import PrintRouteMapDialog from '../dialogs/PrintRouteMapDialog.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
@@ -553,7 +553,7 @@ class RouteEditor {
 
 	routeProperties ( routeObjId ) {
 		let route = theDataSearchEngine.getRoute ( routeObjId );
-		let routePropertiesDialog = newRoutePropertiesDialog ( route );
+		let routePropertiesDialog = new RoutePropertiesDialogV3 ( route );
 
 		routePropertiesDialog.show ( ).then (
 			( ) => {
