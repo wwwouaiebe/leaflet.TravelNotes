@@ -47,7 +47,7 @@ Tests ...
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theUtilities from '../util/Utilities.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import GeoCoder from '../core/GeoCoder.js';
 
@@ -232,15 +232,7 @@ class NoteDialogEventListeners {
 	*/
 
 	static onOpenFileButtonCkick ( ) {
-		let openFileInput = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'file',
-				accept : '.json'
-			}
-		);
-		openFileInput.addEventListener ( 'change', NoteDialogEventListeners.#onOpenFileInputChange, false );
-		openFileInput.click ( );
+		theUtilities.openFile ( NoteDialogEventListeners.#onOpenFileInputChange, '.json' );
 	}
 
 	/**

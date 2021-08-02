@@ -77,12 +77,7 @@ class APIKeysDialogToolbar {
 					textContent : '🔄'
 				},
 				this.#toolbarDiv
-			);
-
-			/*
-			.addEventListener ( 'click', myOnReloadKeysFromServerFileButtonClick, false );
-			*/
-
+			).addEventListener ( 'click', APIKeysDialogEventListeners.onReloadAPIKeysFromServerButtonClick, false );
 		}
 	}
 
@@ -100,11 +95,8 @@ class APIKeysDialogToolbar {
 				textContent : '💾'
 			},
 			this.#toolbarDiv
-		);
-
-		/*
-		.addEventListener ( 'click', myOnSaveKeysToSecureFileButtonClick, false );
-		*/
+		)
+			.addEventListener ( 'click', APIKeysDialogEventListeners.onSaveKeysToSecureFileButtonClick, false );
 
 	}
 
@@ -142,7 +134,6 @@ class APIKeysDialogToolbar {
 			this.#toolbarDiv
 		)
 			.addEventListener ( 'click', APIKeysDialogEventListeners.onAddNewAPIKeyClick, false );
-
 	}
 
 	/**
@@ -159,12 +150,7 @@ class APIKeysDialogToolbar {
 				textContent : '💾'
 			},
 			this.#toolbarDiv
-		);
-
-		/*
-		.addEventListener ( 'click', myOnSaveKeysToUnsecureFileButtonClick, false );
-		*/
-
+		).addEventListener ( 'click', APIKeysDialogEventListeners.onSaveKeysToUnsecureFileButtonClick, false );
 	}
 
 	/**
@@ -181,12 +167,7 @@ class APIKeysDialogToolbar {
 				textContent : '📂'
 			},
 			this.#toolbarDiv
-		);
-
-		/*
-		.addEventListener ( 'click', myOnOpenUnsecureFileButtonClick, false );
-		*/
-
+		).addEventListener ( 'click', APIKeysDialogEventListeners.onOpenUnsecureFileButtonClick, false );
 	}
 
 	/**

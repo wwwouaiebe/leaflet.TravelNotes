@@ -123,6 +123,26 @@ class Utilities {
 	}
 
 	/**
+	Open a file
+	@param {function} eventListener a change event listener to use when the file is opened
+
+	*/
+
+	openFile ( eventListener, acceptFileType ) {
+		let openFileInput = document.createElement ( 'input' );
+		openFileInput.type = 'file';
+		if ( acceptFileType ) {
+			openFileInput.accept = acceptFileType;
+		}
+		openFileInput.addEventListener (
+			'change',
+			eventListener,
+			false
+		);
+		openFileInput.click ( );
+	}
+
+	/**
 	Save a string to a file
 	@param {string} fileName The file name
 	@param {string} fileContent The file content

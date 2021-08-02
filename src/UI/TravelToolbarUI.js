@@ -51,6 +51,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import FileLoader from '../core/FileLoader.js';
 import theConfig from '../data/Config.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
+import theUtilities from '../util/Utilities.js';
 
 import { INVALID_OBJ_ID, ZERO } from '../util/Constants.js';
 
@@ -176,16 +177,7 @@ class OpenTravelButtonEventListeners {
 			return;
 		}
 
-		let openTravelInput = theHTMLElementsFactory.create (
-			'input',
-			{
-				className : 'TravelNotes-TravelUI-OpenFileInput',
-				type : 'file',
-				accept : '.trv'
-			}
-		);
-		openTravelInput.addEventListener ( 'change', OpenTravelButtonEventListeners.#onInputChange, false );
-		openTravelInput.click ( );
+		theUtilities.openFile ( OpenTravelButtonEventListeners.#onInputChange, '.trv' );
 	}
 }
 
@@ -231,16 +223,7 @@ class ImportTravelButtonEventListeners {
 
 	static onClick ( ) {
 		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
-			let importTravelInput = theHTMLElementsFactory.create (
-				'input',
-				{
-					className : 'TravelNotes-TravelUI-OpenFileInput',
-					type : 'file',
-					accept : '.trv,.map'
-				}
-			);
-			importTravelInput.addEventListener ( 'change', ImportTravelButtonEventListeners.#onInputChange, false );
-			importTravelInput.click ( );
+			theUtilities.openFile ( ImportTravelButtonEventListeners.#onInputChange, '.trv' );
 		}
 		else {
 			theErrorsUI.showError (

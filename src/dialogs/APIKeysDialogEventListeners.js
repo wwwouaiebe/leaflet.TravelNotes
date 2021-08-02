@@ -43,11 +43,11 @@ Tests ...
 */
 
 import PasswordDialog from '../dialogs/PasswordDialog.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import DataEncryptor from '../util/DataEncryptor.js';
+import theUtilities from '../util/Utilities.js';
 import theTranslator from '../UI/Translator.js';
 import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
-import { ZERO } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -85,7 +85,6 @@ class APIKeysDialogEventListeners {
 	}
 
 	static onAPIKeyDeleted ( ApiKeyDeletedEvent ) {
-		console.log ( 'b' );
 		APIKeysDialogEventListeners.APIKeysControls.delete ( ApiKeyDeletedEvent.data.objId );
 		APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
 	}
@@ -126,6 +125,62 @@ class APIKeysDialogEventListeners {
 		}
 
 		return true;
+	}
+
+	static #getAPIKeysJsonString ( ) {
+		let APIKeys = [];
+		APIKeysDialogEventListeners.APIKeysControls.forEach (
+			APIKeyControl => { APIKeys.push ( APIKeyControl.APIKey ); }
+		);
+		return JSON.stringify ( APIKeys );
+	}
+
+	static onSaveKeysToUnsecureFileButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		if ( ! APIKeysDialogEventListeners.validateAPIKeys ( ) ) {
+			return;
+		}
+		theUtilities.saveFile (
+			'APIKeys.json',
+			APIKeysDialogEventListeners.#getAPIKeysJsonString ( )
+		);
+	}
+
+	static #onOkEncrypt ( data ) {
+		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
+		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
+		theUtilities.saveFile (
+			'APIKeys',
+			data
+		);
+
+		// myAPIKeysDialog.keyboardEventListenerEnabled = true;
+	}
+
+	static #onErrorEncrypt ( ) {
+		APIKeysDialogEventListeners.APIKeysDialog.showError (
+			theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' )
+		);
+		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
+
+		// myAPIKeysDialog.keyboardEventListenerEnabled = true;
+	}
+
+	static onSaveKeysToSecureFileButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		if ( ! APIKeysDialogEventListeners.validateAPIKeys ( ) ) {
+			return;
+		}
+		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
+
+		// myAPIKeysDialog.keyboardEventListenerEnabled = false;
+
+		new DataEncryptor ( ).encryptData (
+			new window.TextEncoder ( ).encode ( APIKeysDialogEventListeners.#getAPIKeysJsonString ( ) ),
+			APIKeysDialogEventListeners.#onOkEncrypt,
+			APIKeysDialogEventListeners.#onErrorEncrypt,
+			new PasswordDialog ( true ).show ( )
+		);
 	}
 
 	static #onOkDecrypt ( data ) {
@@ -174,14 +229,71 @@ class APIKeysDialogEventListeners {
 		fileReader.readAsArrayBuffer ( changeEvent.target.files [ ZERO ] );
 	}
 
+	static onReloadAPIKeysFromServerButtonClick ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
+		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
+
+		// myAPIKeysDialog.keyboardEventListenerEnabled = false;
+
+		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
+			.then (
+				response => {
+					if ( HTTP_STATUS_OK === response.status && response.ok ) {
+						response.arrayBuffer ( ).then (
+							data => {
+								new DataEncryptor ( ).decryptData (
+									data,
+									APIKeysDialogEventListeners.#onOkDecrypt,
+									APIKeysDialogEventListeners.#onErrorDecrypt,
+									new PasswordDialog ( false ).show ( )
+								);
+							}
+						);
+					}
+					else {
+						APIKeysDialogEventListeners.#onErrorDecrypt ( new Error ( 'Invalid http status' ) );
+					}
+				}
+			)
+			.catch (
+				err => {
+					APIKeysDialogEventListeners.#onErrorDecrypt ( err );
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+			);
+	}
+
 	static onOpenSecureFileButtonClick ( ) {
-		let OpenSecureFileInput = theHTMLElementsFactory.create ( 'input', { type : 'file' } );
-		OpenSecureFileInput.addEventListener (
-			'change',
-			APIKeysDialogEventListeners.#onOpenSecureFileInputChange,
-			false
-		);
-		OpenSecureFileInput.click ( );
+		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
+		theUtilities.openFile (	APIKeysDialogEventListeners.#onOpenSecureFileInputChange );
+	}
+
+	static #onOpenUnsecureFileInputChange ( changeEvent ) {
+		changeEvent.stopPropagation ( );
+		let fileReader = new FileReader ( );
+		fileReader.onload = ( ) => {
+			try {
+				APIKeysDialogEventListeners.addAPIKeys (
+					JSON.parse ( fileReader.result )
+				);
+			}
+			catch ( err ) {
+				APIKeysDialogEventListeners.APIKeysDialog.showError ( err.message );
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+			APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
+		};
+		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
+	}
+
+	static onOpenUnsecureFileButtonClick ( ) {
+		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
+		theUtilities.openFile (	APIKeysDialogEventListeners.#onOpenUnsecureFileInputChange, '.json' );
 	}
 }
 
