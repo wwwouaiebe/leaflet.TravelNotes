@@ -44,8 +44,6 @@ Tests ...
 
 import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
-import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
-import theTranslator from '../UI/Translator.js';
 import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
@@ -64,13 +62,22 @@ class APIKeysDialogV3 extends BaseDialogV3 {
 	#toolbar = null;
 	#APIKeysControlsContainer = null
 
+	#createAPIKeysControlsContainer ( ) {
+		this.#APIKeysControlsContainer = theHTMLElementsFactory.create ( 'div' );
+		this.#APIKeysControlsContainer.addEventListener (
+			'apikeydeleted',
+			APIKeysDialogEventListeners.onAPIKeyDeleted,
+			false
+		);
+	}
+
 	constructor ( APIKeys, haveAPIKeysFile ) {
 
 		super ( );
 
 		APIKeysDialogEventListeners.APIKeysDialog = this;
 		this.#toolbar = new APIKeysDialogToolbar ( haveAPIKeysFile );
-		this.#APIKeysControlsContainer = theHTMLElementsFactory.create ( 'div' );
+		this.#createAPIKeysControlsContainer ( );
 
 		APIKeysDialogEventListeners.addAPIKeys ( APIKeys );
 
@@ -87,16 +94,7 @@ class APIKeysDialogV3 extends BaseDialogV3 {
 	}
 
 	canClose ( ) {
-		this.hideError ( );
-		let returnValue = true;
-
-		/* TODO */
-
-		if ( ! returnValue ) {
-			this.showError ( theTranslator.getText ( 'APIKeysDialog - empty API key name or value' ) );
-		}
-
-		return returnValue;
+		return APIKeysDialogEventListeners.validateAPIKeys ( );
 	}
 
 	onOk ( ) {
@@ -104,10 +102,13 @@ class APIKeysDialogV3 extends BaseDialogV3 {
 		APIKeysDialogEventListeners.APIKeysControls.forEach (
 			APIKeyControl => APIKeys.push ( APIKeyControl.APIKey )
 		);
-
-		console.log ( APIKeys );
-
+		APIKeysDialogEventListeners.APIKeysControls.clear ( );
 		super.onOk ( APIKeys );
+	}
+
+	onCancel ( ) {
+		APIKeysDialogEventListeners.APIKeysControls.clear ( );
+		super.onCancel ( );
 	}
 
 	get content ( ) {

@@ -46,6 +46,7 @@ import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import ObjId from '../data/ObjId.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -62,9 +63,17 @@ class APIKeysDialogKeyControl {
 	#APIKeyDiv = null;
 	#providerNameInput = null;
 	#providerKeyInput = null;
-	#objId = ObjId.nextObjId;
+	#objId = INVALID_OBJ_ID;
+
+	static #onDeleteNewAPIKeyClick ( clickEvent ) {
+		let dispatchedEvent = new Event ( 'apikeydeleted' );
+		dispatchedEvent.data = { objId : clickEvent.target.objId };
+		clickEvent.target.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
 
 	constructor ( APIKey ) {
+
+		this.#objId = ObjId.nextObjId;
 
 		this.#APIKeyDiv = theHTMLElementsFactory.create (
 			'div',
@@ -101,15 +110,12 @@ class APIKeysDialogKeyControl {
 					'TravelNotes-BaseDialog-Button ' +
 					'TravelNotes-APIKeysDialog-AtRightButton TravelNotes-APIKeysDialog-DeleteRowButton',
 				title : theTranslator.getText ( 'APIKeysDialog - delete API key' ),
-				textContent : '❌'
+				textContent : '❌',
+				objId : this.#objId
 			},
 			this.#APIKeyDiv
-		);
-
-		/*
-			.addEventListener ( 'click', myOnDeleteApiKeyRowButton, false );
-		*/
-
+		)
+			.addEventListener ( 'click', APIKeysDialogKeyControl.#onDeleteNewAPIKeyClick, false );
 	}
 
 	get objId ( ) { return this.#objId; }

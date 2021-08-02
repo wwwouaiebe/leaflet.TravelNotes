@@ -84,6 +84,50 @@ class APIKeysDialogEventListeners {
 		APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
 	}
 
+	static onAPIKeyDeleted ( ApiKeyDeletedEvent ) {
+		console.log ( 'b' );
+		APIKeysDialogEventListeners.APIKeysControls.delete ( ApiKeyDeletedEvent.data.objId );
+		APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
+	}
+
+	static validateAPIKeys ( ) {
+		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
+		let haveEmptyValues = false;
+		let providersNames = [];
+		APIKeysDialogEventListeners.APIKeysControls.forEach (
+			APIKeyControl => {
+				haveEmptyValues =
+					haveEmptyValues ||
+					'' === APIKeyControl.providerName
+					||
+					'' === APIKeyControl.providerKey;
+				providersNames.push ( APIKeyControl.providerName );
+			}
+		);
+		let haveDuplicate = false;
+		providersNames.forEach (
+			providerName => {
+				haveDuplicate =
+					haveDuplicate ||
+					providersNames.indexOf ( providerName ) !== providersNames.lastIndexOf ( providerName );
+			}
+		);
+		if ( haveEmptyValues ) {
+			APIKeysDialogEventListeners.APIKeysDialog.showError (
+				theTranslator.getText ( 'APIKeysDialog - empty API key name or value' )
+			);
+			return false;
+		}
+		else if ( haveDuplicate ) {
+			APIKeysDialogEventListeners.APIKeysDialog.showError (
+				theTranslator.getText ( 'APIKeysDialog - duplicate API key name found' )
+			);
+			return false;
+		}
+
+		return true;
+	}
+
 	static #onOkDecrypt ( data ) {
 		try {
 			APIKeysDialogEventListeners.addAPIKeys (
@@ -112,7 +156,7 @@ class APIKeysDialogEventListeners {
 		}
 	}
 
-	static #onRestoreKeysFromSecureFileInputChange ( changeEvent ) {
+	static #onOpenSecureFileInputChange ( changeEvent ) {
 		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
 		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
 
@@ -134,7 +178,7 @@ class APIKeysDialogEventListeners {
 		let OpenSecureFileInput = theHTMLElementsFactory.create ( 'input', { type : 'file' } );
 		OpenSecureFileInput.addEventListener (
 			'change',
-			APIKeysDialogEventListeners.#onRestoreKeysFromSecureFileInputChange,
+			APIKeysDialogEventListeners.#onOpenSecureFileInputChange,
 			false
 		);
 		OpenSecureFileInput.click ( );

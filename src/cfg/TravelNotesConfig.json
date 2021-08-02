@@ -4,7 +4,7 @@
 		"saveToSessionStorage":true
 	},
 	"APIKeysDialog":{
-		"haveUnsecureButtons":false,
+		"haveUnsecureButtons":true,
 		"showAPIKeys":false,
 		"showButton":true
 	},
