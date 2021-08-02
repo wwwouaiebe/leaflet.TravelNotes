@@ -80,7 +80,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import Route from '../data/Route.js';
 import GpxFactory from '../core/GpxFactory.js';
 import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
-import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
+import PrintRouteMapDialog from '../dialogs/PrintRouteMapDialog.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
@@ -587,7 +587,7 @@ class RouteEditor {
 	*/
 
 	printRouteMap ( routeObjId ) {
-		newPrintRouteMapDialog ( )
+		new PrintRouteMapDialog ( )
 			.show ( )
 			.then ( printData => newPrintFactory ( ).print ( printData, routeObjId ) )
 			.catch (
