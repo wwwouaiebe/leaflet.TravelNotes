@@ -79,11 +79,11 @@ import theUI from '../UI/UI.js';
 import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
 import Maneuver from '../data/Maneuver.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 
 // import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
@@ -435,7 +435,7 @@ class TravelNotes {
 	get a new BaseDialog object. Used by plugins.
 	*/
 
-	get baseDialog ( ) { return newBaseDialog ( ); }
+	get baseDialog ( ) { return new BaseDialog ( ); }
 
 	/**
 	get the Leaflet map object

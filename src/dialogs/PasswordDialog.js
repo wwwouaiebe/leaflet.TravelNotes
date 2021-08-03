@@ -50,7 +50,7 @@ Tests ...
 */
 
 import theTranslator from '../UI/Translator.js';
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 const OUR_PSWD_MIN_LENGTH = 12;
@@ -60,12 +60,12 @@ const OUR_PSWD_MIN_LENGTH = 12;
 
 @class
 @classdesc This class is the password dialog
-@extends BaseDialogV3
+@extends BaseDialog
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class PasswordDialog extends BaseDialogV3 {
+class PasswordDialog extends BaseDialog {
 
 	/**
 	The password html div

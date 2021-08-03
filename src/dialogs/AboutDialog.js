@@ -59,7 +59,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theCurrentVersion from '../data/Version.js';
 
@@ -68,13 +68,13 @@ import theCurrentVersion from '../data/Version.js';
 
 @class AboutDialog
 @classdesc This class is the 'About' dialog
-@augments BaseDialogV3
+@augments BaseDialog
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class AboutDialog extends BaseDialogV3 {
+class AboutDialog extends BaseDialog {
 
 	#aboutDiv = null;
 

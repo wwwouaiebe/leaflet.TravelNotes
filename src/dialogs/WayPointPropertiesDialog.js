@@ -24,7 +24,9 @@ Changes:
 		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v2.2.0:
 		- Issue ♯64 : Improve geocoding
-Doc reviewed 20200816
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210803
 Tests ...
 */
 /**
@@ -47,7 +49,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import GeoCoder from '../core/GeoCoder.js';
@@ -58,13 +60,13 @@ import theConfig from '../data/Config.js';
 
 @class WayPointPropertiesDialog
 @classdesc This is the WayPointProerties dialog
-@augments BaseDialogV3
+@augments BaseDialog
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class WayPointPropertiesDialogV3 extends BaseDialogV3 {
+class WayPointPropertiesDialogV3 extends BaseDialog {
 
 	/**
 	A reference to the edited wayPoint

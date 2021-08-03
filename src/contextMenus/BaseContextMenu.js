@@ -57,6 +57,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import BaseContextMenuEvents from '../contextMenus/BaseContextMenuEvents.js';
@@ -180,12 +181,9 @@ class BaseContextMenu {
 
 	#moveContainer ( ) {
 
-		// a dummy div is created to find the screen width and height
-		let dummyDiv =
-			theHTMLElementsFactory.create ( 'div', { className : 'TravelNotes-ContextMenu-DummyDiv' }, document.body );
-		let screenWidth = dummyDiv.clientWidth;
-		let screenHeight = dummyDiv.clientHeight;
-		document.body.removeChild ( dummyDiv );
+		// Searching the screen width and height
+		let screenWidth = theTravelNotesData.map.getContainer ( ).clientWidth;
+		let screenHeight = theTravelNotesData.map.getContainer ( ).clientHeight;
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (

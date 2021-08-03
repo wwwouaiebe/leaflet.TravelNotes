@@ -68,7 +68,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import NoteDialogToolbar from '../dialogs/NoteDialogToolbar.js';
 import NoteDialogIconDimsControl from '../dialogs/NoteDialogIconDimsControl.js';
 import NoteDialogIconControl from '../dialogs/NoteDialogIconControl.js';
@@ -91,13 +91,13 @@ import { ZERO, ONE } from '../util/Constants.js';
 
 @class NoteDialog
 @classdesc This class create and manage the NoteDialog
-@extends BaseDialogV3
+@extends BaseDialog
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialog extends BaseDialogV3 {
+class NoteDialog extends BaseDialog {
 
 	/**
 	the currently edited note

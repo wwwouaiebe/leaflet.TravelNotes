@@ -54,7 +54,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
 import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';
@@ -65,13 +65,13 @@ import { ZERO } from '../util/Constants.js';
 
 @class APIKeysDialog
 @classdesc This class is the APIKeys dialog
-@extends BaseDialogV3
+@extends BaseDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class APIKeysDialog extends BaseDialogV3 {
+class APIKeysDialog extends BaseDialog {
 
 	/**
 	The dialog toolbar

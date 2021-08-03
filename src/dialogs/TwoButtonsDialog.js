@@ -21,7 +21,9 @@ Changes:
 		- created
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200815
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210803
 Tests ...
 */
 
@@ -59,7 +61,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 /**
@@ -82,13 +84,13 @@ newTwoButtonsDialog (
 	.then ( ( ) => doSomethingOnOkButtonClick )
 	.catch ( error => doSomethingWithTheError );
 @see {@link newTwoButtonsDialog} for constructor
-@augments BaseDialogV3
+@augments BaseDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TwoButtonsDialog extends BaseDialogV3 {
+class TwoButtonsDialog extends BaseDialog {
 
 	#options = null;
 

@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v2.2.0:
 		- created
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210803
 Tests ...
 */
 
@@ -44,7 +46,7 @@ Tests ...
 */
 
 import theTranslator from '../UI/Translator.js';
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 /**
@@ -54,7 +56,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 @classdesc A saveAsDialog object completed for making a partial save of the edited travel
 Create an instance of the dialog, then execute the show ( ) method. The selected values are returned as parameter of the
 succes handler of the Promise returned by the show ( ) method.
-@augments BaseDialogV3
+@augments BaseDialog
 @example
 new SaveAsDialog (  )
 	.show ( )
@@ -65,7 +67,7 @@ new SaveAsDialog (  )
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class SaveAsDialog extends BaseDialogV3 {
+class SaveAsDialog extends BaseDialog {
 
 	#removeTravelNotesInput = null;
 	#removeRoutesNotesInput = null;

@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.9.0:
 		- created
-Doc reviewed 20200815
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210803
 Tests ...
 */
 
@@ -61,7 +63,7 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
@@ -72,13 +74,13 @@ const OUR_MAX_ZOOM = 15;
 
 @class PrintRouteMapDialog
 @classdesc This class create and manage the print route map dialog
-@extends BaseDialogV3
+@extends BaseDialog
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class PrintRouteMapDialog extends BaseDialogV3 {
+class PrintRouteMapDialog extends BaseDialog {
 
 	#paperWidthInput = null;
 	#paperHeightInput = null;

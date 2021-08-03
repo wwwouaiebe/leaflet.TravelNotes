@@ -55,7 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
+import BaseDialog from '../dialogs/BaseDialog.js';
 import theTranslator from '../UI/Translator.js';
 import ColorControl from '../dialogs/ColorControl.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
@@ -70,13 +70,13 @@ const OUR_ROUTE_MAX_WIDTH = 40;
 
 @class RoutePropertiesDialog
 @classdesc This class is the route properties dialog
-@extends BaseDialogV3
+@extends BaseDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RoutePropertiesDialog extends BaseDialogV3 {
+class RoutePropertiesDialog extends BaseDialog {
 
 	/**
 	A reference to the route
