@@ -18,6 +18,8 @@ import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
 class BaseDialogV3 {
 
+	#options = null;
+
 	/**
 	onOk promise function
 	@private
@@ -243,16 +245,36 @@ class BaseDialogV3 {
 		BaseDialogEventListeners.containerDiv.footerDiv.okButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				textContent : '🆗',
+				textContent : this.#options.firstButtonText || '🆗',
 				className : 'TravelNotes-BaseDialog-Button'
 			},
 			BaseDialogEventListeners.containerDiv.footerDiv
 		);
+		if ( this.#options.firstButtonText ) {
+			BaseDialogEventListeners.containerDiv.footerDiv.okButton.style [ 'background-color' ] = 'green';
+		}
 		BaseDialogEventListeners.containerDiv.footerDiv.okButton.addEventListener (
 			'click',
 			BaseDialogEventListeners.onOkButtonClick,
 			false
 		);
+
+		if ( this.#options.secondButtonText ) {
+			BaseDialogEventListeners.containerDiv.footerDiv.secondButton = theHTMLElementsFactory.create (
+				'div',
+				{
+					textContent : this.#options.secondButtonText,
+					className : 'TravelNotes-BaseDialog-Button'
+				},
+				BaseDialogEventListeners.containerDiv.footerDiv
+			);
+			BaseDialogEventListeners.containerDiv.footerDiv.secondButton.style [ 'background-color' ] = 'red';
+			BaseDialogEventListeners.containerDiv.footerDiv.secondButton.addEventListener (
+				'click',
+				BaseDialogEventListeners.onCancelButtonClick,
+				false
+			);
+		}
 
 		this.footerHTMLElements.forEach (
 			footerHTMLElement => BaseDialogEventListeners.containerDiv.footerDiv.appendChild ( footerHTMLElement )
@@ -324,7 +346,8 @@ class BaseDialogV3 {
 		this.onShow ( );
 	}
 
-	constructor ( ) {
+	constructor ( options = {} ) {
+		this.#options = options;
 		BaseDialogEventListeners.globalVarsPush ( );
 		BaseDialogEventListeners.baseDialog = this;
 	}

@@ -67,8 +67,6 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-
-// import { newNoteDialog } from '../dialogs/NoteDialog.js';
 import NoteDialog from '../dialogs/NoteDialog.js';
 import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
@@ -78,7 +76,7 @@ import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import theConfig from '../data/Config.js';
 import WaitUI from '../UI/WaitUI.js';
-import { newTwoButtonsDialog } from '../dialogs/TwoButtonsDialog.js';
+import TwoButtonsDialog from '../dialogs/TwoButtonsDialog.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import GeoCoder from '../core/GeoCoder.js';
@@ -350,14 +348,14 @@ class NoteEditor {
 			return;
 		}
 
-		newTwoButtonsDialog (
+		new TwoButtonsDialog (
 			{
 				title : theTranslator.getText ( 'NoteEditor - Add a note for each maneuver' ),
-				textContent : theTranslator.getText (
+				text : theTranslator.getText (
 					'NoteEditor - Add a note for each maneuver. Are you sure?',
 					{ noteLength : maneuverLength }
 				),
-				secondButtonContent : '❌'
+				secondButtonText : '❌'
 			}
 		)
 			.show ( )
