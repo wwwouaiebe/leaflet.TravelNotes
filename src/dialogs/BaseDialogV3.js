@@ -363,7 +363,7 @@ class BaseDialogV3 {
 	onShow ( ) {}
 
 	/**
-	Get the HTML content section of the dialog is show. Can be overloaded in the derived classes
+	Get the title of the dialog. Can be overloaded in the derived classes
 	@readonly
 	*/
 

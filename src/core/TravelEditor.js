@@ -79,7 +79,7 @@ import FileCompactor from '../core/FileCompactor.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 import theMouseUI from '../UI/MouseUI.js';
-import { newSaveAsDialog } from '../dialogs/SaveAsDialog.js';
+import SaveAsDialog from '../dialogs/SaveAsDialog.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -166,8 +166,7 @@ class TravelEditor {
 			return;
 		}
 
-		let saveAsDialog = newSaveAsDialog ( );
-		saveAsDialog.show ( )
+		new SaveAsDialog ( ).show ( )
 			.then ( removeData => { this.#saveAsTravel ( removeData ); } )
 			.catch (
 				err => {

@@ -44,80 +44,45 @@ Tests ...
 */
 
 import theTranslator from '../UI/Translator.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
+import BaseDialogV3 from '../dialogs/BaseDialogV3.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewSaveAsDialog
-@desc constructor for SaveAsDialog objects
-@return {SaveAsDialog} an instance of SaveAsDialog object
-@private
+@class SaveAsDialog
+@classdesc A saveAsDialog object completed for making a partial save of the edited travel
+Create an instance of the dialog, then execute the show ( ) method. The selected values are returned as parameter of the
+succes handler of the Promise returned by the show ( ) method.
+@augments BaseDialogV3
+@example
+new SaveAsDialog (  )
+	.show ( )
+	.then ( removeData => doSomethingWithTheDataToRemove )
+	.catch ( error => doSomethingWithTheError );
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewSaveAsDialog ( ) {
+class SaveAsDialog extends BaseDialogV3 {
+
+	#removeTravelNotesInput = null;
+	#removeRoutesNotesInput = null;
+	#removeManeuversInput = null;
+	#removeTravelNotesDiv = null;
+	#removeRoutesNotesDiv = null;
+	#removeManeuversDiv = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class SaveAsDialog
-	@classdesc A saveAsDialog object completed for making a partial save of the edited travel
-	Create an instance of the dialog, then execute the show ( ) method. The selected values are returned as parameter of the
-	succes handler of the Promise returned by the show ( ) method.
-	@example
-	newSaveAsDialog (  )
-		.show ( )
-		.then ( removeData => doSomethingWithTheDataToRemove )
-		.catch ( error => doSomethingWithTheError );
-	@see {@link newSaveAsDialog} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	let mySaveAsDialog = null;
-	let mySaveAsDiv = null;
-	let myRemoveTravelNotesInput = null;
-	let myRemoveRoutesNotesInput = null;
-	let myRemoveManeuversInput = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnOkButtonClick
-	@desc Event listener for the ok button
+	Create an input div and an input HTMLelements
+	@param {string} inputText The text to display near the input
+	@return {Array.<HTMLElement>} An array with the div and the input HTMLelement
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOkButtonClick ( ) {
-		return Object.freeze (
-			{
-				removeTravelNotes : myRemoveTravelNotesInput.checked,
-				removeRoutesNotes : myRemoveRoutesNotesInput.checked,
-				removeManeuvers : myRemoveManeuversInput.checked
-			}
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateInputDiv
-	@desc This method creates a div with a checkbox and a text
-	@param {string} inputText the text to display
-	@return {HTMLInputElement} the input element in the div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateInputDiv ( inputText ) {
-		let inputDiv = theHTMLElementsFactory.create ( 'div', null, mySaveAsDiv );
+	#createInputDiv ( inputText ) {
+		let inputDiv = theHTMLElementsFactory.create ( 'div', null );
 		let input = theHTMLElementsFactory.create (
 			'input',
 			{
@@ -127,48 +92,58 @@ function ourNewSaveAsDialog ( ) {
 			inputDiv
 		);
 		theHTMLElementsFactory.create ( 'text', { value : inputText }, inputDiv );
-		return input;
+		return [ inputDiv, input ];
+	}
+
+	constructor ( ) {
+		super ( );
+		[ this.#removeTravelNotesDiv, this.#removeTravelNotesInput ] =
+			this.#createInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Travel Notes' ) );
+		[ this.#removeRoutesNotesDiv, this.#removeRoutesNotesInput ] =
+			this.#createInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Routes Notes' ) );
+		[ this.#removeManeuversDiv, this.#removeManeuversInput ] =
+			this.#createInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Travel Notes' ) );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDialog
-	@desc This method creates the dialog
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Ok button handler.
 	*/
 
-	function myCreateDialog ( ) {
-		mySaveAsDialog = newBaseDialog ( );
-		mySaveAsDialog.title = theTranslator.getText ( 'SaveAsDialog - SaveAs' );
-		mySaveAsDialog.okButtonListener = myOnOkButtonClick;
-		mySaveAsDiv = theHTMLElementsFactory.create ( 'div', null, mySaveAsDialog.content );
-		myRemoveTravelNotesInput = myCreateInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Travel Notes' ) );
-		myRemoveRoutesNotesInput = myCreateInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Routes Notes' ) );
-		myRemoveManeuversInput = myCreateInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Maneuvers' ) );
+	onOk ( ) {
+		super.onOk (
+			Object.freeze (
+				{
+					removeTravelNotes : this.#removeTravelNotesInput.checked,
+					removeRoutesNotes : this.#removeRoutesNotesInput.checked,
+					removeManeuvers : this.#removeManeuversInput.checked
+				}
+			)
+		);
 	}
 
-	myCreateDialog ( );
-	return mySaveAsDialog;
+	/**
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
+	@readonly
+	*/
+
+	get contentHTMLElements ( ) {
+		return [
+			this.#removeTravelNotesDiv,
+			this.#removeRoutesNotesDiv,
+			this.#removeManeuversDiv
+		];
+	}
+
+	/**
+	Get the title of the dialog
+	@readonly
+	*/
+
+	get title ( ) { return theTranslator.getText ( 'SaveAsDialog - SaveAs' ); }
+
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newSaveAsDialog
-	@desc constructor for SaveAsDialog objects
-	@return {SaveAsDialog} an instance of SaveAsDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewSaveAsDialog as newSaveAsDialog
-};
+export default SaveAsDialog;
 
 /*
 --- End of SaveAsDialog.js file -----------------------------------------------------------------------------------------------
