@@ -316,6 +316,10 @@ export const WAY_POINT_ICON_SIZE = 20;
 
 export const DIALOG_DRAG_MARGIN = 20;
 
+export const MAX_COLOR_VALUE = 255;
+
+export const MIN_COLOR_VALUE = 0;
+
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------
 */
