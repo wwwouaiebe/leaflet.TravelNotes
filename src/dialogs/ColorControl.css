@@ -28,17 +28,17 @@ Changes:
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-#TravelNotes-ColorDialog-ColorDiv {
+#TravelNotes-ColorControl-ColorDiv {
 	width: 30em;
 	text-align: center;
 }
 
-#TravelNotes-ColorDialog-RedButtonsRowDiv {
+#TravelNotes-ColorControl-RedButtonsRowDiv {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
 
-.TravelNotes-ColorDialog-CellColorDiv {
+.TravelNotes-ColorControl-CellColorDiv {
 	display: inline-block;
 	height: 1em;
 	width: 1em;
@@ -50,12 +50,12 @@ Changes:
 	margin-bottom: 0;
 }
 
-.TravelNotes-ColorDialog-NumberInput {
+.TravelNotes-ColorControl-NumberInput {
 	width: 3em;
 	margin: 0.5em;
 }
 
-#TravelNotes-ColorDialog-ColorSampleDiv {
+#TravelNotes-ColorControl-ColorSampleDiv {
 	width: 5em;
 	height: 3em;
 	display: inline-block;

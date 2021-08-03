@@ -29,9 +29,9 @@ Changes:
 		- Issue ♯63 : Find a better solution for provider keys upload
 	- v1.12.0:
 		- Issue ♯120 : Review the UserInterface
-	- v2.0.0:
-		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200815
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210803
 Tests ...
 */
 
@@ -65,14 +65,59 @@ import { ZERO } from '../util/Constants.js';
 const OUR_ROUTE_MIN_WIDTH = 1;
 const OUR_ROUTE_MAX_WIDTH = 40;
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class RoutePropertiesDialog
+@classdesc This class is the route properties dialog
+@extends BaseDialogV3
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class RoutePropertiesDialog extends BaseDialogV3 {
 
+	/**
+	A reference to the route
+	@private
+	*/
+
 	#route = null;
+
+	/**
+	The colorControl object used in the dialog
+	@private
+	*/
+
 	#colorControl = null;
 
+	/**
+	The route name input in the dialog
+	@private
+	*/
+
 	#nameInput = null;
+
+	/**
+	The route width input in the dialog
+	@private
+	*/
+
 	#widthInput = null;
+
+	/**
+	The route dash select in the dialog
+	@private
+	*/
+
 	#dashSelect = null;
+
+	/**
+	The route chain check box in the dialog
+	@private
+	*/
+
 	#chainInput = null;
 
 	/**
@@ -216,11 +261,21 @@ class RoutePropertiesDialog extends BaseDialogV3 {
 		);
 	}
 
+	/*
+	constructor
+	@param {Route} route The route for witch the properties are edited
+	*/
+
 	constructor ( route ) {
 		super ( );
 		this.#route = route;
 		this.#colorControl = new ColorControl ( route.color );
 	}
+
+	/**
+	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked.
+	Push the new route properties in the route and validate the route
+	*/
 
 	onOk ( ) {
 
@@ -245,6 +300,7 @@ class RoutePropertiesDialog extends BaseDialogV3 {
 	get title ( ) { return theTranslator.getText ( 'RoutePropertiesDialog - Route properties' ); }
 
 	/**
+	Overload of the BaseDialog.contentHTMLElements property.
 	Get an array with the HTMLElements that have to be added in the content of the dialog.
 	@readonly
 	*/

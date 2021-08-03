@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210803
 Tests ...
 */
 
@@ -52,7 +54,7 @@ const OUR_SLIDER_MAX_VALUE = 100;
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class ColorControlEventListeners
-@classdesc coming soon...
+@classdesc Container for vars and event listeners for the ColorControl
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -61,19 +63,57 @@ const OUR_SLIDER_MAX_VALUE = 100;
 class ColorControlEventListeners {
 
 	constructor ( ) {
-		this.colorDiv = null;
+
+		/** An array with the color buttons of the ColorControl
+		*/
+
 		this.colorButtons = [];
+
+		/**
+		The red input htmlElement of the ColorControl
+		*/
+
 		this.redInput = null;
+
+		/**
+		The green input htmlElement of the ColorControl
+		*/
+
 		this.greenInput = null;
+
+		/**
+		The blue input htmlElement of the ColorControl
+		*/
+
 		this.blueInput = null;
+
+		/**
+		A clone of the edited color
+		*/
+
 		this.newColor = new Color;
+
+		/**
+		The sample color div of the color control
+		*/
+
 		this.colorSampleDiv = null;
+
+		/**
+		Shared constant with the slider value
+		*/
+
 		this.sliderMaxValue = OUR_SLIDER_MAX_VALUE;
+
+		/**
+		Shared constant with the color buttons row number
+		*/
+
 		this.colorRowsNumber = OUR_COLOR_ROWS_NUMBER;
 	}
 
 	/**
-	Event listener for the red color buttons
+	Event listener for the color input
 	*/
 
 	onColorInput ( ) {
@@ -86,7 +126,6 @@ class ColorControlEventListeners {
 
 	/**
 	Event listener for the color buttons
-	@private
 	*/
 
 	onColorButtonClick ( clickEvent ) {
@@ -103,7 +142,7 @@ class ColorControlEventListeners {
 	@private
 	*/
 
-	onRedColorButtonOrSlider ( redValue ) {
+	#onRedColorButtonOrSlider ( redValue ) {
 		for ( let rowCounter = ZERO; rowCounter < this.colorRowsNumber; ++ rowCounter ) {
 			for ( let cellCounter = ZERO; cellCounter < this.colorRowsNumber; ++ cellCounter ) {
 				let colorButton = this.colorButtons [ ( this.colorRowsNumber * rowCounter ) + cellCounter ];
@@ -115,24 +154,22 @@ class ColorControlEventListeners {
 
 	/**
 	Event listener for the red color slider
-	@private
 	*/
 
 	onRedColorSliderInput ( inputEvent ) {
 
 		// Math.ceil because with JS 100 * 2.55 = 254.99999....
-		this.onRedColorButtonOrSlider (
+		this.#onRedColorButtonOrSlider (
 			Math.ceil ( inputEvent.target.valueAsNumber * ( MAX_COLOR_VALUE / this.sliderMaxValue ) )
 		);
 	}
 
 	/**
 	Event listener for the red color buttons
-	@private
 	*/
 
 	onRedColorButtonClick ( clickEvent ) {
-		this.onRedColorButtonOrSlider ( MAX_COLOR_VALUE - clickEvent.target.color.blue );
+		this.#onRedColorButtonOrSlider ( MAX_COLOR_VALUE - clickEvent.target.color.blue );
 
 	}
 }
