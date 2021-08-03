@@ -74,7 +74,7 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import { newWayPointPropertiesDialog } from '../dialogs/WayPointPropertiesDialog.js';
+import WayPointPropertiesDialog from '../dialogs/WayPointPropertiesDialog.js';
 import GeoCoder from '../core/GeoCoder.js';
 import WayPoint from '../data/WayPoint.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
@@ -334,7 +334,7 @@ class WayPointEditor {
 
 	wayPointProperties ( wayPointObjId ) {
 		let wayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId );
-		let wayPointPropertiesDialog = newWayPointPropertiesDialog ( wayPoint );
+		let wayPointPropertiesDialog = new WayPointPropertiesDialog ( wayPoint );
 
 		wayPointPropertiesDialog.show ( )
 			.then (
