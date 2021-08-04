@@ -131,6 +131,8 @@ import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
 class BaseDialog {
 
+	#BDEL = null;
+
 	#options = null;
 
 	/**
@@ -155,34 +157,34 @@ class BaseDialog {
 	#createBackgroundDiv ( ) {
 
 		// A new element covering the entire screen is created, with drag and drop event listeners
-		BaseDialogEventListeners.backgroundDiv = theHTMLElementsFactory.create (
+		this.#BDEL.backgroundDiv = theHTMLElementsFactory.create (
 			'div',
 			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
 		);
-		BaseDialogEventListeners.backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
-		BaseDialogEventListeners.backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
+		this.#BDEL.backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
+		this.#BDEL.backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
 
-		BaseDialogEventListeners.backgroundDiv.addEventListener (
+		this.#BDEL.backgroundDiv.addEventListener (
 			'mousedown',
 			BaseDialogEventListeners.onMouseDownBackground,
 			false
 		);
-		BaseDialogEventListeners.backgroundDiv.addEventListener (
+		this.#BDEL.backgroundDiv.addEventListener (
 			'mouseup',
 			BaseDialogEventListeners.onMouseUpBackground,
 			false
 		);
-		BaseDialogEventListeners.backgroundDiv.addEventListener (
+		this.#BDEL.backgroundDiv.addEventListener (
 			'mousemove',
 			BaseDialogEventListeners.onMouseMoveBackground,
 			false
 		);
-		BaseDialogEventListeners.backgroundDiv.addEventListener (
+		this.#BDEL.backgroundDiv.addEventListener (
 			'wheel',
 			BaseDialogEventListeners.onMouseWheelBackground,
 			false
 		);
-		BaseDialogEventListeners.backgroundDiv.addEventListener (
+		this.#BDEL.backgroundDiv.addEventListener (
 			'contextmenu',
 			BaseDialogEventListeners.onContextMenuBackground,
 			false
@@ -197,7 +199,7 @@ class BaseDialog {
 	#CreateContainerDiv ( ) {
 
 		// the dialog is created
-		BaseDialogEventListeners.containerDiv = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Container',
@@ -210,7 +212,7 @@ class BaseDialog {
 				waitDiv : null,
 				footerDiv : null
 			},
-			BaseDialogEventListeners.backgroundDiv
+			this.#BDEL.backgroundDiv
 		);
 	}
 
@@ -221,37 +223,41 @@ class BaseDialog {
 
 	#CreateTopBar ( ) {
 
-		BaseDialogEventListeners.containerDiv.topBar = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.topBar = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-TopBar',
 				draggable : true,
 				cancelButton : null
 			},
-			BaseDialogEventListeners.containerDiv
+			this.#BDEL.containerDiv
 		);
-		BaseDialogEventListeners.containerDiv.topBar.addEventListener (
+		this.#BDEL.containerDiv.topBar.addEventListener (
 			'dragstart',
-			BaseDialogEventListeners.onTopBarDragStart,
+			this.#BDEL.onTopBarDragStart.bind ( this.#BDEL ),
 			false
 		);
-		BaseDialogEventListeners.containerDiv.topBar.addEventListener (
+		this.#BDEL.containerDiv.topBar.addEventListener (
 			'dragend',
-			BaseDialogEventListeners.onTopBarDragEnd,
+			this.#BDEL.onTopBarDragEnd.bind ( this.#BDEL ),
 			false
 		);
 
-		BaseDialogEventListeners.containerDiv.topBar.cancelButton = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.topBar.cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : '❌',
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
-			BaseDialogEventListeners.containerDiv.topBar
+			this.#BDEL.containerDiv.topBar
 		);
-		BaseDialogEventListeners.containerDiv.topBar.cancelButton.addEventListener (
-			'click', BaseDialogEventListeners.onCancelButtonClick, false
+		this.#BDEL.containerDiv.topBar.cancelButton.addEventListener (
+			'click',
+
+			// BaseDialogEventListeners.onCancelButtonClick,
+			this.#BDEL.onCancelButtonClick.bind ( this.#BDEL ),
+			false
 		);
 	}
 
@@ -261,12 +267,12 @@ class BaseDialog {
 	*/
 
 	#createHeaderDiv ( ) {
-		BaseDialogEventListeners.containerDiv.headerDiv = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-HeaderDiv'
 			},
-			BaseDialogEventListeners.containerDiv
+			this.#BDEL.containerDiv
 		);
 
 		theHTMLElementsFactory.create (
@@ -275,7 +281,7 @@ class BaseDialog {
 				value : this.title
 			}
 			,
-			BaseDialogEventListeners.containerDiv.headerDiv
+			this.#BDEL.containerDiv.headerDiv
 		);
 	}
 
@@ -285,16 +291,16 @@ class BaseDialog {
 	*/
 
 	#createContentDiv ( ) {
-		BaseDialogEventListeners.containerDiv.contentDiv = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.contentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-ContentDiv'
 			},
-			BaseDialogEventListeners.containerDiv
+			this.#BDEL.containerDiv
 		);
 
 		this.contentHTMLElements.forEach (
-			contentHTMLElement => BaseDialogEventListeners.containerDiv.contentDiv.appendChild ( contentHTMLElement )
+			contentHTMLElement => this.#BDEL.containerDiv.contentDiv.appendChild ( contentHTMLElement )
 		);
 	}
 
@@ -304,12 +310,12 @@ class BaseDialog {
 	*/
 
 	#createErrorDiv ( ) {
-		BaseDialogEventListeners.containerDiv.errorDiv = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.errorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-ErrorDiv TravelNotes-Hidden'
 			},
-			BaseDialogEventListeners.containerDiv
+			this.#BDEL.containerDiv
 		);
 	}
 
@@ -329,12 +335,12 @@ class BaseDialog {
 				{
 					className : 'TravelNotes-WaitAnimation'
 				},
-				BaseDialogEventListeners.containerDiv.waitDiv = theHTMLElementsFactory.create (
+				this.#BDEL.containerDiv.waitDiv = theHTMLElementsFactory.create (
 					'div',
 					{
 						className : 'TravelNotes-BaseDialog-WaitDiv  TravelNotes-Hidden'
 					},
-					BaseDialogEventListeners.containerDiv
+					this.#BDEL.containerDiv
 				)
 			)
 		);
@@ -346,43 +352,45 @@ class BaseDialog {
 	*/
 
 	#createFooterDiv ( ) {
-		BaseDialogEventListeners.containerDiv.footerDiv = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.footerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-FooterDiv',
 				okButton : null
 			},
-			BaseDialogEventListeners.containerDiv
+			this.#BDEL.containerDiv
 		);
 
-		BaseDialogEventListeners.containerDiv.footerDiv.okButton = theHTMLElementsFactory.create (
+		this.#BDEL.containerDiv.footerDiv.okButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : this.#options.firstButtonText || '🆗',
 				className : 'TravelNotes-BaseDialog-Button'
 			},
-			BaseDialogEventListeners.containerDiv.footerDiv
+			this.#BDEL.containerDiv.footerDiv
 		);
 		if ( this.#options.firstButtonText ) {
-			BaseDialogEventListeners.containerDiv.footerDiv.okButton.style [ 'background-color' ] = 'green';
+			this.#BDEL.containerDiv.footerDiv.okButton.style [ 'background-color' ] = 'green';
 		}
-		BaseDialogEventListeners.containerDiv.footerDiv.okButton.addEventListener (
+		this.#BDEL.containerDiv.footerDiv.okButton.addEventListener (
 			'click',
-			BaseDialogEventListeners.onOkButtonClick,
+
+			// BaseDialogEventListeners.onOkButtonClick,
+			this.#BDEL.onOkButtonClick.bind ( this.#BDEL ),
 			false
 		);
 
 		if ( this.#options.secondButtonText ) {
-			BaseDialogEventListeners.containerDiv.footerDiv.secondButton = theHTMLElementsFactory.create (
+			this.#BDEL.containerDiv.footerDiv.secondButton = theHTMLElementsFactory.create (
 				'div',
 				{
 					textContent : this.#options.secondButtonText,
 					className : 'TravelNotes-BaseDialog-Button'
 				},
-				BaseDialogEventListeners.containerDiv.footerDiv
+				this.#BDEL.containerDiv.footerDiv
 			);
-			BaseDialogEventListeners.containerDiv.footerDiv.secondButton.style [ 'background-color' ] = 'red';
-			BaseDialogEventListeners.containerDiv.footerDiv.secondButton.addEventListener (
+			this.#BDEL.containerDiv.footerDiv.secondButton.style [ 'background-color' ] = 'red';
+			this.#BDEL.containerDiv.footerDiv.secondButton.addEventListener (
 				'click',
 				BaseDialogEventListeners.onCancelButtonClick,
 				false
@@ -390,7 +398,7 @@ class BaseDialog {
 		}
 
 		this.footerHTMLElements.forEach (
-			footerHTMLElement => BaseDialogEventListeners.containerDiv.footerDiv.appendChild ( footerHTMLElement )
+			footerHTMLElement => this.#BDEL.containerDiv.footerDiv.appendChild ( footerHTMLElement )
 		);
 	}
 
@@ -416,29 +424,29 @@ class BaseDialog {
 	*/
 
 	#centerDialog ( ) {
-		BaseDialogEventListeners.containerDiv.dialogX =
-			( BaseDialogEventListeners.backgroundDiv.clientWidth - BaseDialogEventListeners.containerDiv.clientWidth ) / TWO;
-		BaseDialogEventListeners.containerDiv.dialogY =
-			( BaseDialogEventListeners.backgroundDiv.clientHeight - BaseDialogEventListeners.containerDiv.clientHeight ) / TWO;
+		this.#BDEL.containerDiv.dialogX =
+			( this.#BDEL.backgroundDiv.clientWidth - this.#BDEL.containerDiv.clientWidth ) / TWO;
+		this.#BDEL.containerDiv.dialogY =
+			( this.#BDEL.backgroundDiv.clientHeight - this.#BDEL.containerDiv.clientHeight ) / TWO;
 
-		BaseDialogEventListeners.containerDiv.dialogX = Math.min (
-			Math.max ( BaseDialogEventListeners.containerDiv.dialogX, DIALOG_DRAG_MARGIN ),
-			BaseDialogEventListeners.backgroundDiv.clientWidth -
-				BaseDialogEventListeners.containerDiv.clientWidth -
+		this.#BDEL.containerDiv.dialogX = Math.min (
+			Math.max ( this.#BDEL.containerDiv.dialogX, DIALOG_DRAG_MARGIN ),
+			this.#BDEL.backgroundDiv.clientWidth -
+				this.#BDEL.containerDiv.clientWidth -
 				DIALOG_DRAG_MARGIN
 		);
-		BaseDialogEventListeners.containerDiv.dialogY = Math.max (
-			BaseDialogEventListeners.containerDiv.dialogY,
+		this.#BDEL.containerDiv.dialogY = Math.max (
+			this.#BDEL.containerDiv.dialogY,
 			DIALOG_DRAG_MARGIN
 		);
 
 		let dialogMaxHeight =
-			BaseDialogEventListeners.backgroundDiv.clientHeight -
-			Math.max ( BaseDialogEventListeners.containerDiv.dialogY, ZERO ) -
+			this.#BDEL.backgroundDiv.clientHeight -
+			Math.max ( this.#BDEL.containerDiv.dialogY, ZERO ) -
 			DIALOG_DRAG_MARGIN;
-		BaseDialogEventListeners.containerDiv.style.top = String ( BaseDialogEventListeners.containerDiv.dialogY ) + 'px';
-		BaseDialogEventListeners.containerDiv.style.left = String ( BaseDialogEventListeners.containerDiv.dialogX ) + 'px';
-		BaseDialogEventListeners.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
+		this.#BDEL.containerDiv.style.top = String ( this.#BDEL.containerDiv.dialogY ) + 'px';
+		this.#BDEL.containerDiv.style.left = String ( this.#BDEL.containerDiv.dialogX ) + 'px';
+		this.#BDEL.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
 	/**
@@ -452,7 +460,7 @@ class BaseDialog {
 		this.#onPromiseErrorFct = onPromiseErrorFct;
 
 		this.#createHTML ( );
-		document.body.appendChild ( BaseDialogEventListeners.backgroundDiv );
+		document.body.appendChild ( this.#BDEL.backgroundDiv );
 		this.#centerDialog ( );
 		document.addEventListener ( 'keydown', BaseDialogEventListeners.onKeyDown, true );
 
@@ -460,9 +468,8 @@ class BaseDialog {
 	}
 
 	constructor ( options = {} ) {
+		this.#BDEL = new BaseDialogEventListeners ( this );
 		this.#options = options;
-		BaseDialogEventListeners.globalVarsPush ( );
-		BaseDialogEventListeners.baseDialog = this;
 	}
 
 	/**
@@ -536,8 +543,8 @@ class BaseDialog {
 	*/
 
 	showWait ( ) {
-		BaseDialogEventListeners.containerDiv.waitDiv.classList.remove ( 'TravelNotes-Hidden' );
-		BaseDialogEventListeners.containerDiv.footerDiv.okButton.classList.add ( 'TravelNotes-Hidden' );
+		this.#BDEL.containerDiv.waitDiv.classList.remove ( 'TravelNotes-Hidden' );
+		this.#BDEL.containerDiv.footerDiv.okButton.classList.add ( 'TravelNotes-Hidden' );
 	}
 
 	/**
@@ -545,8 +552,8 @@ class BaseDialog {
 	*/
 
 	hideWait ( ) {
-		BaseDialogEventListeners.containerDiv.waitDiv.classList.add ( 'TravelNotes-Hidden' );
-		BaseDialogEventListeners.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
+		this.#BDEL.containerDiv.waitDiv.classList.add ( 'TravelNotes-Hidden' );
+		this.#BDEL.containerDiv.footerDiv.okButton.classList.remove ( 'TravelNotes-Hidden' );
 	}
 
 	/**
@@ -557,9 +564,9 @@ class BaseDialog {
 
 		theHTMLSanitizer.sanitizeToHtmlElement (
 			errorText,
-			BaseDialogEventListeners.containerDiv.errorDiv
+			this.#BDEL.containerDiv.errorDiv
 		);
-		BaseDialogEventListeners.containerDiv.errorDiv.classList.remove ( 'TravelNotes-Hidden' );
+		this.#BDEL.containerDiv.errorDiv.classList.remove ( 'TravelNotes-Hidden' );
 	}
 
 	/**
@@ -567,8 +574,8 @@ class BaseDialog {
 	*/
 
 	hideError ( ) {
-		BaseDialogEventListeners.containerDiv.errorDiv.textContent = '';
-		BaseDialogEventListeners.containerDiv.errorDiv.classList.add ( 'TravelNotes-Hidden' );
+		this.#BDEL.containerDiv.errorDiv.textContent = '';
+		this.#BDEL.containerDiv.errorDiv.classList.add ( 'TravelNotes-Hidden' );
 	}
 
 }
