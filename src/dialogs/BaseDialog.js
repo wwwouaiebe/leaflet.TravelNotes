@@ -169,7 +169,7 @@ class BaseDialog {
 			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
 		);
 
-		this.#BDEL.backgrounddiv = this.#backgroundDiv;
+		this.#BDEL.backgroundDiv = this.#backgroundDiv;
 
 		this.#backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
 		this.#backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
@@ -232,8 +232,7 @@ class BaseDialog {
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-TopBar',
-				draggable : true,
-				cancelButton : null
+				draggable : true
 			},
 			this.#containerDiv
 		);
@@ -248,7 +247,7 @@ class BaseDialog {
 			false
 		);
 
-		topBar.cancelButton = theHTMLElementsFactory.create (
+		let cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : '❌',
@@ -257,7 +256,7 @@ class BaseDialog {
 			},
 			topBar
 		);
-		topBar.cancelButton.addEventListener (
+		cancelButton.addEventListener (
 			'click',
 
 			// BaseDialogEventListeners.onCancelButtonClick,
@@ -377,8 +376,6 @@ class BaseDialog {
 		}
 		this.#okButton.addEventListener (
 			'click',
-
-			// BaseDialogEventListeners.onOkButtonClick,
 			this.#BDEL.onOkButtonClick.bind ( this.#BDEL ),
 			false
 		);
