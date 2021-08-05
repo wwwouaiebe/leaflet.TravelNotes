@@ -159,23 +159,6 @@ class BaseDialogEventListeners {
 		this.containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
-	/**
-	keyboard event listener
-	*/
-
-	onKeyDown ( keyBoardEvent ) {
-
-		// if ( myKeyboardEventListenerEnabled ) {
-		if ( 'Escape' === keyBoardEvent.key || 'Esc' === keyBoardEvent.key ) {
-			this.onCancelButtonClick ( );
-		}
-		else if ( 'Enter' === keyBoardEvent.key ) {
-			this.onOkButtonClick ( );
-		}
-
-		// }
-	}
-
 }
 
 export default BaseDialogEventListeners;

@@ -115,6 +115,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import BaseDialogEventListeners from '../dialogs/BaseDialogEventListeners.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import BaseDialogKeydownEventListener from '../dialogs/BaseDialogKeydownEventListener.js';
 import { theBackgroundEventListeners } from '../dialogs/BaseDialogBackgroundEventListeners.js';
 
 import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
@@ -139,6 +140,10 @@ class BaseDialog {
 	#errorDiv = null;
 	#waitDiv = null;
 	#okButton = null;
+
+	keyboardEventListenerEnabled = true;
+
+	#keydownEventListener = null;
 
 	#options = null;
 
@@ -462,13 +467,14 @@ class BaseDialog {
 		this.#createHTML ( );
 		document.body.appendChild ( this.#backgroundDiv );
 		this.#centerDialog ( );
-		document.addEventListener ( 'keydown', this.#BDEL.onKeyDown.bind ( this.#BDEL ), true );
+		document.addEventListener ( 'keydown', this.#keydownEventListener, { capture : true } );
 
 		this.onShow ( );
 	}
 
 	constructor ( options = {} ) {
 		this.#BDEL = new BaseDialogEventListeners ( this );
+		this.#keydownEventListener = new BaseDialogKeydownEventListener ( this );
 		this.#options = options;
 	}
 
@@ -478,8 +484,7 @@ class BaseDialog {
 
 	onCancel ( ) {
 		document.body.removeChild ( this.#backgroundDiv );
-
-		// document.removeEventListener ( 'keydown', this.#BDEL.onKeyDown, true );
+		document.removeEventListener ( 'keydown', this.#keydownEventListener, { capture : true } );
 		this.#onPromiseErrorFct ( 'Canceled by user' );
 	}
 
@@ -501,7 +506,7 @@ class BaseDialog {
 	onOk ( returnValue ) {
 		document.body.removeChild ( this.#backgroundDiv );
 
-		// document.removeEventListener ( 'keydown', this.#BDEL.onKeyDown, true );
+		document.removeEventListener ( 'keydown', this.#keydownEventListener, { capture : true } );
 		this.#onPromiseOkFct ( returnValue );
 	}
 

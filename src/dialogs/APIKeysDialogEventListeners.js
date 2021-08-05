@@ -214,7 +214,7 @@ class APIKeysDialogEventListeners {
 			data
 		);
 
-		// myAPIKeysDialog.keyboardEventListenerEnabled = true;
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
 	/**
@@ -228,7 +228,7 @@ class APIKeysDialogEventListeners {
 		);
 		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
 
-		// myAPIKeysDialog.keyboardEventListenerEnabled = true;
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
 	/**
@@ -242,7 +242,7 @@ class APIKeysDialogEventListeners {
 		}
 		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
 
-		// myAPIKeysDialog.keyboardEventListenerEnabled = false;
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
 
 		new DataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( APIKeysDialogEventListeners.#getAPIKeysJsonString ( ) ),
@@ -270,7 +270,7 @@ class APIKeysDialogEventListeners {
 		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
 		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
 
-		// APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
 	}
 
 	/**
@@ -281,7 +281,7 @@ class APIKeysDialogEventListeners {
 	static #onErrorDecrypt ( err ) {
 		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
 
-		// APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
 		if ( err && 'Canceled by user' !== err ) {
 			APIKeysDialogEventListeners.APIKeysDialog.showError (
 				theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' )
@@ -300,7 +300,7 @@ class APIKeysDialogEventListeners {
 		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
 		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
 
-		// APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
 		changeEvent.stopPropagation ( );
 		let fileReader = new FileReader ( );
 		fileReader.onload = ( ) => {
@@ -366,6 +366,8 @@ class APIKeysDialogEventListeners {
 		clickEvent.stopPropagation ( );
 		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
 		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
+
+		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
 
 		// myAPIKeysDialog.keyboardEventListenerEnabled = false;
 
