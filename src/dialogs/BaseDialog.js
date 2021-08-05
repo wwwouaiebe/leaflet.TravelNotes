@@ -113,10 +113,15 @@ Box model
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import BaseDialogEventListeners from '../dialogs/BaseDialogEventListeners.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import BaseDialogKeydownEventListener from '../dialogs/BaseDialogKeydownEventListener.js';
-import { theBackgroundEventListeners } from '../dialogs/BaseDialogBackgroundEventListeners.js';
+import {
+	BaseDialogOkButtonClickEventListener,
+	BaseDialogCancelButtonClickEventListener,
+	BaseDialogTopBarDragStartEventListener,
+	BaseDialogTopBarDragEndEventListener,
+	BaseDialogKeydownEventListener,
+	BaseDialogBackgroundEventListeners as theBackgroundEventListeners
+} from '../dialogs/BaseDialogEventListeners.js';
 
 import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
@@ -133,17 +138,31 @@ import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
 class BaseDialog {
 
-	#BDEL = null;
-
-	#backgroundDiv = null;
-	#containerDiv = null;
-	#errorDiv = null;
-	#waitDiv = null;
-	#okButton = null;
+	#backgroundDiv = {};
+	#containerDiv = {};
+	#errorDiv = {};
+	#waitDiv = {};
+	#okButton = {};
+	#cancelButton = {};
+	#topBar = {};
+	#secondButton = null;
 
 	keyboardEventListenerEnabled = true;
 
-	#keydownEventListener = null;
+	#dragData = Object.seal (
+		{
+			dragStartX : ZERO,
+			dragStartY : ZERO,
+			dialogX : ZERO,
+			dialogY : ZERO
+		}
+	);
+
+	#onKeydownEventListener = null;
+	#onOkButtonClickEventListener = null;
+	#onCancelButtonClickEventListener = null;
+	#onTopBarDragStartEventListener = null;
+	#onTopBarDragEndEventListener = null;
 
 	#options = null;
 
@@ -174,36 +193,13 @@ class BaseDialog {
 			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
 		);
 
-		this.#BDEL.backgroundDiv = this.#backgroundDiv;
-
 		this.#backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
 		this.#backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
-
-		this.#backgroundDiv.addEventListener (
-			'mousedown',
-			theBackgroundEventListeners.onMouseDown,
-			false
-		);
-		this.#backgroundDiv.addEventListener (
-			'mouseup',
-			theBackgroundEventListeners.onMouseUp,
-			false
-		);
-		this.#backgroundDiv.addEventListener (
-			'mousemove',
-			theBackgroundEventListeners.onMouseMove,
-			false
-		);
-		this.#backgroundDiv.addEventListener (
-			'wheel',
-			theBackgroundEventListeners.onMouseWheel,
-			false
-		);
-		this.#backgroundDiv.addEventListener (
-			'contextmenu',
-			theBackgroundEventListeners.onContextMenu,
-			false
-		);
+		this.#backgroundDiv.addEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
+		this.#backgroundDiv.addEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
+		this.#backgroundDiv.addEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
+		this.#backgroundDiv.addEventListener ( 'wheel', theBackgroundEventListeners.onMouseWheel, false	);
+		this.#backgroundDiv.addEventListener ( 'contextmenu', theBackgroundEventListeners.onContextMenu, false );
 	}
 
 	/**
@@ -217,13 +213,10 @@ class BaseDialog {
 		this.#containerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-BaseDialog-Container',
-				dialogX : ZERO,
-				dialogY : ZERO
+				className : 'TravelNotes-BaseDialog-Container'
 			},
 			this.#backgroundDiv
 		);
-		this.#BDEL.containerDiv = this.#containerDiv;
 	}
 
 	/**
@@ -233,7 +226,16 @@ class BaseDialog {
 
 	#CreateTopBar ( ) {
 
-		let topBar = theHTMLElementsFactory.create (
+		// event listeners creation must come after the creation of container div and background div
+		// an empty object parameter is undefined and then it's not a reference.
+		this.#onTopBarDragEndEventListener = new BaseDialogTopBarDragEndEventListener (
+			this.#dragData,
+			this.#containerDiv,
+			this.#backgroundDiv
+		);
+		this.#onTopBarDragStartEventListener = new BaseDialogTopBarDragStartEventListener ( this.#dragData );
+
+		this.#topBar = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-TopBar',
@@ -241,33 +243,21 @@ class BaseDialog {
 			},
 			this.#containerDiv
 		);
-		topBar.addEventListener (
-			'dragstart',
-			this.#BDEL.onTopBarDragStart.bind ( this.#BDEL ),
-			false
-		);
-		topBar.addEventListener (
-			'dragend',
-			this.#BDEL.onTopBarDragEnd.bind ( this.#BDEL ),
-			false
-		);
 
-		let cancelButton = theHTMLElementsFactory.create (
+		this.#topBar.addEventListener ( 'dragstart', this.#onTopBarDragStartEventListener, false );
+
+		this.#topBar.addEventListener ( 'dragend', this.#onTopBarDragEndEventListener, false );
+
+		this.#cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : '❌',
 				className : 'TravelNotes-BaseDialog-CancelButton',
 				title : theTranslator.getText ( 'BaseDialog - Cancel' )
 			},
-			topBar
+			this.#topBar
 		);
-		cancelButton.addEventListener (
-			'click',
-
-			// BaseDialogEventListeners.onCancelButtonClick,
-			this.#BDEL.onCancelButtonClick.bind ( this.#BDEL ),
-			false
-		);
+		this.#cancelButton.addEventListener ( 'click', this.#onCancelButtonClickEventListener, false );
 	}
 
 	/**
@@ -379,14 +369,10 @@ class BaseDialog {
 		if ( this.#options.firstButtonText ) {
 			this.#okButton.style [ 'background-color' ] = 'green';
 		}
-		this.#okButton.addEventListener (
-			'click',
-			this.#BDEL.onOkButtonClick.bind ( this.#BDEL ),
-			false
-		);
+		this.#okButton.addEventListener ( 'click', this.#onOkButtonClickEventListener, false );
 
 		if ( this.#options.secondButtonText ) {
-			let secondButton = theHTMLElementsFactory.create (
+			this.#secondButton = theHTMLElementsFactory.create (
 				'div',
 				{
 					textContent : this.#options.secondButtonText,
@@ -394,12 +380,8 @@ class BaseDialog {
 				},
 				footerDiv
 			);
-			secondButton.style [ 'background-color' ] = 'red';
-			secondButton.addEventListener (
-				'click',
-				BaseDialogEventListeners.onCancelButtonClick,
-				false
-			);
+			this.#secondButton.style [ 'background-color' ] = 'red';
+			this.#secondButton.addEventListener ( 'click',	this.#onCancelButtonClickEventListener, false	);
 		}
 
 		this.footerHTMLElements.forEach (
@@ -429,28 +411,29 @@ class BaseDialog {
 	*/
 
 	#centerDialog ( ) {
-		this.#containerDiv.dialogX =
+
+		this.#dragData.dialogX =
 			( this.#backgroundDiv.clientWidth - this.#containerDiv.clientWidth ) / TWO;
-		this.#containerDiv.dialogY =
+		this.#dragData.dialogY =
 			( this.#backgroundDiv.clientHeight - this.#containerDiv.clientHeight ) / TWO;
 
-		this.#containerDiv.dialogX = Math.min (
-			Math.max ( this.#containerDiv.dialogX, DIALOG_DRAG_MARGIN ),
+		this.#dragData.dialogX = Math.min (
+			Math.max ( this.#dragData.dialogX, DIALOG_DRAG_MARGIN ),
 			this.#backgroundDiv.clientWidth -
 				this.#containerDiv.clientWidth -
 				DIALOG_DRAG_MARGIN
 		);
-		this.#containerDiv.dialogY = Math.max (
-			this.#containerDiv.dialogY,
+		this.#dragData.dialogY = Math.max (
+			this.#dragData.dialogY,
 			DIALOG_DRAG_MARGIN
 		);
 
 		let dialogMaxHeight =
 			this.#backgroundDiv.clientHeight -
-			Math.max ( this.#containerDiv.dialogY, ZERO ) -
+			Math.max ( this.#dragData.dialogY, ZERO ) -
 			DIALOG_DRAG_MARGIN;
-		this.#containerDiv.style.top = String ( this.#containerDiv.dialogY ) + 'px';
-		this.#containerDiv.style.left = String ( this.#containerDiv.dialogX ) + 'px';
+		this.#containerDiv.style.left = String ( this.#dragData.dialogX ) + 'px';
+		this.#containerDiv.style.top = String ( this.#dragData.dialogY ) + 'px';
 		this.#containerDiv.style [ 'max-height' ] = String ( dialogMaxHeight ) + 'px';
 	}
 
@@ -467,15 +450,33 @@ class BaseDialog {
 		this.#createHTML ( );
 		document.body.appendChild ( this.#backgroundDiv );
 		this.#centerDialog ( );
-		document.addEventListener ( 'keydown', this.#keydownEventListener, { capture : true } );
+		document.addEventListener ( 'keydown', this.#onKeydownEventListener, { capture : true } );
 
 		this.onShow ( );
 	}
 
 	constructor ( options = {} ) {
-		this.#BDEL = new BaseDialogEventListeners ( this );
-		this.#keydownEventListener = new BaseDialogKeydownEventListener ( this );
+		this.#onKeydownEventListener = new BaseDialogKeydownEventListener ( this );
+		this.#onOkButtonClickEventListener = new BaseDialogOkButtonClickEventListener ( this );
+		this.#onCancelButtonClickEventListener = new BaseDialogCancelButtonClickEventListener ( this );
 		this.#options = options;
+	}
+
+	#destructor ( ) {
+		document.removeEventListener ( 'keydown', this.#onKeydownEventListener, { capture : true } );
+		this.#backgroundDiv.removeEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
+		this.#backgroundDiv.removeEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
+		this.#backgroundDiv.removeEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
+		this.#backgroundDiv.removeEventListener ( 'wheel', theBackgroundEventListeners.onMouseWheel, false	);
+		this.#backgroundDiv.removeEventListener ( 'contextmenu', theBackgroundEventListeners.onContextMenu, false );
+		this.#okButton.removeEventListener ( 'click', this.#onOkButtonClickEventListener, false );
+		if ( this.#secondButton ) {
+			this.#secondButton.removeEventListener ( 'click',	this.#onCancelButtonClickEventListener, false );
+		}
+		this.#cancelButton.removeEventListener ( 'click', this.#onCancelButtonClickEventListener, false );
+		this.#topBar.removeEventListener ( 'dragstart', this.#onTopBarDragEndEventListener, false );
+		this.#topBar.removeEventListener ( 'dragend', this.#onTopBarDragEndEventListener, false );
+		document.body.removeChild ( this.#backgroundDiv );
 	}
 
 	/**
@@ -483,8 +484,7 @@ class BaseDialog {
 	*/
 
 	onCancel ( ) {
-		document.body.removeChild ( this.#backgroundDiv );
-		document.removeEventListener ( 'keydown', this.#keydownEventListener, { capture : true } );
+		this.#destructor ( );
 		this.#onPromiseErrorFct ( 'Canceled by user' );
 	}
 
@@ -504,9 +504,7 @@ class BaseDialog {
 	*/
 
 	onOk ( returnValue ) {
-		document.body.removeChild ( this.#backgroundDiv );
-
-		document.removeEventListener ( 'keydown', this.#keydownEventListener, { capture : true } );
+		this.#destructor ( );
 		this.#onPromiseOkFct ( returnValue );
 	}
 
@@ -572,7 +570,6 @@ class BaseDialog {
 	*/
 
 	showError ( errorText ) {
-
 		theHTMLSanitizer.sanitizeToHtmlElement (
 			errorText,
 			this.#errorDiv
