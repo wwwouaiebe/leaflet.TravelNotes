@@ -64,13 +64,16 @@ class BaseDialogOkButtonClickEventListener {
 	#baseDialog = null;
 
 	constructor ( baseDialog ) {
+		Object.seal ( this );
 		this.#baseDialog = baseDialog;
 	}
 
+	/**
+	Event listener method
+	*/
+
 	handleEvent ( ) {
-		if ( this.#baseDialog.canClose ( ) ) {
-			this.#baseDialog.onOk ( );
-		}
+		this.#baseDialog.onOk ( );
 	}
 }
 
@@ -89,8 +92,13 @@ class BaseDialogCancelButtonClickEventListener {
 	#baseDialog = null;
 
 	constructor ( baseDialog ) {
+		Object.seal ( this );
 		this.#baseDialog = baseDialog;
 	}
+
+	/**
+	Event listener method
+	*/
 
 	handleEvent ( ) {
 		this.#baseDialog.onCancel ( );
@@ -112,18 +120,15 @@ class BaseDialogTopBarDragStartEventListener {
 	#dragData = null;
 
 	constructor ( dragData ) {
+		Object.seal ( this );
 		this.#dragData = dragData;
 	}
 
+	/**
+	Event listener method
+	*/
+
 	handleEvent ( dragStartEvent ) {
-		try {
-			dragStartEvent.dataTransfer.setData ( 'Text', '1' );
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
 		this.#dragData.dragStartX = dragStartEvent.screenX;
 		this.#dragData.dragStartY = dragStartEvent.screenY;
 	}
@@ -146,10 +151,15 @@ class BaseDialogTopBarDragEndEventListener {
 	#backgroundDiv= null;
 
 	constructor ( dragData, containerDiv, backgroundDiv ) {
+		Object.seal ( this );
 		this.#dragData = dragData;
 		this.#containerDiv = containerDiv;
 		this.#backgroundDiv = backgroundDiv;
 	}
+
+	/**
+	Event listener method
+	*/
 
 	handleEvent ( dragEndEvent ) {
 		this.#dragData.dialogX += dragEndEvent.screenX - this.#dragData.dragStartX;
@@ -191,8 +201,13 @@ class BaseDialogKeydownEventListener {
 	#baseDialog = null;
 
 	constructor ( baseDialog ) {
+		Object.seal ( this );
 		this.#baseDialog = baseDialog;
 	}
+
+	/**
+	Event listener method
+	*/
 
 	handleEvent ( keyDownEvent ) {
 
@@ -203,7 +218,7 @@ class BaseDialogKeydownEventListener {
 		if ( 'Escape' === keyDownEvent.key || 'Esc' === keyDownEvent.key ) {
 			this.#baseDialog.onCancel ( );
 		}
-		else if ( 'Enter' === keyDownEvent.key && this.#baseDialog.canClose ( ) ) {
+		else if ( 'Enter' === keyDownEvent.key ) {
 			this.#baseDialog.onOk ( );
 		}
 

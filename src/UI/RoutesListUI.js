@@ -254,7 +254,6 @@ class RoutesListUI {
 							theTravelNotesData.travel.editedRoute.objId
 							:
 							routesIterator.value.objId,
-					canDrag : true,
 					textContent : routeName
 				},
 				this.#routesList

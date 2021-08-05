@@ -366,9 +366,6 @@ class BaseDialog {
 			},
 			footerDiv
 		);
-		if ( this.#options.firstButtonText ) {
-			this.#okButton.style [ 'background-color' ] = 'green';
-		}
 		this.#okButton.addEventListener ( 'click', this.#onOkButtonClickEventListener, false );
 
 		if ( this.#options.secondButtonText ) {
@@ -380,7 +377,6 @@ class BaseDialog {
 				},
 				footerDiv
 			);
-			this.#secondButton.style [ 'background-color' ] = 'red';
 			this.#secondButton.addEventListener ( 'click',	this.#onCancelButtonClickEventListener, false	);
 		}
 
@@ -456,6 +452,7 @@ class BaseDialog {
 	}
 
 	constructor ( options = {} ) {
+		Object.seal ( this );
 		this.#onKeydownEventListener = new BaseDialogKeydownEventListener ( this );
 		this.#onOkButtonClickEventListener = new BaseDialogOkButtonClickEventListener ( this );
 		this.#onCancelButtonClickEventListener = new BaseDialogCancelButtonClickEventListener ( this );
@@ -504,8 +501,10 @@ class BaseDialog {
 	*/
 
 	onOk ( returnValue ) {
-		this.#destructor ( );
-		this.#onPromiseOkFct ( returnValue );
+		if ( this.canClose ) {
+			this.#destructor ( );
+			this.#onPromiseOkFct ( returnValue );
+		}
 	}
 
 	/**
@@ -567,6 +566,7 @@ class BaseDialog {
 
 	/**
 	Show the error section of the dialog
+	@param {string} errorText The text to display in the error section
 	*/
 
 	showError ( errorText ) {

@@ -58,6 +58,8 @@ import BaseDialog from '../dialogs/BaseDialog.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
 import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+
 import { ZERO } from '../util/Constants.js';
 
 /**
@@ -93,7 +95,7 @@ class APIKeysDialog extends BaseDialog {
 	*/
 
 	#createAPIKeysControlsContainer ( ) {
-		this.#APIKeysControlsContainer = document.createElement ( 'div' );
+		this.#APIKeysControlsContainer = theHTMLElementsFactory.create ( 'div' );
 		this.#APIKeysControlsContainer.addEventListener (
 			'apikeydeleted',
 			APIKeysDialogEventListeners.onAPIKeyDeleted,

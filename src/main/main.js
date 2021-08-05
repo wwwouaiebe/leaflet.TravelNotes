@@ -359,7 +359,12 @@ function ourMain ( ) {
 
 	function myLoadTravelNotes ( ) {
 		if ( theConfig.travelNotes.autoLoad && '' === myErrorMessage ) {
-			let mapDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-Map' }, document.body );
+
+			// mapDiv must be extensible for leaflet
+			let mapDiv = document.createElement ( 'div' );
+			mapDiv.id = 'TravelNotes-Map';
+			document.body.appendChild ( mapDiv );
+
 			theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI' }, document.body );
 
 			let map = window.L.map ( 'TravelNotes-Map', { attributionControl : false, zoomControl : false } )

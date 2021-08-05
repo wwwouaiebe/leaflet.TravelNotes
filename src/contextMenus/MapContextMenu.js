@@ -169,7 +169,8 @@ class MapContextMenu extends BaseContextMenu {
 			new Zoomer ( ).zoomToTravel ( );
 			break;
 		case 10 :
-			new AboutDialog ( ).show ( );
+			new AboutDialog ( ).show ( )
+			.catch ( err => {} );
 			break;
 		default :
 			break;

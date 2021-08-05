@@ -73,7 +73,7 @@ class PaneButtonsEventListeners {
 
 	/* eslint-disable no-use-before-define */
 	static onClick ( clickEvent ) {
-		thePanesManagerUI.showPane ( clickEvent.target.paneId );
+		thePanesManagerUI.showPane ( clickEvent.target.objId );
 	}
 	/* eslint-enable no-use-before-define */
 
@@ -113,7 +113,7 @@ class PaneDataDivEventListeners {
 
 class PanesManagerUI {
 
-	#activePaneId = PANE_ID.invalidPane;
+	#activePaneObjId = PANE_ID.invalidPane;
 	#panes = new Map ( );
 	#paneDataDiv = null;
 	#paneControlDiv = null;
@@ -124,8 +124,8 @@ class PanesManagerUI {
 	*/
 
 	#removeActivePane ( ) {
-		if ( PANE_ID.invalidPane !== this.#activePaneId ) {
-			this.#panes.get ( this.#activePaneId ).remove ( );
+		if ( PANE_ID.invalidPane !== this.#activePaneObjId ) {
+			this.#panes.get ( this.#activePaneObjId ).remove ( );
 			this.#paneDataDiv.textContent = '';
 		}
 	}
@@ -174,7 +174,7 @@ class PanesManagerUI {
 					{
 						textContent : pane.getButtonText ( ),
 						className : 'TravelNotes-PanesManagerUI-PaneButton',
-						paneId : pane.getId ( )
+						objId : pane.getId ( )
 					},
 					headerDiv
 				).addEventListener ( 'click', PaneButtonsEventListeners.onClick, false );
@@ -197,13 +197,13 @@ class PanesManagerUI {
 	@param {string|number} pane id of the pane to be displayed
 	*/
 
-	showPane ( paneId ) {
+	showPane ( objId ) {
 		this.#removeActivePane ( );
-		this.#activePaneId = paneId;
-		this.#panes.get ( this.#activePaneId ).add ( );
+		this.#activePaneObjId = objId;
+		this.#panes.get ( this.#activePaneObjId ).add ( );
 		document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
 			paneButton => {
-				if ( paneButton.paneId === this.#activePaneId ) {
+				if ( paneButton.objId === this.#activePaneObjId ) {
 					paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
 				}
 				else {
@@ -218,9 +218,9 @@ class PanesManagerUI {
 	@param {string|number} pane id of the pane to be displayed
 	*/
 
-	updatePane ( paneId ) {
-		if ( paneId === this.#activePaneId ) {
-			this.showPane ( paneId );
+	updatePane ( objId ) {
+		if ( objId === this.#activePaneObjId ) {
+			this.showPane ( objId );
 		}
 	}
 }

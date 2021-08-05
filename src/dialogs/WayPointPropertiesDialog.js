@@ -121,7 +121,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	*/
 
 	#createAddressControl ( ) {
-		let addressHeaderDiv = document.createElement ( 'div' );
+		let addressHeaderDiv = theHTMLElementsFactory.create ( 'div' );
 		theHTMLElementsFactory.create (
 			'div',
 			{
@@ -139,7 +139,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 			addressHeaderDiv
 		);
 
-		let addressInputDiv = document.createElement ( 'div' );
+		let addressInputDiv = theHTMLElementsFactory.create ( 'div' );
 		this.#addressInput = theHTMLElementsFactory.create (
 			'input',
 			{
@@ -165,7 +165,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 				textContent : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
 			}
 		);
-		let nameInputDiv = document.createElement ( 'div' );
+		let nameInputDiv = theHTMLElementsFactory.create ( 'div' );
 		this.#nameInput = theHTMLElementsFactory.create (
 			'input',
 			{
