@@ -81,7 +81,6 @@ let theConfig = {
 		showButton : true
 	},
 	colorDialog : {
-		haveSlider : true,
 		initialRed : 0
 	},
 	contextMenu : {

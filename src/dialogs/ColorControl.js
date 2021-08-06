@@ -47,7 +47,10 @@ Tests ...
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import ColorControlEventListeners from '../dialogs/ColorControlEventListeners.js';
+import {
+	ColorInputEventListener,
+	ColorButtonClickEventListener
+} from '../dialogs/ColorControlEventListeners.js';
 import Color from '../dialogs/Color.js';
 
 import { ZERO, MIN_COLOR_VALUE, MAX_COLOR_VALUE } from '../util/Constants.js';
@@ -55,6 +58,9 @@ import { ZERO, MIN_COLOR_VALUE, MAX_COLOR_VALUE } from '../util/Constants.js';
 const OUR_COLOR_CELLS_NUMBER = 6;
 const OUR_DELTA_COLOR = 51;
 const OUR_SLIDER_STEP = 20;
+
+const OUR_SLIDER_MAX_VALUE = 100;
+const OUR_COLOR_ROWS_NUMBER = 6;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -70,6 +76,33 @@ class ColorControl {
 
 	#colorDiv = null;
 
+	/** An array with the color buttons of the ColorControl
+	*/
+
+	#colorButtons = [];
+
+	/**
+	The red input htmlElement of the ColorControl
+	*/
+
+	#inputs = {
+		red : null,
+		green : null,
+		blue : null
+	};
+
+	/**
+	The sample color div of the color control
+	*/
+
+	#colorSampleDiv = null;
+
+	/**
+	the new color
+	*/
+
+	#newColor = new Color;
+
 	/**
 	Create the Color Buttons div
 	@private
@@ -79,7 +112,7 @@ class ColorControl {
 		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
 		let cellColor = new Color ( theConfig.colorDialog.initialRed, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
 
-		for ( let rowCounter = ZERO; rowCounter < this.eventListeners.colorRowsNumber; ++ rowCounter ) {
+		for ( let rowCounter = ZERO; rowCounter < OUR_COLOR_ROWS_NUMBER; ++ rowCounter ) {
 			let colorButtonsRowDiv = theHTMLElementsFactory.create ( 'div', null, colorButtonsDiv );
 
 			cellColor.green = MIN_COLOR_VALUE;
@@ -92,15 +125,16 @@ class ColorControl {
 					},
 					colorButtonsRowDiv
 				);
-				colorButtonCellDiv.color = cellColor.clone ( );
-				colorButtonCellDiv.style [ 'background-color' ] = cellColor.cssColor;
 
+				// colorButtonCellDiv.color = cellColor.clone ( );
+				colorButtonCellDiv.style [ 'background-color' ] = cellColor.cssColor;
 				colorButtonCellDiv.addEventListener (
 					'click',
-					this.eventListeners.onColorButtonClick.bind ( this.eventListeners ),
-					false );
+					new ColorButtonClickEventListener ( this ),
+					false
+				);
 				cellColor.green += OUR_DELTA_COLOR;
-				this.eventListeners.colorButtons.push ( colorButtonCellDiv );
+				this.#colorButtons.push ( colorButtonCellDiv );
 			}
 			cellColor.blue += OUR_DELTA_COLOR;
 		}
@@ -114,59 +148,27 @@ class ColorControl {
 	#createRedSliderDiv ( ) {
 		let redSliderDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
 		let sliderValue =
-			Math.ceil ( theConfig.colorDialog.initialRed * ( this.eventListeners.sliderMaxValue / MAX_COLOR_VALUE ) );
+			Math.ceil ( theConfig.colorDialog.initialRed * ( OUR_SLIDER_MAX_VALUE / MAX_COLOR_VALUE ) );
 		let redSliderInput = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'range',
 				value : sliderValue,
 				min : ZERO,
-				max : this.eventListeners.sliderMaxValue,
+				max : OUR_SLIDER_MAX_VALUE,
 				step : OUR_SLIDER_STEP
 
 			},
 			redSliderDiv
 		);
 
+		/*
 		redSliderInput.addEventListener (
 			'input',
 			this.eventListeners.onRedColorSliderInput.bind ( this.eventListeners ),
 			false );
+		*/
+
 		redSliderInput.focus ( );
-	}
-
-	/**
-	Create the Red Buttons div
-	@private
-	*/
-
-	#createRedButtonsDiv ( ) {
-		let redButtonsDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
-		let cellColor = new Color ( MAX_COLOR_VALUE, MIN_COLOR_VALUE, MIN_COLOR_VALUE );
-		let redButtonsRowDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-ColorControl-RedButtonsRowDiv'
-			},
-			redButtonsDiv
-		);
-		for ( let cellCounter = ZERO; cellCounter < OUR_COLOR_CELLS_NUMBER; ++ cellCounter ) {
-			let colorButtonCellDiv = theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-ColorControl-CellColorDiv'
-				},
-				redButtonsRowDiv
-			);
-			colorButtonCellDiv.color = cellColor.clone ( );
-			colorButtonCellDiv.style [ 'background-color' ] = colorButtonCellDiv.color.cssColor;
-
-			colorButtonCellDiv.addEventListener (
-				'click',
-				this.eventListeners.onRedColorButtonClick.bind ( this.eventListeners ),
-				false );
-			cellColor.green += OUR_DELTA_COLOR;
-			cellColor.blue += OUR_DELTA_COLOR;
-		}
 	}
 
 	/**
@@ -177,55 +179,55 @@ class ColorControl {
 	#createColorInputDiv ( ) {
 		let rvbDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
 		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Red' ) }, rvbDiv	);
-		this.eventListeners.redInput = theHTMLElementsFactory.create ( 'input',
+		this.#inputs.red = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorControl-NumberInput',
-				value : this.eventListeners.newColor.red,
+				value : this.#newColor.red,
 				min : MIN_COLOR_VALUE,
 				max : MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
 
-		this.eventListeners.redInput.addEventListener (
+		this.#inputs.red.addEventListener (
 			'input',
-			this.eventListeners.onColorInput.bind ( this.eventListeners ),
+			new ColorInputEventListener ( this, this.#inputs ),
 			false
 		);
+
 		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Green' ) }, rvbDiv );
-		this.eventListeners.greenInput = theHTMLElementsFactory.create (
+		this.#inputs.green = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorControl-NumberInput',
-				value : this.eventListeners.newColor.green,
+				value : this.#newColor.green,
 				min : MIN_COLOR_VALUE,
 				max : MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
-
-		this.eventListeners.greenInput.addEventListener (
+		this.#inputs.green.addEventListener (
 			'input',
-			this.eventListeners.onColorInput.bind ( this.eventListeners ),
+			new ColorInputEventListener ( this, this.#inputs ),
 			false );
+
 		theHTMLElementsFactory.create ( 'text', { value : theTranslator.getText ( 'ColorDialog - Blue' ) }, rvbDiv );
-		this.eventListeners.blueInput = theHTMLElementsFactory.create (
+		this.#inputs.blue = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
 				className : 'TravelNotes-ColorControl-NumberInput',
-				value : this.eventListeners.newColor.blue,
+				value : this.#newColor.blue,
 				min : MIN_COLOR_VALUE,
 				max : MAX_COLOR_VALUE
 			},
 			rvbDiv
 		);
-
-		this.eventListeners.blueInput.addEventListener (
+		this.#inputs.blue.addEventListener (
 			'input',
-			this.eventListeners.onColorInput.bind ( this.eventListeners ),
+			new ColorInputEventListener ( this, this.#inputs ),
 			false
 		);
 	}
@@ -236,15 +238,16 @@ class ColorControl {
 	*/
 
 	#createColorSampleDiv ( ) {
-		this.eventListeners.colorSampleDiv = theHTMLElementsFactory.create (
+		this.#colorSampleDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ColorControl-ColorSampleDiv'
 			},
 			this.#colorDiv
 		);
-		this.eventListeners.colorSampleDiv.style [ 'background-color' ] = this.eventListeners.newColor.cssColor;
-		this.eventListeners.colorSampleDiv.color = this.eventListeners.newColor;
+		this.#colorSampleDiv.style [ 'background-color' ] = this.#newColor.cssColor;
+
+		// this.#colorSampleDiv.color = this.#newColor;
 	}
 
 	/**
@@ -253,10 +256,7 @@ class ColorControl {
 
 	constructor ( cssColor ) {
 
-		this.eventListeners = new ColorControlEventListeners ( );
-
-		this.eventListeners.newColor.cssColor = cssColor;
-
+		this.#newColor.cssColor = cssColor;
 		this.#colorDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -264,13 +264,7 @@ class ColorControl {
 			}
 		);
 		this.#createColorButtonsDiv ( );
-
-		if ( theConfig.colorDialog.haveSlider ) {
-			this.#createRedSliderDiv ( );
-		}
-		else {
-			this.#createRedButtonsDiv ( );
-		}
+		this.#createRedSliderDiv ( );
 		this.#createColorInputDiv ( );
 		this.#createColorSampleDiv ( );
 	}
@@ -287,7 +281,15 @@ class ColorControl {
 	@readonly
 	*/
 
-	get cssColor ( ) { return this.eventListeners.newColor.cssColor; }
+	get cssColor ( ) { return this.#newColor.cssColor; }
+
+	set color ( newColor ) {
+		this.#inputs.red.value = newColor.red;
+		this.#inputs.green.value = newColor.green;
+		this.#inputs.blue.value = newColor.blue;
+		this.#colorSampleDiv.style [ 'background-color' ] = newColor.cssColor;
+		newColor.copyTo ( this.#newColor );
+	}
 
 }
 

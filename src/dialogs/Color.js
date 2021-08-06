@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ONE, TWO, THREE, HEXADECIMAL, MIN_COLOR_VALUE, MAX_COLOR_VALUE } from '../util/Constants.js';
+import { ZERO, ONE, TWO, THREE, HEXADECIMAL, MIN_COLOR_VALUE, MAX_COLOR_VALUE } from '../util/Constants.js';
 
 const FIVE = 5;
 
@@ -132,7 +132,7 @@ class Color {
 	}
 
 	/**
-	the color in the css HEX format '#RRGGBB'
+	get the color in the css HEX format '#RRGGBB'
 	*/
 
 	get cssColor ( ) {
@@ -142,10 +142,20 @@ class Color {
 			this.#blue.toString ( HEXADECIMAL ).padStart ( TWO, '0' );
 	}
 
+	/**
+	set the color from a cssColor in the HEX format or the rgb () format
+	*/
+
 	set cssColor ( cssColor ) {
-		this.#red = parseInt ( cssColor.substr ( ONE, TWO ), HEXADECIMAL );
-		this.#green = parseInt ( cssColor.substr ( THREE, TWO ), HEXADECIMAL );
-		this.#blue = parseInt ( cssColor.substr ( FIVE, TWO ), HEXADECIMAL );
+		if ( '#' === cssColor [ ZERO ] ) {
+			this.#red = Number.parseInt ( cssColor.substr ( ONE, TWO ), HEXADECIMAL );
+			this.#green = Number.parseInt ( cssColor.substr ( THREE, TWO ), HEXADECIMAL );
+			this.#blue = Number.parseInt ( cssColor.substr ( FIVE, TWO ), HEXADECIMAL );
+		}
+		else if ( 'rgb' === cssColor.substr ( ZERO, THREE ) ) {
+			[ this.#red, this.#green, this.#blue ] =
+				Array.from ( cssColor.match ( /[0-9]{1,3}/g ), value => Number.parseInt ( value ) );
+		}
 	}
 
 	/**
