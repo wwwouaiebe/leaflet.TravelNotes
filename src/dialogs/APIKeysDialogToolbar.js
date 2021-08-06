@@ -47,7 +47,14 @@ Tests ...
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.js';
+import {
+	RestoreKeysFromUnsecureFileButtonEventListener,
+	ReloadKeysFromServerButtonEventListener,
+	RestoreKeysFromSecureFileButtonEventListener,
+	SaveKeysToSecureFileButtonEventListener,
+	SaveKeysToUnsecureFileButtonEventListener,
+	NewAPIKeyButtonEventListener
+} from '../dialogs/APIKeysDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -61,12 +68,13 @@ import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.
 
 class APIKeysDialogToolbar {
 
+	#APIKeysDialog = null;
+
 	/**
-	The root HTML element of the control
-	@private
+	A map where the APIKeysDialogKeyControl objects are stored
 	*/
 
-	#rootHTMLElement = null;
+	#APIKeysControls = null;
 
 	/**
 	Store the status of the APIKeys file
@@ -76,22 +84,32 @@ class APIKeysDialogToolbar {
 	#haveAPIKeysFile = false
 
 	/**
+	The root HTML element of the control
+	@private
+	*/
+
+	#rootHTMLElement = null;
+
+	/**
 	Create the ReloadKeysFromServerFile Button
 	@private
 	*/
 
-	#createReloadKeysFromServerFileButton ( ) {
-		if ( this.#haveAPIKeysFile ) {
-			theHTMLElementsFactory.create (
-				'div',
-				{
-					className : 'TravelNotes-BaseDialog-Button',
-					title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
-					textContent : '🔄'
-				},
-				this.#rootHTMLElement
-			).addEventListener ( 'click', APIKeysDialogEventListeners.onReloadAPIKeysFromServerButtonClick, false );
-		}
+	#createReloadKeysFromServerButton ( ) {
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'APIKeysDialog - Reload from server' ),
+				textContent : '🔄'
+			},
+			this.#rootHTMLElement
+		)
+			.addEventListener (
+				'click',
+				new ReloadKeysFromServerButtonEventListener ( this.#APIKeysDialog ),
+				false
+			);
 	}
 
 	/**
@@ -109,7 +127,11 @@ class APIKeysDialogToolbar {
 			},
 			this.#rootHTMLElement
 		)
-			.addEventListener ( 'click', APIKeysDialogEventListeners.onSaveKeysToSecureFileButtonClick, false );
+			.addEventListener (
+				'click',
+				new SaveKeysToSecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls ),
+				false
+			);
 
 	}
 
@@ -128,7 +150,11 @@ class APIKeysDialogToolbar {
 			},
 			this.#rootHTMLElement
 		)
-			.addEventListener ( 'click', APIKeysDialogEventListeners.onOpenSecureFileButtonClick, false );
+			.addEventListener (
+				'click',
+				new RestoreKeysFromSecureFileButtonEventListener ( this.#APIKeysDialog ),
+				false
+			);
 	}
 
 	/**
@@ -136,7 +162,7 @@ class APIKeysDialogToolbar {
 	@private
 	*/
 
-	#createAddNewAPIKeyButton ( ) {
+	#createNewAPIKeyButton ( ) {
 		theHTMLElementsFactory.create (
 			'div',
 			{
@@ -146,7 +172,11 @@ class APIKeysDialogToolbar {
 			},
 			this.#rootHTMLElement
 		)
-			.addEventListener ( 'click', APIKeysDialogEventListeners.onAddNewAPIKeyButtonClick, false );
+			.addEventListener (
+				'click',
+				new NewAPIKeyButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls ),
+				false
+			);
 	}
 
 	/**
@@ -163,7 +193,12 @@ class APIKeysDialogToolbar {
 				textContent : '💾'
 			},
 			this.#rootHTMLElement
-		).addEventListener ( 'click', APIKeysDialogEventListeners.onSaveKeysToUnsecureFileButtonClick, false );
+		)
+			.addEventListener (
+				'click',
+				new SaveKeysToUnsecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls ),
+				false
+			);
 	}
 
 	/**
@@ -180,7 +215,12 @@ class APIKeysDialogToolbar {
 				textContent : '📂'
 			},
 			this.#rootHTMLElement
-		).addEventListener ( 'click', APIKeysDialogEventListeners.onOpenUnsecureFileButtonClick, false );
+		)
+			.addEventListener (
+				'click',
+				new RestoreKeysFromUnsecureFileButtonEventListener ( this.#APIKeysDialog ),
+				false
+			);
 	}
 
 	/**
@@ -190,12 +230,14 @@ class APIKeysDialogToolbar {
 
 	#addToolbarButtons ( ) {
 		if ( window.crypto && window.crypto.subtle && window.crypto.subtle.importKey && window.isSecureContext ) {
-			this.#createReloadKeysFromServerFileButton ( );
+			if ( this.#haveAPIKeysFile ) {
+				this.#createReloadKeysFromServerButton ( );
+			}
 			this.#createSaveKeysToSecureFileButton ( );
 			this.#createRestoreKeysFromSecureFileButton ( );
 		}
 
-		this.#createAddNewAPIKeyButton ( );
+		this.#createNewAPIKeyButton ( );
 
 		if ( theConfig.APIKeysDialog.haveUnsecureButtons ) {
 			this.#createSaveKeysToUnsecureFileButton ( );
@@ -208,7 +250,9 @@ class APIKeysDialogToolbar {
 	@param {boolean} haveAPIKeysFile A boolean indicating if a APIKeys file was found on the server whenthe apps is launching
 	*/
 
-	constructor ( haveAPIKeysFile ) {
+	constructor ( APIKeysDialog, APIKeysControls, haveAPIKeysFile ) {
+		this.#APIKeysDialog = APIKeysDialog;
+		this.#APIKeysControls = APIKeysControls;
 		this.#haveAPIKeysFile = haveAPIKeysFile;
 		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',

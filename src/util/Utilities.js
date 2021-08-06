@@ -151,9 +151,15 @@ class Utilities {
 
 	saveFile ( fileName, fileContent, fileMimeType ) {
 		try {
-			let objURL = window.URL.createObjectURL (
-				new File ( [ fileContent ], fileName, { type : fileMimeType || 'text/plain' } )
-			);
+			let objURL = null;
+			if ( fileMimeType ) {
+				objURL = window.URL.createObjectURL (
+					new File ( [ fileContent ], fileName, { type : fileMimeType } )
+				);
+			}
+			else {
+				objURL = URL.createObjectURL ( fileContent );
+			}
 			let element = document.createElement ( 'a' );
 			element.setAttribute ( 'href', objURL );
 			element.setAttribute ( 'download', fileName );

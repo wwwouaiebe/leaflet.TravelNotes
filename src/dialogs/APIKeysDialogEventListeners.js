@@ -52,295 +52,71 @@ import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@class APIKeysDialogEventListeners
-@classdesc Event listeners for the APIKeysDialog
+@class OpenSecureFileInputEventListener
+@classdesc Event listener for the apikeydeleted event
 @hideconstructor
+@private
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-class APIKeysDialogEventListeners {
+class onAPIKeyDeletedEventListener {
 
-	/**
-	A reference to the current APIKeysDialog
-	*/
+	#APIKeysDialog = null;
+	#APIKeysControls = null;
 
-	static APIKeysDialog = null;
-
-	/**
-	A map where the APIKeysDialogKeyControl objects are stored
-	*/
-
-	static APIKeysControls = new Map ( );
-
-	/**
-	reset the global variables
-	*/
-
-	static reset ( ) {
-		APIKeysDialogEventListeners.APIKeysDialog = null;
-		APIKeysDialogEventListeners.APIKeysControls.clear ( );
+	constructor ( APIKeysDialog, APIKeysControls ) {
+		this.#APIKeysDialog = APIKeysDialog;
+		this.#APIKeysControls = APIKeysControls;
 	}
 
 	/**
-	Add a new APIKey and create a APIKeysDialogKeyControl for this APIKey
-	@param {APIKey} APIKey The APIKey to add
-	@private
+	Event listener method
 	*/
 
-	static #addAPIKey ( APIKey ) {
-		let APIKeyControl = new APIKeysDialogKeyControl ( APIKey );
-		APIKeysDialogEventListeners.APIKeysControls.set (
-			APIKeyControl.objId,
-			APIKeyControl
-		);
-	}
-
-	/**
-	Add an array of APIKeys to the APIKeysControls map and to the dialog
-	*/
-
-	static addAPIKeys ( APIKeys ) {
-		APIKeysDialogEventListeners.APIKeysControls.clear ( );
-		APIKeys.forEach ( APIKeysDialogEventListeners.#addAPIKey );
-		APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
-	}
-
-	/**
-	event listener for the addNewAPIKeyButton on the toolbar.
-	Create a new APIKey and add this APIKey to the APIKeysControls map and to the dialog
-	*/
-
-	static onAddNewAPIKeyButtonClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		APIKeysDialogEventListeners.#addAPIKey ( Object.seal ( { providerName : '', providerKey : '' } ) );
-		APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
-	}
-
-	/**
-	apikeydeleted event listener.
-	delete the APIKey from the APIKeysControls map and from the dialog
-	*/
-
-	static onAPIKeyDeleted ( ApiKeyDeletedEvent ) {
+	handleEvent ( ApiKeyDeletedEvent ) {
 		ApiKeyDeletedEvent.stopPropagation ( );
-		APIKeysDialogEventListeners.APIKeysControls.delete ( ApiKeyDeletedEvent.data.objId );
-		APIKeysDialogEventListeners.APIKeysDialog.refreshAPIKeys ( );
+		this.#APIKeysControls.delete ( ApiKeyDeletedEvent.data.objId );
+		this.#APIKeysDialog.refreshAPIKeys ( );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OpenSecureFileInputEventListener
+@classdesc Event listener for change event on the open unsecure file input
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class OpenUnsecureFileInputEventListener {
+
+	#APIKeysDialog = null;
+
+	constructor ( APIKeysDialog ) {
+		this.#APIKeysDialog = APIKeysDialog;
 	}
 
 	/**
-	Validate the APIKeys.
-	Verify that the providerName and provider key are not empty.
-	Verify duplicate providerName
+	Event listener method
 	*/
 
-	static validateAPIKeys ( ) {
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-		let haveEmptyValues = false;
-		let providersNames = [];
-		APIKeysDialogEventListeners.APIKeysControls.forEach (
-			APIKeyControl => {
-				haveEmptyValues =
-					haveEmptyValues ||
-					'' === APIKeyControl.providerName
-					||
-					'' === APIKeyControl.providerKey;
-				providersNames.push ( APIKeyControl.providerName );
-			}
-		);
-		let haveDuplicate = false;
-		providersNames.forEach (
-			providerName => {
-				haveDuplicate =
-					haveDuplicate ||
-					providersNames.indexOf ( providerName ) !== providersNames.lastIndexOf ( providerName );
-			}
-		);
-		if ( haveEmptyValues ) {
-			APIKeysDialogEventListeners.APIKeysDialog.showError (
-				theTranslator.getText ( 'APIKeysDialog - empty API key name or value' )
-			);
-			return false;
-		}
-		else if ( haveDuplicate ) {
-			APIKeysDialogEventListeners.APIKeysDialog.showError (
-				theTranslator.getText ( 'APIKeysDialog - duplicate API key name found' )
-			);
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	Transform the APIKeysControls value into a JSON string
-	@private
-	*/
-
-	static #getAPIKeysJsonString ( ) {
-		let APIKeys = [];
-		APIKeysDialogEventListeners.APIKeysControls.forEach (
-			APIKeyControl => { APIKeys.push ( APIKeyControl.APIKey ); }
-		);
-		return JSON.stringify ( APIKeys );
-	}
-
-	/**
-	click event listener for the SaveKeysToUnsecureFileButton
-	*/
-
-	static onSaveKeysToUnsecureFileButtonClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		if ( ! APIKeysDialogEventListeners.validateAPIKeys ( ) ) {
-			return;
-		}
-		theUtilities.saveFile (
-			'APIKeys.json',
-			APIKeysDialogEventListeners.#getAPIKeysJsonString ( )
-		);
-	}
-
-	/**
-	onOkEncrypt handler for the DataEncryptor
-	@private
-	*/
-
-	static #onOkEncrypt ( data ) {
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
-		theUtilities.saveFile (
-			'APIKeys',
-			data
-		);
-
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-
-	/**
-	onErrorEncrypt handler for the DataEncryptor
-	@private
-	*/
-
-	static #onErrorEncrypt ( ) {
-		APIKeysDialogEventListeners.APIKeysDialog.showError (
-			theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' )
-		);
-		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
-
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-
-	/**
-	click event listener for the SaveKeysToSecureFileButton
-	*/
-
-	static onSaveKeysToSecureFileButtonClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		if ( ! APIKeysDialogEventListeners.validateAPIKeys ( ) ) {
-			return;
-		}
-		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
-
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
-
-		new DataEncryptor ( ).encryptData (
-			new window.TextEncoder ( ).encode ( APIKeysDialogEventListeners.#getAPIKeysJsonString ( ) ),
-			APIKeysDialogEventListeners.#onOkEncrypt,
-			APIKeysDialogEventListeners.#onErrorEncrypt,
-			new PasswordDialog ( true ).show ( )
-		);
-	}
-
-	/**
-	onOkDecrypt handler for the DataEncryptor
-	@private
-	*/
-
-	static #onOkDecrypt ( data ) {
-		try {
-			APIKeysDialogEventListeners.addAPIKeys (
-				JSON.parse ( new TextDecoder ( ).decode ( data ) )
-			);
-		}
-		catch ( err ) {
-			APIKeysDialogEventListeners.onErrorDecrypt ( err );
-			return;
-		}
-		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-
-	/**
-	onErrorDecrypt handler for the DataEncryptor
-	@private
-	*/
-
-	static #onErrorDecrypt ( err ) {
-		APIKeysDialogEventListeners.APIKeysDialog.hideWait ( );
-
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = true;
-		if ( err && 'Canceled by user' !== err ) {
-			APIKeysDialogEventListeners.APIKeysDialog.showError (
-				theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' )
-			);
-		}
-	}
-
-	/**
-	Change event listener for the OpenSecureFile action
-	The input is created by theUtilities.openFile method
-	See onOpenSecureFileButtonClick ( )
-	@private
-	*/
-
-	static #onOpenSecureFileInputChange ( changeEvent ) {
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
-
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
-		changeEvent.stopPropagation ( );
-		let fileReader = new FileReader ( );
-		fileReader.onload = ( ) => {
-			new DataEncryptor ( ).decryptData (
-				fileReader.result,
-				APIKeysDialogEventListeners.#onOkDecrypt,
-				APIKeysDialogEventListeners.#onErrorDecrypt,
-				new PasswordDialog ( false ).show ( )
-			);
-		};
-		fileReader.readAsArrayBuffer ( changeEvent.target.files [ ZERO ] );
-	}
-
-	/**
-	click event listener for the OpenSecureFileButton
-	*/
-
-	static onOpenSecureFileButtonClick ( ) {
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-		theUtilities.openFile (	APIKeysDialogEventListeners.#onOpenSecureFileInputChange );
-	}
-
-	/**
-	Change event listener for the OpenUnsecureFile action
-	The input is created by theUtilities.openFile method
-	See onOpenUnsecureFileButtonClick ( )
-	@private
-	*/
-
-	static #onOpenUnsecureFileInputChange ( changeEvent ) {
+	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
 		let fileReader = new FileReader ( );
 		fileReader.onload = ( ) => {
 			try {
-				APIKeysDialogEventListeners.addAPIKeys (
+				this.#APIKeysDialog.addAPIKeys (
 					JSON.parse ( fileReader.result )
 				);
 			}
 			catch ( err ) {
-				APIKeysDialogEventListeners.APIKeysDialog.showError ( err.message );
+				this.#APIKeysDialog.showError ( err.message );
 				if ( err instanceof Error ) {
 					console.error ( err );
 				}
@@ -348,29 +124,122 @@ class APIKeysDialogEventListeners {
 		};
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
+}
 
-	/**
-	click event listener for the OpenSecureFileButton
-	*/
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-	static onOpenUnsecureFileButtonClick ( ) {
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-		theUtilities.openFile (	APIKeysDialogEventListeners.#onOpenUnsecureFileInputChange, '.json' );
+@class RestoreKeysFromUnsecureFileButtonEventListener
+@classdesc Event listener for click event on the restore keys from unsecure file button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class RestoreKeysFromUnsecureFileButtonEventListener {
+
+	#APIKeysDialog = null;
+
+	constructor ( APIKeysDialog ) {
+		this.#APIKeysDialog = APIKeysDialog;
 	}
 
 	/**
-	click event listener for the ReloadAPIKeysFromServerButton
+	Event listener method
 	*/
 
-	static onReloadAPIKeysFromServerButtonClick ( clickEvent ) {
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		APIKeysDialogEventListeners.APIKeysDialog.hideError ( );
-		APIKeysDialogEventListeners.APIKeysDialog.showWait ( );
+		this.#APIKeysDialog.hideError ( );
+		theUtilities.openFile (	new OpenUnsecureFileInputEventListener ( this.#APIKeysDialog ), '.json' );
 
-		APIKeysDialogEventListeners.APIKeysDialog.keyboardEventListenerEnabled = false;
+	}
+}
 
-		// myAPIKeysDialog.keyboardEventListenerEnabled = false;
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
+@class DataEncryptorEventListeners
+@classdesc onOkDecrypt and onErrorDecrypt event listeners for DataEncryptor
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class DataEncryptorEventListeners {
+
+	#APIKeysDialog = null;
+
+	constructor ( APIKeysDialog ) {
+		this.#APIKeysDialog = APIKeysDialog;
+	}
+
+	/**
+	onErrorDecrypt handler for the DataEncryptor
+	*/
+
+	onErrorDecrypt ( err ) {
+		this.#APIKeysDialog.hideWait ( );
+		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+		if ( err && 'Canceled by user' !== err ) {
+			this.#APIKeysDialog.showError (
+				theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' )
+			);
+		}
+	}
+
+	/**
+	onOkDecrypt handler for the DataEncryptor
+	*/
+
+	onOkDecrypt ( data ) {
+		try {
+			this.#APIKeysDialog.addAPIKeys (
+				JSON.parse ( new TextDecoder ( ).decode ( data ) )
+			);
+		}
+		catch ( err ) {
+			this.onErrorDecrypt ( err );
+			return;
+		}
+		this.#APIKeysDialog.hideWait ( );
+		this.#APIKeysDialog.hideError ( );
+		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ReloadKeysFromServerButtonEventListener
+@classdesc Event listener for click event on the reload keys from server file button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ReloadKeysFromServerButtonEventListener {
+
+	#APIKeysDialog = null;
+
+	constructor ( APIKeysDialog ) {
+		this.#APIKeysDialog = APIKeysDialog;
+	}
+
+	/**
+	Event listener method
+	*/
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		this.#APIKeysDialog.hideError ( );
+		this.#APIKeysDialog.showWait ( );
+		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
+
+		let dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
 		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
 			.then (
 				response => {
@@ -379,31 +248,288 @@ class APIKeysDialogEventListeners {
 							data => {
 								new DataEncryptor ( ).decryptData (
 									data,
-									APIKeysDialogEventListeners.#onOkDecrypt,
-									APIKeysDialogEventListeners.#onErrorDecrypt,
+									tmpData => { dataEncryptorEventListener.onOkDecrypt ( tmpData ); },
+									err => { dataEncryptorEventListener.onErrorDecrypt ( err ); },
 									new PasswordDialog ( false ).show ( )
 								);
 							}
 						);
 					}
 					else {
-						APIKeysDialogEventListeners.#onErrorDecrypt ( new Error ( 'Invalid http status' ) );
+						dataEncryptorEventListener.onErrorDecrypt ( new Error ( 'Invalid http status' ) );
 					}
 				}
 			)
 			.catch (
 				err => {
-					APIKeysDialogEventListeners.#onErrorDecrypt ( err );
+					dataEncryptorEventListener.onErrorDecrypt ( err );
 					if ( err instanceof Error ) {
 						console.error ( err );
 					}
 				}
 			);
 	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OpenSecureFileInputEventListener
+@classdesc Event listener for change event on the open secure file input
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class OpenSecureFileInputEventListener {
+
+	#APIKeysDialog = null;
+
+	constructor ( APIKeysDialog ) {
+		this.#APIKeysDialog = APIKeysDialog;
+	}
+
+	/**
+	Event listener method
+	*/
+
+	/**
+	Event listener method
+	*/
+
+	handleEvent ( changeEvent ) {
+		changeEvent.stopPropagation ( );
+		this.#APIKeysDialog.showWait ( );
+		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
+		let fileReader = new FileReader ( );
+		fileReader.onload = ( ) => {
+			let dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
+			new DataEncryptor ( ).decryptData (
+				fileReader.result,
+				data => { dataEncryptorEventListener.onOkDecrypt ( data ); },
+				err => { dataEncryptorEventListener.onErrorDecrypt ( err ); },
+				new PasswordDialog ( false ).show ( )
+			);
+		};
+		fileReader.readAsArrayBuffer ( changeEvent.target.files [ ZERO ] );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class RestoreKeysFromSecureFileButtonEventListener
+@classdesc Event listener for click event on the restore keys from secure file button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class RestoreKeysFromSecureFileButtonEventListener {
+
+	#APIKeysDialog = null;
+
+	constructor ( APIKeysDialog ) {
+		this.#APIKeysDialog = APIKeysDialog;
+	}
+
+	/**
+	Event listener method
+	*/
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		this.#APIKeysDialog.hideError ( );
+		theUtilities.openFile (	new OpenSecureFileInputEventListener ( this.#APIKeysDialog ) );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class SaveAPIKeysHelper
+@classdesc shared methods for save to file buttons
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class SaveAPIKeysHelper {
+
+	#APIKeysControls = null;
+
+	constructor ( APIKeysControls ) {
+		this.#APIKeysControls = APIKeysControls;
+	}
+
+	/**
+	Transform the APIKeysControls value into a JSON string
+	*/
+
+	getAPIKeysJsonString ( ) {
+		let APIKeys = [];
+		this.#APIKeysControls.forEach (
+			APIKeyControl => { APIKeys.push ( APIKeyControl.APIKey ); }
+		);
+		return JSON.stringify ( APIKeys );
+	}
 
 }
 
-export default APIKeysDialogEventListeners;
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class SaveKeysToSecureFileButtonEventListener
+@classdesc Event listener for click event on the saveAPIKeys to secure file button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class SaveKeysToSecureFileButtonEventListener {
+
+	#APIKeysDialog = null;
+	#APIKeysControls = null;
+
+	constructor ( APIKeysDialog, APIKeysControls ) {
+		this.#APIKeysDialog = APIKeysDialog;
+		this.#APIKeysControls = APIKeysControls;
+	}
+
+	/**
+	onOkEncrypt handler for the DataEncryptor
+	@private
+	*/
+
+	#onOkEncrypt ( data ) {
+		this.#APIKeysDialog.hideError ( );
+		this.#APIKeysDialog.hideWait ( );
+		theUtilities.saveFile ( 'APIKeys', data );
+		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+	}
+
+	/**
+	onErrorEncrypt handler for the DataEncryptor
+	@private
+	*/
+
+	#onErrorEncrypt ( ) {
+		this.#APIKeysDialog.showError (
+			theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' )
+		);
+		this.#APIKeysDialog.hideWait ( );
+		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+	}
+
+	/**
+	Event listener method
+	*/
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
+		if ( ! this.#APIKeysDialog.validateAPIKeys ( ) ) {
+			return;
+		}
+		this.#APIKeysDialog.showWait ( );
+
+		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
+
+		new DataEncryptor ( ).encryptData (
+			new window.TextEncoder ( ).encode ( saveAPIKeysHelper.getAPIKeysJsonString ( ) ),
+			data => { this.#onOkEncrypt ( data ); },
+			( ) => { this.#onErrorEncrypt ( ); },
+			new PasswordDialog ( true ).show ( )
+		);
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class SaveKeysToUnsecureFileButtonEventListener
+@classdesc Event listener for click event on the saveAPIKeys to unsecure file button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class SaveKeysToUnsecureFileButtonEventListener {
+
+	#APIKeysDialog = null;
+	#APIKeysControls = null;
+
+	constructor ( APIKeysDialog, APIKeysControls ) {
+		this.#APIKeysDialog = APIKeysDialog;
+		this.#APIKeysControls = APIKeysControls;
+	}
+
+	/**
+	Event listener method
+	*/
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
+		if ( ! this.#APIKeysDialog.validateAPIKeys ( ) ) {
+			return;
+		}
+		theUtilities.saveFile (
+			'APIKeys.json',
+			saveAPIKeysHelper.getAPIKeysJsonString ( ),
+			'application/json'
+		);
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class NewAPIKeyButtonEventListener
+@classdesc Event listener for click event on the add new APIKey button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NewAPIKeyButtonEventListener {
+
+	#APIKeysDialog = null;
+	#APIKeysControls = null;
+
+	constructor ( APIKeysDialog, APIKeysControls ) {
+		this.#APIKeysDialog = APIKeysDialog;
+		this.#APIKeysControls = APIKeysControls;
+	}
+
+	/**
+	Event listener method
+	*/
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let APIKey = Object.seal ( { providerName : '', providerKey : '' } );
+		let APIKeyControl = new APIKeysDialogKeyControl ( APIKey );
+		this.#APIKeysControls.set ( APIKeyControl.objId, APIKeyControl );
+		this.#APIKeysDialog.refreshAPIKeys ( );
+	}
+}
+
+export {
+	onAPIKeyDeletedEventListener,
+	RestoreKeysFromUnsecureFileButtonEventListener,
+	ReloadKeysFromServerButtonEventListener,
+	RestoreKeysFromSecureFileButtonEventListener,
+	SaveKeysToSecureFileButtonEventListener,
+	SaveKeysToUnsecureFileButtonEventListener,
+	NewAPIKeyButtonEventListener
+};
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

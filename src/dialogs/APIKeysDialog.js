@@ -56,9 +56,10 @@ Tests ...
 
 import BaseDialog from '../dialogs/BaseDialog.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
-import APIKeysDialogEventListeners from '../dialogs/APIKeysDialogEventListeners.js';
+import { onAPIKeyDeletedEventListener } from '../dialogs/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
 
 import { ZERO } from '../util/Constants.js';
 
@@ -74,6 +75,13 @@ import { ZERO } from '../util/Constants.js';
 */
 
 class APIKeysDialog extends BaseDialog {
+
+	/**
+	A map to store the APIKeyControl object
+	@private
+	*/
+
+	#APIKeysControls = new Map ( );
 
 	/**
 	The dialog toolbar
@@ -98,7 +106,7 @@ class APIKeysDialog extends BaseDialog {
 		this.#APIKeysControlsContainer = theHTMLElementsFactory.create ( 'div' );
 		this.#APIKeysControlsContainer.addEventListener (
 			'apikeydeleted',
-			APIKeysDialogEventListeners.onAPIKeyDeleted,
+			new onAPIKeyDeletedEventListener ( this, this.#APIKeysControls ),
 			false
 		);
 	}
@@ -107,11 +115,68 @@ class APIKeysDialog extends BaseDialog {
 
 		super ( );
 
-		APIKeysDialogEventListeners.APIKeysDialog = this;
-		this.#toolbar = new APIKeysDialogToolbar ( haveAPIKeysFile );
+		this.#toolbar = new APIKeysDialogToolbar ( this, this.#APIKeysControls, haveAPIKeysFile );
 		this.#createAPIKeysControlsContainer ( );
+		this.addAPIKeys ( APIKeys );
+	}
 
-		APIKeysDialogEventListeners.addAPIKeys ( APIKeys );
+	/**
+	Validate the APIKeys. Each APIKey must have a not empty name and a not empty key.
+	Duplicate APIKey names are not allowed
+	@return {boolean} true when all the keys are valid and not duplicated
+	*/
+
+	validateAPIKeys ( ) {
+		this.hideError ( );
+		let haveEmptyValues = false;
+		let providersNames = [];
+		this.#APIKeysControls.forEach (
+			APIKeyControl => {
+				haveEmptyValues =
+					haveEmptyValues ||
+					'' === APIKeyControl.providerName
+					||
+					'' === APIKeyControl.providerKey;
+				providersNames.push ( APIKeyControl.providerName );
+			}
+		);
+		let haveDuplicate = false;
+		providersNames.forEach (
+			providerName => {
+				haveDuplicate =
+					haveDuplicate ||
+					providersNames.indexOf ( providerName ) !== providersNames.lastIndexOf ( providerName );
+			}
+		);
+		if ( haveEmptyValues ) {
+			this.showError (
+				theTranslator.getText ( 'APIKeysDialog - empty API key name or value' )
+			);
+			return false;
+		}
+		else if ( haveDuplicate ) {
+			this.showError (
+				theTranslator.getText ( 'APIKeysDialog - duplicate API key name found' )
+			);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	Add an array of APIKeys to the dialog.
+	@param {Array.<APIKey>} APIKeys An array with the APIKeys to add
+	*/
+
+	addAPIKeys ( APIKeys ) {
+		this.#APIKeysControls.clear ( );
+		APIKeys.forEach (
+			APIKey => {
+				let APIKeyControl = new APIKeysDialogKeyControl ( APIKey );
+				this.#APIKeysControls.set ( APIKeyControl.objId, APIKeyControl );
+			}
+		);
+		this.refreshAPIKeys ( );
 	}
 
 	/**
@@ -122,7 +187,7 @@ class APIKeysDialog extends BaseDialog {
 		while ( this.#APIKeysControlsContainer.firstChild ) {
 			this.#APIKeysControlsContainer.removeChild ( this.#APIKeysControlsContainer.firstChild );
 		}
-		APIKeysDialogEventListeners.APIKeysControls.forEach (
+		this.#APIKeysControls.forEach (
 			APIKeyControl => { this.#APIKeysControlsContainer.appendChild ( APIKeyControl.HTMLElements [ ZERO ] ); }
 		);
 	}
@@ -132,7 +197,7 @@ class APIKeysDialog extends BaseDialog {
 	*/
 
 	canClose ( ) {
-		return APIKeysDialogEventListeners.validateAPIKeys ( );
+		return this.validateAPIKeys ( );
 	}
 
 	/**
@@ -140,7 +205,6 @@ class APIKeysDialog extends BaseDialog {
 	*/
 
 	onCancel ( ) {
-		APIKeysDialogEventListeners.reset ( );
 		super.onCancel ( );
 	}
 
@@ -150,10 +214,9 @@ class APIKeysDialog extends BaseDialog {
 
 	onOk ( ) {
 		let APIKeys = [];
-		APIKeysDialogEventListeners.APIKeysControls.forEach (
+		this.#APIKeysControls.forEach (
 			APIKeyControl => APIKeys.push ( APIKeyControl.APIKey )
 		);
-		APIKeysDialogEventListeners.reset ( );
 		super.onOk ( APIKeys );
 	}
 

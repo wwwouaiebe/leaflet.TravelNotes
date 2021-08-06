@@ -170,7 +170,7 @@ class MapContextMenu extends BaseContextMenu {
 			break;
 		case 10 :
 			new AboutDialog ( ).show ( )
-			.catch ( err => {} );
+				.catch ( ( ) => {} );
 			break;
 		default :
 			break;

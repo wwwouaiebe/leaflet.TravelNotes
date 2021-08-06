@@ -55,6 +55,7 @@ import { ZERO, ONE, LAT_LNG, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 @class BaseDialogOkButtonClickEventListener
 @classdesc Event listener for click event on the ok button based on the EventListener API.
 @hideconstructor
+@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -83,6 +84,7 @@ class BaseDialogOkButtonClickEventListener {
 @class BaseDialogCancelButtonClickEventListener
 @classdesc Event listener for click event on the cancel button based on the EventListener API.
 @hideconstructor
+@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -111,6 +113,7 @@ class BaseDialogCancelButtonClickEventListener {
 @class BaseDialogTopBarDragStartEventListener
 @classdesc Event listener for dragstart event on the top bar based on the EventListener API.
 @hideconstructor
+@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -140,6 +143,7 @@ class BaseDialogTopBarDragStartEventListener {
 @class BaseDialogTopBarDragEndEventListener
 @classdesc Event listener for dragend event on the top bar based on the EventListener API.
 @hideconstructor
+@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -192,6 +196,7 @@ class BaseDialogTopBarDragEndEventListener {
 @class BaseDialogKeydownEventListener
 @classdesc BaseDialog keydown event listener based on the EventListener API.
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -231,6 +236,7 @@ class BaseDialogKeydownEventListener {
 @class BaseDialogBackgroundEventListeners
 @classdesc Mouse event listeners on the background of the dialog boxes. Pan and zoom on the map.
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

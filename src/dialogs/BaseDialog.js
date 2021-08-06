@@ -159,10 +159,7 @@ class BaseDialog {
 	);
 
 	#onKeydownEventListener = null;
-	#onOkButtonClickEventListener = null;
 	#onCancelButtonClickEventListener = null;
-	#onTopBarDragStartEventListener = null;
-	#onTopBarDragEndEventListener = null;
 
 	#options = null;
 
@@ -226,15 +223,6 @@ class BaseDialog {
 
 	#CreateTopBar ( ) {
 
-		// event listeners creation must come after the creation of container div and background div
-		// an empty object parameter is undefined and then it's not a reference.
-		this.#onTopBarDragEndEventListener = new BaseDialogTopBarDragEndEventListener (
-			this.#dragData,
-			this.#containerDiv,
-			this.#backgroundDiv
-		);
-		this.#onTopBarDragStartEventListener = new BaseDialogTopBarDragStartEventListener ( this.#dragData );
-
 		this.#topBar = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -244,9 +232,16 @@ class BaseDialog {
 			this.#containerDiv
 		);
 
-		this.#topBar.addEventListener ( 'dragstart', this.#onTopBarDragStartEventListener, false );
+		this.#topBar.addEventListener ( 'dragstart', new BaseDialogTopBarDragStartEventListener ( this.#dragData ), false );
 
-		this.#topBar.addEventListener ( 'dragend', this.#onTopBarDragEndEventListener, false );
+		this.#topBar.addEventListener (
+			'dragend',
+			new BaseDialogTopBarDragEndEventListener (
+				this.#dragData,
+				this.#containerDiv,
+				this.#backgroundDiv
+			),
+			false );
 
 		this.#cancelButton = theHTMLElementsFactory.create (
 			'div',
@@ -366,7 +361,7 @@ class BaseDialog {
 			},
 			footerDiv
 		);
-		this.#okButton.addEventListener ( 'click', this.#onOkButtonClickEventListener, false );
+		this.#okButton.addEventListener ( 'click', new BaseDialogOkButtonClickEventListener ( this ), false );
 
 		if ( this.#options.secondButtonText ) {
 			this.#secondButton = theHTMLElementsFactory.create (
@@ -454,25 +449,12 @@ class BaseDialog {
 	constructor ( options = {} ) {
 		Object.seal ( this );
 		this.#onKeydownEventListener = new BaseDialogKeydownEventListener ( this );
-		this.#onOkButtonClickEventListener = new BaseDialogOkButtonClickEventListener ( this );
 		this.#onCancelButtonClickEventListener = new BaseDialogCancelButtonClickEventListener ( this );
 		this.#options = options;
 	}
 
 	#destructor ( ) {
 		document.removeEventListener ( 'keydown', this.#onKeydownEventListener, { capture : true } );
-		this.#backgroundDiv.removeEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
-		this.#backgroundDiv.removeEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
-		this.#backgroundDiv.removeEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
-		this.#backgroundDiv.removeEventListener ( 'wheel', theBackgroundEventListeners.onMouseWheel, false	);
-		this.#backgroundDiv.removeEventListener ( 'contextmenu', theBackgroundEventListeners.onContextMenu, false );
-		this.#okButton.removeEventListener ( 'click', this.#onOkButtonClickEventListener, false );
-		if ( this.#secondButton ) {
-			this.#secondButton.removeEventListener ( 'click',	this.#onCancelButtonClickEventListener, false );
-		}
-		this.#cancelButton.removeEventListener ( 'click', this.#onCancelButtonClickEventListener, false );
-		this.#topBar.removeEventListener ( 'dragstart', this.#onTopBarDragEndEventListener, false );
-		this.#topBar.removeEventListener ( 'dragend', this.#onTopBarDragEndEventListener, false );
 		document.body.removeChild ( this.#backgroundDiv );
 	}
 
