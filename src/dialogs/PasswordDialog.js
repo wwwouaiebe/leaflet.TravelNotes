@@ -58,6 +58,57 @@ const OUR_PSWD_MIN_LENGTH = 12;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
+@class OnMouseDownEyeEventListener
+@classdesc mousedown event listener for the eye button
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class OnMouseDownEyeEventListener {
+
+	#passwordInput = null;
+
+	constructor ( passwordInput ) {
+		this.#passwordInput = passwordInput;
+	}
+
+	handleEvent ( mouseDownEvent ) {
+		mouseDownEvent.stopPropagation;
+		this.#passwordInput.type = 'text';
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OnMouseUpEyeEventListener
+@classdesc mouseup event listener for the eye button
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class OnMouseUpEyeEventListener {
+
+	#passwordInput = null;
+
+	constructor ( passwordInput ) {
+		this.#passwordInput = passwordInput;
+	}
+
+	handleEvent ( mouseUpEvent ) {
+		mouseUpEvent.stopPropagation;
+		this.#passwordInput.type = 'password';
+		this.#passwordInput.focus ( );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
 @class
 @classdesc This class is the password dialog
 @extends BaseDialog
@@ -95,25 +146,6 @@ class PasswordDialog extends BaseDialog {
 	#verifyPassword = false;
 
 	/**
-	mousedown event listener for the eyeSpan
-	@private
-	*/
-
-	#onMouseDownEye ( ) {
-		this.#passwordInput.type = 'text';
-	}
-
-	/**
-	mouseup event listener for the eyeSpan
-	@private
-	*/
-
-	#onMouseUpEye ( ) {
-		this.#passwordInput.type = 'password';
-		this.#passwordInput.focus ( );
-	}
-
-	/**
 	The constructor
 	@param {boolean} verifyPassword When true the password must be conform to the password rules
 	*/
@@ -133,11 +165,11 @@ class PasswordDialog extends BaseDialog {
 		);
 		this.#eyeSpan.addEventListener (
 			'mousedown',
-			( ) => { this.#onMouseDownEye ( ); },
+			new OnMouseDownEyeEventListener ( this.#passwordInput ),
 			false );
 		this.#eyeSpan.addEventListener (
 			'mouseup',
-			( ) => { this.#onMouseUpEye ( ); },
+			new OnMouseUpEyeEventListener ( this.#passwordInput ),
 			false
 		);
 	}
