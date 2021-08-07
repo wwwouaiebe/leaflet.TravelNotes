@@ -56,6 +56,37 @@ Tests ...
 
 @readonly
 @enum {Object}
+@desc Enum for the ColorControl
+@property {number} minColorValue
+@property {number} maxColorValue
+@property {number} rowsNumber
+@property {number} cellsNumber
+@property {number} deltaColor
+@property {number} sliderMaxValue
+@property {number} sliderStep
+@property {number} initialRed
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+ */
+
+export const COLOR_CONTROL = Object.freeze ( {
+	minColorValue : 0,
+	maxColorValue : 255,
+	rowsNumber : 6,
+	cellsNumber : 6,
+	deltaColor : 51,
+	sliderMaxValue : 100,
+	sliderStep : 20,
+	initialRed : 0
+} );
+
+/**
+
+@------------------------------------------------------------------------------------------------------------------------------
+
+@readonly
+@enum {Object}
 @desc Enum for the save status displayed with the coordinates and zoom values
 @property {string} notSaved The string to display when the travel is modified since more than 5 minutes
 @property {string} modified The string to display when the travel is modified since less than 5 minutes
@@ -315,10 +346,6 @@ export const EARTH_RADIUS = 6371e3;
 export const WAY_POINT_ICON_SIZE = 20;
 
 export const DIALOG_DRAG_MARGIN = 20;
-
-export const MAX_COLOR_VALUE = 255;
-
-export const MIN_COLOR_VALUE = 0;
 
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------

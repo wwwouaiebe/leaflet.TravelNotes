@@ -45,54 +45,61 @@ Tests ...
 */
 
 import Color from '../dialogs/Color.js';
+import { ZERO, COLOR_CONTROL } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@class ColorControlEventListeners
-@classdesc Container for vars and event listeners for the ColorControl
+@class RedSliderEventListener
+@classdesc Event listener for input event on the red slider based on the EventListener API.
 @hideconstructor
+@private
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-/*
+class RedSliderEventListener {
 
-class ColorControlEventListeners {
+	#redSlider = null;
+	#colorButtons = null;
 
-	constructor ( ) {
-
-		this.newColor = new Color;
-
-		this.sliderMaxValue = OUR_SLIDER_MAX_VALUE;
-
-		this.colorRowsNumber = OUR_COLOR_ROWS_NUMBER;
+	constructor ( redSlider, colorButtons ) {
+		this.#redSlider = redSlider;
+		this.#colorButtons = colorButtons;
 	}
 
-	#onRedColorButtonOrSlider ( redValue ) {
-		for ( let rowCounter = ZERO; rowCounter < this.colorRowsNumber; ++ rowCounter ) {
-			for ( let cellCounter = ZERO; cellCounter < this.colorRowsNumber; ++ cellCounter ) {
-				let colorButton = this.colorButtons [ ( this.colorRowsNumber * rowCounter ) + cellCounter ];
-				colorButton.color.red = redValue;
-				colorButton.style [ 'background-color' ] = colorButton.color.cssColor;
-			}
-		}
-	}
+	/**
+	Event listener method
+	*/
 
-	onRedColorSliderInput ( inputEvent ) {
+	handleEvent ( inputEvent ) {
+		inputEvent.stopPropagation ( );
+		let newColor = new Color ( );
 
 		// Math.ceil because with JS 100 * 2.55 = 254.99999....
-		this.#onRedColorButtonOrSlider (
-			Math.ceil ( inputEvent.target.valueAsNumber * ( MAX_COLOR_VALUE / this.sliderMaxValue ) )
-		);
-	}
-
-	onRedColorButtonClick ( clickEvent ) {
-		this.#onRedColorButtonOrSlider ( MAX_COLOR_VALUE - clickEvent.target.color.blue );
+		newColor.red =
+			Math.ceil ( inputEvent.target.valueAsNumber * ( COLOR_CONTROL.maxColorValue / COLOR_CONTROL.sliderMaxValue ) );
+		for ( let rowCounter = ZERO; rowCounter < COLOR_CONTROL.rowsNumber; ++ rowCounter ) {
+			newColor.blue = rowCounter * COLOR_CONTROL.deltaColor;
+			for ( let cellCounter = ZERO; cellCounter < COLOR_CONTROL.rowsNumber; ++ cellCounter ) {
+				newColor.green = cellCounter * COLOR_CONTROL.deltaColor;
+				this.#colorButtons [ ( COLOR_CONTROL.rowsNumber * rowCounter ) + cellCounter ]
+					.style [ 'background-color' ] = newColor.cssColor;
+			}
+		}
 
 	}
 }
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ColorInputEventListener
+@classdesc Event listener for input event on the color inputs based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
 class ColorInputEventListener {
@@ -106,7 +113,7 @@ class ColorInputEventListener {
 	}
 
 	/**
-	Event listener for the color input
+	Event listener method
 	*/
 
 	handleEvent ( inputEvent ) {
@@ -119,6 +126,17 @@ class ColorInputEventListener {
 		this.#colorControl.color = newColor;
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ColorButtonClickEventListener
+@classdesc Event listener for click event on the color buttons based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class ColorButtonClickEventListener {
 
@@ -142,6 +160,7 @@ class ColorButtonClickEventListener {
 }
 
 export {
+	RedSliderEventListener,
 	ColorInputEventListener,
 	ColorButtonClickEventListener
 };

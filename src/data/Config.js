@@ -80,9 +80,6 @@ let theConfig = {
 		showAPIKeys : true,
 		showButton : true
 	},
-	colorDialog : {
-		initialRed : 0
-	},
 	contextMenu : {
 		timeout : 1500
 	},

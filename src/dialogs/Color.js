@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, THREE, HEXADECIMAL, MIN_COLOR_VALUE, MAX_COLOR_VALUE } from '../util/Constants.js';
+import { ZERO, ONE, TWO, THREE, HEXADECIMAL, COLOR_CONTROL } from '../util/Constants.js';
 
 const FIVE = 5;
 
@@ -59,9 +59,9 @@ const FIVE = 5;
 
 class Color {
 
-	#red = MAX_COLOR_VALUE;
-	#green = MAX_COLOR_VALUE;
-	#blue = MAX_COLOR_VALUE;
+	#red = COLOR_CONTROL.maxColorValue;
+	#green = COLOR_CONTROL.maxColorValue;
+	#blue = COLOR_CONTROL.maxColorValue;
 
 	/**
 	@param {?number} red The red value of the color. Must be between 0 and 255. If null set to 255
@@ -76,21 +76,33 @@ class Color {
 		*/
 
 		this.#red =
-			'number' === typeof red && MAX_COLOR_VALUE >= red && MIN_COLOR_VALUE <= red ? red : MAX_COLOR_VALUE;
+			'number' === typeof red && COLOR_CONTROL.maxColorValue >= red && COLOR_CONTROL.minColorValue <= red
+				?
+				red
+				:
+				COLOR_CONTROL.maxColorValue;
 
 		/**
 		The green value of the color
 		*/
 
 		this.#green =
-			'number' === typeof green && MAX_COLOR_VALUE >= green && MIN_COLOR_VALUE <= green ? green : MAX_COLOR_VALUE;
+			'number' === typeof green && COLOR_CONTROL.maxColorValue >= green && COLOR_CONTROL.minColorValue <= green
+				?
+				green
+				:
+				COLOR_CONTROL.maxColorValue;
 
 		/**
 		The blue value of the color
 		*/
 
 		this.#blue =
-			'number' === typeof blue && MAX_COLOR_VALUE >= blue && MIN_COLOR_VALUE <= blue ? blue : MAX_COLOR_VALUE;
+			'number' === typeof blue && COLOR_CONTROL.maxColorValue >= blue && COLOR_CONTROL.minColorValue <= blue
+				?
+				blue
+				:
+				COLOR_CONTROL.maxColorValue;
 
 		Object.seal ( this );
 	}
@@ -102,7 +114,7 @@ class Color {
 	get red ( ) { return this.#red; }
 
 	set red ( red ) {
-		if ( 'number' === typeof red && MAX_COLOR_VALUE >= red && MIN_COLOR_VALUE <= red ) {
+		if ( 'number' === typeof red && COLOR_CONTROL.maxColorValue >= red && COLOR_CONTROL.minColorValue <= red ) {
 			this.#red = red;
 		}
 	}
@@ -114,7 +126,7 @@ class Color {
 	get green ( ) { return this.#green; }
 
 	set green ( green ) {
-		if ( 'number' === typeof green && MAX_COLOR_VALUE >= green && MIN_COLOR_VALUE <= green ) {
+		if ( 'number' === typeof green && COLOR_CONTROL.maxColorValue >= green && COLOR_CONTROL.minColorValue <= green ) {
 			this.#green = green;
 		}
 	}
@@ -126,7 +138,7 @@ class Color {
 	get blue ( ) { return this.#blue; }
 
 	set blue ( blue ) {
-		if ( 'number' === typeof blue && MAX_COLOR_VALUE >= blue && MIN_COLOR_VALUE <= blue ) {
+		if ( 'number' === typeof blue && COLOR_CONTROL.maxColorValue >= blue && COLOR_CONTROL.minColorValue <= blue ) {
 			this.#blue = blue;
 		}
 	}

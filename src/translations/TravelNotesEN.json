@@ -68,20 +68,16 @@
 		"msgstr" : "An error occurs when reading the API keys"
 	},
 	{
-		"msgid" : "ColorDialog - Blue",
+		"msgid" : "ColorControl - Blue",
 		"msgstr" : "Blue"
 	},
 	{
-		"msgid" : "ColorDialog - Green",
+		"msgid" : "ColorControl - Green",
 		"msgstr" : "Green"
 	},
 	{
-		"msgid" : "ColorDialog - Red",
+		"msgid" : "ColorControl - Red",
 		"msgstr" : "Red"
-	},
-	{
-		"msgid" : "ColorDialog - Colors",
-		"msgstr" : "Colors"
 	},
 	{
 		"msgid" : "ContextMenu - Close",

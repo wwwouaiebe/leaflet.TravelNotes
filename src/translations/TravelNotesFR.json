@@ -68,20 +68,16 @@
 		"msgstr" : "Une erreur est survenue lors de la lecture des clefs d'accès"
 	},
 	{
-		"msgid" : "ColorDialog - Blue",
+		"msgid" : "ColorControl - Blue",
 		"msgstr" : "Bleu"
 	},
 	{
-		"msgid" : "ColorDialog - Green",
+		"msgid" : "ColorControl - Green",
 		"msgstr" : "Vert"
 	},
 	{
-		"msgid" : "ColorDialog - Red",
+		"msgid" : "ColorControl - Red",
 		"msgstr" : "Rouge"
-	},
-	{
-		"msgid" : "ColorDialog - Colors",
-		"msgstr" : "Couleurs"
 	},
 	{
 		"msgid" : "ContextMenu - Close",
