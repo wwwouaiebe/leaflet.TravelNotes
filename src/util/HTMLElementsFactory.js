@@ -72,7 +72,15 @@ class HTMLElementsFactory {
 	#addProperties ( element, properties ) {
 		for ( let property in properties ) {
 			try {
-				element [ property ] = properties [ property ];
+				if ( 'dataset' === property ) {
+					let datasetObject = properties.dataset;
+					for ( let valueName in datasetObject ) {
+						element.dataset [ 'tan' + valueName ] = datasetObject [ valueName ];
+					}
+				}
+				else {
+					element [ property ] = properties [ property ];
+				}
 			}
 			catch ( err ) {
 				if ( err instanceof Error ) {

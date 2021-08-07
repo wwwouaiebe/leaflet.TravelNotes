@@ -64,10 +64,27 @@ import {
 
 class NoteDialogAddressControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#addressHeaderDiv = null;
 	#addressInputDiv = null;
 	#addressInput = null;
+
+	/**
+	The latLng used for geocoding
+	@private
+	*/
+
 	#latLng = null;
 
 	constructor ( noteDialog, latLng ) {
@@ -109,7 +126,7 @@ class NoteDialogAddressControl {
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				dataName : 'address'
+				dataset : { Name : 'address' }
 			},
 			this.#addressInputDiv
 		);
@@ -126,6 +143,10 @@ class NoteDialogAddressControl {
 	get HTMLElements ( ) {
 		return [ this.#addressHeaderDiv, this.#addressInputDiv ];
 	}
+
+	/**
+	The address in the control
+	*/
 
 	get address ( ) { return this.#addressInput.value; }
 

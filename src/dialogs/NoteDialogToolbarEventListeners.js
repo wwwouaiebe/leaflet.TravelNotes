@@ -50,7 +50,7 @@ class EditionButtonsEventListener {
 		this.#noteDialog.focusControl.setSelectionRange ( selectionStart, selectionEnd );
 		this.#noteDialog.focusControl.focus ( );
 		let noteData = {};
-		noteData [ this.#noteDialog.focusControl.dataName ] = this.#noteDialog.focusControl.value;
+		noteData [ this.#noteDialog.focusControl.dataset.tanName ] = this.#noteDialog.focusControl.value;
 		this.#noteDialog.updatePreview ( noteData );
 	}
 }

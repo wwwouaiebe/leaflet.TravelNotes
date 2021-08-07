@@ -96,7 +96,7 @@ class NoteDialogPhoneControl {
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				dataName : 'phone'
+				dataset : { Name : 'phone' }
 			},
 			this.#phoneInputDiv
 		);

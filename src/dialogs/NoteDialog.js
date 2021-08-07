@@ -113,6 +113,11 @@ class NoteDialog extends BaseDialog {
 
 	#startGeoCoder = false;
 
+	/**
+	The route ObjId on witch the note is attached
+	@private
+	*/
+
 	#routeObjId = null;
 
 	/**
@@ -123,7 +128,7 @@ class NoteDialog extends BaseDialog {
 	#previewNote = null;
 
 	/**
-	Controls
+	The controls
 	@private
 	*/
 
@@ -135,7 +140,6 @@ class NoteDialog extends BaseDialog {
 	#linkControl = null;
 	#phoneControl = null;
 	#previewControl = null;
-	#mapIconData = null;
 
 	/**
 	the toolbar
@@ -143,6 +147,11 @@ class NoteDialog extends BaseDialog {
 	*/
 
 	#toolbar = null;
+
+	/**
+	The control that have currently the focusControl
+	@private
+	*/
 
 	#focusControl = null;
 
@@ -153,7 +162,6 @@ class NoteDialog extends BaseDialog {
 		this.#routeObjId = routeObjId;
 
 		this.focusControl = null;
-		this.#mapIconData = Object.freeze ( { latLng : note.latLng, routeObjId : routeObjId } );
 
 		this.#previewNote = new Note ( );
 		this.#previewNote.jsonObject = note.jsonObject;
@@ -169,22 +177,22 @@ class NoteDialog extends BaseDialog {
 		this.#previewControl = new NoteDialogPreviewControl ( this.#previewNote );
 
 		this.setControlsValues ( note );
-		Object.seal ( this );
 	}
+
+	/**
+	The control that have currently the focus. Used for toolbar buttons
+	*/
 
 	set focusControl ( focusControl ) { this.#focusControl = focusControl; }
 
 	get focusControl ( ) { return this.#focusControl; }
 
-	get mapIconData ( ) { return this.#mapIconData; }
-
 	/**
-	Update the toolbar. Called when new toolbar buttons and predefined icons are loaded
+	Data needed for the map svg icon
+	@readonly
 	*/
 
-	updateToolbar ( ) {
-		this.#toolbar.update ( );
-	}
+	get mapIconData ( ) { return Object.freeze ( { latLng : this.#previewNote.latLng, routeObjId : this.#routeObjId } ); }
 
 	/**
 	Update the preview of the icons. Used by event listeners

@@ -176,7 +176,7 @@ class InputUpdatedEventListener {
 	handleEvent ( inputUpdatedEvent ) {
 		inputUpdatedEvent.stopPropagation ( );
 		let noteData = {};
-		noteData [ inputUpdatedEvent.target.dataName ] = inputUpdatedEvent.target.value;
+		noteData [ inputUpdatedEvent.target.dataset.tanName ] = inputUpdatedEvent.target.value;
 		this.#noteDialog.updatePreview ( noteData );
 	}
 }

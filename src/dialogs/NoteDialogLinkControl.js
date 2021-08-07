@@ -129,7 +129,7 @@ class NoteDialogLinkControl {
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				dataName : 'url'
+				dataset : { Name : 'url' }
 			},
 			this.#linkInputDiv
 		);

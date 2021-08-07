@@ -79,7 +79,7 @@ class NoteDialogPopupControl {
 			{
 				className : 'TravelNotes-NoteDialog-TextArea',
 				rows : theConfig.noteDialog.areaHeight.popupContent,
-				dataName : 'popupContent'
+				dataset : { Name : 'popupContent' }
 			},
 			this.#popupDiv
 		);
