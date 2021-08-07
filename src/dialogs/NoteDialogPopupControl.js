@@ -47,7 +47,7 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -61,10 +61,12 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 class NoteDialogPopupControl {
 
+	#noteDialog = null;
 	#popupDiv = null;
 	#popupTextArea = null;
 
-	constructor ( ) {
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
 		this.#popupDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -82,8 +84,8 @@ class NoteDialogPopupControl {
 			this.#popupDiv
 		);
 
-		this.#popupTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#popupTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#popupTextArea.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
+		this.#popupTextArea.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 	}
 
 	/**

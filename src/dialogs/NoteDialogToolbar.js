@@ -95,7 +95,12 @@ import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import {
+	EditionButtonsEventListener,
+	IconSelectEventListener,
+	OpenFileButtonEventListener,
+	ToogleContentsButtonEventListener
+} from '../dialogs/NoteDialogToolbarEventListeners.js';
 
 import { NOT_FOUND, ZERO } from '../util/Constants.js';
 
@@ -110,6 +115,8 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 */
 
 class NoteDialogToolbar {
+
+	#noteDialog = null;
 
 	#rootHTMLElement = null;
 
@@ -128,7 +135,7 @@ class NoteDialogToolbar {
 			this.#rootHTMLElement
 		);
 
-		iconSelect.addEventListener ( 'change', NoteDialogEventListeners.onIconSelectChange, false );
+		iconSelect.addEventListener ( 'change', new IconSelectEventListener ( this.#noteDialog ), false );
 
 		theNoteDialogToolbarData.icons.forEach (
 			selectOption => {
@@ -154,7 +161,7 @@ class NoteDialogToolbar {
 			},
 			this.#rootHTMLElement
 		);
-		toogleContentsButton.addEventListener ( 'click', NoteDialogEventListeners.onToogleContentsButtonClick, false );
+		toogleContentsButton.addEventListener ( 'click', new ToogleContentsButtonEventListener ( this.#noteDialog ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -164,7 +171,7 @@ class NoteDialogToolbar {
 				textContent : '📂'
 			},
 			this.#rootHTMLElement
-		).addEventListener ( 'click', NoteDialogEventListeners.onOpenFileButtonCkick, false );
+		).addEventListener ( 'click', new OpenFileButtonEventListener ( this ), false );
 	}
 
 	/**
@@ -173,6 +180,7 @@ class NoteDialogToolbar {
 	*/
 
 	#addEditionButtons ( ) {
+		let editionButtonEventListener = new EditionButtonsEventListener ( this.#noteDialog );
 		theNoteDialogToolbarData.buttons.forEach (
 			editionButton => {
 				let newButton = theHTMLElementsFactory.create (
@@ -185,7 +193,7 @@ class NoteDialogToolbar {
 					this.#rootHTMLElement
 				);
 				theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
-				newButton.addEventListener ( 'click', NoteDialogEventListeners.onClickEditionButton, false );
+				newButton.addEventListener ( 'click', editionButtonEventListener );
 			}
 		);
 	}
@@ -201,7 +209,9 @@ class NoteDialogToolbar {
 		this.#addEditionButtons ( );
 	}
 
-	constructor ( ) {
+	constructor ( noteDialog ) {
+
+		this.#noteDialog = noteDialog;
 
 		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',

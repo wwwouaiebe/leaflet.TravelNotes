@@ -47,7 +47,11 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import {
+	FocusControlEventListener,
+	BlurUrlInputEventListener,
+	InputUpdatedEventListener
+} from '../dialogs/NoteDialogEventListeners.js';
 
 import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 
@@ -63,11 +67,13 @@ import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 
 class NoteDialogLinkControl {
 
+	#noteDialog = null;
 	#linkHeaderDiv = null;
 	#linkInputDiv = null;
 	#linkInput = null;
 
-	constructor ( latLng ) {
+	constructor ( noteDialog, latLng ) {
+		this.#noteDialog = noteDialog;
 		this.#linkHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -128,9 +134,9 @@ class NoteDialogLinkControl {
 			this.#linkInputDiv
 		);
 
-		this.#linkInput.addEventListener ( 'focus', NoteDialogEventListeners.onClearFocusControl, false );
-		this.#linkInput.addEventListener ( 'blur', NoteDialogEventListeners.onBlurUrlInput, false );
-		this.#linkInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#linkInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, true ) );
+		this.#linkInput.addEventListener ( 'blur', new BlurUrlInputEventListener ( this.#noteDialog ) );
+		this.#linkInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 
 	}
 

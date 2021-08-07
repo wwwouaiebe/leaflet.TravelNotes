@@ -46,12 +46,7 @@ Tests ...
 
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
-import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
-import theUtilities from '../util/Utilities.js';
-import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import GeoCoder from '../core/GeoCoder.js';
-
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -72,277 +67,127 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogEventListeners {
+class NoteDialogGeoCoderHelper {
 
-	/**
-	The Note used for preview
-	*/
+	#noteDialog = null;
 
-	static previewNote = null;
+	#onAddressUpdatedByGeoCoder ( address ) {
+		this.#noteDialog.hideWait ( );
+		let addressString = address.street;
+		if ( '' !== address.city ) {
+			addressString += ' <span class="TravelNotes-NoteHtml-Address-City">' + address.city + '</span>';
+		}
 
-	/**
-	The dialog control that have the focus. Used for toolbar edition buttons
-	*/
-
-	static focusControl = null;
-
-	/**
-	A reference to the NoteDiaog object
-	*/
-
-	static noteDialog = null;
-
-	/**
-	The routeObjId of the route on witch the note is attached
-	*/
-
-	static routeObjId = INVALID_OBJ_ID;
-
-	/**
-	Rest static vars function. Must be called when the dialog is closed ( cancel or ok... )
-	*/
-
-	static reset ( ) {
-		NoteDialogEventListeners.previewNote = null;
-		NoteDialogEventListeners.focusControl = null;
-		NoteDialogEventListeners.noteDialog = null;
-		NoteDialogEventListeners.routeObjId = INVALID_OBJ_ID;
+		this.#noteDialog.setControlsValues ( { address : addressString } );
+		this.#noteDialog.updatePreview ( { address : addressString } );
 	}
 
-	/**
-	focus event listener for controls
-	*/
-
-	static onFocusControl ( focusEvent ) {
-		NoteDialogEventListeners.focusControl = focusEvent.target;
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
 	}
 
-	/**
-	focus event listener for controls when the toolbar editions buttons cannot be used
-	*/
+	setAddressWithGeoCoder ( latLng ) {
+		this.#noteDialog.showWait ( );
+		new GeoCoder ( ).getAddressWithPromise ( latLng )
+			.then ( address => { this.#onAddressUpdatedByGeoCoder ( address ); } )
+			.catch (
+				err => {
+					if ( err ) {
+						console.error ( err );
+					}
+					this.#noteDialog.hideWait ( );
+					this.#noteDialog.showError (
+						theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' )
+					);
+				}
+			);
+	}
+}
 
-	static onClearFocusControl ( ) {
-		NoteDialogEventListeners.focusControl = null;
+class AddressButtonEventListener {
+
+	#noteDialog = null;
+	#latLng = null;
+
+	constructor ( noteDialog, latLng ) {
+		this.#noteDialog = noteDialog;
+		this.#latLng = latLng;
 	}
 
-	/**
-	blur event listener for the url input. Verify that the url is a valid url.
-	*/
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		new NoteDialogGeoCoderHelper ( this.#noteDialog ).setAddressWithGeoCoder ( this.#latLng );
+	}
+}
 
-	static onBlurUrlInput ( blurEvent ) {
+class FocusControlEventListener {
+
+	#noteDialog = null;
+	#disableFocusControl = false;
+
+	constructor ( noteDialog, disableFocusControl ) {
+		this.#noteDialog = noteDialog;
+		this.#disableFocusControl = disableFocusControl;
+	}
+
+	handleEvent ( focusEvent ) {
+		focusEvent.stopPropagation ( );
+		if ( this.#disableFocusControl ) {
+			this.#noteDialog.focusControl = null;
+		}
+		else {
+			this.#noteDialog.focusControl = focusEvent.target;
+		}
+	}
+}
+
+class BlurUrlInputEventListener {
+
+	#noteDialog = null;
+
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
+	}
+
+	handleEvent ( blurEvent ) {
+		blurEvent.stopPropagation ( );
 		if ( '' === blurEvent.target.value ) {
 			return;
 		}
 
 		let verifyResult = theHTMLSanitizer.sanitizeToUrl ( blurEvent.target.value );
 		if ( '' === verifyResult.errorsString ) {
-			NoteDialogEventListeners.noteDialog.hideError ( );
+			this.#noteDialog.hideError ( );
 		}
 		else {
-			NoteDialogEventListeners.noteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
+			this.#noteDialog.showError ( theTranslator.getText ( 'NoteDialog - invalidUrl' ) );
 		}
 	}
-
-	/**
-	Input event listeners for controls
-	*/
-
-	static onInputUpdated ( inputUpdatedEvent ) {
-		NoteDialogEventListeners.previewNote [ inputUpdatedEvent.target.dataName ] = inputUpdatedEvent.target.value;
-		NoteDialogEventListeners.noteDialog.updatePreview ( );
-	}
-
-	/**
-	click event listener fot the toolbar edition buttons. Update the current control value*/
-
-	static onClickEditionButton ( clickEvent ) {
-		if ( ! NoteDialogEventListeners.focusControl ) {
-			return;
-		}
-		let button = clickEvent.target;
-		while ( ! button.htmlBefore ) {
-			button = button.parentNode;
-		}
-		let selectionStart = NoteDialogEventListeners.focusControl.selectionStart;
-		let selectionEnd = NoteDialogEventListeners.focusControl.selectionEnd;
-
-		NoteDialogEventListeners.focusControl.value =
-			NoteDialogEventListeners.focusControl.value.slice ( ZERO, selectionStart ) +
-			button.htmlBefore +
-			(
-				ZERO === button.htmlAfter.length
-					?
-					''
-					:
-					NoteDialogEventListeners.focusControl.value.slice ( selectionStart, selectionEnd )
-			) +
-			button.htmlAfter +
-			NoteDialogEventListeners.focusControl.value.slice ( selectionEnd );
-
-		if ( selectionStart === selectionEnd || ZERO === button.htmlAfter.length ) {
-			selectionStart += button.htmlBefore.length;
-			selectionEnd = selectionStart;
-		}
-		else {
-			selectionEnd += button.htmlBefore.length + button.htmlAfter.length;
-		}
-		NoteDialogEventListeners.focusControl.setSelectionRange ( selectionStart, selectionEnd );
-		NoteDialogEventListeners.focusControl.focus ( );
-		NoteDialogEventListeners.previewNote [ NoteDialogEventListeners.focusControl.dataName ] =
-			NoteDialogEventListeners.focusControl.value;
-
-		NoteDialogEventListeners.noteDialog.updatePreview ( );
-	}
-
-	/**
-	click event listener for the toogle button on the toolbar
-	*/
-
-	static onToogleContentsButtonClick ( clickEvent ) {
-		clickEvent.target.textContent = '▼' === clickEvent.target.textContent ? '▶' : '▼';
-		NoteDialogEventListeners.noteDialog.toogleContents ( );
-	}
-
-	/**
-	Change event listener for the input associated on the open file button
-	@private
-	*/
-
-	static #onOpenFileInputChange ( changeEvent ) {
-		changeEvent.stopPropagation ( );
-		let fileReader = new FileReader ( );
-		fileReader.onload = ( ) => {
-			let fileContent = {};
-			try {
-				fileContent = JSON.parse ( fileReader.result );
-				theNoteDialogToolbarData.loadJson ( fileContent );
-				NoteDialogEventListeners.noteDialog.updateToolbar ( );
-			}
-			catch ( err ) {
-				if ( err instanceof Error ) {
-					console.error ( err );
-				}
-			}
-		};
-		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
-	}
-
-	/**
-	click event listener for the open file button on the toolbar
-	*/
-
-	static onOpenFileButtonCkick ( ) {
-		theUtilities.openFile ( NoteDialogEventListeners.#onOpenFileInputChange, '.json' );
-	}
-
-	/**
-	Helper method for the onIconSelectChange mehod
-	@private
-	*/
-
-	static #updatePreviewAndControls ( noteData )	{
-		NoteDialogEventListeners.noteDialog.setControlsValues ( noteData );
-		for ( const property in noteData ) {
-			NoteDialogEventListeners.previewNote [ property ] = noteData [ property ];
-		}
-		NoteDialogEventListeners.noteDialog.updatePreview ( );
-	}
-
-	/**
-	Svg Map icon creation
-	@private
-	*/
-
-	static #onMapIcon ( ) {
-		if ( INVALID_OBJ_ID === NoteDialogEventListeners.routeObjId ) {
-			NoteDialogEventListeners.noteDialog.showError (
-				theTranslator.getText ( 'Notedialog - not possible to create a SVG icon for a travel note' )
-			);
-			return;
-		}
-
-		NoteDialogEventListeners.noteDialog.showWait ( );
-		new MapIconFromOsmFactory ( ).getIconAndAdressWithPromise (
-			NoteDialogEventListeners.previewNote.latLng,
-			NoteDialogEventListeners.routeObjId
-		)
-			.then (
-				mapIconData => {
-					NoteDialogEventListeners.noteDialog.hideWait ( );
-					NoteDialogEventListeners.#updatePreviewAndControls ( mapIconData.noteData );
-				}
-			)
-			.catch (
-				( ) => {
-					NoteDialogEventListeners.noteDialog.hideWait ( );
-					NoteDialogEventListeners.noteDialog.showError (
-						theTranslator.getText ( 'Notedialog - an error occurs when creating the SVG icon' )
-					);
-				}
-			);
-	}
-
-	/**
-	Change event listener for the select icon on the toolbar
-	*/
-
-	static onIconSelectChange ( changeEvent ) {
-		let preDefinedIcon = theNoteDialogToolbarData.getIconData ( changeEvent.target.selectedIndex );
-
-		if ( 'SvgIcon' === preDefinedIcon.icon ) {
-			NoteDialogEventListeners.#onMapIcon ( );
-			return;
-		}
-
-		NoteDialogEventListeners.#updatePreviewAndControls (
-			{
-				iconContent : preDefinedIcon.icon,
-				iconHeight : preDefinedIcon.height,
-				iconWidth : preDefinedIcon.width,
-				tooltipContent : preDefinedIcon.tooltip
-			}
-		);
-	}
-
-	/**
-	Geocoder success event listener
-	@private
-	*/
-
-	static #onAddressUpdatedByGeoCoder ( address ) {
-		NoteDialogEventListeners.noteDialog.hideWait ( );
-		let addressString = address.street;
-		if ( '' !== address.city ) {
-			addressString += ' <span class="TravelNotes-NoteHtml-Address-City">' + address.city + '</span>';
-		}
-		NoteDialogEventListeners.#updatePreviewAndControls ( { address : addressString } );
-	}
-
-	/**
-	click event listener for the reset address button. Also called when a new note is created
-	*/
-
-	static setAddressWithGeoCoder ( ) {
-		NoteDialogEventListeners.noteDialog.showWait ( );
-		new GeoCoder ( ).getAddressWithPromise ( NoteDialogEventListeners.previewNote.latLng )
-			.then ( NoteDialogEventListeners.#onAddressUpdatedByGeoCoder )
-			.catch (
-				err => {
-					if ( err ) {
-						console.error ( err );
-					}
-					NoteDialogEventListeners.noteDialog.hideWait ( );
-					NoteDialogEventListeners.noteDialog.showError (
-						theTranslator.getText ( 'Notedialog - an error occurs when searching the adress' )
-					);
-				}
-			);
-
-	}
-
 }
 
-export default NoteDialogEventListeners;
+class InputUpdatedEventListener {
+
+	#noteDialog = null;
+
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
+	}
+
+	handleEvent ( inputUpdatedEvent ) {
+		inputUpdatedEvent.stopPropagation ( );
+		let noteData = {};
+		noteData [ inputUpdatedEvent.target.dataName ] = inputUpdatedEvent.target.value;
+		this.#noteDialog.updatePreview ( noteData );
+	}
+}
+
+export {
+	AddressButtonEventListener,
+	NoteDialogGeoCoderHelper,
+	FocusControlEventListener,
+	BlurUrlInputEventListener,
+	InputUpdatedEventListener
+};
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

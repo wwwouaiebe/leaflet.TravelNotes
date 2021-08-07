@@ -78,7 +78,7 @@ import NoteDialogAddressControl from '../dialogs/NoteDialogAddressControl.js';
 import NoteDialogLinkControl from '../dialogs/NoteDialogLinkControl.js';
 import NoteDialogPhoneControl from '../dialogs/NoteDialogPhoneControl.js';
 import NoteDialogPreviewControl from '../dialogs/NoteDialogPreviewControl.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import { NoteDialogGeoCoderHelper } from '../dialogs/NoteDialogEventListeners.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../UI/Translator.js';
 import Note from '../data/Note.js';
@@ -113,6 +113,8 @@ class NoteDialog extends BaseDialog {
 
 	#startGeoCoder = false;
 
+	#routeObjId = null;
+
 	/**
 	A clone of the #note used to store the modifications and display the preview
 	@private
@@ -133,6 +135,7 @@ class NoteDialog extends BaseDialog {
 	#linkControl = null;
 	#phoneControl = null;
 	#previewControl = null;
+	#mapIconData = null;
 
 	/**
 	the toolbar
@@ -141,30 +144,39 @@ class NoteDialog extends BaseDialog {
 
 	#toolbar = null;
 
+	#focusControl = null;
+
 	constructor ( note, routeObjId, startGeoCoder ) {
 		super ( );
 		this.#note = note;
 		this.#startGeoCoder = startGeoCoder;
-		NoteDialogEventListeners.routeObjId = routeObjId;
+		this.#routeObjId = routeObjId;
 
-		NoteDialogEventListeners.previewNote = new Note ( );
-		NoteDialogEventListeners.previewNote.jsonObject = note.jsonObject;
+		this.focusControl = null;
+		this.#mapIconData = Object.freeze ( { latLng : note.latLng, routeObjId : routeObjId } );
 
-		this.#toolbar = new NoteDialogToolbar ( );
-		this.#iconDimsControl = new NoteDialogIconDimsControl ( );
-		this.#iconControl = new NoteDialogIconControl ( );
-		this.#tooltipControl = new NoteDialogTooltipControl ( );
-		this.#popupControl = new NoteDialogPopupControl ( );
-		this.#addressControl = new NoteDialogAddressControl ( note.latLng, startGeoCoder );
-		this.#linkControl = new NoteDialogLinkControl ( note.latLng );
-		this.#phoneControl = new NoteDialogPhoneControl ( );
+		this.#previewNote = new Note ( );
+		this.#previewNote.jsonObject = note.jsonObject;
 
-		this.#previewControl = new NoteDialogPreviewControl ( );
+		this.#toolbar = new NoteDialogToolbar ( this );
+		this.#iconDimsControl = new NoteDialogIconDimsControl ( this );
+		this.#iconControl = new NoteDialogIconControl ( this );
+		this.#tooltipControl = new NoteDialogTooltipControl ( this );
+		this.#popupControl = new NoteDialogPopupControl ( this );
+		this.#addressControl = new NoteDialogAddressControl ( this, note.latLng, startGeoCoder );
+		this.#linkControl = new NoteDialogLinkControl ( this, note.latLng );
+		this.#phoneControl = new NoteDialogPhoneControl ( this );
+		this.#previewControl = new NoteDialogPreviewControl ( this.#previewNote );
 
-		NoteDialogEventListeners.noteDialog = this;
 		this.setControlsValues ( note );
 		Object.seal ( this );
 	}
+
+	set focusControl ( focusControl ) { this.#focusControl = focusControl; }
+
+	get focusControl ( ) { return this.#focusControl; }
+
+	get mapIconData ( ) { return this.#mapIconData; }
 
 	/**
 	Update the toolbar. Called when new toolbar buttons and predefined icons are loaded
@@ -178,7 +190,10 @@ class NoteDialog extends BaseDialog {
 	Update the preview of the icons. Used by event listeners
 	*/
 
-	updatePreview ( ) {
+	updatePreview ( noteData ) {
+		for ( const property in noteData ) {
+			this.#previewNote [ property ] = noteData [ property ];
+		}
 		this.#previewControl.update ( );
 	}
 
@@ -188,7 +203,7 @@ class NoteDialog extends BaseDialog {
 
 	onShow ( ) {
 		if ( this.#startGeoCoder ) {
-			NoteDialogEventListeners.setAddressWithGeoCoder ( );
+			new NoteDialogGeoCoderHelper ( this ).setAddressWithGeoCoder ( this.#previewNote.latLng );
 		}
 
 		this.toogleContents ( );
@@ -214,30 +229,12 @@ class NoteDialog extends BaseDialog {
 		this.getControlsValues ( this.#note );
 
 		// latLng can change for map icons, so we save the value from the preview note
-		this.#note.latLng = NoteDialogEventListeners.previewNote.latLng;
+		this.#note.latLng = this.#previewNote.latLng;
 
 		// Sanitizing the html code entered by the user
 		this.#note.validateData ( );
 
 		return true;
-	}
-
-	/**
-	Overload of the BaseDialog.onCancel ( ) method. Called when the cancel button is clicked
-	*/
-
-	onCancel ( ) {
-		NoteDialogEventListeners.reset ( );
-		super.onCancel ( );
-	}
-
-	/**
-	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked
-	*/
-
-	onOk ( ) {
-		NoteDialogEventListeners.reset ( );
-		super.onOk ( );
 	}
 
 	/**

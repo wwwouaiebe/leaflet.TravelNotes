@@ -46,7 +46,11 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import {
+	AddressButtonEventListener,
+	FocusControlEventListener,
+	InputUpdatedEventListener
+} from '../dialogs/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -60,12 +64,14 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 class NoteDialogAddressControl {
 
+	#noteDialog = null;
 	#addressHeaderDiv = null;
 	#addressInputDiv = null;
 	#addressInput = null;
 	#latLng = null;
 
-	constructor ( latLng ) {
+	constructor ( noteDialog, latLng ) {
+		this.#noteDialog = noteDialog;
 		this.#latLng = latLng;
 		this.#addressHeaderDiv = theHTMLElementsFactory.create (
 			'div',
@@ -82,7 +88,7 @@ class NoteDialogAddressControl {
 			},
 			this.#addressHeaderDiv
 		)
-			.addEventListener ( 'click', NoteDialogEventListeners.setAddressWithGeoCoder, false );
+			.addEventListener ( 'click', new AddressButtonEventListener ( this.#noteDialog, this.#latLng ) );
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -108,8 +114,8 @@ class NoteDialogAddressControl {
 			this.#addressInputDiv
 		);
 
-		this.#addressInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#addressInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#addressInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
+		this.#addressInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 	}
 
 	/**

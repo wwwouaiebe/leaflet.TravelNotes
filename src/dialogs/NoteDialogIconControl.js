@@ -47,7 +47,7 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
 
 const OUR_DEFAULT_ICON = '?????';
 
@@ -63,10 +63,12 @@ const OUR_DEFAULT_ICON = '?????';
 
 class NoteDialogIconControl {
 
+	#noteDialog = null;
 	#iconDiv = null;
 	#iconTextArea = null;
 
-	constructor ( ) {
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
 		this.#iconDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -85,8 +87,8 @@ class NoteDialogIconControl {
 			this.#iconDiv
 		);
 
-		this.#iconTextArea.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#iconTextArea.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#iconTextArea.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
+		this.#iconTextArea.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 	}
 
 	/**

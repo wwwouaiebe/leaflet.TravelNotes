@@ -46,7 +46,6 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -60,9 +59,12 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 class NoteDialogPreviewControl {
 
+	#previewNote = null;
 	#previewDiv = null;
 
-	constructor ( ) {
+	constructor ( previewNote ) {
+
+		this.#previewNote = previewNote;
 
 		this.#previewDiv = theHTMLElementsFactory.create (
 			'div',
@@ -74,7 +76,7 @@ class NoteDialogPreviewControl {
 		this.#previewDiv.appendChild (
 			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
 				'TravelNotes-NoteDialog-',
-				{ note : NoteDialogEventListeners.previewNote, route : null }
+				{ note : this.#previewNote, route : null }
 			)
 		);
 	}
@@ -84,7 +86,7 @@ class NoteDialogPreviewControl {
 		this.#previewDiv.appendChild (
 			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
 				'TravelNotes-NoteDialog-',
-				{ note : NoteDialogEventListeners.previewNote, route : null }
+				{ note : this.#previewNote, route : null }
 			)
 		);
 	}

@@ -46,7 +46,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -60,10 +60,12 @@ import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
 
 class NoteDialogTooltipControl {
 
+	#noteDialog = null;
 	#tooltipDiv = null;
 	#tooltipInput = null
 
-	constructor ( ) {
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
 		this.#tooltipDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -81,8 +83,8 @@ class NoteDialogTooltipControl {
 			this.#tooltipDiv
 		);
 
-		this.#tooltipInput.addEventListener ( 'focus', NoteDialogEventListeners.onFocusControl, false );
-		this.#tooltipInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#tooltipInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
+		this.#tooltipInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 	}
 
 	/**

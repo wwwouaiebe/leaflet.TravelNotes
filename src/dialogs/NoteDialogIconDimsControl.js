@@ -46,7 +46,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import NoteDialogEventListeners from '../dialogs/NoteDialogEventListeners.js';
+import { InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
 import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**
@@ -61,11 +61,13 @@ import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 class NoteDialogIconDimsControl {
 
+	#noteDialog = null;
 	#iconDimsDiv = null;
 	#iconWidthInput = null;
 	#iconHeightInput = null;
 
-	constructor ( ) {
+	constructor ( noteDialog ) {
+		this.#noteDialog = noteDialog;
 		this.#iconDimsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -90,7 +92,7 @@ class NoteDialogIconDimsControl {
 			this.#iconDimsDiv
 		);
 
-		this.#iconWidthInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#iconWidthInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -110,7 +112,7 @@ class NoteDialogIconDimsControl {
 			this.#iconDimsDiv
 		);
 
-		this.#iconHeightInput.addEventListener ( 'input', NoteDialogEventListeners.onInputUpdated );
+		this.#iconHeightInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
 	}
 
 	/**

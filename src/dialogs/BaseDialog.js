@@ -483,7 +483,7 @@ class BaseDialog {
 	*/
 
 	onOk ( returnValue ) {
-		if ( this.canClose ) {
+		if ( this.canClose ( ) ) {
 			this.#destructor ( );
 			this.#onPromiseOkFct ( returnValue );
 		}
