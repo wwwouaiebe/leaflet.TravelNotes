@@ -94,7 +94,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	@private
 	*/
 
-	async #onResetAddressButtonClick ( clickEvent ) {
+	async handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		if ( ! theConfig.wayPoint.reverseGeocoding ) {
 			return;
@@ -130,7 +130,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 				textContent : '🔄'
 			},
 			addressHeaderDiv
-		).addEventListener ( 'click', this.#onResetAddressButtonClick.bind ( this ), false	);
+		).addEventListener ( 'click', this, false	); // You understand?
 		theHTMLElementsFactory.create (
 			'text',
 			{
