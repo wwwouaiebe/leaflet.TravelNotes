@@ -61,7 +61,18 @@ import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs
 
 class NoteDialogPopupControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#popupDiv = null;
 	#popupTextArea = null;
 
@@ -94,6 +105,10 @@ class NoteDialogPopupControl {
 	*/
 
 	get HTMLElements ( ) { return [ this.#popupDiv ]; }
+
+	/**
+	The popupcontent value in the control
+	*/
 
 	get popupContent ( ) { return this.#popupTextArea.value; }
 

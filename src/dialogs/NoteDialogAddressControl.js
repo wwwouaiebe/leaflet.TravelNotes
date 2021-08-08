@@ -145,7 +145,7 @@ class NoteDialogAddressControl {
 	}
 
 	/**
-	The address in the control
+	The address value in the control
 	*/
 
 	get address ( ) { return this.#addressInput.value; }

@@ -67,6 +67,17 @@ import GeoCoder from '../core/GeoCoder.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class BaseDialogOkButtonClickEventListener
+@classdesc Helper class for the GeoCoder usage
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class NoteDialogGeoCoderHelper {
 
 	#noteDialog = null;
@@ -88,6 +99,7 @@ class NoteDialogGeoCoderHelper {
 
 	setAddressWithGeoCoder ( latLng ) {
 		this.#noteDialog.showWait ( );
+		this.#noteDialog.hideError ( );
 		new GeoCoder ( ).getAddressWithPromise ( latLng )
 			.then ( address => { this.#onAddressUpdatedByGeoCoder ( address ); } )
 			.catch (
@@ -104,6 +116,17 @@ class NoteDialogGeoCoderHelper {
 	}
 }
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class AddressButtonEventListener
+@classdesc Event listener for click event on the address button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class AddressButtonEventListener {
 
 	#noteDialog = null;
@@ -119,6 +142,17 @@ class AddressButtonEventListener {
 		new NoteDialogGeoCoderHelper ( this.#noteDialog ).setAddressWithGeoCoder ( this.#latLng );
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class FocusControlEventListener
+@classdesc Event listener for focus event on the controls button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class FocusControlEventListener {
 
@@ -140,6 +174,17 @@ class FocusControlEventListener {
 		}
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class BlurUrlInputEventListener
+@classdesc Event listener for blur event on the url control based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class BlurUrlInputEventListener {
 
@@ -164,6 +209,17 @@ class BlurUrlInputEventListener {
 		}
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class InputUpdatedEventListener
+@classdesc Event listener for input event on the controls based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class InputUpdatedEventListener {
 

@@ -60,7 +60,18 @@ import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs
 
 class NoteDialogTooltipControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#tooltipDiv = null;
 	#tooltipInput = null
 
@@ -93,6 +104,10 @@ class NoteDialogTooltipControl {
 	*/
 
 	get HTMLElements ( ) { return [ this.#tooltipDiv ]; }
+
+	/**
+	the tooltip value in the control
+	*/
 
 	get tooltipContent ( ) { return this.#tooltipInput.value; }
 

@@ -59,6 +59,11 @@ import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
 
 class NoteDialogPreviewControl {
 
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#previewNote = null;
 	#previewDiv = null;
 

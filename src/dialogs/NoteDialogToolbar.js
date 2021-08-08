@@ -116,7 +116,17 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 
 class NoteDialogToolbar {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
 
 	#rootHTMLElement = null;
 
@@ -210,9 +220,7 @@ class NoteDialogToolbar {
 	}
 
 	constructor ( noteDialog ) {
-
 		this.#noteDialog = noteDialog;
-
 		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -220,9 +228,7 @@ class NoteDialogToolbar {
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			}
 		);
-
 		this.#addToolbarElements ( );
-
 	}
 
 	/**
@@ -230,7 +236,7 @@ class NoteDialogToolbar {
 	*/
 
 	update ( ) {
-		this.#rootHTMLElement.innerText = '';
+		this.#rootHTMLElement.textContent = '';
 		this.#addToolbarElements ( );
 	}
 

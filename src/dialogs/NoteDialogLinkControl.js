@@ -67,20 +67,28 @@ import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 
 class NoteDialogLinkControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#linkHeaderDiv = null;
 	#linkInputDiv = null;
 	#linkInput = null;
 
-	constructor ( noteDialog, latLng ) {
-		this.#noteDialog = noteDialog;
-		this.#linkHeaderDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
-			}
-		);
+	/**
+	The Devil button...
+	@private
+	*/
 
+	#createTheDevilButton ( latLng ) {
 		if ( theConfig.noteDialog.theDevil.addButton ) {
 			theHTMLElementsFactory.create (
 				'text',
@@ -108,6 +116,18 @@ class NoteDialogLinkControl {
 				)
 			);
 		}
+	}
+
+	constructor ( noteDialog, latLng ) {
+		this.#noteDialog = noteDialog;
+		this.#linkHeaderDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv'
+			}
+		);
+
+		this.#createTheDevilButton ( latLng );
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -146,6 +166,10 @@ class NoteDialogLinkControl {
 	*/
 
 	get HTMLElements ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
+
+	/**
+	The url value in the control
+	*/
 
 	get url ( ) { return this.#linkInput.value; }
 

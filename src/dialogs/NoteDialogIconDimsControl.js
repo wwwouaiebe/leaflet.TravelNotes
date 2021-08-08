@@ -61,7 +61,18 @@ import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 class NoteDialogIconDimsControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#iconDimsDiv = null;
 	#iconWidthInput = null;
 	#iconHeightInput = null;
@@ -122,11 +133,19 @@ class NoteDialogIconDimsControl {
 
 	get HTMLElements ( ) { return [ this.#iconDimsDiv ]; }
 
+	/**
+	The icon width value in the control
+	*/
+
 	get iconWidth ( ) { return Number.parseInt ( this.#iconWidthInput.value ); }
 
-	get iconHeight ( ) { return Number.parseInt ( this.#iconHeightInput.value ); }
-
 	set iconWidth ( Value ) { this.#iconWidthInput.value = Value; }
+
+	/**
+	The icon width height in the control
+	*/
+
+	get iconHeight ( ) { return Number.parseInt ( this.#iconHeightInput.value ); }
 
 	set iconHeight ( Value ) { this.#iconHeightInput.value = Value; }
 

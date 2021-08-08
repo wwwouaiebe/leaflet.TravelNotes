@@ -63,7 +63,18 @@ const OUR_DEFAULT_ICON = '?????';
 
 class NoteDialogIconControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#iconDiv = null;
 	#iconTextArea = null;
 
@@ -97,6 +108,10 @@ class NoteDialogIconControl {
 	*/
 
 	get HTMLElements ( ) { return [ this.#iconDiv ]; }
+
+	/**
+	The icon value in the control
+	*/
 
 	get iconContent ( ) { return this.#iconTextArea.value; }
 

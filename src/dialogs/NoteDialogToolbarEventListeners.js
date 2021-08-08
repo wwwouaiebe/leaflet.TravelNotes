@@ -1,8 +1,63 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+Changes:
+Doc reviewed ...
+Tests ...
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file NoteDialogToolbarEventListeners.js
+@copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+@license GNU General Public License
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@module NoteDialogToolbarEventListeners
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 import theUtilities from '../util/Utilities.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theTranslator from '../UI/Translator.js';
 import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class EditionButtonsEventListener
+@classdesc Event listener for click event on the edition buttons based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class EditionButtonsEventListener {
 
@@ -54,6 +109,17 @@ class EditionButtonsEventListener {
 		this.#noteDialog.updatePreview ( noteData );
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class IconSelectEventListener
+@classdesc Event listener for change event on the icon select based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class IconSelectEventListener {
 
@@ -131,6 +197,17 @@ class IconSelectEventListener {
 	}
 }
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ToogleContentsButtonEventListener
+@classdesc Event listener for click event on the toogle button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class ToogleContentsButtonEventListener {
 
 	#noteDialog = null;
@@ -148,6 +225,17 @@ class ToogleContentsButtonEventListener {
 		this.#noteDialog.toogleContents ( );
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OpenFileInputEventListener
+@classdesc Event listener for change event on the temp file input based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class OpenFileInputEventListener {
 
@@ -182,6 +270,17 @@ class OpenFileInputEventListener {
 	}
 }
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class OpenFileButtonEventListener
+@classdesc Event listener for click event on the open file button based on the EventListener API.
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class OpenFileButtonEventListener {
 
 	#noteDialogToolbar = null;
@@ -206,3 +305,11 @@ export {
 	OpenFileButtonEventListener,
 	ToogleContentsButtonEventListener
 };
+
+/*
+@------------------------------------------------------------------------------------------------------------------------------
+
+end of NoteDialogToolbarEventListeners.js file
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/

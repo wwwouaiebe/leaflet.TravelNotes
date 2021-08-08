@@ -60,7 +60,18 @@ import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs
 
 class NoteDialogPhoneControl {
 
+	/**
+	A reference to the noteDialog
+	@private
+	*/
+
 	#noteDialog = null;
+
+	/**
+	HTMLElements
+	@private
+	*/
+
 	#phoneHeaderDiv = null;
 	#phoneInputDiv = null;
 	#phoneInput = null;
@@ -111,6 +122,10 @@ class NoteDialogPhoneControl {
 	*/
 
 	get HTMLElements ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
+
+	/**
+	The phone number in the control
+	*/
 
 	get phone ( ) { return this.#phoneInput.value; }
 
