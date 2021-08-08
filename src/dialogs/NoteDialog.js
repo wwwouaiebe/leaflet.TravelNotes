@@ -161,8 +161,6 @@ class NoteDialog extends BaseDialog {
 		this.#startGeoCoder = startGeoCoder;
 		this.#routeObjId = routeObjId;
 
-		this.focusControl = null;
-
 		this.#previewNote = new Note ( );
 		this.#previewNote.jsonObject = note.jsonObject;
 

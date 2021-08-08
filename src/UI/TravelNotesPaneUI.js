@@ -188,7 +188,7 @@ class TravelNotesPaneUI extends PaneUI {
 	This method returns the pane id
 	*/
 
-	getId ( ) { return PANE_ID.travelNotesPane; }
+	getPaneId ( ) { return PANE_ID.travelNotesPane; }
 
 	/**
 	This method returns the text to add in the pane button

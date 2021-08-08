@@ -71,7 +71,7 @@ class PaneUI {
 	add ( ) {
 	}
 
-	getId ( ) {
+	getPaneId ( ) {
 		return PANE_ID.invalidPane;
 	}
 

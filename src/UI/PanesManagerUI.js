@@ -62,36 +62,42 @@ import { MOUSE_WHEEL_FACTORS, PANE_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class PaneButtonsEventListeners
-@classdesc This class contains the event listeners for the Pane buttons
+@class PaneButtonClickEventListener
+@classdesc click event listener for the mane buttons
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class PaneButtonsEventListeners {
+class PaneButtonClickEventListener {
 
-	/* eslint-disable no-use-before-define */
-	static onClick ( clickEvent ) {
-		thePanesManagerUI.showPane ( clickEvent.target.objId );
+	#paneManagerUI = null;
+
+	constructor ( paneManagerUI ) {
+		this.#paneManagerUI = paneManagerUI;
 	}
-	/* eslint-enable no-use-before-define */
 
+	handleEvent ( clickEvent ) {
+		this.#paneManagerUI.showPane ( clickEvent.target.dataset.tanPaneId );
+	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class PaneDataDivEventListeners
-@classdesc This class contains the event listeners for the PaneDataDiv
+@class PaneDataDivWheelEventListener
+@classdesc wheel event listeners for the PaneDataDiv
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class PaneDataDivEventListeners {
+class PaneDataDivWheelEventListener {
 
-	static onWheel ( wheelEvent ) {
+	constructor ( ) {
+	}
+
+	handleEvent ( wheelEvent ) {
 		if ( wheelEvent.deltaY ) {
 			wheelEvent.target.scrollTop +=
 				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
@@ -113,7 +119,7 @@ class PaneDataDivEventListeners {
 
 class PanesManagerUI {
 
-	#activePaneObjId = PANE_ID.invalidPane;
+	#activePaneId = PANE_ID.invalidPane;
 	#panes = new Map ( );
 	#paneDataDiv = null;
 	#paneControlDiv = null;
@@ -124,8 +130,8 @@ class PanesManagerUI {
 	*/
 
 	#removeActivePane ( ) {
-		if ( PANE_ID.invalidPane !== this.#activePaneObjId ) {
-			this.#panes.get ( this.#activePaneObjId ).remove ( );
+		if ( PANE_ID.invalidPane !== this.#activePaneId ) {
+			this.#panes.get ( this.#activePaneId ).remove ( );
 			this.#paneDataDiv.textContent = '';
 		}
 	}
@@ -166,7 +172,7 @@ class PanesManagerUI {
 			},
 			uiMainDiv
 		);
-		this.#paneDataDiv.addEventListener ( 'wheel', PaneDataDivEventListeners.onWheel, false );
+		this.#paneDataDiv.addEventListener ( 'wheel', new PaneDataDivWheelEventListener ( ) );
 		this.#panes.forEach (
 			pane => {
 				theHTMLElementsFactory.create (
@@ -174,10 +180,10 @@ class PanesManagerUI {
 					{
 						textContent : pane.getButtonText ( ),
 						className : 'TravelNotes-PanesManagerUI-PaneButton',
-						objId : pane.getId ( )
+						dataset : { PaneId : pane.getPaneId ( ) }
 					},
 					headerDiv
-				).addEventListener ( 'click', PaneButtonsEventListeners.onClick, false );
+				).addEventListener ( 'click', new PaneButtonClickEventListener ( this ) );
 				pane.setPaneDivs ( this.#paneDataDiv, this.#paneControlDiv );
 			}
 		);
@@ -189,7 +195,7 @@ class PanesManagerUI {
 	*/
 
 	addPane ( paneUI ) {
-		this.#panes.set ( paneUI.getId ( ), paneUI );
+		this.#panes.set ( paneUI.getPaneId ( ), paneUI );
 	}
 
 	/**
@@ -197,13 +203,13 @@ class PanesManagerUI {
 	@param {string|number} pane id of the pane to be displayed
 	*/
 
-	showPane ( objId ) {
+	showPane ( paneId ) {
 		this.#removeActivePane ( );
-		this.#activePaneObjId = objId;
-		this.#panes.get ( this.#activePaneObjId ).add ( );
+		this.#activePaneId = paneId;
+		this.#panes.get ( this.#activePaneId ).add ( );
 		document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
 			paneButton => {
-				if ( paneButton.objId === this.#activePaneObjId ) {
+				if ( paneButton.dataset.tanPaneId === this.#activePaneId ) {
 					paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
 				}
 				else {
@@ -218,9 +224,9 @@ class PanesManagerUI {
 	@param {string|number} pane id of the pane to be displayed
 	*/
 
-	updatePane ( objId ) {
-		if ( objId === this.#activePaneObjId ) {
-			this.showPane ( objId );
+	updatePane ( paneId ) {
+		if ( paneId === this.#activePaneId ) {
+			this.showPane ( paneId );
 		}
 	}
 }

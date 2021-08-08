@@ -159,7 +159,6 @@ class BaseDialog {
 	);
 
 	#onKeydownEventListener = null;
-	#onCancelButtonClickEventListener = null;
 
 	#options = null;
 
@@ -252,7 +251,7 @@ class BaseDialog {
 			},
 			this.#topBar
 		);
-		this.#cancelButton.addEventListener ( 'click', this.#onCancelButtonClickEventListener, false );
+		this.#cancelButton.addEventListener ( 'click', new BaseDialogCancelButtonClickEventListener ( this ), false );
 	}
 
 	/**
@@ -372,7 +371,7 @@ class BaseDialog {
 				},
 				footerDiv
 			);
-			this.#secondButton.addEventListener ( 'click',	this.#onCancelButtonClickEventListener, false	);
+			this.#secondButton.addEventListener ( 'click',	new BaseDialogCancelButtonClickEventListener ( this ), false	);
 		}
 
 		this.footerHTMLElements.forEach (
@@ -449,7 +448,6 @@ class BaseDialog {
 	constructor ( options = {} ) {
 		Object.seal ( this );
 		this.#onKeydownEventListener = new BaseDialogKeydownEventListener ( this );
-		this.#onCancelButtonClickEventListener = new BaseDialogCancelButtonClickEventListener ( this );
 		this.#options = options;
 	}
 

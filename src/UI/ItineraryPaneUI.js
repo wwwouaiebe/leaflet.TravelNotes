@@ -311,7 +311,7 @@ class ItineraryPaneUI extends PaneUI {
 	This method returns the pane id
 	*/
 
-	getId ( ) { return PANE_ID.itineraryPane; }
+	getPaneId ( ) { return PANE_ID.itineraryPane; }
 
 	/**
 	This method returns the text to add in the pane button

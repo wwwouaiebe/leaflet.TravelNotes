@@ -148,7 +148,7 @@ class OsmSearchPaneUI extends PaneUI {
 	This method returns the pane id
 	*/
 
-	getId ( ) { return PANE_ID.searchPane; }
+	getPaneId ( ) { return PANE_ID.searchPane; }
 
 	/**
 	This method returns the text to add in the pane button
