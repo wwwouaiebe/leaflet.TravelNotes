@@ -970,7 +970,7 @@ class PublicTransportRouteProvider {
 
 	get title ( ) { return 'Public Transport on OpenStreetMap'; }
 
-	get transitModes ( ) { return { car : false, bike : false, pedestrian : false, train : true }; }
+	get transitModes ( ) { return [ 'train' ]; }
 
 	get providerKeyNeeded ( ) { return false; }
 

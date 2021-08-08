@@ -420,7 +420,7 @@ class PolylineRouteProvider {
 
 	get title ( ) { return 'Polyline & Circle'; }
 
-	get transitModes ( ) { return { line : true, circle : true }; }
+	get transitModes ( ) { return [ 'line', 'circle' ]; }
 
 	get providerKeyNeeded ( ) { return false; }
 

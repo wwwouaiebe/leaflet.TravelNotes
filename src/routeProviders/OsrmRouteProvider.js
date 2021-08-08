@@ -297,7 +297,7 @@ class OsrmRouteProvider {
 
 	get title ( ) { return 'OSRM'; }
 
-	get transitModes ( ) { return { car : true, bike : true, pedestrian : true, train : false }; }
+	get transitModes ( ) { return [ 'bike', 'pedestrian', 'car' ]; }
 
 	get providerKeyNeeded ( ) { return false; }
 
