@@ -125,7 +125,11 @@ class TravelEditor {
 			}
 		}
 		let compressedSaveAsTravel = new FileCompactor ( ).compress ( saveAsTravel );
-		theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
+		theUtilities.saveFile (
+			compressedSaveAsTravel.name + '.trv',
+			JSON.stringify ( compressedSaveAsTravel ),
+			'application/json'
+		);
 	}
 
 	constructor ( ) {
@@ -191,7 +195,7 @@ class TravelEditor {
 			routesIterator.value.hidden = false;
 		}
 		let compressedTravel = new FileCompactor ( ).compress ( theTravelNotesData.travel );
-		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ), 'application/json' );
 		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
 
