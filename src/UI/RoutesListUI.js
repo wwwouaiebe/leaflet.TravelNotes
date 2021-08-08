@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210725
+Doc reviewed 20210808
 Tests ...
 */
 
@@ -44,121 +44,15 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTravelEditor from '../core/TravelEditor.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-
-import { LAT_LNG, ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class RoutesListDragEventListeners
-@classdesc This class contains the event listeners for the RoutesList drag oprations
-@private
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class RoutesListDragEventListeners {
-
-	static #draggedRouteObjId = ZERO;
-
-	/**
-	@desc dragstart event listener
-	*/
-
-	static dragStart ( dragEvent ) {
-		dragEvent.stopPropagation ( );
-		try {
-			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.objId );
-			dragEvent.dataTransfer.dropEffect = 'move';
-			dragEvent.dataTransfer.routeObjId = dragEvent.target.objId;
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
-		RoutesListDragEventListeners.#draggedRouteObjId = dragEvent.target.objId;
-	}
-
-	/**
-	dragover event listener
-	*/
-
-	static dragOver ( dragEvent ) {
-		dragEvent.preventDefault ( );
-	}
-
-	/**
-	drop event listener
-	*/
-
-	static drop ( dropEvent ) {
-		dropEvent.preventDefault ( );
-		let element = dropEvent.target;
-		while ( ! element.objId ) {
-			element = element.parentElement;
-		}
-		let clientRect = element.getBoundingClientRect ( );
-		theTravelEditor.routeDropped (
-			RoutesListDragEventListeners.#draggedRouteObjId,
-			element.objId,
-			( dropEvent.clientY - clientRect.top < clientRect.bottom - dropEvent.clientY )
-		);
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class RoutesListEventListeners
-@classdesc This class contains the event listeners for the RoutesList
-@private
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class RoutesListEventListeners {
-
-	/*
-	wheel event listener
-	*/
-
-	static onWheel ( wheelEvent ) {
-		if ( wheelEvent.deltaY ) {
-			wheelEvent.target.scrollTop +=
-					wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
-		}
-		wheelEvent.stopPropagation ( );
-	}
-
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class RoutesEventListeners
-@classdesc This class contains the event listeners for the Routes
-@private
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class RoutesEventListeners {
-
-	static contextMenu ( contextMenuEvent ) {
-		contextMenuEvent.stopPropagation ( );
-		contextMenuEvent.preventDefault ( );
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.fromUI = true;
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY
-			};
-		new RouteContextMenu ( contextMenuEvent, contextMenuEvent.target.parentNode ).show ( );
-	}
-}
+import {
+	RouteDragStartEventListener,
+	RouteDropEventListener,
+	RouteContextMenuEventListener,
+	RoutesListDragOverEventListener,
+	RoutesListWheelEventListener
+} from '../UI/RoutesListUIEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -173,25 +67,19 @@ class RoutesEventListeners {
 
 class RoutesListUI {
 
-	#routesList = null;
+	/**
+	The route lst HTMLElement
+	*/
+
+	#routesListHTMLElement = null;
 
 	/**
-	This method creates the routes list header div
-	@private
-*/
+	Event listeners
+	*/
 
-	#createRouteListDiv ( uiMainDiv ) {
-		this.#routesList = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'List'
-			},
-			uiMainDiv
-		);
-		this.#routesList.addEventListener ( 'drop', RoutesListDragEventListeners.drop, false );
-		this.#routesList.addEventListener ( 'dragover', RoutesListDragEventListeners.dragOver, false );
-		this.#routesList.addEventListener ( 'wheel', RoutesListEventListeners.onWheel, false );
-	}
+	#routeContextMenuEventListener = new RouteContextMenuEventListener ( );
+	#routeDropEventListener = new RouteDropEventListener ( );
+	#routeDragStartEventListener = new RouteDragStartEventListener ( );
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -202,8 +90,10 @@ class RoutesListUI {
 	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
 	*/
 
-	createUI ( uiMainDiv ) {
-		this.#createRouteListDiv ( uiMainDiv );
+	createUI ( UIMainHTMLElement ) {
+		this.#routesListHTMLElement = theHTMLElementsFactory.create ( 'div', null, UIMainHTMLElement );
+		this.#routesListHTMLElement.addEventListener ( 'dragover', new RoutesListDragOverEventListener ( ) );
+		this.#routesListHTMLElement.addEventListener ( 'wheel', new RoutesListWheelEventListener ( ) );
 	}
 
 	/*
@@ -211,8 +101,8 @@ class RoutesListUI {
 	*/
 
 	toogleExpand ( ) {
-		this.#routesList.classList.toggle ( 'TravelNotes-Hidden' );
-		return this.#routesList.classList.contains ( 'TravelNotes-Hidden' );
+		this.#routesListHTMLElement.classList.toggle ( 'TravelNotes-Hidden' );
+		return this.#routesListHTMLElement.classList.contains ( 'TravelNotes-Hidden' );
 	}
 
 	/**
@@ -220,10 +110,11 @@ class RoutesListUI {
 	*/
 
 	setRoutesList ( ) {
-		while ( this.#routesList.firstChild ) {
-			this.#routesList.firstChild.removeEventListener ( 'dragstart', RoutesListDragEventListeners.dragStart, false );
-			this.#routesList.firstChild.removeEventListener ( 'contextmenu', RoutesEventListeners.contextMenu, false );
-			this.#routesList.removeChild ( this.#routesList.firstChild );
+		while ( this.#routesListHTMLElement.firstChild ) {
+			this.#routesListHTMLElement.firstChild.removeEventListener ( 'dragstart', this.#routeDragStartEventListener );
+			this.#routesListHTMLElement.firstChild.removeEventListener ( 'drop', this.#routeDropEventListener );
+			this.#routesListHTMLElement.firstChild.removeEventListener ( 'contextmenu', this.#routeContextMenuEventListener );
+			this.#routesListHTMLElement.removeChild ( this.#routesListHTMLElement.firstChild );
 		}
 
 		let routesIterator = theTravelNotesData.travel.routes.iterator;
@@ -233,6 +124,7 @@ class RoutesListUI {
 				theTravelNotesData.travel.editedRoute
 				:
 				routesIterator.value;
+
 			let routeName =
 				( routesIterator.value.objId === theTravelNotesData.editedRouteObjId ? '🔴\u00a0' : '' ) +
 				( route.chain ? '⛓\u00a0' : '' ) +
@@ -241,26 +133,23 @@ class RoutesListUI {
 						theTravelNotesData.travel.editedRoute.computedName :
 						route.computedName
 				);
-			let routeDiv = theHTMLElementsFactory.create (
+
+			let routeHTMLElement = theHTMLElementsFactory.create (
 				'div',
 				{
 					draggable : true,
 					className :
-						'TravelNotes-TravelUI-RoutesList-Item TravelNotes-UI-MoveCursor' +
-						( routesIterator.value.hidden ? ' TravelNotes-TravelUI-RoutesList-HiddenItem' : '' ),
-					objId :
-						routesIterator.value.objId === theTravelNotesData.editedRouteObjId
-							?
-							theTravelNotesData.travel.editedRoute.objId
-							:
-							routesIterator.value.objId,
+						'TravelNotes-TravelUI-routesListHTMLElement-Item TravelNotes-UI-MoveCursor' +
+						( routesIterator.value.hidden ? ' TravelNotes-TravelUI-routesListHTMLElement-HiddenItem' : '' ),
+					dataset : { ObjId : route.objId },
 					textContent : routeName
 				},
-				this.#routesList
+				this.#routesListHTMLElement
 			);
 
-			routeDiv.addEventListener ( 'dragstart', RoutesListDragEventListeners.dragStart, false );
-			routeDiv.addEventListener ( 'contextmenu', RoutesEventListeners.contextMenu, false );
+			routeHTMLElement.addEventListener ( 'dragstart', this.#routeDragStartEventListener );
+			routeHTMLElement.addEventListener ( 'drop', this.#routeDropEventListener );
+			routeHTMLElement.addEventListener ( 'contextmenu', this.#routeContextMenuEventListener );
 		}
 	}
 }
