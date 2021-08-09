@@ -146,6 +146,8 @@ class BaseDialogTopBarDragStartEventListener {
 	handleEvent ( dragStartEvent ) {
 		this.#dragData.dragStartX = dragStartEvent.screenX;
 		this.#dragData.dragStartY = dragStartEvent.screenY;
+		dragStartEvent.dataTransfer.dropEffect = 'move';
+		dragStartEvent.dataTransfer.effectAllowed = 'move';
 	}
 }
 
@@ -356,6 +358,9 @@ class BaseDialogBackgroundEventListeners {
 		contextmenuEvent.preventDefault ( );
 	}
 
+	static onDragOver ( dragEvent ) {
+		dragEvent.preventDefault ( );
+	}
 }
 
 export {

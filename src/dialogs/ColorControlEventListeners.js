@@ -68,6 +68,11 @@ class RedSliderEventListener {
 		this.#colorButtons = colorButtons;
 	}
 
+	destructor ( ) {
+		this.#redSlider = null;
+		this.#colorButtons = null;
+	}
+
 	/**
 	Event listener method
 	*/
@@ -112,6 +117,11 @@ class ColorInputEventListener {
 		this.#inputs = inputs;
 	}
 
+	destructor ( ) {
+		this.#colorControl = null;
+		this.#inputs = null;
+	}
+
 	/**
 	Event listener method
 	*/
@@ -144,6 +154,10 @@ class ColorButtonClickEventListener {
 
 	constructor ( colorControl ) {
 		this.#colorControl = colorControl;
+	}
+
+	destructor ( ) {
+		this.#colorControl = null;
 	}
 
 	/**

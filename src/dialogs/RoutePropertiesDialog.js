@@ -273,6 +273,15 @@ class RoutePropertiesDialog extends BaseDialog {
 	}
 
 	/**
+	Overload of the BaseDialog.onCancel ( ) method.
+	*/
+
+	onCancel ( ) {
+		this.#colorControl.destructor ( );
+		super.onCancel ( );
+	}
+
+	/**
 	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked.
 	Push the new route properties in the route and validate the route
 	*/
@@ -288,6 +297,7 @@ class RoutePropertiesDialog extends BaseDialog {
 		this.#route.dashArray = this.#dashSelect.selectedIndex;
 
 		this.#route.validateData ( );
+		this.#colorControl.destructor ( );
 
 		super.onOk ( );
 	}

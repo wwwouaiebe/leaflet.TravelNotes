@@ -52,59 +52,9 @@ Tests ...
 import theTranslator from '../UI/Translator.js';
 import BaseDialog from '../dialogs/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import { OnMouseDownEyeEventListener, OnMouseUpEyeEventListener } from '../dialogs/PasswordDialogEventListeners.js';
 
 const OUR_PSWD_MIN_LENGTH = 12;
-
-/**
-@--------------------------------------------------------------------------------------------------------------------------
-
-@class OnMouseDownEyeEventListener
-@classdesc mousedown event listener for the eye button
-@hideconstructor
-@private
-
-@--------------------------------------------------------------------------------------------------------------------------
-*/
-
-class OnMouseDownEyeEventListener {
-
-	#passwordInput = null;
-
-	constructor ( passwordInput ) {
-		this.#passwordInput = passwordInput;
-	}
-
-	handleEvent ( mouseDownEvent ) {
-		mouseDownEvent.stopPropagation;
-		this.#passwordInput.type = 'text';
-	}
-}
-
-/**
-@--------------------------------------------------------------------------------------------------------------------------
-
-@class OnMouseUpEyeEventListener
-@classdesc mouseup event listener for the eye button
-@hideconstructor
-@private
-
-@--------------------------------------------------------------------------------------------------------------------------
-*/
-
-class OnMouseUpEyeEventListener {
-
-	#passwordInput = null;
-
-	constructor ( passwordInput ) {
-		this.#passwordInput = passwordInput;
-	}
-
-	handleEvent ( mouseUpEvent ) {
-		mouseUpEvent.stopPropagation;
-		this.#passwordInput.type = 'password';
-		this.#passwordInput.focus ( );
-	}
-}
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -145,6 +95,9 @@ class PasswordDialog extends BaseDialog {
 
 	#verifyPassword = false;
 
+	#onMouseDownEyeEventListener = null;
+	#onMouseUpEyeEventListener = null;
+
 	/**
 	The constructor
 	@param {boolean} verifyPassword When true the password must be conform to the password rules
@@ -155,6 +108,8 @@ class PasswordDialog extends BaseDialog {
 		this.#verifyPassword = verifyPassword;
 		this.#passwordDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-PasswordDialog-PasswordDiv' } );
 		this.#passwordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, this.#passwordDiv );
+		this.#onMouseDownEyeEventListener = new OnMouseDownEyeEventListener ( this.#passwordInput );
+		this.#onMouseUpEyeEventListener = new OnMouseUpEyeEventListener ( this.#passwordInput );
 		this.#eyeSpan = theHTMLElementsFactory.create (
 			'span',
 			{
@@ -163,15 +118,16 @@ class PasswordDialog extends BaseDialog {
 			},
 			this.#passwordDiv
 		);
-		this.#eyeSpan.addEventListener (
-			'mousedown',
-			new OnMouseDownEyeEventListener ( this.#passwordInput ),
-			false );
-		this.#eyeSpan.addEventListener (
-			'mouseup',
-			new OnMouseUpEyeEventListener ( this.#passwordInput ),
-			false
-		);
+		this.#eyeSpan.addEventListener ( 'mousedown', this.#onMouseDownEyeEventListener, false );
+		this.#eyeSpan.addEventListener ( 'mouseup', this.#onMouseUpEyeEventListener,	false );
+	}
+
+	#destructor ( ) {
+		this.#eyeSpan.removeEventListener ( 'mousedown', this.#onMouseDownEyeEventListener, false );
+		this.#eyeSpan.removeEventListener ( 'mouseup', this.#onMouseUpEyeEventListener,	false );
+		this.#onMouseDownEyeEventListener.destructor ( );
+		this.#onMouseUpEyeEventListener.destructor ( );
+
 	}
 
 	/**
@@ -208,11 +164,21 @@ class PasswordDialog extends BaseDialog {
 	}
 
 	/**
+	Overload of the BaseDialog.onCancel ( ) method.
+	*/
+
+	onCancel ( ) {
+		this.#destructor ( );
+		super.onCancel ( );
+	}
+
+	/**
 	Overload of the BaseDialog.onOk ( ) method.
 	@return the password encoded with TextEncoder
 	*/
 
 	onOk ( ) {
+		this.#destructor ( );
 		super.onOk ( new window.TextEncoder ( ).encode ( this.#passwordInput.value ) );
 	}
 

@@ -140,11 +140,17 @@ import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
 class BaseDialog {
 
-	/*
+	/**
 	Garbage collector testing. Only for dev...
+	@private
 	*/
 
 	#garbageCollectorTester = new GarbageCollectorTester ( );
+
+	/**
+	HTMLElements of the dialog
+	@private
+	*/
 
 	#backgroundDiv = {};
 	#containerDiv = {};
@@ -155,7 +161,17 @@ class BaseDialog {
 	#topBar = {};
 	#secondButton = null;
 
+	/**
+	A flag to avoid all dialogs close when using the esc or enter keys
+	@private
+	*/
+
 	keyboardEventListenerEnabled = true;
+
+	/**
+	Data for drag ond drop operations
+	@private
+	*/
 
 	#dragData = Object.seal (
 		{
@@ -166,6 +182,11 @@ class BaseDialog {
 		}
 	);
 
+	/**
+	event listeners
+	@private
+	*/
+
 	#eventListeners = {
 		onKeydown : null,
 		onTopBarDragStart : null,
@@ -173,6 +194,11 @@ class BaseDialog {
 		onCancelButtonClick : null,
 		onOkButtonClick : null
 	};
+
+	/**
+	options parameter
+	@private
+	*/
 
 	#options = null;
 
@@ -203,8 +229,7 @@ class BaseDialog {
 			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
 		);
 
-		// this.#backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
-		// this.#backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
+		this.#backgroundDiv.addEventListener ( 'dragover', theBackgroundEventListeners.onDragOver, false );
 		this.#backgroundDiv.addEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
 		this.#backgroundDiv.addEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
 		this.#backgroundDiv.addEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
@@ -464,9 +489,7 @@ class BaseDialog {
 	}
 
 	#destructor ( ) {
-
-		// this.#backgroundDiv.removeEventListener ( 'dragover', ( ) => null, false );
-		// this.#backgroundDiv.removeEventListener ( 'drop', ( ) => null, false );
+		this.#backgroundDiv.removeEventListener ( 'dragover', theBackgroundEventListeners.onDragOver, false );
 		this.#backgroundDiv.removeEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
 		this.#backgroundDiv.removeEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
 		this.#backgroundDiv.removeEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);

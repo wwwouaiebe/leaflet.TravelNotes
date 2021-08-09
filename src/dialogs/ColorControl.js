@@ -88,6 +88,8 @@ class ColorControl {
 		blue : null
 	};
 
+	#redSliderInput = null;
+
 	/**
 	A div that contains the red green and blue inputs
 	@private
@@ -114,10 +116,16 @@ class ColorControl {
 	@private
 	*/
 
+	#eventListeners = {
+		onColorButtonClick : null,
+		onColorInput : null,
+		onRedSliderInput : null
+	}
+
 	#createColorButtonsDiv ( ) {
 		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
 		let cellColor = new Color ( COLOR_CONTROL.initialRed, COLOR_CONTROL.minColorValue, COLOR_CONTROL.minColorValue 	);
-		let buttonEventListener = new ColorButtonClickEventListener ( this );
+		this.#eventListeners.onColorButtonClick = new ColorButtonClickEventListener ( this );
 
 		for ( let rowCounter = ZERO; rowCounter < COLOR_CONTROL.rowsNumber; ++ rowCounter ) {
 			let colorButtonsRowDiv = theHTMLElementsFactory.create ( 'div', null, colorButtonsDiv );
@@ -133,7 +141,7 @@ class ColorControl {
 					colorButtonsRowDiv
 				);
 				colorButtonCellDiv.style [ 'background-color' ] = cellColor.cssColor;
-				colorButtonCellDiv.addEventListener ( 'click', buttonEventListener, false );
+				colorButtonCellDiv.addEventListener ( 'click', this.#eventListeners.onColorButtonClick, false );
 				cellColor.green += COLOR_CONTROL.deltaColor;
 				this.#colorButtons.push ( colorButtonCellDiv );
 			}
@@ -148,7 +156,7 @@ class ColorControl {
 
 	#createRedSliderDiv ( ) {
 		let redSliderDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
-		let redSliderInput = theHTMLElementsFactory.create ( 'input',
+		this.#redSliderInput = theHTMLElementsFactory.create ( 'input',
 			{
 				type : 'range',
 				value : Math.ceil (
@@ -162,12 +170,10 @@ class ColorControl {
 			redSliderDiv
 		);
 
-		redSliderInput.addEventListener (
-			'input',
-			new RedSliderEventListener ( redSliderInput, this.#colorButtons ),
-			false );
+		this.#eventListeners.onRedSliderInput = new RedSliderEventListener ( this.#redSliderInput, this.#colorButtons );
+		this.#redSliderInput.addEventListener ( 'input', this.#eventListeners.onRedSliderInput, false );
 
-		redSliderInput.focus ( );
+		this.#redSliderInput.focus ( );
 	}
 
 	/**
@@ -186,12 +192,7 @@ class ColorControl {
 			},
 			this.#rgbDiv
 		);
-
-		inputHtmlElement.addEventListener (
-			'input',
-			new ColorInputEventListener ( this, this.#inputs ),
-			false
-		);
+		inputHtmlElement.addEventListener ( 'input', this.#eventListeners.onColorInput, false );
 
 		return inputHtmlElement;
 	}
@@ -203,6 +204,8 @@ class ColorControl {
 
 	#createColorInputsDiv ( ) {
 		this.#rgbDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
+
+		this.#eventListeners.onColorInput = new ColorInputEventListener ( this, this.#inputs );
 
 		this.#inputs.red = this.#createColorInput (
 			theTranslator.getText ( 'ColorControl - Red' ),
@@ -251,6 +254,23 @@ class ColorControl {
 		this.#createRedSliderDiv ( );
 		this.#createColorInputsDiv ( );
 		this.#createColorSampleDiv ( );
+	}
+
+	destructor ( ) {
+		this.#colorButtons.forEach (
+			colorButton => {
+				colorButton.removeEventListener ( 'click', this.#eventListeners.onColorButtonClick, false );
+			}
+		);
+		this.#eventListeners.onColorButtonClick.destructor ( );
+
+		for ( const colorInput in this.#inputs ) {
+			this.#inputs [ colorInput ].removeEventListener ( 'input', this.#eventListeners.onColorInput, false );
+		}
+		this.#eventListeners.onColorInput.destructor ( );
+
+		this.#redSliderInput.removeEventListener ( 'input', this.#eventListeners.onRedSliderInput, false );
+		this.#eventListeners.onRedSliderInput.destructor ( );
 	}
 
 	/**
