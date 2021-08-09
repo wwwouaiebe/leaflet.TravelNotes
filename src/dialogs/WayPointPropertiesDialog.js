@@ -203,7 +203,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	*/
 
 	onCancel ( ) {
-		// this.#resetAddressButton.removeEventListener ( 'click', this, false	);
+		this.#resetAddressButton.removeEventListener ( 'click', this, false	);
 		super.onCancel ( );
 	}
 
