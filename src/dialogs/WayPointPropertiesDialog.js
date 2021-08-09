@@ -81,6 +81,13 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	*/
 
 	#addressInput = null;
+	
+	/**
+	The reser address button
+	@private
+	*/
+	
+	#resetAddressButton = null;
 
 	/**
 	The name input HTMLElement
@@ -122,7 +129,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 
 	#createAddressControl ( ) {
 		let addressHeaderDiv = theHTMLElementsFactory.create ( 'div' );
-		theHTMLElementsFactory.create (
+		this.#resetAddressButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -130,7 +137,8 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 				textContent : '🔄'
 			},
 			addressHeaderDiv
-		).addEventListener ( 'click', this, false	); // You understand?
+		)
+		this.#resetAddressButton.addEventListener ( 'click', this, false ); // You understand?
 		theHTMLElementsFactory.create (
 			'text',
 			{
@@ -189,6 +197,15 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 		this.#wayPoint = wayPoint;
 
 	}
+	
+	/**
+	Overload of the BaseDialog.onCancel ( ) method.
+	*/
+
+	onCancel ( ) {
+		// this.#resetAddressButton.removeEventListener ( 'click', this, false	);
+		super.onCancel ( );
+	}
 
 	/**
 	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked
@@ -197,6 +214,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	onOk ( ) {
 		this.#wayPoint.address = this.#addressInput.value;
 		this.#wayPoint.name = this.#nameInput.value;
+		this.#resetAddressButton.removeEventListener ( 'click', this, false	);
 		super.onOk ( );
 	}
 
