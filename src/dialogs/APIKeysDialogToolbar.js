@@ -90,13 +90,27 @@ class APIKeysDialogToolbar {
 
 	#rootHTMLElement = null;
 
+	#reloadKeysFromServerButton = null;
+	#saveKeysToSecureFileButton = null;
+	#restoreKeysFromSecureFileButton = null;
+	#newAPIKeyButton = null;
+	#saveKeysToUnsecureFileButton = null;
+	#restoreKeysFromUnsecureFileButton = null;
+
+	#reloadKeysFromServerButtonEventListener = null;
+	#saveKeysToSecureFileButtonEventListener = null;
+	#restoreKeysFromSecureFileButtonEventListener = null;
+	#newAPIKeyButtonEventListener = null;
+	#saveKeysToUnsecureFileButtonEventListener = null;
+	#restoreKeysFromUnsecureFileButtonEventListener = null;
+
 	/**
 	Create the ReloadKeysFromServerFile Button
 	@private
 	*/
 
 	#createReloadKeysFromServerButton ( ) {
-		theHTMLElementsFactory.create (
+		this.#reloadKeysFromServerButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -104,12 +118,14 @@ class APIKeysDialogToolbar {
 				textContent : '🔄'
 			},
 			this.#rootHTMLElement
-		)
-			.addEventListener (
-				'click',
-				new ReloadKeysFromServerButtonEventListener ( this.#APIKeysDialog ),
-				false
-			);
+		);
+		this.#reloadKeysFromServerButtonEventListener =
+			new ReloadKeysFromServerButtonEventListener ( this.#APIKeysDialog );
+		this.#reloadKeysFromServerButton.addEventListener (
+			'click',
+			this.#reloadKeysFromServerButtonEventListener,
+			false
+		);
 	}
 
 	/**
@@ -118,7 +134,7 @@ class APIKeysDialogToolbar {
 	*/
 
 	#createSaveKeysToSecureFileButton ( ) {
-		theHTMLElementsFactory.create (
+		this.#saveKeysToSecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -126,13 +142,14 @@ class APIKeysDialogToolbar {
 				textContent : '💾'
 			},
 			this.#rootHTMLElement
-		)
-			.addEventListener (
-				'click',
-				new SaveKeysToSecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls ),
-				false
-			);
-
+		);
+		this.#saveKeysToSecureFileButtonEventListener =
+			new SaveKeysToSecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls );
+		this.#saveKeysToSecureFileButton.addEventListener (
+			'click',
+			this.#saveKeysToSecureFileButtonEventListener,
+			false
+		);
 	}
 
 	/**
@@ -141,7 +158,7 @@ class APIKeysDialogToolbar {
 	*/
 
 	#createRestoreKeysFromSecureFileButton ( ) {
-		theHTMLElementsFactory.create (
+		this.#restoreKeysFromSecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -149,12 +166,14 @@ class APIKeysDialogToolbar {
 				textContent : '📂'
 			},
 			this.#rootHTMLElement
-		)
-			.addEventListener (
-				'click',
-				new RestoreKeysFromSecureFileButtonEventListener ( this.#APIKeysDialog ),
-				false
-			);
+		);
+		this.#restoreKeysFromSecureFileButtonEventListener =
+			new RestoreKeysFromSecureFileButtonEventListener ( this.#APIKeysDialog );
+		this.#restoreKeysFromSecureFileButton.addEventListener (
+			'click',
+			this.#restoreKeysFromSecureFileButtonEventListener,
+			false
+		);
 	}
 
 	/**
@@ -163,7 +182,7 @@ class APIKeysDialogToolbar {
 	*/
 
 	#createNewAPIKeyButton ( ) {
-		theHTMLElementsFactory.create (
+		this.#newAPIKeyButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -171,12 +190,14 @@ class APIKeysDialogToolbar {
 				textContent : '+'
 			},
 			this.#rootHTMLElement
-		)
-			.addEventListener (
-				'click',
-				new NewAPIKeyButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls ),
-				false
-			);
+		);
+		this.#newAPIKeyButtonEventListener =
+			new NewAPIKeyButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls );
+		this.#newAPIKeyButton.addEventListener (
+			'click',
+			this.#newAPIKeyButtonEventListener,
+			false
+		);
 	}
 
 	/**
@@ -185,7 +206,7 @@ class APIKeysDialogToolbar {
 	*/
 
 	#createSaveKeysToUnsecureFileButton ( ) {
-		theHTMLElementsFactory.create (
+		this.#saveKeysToUnsecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button TravelNotes-APIKeysDialog-AtRightButton',
@@ -193,12 +214,14 @@ class APIKeysDialogToolbar {
 				textContent : '💾'
 			},
 			this.#rootHTMLElement
-		)
-			.addEventListener (
-				'click',
-				new SaveKeysToUnsecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls ),
-				false
-			);
+		);
+		this.#saveKeysToUnsecureFileButtonEventListener =
+			new SaveKeysToUnsecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls );
+		this.#saveKeysToUnsecureFileButton.addEventListener (
+			'click',
+			this.#saveKeysToUnsecureFileButtonEventListener,
+			false
+		);
 	}
 
 	/**
@@ -207,7 +230,7 @@ class APIKeysDialogToolbar {
 	*/
 
 	#createRestoreKeysFromUnsecureFileButton ( ) {
-		theHTMLElementsFactory.create (
+		this.#restoreKeysFromUnsecureFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -215,12 +238,14 @@ class APIKeysDialogToolbar {
 				textContent : '📂'
 			},
 			this.#rootHTMLElement
-		)
-			.addEventListener (
-				'click',
-				new RestoreKeysFromUnsecureFileButtonEventListener ( this.#APIKeysDialog ),
-				false
-			);
+		);
+		this.#restoreKeysFromUnsecureFileButtonEventListener =
+			new RestoreKeysFromUnsecureFileButtonEventListener ( this.#APIKeysDialog );
+		this.#restoreKeysFromUnsecureFileButton.addEventListener (
+			'click',
+			this.#restoreKeysFromUnsecureFileButtonEventListener,
+			false
+		);
 	}
 
 	/**
@@ -263,6 +288,57 @@ class APIKeysDialogToolbar {
 
 		this.#addToolbarButtons ( );
 
+	}
+
+	destructor ( ) {
+		if ( this.#reloadKeysFromServerButton ) {
+			this.#reloadKeysFromServerButton.removeEventListener (
+				'click',
+				this.#reloadKeysFromServerButtonEventListener,
+				false
+			);
+			this.#reloadKeysFromServerButtonEventListener.destructor ( );
+		}
+		if ( this.#saveKeysToSecureFileButton ) {
+			this.#saveKeysToSecureFileButton.removeEventListener (
+				'click',
+				this.#saveKeysToSecureFileButtonEventListener,
+				false
+			);
+			this.#saveKeysToSecureFileButtonEventListener.destructor ( );
+		}
+		if ( this.#restoreKeysFromSecureFileButton ) {
+			this.#restoreKeysFromSecureFileButton.removeEventListener (
+				'click',
+				this.#restoreKeysFromSecureFileButtonEventListener,
+				false
+			);
+			this.#restoreKeysFromSecureFileButtonEventListener.destructor ( );
+		}
+		if ( this.#newAPIKeyButton ) {
+			this.#newAPIKeyButton.removeEventListener (
+				'click',
+				this.#newAPIKeyButtonEventListener,
+				false
+			);
+			this.#newAPIKeyButtonEventListener.destructor ( );
+		}
+		if ( this.#saveKeysToUnsecureFileButton ) {
+			this.#saveKeysToUnsecureFileButton.removeEventListener (
+				'click',
+				this.#saveKeysToUnsecureFileButtonEventListener,
+				false
+			);
+			this.#saveKeysToUnsecureFileButtonEventListener.destructor ( );
+		}
+		if ( this.#restoreKeysFromUnsecureFileButton ) {
+			this.#restoreKeysFromUnsecureFileButton.removeEventListener (
+				'click',
+				this.#restoreKeysFromUnsecureFileButtonEventListener,
+				false
+			);
+			this.#restoreKeysFromUnsecureFileButtonEventListener.destructor ( );
+		}
 	}
 
 	/**

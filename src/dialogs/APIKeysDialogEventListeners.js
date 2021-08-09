@@ -62,7 +62,7 @@ import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class onAPIKeyDeletedEventListener {
+class OnAPIKeyDeletedEventListener {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
@@ -70,6 +70,11 @@ class onAPIKeyDeletedEventListener {
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#APIKeysControls = null;
 	}
 
 	/**
@@ -100,6 +105,10 @@ class OpenUnsecureFileInputEventListener {
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
 	}
 
 	/**
@@ -140,9 +149,16 @@ class OpenUnsecureFileInputEventListener {
 class RestoreKeysFromUnsecureFileButtonEventListener {
 
 	#APIKeysDialog = null;
+	#openUnsecureFileInputEventListener = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		this.#openUnsecureFileInputEventListener = new OpenUnsecureFileInputEventListener ( this.#APIKeysDialog );
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#openUnsecureFileInputEventListener.destructor ( );
 	}
 
 	/**
@@ -152,7 +168,7 @@ class RestoreKeysFromUnsecureFileButtonEventListener {
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		this.#APIKeysDialog.hideError ( );
-		theUtilities.openFile (	new OpenUnsecureFileInputEventListener ( this.#APIKeysDialog ), '.json' );
+		theUtilities.openFile (	this.#openUnsecureFileInputEventListener, '.json' );
 
 	}
 }
@@ -174,6 +190,10 @@ class DataEncryptorEventListeners {
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
 	}
 
 	/**
@@ -224,9 +244,16 @@ class DataEncryptorEventListeners {
 class ReloadKeysFromServerButtonEventListener {
 
 	#APIKeysDialog = null;
+	#dataEncryptorEventListener = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		this.#dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#dataEncryptorEventListener.destructor ( );
 	}
 
 	/**
@@ -239,7 +266,6 @@ class ReloadKeysFromServerButtonEventListener {
 		this.#APIKeysDialog.showWait ( );
 		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
 
-		let dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
 		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
 			.then (
 				response => {
@@ -248,21 +274,21 @@ class ReloadKeysFromServerButtonEventListener {
 							data => {
 								new DataEncryptor ( ).decryptData (
 									data,
-									tmpData => { dataEncryptorEventListener.onOkDecrypt ( tmpData ); },
-									err => { dataEncryptorEventListener.onErrorDecrypt ( err ); },
+									tmpData => { this.#dataEncryptorEventListener.onOkDecrypt ( tmpData ); },
+									err => { this.#dataEncryptorEventListener.onErrorDecrypt ( err ); },
 									new PasswordDialog ( false ).show ( )
 								);
 							}
 						);
 					}
 					else {
-						dataEncryptorEventListener.onErrorDecrypt ( new Error ( 'Invalid http status' ) );
+						this.#dataEncryptorEventListener.onErrorDecrypt ( new Error ( 'Invalid http status' ) );
 					}
 				}
 			)
 			.catch (
 				err => {
-					dataEncryptorEventListener.onErrorDecrypt ( err );
+					this.#dataEncryptorEventListener.onErrorDecrypt ( err );
 					if ( err instanceof Error ) {
 						console.error ( err );
 					}
@@ -285,9 +311,16 @@ class ReloadKeysFromServerButtonEventListener {
 class OpenSecureFileInputEventListener {
 
 	#APIKeysDialog = null;
+	#dataEncryptorEventListener = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		this.#dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#dataEncryptorEventListener.destructor ( );
 	}
 
 	/**
@@ -304,11 +337,10 @@ class OpenSecureFileInputEventListener {
 		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
 		let fileReader = new FileReader ( );
 		fileReader.onload = ( ) => {
-			let dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
 			new DataEncryptor ( ).decryptData (
 				fileReader.result,
-				data => { dataEncryptorEventListener.onOkDecrypt ( data ); },
-				err => { dataEncryptorEventListener.onErrorDecrypt ( err ); },
+				data => { this.#dataEncryptorEventListener.onOkDecrypt ( data ); },
+				err => { this.#dataEncryptorEventListener.onErrorDecrypt ( err ); },
 				new PasswordDialog ( false ).show ( )
 			);
 		};
@@ -330,9 +362,16 @@ class OpenSecureFileInputEventListener {
 class RestoreKeysFromSecureFileButtonEventListener {
 
 	#APIKeysDialog = null;
+	#openSecureFileInputEventListener = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		this.#openSecureFileInputEventListener = new OpenSecureFileInputEventListener ( this.#APIKeysDialog );
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#openSecureFileInputEventListener.destructor ( );
 	}
 
 	/**
@@ -342,7 +381,7 @@ class RestoreKeysFromSecureFileButtonEventListener {
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		this.#APIKeysDialog.hideError ( );
-		theUtilities.openFile (	new OpenSecureFileInputEventListener ( this.#APIKeysDialog ) );
+		theUtilities.openFile (	this.#openSecureFileInputEventListener );
 	}
 }
 
@@ -363,6 +402,10 @@ class SaveAPIKeysHelper {
 
 	constructor ( APIKeysControls ) {
 		this.#APIKeysControls = APIKeysControls;
+	}
+
+	destructor ( ) {
+		this.#APIKeysControls = null;
 	}
 
 	/**
@@ -394,10 +437,18 @@ class SaveKeysToSecureFileButtonEventListener {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
+	#saveAPIKeysHelper = null;
 
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
+		this.#saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#APIKeysControls = null;
+		this.#saveAPIKeysHelper.destructor ( );
 	}
 
 	/**
@@ -431,7 +482,6 @@ class SaveKeysToSecureFileButtonEventListener {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		let saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
 		if ( ! this.#APIKeysDialog.validateAPIKeys ( ) ) {
 			return;
 		}
@@ -440,7 +490,7 @@ class SaveKeysToSecureFileButtonEventListener {
 		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
 
 		new DataEncryptor ( ).encryptData (
-			new window.TextEncoder ( ).encode ( saveAPIKeysHelper.getAPIKeysJsonString ( ) ),
+			new window.TextEncoder ( ).encode ( this.#saveAPIKeysHelper.getAPIKeysJsonString ( ) ),
 			data => { this.#onOkEncrypt ( data ); },
 			( ) => { this.#onErrorEncrypt ( ); },
 			new PasswordDialog ( true ).show ( )
@@ -463,10 +513,18 @@ class SaveKeysToUnsecureFileButtonEventListener {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
+	#saveAPIKeysHelper = null;
 
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
+		this.#saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
+	}
+
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#APIKeysControls = null;
+		this.#saveAPIKeysHelper.destructor ( );
 	}
 
 	/**
@@ -475,13 +533,12 @@ class SaveKeysToUnsecureFileButtonEventListener {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		let saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
 		if ( ! this.#APIKeysDialog.validateAPIKeys ( ) ) {
 			return;
 		}
 		theUtilities.saveFile (
 			'APIKeys.json',
-			saveAPIKeysHelper.getAPIKeysJsonString ( ),
+			this.#saveAPIKeysHelper.getAPIKeysJsonString ( ),
 			'application/json'
 		);
 	}
@@ -508,6 +565,11 @@ class NewAPIKeyButtonEventListener {
 		this.#APIKeysControls = APIKeysControls;
 	}
 
+	destructor ( ) {
+		this.#APIKeysDialog = null;
+		this.#APIKeysControls = null;
+	}
+
 	/**
 	Event listener method
 	*/
@@ -522,7 +584,7 @@ class NewAPIKeyButtonEventListener {
 }
 
 export {
-	onAPIKeyDeletedEventListener,
+	OnAPIKeyDeletedEventListener,
 	RestoreKeysFromUnsecureFileButtonEventListener,
 	ReloadKeysFromServerButtonEventListener,
 	RestoreKeysFromSecureFileButtonEventListener,

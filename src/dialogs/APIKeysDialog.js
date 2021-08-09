@@ -56,7 +56,7 @@ Tests ...
 
 import BaseDialog from '../dialogs/BaseDialog.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
-import { onAPIKeyDeletedEventListener } from '../dialogs/APIKeysDialogEventListeners.js';
+import { OnAPIKeyDeletedEventListener } from '../dialogs/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
@@ -97,6 +97,8 @@ class APIKeysDialog extends BaseDialog {
 
 	#APIKeysControlsContainer = null
 
+	#onAPIKeyDeletedEventListener = null;
+
 	/**
 	Create the #APIKeysControlsContainer
 	@private
@@ -104,9 +106,10 @@ class APIKeysDialog extends BaseDialog {
 
 	#createAPIKeysControlsContainer ( ) {
 		this.#APIKeysControlsContainer = theHTMLElementsFactory.create ( 'div' );
+		this.#onAPIKeyDeletedEventListener = new OnAPIKeyDeletedEventListener ( this, this.#APIKeysControls );
 		this.#APIKeysControlsContainer.addEventListener (
 			'apikeydeleted',
-			new onAPIKeyDeletedEventListener ( this, this.#APIKeysControls ),
+			this.#onAPIKeyDeletedEventListener,
 			false
 		);
 	}
@@ -118,6 +121,16 @@ class APIKeysDialog extends BaseDialog {
 		this.#toolbar = new APIKeysDialogToolbar ( this, this.#APIKeysControls, haveAPIKeysFile );
 		this.#createAPIKeysControlsContainer ( );
 		this.addAPIKeys ( APIKeys );
+	}
+
+	#destructor ( ) {
+		this.#toolbar.destructor ( );
+		this.#APIKeysControlsContainer.removeEventListener (
+			'apikeydeleted',
+			this.#onAPIKeyDeletedEventListener,
+			false
+		);
+		this.#onAPIKeyDeletedEventListener.destructor ( );
 	}
 
 	/**
@@ -205,6 +218,7 @@ class APIKeysDialog extends BaseDialog {
 	*/
 
 	onCancel ( ) {
+		this.#destructor ( );
 		super.onCancel ( );
 	}
 
@@ -217,6 +231,7 @@ class APIKeysDialog extends BaseDialog {
 		this.#APIKeysControls.forEach (
 			APIKeyControl => APIKeys.push ( APIKeyControl.APIKey )
 		);
+		this.#destructor ( );
 		super.onOk ( APIKeys );
 	}
 

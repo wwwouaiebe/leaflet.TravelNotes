@@ -69,6 +69,10 @@ class BaseDialogOkButtonClickEventListener {
 		this.#baseDialog = baseDialog;
 	}
 
+	destructor ( ) {
+		this.#baseDialog = null;
+	}
+
 	/**
 	Event listener method
 	*/
@@ -98,6 +102,10 @@ class BaseDialogCancelButtonClickEventListener {
 		this.#baseDialog = baseDialog;
 	}
 
+	destructor ( ) {
+		this.#baseDialog = null;
+	}
+
 	/**
 	Event listener method
 	*/
@@ -125,6 +133,10 @@ class BaseDialogTopBarDragStartEventListener {
 	constructor ( dragData ) {
 		Object.seal ( this );
 		this.#dragData = dragData;
+	}
+
+	destructor ( ) {
+		this.#dragData = null;
 	}
 
 	/**
@@ -159,6 +171,12 @@ class BaseDialogTopBarDragEndEventListener {
 		this.#dragData = dragData;
 		this.#containerDiv = containerDiv;
 		this.#backgroundDiv = backgroundDiv;
+	}
+
+	destructor ( ) {
+		this.#dragData = null;
+		this.#containerDiv = null;
+		this.#backgroundDiv = null;
 	}
 
 	/**
@@ -208,6 +226,10 @@ class BaseDialogKeydownEventListener {
 	constructor ( baseDialog ) {
 		Object.seal ( this );
 		this.#baseDialog = baseDialog;
+	}
+
+	destructor ( ) {
+		this.#baseDialog = null;
 	}
 
 	/**

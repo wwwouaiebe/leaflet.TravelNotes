@@ -123,6 +123,8 @@ import {
 	BaseDialogBackgroundEventListeners as theBackgroundEventListeners
 } from '../dialogs/BaseDialogEventListeners.js';
 
+import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
+
 import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
 /**
@@ -137,6 +139,12 @@ import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 */
 
 class BaseDialog {
+
+	/*
+	Garbage collector testing. Only for dev...
+	*/
+
+	#garbageCollectorTester = new GarbageCollectorTester ( );
 
 	#backgroundDiv = {};
 	#containerDiv = {};
@@ -158,7 +166,13 @@ class BaseDialog {
 		}
 	);
 
-	#onKeydownEventListener = null;
+	#eventListeners = {
+		onKeydown : null,
+		onTopBarDragStart : null,
+		onTopBarDragEnd : null,
+		onCancelButtonClick : null,
+		onOkButtonClick : null
+	};
 
 	#options = null;
 
@@ -189,8 +203,8 @@ class BaseDialog {
 			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
 		);
 
-		this.#backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
-		this.#backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
+		// this.#backgroundDiv.addEventListener ( 'dragover', ( ) => null, false );
+		// this.#backgroundDiv.addEventListener ( 'drop', ( ) => null, false );
 		this.#backgroundDiv.addEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
 		this.#backgroundDiv.addEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
 		this.#backgroundDiv.addEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
@@ -231,17 +245,13 @@ class BaseDialog {
 			this.#containerDiv
 		);
 
-		this.#topBar.addEventListener ( 'dragstart', new BaseDialogTopBarDragStartEventListener ( this.#dragData ), false );
+		this.#eventListeners.onTopBarDragStart = new BaseDialogTopBarDragStartEventListener ( this.#dragData );
+		this.#eventListeners.onTopBarDragEnd =
+			new BaseDialogTopBarDragEndEventListener ( this.#dragData, this.#containerDiv, this.#backgroundDiv );
+		this.#topBar.addEventListener ( 'dragstart', this.#eventListeners.onTopBarDragStart, false );
+		this.#topBar.addEventListener ( 'dragend', this.#eventListeners.onTopBarDragEnd, false );
 
-		this.#topBar.addEventListener (
-			'dragend',
-			new BaseDialogTopBarDragEndEventListener (
-				this.#dragData,
-				this.#containerDiv,
-				this.#backgroundDiv
-			),
-			false );
-
+		this.#eventListeners.onCancelButtonClick = new BaseDialogCancelButtonClickEventListener ( this );
 		this.#cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -251,7 +261,7 @@ class BaseDialog {
 			},
 			this.#topBar
 		);
-		this.#cancelButton.addEventListener ( 'click', new BaseDialogCancelButtonClickEventListener ( this ), false );
+		this.#cancelButton.addEventListener ( 'click', this.#eventListeners.onCancelButtonClick, false );
 	}
 
 	/**
@@ -360,7 +370,8 @@ class BaseDialog {
 			},
 			footerDiv
 		);
-		this.#okButton.addEventListener ( 'click', new BaseDialogOkButtonClickEventListener ( this ), false );
+		this.#eventListeners.onOkButtonClick = new BaseDialogOkButtonClickEventListener ( this );
+		this.#okButton.addEventListener ( 'click', this.#eventListeners.onOkButtonClick, false );
 
 		if ( this.#options.secondButtonText ) {
 			this.#secondButton = theHTMLElementsFactory.create (
@@ -371,7 +382,7 @@ class BaseDialog {
 				},
 				footerDiv
 			);
-			this.#secondButton.addEventListener ( 'click',	new BaseDialogCancelButtonClickEventListener ( this ), false	);
+			this.#secondButton.addEventListener ( 'click',	this.#eventListeners.onCancelButtonClick, false	);
 		}
 
 		this.footerHTMLElements.forEach (
@@ -440,19 +451,43 @@ class BaseDialog {
 		this.#createHTML ( );
 		document.body.appendChild ( this.#backgroundDiv );
 		this.#centerDialog ( );
-		document.addEventListener ( 'keydown', this.#onKeydownEventListener, { capture : true } );
+		document.addEventListener ( 'keydown', this.#eventListeners.onKeydown, { capture : true } );
 
 		this.onShow ( );
 	}
 
 	constructor ( options = {} ) {
 		Object.seal ( this );
-		this.#onKeydownEventListener = new BaseDialogKeydownEventListener ( this );
 		this.#options = options;
+
+		this.#eventListeners.onKeydown = new BaseDialogKeydownEventListener ( this );
 	}
 
 	#destructor ( ) {
-		document.removeEventListener ( 'keydown', this.#onKeydownEventListener, { capture : true } );
+
+		// this.#backgroundDiv.removeEventListener ( 'dragover', ( ) => null, false );
+		// this.#backgroundDiv.removeEventListener ( 'drop', ( ) => null, false );
+		this.#backgroundDiv.removeEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
+		this.#backgroundDiv.removeEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
+		this.#backgroundDiv.removeEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
+		this.#backgroundDiv.removeEventListener ( 'wheel', theBackgroundEventListeners.onMouseWheel, false	);
+		this.#backgroundDiv.removeEventListener ( 'contextmenu', theBackgroundEventListeners.onContextMenu, false );
+		document.removeEventListener ( 'keydown', this.#eventListeners.onKeydown, { capture : true } );
+		this.#topBar.removeEventListener ( 'dragstart', this.#eventListeners.onTopBarDragStart, false );
+		this.#topBar.removeEventListener ( 'dragend', this.#eventListeners.onTopBarDragEnd, false );
+		this.#cancelButton.removeEventListener ( 'click', this.#eventListeners.onCancelButtonClick, false );
+		this.#okButton.removeEventListener ( 'click', this.#eventListeners.onOkButtonClick, false );
+		if ( this.#options.secondButtonText ) {
+			this.#secondButton.removeEventListener ( 'click',	this.#eventListeners.onCancelButtonClick, false	);
+		}
+		document.removeEventListener ( 'keydown', this.#eventListeners.onKeydown, { capture : true } );
+
+		this.#eventListeners.onKeydown.destructor ( );
+		this.#eventListeners.onTopBarDragStart.destructor ( );
+		this.#eventListeners.onTopBarDragEnd.destructor ( );
+		this.#eventListeners.onCancelButtonClick.destructor ( );
+		this.#eventListeners.onOkButtonClick.destructor ( );
+
 		document.body.removeChild ( this.#backgroundDiv );
 	}
 
