@@ -76,6 +76,16 @@ class NoteDialogPhoneControl {
 	#phoneInputDiv = null;
 	#phoneInput = null;
 
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onFocusControl : null,
+		onInputUpdated : null
+	}
+
 	constructor ( noteDialog ) {
 
 		this.#noteDialog = noteDialog;
@@ -112,8 +122,18 @@ class NoteDialogPhoneControl {
 			this.#phoneInputDiv
 		);
 
-		this.#phoneInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
-		this.#phoneInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#phoneInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#phoneInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+	}
+
+	destructor ( ) {
+		this.#phoneInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#phoneInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#eventListeners.onFocusControl.destructor ( );
+		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**

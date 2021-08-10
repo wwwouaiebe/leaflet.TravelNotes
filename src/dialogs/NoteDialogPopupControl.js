@@ -76,6 +76,16 @@ class NoteDialogPopupControl {
 	#popupDiv = null;
 	#popupTextArea = null;
 
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onFocusControl : null,
+		onInputUpdated : null
+	}
+
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
 		this.#popupDiv = theHTMLElementsFactory.create (
@@ -95,8 +105,18 @@ class NoteDialogPopupControl {
 			this.#popupDiv
 		);
 
-		this.#popupTextArea.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
-		this.#popupTextArea.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#popupTextArea.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#popupTextArea.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+	}
+
+	destructor ( ) {
+		this.#popupTextArea.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#popupTextArea.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#eventListeners.onFocusControl.destructor ( );
+		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**

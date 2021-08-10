@@ -84,6 +84,17 @@ class NoteDialogLinkControl {
 	#linkInput = null;
 
 	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onFocusControl : null,
+		onInputUpdated : null,
+		onBlurUrlInput : null
+	}
+
+	/**
 	The Devil button...
 	@private
 	*/
@@ -154,10 +165,22 @@ class NoteDialogLinkControl {
 			this.#linkInputDiv
 		);
 
-		this.#linkInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, true ) );
-		this.#linkInput.addEventListener ( 'blur', new BlurUrlInputEventListener ( this.#noteDialog ) );
-		this.#linkInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, true );
+		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#eventListeners.onBlurUrlInput = new BlurUrlInputEventListener ( this.#noteDialog );
+		this.#linkInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#linkInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#linkInput.addEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );
+	}
 
+	destructor ( ) {
+		this.#linkInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#linkInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#linkInput.removeEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );
+		this.#eventListeners.onFocusControl.destructor ( );
+		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#eventListeners.onBlurUrlInput.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**

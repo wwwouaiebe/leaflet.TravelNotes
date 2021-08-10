@@ -81,12 +81,12 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	*/
 
 	#addressInput = null;
-	
+
 	/**
 	The reser address button
 	@private
 	*/
-	
+
 	#resetAddressButton = null;
 
 	/**
@@ -137,7 +137,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 				textContent : '🔄'
 			},
 			addressHeaderDiv
-		)
+		);
 		this.#resetAddressButton.addEventListener ( 'click', this, false ); // You understand?
 		theHTMLElementsFactory.create (
 			'text',
@@ -197,7 +197,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 		this.#wayPoint = wayPoint;
 
 	}
-	
+
 	/**
 	Overload of the BaseDialog.onCancel ( ) method.
 	*/

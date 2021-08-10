@@ -67,6 +67,10 @@ class EditionButtonsEventListener {
 		this.#noteDialog = noteDialog;
 	}
 
+	destructor ( ) {
+		this.#noteDialog = null;
+	}
+
 	/**
 	click event listener fot the toolbar edition buttons. Update the current control value
 	*/
@@ -173,6 +177,10 @@ class IconSelectEventListener {
 		this.#noteDialog = noteDialog;
 	}
 
+	destructor ( ) {
+		this.#noteDialog = null;
+	}
+
 	/**
 	Change event listener for the select icon on the toolbar
 	*/
@@ -214,6 +222,10 @@ class ToogleContentsButtonEventListener {
 
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
+	}
+
+	destructor ( ) {
+		this.#noteDialog = null;
 	}
 
 	/**
@@ -287,6 +299,10 @@ class OpenFileButtonEventListener {
 
 	constructor ( noteDialogToolbar ) {
 		this.#noteDialogToolbar = noteDialogToolbar;
+	}
+
+	destructor ( ) {
+		this.#noteDialogToolbar = null;
 	}
 
 	/**

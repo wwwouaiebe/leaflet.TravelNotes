@@ -129,6 +129,22 @@ class NoteDialogToolbar {
 	*/
 
 	#rootHTMLElement = null;
+	#iconSelect = null;
+	#toogleContentsButton = null;
+	#openFileButton = null;
+	#editionButtons = [];
+
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onEditionButtonClick : null,
+		onIconSelectChange : null,
+		onToogleContentsButtonClick : null,
+		onOpenFileButtonClick : null
+	};
 
 	/**
 	Add the icon selector to the toolbar
@@ -136,7 +152,7 @@ class NoteDialogToolbar {
 	*/
 
 	#addIconsSelector ( ) {
-		let iconSelect = theHTMLElementsFactory.create (
+		this.#iconSelect = theHTMLElementsFactory.create (
 			'select',
 			{
 				className : 'TravelNotes-NoteDialog-Select',
@@ -144,15 +160,14 @@ class NoteDialogToolbar {
 			},
 			this.#rootHTMLElement
 		);
-
-		iconSelect.addEventListener ( 'change', new IconSelectEventListener ( this.#noteDialog ), false );
+		this.#iconSelect.addEventListener ( 'change', this.#eventListeners.onIconSelectChange, false );
 
 		theNoteDialogToolbarData.icons.forEach (
 			selectOption => {
-				iconSelect.add ( theHTMLElementsFactory.create ( 'option', { text : selectOption [ ZERO ] } ) );
+				this.#iconSelect.add ( theHTMLElementsFactory.create ( 'option', { text : selectOption [ ZERO ] } ) );
 			}
 		);
-		iconSelect.selectedIndex = NOT_FOUND;
+		this.#iconSelect.selectedIndex = NOT_FOUND;
 	}
 
 	/**
@@ -162,7 +177,7 @@ class NoteDialogToolbar {
 
 	#addToolbarButtons ( ) {
 
-		let toogleContentsButton = theHTMLElementsFactory.create (
+		this.#toogleContentsButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -171,9 +186,9 @@ class NoteDialogToolbar {
 			},
 			this.#rootHTMLElement
 		);
-		toogleContentsButton.addEventListener ( 'click', new ToogleContentsButtonEventListener ( this.#noteDialog ), false );
+		this.#toogleContentsButton.addEventListener ( 'click', this.#eventListeners.onToogleContentsButtonClick, false );
 
-		theHTMLElementsFactory.create (
+		this.#openFileButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -181,7 +196,8 @@ class NoteDialogToolbar {
 				textContent : '📂'
 			},
 			this.#rootHTMLElement
-		).addEventListener ( 'click', new OpenFileButtonEventListener ( this ), false );
+		);
+		this.#openFileButton.addEventListener ( 'click', this.#eventListeners.onOpenFileButtonClick, false );
 	}
 
 	/**
@@ -190,7 +206,6 @@ class NoteDialogToolbar {
 	*/
 
 	#addEditionButtons ( ) {
-		let editionButtonEventListener = new EditionButtonsEventListener ( this.#noteDialog );
 		theNoteDialogToolbarData.buttons.forEach (
 			editionButton => {
 				let newButton = theHTMLElementsFactory.create (
@@ -203,7 +218,8 @@ class NoteDialogToolbar {
 					this.#rootHTMLElement
 				);
 				theHTMLSanitizer.sanitizeToHtmlElement ( editionButton.title || '?', newButton );
-				newButton.addEventListener ( 'click', editionButtonEventListener );
+				newButton.addEventListener ( 'click', this.#eventListeners.onEditionButtonClick, false );
+				this.#editionButtons.push ( newButton );
 			}
 		);
 	}
@@ -219,6 +235,19 @@ class NoteDialogToolbar {
 		this.#addEditionButtons ( );
 	}
 
+	/**
+	Remove event listeners on all htmlElements
+	*/
+
+	#removeEventListeners ( ) {
+		this.#iconSelect.removeEventListener ( 'change', this.#eventListeners.onIconSelectChange, false );
+		this.#toogleContentsButton.removeEventListener ( 'click', this.#eventListeners.onToogleContentsButtonClick, false );
+		this.#openFileButton.removeEventListener ( 'click', this.#eventListeners.onOpenFileButtonClick, false );
+		this.#editionButtons.forEach (
+			button => { button.removeEventListener ( 'click', this.#eventListeners.onEditionButtonClick, false ); }
+		);
+	}
+
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
 		this.#rootHTMLElement = theHTMLElementsFactory.create (
@@ -228,7 +257,21 @@ class NoteDialogToolbar {
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			}
 		);
+		this.#eventListeners.onIconSelectChange = new IconSelectEventListener ( this.#noteDialog );
+		this.#eventListeners.onToogleContentsButtonClick = new ToogleContentsButtonEventListener ( this.#noteDialog );
+		this.#eventListeners.onOpenFileButtonClick = new OpenFileButtonEventListener ( this );
+		this.#eventListeners.onEditionButtonClick = new EditionButtonsEventListener ( this.#noteDialog );
+
 		this.#addToolbarElements ( );
+	}
+
+	destructor ( ) {
+		this.#removeEventListeners ( );
+		this.#eventListeners.onEditionButtonClick.destructor ( );
+		this.#eventListeners.onIconSelectChange.destructor ( );
+		this.#eventListeners.onToogleContentsButtonClick.destructor ( );
+		this.#eventListeners.onOpenFileButtonClick.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**
@@ -236,7 +279,9 @@ class NoteDialogToolbar {
 	*/
 
 	update ( ) {
+		this.#removeEventListeners ( );
 		this.#rootHTMLElement.textContent = '';
+		this.#editionButtons = [];
 		this.#addToolbarElements ( );
 	}
 

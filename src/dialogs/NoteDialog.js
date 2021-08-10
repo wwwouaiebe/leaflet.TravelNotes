@@ -177,6 +177,18 @@ class NoteDialog extends BaseDialog {
 		this.setControlsValues ( note );
 	}
 
+	#destructor ( ) {
+		this.#toolbar.destructor ( );
+		this.#iconDimsControl.destructor ( );
+		this.#iconControl.destructor ( );
+		this.#tooltipControl.destructor ( );
+		this.#popupControl.destructor ( );
+		this.#addressControl.destructor ( );
+		this.#linkControl.destructor ( );
+		this.#phoneControl.destructor ( );
+
+	}
+
 	/**
 	The control that have currently the focus. Used for toolbar buttons
 	*/
@@ -241,6 +253,16 @@ class NoteDialog extends BaseDialog {
 		this.#note.validateData ( );
 
 		return true;
+	}
+
+	onCancel ( ) {
+		this.#destructor ( );
+		super.onCancel ( );
+	}
+
+	onOk ( ) {
+		this.#destructor ( );
+		super.onOk ( );
 	}
 
 	/**

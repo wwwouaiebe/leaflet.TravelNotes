@@ -97,6 +97,10 @@ class NoteDialogGeoCoderHelper {
 		this.#noteDialog = noteDialog;
 	}
 
+	destructor ( ) {
+		this.#noteDialog = null;
+	}
+
 	setAddressWithGeoCoder ( latLng ) {
 		this.#noteDialog.showWait ( );
 		this.#noteDialog.hideError ( );
@@ -131,15 +135,22 @@ class AddressButtonEventListener {
 
 	#noteDialog = null;
 	#latLng = null;
+	#geoCoderHelper = null;
 
 	constructor ( noteDialog, latLng ) {
 		this.#noteDialog = noteDialog;
 		this.#latLng = latLng;
+		this.#geoCoderHelper = new NoteDialogGeoCoderHelper ( this.#noteDialog );
+	}
+
+	destructor ( ) {
+		this.#noteDialog = null;
+		this.#geoCoderHelper.destructor ( );
 	}
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		new NoteDialogGeoCoderHelper ( this.#noteDialog ).setAddressWithGeoCoder ( this.#latLng );
+		this.#geoCoderHelper.setAddressWithGeoCoder ( this.#latLng );
 	}
 }
 
@@ -162,6 +173,10 @@ class FocusControlEventListener {
 	constructor ( noteDialog, disableFocusControl ) {
 		this.#noteDialog = noteDialog;
 		this.#disableFocusControl = disableFocusControl;
+	}
+
+	destructor ( ) {
+		this.#noteDialog = null;
 	}
 
 	handleEvent ( focusEvent ) {
@@ -192,6 +207,10 @@ class BlurUrlInputEventListener {
 
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
+	}
+
+	destructor ( ) {
+		this.#noteDialog = null;
 	}
 
 	handleEvent ( blurEvent ) {
@@ -227,6 +246,10 @@ class InputUpdatedEventListener {
 
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
+	}
+
+	destructor ( ) {
+		this.#noteDialog = null;
 	}
 
 	handleEvent ( inputUpdatedEvent ) {

@@ -79,6 +79,7 @@ class NoteDialogAddressControl {
 	#addressHeaderDiv = null;
 	#addressInputDiv = null;
 	#addressInput = null;
+	#addressButton = null;
 
 	/**
 	The latLng used for geocoding
@@ -86,6 +87,17 @@ class NoteDialogAddressControl {
 	*/
 
 	#latLng = null;
+
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onFocusControl : null,
+		onInputUpdated : null,
+		onAddressButtonClick : null
+	}
 
 	constructor ( noteDialog, latLng ) {
 		this.#noteDialog = noteDialog;
@@ -96,7 +108,7 @@ class NoteDialogAddressControl {
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			}
 		);
-		theHTMLElementsFactory.create (
+		this.#addressButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
@@ -104,8 +116,7 @@ class NoteDialogAddressControl {
 				textContent : '🔄'
 			},
 			this.#addressHeaderDiv
-		)
-			.addEventListener ( 'click', new AddressButtonEventListener ( this.#noteDialog, this.#latLng ) );
+		);
 
 		theHTMLElementsFactory.create (
 			'text',
@@ -131,8 +142,21 @@ class NoteDialogAddressControl {
 			this.#addressInputDiv
 		);
 
-		this.#addressInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
-		this.#addressInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#eventListeners.onAddressButtonClick = new AddressButtonEventListener ( this.#noteDialog, this.#latLng );
+		this.#addressInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#addressInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#addressButton.addEventListener ( 'click', this.#eventListeners.onAddressButtonClick );
+	}
+
+	destructor ( ) {
+		this.#addressInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#addressInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#addressButton.removeEventListener ( 'click', this.#eventListeners.onAddressButtonClick );
+		this.#eventListeners.onFocusControl.destructor ( );
+		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#eventListeners.onAddressButtonClick.destructor ( );
 	}
 
 	/**

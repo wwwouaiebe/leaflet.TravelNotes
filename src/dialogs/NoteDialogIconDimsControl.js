@@ -77,6 +77,15 @@ class NoteDialogIconDimsControl {
 	#iconWidthInput = null;
 	#iconHeightInput = null;
 
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onInputUpdated : null
+	}
+
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
 		this.#iconDimsDiv = theHTMLElementsFactory.create (
@@ -103,8 +112,6 @@ class NoteDialogIconDimsControl {
 			this.#iconDimsDiv
 		);
 
-		this.#iconWidthInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
-
 		theHTMLElementsFactory.create (
 			'text',
 			{
@@ -123,7 +130,16 @@ class NoteDialogIconDimsControl {
 			this.#iconDimsDiv
 		);
 
-		this.#iconHeightInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
+		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#iconWidthInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#iconHeightInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+	}
+
+	destructor ( ) {
+		this.#iconWidthInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#iconHeightInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**

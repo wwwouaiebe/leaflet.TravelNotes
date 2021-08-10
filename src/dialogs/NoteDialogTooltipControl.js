@@ -75,6 +75,16 @@ class NoteDialogTooltipControl {
 	#tooltipDiv = null;
 	#tooltipInput = null
 
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onFocusControl : null,
+		onInputUpdated : null
+	}
+
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
 		this.#tooltipDiv = theHTMLElementsFactory.create (
@@ -94,8 +104,18 @@ class NoteDialogTooltipControl {
 			this.#tooltipDiv
 		);
 
-		this.#tooltipInput.addEventListener ( 'focus', new FocusControlEventListener ( this.#noteDialog, false ) );
-		this.#tooltipInput.addEventListener ( 'input', new InputUpdatedEventListener ( this.#noteDialog ) );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#tooltipInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#tooltipInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+	}
+
+	destructor ( ) {
+		this.#tooltipInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#tooltipInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#eventListeners.onFocusControl.destructor ( );
+		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**
