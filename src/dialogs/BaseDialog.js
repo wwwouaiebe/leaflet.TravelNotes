@@ -123,7 +123,7 @@ import {
 	BaseDialogBackgroundEventListeners as theBackgroundEventListeners
 } from '../dialogs/BaseDialogEventListeners.js';
 
-import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
+// import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
 
 import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
@@ -141,11 +141,11 @@ import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 class BaseDialog {
 
 	/**
-	Garbage collector testing. Only for dev...
+	Garbage collector testing. Only for memory free tests on dev.
 	@private
 	*/
 
-	#garbageCollectorTester = new GarbageCollectorTester ( );
+	// #garbageCollectorTester = new GarbageCollectorTester ( );
 
 	/**
 	HTMLElements of the dialog
