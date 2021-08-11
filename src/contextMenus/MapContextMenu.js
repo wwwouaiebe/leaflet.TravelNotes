@@ -79,59 +79,7 @@ class MapContextMenu extends BaseContextMenu {
 		super ( contextMenuEvent, parentDiv );
 		this.#latLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
 
-		this.menuItems = [
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
-				doAction :
-					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
-					&&
-					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
-				doAction : ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
-				doAction :
-					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
-					&&
-					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Add a route' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Hide all routes' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Show all routes' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - New travel note' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Hide all notes' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Show all notes' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Zoom to travel' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - About Travel & Notes' ),
-				doAction : true
-			}
-		];
-		Object.freeze ( this );
+		Object.seal ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -178,6 +126,61 @@ class MapContextMenu extends BaseContextMenu {
 	}
 
 	/* eslint-enable no-magic-numbers */
+
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
+				isActive :
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+					&&
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
+				isActive : ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
+				isActive :
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+					&&
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Add a route' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Hide all routes' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Show all routes' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - New travel note' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Hide all notes' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Show all notes' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Zoom to travel' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - About Travel & Notes' ),
+				isActive : true
+			}
+		];
+	}
 }
 
 export default MapContextMenu;

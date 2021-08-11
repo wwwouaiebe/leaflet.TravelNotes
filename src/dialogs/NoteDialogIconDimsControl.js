@@ -125,7 +125,7 @@ class NoteDialogIconDimsControl {
 				type : 'number',
 				className : 'TravelNotes-NoteDialog-NumberInput',
 				value : ICON_DIMENSIONS.height,
-				dataset : { name : 'iconHeight' }
+				dataset : { Name : 'iconHeight' }
 			},
 			this.#iconDimsDiv
 		);

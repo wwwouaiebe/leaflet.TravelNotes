@@ -56,14 +56,317 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import BaseContextMenuEvents from '../contextMenus/BaseContextMenuEvents.js';
-import { ZERO, ONE } from '../util/Constants.js';
+import theConfig from '../data/Config.js';
+import { NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const OUR_MENU_MARGIN = 20;
+
+class KeydownKeyboardEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( keydownEvent ) {
+		switch ( keydownEvent.key ) {
+		case 'Escape' :
+		case 'Esc' :
+			keydownEvent.stopPropagation ( );
+			this.#menuOperator.onCancelMenu ( );
+			break;
+		case 'ArrowDown' :
+		case 'ArrowRight' :
+		case 'Tab' :
+			keydownEvent.stopPropagation ( );
+			this.#menuOperator.changeKeyboardSelectedItem ( ONE );
+			break;
+		case 'ArrowUp' :
+		case 'ArrowLeft' :
+			keydownEvent.stopPropagation ( );
+			this.#menuOperator.changeKeyboardSelectedItem ( NOT_FOUND );
+			break;
+		case 'Home' :
+			keydownEvent.stopPropagation ( );
+			this.#menuOperator.changeKeyboardSelectedItem ( ZERO );
+			break;
+		case 'End' :
+			keydownEvent.stopPropagation ( );
+			this.#menuOperator.changeKeyboardSelectedItem ( TWO );
+			break;
+		case 'Enter' :
+			keydownEvent.stopPropagation ( );
+			this.#menuOperator.selectKeyboardItem ( );
+			break;
+		default :
+			break;
+		}
+	}
+}
+
+class MouseClickCancelButtonEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		this.#menuOperator.onCancelMenu ( );
+	}
+}
+
+class MouseLeaveMenuItemEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( mouseLeaveEvent ) {
+		this.#menuOperator.onMouseLeaveMenuItem ( mouseLeaveEvent.target );
+	}
+}
+
+class MouseEnterMenuItemEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( mouseEnterEvent ) {
+		this.#menuOperator.onMouseEnterMenuItem ( mouseEnterEvent.target );
+	}
+}
+
+class ClickMenuItemEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		this.#menuOperator.selectItem ( Number.parseInt ( clickEvent.target.dataset.tanObjId ) );
+	}
+}
+
+class MouseLeaveContainerEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( mouseLeaveEvent ) {
+		mouseLeaveEvent.stopPropagation ( );
+		this.#menuOperator.onMouseLeaveContainer ( );
+	}
+}
+
+class MouseEnterContainerEventListener {
+
+	#menuOperator = null;
+
+	constructor ( menuOperator ) {
+		this.#menuOperator = menuOperator;
+	}
+
+	destructor ( ) {
+		this.#menuOperator = null;
+	}
+
+	handleEvent ( mouseEnterEvent ) {
+		mouseEnterEvent.stopPropagation ( );
+		this.#menuOperator.onMouseEnterContainer ( );
+	}
+}
+
+class MenuOperator {
+
+	#contextMenu = null;
+
+	#eventListeners = {
+		onKeydownKeyboard : null,
+		onMouseLeaveContainer : null,
+		onMouseEnterContainer : null,
+		onMouseClickCancelButton : null,
+		onClickMenuItem : null,
+		onMouseLeaveMenuItem : null,
+		onMouseEnterMenuItem : null
+	};
+
+	#keyboardSelectedItem = NOT_FOUND;
+
+	#timerId = null;
+
+	constructor ( contextMenu ) {
+		this.#contextMenu = contextMenu;
+
+		this.#eventListeners.onKeydownKeyboard = new KeydownKeyboardEventListener ( this );
+		this.#eventListeners.onMouseLeaveContainer = new MouseLeaveContainerEventListener ( this );
+		this.#eventListeners.onMouseEnterContainer = new MouseEnterContainerEventListener ( this );
+		this.#eventListeners.onMouseClickCancelButton = new MouseClickCancelButtonEventListener ( this );
+		this.#eventListeners.onClickMenuItem = new ClickMenuItemEventListener ( this );
+		this.#eventListeners.onMouseLeaveMenuItem = new MouseLeaveMenuItemEventListener ( this );
+		this.#eventListeners.onMouseEnterMenuItem = new MouseEnterMenuItemEventListener ( this );
+		document.addEventListener ( 'keydown', this.#eventListeners.onKeydownKeyboard, true );
+		this.#contextMenu.htmlElements.container.addEventListener ( 'mouseleave', this.#eventListeners.onMouseLeaveContainer );
+		this.#contextMenu.htmlElements.container.addEventListener ( 'mouseenter', this.#eventListeners.onMouseEnterContainer );
+		this.#contextMenu.htmlElements.cancelButton.addEventListener ( 'click', this.#eventListeners.onMouseClickCancelButton );
+		this.#contextMenu.htmlElements.menuItemHTMLElements.forEach (
+			menuItemHTMLElement => {
+				menuItemHTMLElement.addEventListener ( 'click', this.#eventListeners.onClickMenuItem );
+				menuItemHTMLElement.addEventListener ( 'mouseleave', this.#eventListeners.onMouseLeaveMenuItem );
+				menuItemHTMLElement.addEventListener ( 'mouseenter', this.#eventListeners.onMouseEnterMenuItem );
+			}
+		);
+	}
+
+	destructor ( ) {
+		document.removeEventListener ( 'keydown', this.#eventListeners.onKeydownKeyboard, true );
+		if ( this.#timerId ) {
+			clearTimeout ( this.#timerId );
+			this.#timerId = null;
+		}
+		this.#contextMenu.htmlElements.container.removeEventListener (
+			'mouseleave',
+			this.#eventListeners.onMouseLeaveContainer
+		);
+		this.#contextMenu.htmlElements.container.removeEventListener (
+			'mouseenter',
+			this.#eventListeners.onMouseEnterContainer
+		);
+		this.#contextMenu.htmlElements.cancelButton.removeEventListener (
+			'click',
+			this.#eventListeners.onMouseClickCancelButton
+		);
+		this.#contextMenu.htmlElements.menuItemHTMLElements.forEach (
+			menuItemHTMLElement => {
+				menuItemHTMLElement.removeEventListener ( 'click', this.#eventListeners.onClickMenuItem );
+				menuItemHTMLElement.removeEventListener ( 'mouseleave', this.#eventListeners.onMouseLeaveMenuItem );
+				menuItemHTMLElement.removeEventListener ( 'mouseenter', this.#eventListeners.onMouseEnterMenuItem );
+			}
+		);
+		for ( const eventListenerName in this.#eventListeners ) {
+			this.#eventListeners [ eventListenerName ].destructor ( );
+		}
+		this.#contextMenu.htmlElements.parentNode.removeChild ( this.#contextMenu.htmlElements.container );
+		this.#contextMenu = null;
+	}
+
+	onMouseLeaveContainer ( ) {
+		this.#timerId = setTimeout (
+			( ) => { this.onCancelMenu ( ); },
+			theConfig.contextMenu.timeout
+		);
+	}
+
+	onMouseEnterContainer ( ) {
+		if ( this.#timerId ) {
+			clearTimeout ( this.#timerId );
+			this.#timerId = null;
+		}
+	}
+
+	changeKeyboardSelectedItem ( changeValue ) {
+		if ( this.#keyboardSelectedItem !== NOT_FOUND ) {
+			this.#contextMenu.htmlElements.menuItemHTMLElements [ this.#keyboardSelectedItem ]
+				.classList.remove ( 'TravelNotes-ContextMenu-ItemSelected' );
+		}
+		switch ( changeValue ) {
+		case NOT_FOUND :
+		case ONE :
+			this.#keyboardSelectedItem += changeValue;
+			if ( NOT_FOUND === this.#keyboardSelectedItem ) {
+				this.#keyboardSelectedItem = this.#contextMenu.htmlElements.menuItemHTMLElements.length - ONE;
+			}
+			if ( this.#contextMenu.htmlElements.menuItemHTMLElements.length === this.#keyboardSelectedItem ) {
+				this.#keyboardSelectedItem = ZERO;
+			}
+			break;
+		case ZERO :
+			this.#keyboardSelectedItem = ZERO;
+			break;
+		default :
+			this.#keyboardSelectedItem = this.#contextMenu.htmlElements.menuItemHTMLElements.length - ONE;
+			break;
+		}
+		this.#contextMenu.htmlElements.menuItemHTMLElements [ this.#keyboardSelectedItem ]
+			.classList.add ( 'TravelNotes-ContextMenu-ItemSelected' );
+	}
+
+	selectKeyboardItem ( ) {
+		if (
+			( NOT_FOUND === this.#keyboardSelectedItem )
+			||
+			( this.#contextMenu.htmlElements.menuItemHTMLElements [ this.#keyboardSelectedItem ]
+				.classList.contains ( 'TravelNotes-ContextMenu-ItemDisabled' )
+			)
+		) {
+			return;
+		}
+		this.#contextMenu.onOk ( this.#keyboardSelectedItem );
+	}
+
+	onCancelMenu ( ) {
+		this.#contextMenu.onCancel ( 'Canceled by user' );
+	}
+
+	selectItem ( itemObjId ) {
+		if (
+			this.#contextMenu.htmlElements.menuItemHTMLElements [ itemObjId ]
+				.classList.contains ( 'TravelNotes-ContextMenu-ItemDisabled' )
+		) {
+			return;
+		}
+		this.#contextMenu.onOk ( itemObjId );
+	}
+
+	onMouseLeaveMenuItem ( menuItem ) {
+		menuItem.classList.remove ( 'TravelNotes-ContextMenu-ItemSelected' );
+	}
+
+	onMouseEnterMenuItem ( menuItem ) {
+		menuItem.classList.add ( 'TravelNotes-ContextMenu-ItemSelected' );
+	}
+}
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -78,40 +381,36 @@ const OUR_MENU_MARGIN = 20;
 
 class BaseContextMenu {
 
+	static container = null;
+
+	#onPromiseOk = null;
+	#onPromiseError = null;
+
+	#htmlElements = {
+		parentNode : null,
+		container : null,
+		cancelButton : null,
+		menuItemHTMLElements : []
+	};
+
 	#contextMenuEvent = null;
-	#haveParentDiv = null;
-	#onOk = null;
-	#onError = null;
-	#menuItems = null;
+	#haveParentDiv = false;
+	#menuOperator = null;
 
 	/**
 	Build the menu container and add event listeners
 	@private
 	*/
 
-	#buildContainer ( ) {
-		BaseContextMenuEvents.container = theHTMLElementsFactory.create (
+	#createContainer ( ) {
+		this.#htmlElements.container = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-ContextMenu-Container',
 				className : 'TravelNotes-ContextMenu-Container'
 			},
-			BaseContextMenuEvents.parentDiv
+			this.#htmlElements.parentNode
 		);
-
-		// Events are created to clear or add a timer when the mouse leave or enter in the container
-		if ( ZERO < theConfig.contextMenu.timeout ) {
-			BaseContextMenuEvents.container.addEventListener (
-				'mouseenter',
-				BaseContextMenuEvents.onMouseEnterContainer,
-				false
-			);
-			BaseContextMenuEvents.container.addEventListener (
-				'mouseleave',
-				BaseContextMenuEvents.onMouseLeaveContainer,
-				false
-			);
-		}
 	}
 
 	/**
@@ -119,65 +418,38 @@ class BaseContextMenu {
 	@private
 	*/
 
-	#addCloseButton ( ) {
-		theHTMLElementsFactory.create (
+	#createCancelButton ( ) {
+		this.#htmlElements.cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : '❌',
 				className : 'TravelNotes-ContextMenu-CloseButton',
 				title : theTranslator.getText ( 'ContextMenu - Close' )
 			},
-			BaseContextMenuEvents.container
-		).addEventListener ( 'click', BaseContextMenuEvents.onCloseMenu, false );
+			this.#htmlElements.container
+		);
 	}
 
-	/**
-	Add the menu items and event listeners to the container
-	@private
-	*/
-
-	#addMenuItems ( ) {
-		let menuItemCounter = ZERO;
+	#createMenuItemsHTMLElements ( ) {
+		let menuItemCounter = 0;
 		this.menuItems.forEach (
 			menuItem => {
-				let itemContainer = theHTMLElementsFactory.create (
-					'div',
-					{
-						className : 'TravelNotes-ContextMenu-ItemContainer'
-					},
-					BaseContextMenuEvents.container
-				);
-				let itemButton = theHTMLElementsFactory.create (
+				let menuItemHTMLElement = theHTMLElementsFactory.create (
 					'div',
 					{
 						textContent : menuItem.itemText,
-						id : 'TravelNotes-ContextMenu-Item' + menuItemCounter,
-						objId : menuItemCounter,
-						className :
-							menuItem.doAction
-								?
-								'TravelNotes-ContextMenu-Item'
-								:
-								'TravelNotes-ContextMenu-Item TravelNotes-ContextMenu-ItemDisabled'
+						className :	'TravelNotes-ContextMenu-Item',
+						dataset : { ObjId : String ( menuItemCounter ++ ) }
 					},
-					itemContainer
+					this.#htmlElements.container
 				);
-
-				itemButton.addEventListener ( 'mouseenter', BaseContextMenuEvents.onMouseEnterMenuItem, false );
-				if ( menuItem.doAction ) {
-					itemButton.addEventListener ( 'click', BaseContextMenuEvents.onClickItem, false );
+				if ( ! menuItem.isActive ) {
+					menuItemHTMLElement.classList.add ( 'TravelNotes-ContextMenu-ItemDisabled' );
 				}
-
-				++ menuItemCounter;
+				this.#htmlElements.menuItemHTMLElements.push ( menuItemHTMLElement );
 			}
 		);
-		BaseContextMenuEvents.lastItemObjId = menuItemCounter - ONE;
 	}
-
-	/**
-	Move the menu container on the screen, so the menu is always completely visible and near the selected point
-	@private
-	*/
 
 	#moveContainer ( ) {
 
@@ -188,109 +460,81 @@ class BaseContextMenu {
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
 			this.#contextMenuEvent.originalEvent.clientY,
-			screenHeight - BaseContextMenuEvents.container.clientHeight - OUR_MENU_MARGIN
+			screenHeight - this.#htmlElements.container.clientHeight - OUR_MENU_MARGIN
 		);
 		let menuLeft = Math.min (
 			this.#contextMenuEvent.originalEvent.clientX,
-			screenWidth - BaseContextMenuEvents.container.clientWidth - OUR_MENU_MARGIN
+			screenWidth - this.#htmlElements.container.clientWidth - OUR_MENU_MARGIN
 		);
+		this.#htmlElements.container.style.top = String ( menuTop ) + 'px';
 		if ( this.#haveParentDiv ) {
-			BaseContextMenuEvents.container.style.top = String ( menuTop ) + 'px';
-			BaseContextMenuEvents.container.style.right = String ( OUR_MENU_MARGIN ) + 'px';
+			this.#htmlElements.container.style.right = String ( OUR_MENU_MARGIN ) + 'px';
 		}
 		else {
-			BaseContextMenuEvents.container.style.top = String ( menuTop ) + 'px';
-			BaseContextMenuEvents.container.style.left = String ( menuLeft ) + 'px';
+			this.#htmlElements.container.style.left = String ( menuLeft ) + 'px';
 		}
 	}
-
-	/**
-	Takes action when an item is selected in the menu
-	@param {number} selectedItemObjId the objId of the selected item
-	*/
-
-	onSelectedItem ( selectedItemObjId ) {
-		this.#onOk ( selectedItemObjId );
-	}
-
-	/**
-	Verify that an item can performs an action
-	@param {number} selectedItemObjId the objId of the selected item
-	@return {boolean} true when the item can performs an action
-	*/
-
-	itemHaveAction ( itemObjId ) {
-		return this.menuItems [ itemObjId ].doAction;
-	}
-
-	/**
-	build and show the menu
-	@private
-	*/
 
 	#show ( onOk, onError ) {
-		this.#onOk = onOk;
-		this.#onError = onError;
-		this.#buildContainer ( );
-		this.#addCloseButton ( );
-		this.#addMenuItems ( );
+		this.#onPromiseOk = onOk;
+		this.#onPromiseError = onError;
+		this.#createContainer ( );
+		this.#createCancelButton ( );
+		this.#createMenuItemsHTMLElements ( );
 		this.#moveContainer ( );
-		document.addEventListener ( 'keydown', BaseContextMenuEvents.onKeyDown, true );
+		this.#menuOperator = new MenuOperator ( this );
+
 	}
 
-	constructor ( contextMenuEvent, parentDiv ) {
-		if ( BaseContextMenuEvents.container ) {
-
-			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-			BaseContextMenuEvents.onCloseMenu ( );
-			return;
-		}
-
-		BaseContextMenuEvents.contextMenu = this;
-		this.#contextMenuEvent = contextMenuEvent;
-		BaseContextMenuEvents.parentDiv = parentDiv || document.body;
-		this.#haveParentDiv = null !== parentDiv;
+	onOk ( selectedItem ) {
+		this.#menuOperator.destructor ( );
+		BaseContextMenu.container = null;
+		this.#onPromiseOk ( selectedItem );
 	}
 
-	/**
-	Show the menu
-	*/
+	onCancel ( ) {
+		this.#menuOperator.destructor ( );
+		BaseContextMenu.container = null;
+		this.#onPromiseError ( );
+	}
 
 	show ( ) {
+		if ( ! BaseContextMenu.container ) {
+			return;
+		}
 		new Promise (
 			( onOk, onError ) => { this.#show ( onOk, onError ); }
 		)
 			.then ( selection => this.doAction ( selection ) )
 			.catch (
 				err => {
-					console.error ( err );
-					BaseContextMenuEvents.reset ( );
+					if ( err ) {
+						console.error ( err );
+					}
 				}
 			);
-
 	}
 
-	/**
-	Execute the action for the selected item. Must be implemented in the derived classes
-	@param {number} selectedItemObjId The selected item objId
-	*/
+	constructor ( contextMenuEvent, parentNode ) {
 
-	doAction ( /* selectedItemObjId */ ) {
-	}
+		if ( BaseContextMenu.container ) {
 
-	/**
-	The menuItems to be used by the menu.  Must be implemented in the derived classes
-	*/
-
-	set menuItems ( MenuItems ) {
-		if ( ! this.#menuItems ) {
-			this.#menuItems = MenuItems;
+			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
+			BaseContextMenu.container.onCancel ( );
+			return;
 		}
+
+		this.#contextMenuEvent = contextMenuEvent;
+		this.#htmlElements.parentNode = parentNode || document.body;
+		this.#haveParentDiv = null !== parentNode;
+
+		BaseContextMenu.container = this;
+
 	}
 
-	get menuItems ( ) {
-		return this.#menuItems;
-	}
+	get menuItems ( ) { return []; }
+
+	get htmlElements ( ) { return this.#htmlElements; }
 
 }
 
