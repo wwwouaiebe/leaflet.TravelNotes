@@ -66,8 +66,8 @@ class ProfileContextMenu extends BaseContextMenu {
 
 	#contextMenuEvent = null;
 
-	constructor ( contextMenuEvent, parentDiv = null ) {
-		super ( contextMenuEvent, parentDiv );
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
 		this.#contextMenuEvent = contextMenuEvent;
 	}
 
