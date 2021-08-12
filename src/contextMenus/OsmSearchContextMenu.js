@@ -74,8 +74,8 @@ class OsmSearchContextMenu extends BaseContextMenu {
 	#osmElement = null;
 	#geometry = null;
 
-	constructor ( contextMenuEvent, parentDiv = null ) {
-		super ( contextMenuEvent, parentDiv );
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
 		this.#latLng = contextMenuEvent.originalEvent.latLng;
 		this.#osmElement = contextMenuEvent.originalEvent.osmElement;
 		this.#geometry = contextMenuEvent.originalEvent.geometry;

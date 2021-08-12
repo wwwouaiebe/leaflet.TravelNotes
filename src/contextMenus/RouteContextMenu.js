@@ -85,13 +85,12 @@ class RouteContextMenu extends BaseContextMenu {
 
 	#routeObjId = INVALID_OBJ_ID;
 	#route = null;
-	#contextMenuEvent = null;
 
-	constructor ( contextMenuEvent, parentDiv = null ) {
-		super ( contextMenuEvent, parentDiv );
-		this.#routeObjId = contextMenuEvent.target.objId;
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
+
+		this.#routeObjId = this.eventData.targetObjId;
 		this.#route = theDataSearchEngine.getRoute ( this.#routeObjId );
-		this.#contextMenuEvent = contextMenuEvent;
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -134,8 +133,8 @@ class RouteContextMenu extends BaseContextMenu {
 			theNoteEditor.newRouteNote (
 				{
 					routeObjId : this.#routeObjId,
-					lat : this.#contextMenuEvent.latlng.lat,
-					lng : this.#contextMenuEvent.latlng.lng
+					lat : this.eventData.lat,
+					lng : this.eventData.lng
 				}
 			);
 			break;
@@ -215,7 +214,7 @@ class RouteContextMenu extends BaseContextMenu {
 			},
 			{
 				itemText : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
-				isActive : ! this.#contextMenuEvent.fromUI
+				isActive : ! this.eventData.haveParentNode
 			},
 			{
 				itemText : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),

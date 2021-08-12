@@ -74,9 +74,9 @@ class NoteContextMenu extends BaseContextMenu {
 	#noteObjId = INVALID_OBJ_ID;
 	#route = null;
 
-	constructor ( contextMenuEvent, parentDiv = null ) {
-		super ( contextMenuEvent, parentDiv );
-		this.#noteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
+		this.#noteObjId = this.eventData.targetObjId;
 		this.#route = theDataSearchEngine.getNoteAndRoute ( this.#noteObjId ).route;
 	}
 

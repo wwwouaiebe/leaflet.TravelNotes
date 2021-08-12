@@ -47,7 +47,7 @@ Tests ...
 import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theTravelEditor from '../core/TravelEditor.js';
 
-import { LAT_LNG, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -176,13 +176,6 @@ class RouteContextMenuEventListener {
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.fromUI = true;
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY
-			};
 		new RouteContextMenu ( contextMenuEvent, contextMenuEvent.target.parentNode ).show ( );
 	}
 }

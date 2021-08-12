@@ -69,7 +69,7 @@ class ManeuverContextMenu extends BaseContextMenu {
 
 	constructor ( contextMenuEvent, parentDiv = null ) {
 		super ( contextMenuEvent, parentDiv );
-		this.#maneuverObjId = contextMenuEvent.maneuverObjId;
+		this.#maneuverObjId = this.eventData.targetObjId;
 	}
 
 	/* eslint-disable no-magic-numbers */

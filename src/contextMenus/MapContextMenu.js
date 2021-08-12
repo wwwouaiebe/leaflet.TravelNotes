@@ -75,11 +75,9 @@ class MapContextMenu extends BaseContextMenu {
 
 	#latLng = LAT_LNG.defaultValue;
 
-	constructor ( contextMenuEvent, parentDiv = null ) {
-		super ( contextMenuEvent, parentDiv );
-		this.#latLng = [ contextMenuEvent.latlng.lat, contextMenuEvent.latlng.lng ];
-
-		Object.seal ( this );
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
+		this.#latLng = [ this.eventData.lat, this.eventData.lng ];
 	}
 
 	/* eslint-disable no-magic-numbers */

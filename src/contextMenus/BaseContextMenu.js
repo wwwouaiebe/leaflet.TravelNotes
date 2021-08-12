@@ -61,6 +61,8 @@ import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import BaseContextMenuOperator from '../contextMenus/BaseContextMenuOperator.js';
 
+import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
+
 // import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
 
 const OUR_MENU_MARGIN = 20;
@@ -91,7 +93,7 @@ class BaseContextMenu {
 	@private
 	*/
 
-	static #container = null;
+	static #currentMenu = null;
 
 	/**
 	The promise ok and error handler
@@ -113,19 +115,14 @@ class BaseContextMenu {
 		menuItemHTMLElements : []
 	};
 
-	/**
-	The event that have trigered the menu
-	@private
-	*/
-
-	#contextMenuEvent = null;
-
-	/**
-	A flag for the parentNode. False when the parentNode is the body.
-	@private
-	*/
-
-	#haveParentNode = false;
+	#eventData = {
+		clientX : ZERO,
+		clientY : ZERO,
+		lat : LAT_LNG.defaultValue,
+		lng : LAT_LNG.defaultValue,
+		targetObjId : INVALID_OBJ_ID,
+		haveParentNode : false
+	};
 
 	/**
 	The associated BaseContextMenuOperator object
@@ -206,15 +203,15 @@ class BaseContextMenu {
 
 		// the menu is positionned ( = top left where the user have clicked but the menu must be completely in the window...
 		let menuTop = Math.min (
-			this.#contextMenuEvent.originalEvent.clientY,
+			this.#eventData.clientY,
 			screenHeight - this.#htmlElements.container.clientHeight - OUR_MENU_MARGIN
 		);
 		let menuLeft = Math.min (
-			this.#contextMenuEvent.originalEvent.clientX,
+			this.#eventData.clientX,
 			screenWidth - this.#htmlElements.container.clientWidth - OUR_MENU_MARGIN
 		);
 		this.#htmlElements.container.style.top = String ( menuTop ) + 'px';
-		if ( this.#haveParentNode ) {
+		if ( this.#eventData.haveParentNode ) {
 			this.#htmlElements.container.style.right = String ( OUR_MENU_MARGIN ) + 'px';
 		}
 		else {
@@ -244,7 +241,7 @@ class BaseContextMenu {
 
 	onOk ( selectedItem ) {
 		this.#menuOperator.destructor ( );
-		BaseContextMenu.#container = null;
+		BaseContextMenu.#currentMenu = null;
 		this.#onPromiseOk ( selectedItem );
 	}
 
@@ -254,7 +251,7 @@ class BaseContextMenu {
 
 	onCancel ( ) {
 		this.#menuOperator.destructor ( );
-		BaseContextMenu.#container = null;
+		BaseContextMenu.#currentMenu = null;
 		this.#onPromiseError ( );
 	}
 
@@ -263,7 +260,7 @@ class BaseContextMenu {
 	*/
 
 	show ( ) {
-		if ( ! BaseContextMenu.#container ) {
+		if ( ! BaseContextMenu.#currentMenu ) {
 			return;
 		}
 		new Promise (
@@ -281,18 +278,29 @@ class BaseContextMenu {
 
 	constructor ( contextMenuEvent, parentNode ) {
 
-		if ( BaseContextMenu.#container ) {
+		if ( BaseContextMenu.#currentMenu ) {
 
 			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-			BaseContextMenu.#container.onCancel ( );
+			BaseContextMenu.#currentMenu.onCancel ( );
 			return;
 		}
 
-		this.#contextMenuEvent = contextMenuEvent;
-		this.#htmlElements.parentNode = parentNode || document.body;
-		this.#haveParentNode = null !== parentNode;
+		this.#eventData.clientX = contextMenuEvent.clientX || contextMenuEvent.originalEvent.clientX || ZERO;
+		this.#eventData.clientY = contextMenuEvent.clientY || contextMenuEvent.originalEvent.clientY || ZERO;
+		this.#eventData.lat = contextMenuEvent.latlng ? contextMenuEvent.latlng.lat : LAT_LNG.defaultValue;
+		this.#eventData.lng = contextMenuEvent.latlng ? contextMenuEvent.latlng.lng : LAT_LNG.defaultValue;
+		if ( contextMenuEvent.target.objId ) {
+			this.#eventData.targetObjId = contextMenuEvent.target.objId;
+		}
+		else if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
+			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.target.dataset.tanObjId );
+		}
+		this.#eventData.haveParentNode = null !== parentNode;
+		Object.freeze ( this.#eventData );
 
-		BaseContextMenu.#container = this;
+		this.#htmlElements.parentNode = parentNode || document.body;
+
+		BaseContextMenu.#currentMenu = this;
 		Object.seal ( this );
 
 	}
@@ -309,7 +317,9 @@ class BaseContextMenu {
 	@readonly
 	*/
 
-	get htmlElements ( ) { return Object.freeze ( this.#htmlElements ); }
+	get htmlElements ( ) { return this.#htmlElements; }
+
+	get eventData ( ) { return this.#eventData; }
 
 }
 
