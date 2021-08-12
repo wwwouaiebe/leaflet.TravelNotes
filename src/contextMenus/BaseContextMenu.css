@@ -58,31 +58,15 @@ Changes:
 	cursor: default;
 }
 
-/*
-.TravelNotes-ContextMenu-ItemContainer {
-	margin-left: 2em;
-	margin-right: 0.5em;
-	border-bottom-style: solid;
-	border-bottom-width: 0.1em;
-}
-
-.TravelNotes-ContextMenu-ItemContainer:last-child {
-	border-bottom-style: none;
-}
-*/
 .TravelNotes-ContextMenu-Item {
 	margin-left: 2em;
+	margin-right: 1em;
 	border-bottom-style: solid;
 	border-bottom-width: 0.1em;
-	padding: 0.2em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	padding-right: 0.5em;
 	padding-left: 1em;
-
-	/*
-	margin-top: 0.2em;
-	margin-bottom: 0.2em;
-	padding-left: 1em;
-	padding-right: 0.2em;
-	*/
 }
 
 .TravelNotes-ContextMenu-Item:last-child {
