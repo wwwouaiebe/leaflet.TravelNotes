@@ -71,7 +71,6 @@ class ManeuverOrNoteEventListeners {
 			element = element.parentNode;
 		}
 		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.fromUI = true;
 		contextMenuEvent.originalEvent =
 			{
 				clientX : contextMenuEvent.clientX,
