@@ -65,7 +65,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class MapContextMenu
 @classdesc this class implements the BaseContextMenu class for the map
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------

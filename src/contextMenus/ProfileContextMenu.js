@@ -56,7 +56,7 @@ import Zoomer from '../core/Zoomer.js';
 
 @class ProfileContextMenu
 @classdesc this class implements the BaseContextMenu class for the profiles
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -69,18 +69,6 @@ class ProfileContextMenu extends BaseContextMenu {
 	constructor ( contextMenuEvent, parentDiv = null ) {
 		super ( contextMenuEvent, parentDiv );
 		this.#contextMenuEvent = contextMenuEvent;
-		this.menuItems =
-		[
-			{
-				itemText : theTranslator.getText ( 'ProfileContextMenu - Add a note to the route at this point' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'ProfileContextMenu - Zoom to this point' ),
-				doAction : true
-			}
-		];
-		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -106,6 +94,18 @@ class ProfileContextMenu extends BaseContextMenu {
 
 	/* eslint-enable no-magic-numbers */
 
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'ProfileContextMenu - Add a note to the route at this point' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'ProfileContextMenu - Zoom to this point' ),
+				isActive : true
+			}
+		];
+	}
 }
 
 export default ProfileContextMenu;

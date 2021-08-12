@@ -75,7 +75,7 @@ import { ROUTE_EDITION_STATUS, ZERO, INVALID_OBJ_ID } from '../util/Constants.js
 
 @class RouteContextMenu
 @classdesc this class implements the BaseContextMenu class for the routes
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -92,82 +92,6 @@ class RouteContextMenu extends BaseContextMenu {
 		this.#routeObjId = contextMenuEvent.target.objId;
 		this.#route = theDataSearchEngine.getRoute ( this.#routeObjId );
 		this.#contextMenuEvent = contextMenuEvent;
-		this.menuItems =
-		[
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Edit this route' ),
-				doAction :
-					(
-						( this.#routeObjId !== theTravelNotesData.travel.editedRoute.objId )
-						&&
-						( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus )
-					)
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
-				doAction :
-					(
-						( this.#routeObjId !== theTravelNotesData.travel.editedRoute.objId )
-						||
-						( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus )
-					)
-			},
-			{
-				itemText :
-					theTranslator.getText (
-						this.#route.hidden
-							?
-							'RouteContextMenu - Show this route'
-							:
-							'RouteContextMenu - Hide this route'
-					),
-				doAction :
-					this.#route.hidden
-					||
-					theTravelNotesData.travel.editedRoute.objId !== this.#routeObjId
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Properties' ),
-				doAction : ! this.#route.hidden
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
-				doAction : ! this.#route.hidden
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
-				doAction : this.#route.itinerary.hasProfile
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Print route map' ),
-				doAction : theConfig.printRouteMap.isEnabled
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Save this route in a GPX file' ),
-				doAction : ( ZERO < this.#route.itinerary.itineraryPoints.length )
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Invert waypoints' ),
-				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
-				doAction : ! contextMenuEvent.fromUI
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
-				doAction : ! this.#route.hidden
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Save modifications on this route' ),
-				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
-			},
-			{
-				itemText : theTranslator.getText ( 'RouteContextMenu - Cancel modifications on this route' ),
-				doAction : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
-			}
-		];
-		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -231,6 +155,82 @@ class RouteContextMenu extends BaseContextMenu {
 
 	/* eslint-enable no-magic-numbers */
 
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Edit this route' ),
+				isActive :
+					(
+						( this.#routeObjId !== theTravelNotesData.travel.editedRoute.objId )
+						&&
+						( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus )
+					)
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Delete this route' ),
+				isActive :
+					(
+						( this.#routeObjId !== theTravelNotesData.travel.editedRoute.objId )
+						||
+						( ROUTE_EDITION_STATUS.editedChanged !== theTravelNotesData.travel.editedRoute.editionStatus )
+					)
+			},
+			{
+				itemText :
+					theTranslator.getText (
+						this.#route.hidden
+							?
+							'RouteContextMenu - Show this route'
+							:
+							'RouteContextMenu - Hide this route'
+					),
+				isActive :
+					this.#route.hidden
+					||
+					theTravelNotesData.travel.editedRoute.objId !== this.#routeObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Properties' ),
+				isActive : ! this.#route.hidden
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Zoom to route' ),
+				isActive : ! this.#route.hidden
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - View the elevation' ),
+				isActive : this.#route.itinerary.hasProfile
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Print route map' ),
+				isActive : theConfig.printRouteMap.isEnabled
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Save this route in a GPX file' ),
+				isActive : ( ZERO < this.#route.itinerary.itineraryPoints.length )
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Invert waypoints' ),
+				isActive : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Add a note on the route' ),
+				isActive : ! this.#contextMenuEvent.fromUI
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Create a note for each route maneuver' ),
+				isActive : ! this.#route.hidden
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Save modifications on this route' ),
+				isActive : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'RouteContextMenu - Cancel modifications on this route' ),
+				isActive : theTravelNotesData.travel.editedRoute.objId === this.#routeObjId
+			}
+		];
+	}
 }
 
 export default RouteContextMenu;

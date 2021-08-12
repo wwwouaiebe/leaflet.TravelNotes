@@ -57,7 +57,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class ManeuverContextMenu
 @classdesc this class implements the BaseContextMenu class for the maneuvers
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -70,14 +70,6 @@ class ManeuverContextMenu extends BaseContextMenu {
 	constructor ( contextMenuEvent, parentDiv = null ) {
 		super ( contextMenuEvent, parentDiv );
 		this.#maneuverObjId = contextMenuEvent.maneuverObjId;
-		this.menuItems =
-		[
-			{
-				itemText : theTranslator.getText ( 'ManeuverContextMenu - Zoom to this maneuver' ),
-				doAction : true
-			}
-		];
-		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -94,6 +86,14 @@ class ManeuverContextMenu extends BaseContextMenu {
 
 	/* eslint-enable no-magic-numbers */
 
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'ManeuverContextMenu - Zoom to this maneuver' ),
+				isActive : true
+			}
+		];
+	}
 }
 
 export default ManeuverContextMenu;

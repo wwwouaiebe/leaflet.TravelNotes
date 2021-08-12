@@ -60,7 +60,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class WayPointContextMenu
 @classdesc this class implements the BaseContextMenu class for the wayPoints
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -73,21 +73,6 @@ class WayPointContextMenu extends BaseContextMenu {
 	constructor ( contextMenuEvent, parentDiv = null ) {
 		super ( contextMenuEvent, parentDiv );
 		this.#wayPointObjId = contextMenuEvent.target.objId;
-		this.menuItems =
-		[
-			{
-				itemText : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
-				doAction :
-					theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== this.#wayPointObjId
-					&&
-					theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== this.#wayPointObjId
-			},
-			{
-				itemText : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
-				doAction : true
-			}
-		];
-		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -107,6 +92,21 @@ class WayPointContextMenu extends BaseContextMenu {
 
 	/* eslint-enable no-magic-numbers */
 
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'WayPointContextMenu - Delete this waypoint' ),
+				isActive :
+					theTravelNotesData.travel.editedRoute.wayPoints.first.objId !== this.#wayPointObjId
+					&&
+					theTravelNotesData.travel.editedRoute.wayPoints.last.objId !== this.#wayPointObjId
+			},
+			{
+				itemText : theTranslator.getText ( 'WayPointContextMenu - Modify properties' ),
+				isActive : true
+			}
+		];
+	}
 }
 
 export default WayPointContextMenu;

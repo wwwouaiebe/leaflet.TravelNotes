@@ -62,7 +62,7 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class OsmSearchContextMenu
 @classdesc this class implements the BaseContextMenu class for the OsmSearch data
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -79,50 +79,6 @@ class OsmSearchContextMenu extends BaseContextMenu {
 		this.#latLng = contextMenuEvent.originalEvent.latLng;
 		this.#osmElement = contextMenuEvent.originalEvent.osmElement;
 		this.#geometry = contextMenuEvent.originalEvent.geometry;
-		this.menuItems =
-		[
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
-				doAction :
-					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
-					&&
-					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
-				doAction : ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
-			},
-			{
-				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
-				doAction :
-					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
-					&&
-					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
-			},
-			{
-				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Create a route note with this result' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText (
-					theNoteEditor.osmSearchNoteDialog
-						?
-						'OsmSearchContextMenu - Hide note dialog'
-						:
-						'OsmSearchContextMenu - Show note dialog'
-				),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Zoom to this result' ),
-				doAction : true
-			}
-		];
-		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -162,6 +118,50 @@ class OsmSearchContextMenu extends BaseContextMenu {
 
 	/* eslint-enable no-magic-numbers */
 
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as start point' ),
+				isActive :
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+					&&
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.first.lat )
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as way point' ),
+				isActive : ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+			},
+			{
+				itemText : theTranslator.getText ( 'MapContextMenu - Select this point as end point' ),
+				isActive :
+					( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId )
+					&&
+					( LAT_LNG.defaultValue === theTravelNotesData.travel.editedRoute.wayPoints.last.lat )
+			},
+			{
+				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Create a route note with this result' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Create a travel note with this result' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText (
+					theNoteEditor.osmSearchNoteDialog
+						?
+						'OsmSearchContextMenu - Hide note dialog'
+						:
+						'OsmSearchContextMenu - Show note dialog'
+				),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'OsmSearchContextMenu - Zoom to this result' ),
+				isActive : true
+			}
+		];
+	}
 }
 
 export default OsmSearchContextMenu;

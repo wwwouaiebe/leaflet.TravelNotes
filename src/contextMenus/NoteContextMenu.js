@@ -63,7 +63,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class NoteContextMenu
 @classdesc this class implements the BaseContextMenu class for the notes
-@implements {BaseContextMenu}
+@extends BaseContextMenu
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
@@ -78,31 +78,6 @@ class NoteContextMenu extends BaseContextMenu {
 		super ( contextMenuEvent, parentDiv );
 		this.#noteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
 		this.#route = theDataSearchEngine.getNoteAndRoute ( this.#noteObjId ).route;
-		this.menuItems = [
-			{
-				itemText : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
-				doAction : true
-			},
-			{
-				itemText : theTranslator.getText (
-					this.#route
-						?
-						'NoteContextMenu - Detach note from route'
-						:
-						'NoteContextMenu - Attach note to route'
-				),
-				doAction : INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
-			}
-		];
-		Object.freeze ( this );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -132,6 +107,33 @@ class NoteContextMenu extends BaseContextMenu {
 	}
 
 	/* eslint-enable no-magic-numbers */
+
+	get menuItems ( ) {
+		return [
+			{
+				itemText : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
+				isActive : true
+			},
+			{
+				itemText : theTranslator.getText (
+					this.#route
+						?
+						'NoteContextMenu - Detach note from route'
+						:
+						'NoteContextMenu - Attach note to route'
+				),
+				isActive : INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
+			}
+		];
+	}
 }
 
 export default NoteContextMenu;
