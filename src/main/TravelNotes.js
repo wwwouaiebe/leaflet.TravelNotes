@@ -264,6 +264,13 @@ function ourAddEventsListeners ( ) {
 		( ) => theUI.pin ( ),
 		false
 	);
+	document.addEventListener (
+		'geolocationstatuschanged',
+		geoLocationStatusChangedEvent => {
+			theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+		},
+		false
+	);
 }
 
 /**

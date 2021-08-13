@@ -68,7 +68,7 @@ import ItineraryPaneUI from '../UI/ItineraryPaneUI.js';
 import TravelNotesPaneUI from '../UI/TravelNotesPaneUI.js';
 import OsmSearchPaneUI from '../UI/OsmSearchPaneUI.js';
 import theRoutesListUI from '../UI/RoutesListUI.js';
-import { PANE_ID } from '../util/Constants.js';
+import { PANE_ID, ONE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -83,54 +83,11 @@ import { PANE_ID } from '../util/Constants.js';
 
 class UI {
 
-	static #mainDiv = null;
-	static #timerId = null;
-	static #titleDiv = null;
+	#mainHTMLElement = null;
 
+	#timerId = null;
+	#titleHTMLElement = null;
 	#isPinned = false;
-
-	/**
-	Event listener for the mouse enter on the UI
-	@private
-	*/
-
-	static #onMouseEnter ( ) {
-		if ( UI.#timerId ) {
-			clearTimeout ( UI.#timerId );
-			UI.#timerId = null;
-		}
-		UI.#mainDiv.classList.remove ( 'TravelNotes-UI-Minimized' );
-
-		UI.#titleDiv.classList.add ( 'TravelNotes-Hidden' );
-		let children = UI.#mainDiv.childNodes;
-		for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
-			children[ childrenCounter ].classList.remove ( 'TravelNotes-Hidden' );
-		}
-	}
-
-	/**
-	Event listener for the timer on mouse leave on the UI
-	@private
-	*/
-
-	static #onTimeOut ( ) {
-		UI.#mainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
-
-		UI.#titleDiv.classList.remove ( 'TravelNotes-Hidden' );
-		let children = UI.#mainDiv.childNodes;
-		for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
-			children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
-		}
-	}
-
-	/**
-	Event listener for the mouse leave on the UI
-	@private
-	*/
-
-	static #onMouseLeave ( ) {
-		UI.#timerId = setTimeout ( UI.#onTimeOut, theConfig.travelEditor.timeout );
-	}
 
 	/**
 	This method add the TravelNotes events listeners
@@ -138,28 +95,40 @@ class UI {
 	*/
 
 	#addTravelNotesEventListeners ( ) {
-		UI.#mainDiv.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
-		UI.#mainDiv.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
-		UI.#mainDiv.addEventListener ( 'showitinerary', ( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ), false );
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
+		this.#mainHTMLElement.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
+		this.#mainHTMLElement.addEventListener (
+			'showitinerary',
+			( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ),
+			false
+		);
+		this.#mainHTMLElement.addEventListener (
 			'updateitinerary',
 			( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
 			false
 		);
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'showtravelnotes',
 			( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
 			false
 		);
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'updatetravelnotes',
 			( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
 			false
 		);
-		UI.#mainDiv.addEventListener ( 'showsearch', ( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ), false );
-		UI.#mainDiv.addEventListener ( 'updatesearch', ( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ), false );
-		UI.#mainDiv.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
+			'showsearch',
+			( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ),
+			false
+		);
+		this.#mainHTMLElement.addEventListener (
+			'updatesearch',
+			( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ),
+			false
+		);
+		this.#mainHTMLElement.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
+		this.#mainHTMLElement.addEventListener (
 			'setprovider',
 			setProviderEvent => {
 				if ( setProviderEvent.data && setProviderEvent.data.provider ) {
@@ -168,7 +137,7 @@ class UI {
 			},
 			false
 		);
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'settransitmode',
 			setTransitModeEvent => {
 				if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
@@ -177,22 +146,15 @@ class UI {
 			},
 			false
 		);
-		document.addEventListener (
-			'geolocationstatuschanged',
-			geoLocationStatusChangedEvent => {
-				theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
-			},
-			false
-		);
 	}
 
 	/**
-	@desc This method add the mouse events listeners
+	@desc This method add the mouse events listeners (prevent defaults actions on the UI )
 	@private
 	*/
 
 	#addMouseEventListeners ( ) {
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'click',
 			clickEvent => {
 				if ( clickEvent.target.id && 'TravelNotes-UI-MainDiv' === clickEvent.target.id ) {
@@ -203,7 +165,7 @@ class UI {
 			false
 		);
 
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'dblclick',
 			dblClickEvent => {
 				dblClickEvent.stopPropagation ( );
@@ -212,7 +174,7 @@ class UI {
 			false
 		);
 
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'contextmenu',
 			conextMenuEvent => {
 				conextMenuEvent.stopPropagation ( );
@@ -221,7 +183,7 @@ class UI {
 			false
 		);
 
-		UI.#mainDiv.addEventListener (
+		this.#mainHTMLElement.addEventListener (
 			'wheel',
 			wheelEvent => {
 				wheelEvent.stopPropagation ( );
@@ -229,6 +191,59 @@ class UI {
 			},
 			false
 		);
+	}
+
+	/**
+	Event listener for the mouse leave on the UI
+	@private
+	*/
+
+	#onMouseLeave ( ) {
+		if ( this.#isPinned ) {
+			return;
+		}
+		this.#timerId = setTimeout ( ( ) => this.#hide ( ), theConfig.travelEditor.timeout );
+	}
+
+	/**
+	Show the UI and hide the title
+	@private
+	*/
+
+	#show ( ) {
+		if ( this.#isPinned ) {
+			return;
+		}
+		if ( this.#timerId ) {
+			clearTimeout ( this.#timerId );
+			this.#timerId = null;
+		}
+		this.#mainHTMLElement.classList.remove ( 'TravelNotes-UI-Minimized' );
+		this.#titleHTMLElement.classList.add ( 'TravelNotes-Hidden' );
+
+		let children = this.#mainHTMLElement.childNodes;
+		for ( let childrenCounter = ONE; childrenCounter < children.length; childrenCounter ++ ) {
+			children[ childrenCounter ].classList.remove ( 'TravelNotes-Hidden' );
+		}
+
+	}
+
+	/**
+	Hide the UI and show the title
+	@private
+	*/
+
+	#hide ( ) {
+		if ( this.#isPinned ) {
+			return;
+		}
+		this.#mainHTMLElement.classList.add ( 'TravelNotes-UI-Minimized' );
+		this.#titleHTMLElement.classList.remove ( 'TravelNotes-Hidden' );
+
+		let children = this.#mainHTMLElement.childNodes;
+		for ( let childrenCounter = ONE; childrenCounter < children.length; childrenCounter ++ ) {
+			children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
+		}
 	}
 
 	constructor ( ) {
@@ -240,14 +255,6 @@ class UI {
 	*/
 
 	pin ( ) {
-		if ( this.#isPinned ) {
-			UI.#mainDiv.addEventListener ( 'mouseenter', UI.#onMouseEnter, false );
-			UI.#mainDiv.addEventListener ( 'mouseleave', UI.#onMouseLeave, false );
-		}
-		else {
-			UI.#mainDiv.removeEventListener ( 'mouseenter', UI.#onMouseEnter, false );
-			UI.#mainDiv.removeEventListener ( 'mouseleave', UI.#onMouseLeave, false );
-		}
 		this.#isPinned = ! this.#isPinned;
 	}
 
@@ -256,45 +263,42 @@ class UI {
 	@param {HTMLElement} uiDiv The HTML element in witch the UI have to be created
 	*/
 
-	createUI ( uiDiv ) {
-		if ( UI.#mainDiv ) {
+	createUI ( uiHTMLElement ) {
+		if ( this.#mainHTMLElement ) {
 			return;
 		}
-		UI.#mainDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiDiv );
 
-		UI.#titleDiv = theHTMLElementsFactory.create (
+		this.#mainHTMLElement = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-UI-MainDiv' }, uiHTMLElement );
+		this.#titleHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-UI-MainDiv-Title',
 				textContent : 'Travel\u00A0\u0026\u00A0Notes'
 			},
-			UI.#mainDiv
+			this.#mainHTMLElement
 		);
-
-		theTravelNotesToolbarUI.createUI ( UI.#mainDiv );
-		theTravelUI.createUI ( UI.#mainDiv );
+		theTravelNotesToolbarUI.createUI ( this.#mainHTMLElement );
+		theTravelUI.createUI ( this.#mainHTMLElement );
 		thePanesManagerUI.addPane ( new ItineraryPaneUI ( ) );
 		thePanesManagerUI.addPane ( new TravelNotesPaneUI ( ) );
 		thePanesManagerUI.addPane ( new OsmSearchPaneUI ( ) );
-		thePanesManagerUI.createUI ( UI.#mainDiv );
-		theProvidersToolbarUI.createUI ( UI.#mainDiv );
+		thePanesManagerUI.createUI ( this.#mainHTMLElement );
+		theProvidersToolbarUI.createUI ( this.#mainHTMLElement );
 
-		if ( theConfig.travelEditor.startMinimized ) {
-			UI.#mainDiv.addEventListener ( 'mouseenter', UI.#onMouseEnter, false );
-			UI.#mainDiv.addEventListener ( 'mouseleave', UI.#onMouseLeave, false );
-			UI.#mainDiv.classList.add ( 'TravelNotes-UI-Minimized' );
-			let children = UI.#mainDiv.childNodes;
-			for ( let childrenCounter = 1; childrenCounter < children.length; childrenCounter ++ ) {
-				children[ childrenCounter ].classList.add ( 'TravelNotes-Hidden' );
-			}
-		}
-		else {
-			UI.#titleDiv.classList.add ( 'TravelNotes-Hidden' );
-			this.#isPinned = true;
-		}
+		this.#mainHTMLElement.addEventListener ( 'mouseenter', ( ) => this.#show ( ), false );
+		this.#mainHTMLElement.addEventListener ( 'mouseleave', ( ) => this.#onMouseLeave ( ), false );
 
 		this.#addTravelNotesEventListeners ( );
 		this.#addMouseEventListeners ( );
+
+		if ( theConfig.travelEditor.startMinimized ) {
+			this.#hide ( );
+			this.#isPinned = false;
+		}
+		else {
+			this.#show ( );
+			this.#isPinned = true;
+		}
 	}
 }
 
