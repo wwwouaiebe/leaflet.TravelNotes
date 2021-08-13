@@ -47,12 +47,6 @@ Changes:
 	margin: 0.5em;
 }
 
-#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Hidden {
-	visibility: hidden;
-	width: 0;
-	height: 0;
-}
-
 #TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Error {
 	color: white;
 	background-color: red;
