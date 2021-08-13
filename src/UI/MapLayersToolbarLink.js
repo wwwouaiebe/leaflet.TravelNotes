@@ -136,7 +136,6 @@ class MapLayersToolbarLink {
 		this.#linkButton = theHTMLElementsFactory.create (
 			'div',
 			{
-				type : 'link',
 				className : 'TravelNotes-MapLayersToolbarUI-Button TravelNotes-MapLayersToolbarUI-LinkButton-Leave'
 			},
 			parentNode

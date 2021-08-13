@@ -228,7 +228,7 @@ class ErrorsUI {
 			'label',
 			{
 				id : 'TravelNotes-ErrorsUI-HelpInputLabel',
-				for : 'TravelNotes-ErrorsUI-HelpInput',
+				htmlFor : 'TravelNotes-ErrorsUI-HelpInput',
 				textContent : theTranslator.getText ( 'ErrorUI - Dont show again' )
 			},
 			this.#showHelpHTMLElement
