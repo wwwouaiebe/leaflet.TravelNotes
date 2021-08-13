@@ -67,8 +67,7 @@ import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import ItineraryPaneUI from '../UI/ItineraryPaneUI.js';
 import TravelNotesPaneUI from '../UI/TravelNotesPaneUI.js';
 import OsmSearchPaneUI from '../UI/OsmSearchPaneUI.js';
-import theRoutesListUI from '../UI/RoutesListUI.js';
-import { PANE_ID, ONE } from '../util/Constants.js';
+import { ONE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -88,65 +87,6 @@ class UI {
 	#timerId = null;
 	#titleHTMLElement = null;
 	#isPinned = false;
-
-	/**
-	This method add the TravelNotes events listeners
-	@private
-	*/
-
-	#addTravelNotesEventListeners ( ) {
-		this.#mainHTMLElement.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
-		this.#mainHTMLElement.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
-		this.#mainHTMLElement.addEventListener (
-			'showitinerary',
-			( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ),
-			false
-		);
-		this.#mainHTMLElement.addEventListener (
-			'updateitinerary',
-			( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
-			false
-		);
-		this.#mainHTMLElement.addEventListener (
-			'showtravelnotes',
-			( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
-			false
-		);
-		this.#mainHTMLElement.addEventListener (
-			'updatetravelnotes',
-			( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
-			false
-		);
-		this.#mainHTMLElement.addEventListener (
-			'showsearch',
-			( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ),
-			false
-		);
-		this.#mainHTMLElement.addEventListener (
-			'updatesearch',
-			( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ),
-			false
-		);
-		this.#mainHTMLElement.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
-		this.#mainHTMLElement.addEventListener (
-			'setprovider',
-			setProviderEvent => {
-				if ( setProviderEvent.data && setProviderEvent.data.provider ) {
-					theProvidersToolbarUI.provider = setProviderEvent.data.provider;
-				}
-			},
-			false
-		);
-		this.#mainHTMLElement.addEventListener (
-			'settransitmode',
-			setTransitModeEvent => {
-				if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
-					theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
-				}
-			},
-			false
-		);
-	}
 
 	/**
 	@desc This method add the mouse events listeners (prevent defaults actions on the UI )
@@ -260,7 +200,7 @@ class UI {
 
 	/**
 	creates the user interface
-	@param {HTMLElement} uiDiv The HTML element in witch the UI have to be created
+	@param {HTMLElement} uiHTMLElement The HTML element in witch the UI have to be created
 	*/
 
 	createUI ( uiHTMLElement ) {
@@ -287,8 +227,6 @@ class UI {
 
 		this.#mainHTMLElement.addEventListener ( 'mouseenter', ( ) => this.#show ( ), false );
 		this.#mainHTMLElement.addEventListener ( 'mouseleave', ( ) => this.#onMouseLeave ( ), false );
-
-		this.#addTravelNotesEventListeners ( );
 		this.#addMouseEventListeners ( );
 
 		if ( theConfig.travelEditor.startMinimized ) {

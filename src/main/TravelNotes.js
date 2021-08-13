@@ -84,6 +84,11 @@ import ItineraryPoint from '../data/ItineraryPoint.js';
 import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import BaseDialog from '../dialogs/BaseDialog.js';
+import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
+import thePanesManagerUI from '../UI/PanesManagerUI.js';
+import theTravelUI from '../UI/TravelUI.js';
+import theProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
+import theRoutesListUI from '../UI/RoutesListUI.js';
 
 // import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
@@ -95,7 +100,7 @@ import theErrorsUI from '../UI/ErrorsUI.js';
 import { theIndexedDb } from '../roadbook/IndexedDb.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theTranslator from '../UI/Translator.js';
-import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
+import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK, PANE_ID } from '../util/Constants.js';
 
 let ourTravelNotesLoaded = false;
 
@@ -268,6 +273,57 @@ function ourAddEventsListeners ( ) {
 		'geolocationstatuschanged',
 		geoLocationStatusChangedEvent => {
 			theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+		},
+		false
+	);
+	document.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
+	document.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
+	document.addEventListener (
+		'showitinerary',
+		( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ),
+		false
+	);
+	document.addEventListener (
+		'updateitinerary',
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
+		false
+	);
+	document.addEventListener (
+		'showtravelnotes',
+		( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
+		false
+	);
+	document.addEventListener (
+		'updatetravelnotes',
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
+		false
+	);
+	document.addEventListener (
+		'showsearch',
+		( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ),
+		false
+	);
+	document.addEventListener (
+		'updatesearch',
+		( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ),
+		false
+	);
+	document.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
+	document.addEventListener (
+		'setprovider',
+		setProviderEvent => {
+			if ( setProviderEvent.data && setProviderEvent.data.provider ) {
+				theProvidersToolbarUI.provider = setProviderEvent.data.provider;
+			}
+		},
+		false
+	);
+	document.addEventListener (
+		'settransitmode',
+		setTransitModeEvent => {
+			if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
+				theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
+			}
 		},
 		false
 	);

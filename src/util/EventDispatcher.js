@@ -290,8 +290,6 @@ and when the geolocation marker must be removed from the map
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { NOT_FOUND } from '../util/Constants.js';
-
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
@@ -305,56 +303,6 @@ import { NOT_FOUND } from '../util/Constants.js';
 
 class EventDispatcher {
 
-	/**
-	This method get the target of a event from the event name
-	@param {string} eventName The name of the event
-	@return {?document|HTMLElement} The target for the event name
-	@private
-	*/
-
-	#getTarget ( eventName ) {
-		if ( NOT_FOUND <
-			[
-				'showitinerary',
-				'updateitinerary',
-				'showtravelnotes',
-				'updatetravelnotes',
-				'showsearch',
-				'updatesearch',
-				'setrouteslist',
-				'setprovider',
-				'providersadded',
-				'travelnameupdated',
-				'settransitmode'
-			].indexOf ( eventName )
-		) {
-			return document.getElementById ( 'TravelNotes-UI-MainDiv' );
-		}
-		else if ( NOT_FOUND <
-			[
-				'removeobject',
-				'removeallobjects',
-				'zoomto',
-				'additinerarypointmarker',
-				'addsearchpointmarker',
-				'addrectangle',
-				'addwaypoint',
-				'layerchange',
-				'geolocationstatuschanged',
-				'geolocationpositionchanged',
-				'routeupdated',
-				'routepropertiesupdated',
-				'noteupdated',
-				'roadbookupdate',
-				'profileclosed',
-				'uipinned'
-			].indexOf ( eventName )
-		) {
-			return document;
-		}
-		return null;
-	}
-
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -366,14 +314,11 @@ class EventDispatcher {
 	*/
 
 	dispatch ( eventName, eventData ) {
-		let target = this.#getTarget ( eventName );
-		if ( target ) {
-			let dispatchedEvent = new Event ( eventName );
-			if ( eventData ) {
-				dispatchedEvent.data = eventData;
-			}
-			target.dispatchEvent ( dispatchedEvent );
+		let dispatchedEvent = new Event ( eventName );
+		if ( eventData ) {
+			dispatchedEvent.data = eventData;
 		}
+		document.dispatchEvent ( dispatchedEvent );
 	}
 }
 
