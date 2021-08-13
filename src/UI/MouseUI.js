@@ -59,51 +59,6 @@ import { SAVE_STATUS } from '../util/Constants.js';
 
 const OUR_SAVE_TIME = 300000;
 
-/* eslint-disable no-use-before-define */
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class MapEventListeners
-@classdesc Map event listeners
-@hideconstructor
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class MapEventListeners {
-
-	static onMouseMove ( mouseMoveEvent ) {
-		theMouseUI.mousePosition =
-			theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
-	}
-
-	static onZoomEnd ( ) {
-		theMouseUI.zoom = String ( theTravelNotesData.map.getZoom ( ) );
-	}
-
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class TimerEventListeners
-@classdesc timer event listeners
-@hideconstructor
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class TimerEventListeners {
-	static onTimer ( ) {
-		theMouseUI.saveStatus = SAVE_STATUS.notSaved;
-	}
-}
-
-/* eslint-enable no-use-before-define */
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
@@ -136,24 +91,6 @@ class MouseUI {
 	}
 
 	/**
-	set the mouse position on the UI
-	*/
-
-	set mousePosition ( MousePosition ) {
-		this.#mousePosition = MousePosition;
-		this.#updateUI ( );
-	}
-
-	/**
-	set the zoom on the UI
-	*/
-
-	set zoom ( Zoom ) {
-		this.#zoom = Zoom;
-		this.#updateUI ( );
-	}
-
-	/**
 	change the save status on the UI
 	*/
 
@@ -163,7 +100,10 @@ class MouseUI {
 		}
 		this.#saveStatus = SaveStatus;
 		if ( SAVE_STATUS.modified === SaveStatus && ! this.#saveTimer ) {
-			this.#saveTimer = setTimeout ( TimerEventListeners.onTimer, OUR_SAVE_TIME );
+			this.#saveTimer = setTimeout (
+				( ) => this.#saveStatus = SAVE_STATUS.notSaved,
+				OUR_SAVE_TIME
+			);
 		}
 		if ( SAVE_STATUS.saved === SaveStatus && this.#saveTimer ) {
 			clearTimeout ( this.#saveTimer );
@@ -183,15 +123,27 @@ class MouseUI {
 				null,
 				theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MouseUI' }, document.body )
 			);
-		this.zoom = theTravelNotesData.map.getZoom ( );
-		this.mousePosition =
+		this.#zoom = theTravelNotesData.map.getZoom ( );
+		this.#mousePosition =
 			theUtilities.formatLat ( theConfig.map.center.lat ) +
 			'\u00a0-\u00a0' +
 			theUtilities.formatLng ( theConfig.map.center.lng );
-		theTravelNotesData.map.on ( 'mousemove', MapEventListeners.onMouseMove );
-		theTravelNotesData.map.on ( 'zoomend', MapEventListeners.onZoomEnd );
+		theTravelNotesData.map.on (
+			'mousemove',
+			mouseMoveEvent => {
+				this.#mousePosition =
+					theUtilities.formatLatLng ( [ mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng ] );
+				this.#updateUI ( );
+			}
+		);
+		theTravelNotesData.map.on (
+			'zoomend',
+			( ) => {
+				this.#zoom = String ( theTravelNotesData.map.getZoom ( ) );
+				this.#updateUI ( );
+			}
+		);
 	}
-
 }
 
 /**
