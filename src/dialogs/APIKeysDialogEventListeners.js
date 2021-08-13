@@ -491,8 +491,8 @@ class SaveKeysToSecureFileButtonEventListener {
 
 		new DataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( this.#saveAPIKeysHelper.getAPIKeysJsonString ( ) ),
-			data => { this.#onOkEncrypt ( data ); },
-			( ) => { this.#onErrorEncrypt ( ); },
+			data => this.#onOkEncrypt ( data ),
+			( ) => this.#onErrorEncrypt ( ),
 			new PasswordDialog ( true ).show ( )
 		);
 	}

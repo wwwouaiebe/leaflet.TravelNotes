@@ -224,7 +224,7 @@ class NoteEditor {
 	#noteDialog ( note, routeObjId, isNewNote ) {
 		new NoteDialog ( note, routeObjId, isNewNote )
 			.show ( )
-			.then ( ( ) => { this.#addNote ( note, routeObjId, isNewNote ); } )
+			.then ( ( ) => this.#addNote ( note, routeObjId, isNewNote ) )
 			.catch (
 				err => {
 					console.error ( err );
@@ -359,7 +359,7 @@ class NoteEditor {
 			}
 		)
 			.show ( )
-			.then ( ( ) => { this.#addAllManeuverNotes ( route, maneuverLength ); } )
+			.then ( ( ) => this.#addAllManeuverNotes ( route, maneuverLength ) )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {

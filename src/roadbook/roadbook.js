@@ -247,12 +247,7 @@ function ourOpenIndexedDb ( ) {
 				}
 			);
 		window.addEventListener ( 'storage', ourOnStorage );
-		window.addEventListener (
-			'unload',
-			( ) => {
-				theIndexedDb.closeDb ( );
-			}
-		);
+		window.addEventListener ( 'unload', ( ) => theIndexedDb.closeDb ( )	);
 	}
 }
 

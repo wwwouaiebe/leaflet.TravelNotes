@@ -223,10 +223,7 @@ class BaseContextMenuOperator {
 	*/
 
 	onMouseLeaveContainer ( ) {
-		this.#timerId = setTimeout (
-			( ) => { this.onCancelMenu ( ); },
-			theConfig.contextMenu.timeout
-		);
+		this.#timerId = setTimeout ( ( ) => this.onCancelMenu ( ), theConfig.contextMenu.timeout );
 	}
 
 	/**

@@ -340,12 +340,7 @@ function ourAddEventsListeners ( ) {
 */
 
 function ourAddUnloadEventsListeners ( ) {
-	window.addEventListener (
-		'unload',
-		( ) => {
-			localStorage.removeItem ( theTravelNotesData.UUID );
-		}
-	);
+	window.addEventListener ( 'unload', ( ) => localStorage.removeItem ( theTravelNotesData.UUID ) );
 	window.addEventListener (
 		'beforeunload',
 		beforeUnloadEvent => {
