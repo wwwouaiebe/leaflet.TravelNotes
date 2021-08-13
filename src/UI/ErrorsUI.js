@@ -185,7 +185,7 @@ class ErrorsUI {
 		this.#mainHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
-				id: 'TravelNotes-ErrorsUI',
+				id : 'TravelNotes-ErrorsUI',
 				className : 'TravelNotes-Hidden'
 			},
 			document.body

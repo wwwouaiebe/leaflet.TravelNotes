@@ -28,7 +28,7 @@ Changes:
 		- Issue ♯142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210726
+Doc reviewed 20210813
 Tests ...
 */
 
@@ -56,10 +56,12 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theAPIKeysManager from '../core/APIKeysManager.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
+import MapLayersToolbarButton from '../UI/MapLayersToolbarButton.js';
+import MapLayersToolbarLink from '../UI/MapLayersToolbarLink.js';
+import theAPIKeysManager from '../core/APIKeysManager.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
 
@@ -68,269 +70,55 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LayerButtonEventListeners
-@classdesc This class contains the event listeners for the layer buttons
+@class
+@classdesc Wheel event listeners on the map layer buttons. Scroll the buttons
+@see {@link theMapLayersToolbarUI} for the one and only one instance of this class
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LayerButtonEventListeners {
+class WheelButtonsEventListener {
 
-	/**
-	Mouse enter event listener. Inverse the button color
-	*/
+	#mapLayersToolbarUI = null;
 
-	static onMouseEnter ( mouseEnterEvent ) {
+	#wheelEventData = null;
 
-		mouseEnterEvent.target.style.color = mouseEnterEvent.target.layer.toolbar.backgroundColor;
-		mouseEnterEvent.target.style[ 'background-color' ] = mouseEnterEvent.target.layer.toolbar.color;
+	constructor ( mapLayersToolbarUI, wheelEventData ) {
+		this.#mapLayersToolbarUI = mapLayersToolbarUI;
+		this.#wheelEventData = wheelEventData;
 	}
 
-	/**
-	Mouse leave event listener. Inverse the button color
-	*/
-
-	static onMouseLeave ( mouseLeaveEvent ) {
-		mouseLeaveEvent.target.style.color = mouseLeaveEvent.target.layer.toolbar.color;
-		mouseLeaveEvent.target.style[ 'background-color' ] = mouseLeaveEvent.target.layer.toolbar.backgroundColor;
-	}
-
-	/**
-	Mouse click event listener. Change the background map
-	*/
-
-	static onClick ( clickEvent ) {
-		theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
-		theAttributionsUI.attributions = clickEvent.target.layer.attribution;
-		theTravelNotesData.travel.layerName = clickEvent.target.layer.name;
-	}
-
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class LinkButtonEventListeners
-@classdesc This class contains the event listeners for the link buttons
-@hideconstructor
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class LinkButtonEventListeners {
-
-	/**
-	Mouse enter event listener. Inverse the button color
-	*/
-
-	static onMouseEnter ( mouseEnterEvent ) {
-		mouseEnterEvent.target.classList.add ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Enter' );
-		mouseEnterEvent.target.classList.remove ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Leave' );
-	}
-
-	/**
-	Mouse leave event listener. Inverse the button color
-	*/
-
-	static onMouseLeave ( mouseLeaveEvent ) {
-		mouseLeaveEvent.target.classList.add ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Leave' );
-		mouseLeaveEvent.target.classList.remove ( 'TravelNotes-MapLayersToolbarUI-LinkButton-Enter' );
-	}
-
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class ToolbarEventListeners
-@classdesc This class contains the event listeners for the toolbar
-@hideconstructor
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class ToolbarEventListeners {
-
-	static #marginTop = ZERO;
-	static #buttonHeight = ZERO;
-	static #buttonsHeight = ZERO;
-	static #buttonTop = ZERO;
-	static #timerId = null;
-	static #layersToolbarButtonsDiv = null;
-
-	static #getMapLayersToolbar ( ) { return document.getElementById ( 'TravelNotes-MapLayersToolbarUI' ); }
-
-	/**
-	Create a button for a layer on the toolbar
-	@param {Layer} layer The layer for witch the button must be created
-	@private
-	*/
-
-	static #createLayerButton ( layer ) {
-		if ( layer.providerKeyNeeded && ! theAPIKeysManager.hasKey ( layer.providerName.toLowerCase ( ) ) ) {
-			return;
-		}
-		let layerButton = theHTMLElementsFactory.create (
-			'div',
-			{
-				type : 'layer',
-				className : 'TravelNotes-MapLayersToolbarUI-Button',
-				title : layer.name,
-				layer : layer,
-				textContent : layer.toolbar.text,
-				style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
-			},
-			ToolbarEventListeners.#layersToolbarButtonsDiv
-		);
-		layerButton.addEventListener ( 'mouseenter', LayerButtonEventListeners.onMouseEnter, false );
-		layerButton.addEventListener ( 'mouseleave', LayerButtonEventListeners.onMouseLeave, false );
-		layerButton.addEventListener ( 'click', LayerButtonEventListeners.onClick, false );
-		ToolbarEventListeners.#buttonHeight = layerButton.clientHeight;
-		ToolbarEventListeners.#buttonsHeight += ToolbarEventListeners.#buttonHeight;
-	}
-
-	/**
-	Create a button for a link (the devil) on the toolbar
-	@param {string} href The href of the link to add in the button
-	@param {string} title The title of the link to add in the button
-	@param {string} text The text to be displayed in the button
-	@private
-	*/
-
-	static #createLinkButton ( href, title, textContent ) {
-		let linkButton = theHTMLElementsFactory.create (
-			'div',
-			{
-				type : 'link',
-				className : 'TravelNotes-MapLayersToolbarUI-Button TravelNotes-MapLayersToolbarUI-LinkButton-Leave'
-			},
-			ToolbarEventListeners.#layersToolbarButtonsDiv
-		);
-		theHTMLElementsFactory.create (
-			'a',
-			{
-				href : href,
-				title : title,
-				textContent : textContent,
-				target : '_blank'
-			},
-			linkButton
-		);
-
-		linkButton.addEventListener ( 'mouseenter', LinkButtonEventListeners.onMouseEnter, false );
-		linkButton.addEventListener ( 'mouseleave', LinkButtonEventListeners.onMouseLeave, false );
-		ToolbarEventListeners.#buttonsHeight += linkButton.clientHeight;
-	}
-
-	/**
-	Mouse wheel event listener. Scroll the toolbar
-	*/
-
-	static onWheel ( wheelEvent ) {
+	handleEvent ( wheelEvent ) {
+		wheelEvent.stopPropagation ( );
 		if ( wheelEvent.deltaY ) {
-			ToolbarEventListeners.#marginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
-			ToolbarEventListeners.#marginTop =
-				ToolbarEventListeners.#marginTop > ToolbarEventListeners.#buttonTop
+			this.#wheelEventData.marginTop -= wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
+			this.#wheelEventData.marginTop =
+				this.#wheelEventData.marginTop > this.#wheelEventData.buttonTop
 					?
-					ToolbarEventListeners.#buttonTop
+					this.#wheelEventData.buttonTop
 					:
-					ToolbarEventListeners.#marginTop;
-			ToolbarEventListeners.#marginTop =
-				ToolbarEventListeners.#marginTop < ToolbarEventListeners.#buttonTop - ToolbarEventListeners.#buttonsHeight +
-				( OUR_MIN_BUTTONS_VISIBLE * ToolbarEventListeners.#buttonHeight )
+					this.#wheelEventData.marginTop;
+			this.#wheelEventData.marginTop =
+				this.#wheelEventData.marginTop < this.#wheelEventData.buttonTop - this.#wheelEventData.buttonsHeight +
+				( OUR_MIN_BUTTONS_VISIBLE * this.#wheelEventData.buttonHeight )
 					?
 					(
-						ToolbarEventListeners.#buttonTop -
-						ToolbarEventListeners.#buttonsHeight +
-						( OUR_MIN_BUTTONS_VISIBLE * ToolbarEventListeners.#buttonHeight )
+						this.#wheelEventData.buttonTop -
+						this.#wheelEventData.buttonsHeight +
+						( OUR_MIN_BUTTONS_VISIBLE * this.#wheelEventData.buttonHeight )
 					)
 					:
-					ToolbarEventListeners.#marginTop;
-			ToolbarEventListeners.#layersToolbarButtonsDiv.style.marginTop = String ( ToolbarEventListeners.#marginTop ) + 'px';
+					this.#wheelEventData.marginTop;
+			this.#mapLayersToolbarUI.buttonsHTMLElement.style.marginTop = String ( this.#wheelEventData.marginTop ) + 'px';
 		}
-		wheelEvent.stopPropagation ( );
 	}
-
-	/**
-	Mouse enter event listener. Creates and show the buttons
-	*/
-
-	static onMouseEnter ( ) {
-		if ( ToolbarEventListeners.#timerId ) {
-			clearTimeout ( ToolbarEventListeners.#timerId );
-			ToolbarEventListeners.#timerId = null;
-			return;
-		}
-		ToolbarEventListeners.#layersToolbarButtonsDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-MapLayersToolbarUI-Buttons'
-			},
-			ToolbarEventListeners.#getMapLayersToolbar ( )
-		);
-		ToolbarEventListeners.#buttonTop = ToolbarEventListeners.#getMapLayersToolbar ( ).clientHeight;
-		ToolbarEventListeners.#buttonsHeight = ZERO;
-		theMapLayersCollection.forEach ( layer => ToolbarEventListeners.#createLayerButton ( layer ) );
-		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
-			ToolbarEventListeners.#createLinkButton (
-				'https://www.google.com/maps/@' +
-					theTravelNotesData.map.getCenter ( ).lat +
-					',' +
-					theTravelNotesData.map.getCenter ( ).lng +
-					',' +
-					theTravelNotesData.map.getZoom ( ) +
-					'z',
-				'Reminder! The devil will know everything about you',
-				'👿'
-			);
-		}
-		ToolbarEventListeners.#buttonTop += ToolbarEventListeners.#buttonHeight;
-		ToolbarEventListeners.#marginTop = ToolbarEventListeners.#buttonTop;
-		ToolbarEventListeners.#layersToolbarButtonsDiv.style.marginTop = String ( ToolbarEventListeners.#marginTop ) + 'px';
-		ToolbarEventListeners.#layersToolbarButtonsDiv.addEventListener ( 'wheel', ToolbarEventListeners.onWheel, false );
-	}
-
-	/**
-	Timeout event listener. Hide the toolbar
-	*/
-
-	static onTimeout ( ) {
-		let buttons = ToolbarEventListeners.#layersToolbarButtonsDiv.childNodes;
-		for ( let counter = 0; counter < buttons.length; counter ++ ) {
-			if ( 'layer' === buttons [ counter ].type ) {
-				buttons [ counter ].removeEventListener ( 'mouseenter', LayerButtonEventListeners.onMouseEnter, false );
-				buttons [ counter ].removeEventListener ( 'mouseleave', LayerButtonEventListeners.onMouseLeave, false );
-				buttons [ counter ].removeEventListener ( 'click', LayerButtonEventListeners.onClick, false );
-			}
-			else {
-				buttons [ counter ].removeEventListener ( 'mouseenter', LinkButtonEventListeners.onMouseEnter, false );
-				buttons [ counter ].removeEventListener ( 'mouseleave', LinkButtonEventListeners.onMouseEnter, false );
-			}
-		}
-		ToolbarEventListeners.#layersToolbarButtonsDiv.removeEventListener ( 'wheel', ToolbarEventListeners.onWheel, false );
-		ToolbarEventListeners.#getMapLayersToolbar ( ).removeChild ( ToolbarEventListeners.#layersToolbarButtonsDiv );
-		ToolbarEventListeners.#timerId = null;
-	}
-
-	/**
-	Mouse leave event listener. Start the timer.
-	*/
-
-	static onMouseLeave ( ) {
-		ToolbarEventListeners.#timerId =
-			setTimeout ( ToolbarEventListeners.onTimeout, theConfig.layersToolbarUI.toolbarTimeOut );
-	}
-
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class MapLayersToolbarUI
 @classdesc This class is the Layer Toolbar on the left of the screen.
 Displays buttons to change the background maps and manages the background maps list
 @see {@link theMapLayersToolbarUI} for the one and only one instance of this class
@@ -341,7 +129,156 @@ Displays buttons to change the background maps and manages the background maps l
 
 class MapLayersToolbarUI {
 
+	/**
+	The main HTMLElement of the UI
+	@private
+	*/
+
+	#mainHTMLElement = null;
+
+	/**
+	The HTML element that contains the map layer buttons
+	@private
+	*/
+
+	#buttonsHTMLElement = null;
+
+	/**
+	An array with the map layer buttons and links
+	@private
+	*/
+
+	#buttonsAndLinks = [];
+
+	/**
+	Data for the wheel event listener
+	@private
+	*/
+
+	#wheelEventData = {
+		marginTop : ZERO,
+		buttonHeight : ZERO,
+		buttonsHeight : ZERO,
+		buttonTop : ZERO
+	}
+
+	/**
+	Timer id for the mouse leave event
+	@private
+	*/
+
+	#timerId = null;
+
+	/**
+	The wheel eveny listener
+	@private
+	*/
+
+	#onWheelButtonsEventListener = null;
+
+	/**
+	Show the map layer buttons. Called by the mouseenter event
+	@private
+	*/
+
+	#show ( ) {
+
+		// cleaning the timer if needed. The buttons are always visible and we can stop.
+		if ( this.#timerId ) {
+			clearTimeout ( this.#timerId );
+			this.#timerId = null;
+			return;
+		}
+
+		// container for the button
+		this.#buttonsHTMLElement = theHTMLElementsFactory.create (
+			'div',
+			{
+				id : 'TravelNotes-MapLayersToolbarUI-Buttons'
+			},
+			this.#mainHTMLElement
+		);
+
+		// wheel event data computation
+		this.#wheelEventData.buttonTop = this.#mainHTMLElement.clientHeight;
+		this.#wheelEventData.buttonsHeight = ZERO;
+
+		// adding map layer buttons
+		theMapLayersCollection.forEach (
+			mapLayer => {
+				if (
+					( mapLayer.providerKeyNeeded && theAPIKeysManager.hasKey ( mapLayer.providerName.toLowerCase ( ) ) )
+					|| ! mapLayer.providerKeyNeeded
+				) {
+					let mapLayerButton =
+						new MapLayersToolbarButton ( mapLayer, this.#buttonsHTMLElement );
+					this.#wheelEventData.buttonHeight = mapLayerButton.height;
+					this.#wheelEventData.buttonsHeight += mapLayerButton.height;
+					this.#buttonsAndLinks.push ( mapLayerButton );
+				}
+			}
+		);
+
+		// Adding link buttons
+		if ( theConfig.layersToolbarUI.theDevil && theConfig.layersToolbarUI.theDevil.addButton ) {
+			let theDevilButton = new MapLayersToolbarLink (
+				{
+					href : 'https://www.google.com/maps/@' +
+						theTravelNotesData.map.getCenter ( ).lat +
+						',' +
+						theTravelNotesData.map.getCenter ( ).lng +
+						',' +
+						theTravelNotesData.map.getZoom ( ) +
+						'z',
+					title : 'Reminder! The devil will know everything about you',
+					textContent : '👿',
+					target : '_blank'
+				},
+				this.#buttonsHTMLElement
+			);
+			this.#wheelEventData.buttonsHeight += theDevilButton.height;
+			this.#buttonsAndLinks.push ( theDevilButton );
+		}
+
+		// wheel event data computation
+		this.#wheelEventData.buttonTop += this.#wheelEventData.buttonHeight;
+		this.#wheelEventData.marginTop = this.#wheelEventData.buttonTop;
+		this.#buttonsHTMLElement.style.marginTop = String ( this.#wheelEventData.marginTop ) + 'px';
+
+		// adding wheel event
+		this.#buttonsHTMLElement.addEventListener ( 'wheel', this.#onWheelButtonsEventListener, false );
+	}
+
+	/**
+	Hide the toolbar
+	@private
+	*/
+
+	#hide ( ) {
+
+		// Removing map layer buttons and links
+		this.#buttonsAndLinks.forEach ( buttonOrLink => buttonOrLink.destructor ( ) );
+		this.#buttonsAndLinks.length = ZERO;
+
+		// Removing wheel event listener
+		this.#buttonsHTMLElement.removeEventListener ( 'wheel', this.#onWheelButtonsEventListener, false );
+
+		// removing buttons container
+		this.#mainHTMLElement.removeChild ( this.#buttonsHTMLElement );
+		this.#timerId = null;
+	}
+
+	/**
+	The mouseleave event listener. Start a timer
+	@private
+	*/
+
+	#onMouseLeave ( ) {
+		this.#timerId = setTimeout ( ( ) => this.#hide ( ), theConfig.layersToolbarUI.toolbarTimeOut );
+	}
+
 	constructor ( ) {
+		this.#onWheelButtonsEventListener = new WheelButtonsEventListener ( this, this.#wheelEventData );
 		Object.freeze ( this );
 	}
 
@@ -350,17 +287,18 @@ class MapLayersToolbarUI {
 	*/
 
 	createUI ( ) {
-		let layersToolbar = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MapLayersToolbarUI' }, document.body );
+		this.#mainHTMLElement =
+			theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-MapLayersToolbarUI' }, document.body );
 		theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-MapLayersToolbarUI-Header',
 				textContent : theTranslator.getText ( 'MapLayersToolbarUI - Layers' )
 			},
-			layersToolbar
+			this.#mainHTMLElement
 		);
-		layersToolbar.addEventListener ( 'mouseenter', ToolbarEventListeners.onMouseEnter, false );
-		layersToolbar.addEventListener ( 'mouseleave', ToolbarEventListeners.onMouseLeave, false );
+		this.#mainHTMLElement.addEventListener ( 'mouseenter', ( ) => this.#show ( ), false );
+		this.#mainHTMLElement.addEventListener ( 'mouseleave', ( ) => this.#onMouseLeave ( ), false );
 		theEventDispatcher.dispatch ( 'layerchange', { layer : theMapLayersCollection.defaultMapLayer } );
 		theAttributionsUI.attributions = theMapLayersCollection.defaultMapLayer.attribution;
 	}
@@ -378,6 +316,13 @@ class MapLayersToolbarUI {
 		theAttributionsUI.attributions = theLayer.attribution;
 		theTravelNotesData.travel.layerName = theLayer.name;
 	}
+
+	/**
+	The map layer buttons container
+	@readonly
+	*/
+
+	get buttonsHTMLElement ( ) { return this.#buttonsHTMLElement; }
 }
 
 /**
