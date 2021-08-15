@@ -142,8 +142,8 @@ class TravelNotesPaneUI extends PaneUI {
 
 	#travelNotesDiv = null;
 
-	constructor ( ) {
-		super ( );
+	constructor ( paneData, paneControl ) {
+		super ( paneData, paneControl );
 		Object.seal ( this );
 	}
 
@@ -159,7 +159,7 @@ class TravelNotesPaneUI extends PaneUI {
 					childNode.removeEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
 				}
 			);
-			this.paneDataDiv.removeChild ( this.#travelNotesDiv );
+			this.paneData.removeChild ( this.#travelNotesDiv );
 		}
 		this.#travelNotesDiv = null;
 	}
@@ -172,7 +172,7 @@ class TravelNotesPaneUI extends PaneUI {
 		this.#travelNotesDiv = theNoteHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-TravelNotesPaneUI-' );
 		this.#travelNotesDiv.addEventListener ( 'drop', travelNotesDivDragEventListeners.onDrop, false );
 		this.#travelNotesDiv.addEventListener ( 'dragover', travelNotesDivDragEventListeners.onDragOver, false );
-		this.paneDataDiv.appendChild ( this.#travelNotesDiv );
+		this.paneData.appendChild ( this.#travelNotesDiv );
 		this.#travelNotesDiv.childNodes.forEach (
 			childNode => {
 				childNode.draggable = true;

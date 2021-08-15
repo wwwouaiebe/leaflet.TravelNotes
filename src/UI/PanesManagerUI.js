@@ -123,6 +123,7 @@ class PanesManagerUI {
 	#panes = new Map ( );
 	#paneDataDiv = null;
 	#paneControlDiv = null;
+	#headerDiv = null;
 
 	/**
 	This method remove the content of the Data Pane Div
@@ -149,7 +150,7 @@ class PanesManagerUI {
 		if ( this.#paneDataDiv ) {
 			return;
 		}
-		let headerDiv = theHTMLElementsFactory.create (
+		this.#headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -173,20 +174,6 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 		this.#paneDataDiv.addEventListener ( 'wheel', new PaneDataDivWheelEventListener ( ) );
-		this.#panes.forEach (
-			pane => {
-				theHTMLElementsFactory.create (
-					'div',
-					{
-						textContent : pane.getButtonText ( ),
-						className : 'TravelNotes-PanesManagerUI-PaneButton',
-						dataset : { PaneId : pane.getPaneId ( ) }
-					},
-					headerDiv
-				).addEventListener ( 'click', new PaneButtonClickEventListener ( this ) );
-				pane.setPaneDivs ( this.#paneDataDiv, this.#paneControlDiv );
-			}
-		);
 	}
 
 	/**
@@ -194,8 +181,18 @@ class PanesManagerUI {
 	@param {PaneUI} paneUI The pane to add
 	*/
 
-	addPane ( paneUI ) {
-		this.#panes.set ( paneUI.getPaneId ( ), paneUI );
+	addPane ( paneClass ) {
+		let pane = new paneClass ( this.#paneDataDiv, this.#paneControlDiv );
+		this.#panes.set ( pane.getPaneId ( ), pane );
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				textContent : pane.getButtonText ( ),
+				className : 'TravelNotes-PanesManagerUI-PaneButton',
+				dataset : { PaneId : pane.getPaneId ( ) }
+			},
+			this.#headerDiv
+		).addEventListener ( 'click', new PaneButtonClickEventListener ( this ) );
 	}
 
 	/**

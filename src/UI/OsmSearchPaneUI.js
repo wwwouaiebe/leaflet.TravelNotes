@@ -80,8 +80,8 @@ import { PANE_ID } from '../util/Constants.js';
 
 class OsmSearchPaneUI extends PaneUI {
 
-	#osmSearchDataUI = new OsmSearchDataUI ( );
-	#osmSearchControlUI = new OsmSearchControlUI ( );
+	#osmSearchDataUI = new OsmSearchDataUI ( this.paneData );
+	#osmSearchControlUI = new OsmSearchControlUI ( this.paneControl );
 
 	/**
 	Create the controls div
@@ -119,8 +119,8 @@ class OsmSearchPaneUI extends PaneUI {
 		this.#osmSearchDataUI.clearData ( this.paneDataDiv );
 	}
 
-	constructor ( ) {
-		super ( );
+	constructor ( paneData, paneControl ) {
+		super ( paneData, paneControl );
 		Object.seal ( this );
 	}
 

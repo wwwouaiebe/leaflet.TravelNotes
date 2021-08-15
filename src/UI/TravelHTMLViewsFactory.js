@@ -239,7 +239,7 @@ class TravelHTMLViewsFactory {
 			if ( route.itinerary.hasProfile ) {
 				travelHTML.appendChild ( theRouteHTMLViewsFactory.getRouteProfileHTML ( classPrefix, route ) );
 			}
-			travelHTML.appendChild ( theRouteHTMLViewsFactory.getRouteManeuversAndNotesHTML ( classPrefix, route ) );
+			travelHTML.appendChild ( theRouteHTMLViewsFactory.getRouteManeuversAndNotesHTML ( classPrefix, route, false ) );
 			travelHTML.appendChild ( theRouteHTMLViewsFactory.getRouteFooterHTML ( classPrefix, route ) );
 		}
 

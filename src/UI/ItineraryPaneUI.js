@@ -26,7 +26,7 @@ Changes:
 		- Issue ♯120 : Review the UserInterface
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210725
+Doc reviewed 20210815
 Tests ...
 */
 
@@ -51,82 +51,11 @@ Tests ...
 */
 
 import PaneUI from '../UI/PaneUI.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import theConfig from '../data/Config.js';
-import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
-import ManeuverContextMenu from '../contextMenus/ManeuverContextMenu.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { INVALID_OBJ_ID, LAT_LNG, PANE_ID } from '../util/Constants.js';
-
-class ManeuverOrNoteEventListeners {
-
-	static onContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.stopPropagation ( );
-		contextMenuEvent.preventDefault ( );
-		let element = contextMenuEvent.target;
-		while ( ! element.latLng ) {
-			element = element.parentNode;
-		}
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY,
-				latLng : element.latLng
-			};
-		if ( element.maneuverObjId ) {
-			contextMenuEvent.maneuverObjId = element.maneuverObjId;
-			new ManeuverContextMenu (
-				contextMenuEvent,
-				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
-			).show ( );
-		}
-		else if ( element.noteObjId ) {
-			contextMenuEvent.noteObjId = element.noteObjId;
-			new NoteContextMenu (
-				contextMenuEvent,
-				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
-			).show ( );
-		}
-	}
-
-	static onMouseEnter ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		theEventDispatcher.dispatch (
-			'additinerarypointmarker',
-			{
-				objId : mouseEvent.target.objId,
-				latLng : mouseEvent.target.latLng
-			}
-		);
-	}
-
-	static onMouseLeave ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		theEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
-	}
-}
-
-class ShowNotesCheckboxEventListeners {
-
-	static onClick ( ) {
-		document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Notes-Row' ).forEach (
-			noteRow => { noteRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-		);
-	}
-}
-
-class ShowManeuversCheckboxEventListeners {
-
-	static onClick ( ) {
-		document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row' ).forEach (
-			maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-		);
-	}
-}
+import ItineraryControlUI from '../UI/ItineraryControlUI.js';
+import ItineraryDataUI from '../UI/ItineraryDataUI.js';
+import { INVALID_OBJ_ID, PANE_ID } from '../util/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -142,147 +71,24 @@ class ShowManeuversCheckboxEventListeners {
 
 class ItineraryPaneUI extends PaneUI {
 
-	#routeHeader = null;
-	#checkBoxesDiv = null;
-
-	#showNotesCheckBox = null;
-	#showManeuversCheckBox = null;
-	#showNotes = theConfig.itineraryPaneUI.showNotes;
-	#showManeuvers = theConfig.itineraryPaneUI.showManeuvers;
-
 	/**
-	Create the controls div
+	the ItineraryDataUI Object
 	@private
 	*/
 
-	#addControls ( ) {
-		this.#checkBoxesDiv = theHTMLElementsFactory.create ( 'div', null, this.paneControlDiv );
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : theTranslator.getText ( 'ItineraryPaneUI - Show notes' )
-			},
-			this.#checkBoxesDiv
-		);
-		this.#showNotesCheckBox = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'checkbox',
-				id : 'TravelNotes-ItineraryPane-ShowNotesInput',
-				checked : this.#showNotes
-			},
-			this.#checkBoxesDiv
-		);
-		this.#showNotesCheckBox.addEventListener ( 'click', ShowNotesCheckboxEventListeners.onClick, false );
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : theTranslator.getText ( 'ItineraryPaneUI - Show maneuvers' )
-			},
-			this.#checkBoxesDiv
-		);
-		this.#showManeuversCheckBox = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'checkbox',
-				id : 'TravelNotes-ItineraryPane-ShowManeuversInput',
-				checked : this.#showManeuvers
-			},
-			this.#checkBoxesDiv
-		);
-		this.#showManeuversCheckBox.addEventListener ( 'click', ShowManeuversCheckboxEventListeners.onClick, false );
-		this.#routeHeader = theRouteHTMLViewsFactory.getRouteHeaderHTML (
-			'TravelNotes-ItineraryPaneUI-',
-			theTravelNotesData.travel.editedRoute
-		);
-		this.paneControlDiv.appendChild ( this.#routeHeader );
-	}
+	#itineraryDataUI = null;
 
 	/**
-	Add notes and maneuvers to the pane data div
+	the ItineraryControlUI Object
 	@private
 	*/
 
-	#addData ( ) {
-		this.paneDataDiv.appendChild (
-			theRouteHTMLViewsFactory.getRouteManeuversAndNotesHTML (
-				'TravelNotes-ItineraryPaneUI-',
-				theTravelNotesData.travel.editedRoute
-			)
-		);
+	#itineraryControlUI = null;
 
-		document.querySelectorAll (
-			'.TravelNotes-ItineraryPaneUI-Route-Notes-Row, .TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row'
-		).forEach (
-			row => {
-				row.addEventListener ( 'contextmenu', ManeuverOrNoteEventListeners.onContextMenu, false );
-				row.addEventListener ( 'mouseenter', ManeuverOrNoteEventListeners.onMouseEnter, false );
-				row.addEventListener ( 'mouseleave', ManeuverOrNoteEventListeners.onMouseLeave, false );
-			}
-		);
-		if ( ! this.#showNotesCheckBox.checked ) {
-			document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Notes-Row' ).forEach (
-				noteRow => { noteRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-			);
-		}
-		if ( ! this.#showManeuversCheckBox.checked ) {
-			document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row' ).forEach (
-				maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-			);
-		}
-	}
-
-	/**
-	Remove all controls from the pane controls div
-	@private
-	*/
-
-	#clearPaneControlDiv ( ) {
-		if ( this.#checkBoxesDiv ) {
-			if ( this.#showManeuversCheckBox ) {
-				this.#showManeuvers = this.#showManeuversCheckBox.checked;
-				this.#showManeuversCheckBox.removeEventListener ( 'click', ShowManeuversCheckboxEventListeners.onClick, false );
-				this.#checkBoxesDiv.removeChild ( this.#showManeuversCheckBox );
-				this.#showManeuversCheckBox = null;
-			}
-			if ( this.#showNotesCheckBox ) {
-				this.#showNotes = this.#showNotesCheckBox.checked;
-				this.#showNotesCheckBox.removeEventListener ( 'click', ShowNotesCheckboxEventListeners.onClick, false );
-				this.#checkBoxesDiv.removeChild ( this.#showNotesCheckBox );
-				this.#showNotesCheckBox = null;
-			}
-			this.paneControlDiv.removeChild ( this.#checkBoxesDiv );
-			this.#checkBoxesDiv = null;
-		}
-		if ( this.#routeHeader ) {
-			this.paneControlDiv.removeChild ( this.#routeHeader );
-			this.#routeHeader = null;
-		}
-	}
-
-	/**
-	Remove all notes and maneuvers from the pane data div
-	@private
-	*/
-
-	#clearPaneDataDiv ( ) {
-		document.querySelectorAll (
-			'.TravelNotes-ItineraryPaneUI-Route-Notes-Row, .TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row'
-		).forEach (
-			row => {
-				row.removeEventListener ( 'contextmenu', ManeuverOrNoteEventListeners.onContextMenu, false );
-				row.removeEventListener ( 'mouseenter', ManeuverOrNoteEventListeners.onMouseEnter, false );
-				row.removeEventListener ( 'mouseleave', ManeuverOrNoteEventListeners.onMouseLeave, false );
-			}
-		);
-		let routeAndNotesElement = document.querySelector ( '.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes' );
-		if ( routeAndNotesElement ) {
-			this.paneDataDiv.removeChild ( routeAndNotesElement );
-		}
-	}
-
-	constructor ( ) {
-		super ( );
+	constructor ( paneData, paneControl ) {
+		super ( paneData, paneControl );
+		this.#itineraryDataUI = new ItineraryDataUI ( this.paneData );
+		this.#itineraryControlUI = new ItineraryControlUI ( this.paneControl, this.#itineraryDataUI );
 		Object.seal ( this );
 	}
 
@@ -291,8 +97,8 @@ class ItineraryPaneUI extends PaneUI {
 	*/
 
 	remove ( ) {
-		this.#clearPaneDataDiv ( );
-		this.#clearPaneControlDiv ( );
+		this.#itineraryDataUI.clearData ( );
+		this.#itineraryControlUI.clearControl ( );
 	}
 
 	/**
@@ -301,8 +107,8 @@ class ItineraryPaneUI extends PaneUI {
 
 	add ( ) {
 		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-			this.#addControls ( );
-			this.#addData ( );
+			this.#itineraryDataUI.addData ( );
+			this.#itineraryControlUI.addControl ( );
 		}
 	}
 

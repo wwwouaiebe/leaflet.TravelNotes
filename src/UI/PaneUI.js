@@ -60,9 +60,9 @@ import { PANE_ID } from '../util/Constants.js';
 
 class PaneUI {
 
-	constructor ( ) {
-		this.paneDataDiv = null;
-		this.paneControlDiv = null;
+	constructor ( paneData, paneControl ) {
+		this.paneData = paneData;
+		this.paneControl = paneControl;
 	}
 
 	remove ( ) {
@@ -77,11 +77,6 @@ class PaneUI {
 
 	getButtonText ( ) {
 		return '';
-	}
-
-	setPaneDivs ( paneDataDiv, paneControlDiv ) {
-		this.paneDataDiv = paneDataDiv;
-		this.paneControlDiv = paneControlDiv;
 	}
 }
 

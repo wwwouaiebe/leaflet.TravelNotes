@@ -127,6 +127,8 @@ class SearchResultEventListeners {
 
 class OsmSearchDataUI {
 
+	#paneData = null;
+
 	/**
 	Icon builder
 	@private
@@ -316,17 +318,18 @@ class OsmSearchDataUI {
 		return htmlElement;
 	}
 
-	constructor ( ) {
+	constructor ( paneData ) {
+		this.#paneData = paneData;
 	}
 
 	/**
 	Add data to the pane data
 	*/
 
-	addData ( dataDiv ) {
+	addData ( ) {
 		theTravelNotesData.searchData.forEach (
 			osmElement => {
-				dataDiv.appendChild ( this.#buildHtmlElement ( osmElement ) );
+				this.#paneData.appendChild ( this.#buildHtmlElement ( osmElement ) );
 			}
 		);
 	}
@@ -335,13 +338,13 @@ class OsmSearchDataUI {
 	Remove data from the pane data
 	*/
 
-	clearData ( dataDiv ) {
+	clearData ( ) {
 
-		while ( dataDiv.firstChild ) {
-			dataDiv.firstChild.removeEventListener ( 'contextmenu', SearchResultEventListeners.onContextMenu, false );
-			dataDiv.firstChild.removeEventListener ( 'mouseenter', SearchResultEventListeners.onMouseEnter, false );
-			dataDiv.firstChild.removeEventListener ( 'mouseleave', SearchResultEventListeners.onMouseLeave, false );
-			dataDiv.removeChild ( dataDiv.firstChild );
+		while ( this.#paneData.firstChild ) {
+			this.#paneData.firstChild.removeEventListener ( 'contextmenu', SearchResultEventListeners.onContextMenu, false );
+			this.#paneData.firstChild.removeEventListener ( 'mouseenter', SearchResultEventListeners.onMouseEnter, false );
+			this.#paneData.firstChild.removeEventListener ( 'mouseleave', SearchResultEventListeners.onMouseLeave, false );
+			this.#paneData.removeChild ( this.#paneData.firstChild );
 		}
 	}
 }

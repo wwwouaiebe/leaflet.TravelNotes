@@ -219,10 +219,10 @@ class UI {
 		);
 		theTravelNotesToolbarUI.createUI ( this.#mainHTMLElement );
 		theTravelUI.createUI ( this.#mainHTMLElement );
-		thePanesManagerUI.addPane ( new ItineraryPaneUI ( ) );
-		thePanesManagerUI.addPane ( new TravelNotesPaneUI ( ) );
-		thePanesManagerUI.addPane ( new OsmSearchPaneUI ( ) );
 		thePanesManagerUI.createUI ( this.#mainHTMLElement );
+		thePanesManagerUI.addPane ( ItineraryPaneUI );
+		thePanesManagerUI.addPane ( TravelNotesPaneUI );
+		thePanesManagerUI.addPane ( OsmSearchPaneUI );
 		theProvidersToolbarUI.createUI ( this.#mainHTMLElement );
 
 		this.#mainHTMLElement.addEventListener ( 'mouseenter', ( ) => this.#show ( ), false );

@@ -77,8 +77,10 @@ class OsmSearchControlUI {
 	*/
 
 	#osmSearchWaitUI = null;
+	#paneControl = null;
 
-	constructor ( ) {
+	constructor ( paneControl ) {
+		this.#paneControl = paneControl;
 		this.#osmSearchToolbar = new OsmSearchToolbarUI ( );
 		this.#osmSearchTreeUI = new OsmSearchTreeUI ( );
 		this.#osmSearchWaitUI = new OsmSearchWaitUI ( );
@@ -88,21 +90,21 @@ class OsmSearchControlUI {
 	Add the treeHTMLElement to the paneControl
 	*/
 
-	addControl ( paneControl ) {
-		paneControl.appendChild ( this.#osmSearchToolbar.toolbarHTMLElement );
-		paneControl.appendChild ( this.#osmSearchTreeUI.treeHTMLElement );
-		paneControl.appendChild ( this.#osmSearchWaitUI.waitHTMLElement );
+	addControl ( ) {
+		this.#paneControl.appendChild ( this.#osmSearchToolbar.toolbarHTMLElement );
+		this.#paneControl.appendChild ( this.#osmSearchTreeUI.treeHTMLElement );
+		this.#paneControl.appendChild ( this.#osmSearchWaitUI.waitHTMLElement );
 	}
 
 	/**
 	Remove thetreeHTMLElement from the paneControl
 	*/
 
-	clearControl ( paneControl ) {
-		paneControl.removeChild ( this.#osmSearchTreeUI.treeHTMLElement );
-		paneControl.removeChild ( this.#osmSearchToolbar.toolbarHTMLElement );
+	clearControl ( ) {
+		this.#paneControl.removeChild ( this.#osmSearchTreeUI.treeHTMLElement );
+		this.#paneControl.removeChild ( this.#osmSearchToolbar.toolbarHTMLElement );
 		this.#osmSearchWaitUI.hideWait ( );
-		paneControl.removeChild ( this.#osmSearchWaitUI.waitHTMLElement );
+		this.#paneControl.removeChild ( this.#osmSearchWaitUI.waitHTMLElement );
 	}
 }
 

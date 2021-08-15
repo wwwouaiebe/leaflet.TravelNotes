@@ -50,8 +50,6 @@ import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import Zoomer from '../core/Zoomer.js';
 import theTranslator from '../UI/Translator.js';
 
-import { INVALID_OBJ_ID } from '../util/Constants.js';
-
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
@@ -65,11 +63,8 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 class ManeuverContextMenu extends BaseContextMenu {
 
-	#maneuverObjId = INVALID_OBJ_ID;
-
-	constructor ( contextMenuEvent, parentDiv = null ) {
-		super ( contextMenuEvent, parentDiv );
-		this.#maneuverObjId = this.eventData.targetObjId;
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -77,7 +72,7 @@ class ManeuverContextMenu extends BaseContextMenu {
 	doAction ( selectedItemObjId ) {
 		switch ( selectedItemObjId ) {
 		case 0 :
-			new Zoomer ( ).zoomToManeuver ( this.#maneuverObjId );
+			new Zoomer ( ).zoomToManeuver ( this.eventData.targetObjId );
 			break;
 		default :
 			break;

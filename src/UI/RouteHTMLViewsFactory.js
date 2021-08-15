@@ -177,51 +177,66 @@ class RouteHTMLViewsFactory {
 	@return {HTMLElement}
 	*/
 
-	getRouteManeuversAndNotesHTML ( classPrefix, route ) {
-		let notesAndManeuverHTML = [];
+	getRouteManeuversAndNotesHTML ( classPrefix, route, addDataset ) {
+		let notesAndManeuvers = [];
 		let notesIterator = route.notes.iterator;
 		while ( ! notesIterator.done ) {
-			let noteTextAndIconHTML = theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
-				classPrefix,
-				{ note : notesIterator.value, route : route }
+			notesAndManeuvers.push (
+				{
+					data : notesIterator.value,
+					distance : notesIterator.value.distance
+				}
 			);
-			noteTextAndIconHTML.className = classPrefix + 'Route-Notes-Row';
-			noteTextAndIconHTML.objId = ObjId.nextObjId;
-			noteTextAndIconHTML.latLng = notesIterator.value.latLng;
-			noteTextAndIconHTML.noteObjId = notesIterator.value.objId;
-			noteTextAndIconHTML.distance = notesIterator.value.distance;
-			notesAndManeuverHTML.push ( noteTextAndIconHTML );
 		}
 		let maneuversIterator = route.itinerary.maneuvers.iterator;
 		let maneuverDistance = ZERO;
 		while ( ! maneuversIterator.done ) {
-			let maneuverHTML = this.#getManeuverHTML (
-				classPrefix,
+			notesAndManeuvers.push (
 				{
-					route : route,
-					maneuver : maneuversIterator.value,
-					maneuverDistance : maneuverDistance
+					data : maneuversIterator.value,
+					distance : maneuverDistance
 				}
 			);
-			maneuverHTML.className = classPrefix + 'Route-Maneuvers-Row';
-			maneuverHTML.objId = ObjId.nextObjId;
-			maneuverHTML.latLng =
-				route.itinerary.itineraryPoints.getAt ( maneuversIterator.value.itineraryPointObjId ).latLng;
-			maneuverHTML.maneuverObjId = maneuversIterator.value.objId;
-			maneuverHTML.distance = maneuverDistance;
-			notesAndManeuverHTML.push ( maneuverHTML );
 			maneuverDistance += maneuversIterator.value.distance;
 		}
-		notesAndManeuverHTML.sort ( ( first, second ) => first.distance - second.distance );
-		let routeManeuversAndNotesHTML = theHTMLElementsFactory.create (
+		notesAndManeuvers.sort ( ( first, second ) => first.distance - second.distance );
+		let routeNotesAndManeuversHTML = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : classPrefix + 'Route-ManeuversAndNotes'
 			}
 		);
-		notesAndManeuverHTML.forEach ( row => routeManeuversAndNotesHTML.appendChild ( row ) );
+		notesAndManeuvers.forEach (
+			noteOrManeuver => {
+				let noteOrManeuverHTML = null;
+				if ( 'Note' === noteOrManeuver.data.objType.name ) {
+					noteOrManeuverHTML = theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
+						classPrefix,
+						{ note : noteOrManeuver.data, route : route }
+					);
+					noteOrManeuverHTML.className = classPrefix + 'Route-Notes-Row';
+				}
+				else {
+					noteOrManeuverHTML = this.#getManeuverHTML (
+						classPrefix,
+						{
+							route : route,
+							maneuver : noteOrManeuver.data,
+							maneuverDistance : noteOrManeuver.distance
+						}
+					);
+					noteOrManeuverHTML.className = classPrefix + 'Route-Maneuvers-Row';
+				}
+				if ( addDataset ) {
+					noteOrManeuverHTML.dataset.tanObjId = noteOrManeuver.data.objId;
+					noteOrManeuverHTML.dataset.tanMarkerObjId = ObjId.nextObjId;
+					noteOrManeuverHTML.dataset.tanObjType = noteOrManeuver.data.objType.name;
+				}
+				routeNotesAndManeuversHTML.appendChild ( noteOrManeuverHTML );
+			}
+		);
 
-		return routeManeuversAndNotesHTML;
+		return routeNotesAndManeuversHTML;
 	}
 
 	/**
