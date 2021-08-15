@@ -24,7 +24,7 @@ Changes:
 		- Issue ♯135 : Remove innerHTML from code
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210727
+Doc reviewed ...
 Tests ...
 */
 

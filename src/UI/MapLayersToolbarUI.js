@@ -28,7 +28,7 @@ Changes:
 		- Issue ♯142 : Transform the typedef layer to a class as specified in the layersToolbarUI.js
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210813
+Doc reviewed 20210815
 Tests ...
 */
 

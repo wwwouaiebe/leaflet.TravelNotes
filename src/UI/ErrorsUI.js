@@ -27,7 +27,7 @@ Changes:
 		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210724
+Doc reviewed 20210815
 Tests ...
 */
 
