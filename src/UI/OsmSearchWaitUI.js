@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210824
 Tests ...
 */
 
@@ -42,7 +44,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import OsmSearchToolbarUI from '../UI/OsmSearchToolbarUI.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 /**
@@ -65,7 +66,6 @@ class OsmSearchWaitUI {
 			'div',
 			{ className : 'TravelNotes-WaitAnimation' },
 		);
-		OsmSearchToolbarUI.osmSearchWaitUI = this;
 		this.#waitDiv.classList.add ( 'TravelNotes-Hidden' );
 	}
 

@@ -45,10 +45,63 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theOsmSearchEngine from '../core/OsmSearchEngine.js';
-import OsmSearchTreeUIEventListeners from '../UI/OsmSearchTreeUIEventListeners.js';
-import OsmSearchToolbarUI from '../UI/OsmSearchToolbarUI.js';
-import { ZERO } from '../util/Constants.js';
+import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
+import { ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
+
+class ChangeCheckboxEventListener {
+
+	#osmSearchTreeUI = null;
+
+	constructor ( osmSearchTreeUI ) {
+		this.#osmSearchTreeUI = osmSearchTreeUI;
+	}
+
+	/**
+	change event listener for the tree checkboxes
+	*/
+
+	handleEvent ( changeEvent ) {
+		changeEvent.stopPropagation ( );
+		theOsmSearchDictionary.selectItemObjId (
+			Number.parseInt ( changeEvent.target.parentNode.dataset.tanObjId ),
+			changeEvent.target.checked
+		);
+
+		this.#osmSearchTreeUI.redraw ( );
+	}
+}
+
+class WheelEventListener {
+
+	/**
+	wheel event listener for the tree
+	*/
+
+	handleEvent ( wheelEvent ) {
+		wheelEvent.stopPropagation ( );
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop +=
+				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
+		}
+		wheelEvent.stopPropagation ( );
+	}
+}
+
+class ClickArrowEventListener {
+
+	#osmSearchTreeUI = null;
+
+	constructor ( osmSearchTreeUI ) {
+		this.#osmSearchTreeUI = osmSearchTreeUI;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theOsmSearchDictionary.changeExpanded ( Number.parseInt ( clickEvent.target.parentNode.dataset.tanObjId ) );
+		this.#osmSearchTreeUI.redraw ( );
+	}
+
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -63,12 +116,19 @@ class OsmSearchTreeUI {
 
 	/**
 	A reference to the tree HTMLElement
+	@private
 	*/
 
 	#treeHTMLElement = null;
 
+	#eventListeners = {
+		onClickArrow : null,
+		onChangeCheckbox : null
+	}
+
 	/**
 	Recursivity counter for the #addItem method
+	@private
 	*/
 
 	#deepTree = ZERO;
@@ -86,7 +146,7 @@ class OsmSearchTreeUI {
 			{
 				className : 'TravelNotes-OsmSearchPaneUI-SearchItem ' +
 					'TravelNotes-OsmSearchPaneUI-SearchItemMargin' + this.#deepTree,
-				dictItem : item
+				dataset : { ObjId : item.objId }
 			},
 			this.#treeHTMLElement
 		);
@@ -99,7 +159,7 @@ class OsmSearchTreeUI {
 				},
 				itemDiv
 			);
-			itemCheckbox.addEventListener ( 'change', OsmSearchTreeUIEventListeners.onCheckboxChange, false );
+			itemCheckbox.addEventListener ( 'change', this.#eventListeners.onChangeCheckbox, false );
 		}
 		if ( ZERO === item.filterTagsArray.length ) {
 			let itemArrow = theHTMLElementsFactory.create (
@@ -110,7 +170,7 @@ class OsmSearchTreeUI {
 				},
 				itemDiv
 			);
-			itemArrow.addEventListener ( 'click', OsmSearchTreeUIEventListeners.onArrowClick, false );
+			itemArrow.addEventListener ( 'click', this.#eventListeners.onClickArrow, false );
 		}
 		theHTMLElementsFactory.create (
 			'text',
@@ -126,20 +186,20 @@ class OsmSearchTreeUI {
 	}
 
 	constructor ( ) {
+
+		this.#eventListeners.onChangeCheckbox = new ChangeCheckboxEventListener ( this );
+		this.#eventListeners.onClickArrow = new ClickArrowEventListener ( this );
+
 		this.#treeHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-OsmSearchPaneUI-SearchTree'
 			}
 		);
-		this.#treeHTMLElement.addEventListener ( 'wheel', OsmSearchTreeUIEventListeners.onWheel, false );
+		this.#treeHTMLElement.addEventListener ( 'wheel', new WheelEventListener ( ), false );
 
-		// theOsmSearchEngine.dictionary.name = theTranslator.getText ( 'OsmSearchPaneUI - dictionary name' );
-		theOsmSearchEngine.dictionary.name = '';
-		this.#addItem ( theOsmSearchEngine.dictionary );
-
-		OsmSearchToolbarUI.osmSearchTreeUI = this;
-		OsmSearchTreeUIEventListeners.osmSearchTreeUI = this;
+		theOsmSearchDictionary.dictionary.name = '';
+		this.#addItem ( theOsmSearchDictionary.dictionary );
 	}
 
 	/**
@@ -147,44 +207,8 @@ class OsmSearchTreeUI {
 	*/
 
 	redraw ( ) {
-
 		this.#treeHTMLElement.textContent = '';
-		this.#addItem ( theOsmSearchEngine.dictionary );
-	}
-
-	/**
-	Expand the complete tree
-	*/
-
-	expandSearchTree ( item ) {
-		item.items.forEach (
-			tmpItem => { this.expandSearchTree ( tmpItem ); }
-		);
-		item.isExpanded = true;
-	}
-
-	/**
-	Collapse the complete tree
-	*/
-
-	collapseSearchTree ( item ) {
-		item.items.forEach (
-			tmpItem => { this.collapseSearchTree ( tmpItem ); }
-		);
-		if ( ! item.isRoot ) {
-			item.isExpanded = false;
-		}
-	}
-
-	/**
-	Unselect all the items in the tree
-	*/
-
-	clearSearchTree ( item ) {
-		item.items.forEach (
-			tmpItem => { this.clearSearchTree ( tmpItem ); }
-		);
-		item.isSelected = false;
+		this.#addItem ( theOsmSearchDictionary.dictionary );
 	}
 
 	get treeHTMLElement ( ) { return this.#treeHTMLElement; }

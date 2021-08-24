@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed ...
+Doc reviewed 20210824
 Tests ...
 */
 
@@ -46,11 +46,121 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theOsmSearchEngine from '../core/OsmSearchEngine.js';
+import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
 import theTranslator from '../UI/Translator.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
 import { ZERO } from '../util/Constants.js';
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickSearchButtonEventListener
+@classdesc click event listener for the search button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickSearchButtonEventListener {
+
+	#osmSearchTreeUI = null;
+	#osmSearchWaitUI = null;
+
+	constructor ( osmSearchTreeUI, osmSearchWaitUI ) {
+		this.#osmSearchTreeUI = osmSearchTreeUI;
+		this.#osmSearchWaitUI = osmSearchWaitUI;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theOsmSearchDictionary.dictionary.isExpanded = false;
+		this.#osmSearchTreeUI.redraw ( );
+		theTravelNotesData.searchData.length = ZERO;
+		theEventDispatcher.dispatch ( 'showsearch' );
+		this.#osmSearchWaitUI.showWait ( );
+		theOsmSearchEngine.search ( );
+
+		// Notice: theOsmSearchEngine send a 'showsearch' event when the search is succesfully done
+	}
+
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickExpandButtonEventListener
+@classdesc click event listener for the expand tree button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickExpandButtonEventListener {
+
+	#osmSearchTreeUI = null;
+
+	constructor ( osmSearchTreeUI ) {
+		this.#osmSearchTreeUI = osmSearchTreeUI;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theOsmSearchDictionary.expandBranch ( theOsmSearchDictionary.dictionary );
+		this.#osmSearchTreeUI.redraw ( );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickCollapseButtonEventListener
+@classdesc click event listener for the collapse tree button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickCollapseButtonEventListener {
+
+	#osmSearchTreeUI = null;
+
+	constructor ( osmSearchTreeUI ) {
+		this.#osmSearchTreeUI = osmSearchTreeUI;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theOsmSearchDictionary.collapseBranch ( theOsmSearchDictionary.dictionary );
+		this.#osmSearchTreeUI.redraw ( );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickClearButtonEventListener
+@classdesc click event listener for the clear tree button
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickClearButtonEventListener {
+
+	#osmSearchTreeUI = null;
+
+	constructor ( osmSearchTreeUI ) {
+		this.#osmSearchTreeUI = osmSearchTreeUI;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theOsmSearchDictionary.clearBranch ( theOsmSearchDictionary.dictionary );
+		this.#osmSearchTreeUI.redraw ( );
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -64,66 +174,9 @@ import { ZERO } from '../util/Constants.js';
 
 class OsmSearchToolbarUI {
 
-	/**
-	A reference to the OsmSearchTreeUI object
-	*/
-
-	static osmSearchTreeUI = null;
-
-	static osmSearchWaitUI = null;
-
-	/**
-	A reference to the toolbar htmlElement
-	*/
-
 	#toolbarHTMLElement = null;
 
-	/**
-	click event listener for the search button
-	*/
-
-	static onSearchClick ( ) {
-
-		theOsmSearchEngine.dictionary.isExpanded = false;
-		OsmSearchToolbarUI.osmSearchTreeUI.redraw ( );
-		theTravelNotesData.searchData.length = ZERO;
-		theEventDispatcher.dispatch ( 'showsearch' );
-
-		OsmSearchToolbarUI.osmSearchWaitUI.showWait ( );
-
-		theOsmSearchEngine.search ( );
-
-		// Notice: theOsmSearchEngine send a 'showsearch' event when the search is succesfully done
-	}
-
-	/**
-	click event listener for the expand button
-	*/
-
-	static onExpandButtonClick ( ) {
-		OsmSearchToolbarUI.osmSearchTreeUI.expandSearchTree ( theOsmSearchEngine.dictionary );
-		OsmSearchToolbarUI.osmSearchTreeUI.redraw ( );
-	}
-
-	/**
-	click event listener for the collapse button
-	*/
-
-	static onCollapseButtonClick ( ) {
-		OsmSearchToolbarUI.osmSearchTreeUI.collapseSearchTree ( theOsmSearchEngine.dictionary );
-		OsmSearchToolbarUI.osmSearchTreeUI.redraw ( );
-	}
-
-	/**
-	click event listener for the clear button
-	*/
-
-	static onClearButtonClick ( ) {
-		OsmSearchToolbarUI.osmSearchTreeUI.clearSearchTree ( theOsmSearchEngine.dictionary );
-		OsmSearchToolbarUI.osmSearchTreeUI.redraw ( );
-	}
-
-	constructor ( ) {
+	constructor ( osmSearchTreeUI, osmSearchWaitUI ) {
 
 		this.#toolbarHTMLElement = theHTMLElementsFactory.create (
 			'div'
@@ -137,7 +190,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', OsmSearchToolbarUI.onSearchClick, false );
+			.addEventListener ( 'click', new ClickSearchButtonEventListener ( osmSearchTreeUI, osmSearchWaitUI ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -148,7 +201,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', OsmSearchToolbarUI.onExpandButtonClick, false );
+			.addEventListener ( 'click', new ClickExpandButtonEventListener ( osmSearchTreeUI ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -159,7 +212,8 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', OsmSearchToolbarUI.onCollapseButtonClick, false );
+			.addEventListener ( 'click', new ClickCollapseButtonEventListener ( osmSearchTreeUI ), false );
+
 		theHTMLElementsFactory.create (
 			'div',
 			{
@@ -170,7 +224,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', OsmSearchToolbarUI.onClearButtonClick, false );
+			.addEventListener ( 'click', new ClickClearButtonEventListener ( osmSearchTreeUI ), false );
 
 	}
 

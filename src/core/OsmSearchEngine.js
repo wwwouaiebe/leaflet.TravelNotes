@@ -53,35 +53,10 @@ import theConfig from '../data/Config.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
+import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
 
-import { INVALID_OBJ_ID, NOT_FOUND, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
-@classdesc This class is used to represent a branch of the dictionary tree.
-@private
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class DictionaryItem {
-	constructor ( itemName, isRoot ) {
-		this.name = theHTMLSanitizer.sanitizeToJsString ( itemName );
-		this.items = [];
-		this.filterTagsArray = [];
-		this.elementTypes = [ 'node', 'way', 'relation' ];
-		this.isSelected = false;
-		this.isExpanded = false;
-		this.isRoot = false;
-		if ( isRoot ) {
-			this.isExpanded = true;
-			this.isRoot = true;
-		}
-	}
-}
+import { INVALID_OBJ_ID, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -315,12 +290,6 @@ class OsmSearchEngine	{
 	}
 
 	/**
-	The dictionary is a DictionaryItems tree that is used to performs search in osm
-	*/
-
-	get dictionary ( ) { return this.#dictionary; }
-
-	/**
 	Start a search into osm for the items selected in the dictionary
 	*/
 
@@ -330,7 +299,7 @@ class OsmSearchEngine	{
 		}
 		this.#searchStarted = true;
 		this.#filterItems = [];
-		this.#searchFilters ( this.#dictionary );
+		this.#searchFilters ( theOsmSearchDictionary.dictionary );
 		let dataLoader = new OverpassAPIDataLoader ( { searchPlaces : false } );
 		await dataLoader.loadData ( this.#getSearchQueries ( ) );
 		let pointsOfInterest = new Map ( );
@@ -381,68 +350,6 @@ class OsmSearchEngine	{
 			eventDispatcher.dispatch ( 'removeobject', { objId : this.#previousSearchRectangleObjId } );
 			this.#previousSearchRectangleObjId = INVALID_OBJ_ID;
 		}
-	}
-
-	/**
-	Parse the content of the TravelNotesSearchDictionaryXX.csv and build a tree of DictionaryItems
-	with this content
-	*/
-
-	parseDictionary ( dictionaryTextContent ) {
-		this.#dictionary = new DictionaryItem ( 'All', true );
-		let itemsArray = [ this.#dictionary.items ];
-		let filterTagsArray = null;
-		let currentItem = null;
-
-		// split a line into words and add a DictionaryItem or a filterTag to the dictionary
-		function parseLine ( line ) {
-			let words = line.split ( ';' );
-			while ( '' === words [ words.length - ONE ] ) {
-				words.pop ( );
-			}
-			let wordPos = ZERO;
-			let filterTags = null;
-			words.forEach (
-				word => {
-					if ( '' !== word ) {
-						if ( NOT_FOUND === word.indexOf ( '=' ) ) {
-							currentItem = new DictionaryItem ( word );
-							itemsArray [ wordPos ].push ( currentItem );
-							itemsArray [ wordPos + ONE ] = currentItem.items;
-							filterTagsArray = currentItem.filterTagsArray;
-						}
-						else {
-							let keyAndValue = word.split ( '=' );
-							if ( 'element' === keyAndValue [ ZERO ] ) {
-								currentItem.elementTypes = [ keyAndValue [ ONE ] ];
-							}
-							else {
-								let filterTag = {};
-								filterTag [ keyAndValue [ ZERO ] ] =
-									'*' === keyAndValue [ ONE ] ? null : keyAndValue [ ONE ];
-								filterTags = filterTags || [];
-								filterTags.push ( filterTag );
-							}
-						}
-					}
-					wordPos ++;
-				}
-			);
-			if ( filterTags ) {
-				filterTagsArray.push ( filterTags );
-			}
-		}
-
-		// split the dictionary content into lines and analyse each line
-		dictionaryTextContent
-			.split ( /\r\n|\r|\n/ )
-			.forEach (
-				line => {
-					if ( '' !== line ) {
-						parseLine ( line );
-					}
-				}
-			);
 	}
 }
 

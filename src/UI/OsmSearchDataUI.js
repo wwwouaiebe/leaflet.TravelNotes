@@ -57,14 +57,14 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ContextMenuSearchResult
+@class ContextMenuSearchResultEventListener
 @classdesc contextmenu event listener for search result
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ContextMenuSearchResult {
+class ContextMenuSearchResultEventListener {
 
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
@@ -83,14 +83,14 @@ class ContextMenuSearchResult {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterSearchResult
+@class MouseEnterSearchResultEventListener
 @classdesc mouseenter event listener for search result
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterSearchResult {
+class MouseEnterSearchResultEventListener {
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -110,14 +110,14 @@ class MouseEnterSearchResult {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveSearchResult
+@class MouseLeaveSearchResultEventListener
 @classdesc mouseenter event listener for search result
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveSearchResult {
+class MouseLeaveSearchResultEventListener {
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -338,9 +338,9 @@ class OsmSearchDataUI {
 
 	constructor ( paneData ) {
 		this.#paneData = paneData;
-		this.#eventListeners.onContextMenu = new ContextMenuSearchResult ( );
-		this.#eventListeners.onMouseEnter = new MouseEnterSearchResult ( );
-		this.#eventListeners.onMouseLeave = new MouseLeaveSearchResult ( );
+		this.#eventListeners.onContextMenu = new ContextMenuSearchResultEventListener ( );
+		this.#eventListeners.onMouseEnter = new MouseEnterSearchResultEventListener ( );
+		this.#eventListeners.onMouseLeave = new MouseLeaveSearchResultEventListener ( );
 	}
 
 	/**

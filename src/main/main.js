@@ -57,7 +57,7 @@ import theTranslator from '../UI/Translator.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
-import theOsmSearchEngine from '../core/OsmSearchEngine.js';
+import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
 import { LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
 
 const OUR_DEMO_PRINT_MAX_TILES = 120;
@@ -269,7 +269,7 @@ function ourMain ( ) {
 	@--------------------------------------------------------------------------------------------------------------------------
 
 	@function myLoadSearchDictionary
-	@desc This function load the content of the TravelNotesSearchDictionaryXX.csv file into theOsmSearchEngine object
+	@desc This function load the content of the TravelNotesSearchDictionaryXX.csv file into theOsmSearchDictionary object
 	@private
 
 	@--------------------------------------------------------------------------------------------------------------------------
@@ -283,7 +283,7 @@ function ourMain ( ) {
 			&&
 			searchDictPromiseResult.value.ok
 		) {
-			theOsmSearchEngine.parseDictionary ( await searchDictPromiseResult.value.text ( ) );
+			theOsmSearchDictionary.parseDictionary ( await searchDictPromiseResult.value.text ( ) );
 			return '';
 		}
 		if (
@@ -293,7 +293,7 @@ function ourMain ( ) {
 			&&
 			defaultSearchDictPromiseResult.value.ok
 		) {
-			theOsmSearchEngine.parseDictionary ( await defaultSearchDictPromiseResult.value.text ( ) );
+			theOsmSearchDictionary.parseDictionary ( await defaultSearchDictPromiseResult.value.text ( ) );
 			return (
 				'Not possible to load the TravelNotesSearchDictionary' +
 				myLanguage.toUpperCase ( ) +
