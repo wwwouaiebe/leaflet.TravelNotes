@@ -25,7 +25,7 @@ Changes:
 		- Issue ♯128 : Unify osmSearch and notes icons and data
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210728
+Doc reviewed 20210824
 Tests ...
 */
 
@@ -70,15 +70,14 @@ import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
 
 class OsmSearchContextMenu extends BaseContextMenu {
 
-	#latLng = LAT_LNG.defaultValue;
 	#osmElement = null;
-	#geometry = null;
+	#latLng = LAT_LNG.defaultValue;
 
 	constructor ( contextMenuEvent, parentNode = null ) {
 		super ( contextMenuEvent, parentNode );
-		this.#latLng = contextMenuEvent.originalEvent.latLng;
-		this.#osmElement = contextMenuEvent.originalEvent.osmElement;
-		this.#geometry = contextMenuEvent.originalEvent.geometry;
+		this.#osmElement =
+			theTravelNotesData.searchData [ Number.parseInt ( contextMenuEvent.target.dataset.tanElementIndex ) ];
+		this.#latLng = [ this.#osmElement.lat, this.#osmElement.lon ];
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -107,7 +106,7 @@ class OsmSearchContextMenu extends BaseContextMenu {
 			new Zoomer ( ).zoomToPoi (
 				{
 					latLng : this.#latLng,
-					geometry : this.#geometry
+					geometry : this.#osmElement.geometry
 				}
 			);
 			break;

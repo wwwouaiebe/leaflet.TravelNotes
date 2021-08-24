@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed ...
+Doc reviewed 20210824
 Tests ...
 */
 
@@ -52,67 +52,78 @@ import OsmSearchContextMenu from '../contextMenus/OsmSearchContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import ObjId from '../data/ObjId.js';
 
-import { LAT_LNG } from '../util/Constants.js';
+import { ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class SearchResultEventListeners
-@classdesc This class contains the event listeners for the search results
+@class ContextMenuSearchResult
+@classdesc contextmenu event listener for search result
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class SearchResultEventListeners {
+class ContextMenuSearchResult {
 
-	/**
-	context menu event listener
-	*/
-
-	static onContextMenu ( contextMenuEvent ) {
+	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
-		let searchResultDiv = contextMenuEvent.target;
-		while ( ! searchResultDiv.osmElement ) {
-			searchResultDiv = searchResultDiv.parentNode;
+		let searchResultElement = contextMenuEvent.target;
+		while ( ! searchResultElement.dataset.tanObjId ) {
+			searchResultElement = searchResultElement.parentNode;
 		}
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY,
-				latLng : [ searchResultDiv.osmElement.lat, searchResultDiv.osmElement.lon ],
-				osmElement : searchResultDiv.osmElement,
-				geometry : searchResultDiv.osmElement.geometry
-			};
+		contextMenuEvent.target.dataset.tanObjId = searchResultElement.dataset.tanObjId;
+		contextMenuEvent.target.dataset.tanElementIndex = searchResultElement.dataset.tanElementIndex;
 		new OsmSearchContextMenu ( contextMenuEvent, this.paneDataDiv ).show ( );
 	}
 
-	/**
-	mouse enter event listener
-	*/
+}
 
-	static onMouseEnter ( mouseEvent ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class MouseEnterSearchResult
+@classdesc mouseenter event listener for search result
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MouseEnterSearchResult {
+
+	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
+		let osmElement = theTravelNotesData.searchData [ Number.parseInt ( mouseEvent.target.dataset.tanElementIndex ) ];
 		theEventDispatcher.dispatch (
 			'addsearchpointmarker',
 			{
-				objId : mouseEvent.target.objId,
-				latLng : [ mouseEvent.target.osmElement.lat, mouseEvent.target.osmElement.lon ],
-				geometry : mouseEvent.target.osmElement.geometry
+				objId : Number.parseInt ( mouseEvent.target.dataset.tanObjId ),
+				latLng : [ osmElement.lat, osmElement.lon ],
+				geometry : osmElement.geometry
 			}
 		);
 	}
 
-	/**
-	mouse leave event listener
-	*/
+}
 
-	static onMouseLeave ( mouseEvent ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class MouseLeaveSearchResult
+@classdesc mouseenter event listener for search result
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MouseLeaveSearchResult {
+
+	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
-		theEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
+		theEventDispatcher.dispatch ( 'removeobject', { objId : Number.parseInt ( mouseEvent.target.dataset.tanObjId ) } );
 	}
+
 }
 
 /**
@@ -128,30 +139,38 @@ class SearchResultEventListeners {
 class OsmSearchDataUI {
 
 	#paneData = null;
+	#currentOsmElement = null;
+	#currentHtmlElement = null;
+	#elementIndex = ZERO;
+	#eventListeners = {
+		onContextMenu : null,
+		onMouseEnter : null,
+		onMouseLeave : null
+	};
 
 	/**
 	Icon builder
 	@private
 	*/
 
-	#buildIcon ( htmlElement ) {
+	#buildIcon ( ) {
 		let iconContent = '';
-		if ( htmlElement.osmElement.tags.rcn_ref ) {
+		if ( this.#currentOsmElement.tags.rcn_ref ) {
 			iconContent =
 				'<div class=\'TravelNotes-MapNote TravelNotes-MapNoteCategory-0073\'>' +
 				'<svg viewBox=\'0 0 20 20\'><text class=\'\' x=10 y=14>' +
-				htmlElement.osmElement.tags.rcn_ref +
+				this.#currentOsmElement.tags.rcn_ref +
 				'</text></svg></div>';
 		}
 		else {
-			iconContent = theNoteDialogToolbarData.getIconContentFromName ( htmlElement.osmElement.description ) || '';
+			iconContent = theNoteDialogToolbarData.getIconContentFromName ( this.#currentOsmElement.description ) || '';
 		}
 		let iconCell = theHTMLElementsFactory.create (
 			'div',
 			{
 				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-IconCell'
 			},
-			htmlElement
+			this.#currentHtmlElement
 		);
 		theHTMLSanitizer.sanitizeToHtmlElement ( iconContent, iconCell );
 	}
@@ -172,31 +191,31 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addAddress ( htmlElement, searchResultCell ) {
+	#addAddress ( searchResultCell ) {
 		let street =
-			htmlElement.osmElement.tags [ 'addr:street' ]
+			this.#currentOsmElement.tags [ 'addr:street' ]
 				?
 				(
-					htmlElement.osmElement.tags [ 'addr:housenumber' ]
+					this.#currentOsmElement.tags [ 'addr:housenumber' ]
 						?
-						htmlElement.osmElement.tags [ 'addr:housenumber' ] + ' '
+						this.#currentOsmElement.tags [ 'addr:housenumber' ] + ' '
 						:
 						''
 				) +
-				htmlElement.osmElement.tags [ 'addr:street' ] + ' '
+				this.#currentOsmElement.tags [ 'addr:street' ] + ' '
 				:
 				'';
 		let city =
-			htmlElement.osmElement.tags [ 'addr:city' ]
+			this.#currentOsmElement.tags [ 'addr:city' ]
 				?
 				(
-					htmlElement.osmElement.tags [ 'addr:postcode' ]
+					this.#currentOsmElement.tags [ 'addr:postcode' ]
 						?
-						( htmlElement.osmElement.tags [ 'addr:postcode' ] + ' ' )
+						( this.#currentOsmElement.tags [ 'addr:postcode' ] + ' ' )
 						:
 						''
 				) +
-				htmlElement.osmElement.tags [ 'addr:city' ]
+				this.#currentOsmElement.tags [ 'addr:city' ]
 				:
 				'';
 		let address = street + city;
@@ -210,9 +229,9 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addPhone ( htmlElement, searchResultCell ) {
-		if ( htmlElement.osmElement.tags.phone ) {
-			this.#addOsmTag ( '☎️ : ' + htmlElement.osmElement.tags.phone, searchResultCell );
+	#addPhone ( searchResultCell ) {
+		if ( this.#currentOsmElement.tags.phone ) {
+			this.#addOsmTag ( '☎️ : ' + this.#currentOsmElement.tags.phone, searchResultCell );
 		}
 	}
 
@@ -221,13 +240,13 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addMail ( htmlElement, searchResultCell ) {
-		if ( htmlElement.osmElement.tags.email ) {
+	#addMail ( searchResultCell ) {
+		if ( this.#currentOsmElement.tags.email ) {
 			theHTMLElementsFactory.create (
 				'a',
 				{
-					href : 'mailto:' + htmlElement.osmElement.tags.email,
-					textContent : htmlElement.osmElement.tags.email
+					href : 'mailto:' + this.#currentOsmElement.tags.email,
+					textContent : this.#currentOsmElement.tags.email
 				},
 				theHTMLElementsFactory.create ( 'div', { textContent : '📧 : ' }, searchResultCell )
 			);
@@ -239,14 +258,14 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addWebSite ( htmlElement, searchResultCell ) {
-		if ( htmlElement.osmElement.tags.website ) {
+	#addWebSite ( searchResultCell ) {
+		if ( this.#currentOsmElement.tags.website ) {
 			theHTMLElementsFactory.create (
 				'a',
 				{
-					href : htmlElement.osmElement.tags.website,
+					href : this.#currentOsmElement.tags.website,
 					target : '_blank',
-					textContent : htmlElement.osmElement.tags.website
+					textContent : this.#currentOsmElement.tags.website
 				},
 				theHTMLElementsFactory.create ( 'div', null, searchResultCell )
 			);
@@ -257,20 +276,20 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addOsmData ( htmlElement ) {
+	#addOsmData ( ) {
 		let searchResultCell = theHTMLElementsFactory.create (
 			'div',
 			{ className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Cell'	},
-			htmlElement
+			this.#currentHtmlElement
 		);
 
-		this.#addOsmTag ( htmlElement.osmElement.description, searchResultCell );
-		this.#addOsmTag ( htmlElement.osmElement.tags.name, searchResultCell );
-		this.#addOsmTag ( htmlElement.osmElement.tags.rcn_ref, searchResultCell );
-		this.#addAddress ( htmlElement, searchResultCell );
-		this.#addPhone ( htmlElement, searchResultCell );
-		this.#addMail ( htmlElement, searchResultCell );
-		this.#addWebSite ( htmlElement, searchResultCell );
+		this.#addOsmTag ( this.#currentOsmElement.description, searchResultCell );
+		this.#addOsmTag ( this.#currentOsmElement.tags.name, searchResultCell );
+		this.#addOsmTag ( this.#currentOsmElement.tags.rcn_ref, searchResultCell );
+		this.#addAddress ( searchResultCell );
+		this.#addPhone ( searchResultCell );
+		this.#addMail ( searchResultCell );
+		this.#addWebSite ( searchResultCell );
 
 	}
 
@@ -279,9 +298,9 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addTitle ( htmlElement ) {
-		for ( const [ KEY, VALUE ] of Object.entries ( htmlElement.osmElement.tags ) ) {
-			htmlElement.title += KEY + '=' + VALUE + '\n';
+	#addTitle ( ) {
+		for ( const [ KEY, VALUE ] of Object.entries ( this.#currentOsmElement.tags ) ) {
+			this.#currentHtmlElement.title += KEY + '=' + VALUE + '\n';
 		}
 
 	}
@@ -291,10 +310,10 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#addEventListeners ( htmlElement ) {
-		htmlElement.addEventListener ( 'contextmenu', SearchResultEventListeners.onContextMenu, false );
-		htmlElement.addEventListener ( 'mouseenter', SearchResultEventListeners.onMouseEnter, false );
-		htmlElement.addEventListener ( 'mouseleave', SearchResultEventListeners.onMouseLeave, false );
+	#addEventListeners ( ) {
+		this.#currentHtmlElement.addEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
+		this.#currentHtmlElement.addEventListener ( 'mouseenter', this.#eventListeners.onMouseEnter, false );
+		this.#currentHtmlElement.addEventListener ( 'mouseleave', this.#eventListeners.onMouseLeave, false );
 	}
 
 	/**
@@ -302,24 +321,26 @@ class OsmSearchDataUI {
 	@private
 	*/
 
-	#buildHtmlElement ( osmElement ) {
-		let htmlElement = theHTMLElementsFactory.create (
+	#buildHtmlElement ( parentNode ) {
+		this.#currentHtmlElement = theHTMLElementsFactory.create (
 			'div',
 			{
 				className :	'TravelNotes-OsmSearchPaneUI-SearchResult-Row',
-				osmElement : osmElement,
-				objId : ObjId.nextObjId
-			}
+				dataset : { ObjId : ObjId.nextObjId, ElementIndex : this.#elementIndex ++ }
+			},
+			parentNode
 		);
-		this.#buildIcon ( htmlElement );
-		this.#addOsmData ( htmlElement );
-		this.#addTitle ( htmlElement );
-		this.#addEventListeners ( htmlElement );
-		return htmlElement;
+		this.#buildIcon ( );
+		this.#addOsmData ( );
+		this.#addTitle ( );
+		this.#addEventListeners ( );
 	}
 
 	constructor ( paneData ) {
 		this.#paneData = paneData;
+		this.#eventListeners.onContextMenu = new ContextMenuSearchResult ( );
+		this.#eventListeners.onMouseEnter = new MouseEnterSearchResult ( );
+		this.#eventListeners.onMouseLeave = new MouseLeaveSearchResult ( );
 	}
 
 	/**
@@ -327,9 +348,13 @@ class OsmSearchDataUI {
 	*/
 
 	addData ( ) {
+		this.#currentOsmElement = null;
+		this.#currentHtmlElement = null;
+		this.#elementIndex = ZERO;
 		theTravelNotesData.searchData.forEach (
 			osmElement => {
-				this.#paneData.appendChild ( this.#buildHtmlElement ( osmElement ) );
+				this.#currentOsmElement = osmElement;
+				this.#buildHtmlElement ( this.#paneData );
 			}
 		);
 	}
@@ -339,11 +364,10 @@ class OsmSearchDataUI {
 	*/
 
 	clearData ( ) {
-
 		while ( this.#paneData.firstChild ) {
-			this.#paneData.firstChild.removeEventListener ( 'contextmenu', SearchResultEventListeners.onContextMenu, false );
-			this.#paneData.firstChild.removeEventListener ( 'mouseenter', SearchResultEventListeners.onMouseEnter, false );
-			this.#paneData.firstChild.removeEventListener ( 'mouseleave', SearchResultEventListeners.onMouseLeave, false );
+			this.#paneData.firstChild.removeEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
+			this.#paneData.firstChild.removeEventListener ( 'mouseenter', this.#eventListeners.onMouseEnter, false );
+			this.#paneData.firstChild.removeEventListener ( 'mouseleave', this.#eventListeners.onMouseLeave, false );
 			this.#paneData.removeChild ( this.#paneData.firstChild );
 		}
 	}
