@@ -51,6 +51,27 @@ import ObjId from '../data/ObjId.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ClickDeleteButtonEventListener
+@classdesc Event listener for click event on the delete key button
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickDeleteButtonEventListener {
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let dispatchedEvent = new Event ( 'apikeydeleted' );
+		dispatchedEvent.data = { objId : Number.parseInt ( clickEvent.target.dataset.tanObjId ) };
+		clickEvent.target.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
+	}
+}
+
+/**
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class APIKeysDialogKeyControl
@@ -90,18 +111,6 @@ class APIKeysDialogKeyControl {
 	*/
 
 	#objId = INVALID_OBJ_ID;
-
-	/**
-	Event listener for the deleteAPIKey button.
-	Dispatch a new event to the APIKeyDialog.#APIKeysControlsContainer object
-	@private
-	*/
-
-	static #onDeleteNewAPIKeyClick ( clickEvent ) {
-		let dispatchedEvent = new Event ( 'apikeydeleted' );
-		dispatchedEvent.data = { objId : clickEvent.target.objId };
-		clickEvent.target.parentNode.parentNode.dispatchEvent ( dispatchedEvent );
-	}
 
 	constructor ( APIKey ) {
 
@@ -143,11 +152,11 @@ class APIKeysDialogKeyControl {
 					'TravelNotes-APIKeysDialog-AtRightButton TravelNotes-APIKeysDialog-DeleteRowButton',
 				title : theTranslator.getText ( 'APIKeysDialog - delete API key' ),
 				textContent : '❌',
-				objId : this.#objId
+				dataset : { ObjId : this.#objId }
 			},
 			this.#rootHTMLElement
 		)
-			.addEventListener ( 'click', APIKeysDialogKeyControl.#onDeleteNewAPIKeyClick, false );
+			.addEventListener ( 'click', new ClickDeleteButtonEventListener ( ), false );
 	}
 
 	/**

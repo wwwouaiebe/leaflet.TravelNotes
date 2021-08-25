@@ -91,19 +91,19 @@ import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 class APIKeysManager {
 
-	static #haveAPIKeysFile = false;
+	#haveAPIKeysFile = false;
 
-	static #APIKeysMap = new Map;
+	#APIKeysMap = new Map;
 
 	/**
 	This method is called when the 'APIKkeys' file is decoded correctly
-	@param {string} data the decoded API keys as JSON string
+	@param {string} decryptedData the decoded API keys as JSON string
 	@private
 	*/
 
-	static #onOkDecryptServerFile ( data ) {
-		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( data ) );
-		APIKeysManager.#resetAPIKeys ( APIKeys );
+	#onOkDecryptServerFile ( decryptedData ) {
+		let APIKeys = JSON.parse ( new TextDecoder ( ).decode ( decryptedData ) );
+		this.#resetAPIKeys ( APIKeys );
 	}
 
 	/**
@@ -112,7 +112,7 @@ class APIKeysManager {
 	@private
 	*/
 
-	static #onErrorDecryptServerFile ( err ) {
+	#onErrorDecryptServerFile ( err ) {
 
 		// Showing the error if not cancelled by user
 		if ( err instanceof Error ) {
@@ -132,12 +132,12 @@ class APIKeysManager {
 	@private
 	*/
 
-	static #onServerFileFound ( data ) {
+	#onServerFileFound ( data ) {
 		if ( window.isSecureContext && window.crypto && window.crypto.subtle && window.crypto.subtle.importKey ) {
 			new DataEncryptor ( ).decryptData (
 				data,
-				APIKeysManager.#onOkDecryptServerFile,
-				APIKeysManager.#onErrorDecryptServerFile,
+				decryptedData => this.#onOkDecryptServerFile ( decryptedData ),
+				err => this.#onErrorDecryptServerFile ( err ),
 				new PasswordDialog ( false ).show ( )
 			);
 		}
@@ -150,8 +150,8 @@ class APIKeysManager {
 	@private
 	*/
 
-	static #getAPIKey ( providerName ) {
-		return APIKeysManager.#APIKeysMap.get ( providerName.toLowerCase ( ) );
+	#getAPIKey ( providerName ) {
+		return this.#APIKeysMap.get ( providerName.toLowerCase ( ) );
 	}
 
 	/**
@@ -161,8 +161,8 @@ class APIKeysManager {
 	@private
 	*/
 
-	static #setAPIKey ( providerName, key ) {
-		APIKeysManager.#APIKeysMap.set ( providerName.toLowerCase ( ), key );
+	#setAPIKey ( providerName, key ) {
+		this.#APIKeysMap.set ( providerName.toLowerCase ( ), key );
 	}
 
 	/**
@@ -171,12 +171,12 @@ class APIKeysManager {
 	@private
 	*/
 
-	static #setAPIKeysFromSessionStorage ( ) {
+	#setAPIKeysFromSessionStorage ( ) {
 		let APIKeysCounter = ZERO;
 		for ( let counter = ZERO; counter < sessionStorage.length; counter ++ ) {
 			let keyName = sessionStorage.key ( counter );
 			if ( 'ProviderKey' === keyName.substr ( keyName.length - 'ProviderKey'.length ) ) {
-				APIKeysManager.#setAPIKey (
+				this.#setAPIKey (
 					keyName.substr ( ZERO, keyName.length - 'ProviderKey'.length ),
 					atob ( sessionStorage.getItem ( keyName ) )
 				);
@@ -184,7 +184,7 @@ class APIKeysManager {
 			}
 		}
 		theTravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( APIKeysManager.#getAPIKey ( provider.name ) || '' ); }
+			provider => { provider.providerKey = ( this.#getAPIKey ( provider.name ) || '' ); }
 		);
 		return APIKeysCounter;
 	}
@@ -196,9 +196,9 @@ class APIKeysManager {
 	@private
 	*/
 
-	static #resetAPIKeys ( APIKeys ) {
+	#resetAPIKeys ( APIKeys ) {
 		sessionStorage.clear ( );
-		APIKeysManager.#APIKeysMap.clear ( );
+		this.#APIKeysMap.clear ( );
 		let saveToSessionStorage =
 			theUtilities.storageAvailable ( 'sessionStorage' )
 			&&
@@ -211,11 +211,11 @@ class APIKeysManager {
 						btoa ( APIKey.providerKey )
 					);
 				}
-				APIKeysManager.#setAPIKey ( APIKey.providerName, APIKey.providerKey );
+				this.#setAPIKey ( APIKey.providerName, APIKey.providerKey );
 			}
 		);
 		theTravelNotesData.providers.forEach (
-			provider => { provider.providerKey = ( APIKeysManager.#getAPIKey ( provider.name ) || '' ); }
+			provider => { provider.providerKey = ( this.#getAPIKey ( provider.name ) || '' ); }
 		);
 
 		theEventDispatcher.dispatch ( 'providersadded' );
@@ -231,7 +231,7 @@ class APIKeysManager {
 	@return {boolean} true when the provider API key is known
 	*/
 
-	hasKey ( providerName ) { return APIKeysManager.#APIKeysMap.has ( providerName.toLowerCase ( ) ); }
+	hasKey ( providerName ) { return this.#APIKeysMap.has ( providerName.toLowerCase ( ) ); }
 
 	/**
 	Get the url from the layer
@@ -241,7 +241,7 @@ class APIKeysManager {
 
 	getUrl ( layer ) {
 		if ( layer.providerKeyNeeded ) {
-			let providerKey = APIKeysManager.#APIKeysMap.get ( layer.providerName.toLowerCase ( ) );
+			let providerKey = this.#APIKeysMap.get ( layer.providerName.toLowerCase ( ) );
 			if ( providerKey ) {
 				return layer.url.replace ( '{providerKey}', providerKey );
 			}
@@ -263,7 +263,7 @@ class APIKeysManager {
 		let keysRestoredFromStorage = false;
 
 		// Try first to restore keys from storage
-		if ( ZERO !== APIKeysManager.#setAPIKeysFromSessionStorage ( ) ) {
+		if ( ZERO !== this.#setAPIKeysFromSessionStorage ( ) ) {
 			theEventDispatcher.dispatch ( 'providersadded' );
 			keysRestoredFromStorage = true;
 		}
@@ -273,9 +273,9 @@ class APIKeysManager {
 			.then (
 				response => {
 					if ( HTTP_STATUS_OK === response.status && response.ok ) {
-						APIKeysManager.#haveAPIKeysFile = true;
+						this.#haveAPIKeysFile = true;
 						if ( ! keysRestoredFromStorage ) {
-							response.arrayBuffer ( ).then ( APIKeysManager.#onServerFileFound );
+							response.arrayBuffer ( ).then ( data => this.#onServerFileFound ( data ) );
 						}
 					}
 				}
@@ -299,7 +299,7 @@ class APIKeysManager {
 
 		// preparing a list of providers and provider keys for the dialog
 		let ApiKeys = [];
-		APIKeysManager.#APIKeysMap.forEach (
+		this.#APIKeysMap.forEach (
 			( providerKey, providerName ) => {
 				ApiKeys.push ( Object.seal ( { providerName : providerName, providerKey : providerKey } ) );
 			}
@@ -307,9 +307,9 @@ class APIKeysManager {
 		ApiKeys.sort ( ( first, second ) => first.providerName.localeCompare ( second.providerName ) );
 
 		// showing dialog
-		new APIKeysDialog ( ApiKeys, APIKeysManager.#haveAPIKeysFile )
+		new APIKeysDialog ( ApiKeys, this.#haveAPIKeysFile )
 			.show ( )
-			.then ( APIKeys => APIKeysManager.#resetAPIKeys ( APIKeys ) )
+			.then ( APIKeys => this.#resetAPIKeys ( APIKeys ) )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {
@@ -328,7 +328,7 @@ class APIKeysManager {
 		let providerName = provider.name.toLowerCase ( );
 
 		// searching if we have already the provider key
-		let providerKey = APIKeysManager.#getAPIKey ( providerName );
+		let providerKey = this.#getAPIKey ( providerName );
 
 		// no provider key. Searching in the storage
 		if ( provider.providerKeyNeeded && ! providerKey ) {

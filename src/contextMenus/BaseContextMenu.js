@@ -288,7 +288,12 @@ class BaseContextMenu {
 		this.#eventData.clientY = contextMenuEvent.clientY || contextMenuEvent.originalEvent.clientY || ZERO;
 		this.#eventData.lat = contextMenuEvent.latlng ? contextMenuEvent.latlng.lat : LAT_LNG.defaultValue;
 		this.#eventData.lng = contextMenuEvent.latlng ? contextMenuEvent.latlng.lng : LAT_LNG.defaultValue;
-		if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
+		if ( contextMenuEvent.target.objId ) {
+
+			// Needed for leaflet objects
+			this.#eventData.targetObjId = contextMenuEvent.target.objId;
+		}
+		else if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
 			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.target.dataset.tanObjId );
 		}
 		this.#eventData.haveParentNode = null !== parentNode;

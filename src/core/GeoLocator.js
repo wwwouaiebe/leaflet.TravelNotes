@@ -62,9 +62,9 @@ import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
 
 class GeoLocator {
 
-	static #status = ( 'geolocation' in navigator ) ? GEOLOCATION_STATUS.inactive : GEOLOCATION_STATUS.disabled;
+	#status = ( 'geolocation' in navigator ) ? GEOLOCATION_STATUS.inactive : GEOLOCATION_STATUS.disabled;
 
-	static #watchId = null;
+	#watchId = null;
 
 	/**
 	Send an event to show the current position on the map
@@ -84,18 +84,18 @@ class GeoLocator {
 	*/
 
 	#stop ( ) {
-		if ( GEOLOCATION_STATUS.active === GeoLocator.#status ) {
-			GeoLocator.#status = GEOLOCATION_STATUS.inactive;
+		if ( GEOLOCATION_STATUS.active === this.#status ) {
+			this.#status = GEOLOCATION_STATUS.inactive;
 		}
 
 		/*
-			if ( GeoLocator.#watchId )
-			FF: the GeoLocator.#watchId is always 0 so we cannot use GeoLocator.#watchId to see if the geolocation is running
+			if ( this.#watchId )
+			FF: the this.#watchId is always 0 so we cannot use this.#watchId to see if the geolocation is running
 		*/
 
-		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : GeoLocator.#status } );
-		navigator.geolocation.clearWatch ( GeoLocator.#watchId );
-		GeoLocator.#watchId = null;
+		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : this.#status } );
+		navigator.geolocation.clearWatch ( this.#watchId );
+		this.#watchId = null;
 	}
 
 	/**
@@ -106,7 +106,7 @@ class GeoLocator {
 
 	#error ( positionError ) {
 		if ( ONE === positionError.code ) { // see positionError object in MDN
-			GeoLocator.#status = GEOLOCATION_STATUS.refusedByUser;
+			this.#status = GEOLOCATION_STATUS.refusedByUser;
 		}
 		this.#stop ( );
 	}
@@ -118,10 +118,10 @@ class GeoLocator {
 	*/
 
 	#start ( ) {
-		GeoLocator.#status = GEOLOCATION_STATUS.active;
-		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : GeoLocator.#status } );
+		this.#status = GEOLOCATION_STATUS.active;
+		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : this.#status } );
 		navigator.geolocation.getCurrentPosition ( this.#showPosition, this.#error, theConfig.geoLocation.options );
-		GeoLocator.#watchId = navigator.geolocation.watchPosition (
+		this.#watchId = navigator.geolocation.watchPosition (
 			this.#showPosition,
 			this.#error,
 			theConfig.geoLocation.options
@@ -138,7 +138,7 @@ class GeoLocator {
 	@readonly
 	*/
 
-	get status ( ) { return GeoLocator.#status; }
+	get status ( ) { return this.#status; }
 
 	/**
 	Start or stop the geolocatiion, depending of the status
@@ -149,7 +149,7 @@ class GeoLocator {
 	*/
 
 	switch ( ) {
-		switch ( GeoLocator.#status ) {
+		switch ( this.#status ) {
 		case GEOLOCATION_STATUS.inactive :
 			this.#start ( );
 			break;
@@ -160,7 +160,7 @@ class GeoLocator {
 			break;
 		}
 
-		return GeoLocator.#status;
+		return this.#status;
 	}
 }
 

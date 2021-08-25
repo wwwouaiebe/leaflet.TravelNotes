@@ -85,9 +85,9 @@ const ICON_POSITION = Object.freeze ( {
 
 class MapIconDataBuilder {
 
-	static #route = null;
+	#route = null;
 	#overpassAPIDataLoader = null;
-	static #mapIconPosition = null;
+	#mapIconPosition = null;
 
 	#mapIconData = Object.seal (
 		{
@@ -111,12 +111,12 @@ class MapIconDataBuilder {
 	@private
 	*/
 
-	static #latLngCompare ( itineraryPoint ) {
+	#latLngCompare ( itineraryPoint ) {
 
 		const COMPARE_PRECISION = 0.000005;
 
 		let isWayPoint = false;
-		MapIconDataBuilder.#route.wayPoints.forEach (
+		this.#route.wayPoints.forEach (
 			wayPoint => {
 				if (
 					( Math.abs ( itineraryPoint.lat - wayPoint.lat ) < COMPARE_PRECISION )
@@ -131,9 +131,9 @@ class MapIconDataBuilder {
 			! isWayPoint
 			&&
 			(
-				MapIconDataBuilder.#mapIconPosition.latLng [ ZERO ] !== itineraryPoint.lat
+				this.#mapIconPosition.latLng [ ZERO ] !== itineraryPoint.lat
 				||
-				MapIconDataBuilder.#mapIconPosition.latLng [ ONE ] !== itineraryPoint.lng
+				this.#mapIconPosition.latLng [ ONE ] !== itineraryPoint.lng
 			)
 		);
 	}
@@ -159,7 +159,7 @@ class MapIconDataBuilder {
 	#computeTranslation ( ) {
 		this.#mapIconData.translation = theGeometry.subtrackPoints (
 			[ ICON_DIMENSIONS.svgViewboxDim / TWO, ICON_DIMENSIONS.svgViewboxDim / TWO ],
-			theGeometry.project ( MapIconDataBuilder.#mapIconPosition.latLng, SVG_ZOOM )
+			theGeometry.project ( this.#mapIconPosition.latLng, SVG_ZOOM )
 		);
 	}
 
@@ -174,17 +174,17 @@ class MapIconDataBuilder {
 		// searching points at least at 10 m ( SVG_ANGLE_DISTANCE ) from the icon point,
 		// one for rotation and one for direction
 		let distance = DISTANCE.defaultValue;
-		let rotationItineraryPoint = MapIconDataBuilder.#route.itinerary.itineraryPoints.first;
-		let directionItineraryPoint = MapIconDataBuilder.#route.itinerary.itineraryPoints.last;
+		let rotationItineraryPoint = this.#route.itinerary.itineraryPoints.first;
+		let directionItineraryPoint = this.#route.itinerary.itineraryPoints.last;
 		let directionPointReached = false;
 
-		MapIconDataBuilder.#route.itinerary.itineraryPoints.forEach (
+		this.#route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				if ( MapIconDataBuilder.#mapIconPosition.distance - distance > SVG_ANGLE_DISTANCE ) {
+				if ( this.#mapIconPosition.distance - distance > SVG_ANGLE_DISTANCE ) {
 					rotationItineraryPoint = itineraryPoint;
 				}
 				if (
-					distance - MapIconDataBuilder.#mapIconPosition.distance
+					distance - this.#mapIconPosition.distance
 					>
 					SVG_ANGLE_DISTANCE && ! directionPointReached
 				) {
@@ -196,15 +196,15 @@ class MapIconDataBuilder {
 		);
 
 		let iconPoint = theGeometry.addPoints (
-			theGeometry.project ( MapIconDataBuilder.#mapIconPosition.latLng, SVG_ZOOM ),
+			theGeometry.project ( this.#mapIconPosition.latLng, SVG_ZOOM ),
 			this.#mapIconData.translation
 		);
 
 		// computing rotation... if possible
 		if (
-			MapIconDataBuilder.#mapIconPosition.nearestItineraryPointObjId
+			this.#mapIconPosition.nearestItineraryPointObjId
 			!==
-			MapIconDataBuilder.#route.itinerary.itineraryPoints.first.objId
+			this.#route.itinerary.itineraryPoints.first.objId
 		) {
 			let rotationPoint = theGeometry.addPoints (
 				theGeometry.project ( rotationItineraryPoint.latLng, SVG_ZOOM ),
@@ -232,9 +232,9 @@ class MapIconDataBuilder {
 		// computing direction ... if possible
 
 		if (
-			MapIconDataBuilder.#mapIconPosition.nearestItineraryPointObjId
+			this.#mapIconPosition.nearestItineraryPointObjId
 			!==
-			MapIconDataBuilder.#route.itinerary.itineraryPoints.last.objId
+			this.#route.itinerary.itineraryPoints.last.objId
 		) {
 			let directionPoint = theGeometry.addPoints (
 				theGeometry.project ( directionItineraryPoint.latLng, SVG_ZOOM ),
@@ -263,9 +263,9 @@ class MapIconDataBuilder {
 			}
 		}
 		if (
-			MapIconDataBuilder.#mapIconPosition.nearestItineraryPointObjId
+			this.#mapIconPosition.nearestItineraryPointObjId
 			===
-			MapIconDataBuilder.#route.itinerary.itineraryPoints.first.objId
+			this.#route.itinerary.itineraryPoints.first.objId
 		) {
 			this.#mapIconData.rotation = -this.#direction - DEGREES.d90;
 			this.#direction = null;
@@ -273,9 +273,9 @@ class MapIconDataBuilder {
 		}
 
 		if (
-			MapIconDataBuilder.#mapIconPosition.latLng [ ZERO ] === MapIconDataBuilder.#route.itinerary.itineraryPoints.last.lat
+			this.#mapIconPosition.latLng [ ZERO ] === this.#route.itinerary.itineraryPoints.last.lat
 			&&
-			MapIconDataBuilder.#mapIconPosition.latLng [ ONE ] === MapIconDataBuilder.#route.itinerary.itineraryPoints.last.lng
+			this.#mapIconPosition.latLng [ ONE ] === this.#route.itinerary.itineraryPoints.last.lng
 		) {
 
 			// using lat & lng because last point is sometime duplicated
@@ -342,13 +342,13 @@ class MapIconDataBuilder {
 	#searchPassingStreets ( ) {
 
 		// searching the previous and next point on the itinerary
-		let incomingItineraryPoint = MapIconDataBuilder.#route.itinerary.itineraryPoints.previous (
-			MapIconDataBuilder.#mapIconPosition.nearestItineraryPointObjId,
-			MapIconDataBuilder.#latLngCompare
+		let incomingItineraryPoint = this.#route.itinerary.itineraryPoints.previous (
+			this.#mapIconPosition.nearestItineraryPointObjId,
+			itineraryPoint => this.#latLngCompare ( itineraryPoint )
 		);
-		let outgoingItineraryPoint = MapIconDataBuilder.#route.itinerary.itineraryPoints.next (
-			MapIconDataBuilder.#mapIconPosition.nearestItineraryPointObjId,
-			MapIconDataBuilder.#latLngCompare
+		let outgoingItineraryPoint = this.#route.itinerary.itineraryPoints.next (
+			this.#mapIconPosition.nearestItineraryPointObjId,
+			itineraryPoint => this.#latLngCompare ( itineraryPoint )
 		);
 
 		let svgPointId = NOT_FOUND;
@@ -364,13 +364,13 @@ class MapIconDataBuilder {
 		// searching in the nodes JS map the incoming, outgoing and icon nodes
 		this.#overpassAPIDataLoader.nodes.forEach (
 			node => {
-				if ( 'bike' === MapIconDataBuilder.#route.itinerary.transitMode && node.tags && node.tags.rcn_ref ) {
+				if ( 'bike' === this.#route.itinerary.transitMode && node.tags && node.tags.rcn_ref ) {
 					rcnRefNode = node;
 				}
-				if ( INVALID_OBJ_ID !== MapIconDataBuilder.#mapIconPosition.nearestItineraryPointObjId ) {
+				if ( INVALID_OBJ_ID !== this.#mapIconPosition.nearestItineraryPointObjId ) {
 					nodeDistance = theSphericalTrigonometry.pointsDistance (
 						[ node.lat, node.lon ],
-						MapIconDataBuilder.#mapIconPosition.latLng
+						this.#mapIconPosition.latLng
 					);
 					if ( nodeDistance < svgNodeDistance ) {
 						svgPointId = node.id;
@@ -413,7 +413,7 @@ class MapIconDataBuilder {
 			( iconNode && iconNode.tags && iconNode.tags.highway && 'mini_roundabout' === iconNode.tags.highway );
 
 		if (
-			'bike' === MapIconDataBuilder.#route.itinerary.transitMode
+			'bike' === this.#route.itinerary.transitMode
 			&&
 			iconNode && iconNode.tags && iconNode.tags.rcn_ref
 			&&
@@ -539,9 +539,9 @@ class MapIconDataBuilder {
 	*/
 
 	buildData ( route, overpassAPIDataLoader, mapIconPosition ) {
-		MapIconDataBuilder.#route = route;
+		this.#route = route;
 		this.#overpassAPIDataLoader = overpassAPIDataLoader;
-		MapIconDataBuilder.#mapIconPosition = mapIconPosition;
+		this.#mapIconPosition = mapIconPosition;
 
 		this.#mapIconData.translation = [ ZERO, ZERO ];
 		this.#mapIconData.rotation = ZERO;
