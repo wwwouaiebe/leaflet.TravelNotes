@@ -54,16 +54,26 @@ import theTranslator from '../UI/Translator.js';
 import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
-import { LAT_LNG, ZERO, PANE_ID } from '../util/Constants.js';
+import { PANE_ID } from '../util/Constants.js';
 
-class travelNotesDivDragEventListeners {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static #noteObjId = ZERO;
+@class TravelNoteDragStartEventListener
+@classdesc dragstart event listener for the travel notes
+@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	static onDragStart ( dragEvent ) {
+class TravelNoteDragStartEventListener {
+
+	constructor ( ) {
+	}
+
+	handleEvent ( dragEvent ) {
 		dragEvent.stopPropagation ( );
 		try {
-			dragEvent.dataTransfer.setData ( 'Text', dragEvent.target.dataObjId );
+			dragEvent.dataTransfer.setData ( 'ObjId', dragEvent.target.dataset.tanObjId );
 			dragEvent.dataTransfer.dropEffect = 'move';
 		}
 		catch ( err ) {
@@ -71,38 +81,76 @@ class travelNotesDivDragEventListeners {
 				console.error ( err );
 			}
 		}
+	}
+}
 
-		travelNotesDivDragEventListeners.#noteObjId = dragEvent.target.noteObjId;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class TravelNoteDragOverEventListener
+@classdesc dragover event listener for the travel notes
+@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TravelNoteDragOverEventListener {
+
+	constructor ( ) {
 	}
 
-	static onDragOver ( dragEvent ) {
+	handleEvent ( dragEvent ) {
 		dragEvent.preventDefault ( );
 	}
+}
 
-	static onDrop ( dragEvent ) {
-		dragEvent.preventDefault ( );
-		let element = dragEvent.target;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-		while ( ! element.noteObjId ) {
+@class TravelNoteDropEventListener
+@classdesc drop event listener for the travel notes
+@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TravelNoteDropEventListener {
+
+	constructor ( ) {
+	}
+
+	handleEvent ( dropEvent ) {
+		dropEvent.preventDefault ( );
+		let element = dropEvent.target;
+		while ( ! element.dataset.tanObjId ) {
 			element = element.parentElement;
 		}
 		let clientRect = element.getBoundingClientRect ( );
 
 		theNoteEditor.travelNoteDropped (
-			travelNotesDivDragEventListeners.#noteObjId,
-			element.noteObjId,
-			dragEvent.clientY - clientRect.top < clientRect.bottom - dragEvent.clientY
+			Number.parseInt ( dropEvent.dataTransfer.getData ( 'ObjId' ) ),
+			Number.parseInt ( element.dataset.tanObjId ),
+			dropEvent.clientY - clientRect.top < clientRect.bottom - dropEvent.clientY
 		);
 	}
 }
 
-class NotesEventsListeners {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	@private
-	*/
+@class TravelNoteContextMenuEventListener
+@classdesc contextmenu event listener for the travel notes
+@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	static onContextMenu ( contextMenuEvent ) {
+class TravelNoteContextMenuEventListener {
+
+	#paneData = null;
+
+	constructor ( paneData ) {
+		this.#paneData = paneData;
+	}
+
+	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
 		let element = contextMenuEvent.target;
@@ -110,10 +158,7 @@ class NotesEventsListeners {
 			element = element.parentNode;
 		}
 		contextMenuEvent.target.dataset.tanObjId = element.dataset.tanObjId;
-		new NoteContextMenu (
-			contextMenuEvent,
-			document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
-		).show ( );
+		new NoteContextMenu ( contextMenuEvent, this.#paneData ).show ( );
 	}
 }
 
@@ -133,9 +178,19 @@ class TravelNotesPaneUI extends PaneUI {
 
 	#travelNotesDiv = null;
 
+	#eventListeners = {
+		onDragStart : null,
+		onDragOver : null,
+		onDrop : null,
+		onContextMenu : null
+	};
+
 	constructor ( paneData, paneControl ) {
 		super ( paneData, paneControl );
-		Object.seal ( this );
+		this.#eventListeners.onDragStart = new TravelNoteDragStartEventListener ( );
+		this.#eventListeners.onDragOver = new TravelNoteDragOverEventListener ( );
+		this.#eventListeners.onDrop = new TravelNoteDropEventListener ( );
+		this.#eventListeners.onContextMenu = new TravelNoteContextMenuEventListener ( paneData );
 	}
 
 	/**
@@ -146,8 +201,8 @@ class TravelNotesPaneUI extends PaneUI {
 		if ( this.#travelNotesDiv ) {
 			this.#travelNotesDiv.childNodes.forEach (
 				childNode => {
-					childNode.removeEventListener ( 'contextmenu', NotesEventsListeners.onContextMenu, false );
-					childNode.removeEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
+					childNode.removeEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
+					childNode.removeEventListener ( 'dragstart', this.#eventListeners.onDragStart, false );
 				}
 			);
 			this.paneData.removeChild ( this.#travelNotesDiv );
@@ -161,14 +216,14 @@ class TravelNotesPaneUI extends PaneUI {
 
 	add ( ) {
 		this.#travelNotesDiv = theNoteHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-TravelNotesPaneUI-' );
-		this.#travelNotesDiv.addEventListener ( 'drop', travelNotesDivDragEventListeners.onDrop, false );
-		this.#travelNotesDiv.addEventListener ( 'dragover', travelNotesDivDragEventListeners.onDragOver, false );
+		this.#travelNotesDiv.addEventListener ( 'drop', this.#eventListeners.onDrop, false );
+		this.#travelNotesDiv.addEventListener ( 'dragover', this.#eventListeners.onDragOver, false );
 		this.paneData.appendChild ( this.#travelNotesDiv );
 		this.#travelNotesDiv.childNodes.forEach (
 			childNode => {
 				childNode.draggable = true;
-				childNode.addEventListener ( 'contextmenu', NotesEventsListeners.onContextMenu, false );
-				childNode.addEventListener ( 'dragstart', travelNotesDivDragEventListeners.onDragStart, false );
+				childNode.addEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
+				childNode.addEventListener ( 'dragstart', this.#eventListeners.onDragStart, false );
 				childNode.classList.add ( 'TravelNotes-UI-MoveCursor' );
 			}
 		);

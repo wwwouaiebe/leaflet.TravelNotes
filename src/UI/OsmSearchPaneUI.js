@@ -138,7 +138,6 @@ class OsmSearchPaneUI extends PaneUI {
 
 	constructor ( paneData, paneControl ) {
 		super ( paneData, paneControl );
-		Object.seal ( this );
 	}
 
 	/**

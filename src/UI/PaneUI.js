@@ -63,6 +63,7 @@ class PaneUI {
 	constructor ( paneData, paneControl ) {
 		this.paneData = paneData;
 		this.paneControl = paneControl;
+		Object.seal ( this );
 	}
 
 	remove ( ) {

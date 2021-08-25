@@ -121,8 +121,8 @@ class PanesManagerUI {
 
 	#activePaneId = PANE_ID.invalidPane;
 	#panes = new Map ( );
-	#paneDataDiv = null;
-	#paneControlDiv = null;
+	#paneData = null;
+	#paneControl = null;
 	#headerDiv = null;
 
 	/**
@@ -133,7 +133,7 @@ class PanesManagerUI {
 	#removeActivePane ( ) {
 		if ( PANE_ID.invalidPane !== this.#activePaneId ) {
 			this.#panes.get ( this.#activePaneId ).remove ( );
-			this.#paneDataDiv.textContent = '';
+			this.#paneData.textContent = '';
 		}
 	}
 
@@ -147,7 +147,7 @@ class PanesManagerUI {
 	*/
 
 	createUI ( uiMainDiv ) {
-		if ( this.#paneDataDiv ) {
+		if ( this.#paneData ) {
 			return;
 		}
 		this.#headerDiv = theHTMLElementsFactory.create (
@@ -158,7 +158,7 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 
-		this.#paneControlDiv = theHTMLElementsFactory.create (
+		this.#paneControl = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PanesManagerUI-PaneControlsDiv'
@@ -166,14 +166,14 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 
-		this.#paneDataDiv = theHTMLElementsFactory.create (
+		this.#paneData = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PanesManagerUI-PaneDataDiv'
 			},
 			uiMainDiv
 		);
-		this.#paneDataDiv.addEventListener ( 'wheel', new PaneDataDivWheelEventListener ( ) );
+		this.#paneData.addEventListener ( 'wheel', new PaneDataDivWheelEventListener ( ) );
 	}
 
 	/**
@@ -182,7 +182,7 @@ class PanesManagerUI {
 	*/
 
 	addPane ( paneClass ) {
-		let pane = new paneClass ( this.#paneDataDiv, this.#paneControlDiv );
+		let pane = new paneClass ( this.#paneData, this.#paneControl );
 		this.#panes.set ( pane.getPaneId ( ), pane );
 		theHTMLElementsFactory.create (
 			'div',

@@ -89,7 +89,6 @@ class ItineraryPaneUI extends PaneUI {
 		super ( paneData, paneControl );
 		this.#itineraryDataUI = new ItineraryDataUI ( this.paneData );
 		this.#itineraryControlUI = new ItineraryControlUI ( this.paneControl, this.#itineraryDataUI );
-		Object.seal ( this );
 	}
 
 	/**

@@ -77,10 +77,7 @@ class ContextMenuManeuverEventListener {
 			maneuverElement = maneuverElement.parentNode;
 		}
 		contextMenuEvent.target.dataset.tanObjId = maneuverElement.dataset.tanObjId;
-		new ManeuverContextMenu (
-			contextMenuEvent,
-			document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
-		).show ( );
+		new ManeuverContextMenu ( contextMenuEvent, this.#paneData ).show ( );
 	}
 }
 
@@ -110,10 +107,7 @@ class ContextMenuNoteEventListener {
 			maneuverElement = maneuverElement.parentNode;
 		}
 		contextMenuEvent.target.dataset.tanObjId = maneuverElement.dataset.tanObjId;
-		new NoteContextMenu (
-			contextMenuEvent,
-			document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
-		).show ( );
+		new NoteContextMenu ( contextMenuEvent, this.#paneData ).show ( );
 	}
 }
 
