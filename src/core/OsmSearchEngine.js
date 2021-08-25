@@ -48,15 +48,15 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import ObjId from '../data/ObjId.js';
-import theConfig from '../data/Config.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import theGeometry from '../util/Geometry.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
 import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
+import theGeometry from '../util/Geometry.js';
 
-import { INVALID_OBJ_ID, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+
+const SEARCH_DIMENSION = 5000;
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -72,83 +72,9 @@ import { INVALID_OBJ_ID, ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 class OsmSearchEngine	{
 
 	#searchStarted = false;
-	#previousSearchBounds = null;
-	static #searchBounds = null;
 	#dictionary = null;
 	#filterItems = [];
-
-	#previousSearchRectangleObjId = INVALID_OBJ_ID;
-
-	static #nextSearchRectangleObjId = INVALID_OBJ_ID;
-
-	/**
-	Draw the previous search rectangle on the map
-	@fires removeobject
-	@fires addrectangle
-	@private
-	*/
-
-	#drawPreviousSearchRectangle ( ) {
-		if ( ! this.#previousSearchBounds ) {
-			return;
-		}
-		if ( INVALID_OBJ_ID === this.#previousSearchRectangleObjId ) {
-			this.#previousSearchRectangleObjId = ObjId.nextObjId;
-		}
-		else {
-			theEventDispatcher.dispatch ( 'removeobject', { objId : this.#previousSearchRectangleObjId } );
-		}
-		theEventDispatcher.dispatch (
-			'addrectangle',
-			{
-				objId : this.#previousSearchRectangleObjId,
-				bounds : [
-					[ this.#previousSearchBounds.getSouthWest ( ).lat, this.#previousSearchBounds.getSouthWest ( ).lng ],
-					[ this.#previousSearchBounds.getNorthEast ( ).lat, this.#previousSearchBounds.getNorthEast ( ).lng ]
-				],
-				properties : theConfig.osmSearch.previousSearchLimit
-			}
-		);
-
-	}
-
-	/**
-	Event listener for the map zoom and pan. Redraw the next search rectangle on the map
-	@fires removeobject
-	@fires addrectangle
-	@listens zoom
-	@listens move
-	@private
-	*/
-
-	static #onMapChange ( ) {
-		const SEARCH_DIMENSION = 5000;
-		if ( INVALID_OBJ_ID === OsmSearchEngine.#nextSearchRectangleObjId ) {
-			OsmSearchEngine.#nextSearchRectangleObjId = ObjId.nextObjId;
-		}
-		else {
-			theEventDispatcher.dispatch ( 'removeobject', { objId : OsmSearchEngine.#nextSearchRectangleObjId } );
-		}
-		let mapCenter = theTravelNotesData.map.getCenter ( );
-		OsmSearchEngine.#searchBounds = theTravelNotesData.map.getBounds ( );
-		let maxBounds = theGeometry.getSquareBoundingBox ( [ mapCenter.lat, mapCenter.lng ], SEARCH_DIMENSION );
-		OsmSearchEngine.#searchBounds.getSouthWest ( ).lat =
-			Math.max ( OsmSearchEngine.#searchBounds.getSouthWest ( ).lat, maxBounds.getSouthWest ( ).lat );
-		OsmSearchEngine.#searchBounds.getSouthWest ( ).lng =
-			Math.max ( OsmSearchEngine.#searchBounds.getSouthWest ( ).lng, maxBounds.getSouthWest ( ).lng );
-		OsmSearchEngine.#searchBounds.getNorthEast ( ).lat =
-			Math.min ( OsmSearchEngine.#searchBounds.getNorthEast ( ).lat, maxBounds.getNorthEast ( ).lat );
-		OsmSearchEngine.#searchBounds.getNorthEast ( ).lng =
-			Math.min ( OsmSearchEngine.#searchBounds.getNorthEast ( ).lng, maxBounds.getNorthEast ( ).lng );
-		theEventDispatcher.dispatch (
-			'addrectangle',
-			{
-				objId : OsmSearchEngine.#nextSearchRectangleObjId,
-				bounds : OsmSearchEngine.#searchBounds,
-				properties : theConfig.osmSearch.nextSearchLimit
-			}
-		);
-	}
+	#previousSearchBounds = null;
 
 	/**
 	Compare the tags of the osmElement with the tags of the filterTags
@@ -203,8 +129,6 @@ class OsmSearchEngine	{
 
 	#getSearchQueries ( ) {
 		let searchQueries = [];
-		this.#previousSearchBounds = OsmSearchEngine.#searchBounds;
-
 		let keysMap = new Map ( );
 
 		this.#filterItems.forEach (
@@ -229,14 +153,16 @@ class OsmSearchEngine	{
 			}
 		);
 
+		let searchBounds = this.#computeSearchBounds ( );
+		this.#previousSearchBounds = searchBounds;
 		let searchBoundingBoxString = '(' +
-			OsmSearchEngine.#searchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
+			searchBounds.getSouthWest ( ).lat.toFixed ( LAT_LNG.fixed ) +
 			',' +
-			OsmSearchEngine.#searchBounds.getSouthWest ( ).lng.toFixed ( LAT_LNG.fixed ) +
+			searchBounds.getSouthWest ( ).lng.toFixed ( LAT_LNG.fixed ) +
 			',' +
-			OsmSearchEngine.#searchBounds.getNorthEast ( ).lat.toFixed ( LAT_LNG.fixed ) +
+			searchBounds.getNorthEast ( ).lat.toFixed ( LAT_LNG.fixed ) +
 			',' +
-			OsmSearchEngine.#searchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
+			searchBounds.getNorthEast ( ).lng.toFixed ( LAT_LNG.fixed ) +
 			')';
 
 		keysMap.forEach (
@@ -285,6 +211,22 @@ class OsmSearchEngine	{
 		item.items.forEach ( nextItem => this.#searchFilters ( nextItem ) );
 	}
 
+	#computeSearchBounds ( ) {
+		let mapCenter = theTravelNotesData.map.getCenter ( );
+		let searchBounds = theTravelNotesData.map.getBounds ( );
+		let maxBounds = theGeometry.getSquareBoundingBox ( [ mapCenter.lat, mapCenter.lng ], SEARCH_DIMENSION );
+		searchBounds.getSouthWest ( ).lat =
+			Math.max ( searchBounds.getSouthWest ( ).lat, maxBounds.getSouthWest ( ).lat );
+		searchBounds.getSouthWest ( ).lng =
+			Math.max ( searchBounds.getSouthWest ( ).lng, maxBounds.getSouthWest ( ).lng );
+		searchBounds.getNorthEast ( ).lat =
+			Math.min ( searchBounds.getNorthEast ( ).lat, maxBounds.getNorthEast ( ).lat );
+		searchBounds.getNorthEast ( ).lng =
+			Math.min ( searchBounds.getNorthEast ( ).lng, maxBounds.getNorthEast ( ).lng );
+
+		return searchBounds;
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -323,34 +265,9 @@ class OsmSearchEngine	{
 		theEventDispatcher.dispatch ( 'showsearch' );
 	}
 
-	/**
-	Add maps event listeners and search rectangles on the map
-	*/
+	get searchBounds ( ) { return this.#computeSearchBounds ( ); }
+	get previousSearchBounds ( ) { return this.#previousSearchBounds; }
 
-	show ( ) {
-		theTravelNotesData.map.on ( 'zoom', OsmSearchEngine.#onMapChange );
-		theTravelNotesData.map.on ( 'move', OsmSearchEngine.#onMapChange );
-		OsmSearchEngine.#onMapChange ( );
-		this.#drawPreviousSearchRectangle ( );
-	}
-
-	/**
-	Remove maps event listeners and search rectangles on the map
-	*/
-
-	hide ( ) {
-		let eventDispatcher = theEventDispatcher;
-		theTravelNotesData.map.off ( 'zoom', OsmSearchEngine.#onMapChange );
-		theTravelNotesData.map.off ( 'move', OsmSearchEngine.#onMapChange );
-		if ( INVALID_OBJ_ID !== OsmSearchEngine.#nextSearchRectangleObjId ) {
-			eventDispatcher.dispatch ( 'removeobject', { objId : OsmSearchEngine.#nextSearchRectangleObjId } );
-			OsmSearchEngine.#nextSearchRectangleObjId = INVALID_OBJ_ID;
-		}
-		if ( INVALID_OBJ_ID !== this.#previousSearchRectangleObjId ) {
-			eventDispatcher.dispatch ( 'removeobject', { objId : this.#previousSearchRectangleObjId } );
-			this.#previousSearchRectangleObjId = INVALID_OBJ_ID;
-		}
-	}
 }
 
 /**

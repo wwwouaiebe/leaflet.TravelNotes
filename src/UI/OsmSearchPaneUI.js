@@ -59,7 +59,7 @@ Tests ...
 
 import PaneUI from '../UI/PaneUI.js';
 import theTranslator from '../UI/Translator.js';
-import theOsmSearchEngine from '../core/OsmSearchEngine.js';
+import OsmSearchLimitsUI from '../UI/OsmSearchLimitsUI.js';
 import OsmSearchDataUI from '../UI/OsmSearchDataUI.js';
 import OsmSearchControlUI from '../UI/OsmSearchControlUI.js';
 
@@ -82,6 +82,7 @@ class OsmSearchPaneUI extends PaneUI {
 
 	#osmSearchDataUI = new OsmSearchDataUI ( this.paneData );
 	#osmSearchControlUI = new OsmSearchControlUI ( this.paneControl );
+	#osmSearchLimitsUI = new OsmSearchLimitsUI ( );
 
 	/**
 	Create the controls div
@@ -129,7 +130,7 @@ class OsmSearchPaneUI extends PaneUI {
 	*/
 
 	remove ( ) {
-		theOsmSearchEngine.hide ( );
+		this.#osmSearchLimitsUI.hide ( );
 		this.#clearPaneDataDiv ( );
 		this.#clearPaneControlDiv ( );
 	}
@@ -139,7 +140,7 @@ class OsmSearchPaneUI extends PaneUI {
 	*/
 
 	add ( ) {
-		theOsmSearchEngine.show ( );
+		this.#osmSearchLimitsUI.show ( );
 		this.#addControls ( );
 		this.#addData ( );
 	}
