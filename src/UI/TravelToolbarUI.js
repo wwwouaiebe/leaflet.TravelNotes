@@ -58,20 +58,15 @@ import { INVALID_OBJ_ID, ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class SaveAsTravelButtonEventListeners
-@classdesc This class contains the event listeners for the SaveAsTravel button
+@class ClickSaveAsButtonEventListener
+@classdesc click event listener for the SaveAs button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class SaveAsTravelButtonEventListeners {
+class ClickSaveAsButtonEventListener {
 
-	/**
-	click event listener for the SaveAsTravel button
-	@private
-	*/
-
-	static onClick ( clickEvent ) {
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theTravelEditor.saveAsTravel ( );
 	}
@@ -81,20 +76,15 @@ class SaveAsTravelButtonEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class CancelTravelButtonEventListeners
-@classdesc This class contains the event listeners for the CancelTravel button
+@class ClickCancelButtonEventListener
+@classdesc click event listener for the Cancel button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class CancelTravelButtonEventListeners {
+class ClickCancelButtonEventListener {
 
-	/**
-	click event listener for the CancelTravel button
-	@private
-	*/
-
-	static onClick ( clickEvent ) {
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ();
 		theTravelEditor.clear ( );
 		document.title =
@@ -106,20 +96,15 @@ class CancelTravelButtonEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class SaveTravelButtonEventListeners
-@classdesc This class contains the event listeners for the CancelTravel button
+@class ClickSaveButtonEventListener
+@classdesc click event listener for the Save button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class SaveTravelButtonEventListeners {
+class ClickSaveButtonEventListener {
 
-	/**
-	click event listener for the SaveTravel button
-	@private
-	*/
-
-	static onClick ( clickEvent ) {
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theTravelEditor.saveTravel ( );
 	}
@@ -128,22 +113,16 @@ class SaveTravelButtonEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class OpenTravelButtonEventListeners
-@classdesc This class contains the event listeners for the OpenTravel button
+@class OpenInputChangeEventListener
+@classdesc change event listener for the input associated to the open button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class OpenTravelButtonEventListeners {
+class OpenInputChangeEventListener {
 
-	/**
-	change event listener for the OpenTravel input
-	@private
-	*/
-
-	static #onInputChange ( changeEvent ) {
+	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
-
 		let fileReader = new FileReader ( );
 		fileReader.onload = ( ) => {
 			let fileContent = {};
@@ -159,12 +138,21 @@ class OpenTravelButtonEventListeners {
 		};
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
+}
 
-	/**
-	Click event listener for the OpenTravel button
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onClick ( ) {
+@class ClickOpenButtonEventListener
+@classdesc click event listener for the open button
+@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickOpenButtonEventListener {
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
 		if (
 			theConfig.travelNotes.haveBeforeUnloadWarning
 			&&
@@ -177,29 +165,23 @@ class OpenTravelButtonEventListeners {
 			return;
 		}
 
-		theUtilities.openFile ( OpenTravelButtonEventListeners.#onInputChange, '.trv' );
+		theUtilities.openFile ( new OpenInputChangeEventListener ( ), '.trv' );
 	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ImportTravelButtonEventListeners
-@classdesc This class contains the event listeners for the ImportTravel button
+@class ImportInputChangeEventListener
+@classdesc change event listener for the input associated to the import button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ImportTravelButtonEventListeners {
+class ImportInputChangeEventListener {
 
-	/**
-	change event listener for the ImportTravel input
-	@private
-	*/
-
-	static #onInputChange ( changeEvent ) {
+	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
-
 		let fileReader = new FileReader ( );
 		fileReader.onload = ( ) => {
 			let fileContent = {};
@@ -216,14 +198,23 @@ class ImportTravelButtonEventListeners {
 
 		fileReader.readAsText ( changeEvent.target.files [ ZERO ] );
 	}
+}
 
-	/**
-	Click event listener for the ImportTravel button
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onClick ( ) {
+@class ClickImportButtonEventListener
+@classdesc click event listener for the import button
+@private
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickImportButtonEventListener {
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
 		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
-			theUtilities.openFile ( ImportTravelButtonEventListeners.#onInputChange, '.trv' );
+			theUtilities.openFile ( new ImportInputChangeEventListener ( ), '.trv' );
 		}
 		else {
 			theErrorsUI.showError (
@@ -263,7 +254,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', SaveAsTravelButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickSaveAsButtonEventListener ( ), false );
 	}
 
 	/**
@@ -281,7 +272,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', CancelTravelButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickCancelButtonEventListener ( ), false );
 	}
 
 	/**
@@ -299,7 +290,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', SaveTravelButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickSaveButtonEventListener ( ), false );
 	}
 
 	/**
@@ -318,7 +309,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', OpenTravelButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickOpenButtonEventListener ( ), false );
 	}
 
 	/**
@@ -336,7 +327,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', ImportTravelButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickImportButtonEventListener ( ), false );
 	}
 
 	/**

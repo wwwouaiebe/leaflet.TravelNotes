@@ -62,16 +62,17 @@ import { GEOLOCATION_STATUS } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ApiKeysButtonEventListeners
-@classdesc ApiKeys button event listeners
+@class ClickApiKeysButtonEventListener
+@classdesc click on ApiKeys button event listeners
 @hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ApiKeysButtonEventListeners {
-	static onClick ( clickEvent ) {
+class ClickApiKeysButtonEventListener {
+
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theAPIKeysManager.setKeysFromDialog ( );
 	}
@@ -80,7 +81,7 @@ class ApiKeysButtonEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class GeoLocatorButtonEventListeners
+@class ClickGeoLocatorButtonEventListener
 @classdesc GeoLocator button event listeners
 @hideconstructor
 @private
@@ -88,8 +89,9 @@ class ApiKeysButtonEventListeners {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class GeoLocatorButtonEventListeners {
-	static onClick ( clickEvent ) {
+class ClickGeoLocatorButtonEventListener {
+
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theGeoLocator.switch ( );
 	}
@@ -106,8 +108,9 @@ class GeoLocatorButtonEventListeners {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class PinButtonEventListeners {
-	static onClick ( clickEvent ) {
+class ClickPinButtonEventListener {
+
+	handleEvent ( clickEvent ) {
 		clickEvent.target.textContent = '📌' === clickEvent.target.textContent ? '❌' : '📌';
 		theEventDispatcher.dispatch ( 'uipinned' );
 	}
@@ -235,7 +238,7 @@ class TravelNotesToolbarUI {
 				},
 				this.#buttonsDiv
 			)
-				.addEventListener ( 'click', ApiKeysButtonEventListeners.onClick, false );
+				.addEventListener ( 'click', new ClickApiKeysButtonEventListener ( ), false );
 		}
 	}
 
@@ -258,7 +261,7 @@ class TravelNotesToolbarUI {
 				},
 				this.#buttonsDiv
 			);
-			this.#geoLocationButton.addEventListener ( 'click', GeoLocatorButtonEventListeners.onClick, false );
+			this.#geoLocationButton.addEventListener ( 'click', new ClickGeoLocatorButtonEventListener ( ), false );
 		}
 	}
 
@@ -276,7 +279,7 @@ class TravelNotesToolbarUI {
 			},
 			this.#buttonsDiv
 		);
-		pinButton.addEventListener ( 'click', PinButtonEventListeners.onClick, false );
+		pinButton.addEventListener ( 'click', new ClickPinButtonEventListener ( ), false );
 	}
 
 	constructor ( ) {

@@ -80,15 +80,16 @@ import theRoutesListUI from '../UI/RoutesListUI.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TravelNameInputEventListeners
-@classdesc This class contains the event listeners for the TravelName input
+@class ChangeTravelNameInputEventListener
+@classdesc change event listener for the TravelName input
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TravelNameInputEventListeners {
+class ChangeTravelNameInputEventListener {
 
-	static onChange ( changeEvent ) {
+	handleEvent ( changeEvent ) {
+		changeEvent.stopPropagation ( );
 		theTravelNotesData.travel.name = theHTMLSanitizer.sanitizeToJsString ( changeEvent.target.value );
 		document.title =
 			'Travel & Notes' +
@@ -101,15 +102,15 @@ class TravelNameInputEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ExpandRoutesButtonEventListeners
-@classdesc This class contains the event listeners for the ExpandRoutes button
+@class ClickExpandButtonEventListener
+@classdesc click event listener for the ExpandRoutes button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ExpandRoutesButtonEventListeners {
+class ClickExpandButtonEventListener {
 
-	static onClick ( clickEvent ) {
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		let hiddenList = theRoutesListUI.toogleExpand ( );
 		clickEvent.target.textContent =
@@ -127,14 +128,15 @@ class ExpandRoutesButtonEventListeners {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class AddRouteButtonEventListeners
-@classdesc This class contains the event listeners for the addRoute button
+@class ClickAddRouteButtonEventListener
+@classdesc click event listener for the addRoute button
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class AddRouteButtonEventListeners {
-	static onClick ( clickEvent ) {
+class ClickAddRouteButtonEventListener {
+
+	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theRouteEditor.addRoute ( );
 	}
@@ -185,7 +187,7 @@ class TravelUI {
 			},
 			travelNameDiv
 		);
-		this.#travelNameInput.addEventListener ( 'change', TravelNameInputEventListeners.onChange, false );
+		this.#travelNameInput.addEventListener ( 'change', new ChangeTravelNameInputEventListener ( ), false );
 	}
 
 	/**
@@ -202,7 +204,7 @@ class TravelUI {
 			},
 			this.#routesHeaderDiv
 		)
-			.addEventListener ( 'click', ExpandRoutesButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickExpandButtonEventListener ( ), false );
 	}
 
 	/**
@@ -220,7 +222,7 @@ class TravelUI {
 			},
 			this.#routesHeaderDiv
 		)
-			.addEventListener ( 'click', AddRouteButtonEventListeners.onClick, false );
+			.addEventListener ( 'click', new ClickAddRouteButtonEventListener ( ), false );
 	}
 
 	/**
