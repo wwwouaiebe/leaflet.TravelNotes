@@ -74,8 +74,8 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import theTravelToolbarUI from '../UI/TravelToolbarUI.js';
-import theRoutesListUI from '../UI/RoutesListUI.js';
+import TravelToolbarUI from '../UI/TravelToolbarUI.js';
+import RoutesListUI from '../UI/RoutesListUI.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -110,9 +110,14 @@ class ChangeTravelNameInputEventListener {
 
 class ClickExpandButtonEventListener {
 
+	#routesListUI = null;
+	constructor ( routesListUI ) {
+		this.#routesListUI = routesListUI;
+	}
+
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		let hiddenList = theRoutesListUI.toogleExpand ( );
+		let hiddenList = this.#routesListUI.toogleExpand ( );
 		clickEvent.target.textContent =
 			hiddenList ? '▶' : '▼'; // 25b6 = '▶'  25bc = ▼
 		clickEvent.target.title =
@@ -147,7 +152,6 @@ class ClickAddRouteButtonEventListener {
 
 @class TravelUI
 @classdesc This class is the Travel part of the UI
-@see {@link theTravelUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -157,6 +161,8 @@ class TravelUI {
 
 	#routesHeaderDiv = null;
 	#travelNameInput = null;
+	#routesListUI = null;
+	#expandRoutesButton = null;
 
 	/**
 	This method creates the travel name div
@@ -191,23 +197,6 @@ class TravelUI {
 	}
 
 	/**
-	This method creates the expand routes list button
-	@private
-	*/
-
-	#createExpandRoutesButton ( ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				textContent : '▼',
-				className : 'TravelNotes-TravelUI-RouteList-ExpandButton'
-			},
-			this.#routesHeaderDiv
-		)
-			.addEventListener ( 'click', new ClickExpandButtonEventListener ( ), false );
-	}
-
-	/**
 	This method creates the add route button
 	@private
 	*/
@@ -239,7 +228,14 @@ class TravelUI {
 			uiMainDiv
 		);
 
-		this.#createExpandRoutesButton ( this.#routesHeaderDiv );
+		this.#expandRoutesButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				textContent : '▼',
+				className : 'TravelNotes-TravelUI-RouteList-ExpandButton'
+			},
+			this.#routesHeaderDiv
+		);
 
 		theHTMLElementsFactory.create (
 			'span',
@@ -252,20 +248,17 @@ class TravelUI {
 		this.#createAddRouteButton ( this.#routesHeaderDiv );
 	}
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	creates the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
-	*/
-
-	createUI ( uiMainDiv ) {
+	constructor ( uiMainDiv ) {
+		Object.seal ( this );
 		this.#createTravelNameDiv ( uiMainDiv );
-		theTravelToolbarUI.createUI ( uiMainDiv );
+		new TravelToolbarUI ( uiMainDiv );
 		this.#createRoutesListHeaderDiv ( uiMainDiv );
-		theRoutesListUI.createUI ( uiMainDiv );
+		this.#routesListUI = new RoutesListUI ( uiMainDiv );
+		this.#expandRoutesButton.addEventListener (
+			'click',
+			new ClickExpandButtonEventListener ( this.#routesListUI ),
+			false
+		);
 	}
 
 	/**
@@ -275,22 +268,11 @@ class TravelUI {
 	setTravelName ( ) {
 		this.#travelNameInput.value = theTravelNotesData.travel.name;
 	}
+
+	get routesListUI ( ) { return this.#routesListUI; }
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@desc The one and only one instance of TravelUI class
-@type {TravelUI}
-@constant
-@global
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theTravelUI = new TravelUI ( );
-
-export default theTravelUI;
+export default TravelUI;
 
 /*
 --- End of TravelUI.js file ---------------------------------------------------------------------------------------------------

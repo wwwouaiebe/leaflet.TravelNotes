@@ -84,13 +84,6 @@ import ItineraryPoint from '../data/ItineraryPoint.js';
 import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import BaseDialog from '../dialogs/BaseDialog.js';
-import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
-import thePanesManagerUI from '../UI/PanesManagerUI.js';
-import theTravelUI from '../UI/TravelUI.js';
-import theProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
-import theRoutesListUI from '../UI/RoutesListUI.js';
-
-// import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
 import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
@@ -272,48 +265,48 @@ function ourAddEventsListeners ( ) {
 	document.addEventListener (
 		'geolocationstatuschanged',
 		geoLocationStatusChangedEvent => {
-			theTravelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+			theUI.travelNotesToolbarUI.geoLocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
 		},
 		false
 	);
-	document.addEventListener ( 'travelnameupdated', ( ) => theTravelUI.setTravelName ( ), false );
-	document.addEventListener ( 'setrouteslist', ( ) => theRoutesListUI.setRoutesList ( ), false );
+	document.addEventListener ( 'travelnameupdated', ( ) => theUI.travelUI.setTravelName ( ), false );
+	document.addEventListener ( 'setrouteslist', ( ) => theUI.travelUI.routesListUI.setRoutesList ( ), false );
 	document.addEventListener (
 		'showitinerary',
-		( ) => thePanesManagerUI.showPane ( PANE_ID.itineraryPane ),
+		( ) => theUI.panesManagerUI.showPane ( PANE_ID.itineraryPane ),
 		false
 	);
 	document.addEventListener (
 		'updateitinerary',
-		( ) => thePanesManagerUI.updatePane ( PANE_ID.itineraryPane ),
+		( ) => theUI.panesManagerUI.updatePane ( PANE_ID.itineraryPane ),
 		false
 	);
 	document.addEventListener (
 		'showtravelnotes',
-		( ) => thePanesManagerUI.showPane ( PANE_ID.travelNotesPane ),
+		( ) => theUI.panesManagerUI.showPane ( PANE_ID.travelNotesPane ),
 		false
 	);
 	document.addEventListener (
 		'updatetravelnotes',
-		( ) => thePanesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
+		( ) => theUI.panesManagerUI.updatePane ( PANE_ID.travelNotesPane ),
 		false
 	);
 	document.addEventListener (
 		'showsearch',
-		( ) => thePanesManagerUI.showPane ( PANE_ID.searchPane ),
+		( ) => theUI.panesManagerUI.showPane ( PANE_ID.searchPane ),
 		false
 	);
 	document.addEventListener (
 		'updatesearch',
-		( ) => thePanesManagerUI.updatePane ( PANE_ID.searchPane ),
+		( ) => theUI.panesManagerUI.updatePane ( PANE_ID.searchPane ),
 		false
 	);
-	document.addEventListener ( 'providersadded', ( ) => theProvidersToolbarUI.providersAdded ( ), false );
+	document.addEventListener ( 'providersadded', ( ) => theUI.providersToolbarUI.providersAdded ( ), false );
 	document.addEventListener (
 		'setprovider',
 		setProviderEvent => {
 			if ( setProviderEvent.data && setProviderEvent.data.provider ) {
-				theProvidersToolbarUI.provider = setProviderEvent.data.provider;
+				theUI.providersToolbarUI.provider = setProviderEvent.data.provider;
 			}
 		},
 		false
@@ -322,7 +315,7 @@ function ourAddEventsListeners ( ) {
 		'settransitmode',
 		setTransitModeEvent => {
 			if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
-				theProvidersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
+				theUI.providersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
 			}
 		},
 		false

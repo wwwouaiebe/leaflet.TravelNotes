@@ -60,10 +60,10 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTravelUI from '../UI/TravelUI.js';
-import thePanesManagerUI from '../UI/PanesManagerUI.js';
-import theProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
-import theTravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
+import TravelUI from '../UI/TravelUI.js';
+import PanesManagerUI from '../UI/PanesManagerUI.js';
+import ProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
+import TravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import ItineraryPaneUI from '../UI/ItineraryPaneUI.js';
 import TravelNotesPaneUI from '../UI/TravelNotesPaneUI.js';
 import OsmSearchPaneUI from '../UI/OsmSearchPaneUI.js';
@@ -83,6 +83,11 @@ import { ONE } from '../util/Constants.js';
 class UI {
 
 	#mainHTMLElement = null;
+
+	#travelNotesToolbarUI = null;
+	#travelUI = null;
+	#panesManagerUI = null;
+	#providersToolbarUI = null;
 
 	#timerId = null;
 	#titleHTMLElement = null;
@@ -217,13 +222,13 @@ class UI {
 			},
 			this.#mainHTMLElement
 		);
-		theTravelNotesToolbarUI.createUI ( this.#mainHTMLElement );
-		theTravelUI.createUI ( this.#mainHTMLElement );
-		thePanesManagerUI.createUI ( this.#mainHTMLElement );
-		thePanesManagerUI.addPane ( ItineraryPaneUI );
-		thePanesManagerUI.addPane ( TravelNotesPaneUI );
-		thePanesManagerUI.addPane ( OsmSearchPaneUI );
-		theProvidersToolbarUI.createUI ( this.#mainHTMLElement );
+		this.#travelNotesToolbarUI = new TravelNotesToolbarUI ( this.#mainHTMLElement );
+		this.#travelUI = new TravelUI ( this.#mainHTMLElement );
+		this.#panesManagerUI = new PanesManagerUI ( this.#mainHTMLElement );
+		this.#panesManagerUI.addPane ( ItineraryPaneUI );
+		this.#panesManagerUI.addPane ( TravelNotesPaneUI );
+		this.#panesManagerUI.addPane ( OsmSearchPaneUI );
+		this.#providersToolbarUI = new ProvidersToolbarUI ( this.#mainHTMLElement );
 
 		this.#mainHTMLElement.addEventListener ( 'mouseenter', ( ) => this.#show ( ), false );
 		this.#mainHTMLElement.addEventListener ( 'mouseleave', ( ) => this.#onMouseLeave ( ), false );
@@ -238,6 +243,11 @@ class UI {
 			this.#isPinned = true;
 		}
 	}
+
+	get travelNotesToolbarUI ( ) { return this.#travelNotesToolbarUI; }
+	get travelUI ( ) { return this.#travelUI; }
+	get panesManagerUI ( ) { return this.#panesManagerUI; }
+	get providersToolbarUI ( ) { return this.#providersToolbarUI; }
 }
 
 /**

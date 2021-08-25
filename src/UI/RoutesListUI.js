@@ -59,7 +59,6 @@ import {
 
 @class RoutesListUI
 @classdesc This class is the Routes List part of the UI
-@see {@link theRoutesListUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -81,16 +80,8 @@ class RoutesListUI {
 	#routeDropEventListener = new RouteDropEventListener ( );
 	#routeDragStartEventListener = new RouteDragStartEventListener ( );
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	creates the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
-	*/
-
-	createUI ( UIMainHTMLElement ) {
+	constructor ( UIMainHTMLElement ) {
+		Object.seal ( this );
 		this.#routesListHTMLElement = theHTMLElementsFactory.create ( 'div', null, UIMainHTMLElement );
 		this.#routesListHTMLElement.addEventListener ( 'dragover', new RoutesListDragOverEventListener ( ) );
 		this.#routesListHTMLElement.addEventListener ( 'wheel', new RoutesListWheelEventListener ( ) );
@@ -154,20 +145,7 @@ class RoutesListUI {
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@desc The one and only one instance of RoutesListUI class
-@type {RoutesListUI}
-@constant
-@global
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theRoutesListUI = new RoutesListUI ( );
-
-export default theRoutesListUI;
+export default RoutesListUI;
 
 /*
 --- End of RoutesListUI.js file ------------------------------------------------------------------------------------------------

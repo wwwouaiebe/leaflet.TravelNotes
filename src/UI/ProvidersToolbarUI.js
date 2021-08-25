@@ -69,7 +69,6 @@ import { NOT_FOUND, ZERO } from '../util/Constants.js';
 
 @class ProvidersToolbarUI
 @classdesc This class is the provider and transitModes toolbar at the bottom of the UI
-@see {@link theProvidersToolbarUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -145,15 +144,8 @@ class ProvidersToolbarUI {
 		);
 	}
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	User Interface creation
-	*/
-
-	createUI ( UIMainHTMLElement ) {
+	constructor ( UIMainHTMLElement ) {
+		Object.seal ( this );
 		this.#toolbarHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -247,20 +239,7 @@ class ProvidersToolbarUI {
 
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@desc The one and only one instance of ProvidersToolbarUI class
-@type {ProvidersToolbarUI}
-@constant
-@global
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theProvidersToolbarUI = new ProvidersToolbarUI ( );
-
-export default theProvidersToolbarUI;
+export default ProvidersToolbarUI;
 
 /*
 --- End of ProvidersToolbarUI.js file -----------------------------------------------------------------------------------------

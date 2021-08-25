@@ -121,7 +121,6 @@ class ClickPinButtonEventListener {
 
 @class
 @classdesc This class is the Toolbar on top of the UI
-@see {@link theTravelNotesToolbarUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -282,16 +281,8 @@ class TravelNotesToolbarUI {
 		pinButton.addEventListener ( 'click', new ClickPinButtonEventListener ( ), false );
 	}
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	creates the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
-	*/
-
-	createUI ( uiMainDiv ) {
+	constructor ( uiMainDiv ) {
+		Object.seal ( this );
 		this.#buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -299,7 +290,6 @@ class TravelNotesToolbarUI {
 			},
 			uiMainDiv
 		);
-
 		this.#createHomeButton ( );
 		this.#createHelpButton ( );
 		this.#createContactButton ( );
@@ -331,20 +321,7 @@ class TravelNotesToolbarUI {
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@desc The one and only one instance of TravelNotesToolbarUI class
-@type {TravelNotesToolbarUI}
-@constant
-@global
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theTravelNotesToolbarUI = new TravelNotesToolbarUI ( );
-
-export default theTravelNotesToolbarUI;
+export default TravelNotesToolbarUI;
 
 /*
 --- End of TravelNotesToolbarUI.js file ---------------------------------------------------------------------------------------

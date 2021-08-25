@@ -229,7 +229,6 @@ class ClickImportButtonEventListener {
 
 @class TravelToolbarUI
 @classdesc This class is the TravelToolbar part of the UI
-@see {@link theTravelToolbarUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -363,21 +362,8 @@ class TravelToolbarUI {
 		);
 	}
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	creates the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
-	*/
-
-	createUI ( uiMainDiv ) {
-
-		if ( this.#buttonsDiv ) {
-			return;
-		}
-
+	constructor ( uiMainDiv ) {
+		Object.seal ( this );
 		this.#buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -395,20 +381,7 @@ class TravelToolbarUI {
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@desc The one and only one instance of TravelToolbarUI class
-@type {TravelToolbarUI}
-@constant
-@global
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-const theTravelToolbarUI = new TravelToolbarUI ( );
-
-export default theTravelToolbarUI;
+export default TravelToolbarUI;
 
 /*
 --- End of TravelToolbarUI.js file --------------------------------------------------------------------------------------------

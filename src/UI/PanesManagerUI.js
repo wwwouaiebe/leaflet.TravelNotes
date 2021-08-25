@@ -111,7 +111,6 @@ class PaneDataDivWheelEventListener {
 
 @class
 @classdesc This class manages the differents panes on the UI
-@see {@link thePanesManagerUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -137,19 +136,8 @@ class PanesManagerUI {
 		}
 	}
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
-
-	/**
-	creates the data panes on the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
-	*/
-
-	createUI ( uiMainDiv ) {
-		if ( this.#paneData ) {
-			return;
-		}
+	constructor ( uiMainDiv ) {
+		Object.seal ( this );
 		this.#headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -228,20 +216,7 @@ class PanesManagerUI {
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@desc The one and only one instance of PanesManagerUI class
-@type {PanesManagerUI}
-@constant
-@global
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-const thePanesManagerUI = new PanesManagerUI ( );
-
-export default thePanesManagerUI;
+export default PanesManagerUI;
 
 /*
 --- End of dataPanesUI.js file ------------------------------------------------------------------------------------------------
