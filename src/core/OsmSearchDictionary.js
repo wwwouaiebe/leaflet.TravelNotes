@@ -42,7 +42,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import DictionaryItem from '../core/DictionaryItem.js';
+import OsmSearchDictionaryItem from '../core/OsmSearchDictionaryItem.js';
 import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
 
 /**
@@ -65,12 +65,12 @@ class OsmSearchDictionary {
 
 	constructor ( ) {
 		this.#itemsMap = new Map ( );
-		this.#dictionary = new DictionaryItem ( 'All', true );
+		this.#dictionary = new OsmSearchDictionaryItem ( 'All', true );
 		this.#itemsMap.set ( this.#dictionary.objId, this.#dictionary );
 		this.#itemsArray = [ this.#dictionary.items ];
 	}
 
-	// split a line into words and add a DictionaryItem or a filterTag to the dictionary
+	// split a line into words and add a OsmSearchDictionaryItem or a filterTag to the dictionary
 	#parseLine ( line ) {
 		let words = line.split ( ';' );
 		while ( '' === words [ words.length - ONE ] ) {
@@ -82,7 +82,7 @@ class OsmSearchDictionary {
 			word => {
 				if ( '' !== word ) {
 					if ( NOT_FOUND === word.indexOf ( '=' ) ) {
-						this.#currentItem = new DictionaryItem ( word );
+						this.#currentItem = new OsmSearchDictionaryItem ( word );
 						this.#itemsMap.set ( this.#currentItem.objId, this.#currentItem );
 						this.#itemsArray [ wordPos ].push ( this.#currentItem );
 						this.#itemsArray [ wordPos + ONE ] = this.#currentItem.items;

@@ -273,7 +273,7 @@ class OsmSearchEngine	{
 	/**
 	Search all selected items on the tree dictionary and for each selected item, add it to a list of selected items
 	and add the first tag to the root tags map.
-	@param {DictionaryItem} item The item from witch the search start. Recursive function. The first
+	@param {OsmSearchDictionaryItem} item The item from witch the search start. Recursive function. The first
 	call start with this.#dictionary
 	@private
 	*/

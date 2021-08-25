@@ -12,7 +12,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class DictionaryItem {
+class OsmSearchDictionaryItem {
 
 	#objId = INVALID_OBJ_ID;
 
@@ -34,4 +34,4 @@ class DictionaryItem {
 	get objId ( ) { return this.#objId; }
 }
 
-export default DictionaryItem;
+export default OsmSearchDictionaryItem;
