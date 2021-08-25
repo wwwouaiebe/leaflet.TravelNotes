@@ -62,7 +62,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 class OsmSearchLimitsUI {
 
 	#previousSearchLimitObjId = INVALID_OBJ_ID;
-	static #searchLimitObjId = INVALID_OBJ_ID;
+	#searchLimitObjId = INVALID_OBJ_ID;
 
 	/**
 	Event listener for the map zoom and pan. Redraw the next search rectangle on the map
@@ -73,18 +73,18 @@ class OsmSearchLimitsUI {
 	@private
 	*/
 
-	static #onMapChange ( ) {
-		if ( INVALID_OBJ_ID === OsmSearchLimitsUI.#searchLimitObjId ) {
-			OsmSearchLimitsUI.#searchLimitObjId = ObjId.nextObjId;
+	#onMapChange ( ) {
+		if ( INVALID_OBJ_ID === this.#searchLimitObjId ) {
+			this.#searchLimitObjId = ObjId.nextObjId;
 		}
 		else {
-			theEventDispatcher.dispatch ( 'removeobject', { objId : OsmSearchLimitsUI.#searchLimitObjId } );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : this.#searchLimitObjId } );
 		}
 
 		theEventDispatcher.dispatch (
 			'addrectangle',
 			{
-				objId : OsmSearchLimitsUI.#searchLimitObjId,
+				objId : this.#searchLimitObjId,
 				bounds : theOsmSearchEngine.searchBounds,
 				properties : theConfig.osmSearch.nextSearchLimit
 			}
@@ -120,7 +120,6 @@ class OsmSearchLimitsUI {
 				properties : theConfig.osmSearch.previousSearchLimit
 			}
 		);
-
 	}
 
 	/**
@@ -128,9 +127,9 @@ class OsmSearchLimitsUI {
 	*/
 
 	show ( ) {
-		theTravelNotesData.map.on ( 'zoom', OsmSearchLimitsUI.#onMapChange );
-		theTravelNotesData.map.on ( 'move', OsmSearchLimitsUI.#onMapChange );
-		OsmSearchLimitsUI.#onMapChange ( );
+		theTravelNotesData.map.on ( 'zoom', this.#onMapChange, this );
+		theTravelNotesData.map.on ( 'move', this.#onMapChange, this );
+		this.#onMapChange ( );
 		this.#drawPreviousSearchlimit ( );
 	}
 
@@ -140,11 +139,11 @@ class OsmSearchLimitsUI {
 
 	hide ( ) {
 		let eventDispatcher = theEventDispatcher;
-		theTravelNotesData.map.off ( 'zoom', OsmSearchLimitsUI.#onMapChange );
-		theTravelNotesData.map.off ( 'move', OsmSearchLimitsUI.#onMapChange );
-		if ( INVALID_OBJ_ID !== OsmSearchLimitsUI.#searchLimitObjId ) {
-			eventDispatcher.dispatch ( 'removeobject', { objId : OsmSearchLimitsUI.#searchLimitObjId } );
-			OsmSearchLimitsUI.#searchLimitObjId = INVALID_OBJ_ID;
+		theTravelNotesData.map.off ( 'zoom', this.#onMapChange );
+		theTravelNotesData.map.off ( 'move', this.#onMapChange );
+		if ( INVALID_OBJ_ID !== this.#searchLimitObjId ) {
+			eventDispatcher.dispatch ( 'removeobject', { objId : this.#searchLimitObjId } );
+			this.#searchLimitObjId = INVALID_OBJ_ID;
 		}
 		if ( INVALID_OBJ_ID !== this.#previousSearchLimitObjId ) {
 			eventDispatcher.dispatch ( 'removeobject', { objId : this.#previousSearchLimitObjId } );
