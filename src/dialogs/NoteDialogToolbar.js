@@ -256,7 +256,6 @@ class NoteDialogToolbar {
 		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-ToolbarDiv',
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			}
 		);
