@@ -140,7 +140,6 @@ class BaseContextMenu {
 		this.#htmlElements.container = theHTMLElementsFactory.create (
 			'div',
 			{
-				id : 'TravelNotes-ContextMenu-Container',
 				className : 'TravelNotes-ContextMenu-Container'
 			},
 			this.#htmlElements.parentNode
@@ -289,10 +288,7 @@ class BaseContextMenu {
 		this.#eventData.clientY = contextMenuEvent.clientY || contextMenuEvent.originalEvent.clientY || ZERO;
 		this.#eventData.lat = contextMenuEvent.latlng ? contextMenuEvent.latlng.lat : LAT_LNG.defaultValue;
 		this.#eventData.lng = contextMenuEvent.latlng ? contextMenuEvent.latlng.lng : LAT_LNG.defaultValue;
-		if ( contextMenuEvent.target.objId ) {
-			this.#eventData.targetObjId = contextMenuEvent.target.objId;
-		}
-		else if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
+		if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
 			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.target.dataset.tanObjId );
 		}
 		this.#eventData.haveParentNode = null !== parentNode;
