@@ -211,8 +211,10 @@ class NoteDialogToolbar {
 				let newButton = theHTMLElementsFactory.create (
 					'div',
 					{
-						htmlBefore : editionButton.htmlBefore || '',
-						htmlAfter : editionButton.htmlAfter || '',
+						dataset : {
+							HtmlBefore : editionButton.htmlBefore || '',
+							HtmlAfter : editionButton.htmlAfter || ''
+						},
 						className : 'TravelNotes-NoteDialog-EditorButton'
 					},
 					this.#rootHTMLElement
@@ -230,6 +232,7 @@ class NoteDialogToolbar {
 	*/
 
 	#addToolbarElements ( ) {
+
 		this.#addIconsSelector ( );
 		this.#addToolbarButtons ( );
 		this.#addEditionButtons ( );

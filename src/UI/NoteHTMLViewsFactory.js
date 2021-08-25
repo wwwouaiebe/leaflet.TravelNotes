@@ -80,7 +80,12 @@ class NoteHTMLViewsFactory {
 	*/
 
 	getNoteTextAndIconHTML ( classPrefix, noteAndRoute ) {
-		let NoteTextAndIconHTML = theHTMLElementsFactory.create ( 'div' );
+		let NoteTextAndIconHTML = theHTMLElementsFactory.create (
+			'div',
+			{
+				dataset : { ObjId : noteAndRoute.note.objId }
+			}
+		);
 		let iconHTML = theHTMLElementsFactory.create (
 			'div',
 			{
@@ -119,7 +124,6 @@ class NoteHTMLViewsFactory {
 			classPrefix +
 			( noteAndRoute.route ? 'Route-ManeuversAndNotes-Cell' : 'Travel-Notes-Cell' );
 		NoteTextAndIconHTML.appendChild ( noteTextHTMLElement );
-		NoteTextAndIconHTML.noteObjId = noteAndRoute.note.objId;
 
 		return NoteTextAndIconHTML;
 	}

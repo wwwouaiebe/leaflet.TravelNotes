@@ -106,23 +106,14 @@ class NotesEventsListeners {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
 		let element = contextMenuEvent.target;
-		while ( ! element.noteObjId ) {
+		while ( ! element.dataset.tanObjId ) {
 			element = element.parentNode;
 		}
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY,
-				latLng : element.latLng
-			};
-		if ( element.noteObjId ) {
-			contextMenuEvent.noteObjId = element.noteObjId;
-			new NoteContextMenu (
-				contextMenuEvent,
-				document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
-			).show ( );
-		}
+		contextMenuEvent.target.dataset.tanObjId = element.dataset.tanObjId;
+		new NoteContextMenu (
+			contextMenuEvent,
+			document.getElementById ( 'TravelNotes-PanesManagerUI-PaneDataDiv' )
+		).show ( );
 	}
 }
 

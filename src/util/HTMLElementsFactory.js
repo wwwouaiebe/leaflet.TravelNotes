@@ -111,11 +111,12 @@ class HTMLElementsFactory {
 			element = document.createTextNode ( properties.value || '' );
 		}
 		else {
-
-			// element = Object.seal ( document.createElement ( tagName ) );
-
-			element = document.createElement ( tagName );
-
+			if ( 'select' === tagName.toLowerCase ( ) ) {
+				element = document.createElement ( tagName );
+			}
+			else {
+				element = Object.seal ( document.createElement ( tagName ) );
+			}
 			if ( properties ) {
 				this.#addProperties ( element, properties );
 			}

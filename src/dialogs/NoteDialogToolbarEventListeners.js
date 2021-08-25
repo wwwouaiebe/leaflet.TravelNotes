@@ -80,7 +80,7 @@ class EditionButtonsEventListener {
 			return;
 		}
 		let button = clickEvent.target;
-		while ( ! button.htmlBefore ) {
+		while ( ! button.dataset.tanHtmlBefore ) {
 			button = button.parentNode;
 		}
 		let selectionStart = this.#noteDialog.focusControl.selectionStart;
@@ -88,23 +88,23 @@ class EditionButtonsEventListener {
 
 		this.#noteDialog.focusControl.value =
 			this.#noteDialog.focusControl.value.slice ( ZERO, selectionStart ) +
-			button.htmlBefore +
+			button.dataset.tanHtmlBefore +
 			(
-				ZERO === button.htmlAfter.length
+				ZERO === button.dataset.tanHtmlAfter.length
 					?
 					''
 					:
 					this.#noteDialog.focusControl.value.slice ( selectionStart, selectionEnd )
 			) +
-			button.htmlAfter +
+			button.dataset.tanHtmlAfter +
 			this.#noteDialog.focusControl.value.slice ( selectionEnd );
 
-		if ( selectionStart === selectionEnd || ZERO === button.htmlAfter.length ) {
-			selectionStart += button.htmlBefore.length;
+		if ( selectionStart === selectionEnd || ZERO === button.dataset.tanHtmlAfter.length ) {
+			selectionStart += button.dataset.tanHtmlBefore.length;
 			selectionEnd = selectionStart;
 		}
 		else {
-			selectionEnd += button.htmlBefore.length + button.htmlAfter.length;
+			selectionEnd += button.dataset.tanHtmlBefore.length + button.dataset.tanHtmlAfter.length;
 		}
 		this.#noteDialog.focusControl.setSelectionRange ( selectionStart, selectionEnd );
 		this.#noteDialog.focusControl.focus ( );
