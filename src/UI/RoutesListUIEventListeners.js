@@ -145,11 +145,11 @@ class RouteDropEventListener {
 
 class RoutesListWheelEventListener {
 
-	/*
-	wheel event listener
-	*/
+	constructor ( ) {
+	}
 
-	static onWheel ( wheelEvent ) {
+	handleEvent ( wheelEvent ) {
+		wheelEvent.stopPropagation ( );
 		if ( wheelEvent.deltaY ) {
 			wheelEvent.target.scrollTop +=
 					wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
