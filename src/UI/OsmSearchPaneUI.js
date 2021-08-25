@@ -33,7 +33,7 @@ Changes:
 		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed ...
+Doc reviewed 20210825
 Tests ...
 */
 
@@ -70,7 +70,6 @@ import { PANE_ID } from '../util/Constants.js';
 
 @class OsmSearchPaneUI
 @classdesc This class manages the search pane UI
-@see {@link newOsmSearchPaneUI} for constructor
 @see {@link PanesManagerUI} for pane UI management
 @implements {PaneUI}
 @hideconstructor
@@ -80,8 +79,25 @@ import { PANE_ID } from '../util/Constants.js';
 
 class OsmSearchPaneUI extends PaneUI {
 
+	/**
+	the data UI
+	@private
+	*/
+
 	#osmSearchDataUI = new OsmSearchDataUI ( this.paneData );
+
+	/**
+	The control UI
+	@private
+	*/
+
 	#osmSearchControlUI = new OsmSearchControlUI ( this.paneControl );
+
+	/**
+	The limits UI
+	@private
+	*/
+
 	#osmSearchLimitsUI = new OsmSearchLimitsUI ( );
 
 	/**

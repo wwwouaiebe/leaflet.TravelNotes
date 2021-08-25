@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210824
+Doc reviewed 20210825
 Tests ...
 */
 
@@ -62,21 +62,30 @@ class OsmSearchControlUI {
 
 	/**
 	A reference to the OsmSearchTreeUI object
+	@private
 	*/
 
 	#osmSearchTreeUI = null;
 
 	/**
 	A reference to the OsmSearchToolbarUI object
+	@private
 	*/
 
 	#osmSearchToolbar = null;
 
 	/**
 	A reference to the OsmSearchWaitUI Object
+	@private
 	*/
 
 	#osmSearchWaitUI = null;
+
+	/**
+	A reference to the pane control html element
+	@private
+	*/
+
 	#paneControl = null;
 
 	constructor ( paneControl ) {

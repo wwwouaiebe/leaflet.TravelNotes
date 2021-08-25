@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed ...
+Doc reviewed 20210825
 Tests ...
 */
 
@@ -48,6 +48,16 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
 import { ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ChangeCheckboxEventListener
+@classdesc change event listener for the tree checkboxes
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
 class ChangeCheckboxEventListener {
 
 	#osmSearchTreeUI = null;
@@ -55,10 +65,6 @@ class ChangeCheckboxEventListener {
 	constructor ( osmSearchTreeUI ) {
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 	}
-
-	/**
-	change event listener for the tree checkboxes
-	*/
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -71,11 +77,17 @@ class ChangeCheckboxEventListener {
 	}
 }
 
-class WheelEventListener {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	wheel event listener for the tree
-	*/
+@class WheelEventListener
+@classdesc wheel event listener
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class WheelEventListener {
 
 	handleEvent ( wheelEvent ) {
 		wheelEvent.stopPropagation ( );
@@ -86,6 +98,16 @@ class WheelEventListener {
 		wheelEvent.stopPropagation ( );
 	}
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickArrowEventListener
+@classdesc cick event listener for the tree arrows
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 class ClickArrowEventListener {
 
@@ -108,6 +130,7 @@ class ClickArrowEventListener {
 
 @class OsmSearchTreeUI
 @classdesc This class build the search tree and contains also methods to modify this tree
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -120,6 +143,11 @@ class OsmSearchTreeUI {
 	*/
 
 	#treeHTMLElement = null;
+
+	/**
+	Event listeners
+	@private
+	*/
 
 	#eventListeners = {
 		onClickArrow : null,
@@ -210,6 +238,10 @@ class OsmSearchTreeUI {
 		this.#treeHTMLElement.textContent = '';
 		this.#addItem ( theOsmSearchDictionary.dictionary );
 	}
+
+	/**
+	tree HTML element getter
+	*/
 
 	get treeHTMLElement ( ) { return this.#treeHTMLElement; }
 }

@@ -24,7 +24,7 @@ Changes:
 		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210722
+Doc reviewed 20210825
 Tests ...
 */
 
@@ -62,7 +62,7 @@ const SEARCH_DIMENSION = 5000;
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc This class manages the search dictionary, the search rectangles on the map and search the osm data
+@classdesc This class search the osm data
 @see {@link theOsmSearchEngine} for the one and only one instance of this class
 @hideconstructor
 
@@ -72,7 +72,6 @@ const SEARCH_DIMENSION = 5000;
 class OsmSearchEngine	{
 
 	#searchStarted = false;
-	#dictionary = null;
 	#filterItems = [];
 	#previousSearchBounds = null;
 
@@ -211,6 +210,11 @@ class OsmSearchEngine	{
 		item.items.forEach ( nextItem => this.#searchFilters ( nextItem ) );
 	}
 
+	/**
+	Compute the search bounds
+	@private
+	*/
+
 	#computeSearchBounds ( ) {
 		let mapCenter = theTravelNotesData.map.getCenter ( );
 		let searchBounds = theTravelNotesData.map.getBounds ( );
@@ -265,7 +269,16 @@ class OsmSearchEngine	{
 		theEventDispatcher.dispatch ( 'showsearch' );
 	}
 
+	/**
+	Current search bounds getter
+	*/
+
 	get searchBounds ( ) { return this.#computeSearchBounds ( ); }
+
+	/**
+	Previous search bounds getter
+	*/
+
 	get previousSearchBounds ( ) { return this.#previousSearchBounds; }
 
 }

@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210825
 Tests ...
 */
 
@@ -53,7 +55,7 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class OsmSearchLimitsUI
-@classdesc coming soon...
+@classdesc This class manages the search limits on the map
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -61,11 +63,17 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 class OsmSearchLimitsUI {
 
+	/**
+	ObjId's for the limits
+	@private
+	*/
+
 	#previousSearchLimitObjId = INVALID_OBJ_ID;
 	#searchLimitObjId = INVALID_OBJ_ID;
 
 	/**
-	Event listener for the map zoom and pan. Redraw the next search rectangle on the map
+	Draw the search limit on the map.
+	Also used as event listener for pan and zoom operations on the map.
 	@fires removeobject
 	@fires addrectangle
 	@listens zoom
@@ -73,7 +81,7 @@ class OsmSearchLimitsUI {
 	@private
 	*/
 
-	#onMapChange ( ) {
+	#drawSearchLimit ( ) {
 		if ( INVALID_OBJ_ID === this.#searchLimitObjId ) {
 			this.#searchLimitObjId = ObjId.nextObjId;
 		}
@@ -92,7 +100,7 @@ class OsmSearchLimitsUI {
 	}
 
 	/**
-	Draw the previous search rectangle on the map
+	Draw the previous search limit on the map
 	@fires removeobject
 	@fires addrectangle
 	@private
@@ -123,30 +131,29 @@ class OsmSearchLimitsUI {
 	}
 
 	/**
-	Add maps event listeners and search rectangles on the map
+	Add maps event listeners and search limits on the map
 	*/
 
 	show ( ) {
-		theTravelNotesData.map.on ( 'zoom', this.#onMapChange, this );
-		theTravelNotesData.map.on ( 'move', this.#onMapChange, this );
-		this.#onMapChange ( );
+		theTravelNotesData.map.on ( 'zoom', this.#drawSearchLimit, this );
+		theTravelNotesData.map.on ( 'move', this.#drawSearchLimit, this );
+		this.#drawSearchLimit ( );
 		this.#drawPreviousSearchlimit ( );
 	}
 
 	/**
-	Remove maps event listeners and search rectangles on the map
+	Remove maps event listeners and search limits on the map
 	*/
 
 	hide ( ) {
-		let eventDispatcher = theEventDispatcher;
-		theTravelNotesData.map.off ( 'zoom', this.#onMapChange );
-		theTravelNotesData.map.off ( 'move', this.#onMapChange );
+		theTravelNotesData.map.off ( 'zoom', this.#drawSearchLimit, this );
+		theTravelNotesData.map.off ( 'move', this.#drawSearchLimit, this );
 		if ( INVALID_OBJ_ID !== this.#searchLimitObjId ) {
-			eventDispatcher.dispatch ( 'removeobject', { objId : this.#searchLimitObjId } );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : this.#searchLimitObjId } );
 			this.#searchLimitObjId = INVALID_OBJ_ID;
 		}
 		if ( INVALID_OBJ_ID !== this.#previousSearchLimitObjId ) {
-			eventDispatcher.dispatch ( 'removeobject', { objId : this.#previousSearchLimitObjId } );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : this.#previousSearchLimitObjId } );
 			this.#previousSearchLimitObjId = INVALID_OBJ_ID;
 		}
 	}

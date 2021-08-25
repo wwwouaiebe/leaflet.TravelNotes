@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210825
 Tests ...
 */
 
@@ -49,7 +51,9 @@ import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class OsmSearchDictionary
-@classdesc coming soon...
+@classdesc This class contains the OsmSearch dictionary and methods to perform changes in the dictionary
+@see {@link OsmSearchDictionaryItem} for dictionary items
+@see {@link theOsmSearchDictionary} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -57,8 +61,24 @@ import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
 
 class OsmSearchDictionary {
 
+	/**
+	the root item of the dictionary
+	@private
+	*/
+
 	#dictionary = null;
+
+	/**
+	A map with the dictionary items
+	@private
+	*/
+
 	#itemsMap = null;
+
+	/**
+	Variables used for the conversion of the .csv file
+	*/
+
 	#itemsArray = [ ];
 	#filterTagsArray = null;
 	#currentItem = null;
@@ -70,7 +90,11 @@ class OsmSearchDictionary {
 		this.#itemsArray = [ this.#dictionary.items ];
 	}
 
-	// split a line into words and add a OsmSearchDictionaryItem or a filterTag to the dictionary
+	/**
+	Split a line from the csv file into words and add a OsmSearchDictionaryItem or a filterTag to the dictionary
+	@private
+	*/
+
 	#parseLine ( line ) {
 		let words = line.split ( ';' );
 		while ( '' === words [ words.length - ONE ] ) {
@@ -111,7 +135,7 @@ class OsmSearchDictionary {
 	}
 
 	/**
-	Parse the content of the TravelNotesSearchDictionaryXX.csv and build a tree of DictionaryItems
+	Parse the content of the TravelNotesSearchDictionaryXX.csv and build a tree of OsmSearchDictionaryItem
 	with this content
 	*/
 
@@ -129,12 +153,8 @@ class OsmSearchDictionary {
 
 	/**
 	Helper method to select or unselected all the items childrens of a given item
+	@private
 	*/
-
-	selectItemObjId ( itemObjId, isSelected ) {
-		let item = this.#itemsMap.get ( itemObjId );
-		this.#selectItem ( item, isSelected );
-	}
 
 	#selectItem ( item, isSelected ) {
 		item.isSelected = isSelected;
@@ -143,13 +163,26 @@ class OsmSearchDictionary {
 		);
 	}
 
+	/**
+	Mark as selected/not selected an item identified by it's objId and all the chidrens of this item
+	*/
+
+	selectItemObjId ( itemObjId, isSelected ) {
+		let item = this.#itemsMap.get ( itemObjId );
+		this.#selectItem ( item, isSelected );
+	}
+
+	/**
+	Mark as expanded an item identified by it's objId
+	*/
+
 	changeExpanded ( itemObjId ) {
 		let item = this.#itemsMap.get ( itemObjId );
 		item.isExpanded = ! item.isExpanded;
 	}
 
 	/**
-	Expand the complete tree
+	Mark as expanded an item and all the childrens
 	*/
 
 	expandBranch ( item ) {
@@ -160,7 +193,7 @@ class OsmSearchDictionary {
 	}
 
 	/**
-	Collapse the complete tree
+	Mark as not expanded an item and all the childrens
 	*/
 
 	collapseBranch ( item ) {
@@ -173,7 +206,7 @@ class OsmSearchDictionary {
 	}
 
 	/**
-	Unselect all the items in the tree
+	Unselect an item and all the childrens
 	*/
 
 	clearBranch ( item ) {
@@ -184,7 +217,7 @@ class OsmSearchDictionary {
 	}
 
 	/**
-	The dictionary is a DictionaryItems tree that is used to performs search in osm
+	get the dictionary
 	*/
 
 	get dictionary ( ) { return this.#dictionary; }
