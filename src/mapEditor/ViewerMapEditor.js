@@ -297,8 +297,8 @@ class ViewerMapEditor {
 				route.computedName,
 				{ sticky : true, direction : 'right' }
 			);
-			polyline.on ( 'mouseover', RouteEventListeners.onMouseOverOrMove );
-			polyline.on ( 'mousemove', RouteEventListeners.onMouseOverOrMove );
+			window.L.DomEvent.on ( polyline, 'mouseover', RouteEventListeners.onMouseOverOrMove );
+			window.L.DomEvent.on ( polyline, 'mousemove', RouteEventListeners.onMouseOverOrMove );
 		}
 
 		polyline.bindPopup (
