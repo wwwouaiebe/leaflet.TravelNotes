@@ -49,28 +49,9 @@ import theTranslator from '../UI/Translator.js';
 import GeoCoder from '../core/GeoCoder.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class NoteDialogEventListeners
-@classdesc container for the NoteDialog event listeners, static functions and static variables
-@see NoteDialogAddressControl
-@see NoteDialogIconControl
-@see NoteDialogIconDimsControl
-@see NoteDialogLinkControl
-@see NoteDialogPhoneControl
-@see NoteDialogPopupControl
-@see NoteDialogToolbar
-@see NoteDialogTooltipControl
-@see NoteDialog
-@hideconstructor
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogOkButtonClickEventListener
+@class NoteDialogGeoCoderHelper
 @classdesc Helper class for the GeoCoder usage
 @hideconstructor
 @private
