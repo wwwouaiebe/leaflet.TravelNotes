@@ -144,8 +144,59 @@ class PolylineEncoder {
 	@private
 	*/
 
-	static #python2Round ( value ) {
+	#python2Round ( value ) {
 		return Math.floor ( Math.abs ( value ) + OUR_DOT5 ) * ( ZERO <= value ? ONE : -ONE );
+	}
+
+	/**
+	Helper method for the encode...
+	@private
+	*/
+
+	#encodeDelta ( current, previous, factorD ) {
+		let currentCoordRound = this.#python2Round ( current * factorD );
+		let previousCoordRound = this.#python2Round ( previous * factorD );
+		let coordinateDelta = currentCoordRound - previousCoordRound;
+		/* eslint-disable no-bitwise */
+		coordinateDelta <<= ONE;
+		if ( ZERO > currentCoordRound - previousCoordRound ) {
+			coordinateDelta = ~ coordinateDelta;
+		}
+		let outputDelta = '';
+		while ( OUR_NUMBER32 <= coordinateDelta ) {
+			outputDelta += String.fromCharCode ( ( OUR_NUMBER32 | ( coordinateDelta & OUR_NUMBER31 ) ) + OUR_NUMBER63 );
+			coordinateDelta >>= OUR_NUMBER5;
+		}
+		/* eslint-enable no-bitwise */
+		outputDelta += String.fromCharCode ( coordinateDelta + OUR_NUMBER63 );
+		return outputDelta;
+	}
+
+	/**
+	tmp variable for decode and decodeDelta methods communication (cannot use parameter the two functions are modifying the
+	value )
+	@private
+	*/
+
+	#index = ZERO;
+
+	/**
+	Helper method for the decode...
+	@private
+	*/
+
+	#decodeDelta ( encodedString ) {
+		let byte = null;
+		let shift = ZERO;
+		let result = ZERO;
+		do {
+			byte = encodedString.charCodeAt ( this.#index ++ ) - OUR_NUMBER63;
+			/* eslint-disable no-bitwise */
+			result |= ( byte & OUR_NUMBER31 ) << shift;
+			shift += OUR_NUMBER5;
+		} while ( OUR_NUMBER32 <= byte );
+		return ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
+		/* eslint-enable no-bitwise */
 	}
 
 	constructor ( ) {
@@ -167,34 +218,15 @@ class PolylineEncoder {
 		let dimensions = precisions.length;
 		let factors = Array.from ( precisions, precision => Math.pow ( OUR_NUMBER10, precision ) );
 
-		function encodeDelta ( current, previous, factorD ) {
-			let currentCoordRound = PolylineEncoder.#python2Round ( current * factorD );
-			let previousCoordRound = PolylineEncoder.#python2Round ( previous * factorD );
-			let coordinateDelta = currentCoordRound - previousCoordRound;
-			/* eslint-disable no-bitwise */
-			coordinateDelta <<= ONE;
-			if ( ZERO > currentCoordRound - previousCoordRound ) {
-				coordinateDelta = ~ coordinateDelta;
-			}
-			let outputDelta = '';
-			while ( OUR_NUMBER32 <= coordinateDelta ) {
-				outputDelta += String.fromCharCode ( ( OUR_NUMBER32 | ( coordinateDelta & OUR_NUMBER31 ) ) + OUR_NUMBER63 );
-				coordinateDelta >>= OUR_NUMBER5;
-			}
-			/* eslint-enable no-bitwise */
-			outputDelta += String.fromCharCode ( coordinateDelta + OUR_NUMBER63 );
-			return outputDelta;
-		}
-
 		let output = '';
 		for ( let counter = 0; counter < dimensions; counter ++ ) {
-			output += encodeDelta ( coordinatesArray [ ZERO ] [ counter ], ZERO, factors [ counter ] );
+			output += this.#encodeDelta ( coordinatesArray [ ZERO ] [ counter ], ZERO, factors [ counter ] );
 		}
 		for ( let coordCounter = ONE; coordCounter < coordinatesArray.length; coordCounter ++ ) {
 			let currentCoord = coordinatesArray [ coordCounter ];
 			let previousCoord = coordinatesArray [ coordCounter - ONE ];
 			for ( let counter = 0; counter < dimensions; counter ++ ) {
-				output += encodeDelta ( currentCoord [ counter ], previousCoord [ counter ], factors [ counter ] );
+				output += this.#encodeDelta ( currentCoord [ counter ], previousCoord [ counter ], factors [ counter ] );
 			}
 		}
 
@@ -214,29 +246,15 @@ class PolylineEncoder {
 			return [ ];
 		}
 
-		let index = ZERO;
+		this.#index = ZERO;
 		let allDecodedValues = [];
 		let factors = Array.from ( precisions, precision => Math.pow ( OUR_NUMBER10, precision ) );
 		let tmpValues = new Array ( dimensions ).fill ( ZERO );
 
-		function decodeDelta ( ) {
-			let byte = null;
-			let shift = ZERO;
-			let result = ZERO;
-			do {
-				byte = encodedString.charCodeAt ( index ++ ) - OUR_NUMBER63;
-				/* eslint-disable no-bitwise */
-				result |= ( byte & OUR_NUMBER31 ) << shift;
-				shift += OUR_NUMBER5;
-			} while ( OUR_NUMBER32 <= byte );
-			return ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			/* eslint-enable no-bitwise */
-		}
-
-		while ( index < encodedString.length ) {
+		while ( this.#index < encodedString.length ) {
 			let decodedValues = new Array ( dimensions ).fill ( ZERO );
 			for ( let coordCounter = 0; coordCounter < dimensions; coordCounter ++ ) {
-				tmpValues [ coordCounter ] += decodeDelta ( );
+				tmpValues [ coordCounter ] += this.#decodeDelta ( encodedString );
 				decodedValues [ coordCounter ] = tmpValues [ coordCounter ] / factors [ coordCounter ];
 			}
 			allDecodedValues.push ( decodedValues );
