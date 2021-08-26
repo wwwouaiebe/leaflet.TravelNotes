@@ -81,7 +81,7 @@ class ItineraryPoint {
 	@private
 	*/
 
-	static #upgradeObject ( itineraryPoint ) {
+	#upgradeObject ( itineraryPoint ) {
 		switch ( itineraryPoint.objType.version ) {
 		case '1.0.0' :
 		case '1.1.0' :
@@ -118,13 +118,13 @@ class ItineraryPoint {
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
 		OUR_OBJ_TYPE.validate ( something.objType );
 		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-			ItineraryPoint.#upgradeObject ( something );
+			this.#upgradeObject ( something );
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'lat', 'lng', 'distance', 'elev', 'objId' ].forEach (
@@ -217,7 +217,7 @@ class ItineraryPoint {
 	}
 
 	set jsonObject ( something ) {
-		let otherthing = ItineraryPoint.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.defaultValue;

@@ -80,7 +80,7 @@ class Note {
 	@private
 	*/
 
-	static #UpdateStyles ( somethingText ) {
+	#UpdateStyles ( somethingText ) {
 		let returnValue = somethingText
 			.replaceAll ( /style='color:white;background-color:red'/g, 'class=\'TravelNotes-Note-WhiteRed\'' )
 			.replaceAll ( /style='color:white;background-color:green'/g, 'class=\'TravelNotes-Note-WhiteGreen\'' )
@@ -102,7 +102,7 @@ class Note {
 	*/
 
 	/* eslint-disable-next-line complexity */
-	static #upgradeObject ( note ) {
+	#upgradeObject ( note ) {
 		switch ( note.objType.version ) {
 		case '1.0.0' :
 		case '1.1.0' :
@@ -125,11 +125,11 @@ class Note {
 			if ( 'string' === typeof ( note.iconWidth ) ) {
 				note.iconWidth = Number.parseInt ( note.iconWidth );
 			}
-			note.iconContent = Note.#UpdateStyles ( note.iconContent );
-			note.popupContent = Note.#UpdateStyles ( note.popupContent );
-			note.tooltipContent = Note.#UpdateStyles ( note.tooltipContent );
-			note.phone = Note.#UpdateStyles ( note.phone );
-			note.address = Note.#UpdateStyles ( note.address );
+			note.iconContent = this.#UpdateStyles ( note.iconContent );
+			note.popupContent = this.#UpdateStyles ( note.popupContent );
+			note.tooltipContent = this.#UpdateStyles ( note.tooltipContent );
+			note.phone = this.#UpdateStyles ( note.phone );
+			note.address = this.#UpdateStyles ( note.address );
 			// eslint break omitted intentionally
 		case '2.0.0' :
 		case '2.1.0' :
@@ -149,13 +149,13 @@ class Note {
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
 		OUR_OBJ_TYPE.validate ( something.objType );
 		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-			Note.#upgradeObject ( something );
+			this.#upgradeObject ( something );
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[
@@ -364,7 +364,7 @@ class Note {
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = Note.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.iconHeight = otherthing.iconHeight || ICON_DIMENSIONS.height;
 		this.iconWidth = otherthing.iconWidth || ICON_DIMENSIONS.width;
 		this.iconContent = otherthing.iconContent || '';

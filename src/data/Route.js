@@ -93,7 +93,7 @@ class Route {
 	@private
 	*/
 
-	static #upgradeObject ( route ) {
+	#upgradeObject ( route ) {
 		switch ( route.objType.version ) {
 		case '1.0.0' :
 			route.dashArray = ZERO;
@@ -135,13 +135,13 @@ class Route {
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
 		OUR_OBJ_TYPE.validate ( something.objType );
 		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-			Route.#upgradeObject ( something );
+			this.#upgradeObject ( something );
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[
@@ -335,7 +335,7 @@ class Route {
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = Route.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.name = otherthing.name || '';
 		this.wayPoints.jsonObject = otherthing.wayPoints || [];
 		this.notes.jsonObject = otherthing.notes || [];

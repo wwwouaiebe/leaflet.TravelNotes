@@ -89,7 +89,7 @@ class Travel {
 	*/
 
 	/* eslint-disable-next-line complexity */
-	static #upgradeObject ( travel ) {
+	#upgradeObject ( travel ) {
 		switch ( travel.objType.version ) {
 		case '1.0.0' :
 		case '1.1.0' :
@@ -154,13 +154,13 @@ class Travel {
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
 		OUR_OBJ_TYPE.validate ( something.objType );
 		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-			Travel.#upgradeObject ( something );
+			this.#upgradeObject ( something );
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'name', 'editedRoute', 'routes', 'objId' ].forEach (
@@ -259,7 +259,7 @@ class Travel {
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = Travel.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.editedRoute.jsonObject = otherthing.editedRoute;
 		this.layerName = something.layerName || 'OSM - Color';
 		this.name = otherthing.name || '';

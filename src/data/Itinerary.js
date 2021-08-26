@@ -84,7 +84,7 @@ class Itinerary	{
 	@private
 	*/
 
-	static #upgradeObject ( itinerary ) {
+	#upgradeObject ( itinerary ) {
 		switch ( itinerary.objType.version ) {
 		case '1.0.0' :
 		case '1.1.0' :
@@ -123,13 +123,13 @@ class Itinerary	{
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
 		OUR_OBJ_TYPE.validate ( something.objType );
 		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-			Itinerary.#upgradeObject ( something );
+			this.#upgradeObject ( something );
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 	'hasProfile',
@@ -243,7 +243,7 @@ class Itinerary	{
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = Itinerary.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.hasProfile = otherthing.hasProfile || false;
 		this.ascent = otherthing.ascent || ZERO;
 		this.descent = otherthing.descent || ZERO;

@@ -80,7 +80,7 @@ class Maneuver {
 	@private
 	*/
 
-	static #upgradeObject ( maneuver ) {
+	#upgradeObject ( maneuver ) {
 		switch ( maneuver.objType.version ) {
 		case '1.0.0' :
 		case '1.1.0' :
@@ -119,7 +119,7 @@ class Maneuver {
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
@@ -214,7 +214,7 @@ class Maneuver {
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = Maneuver.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.iconName = otherthing.iconName || '';
 		this.instruction = otherthing.instruction || '';
 		this.distance = otherthing.distance || DISTANCE.defaultValue;

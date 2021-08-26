@@ -83,7 +83,7 @@ class WayPoint {
 	@private
 	*/
 
-	static #upgradeObject ( wayPoint ) {
+	#upgradeObject ( wayPoint ) {
 		switch ( wayPoint.objType.version ) {
 		case '1.0.0' :
 		case '1.1.0' :
@@ -121,13 +121,13 @@ class WayPoint {
 	@private
 	*/
 
-	static #validateObject ( something ) {
+	#validateObject ( something ) {
 		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
 			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
 		}
 		OUR_OBJ_TYPE.validate ( something.objType );
 		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-			WayPoint.#upgradeObject ( something );
+			this.#upgradeObject ( something );
 		}
 		let properties = Object.getOwnPropertyNames ( something );
 		[ 'address', 'name', 'lat', 'lng', 'objId' ].forEach (
@@ -237,7 +237,7 @@ class WayPoint {
 	}
 
 	set jsonObject ( something ) {
-		let otherthing = WayPoint.#validateObject ( something );
+		let otherthing = this.#validateObject ( something );
 		this.address = otherthing.address || '';
 		this.name = otherthing.name || '';
 		this.lat = otherthing.lat || LAT_LNG.defaultValue;
