@@ -95,7 +95,7 @@ import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 class WayPointEditor {
 
 	/**
-	This function rename a WayPoint
+	This method rename a WayPoint
 	@param {WayPointOsmData} wayPointOsmData the name and address for WayPoint renaming
 	@param {!number} wayPointObjId The objId of the WayPoint to rename
 	@fires setrouteslist
@@ -120,7 +120,7 @@ class WayPointEditor {
 	}
 
 	/**
-	This function rename a WayPoint with data from Nominatim
+	This method rename a WayPoint with data from Nominatim
 	@param {Array.<number>} latLng The latitude and longitude of the WayPoint
 	@param {!number} wayPointObjId The objId of the WayPoint to rename
 	@fires setrouteslist

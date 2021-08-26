@@ -54,7 +54,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class
-@classdesc Wrapper for function for creation of html elements
+@classdesc ...
 @see {@link theHTMLElementsFactory} for the one and only one instance of this class
 @hideconstructor
 

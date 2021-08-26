@@ -67,7 +67,7 @@ class MapIconSvgBuilder {
 	#svgElement = null;
 
 	/**
-	This function creates the svgElement
+	This method creates the svgElement
 	@private
 	*/
 

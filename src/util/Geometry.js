@@ -142,7 +142,7 @@ class Geometry {
 	}
 
 	/**
-	This function search the nearest point on a route from a given point and compute the distance
+	This method search the nearest point on a route from a given point and compute the distance
 	between the beginning of the route and the nearest point
 	@param {Route} route The route object to be used
 	@param {Array.<number>} latLng The latitude and longitude of the point
@@ -215,7 +215,7 @@ class Geometry {
 	}
 
 	/**
-	This function returns a window.L.latLngBounds that represents a square
+	This method returns a window.L.latLngBounds that represents a square
 	@param {Array.<number>} latLngCenter The latitude and longitude of the center of the square
 	@param {number} dimension The half length of the square side in meter.
 	*/
@@ -235,7 +235,7 @@ class Geometry {
 	}
 
 	/**
-	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin using the Leaflet
+	This method transforms a lat lng coordinate to pixel coordinate relative to the CRS origin using the Leaflet
 	method map.project
 	@param {Array.<number>} latLng The latitude and longitude of the point
 	@param {number} zoom The zoom factor to use

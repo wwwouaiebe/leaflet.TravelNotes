@@ -95,7 +95,7 @@ import SaveAsDialog from '../dialogs/SaveAsDialog.js';
 class TravelEditor {
 
 	/**
-	This function save the travel to a file, removing notes and maneuvers, depending of the user choice.
+	This method save the travel to a file, removing notes and maneuvers, depending of the user choice.
 	@param {Object} removeData an object describing witch data must be saved
 	@private
 	*/

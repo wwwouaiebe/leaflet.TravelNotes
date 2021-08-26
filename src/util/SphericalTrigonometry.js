@@ -68,7 +68,7 @@ import { ZERO, ONE, DEGREES, EARTH_RADIUS } from '../util/Constants.js';
 class SphericalTrigonometry {
 
 	/**
-	This function normalize a longitude (always between -180° and 180°)
+	This method normalize a longitude (always between -180° and 180°)
 	@param {number} Lng The longitude to normalize
 	@return {number} The normalized longitude
 	@private
@@ -84,7 +84,7 @@ class SphericalTrigonometry {
 
 	/**
 
-	This function gives an arc of a spherical triangle when the 2 others arcs and the opposite summit are know
+	This method gives an arc of a spherical triangle when the 2 others arcs and the opposite summit are know
 	It's the well know cosinus law
 	cos a = cos b cos c + sin b sin c cos A
 	cos b =	cos c cos a + sin c sin a cos B
@@ -105,7 +105,7 @@ class SphericalTrigonometry {
 
 	/**
 
-	This function is also the well know cosinus law written in an other way....
+	This method is also the well know cosinus law written in an other way....
 	cos C = ( cos c - cos a cos b ) / sin a sin b
 
 	@param {number} arc1 the first arc
@@ -122,9 +122,9 @@ class SphericalTrigonometry {
 	}
 
 	/**
-	This function returns the distance between two points
+	This method returns the distance between two points
 	Since v1.7.0 we use the simple spherical law of cosines formula
-	(cos c = cos a cos b + sin a sin b cos C). The delta with the Leaflet function is
+	(cos c = cos a cos b + sin a sin b cos C). The delta with the Leaflet method is
 	always < 10e-3 m. The error due to the earth radius is a lot bigger.
 	Notice: leaflet uses the haversine formula.
 	@param {Array.<number>} latLngStartPoint The coordinates of the start point
@@ -138,7 +138,7 @@ class SphericalTrigonometry {
 			latLngStartPoint [ ONE ] === latLngEndPoint [ ONE ]
 		) {
 
-			// the function runs infinitely when latLngStartPoint === latLngEndPoint :-(
+			// the method runs infinitely when latLngStartPoint === latLngEndPoint :-(
 			return ZERO;
 		}
 		let latStartPoint = latLngStartPoint [ ZERO ] * DEGREES.toRadians;

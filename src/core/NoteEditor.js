@@ -103,7 +103,7 @@ class NoteEditor {
 	#maneuverCounter = ZERO;
 
 	/**
-	This function creates a new route note with data from osm
+	This method creates a new route note with data from osm
 	@param {OsmNoteData} osmNoteData The osm data needed for the note
 	@param {Route} route The route to witch the note will be attached
 	@fires noteupdated

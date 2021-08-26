@@ -445,7 +445,7 @@ class HTMLSanitizer {
 	}
 
 	/**
-	This function transform a string containing html and svg tags into html and svg elements and copy these elements
+	This method transform a string containing html and svg tags into html and svg elements and copy these elements
 	as child nodes of the targetNode. Only tags and attributes present in the this.#validityMap variable
 	are copied in the targetNode. Url in the href and src attributes must be valid url (see sanitizeToUrl method)
 	@param {string} htmlString the string to transform
@@ -464,7 +464,7 @@ class HTMLSanitizer {
 	}
 
 	/**
-	This function transform a string containing html and svg tags. Tags and attributes not present in the this.#validityMap
+	This method transform a string containing html and svg tags. Tags and attributes not present in the this.#validityMap
 	variable are removed. Invalid Url in the href and src attributes are also removed (see sanitizeToUrl method)
 	@param {string} htmlString the string to transform
 	@return {object} a HtmlStringValidationReult with the result of the validation

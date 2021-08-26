@@ -138,7 +138,7 @@ Based on Mark McClure polyline encoder (more info needed...)
 class PolylineEncoder {
 
 	/**
-	This function round a number in the same way than Python 2
+	This method round a number in the same way than Python 2
 	@param {number} value The value to round
 	@return {number} The rounded value
 	@private

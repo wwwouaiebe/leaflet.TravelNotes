@@ -180,7 +180,7 @@ class FileLoader {
 	/**
 	Open a file, set or merge it's content in theTravelNotesData and then display the file
 	@param {event} changeEvent the changeEvent that have started the process
-	@param {boolean} mustMerge the function merge the content when true
+	@param {boolean} mustMerge the method merge the content when true
 	@private
 	*/
 
