@@ -46,7 +46,9 @@ Changes:
 		- Issue ♯140 : Remove userData
 	-v2.2.0:
 		- Issue ♯129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200824
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210826
 Tests ...
 */
 
@@ -94,7 +96,7 @@ import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js'
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class TravelNotes
 @classdesc This class is the entry point of the application.
 @see {@link theTravelNotes} for the one and only one instance of this class
 @hideconstructor
@@ -239,6 +241,17 @@ class TravelNotes {
 
 	get version ( ) { return theCurrentVersion; }
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@desc The one and only one instance of TravelNotes class
+@type {TravelNotes}
+@constant
+@global
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 const theTravelNotes = new TravelNotes ( );
 

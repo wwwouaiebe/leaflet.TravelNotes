@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed 20200824
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210826
 Tests ...
 */
 
@@ -44,129 +46,10 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import ViewerMapEditor from '../mapEditor/ViewerMapEditor.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
 import theAttributionsUI from '../UI/AttributionsUI.js';
 import theViewerLayersToolbarUI from '../UI/ViewerLayersToolbarUI.js';
-import theGeoLocator from '../core/GeoLocator.js';
-import Zoomer from '../core/Zoomer.js';
-import { ZERO, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
-
-const theViewerMapEditor = new ViewerMapEditor ( );
-
-let ourTravelNotesLoaded = false;
-
-function ourOnKeyDown ( keyBoardEvent ) {
-	if ( 'Z' === keyBoardEvent.key || 'z' === keyBoardEvent.key ) {
-		new Zoomer ( ).zoomToTravel ( );
-	}
-	else if ( 'G' === keyBoardEvent.key || 'g' === keyBoardEvent.key ) {
-		theGeoLocator.switch ( );
-	}
-	else {
-		let charCode = keyBoardEvent.key.charCodeAt ( ZERO );
-		/* eslint-disable-next-line no-magic-numbers */
-		if ( 47 < charCode && 58 > charCode ) {
-			theViewerLayersToolbarUI.setMapLayer ( keyBoardEvent.key );
-		}
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddEventsListeners
-@desc This method add the document events listeners
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddEventsListeners ( ) {
-	document.addEventListener ( 'keydown', ourOnKeyDown, true );
-	document.addEventListener (
-		'routeupdated',
-		updateRouteEvent => {
-			if ( updateRouteEvent.data ) {
-				theViewerMapEditor.addRoute (
-					updateRouteEvent.data.addedRouteObjId
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'noteupdated',
-		updateNoteEvent => {
-			if ( updateNoteEvent.data ) {
-				theViewerMapEditor.addNote (
-					updateNoteEvent.data.addedNoteObjId
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'zoomto',
-		zoomToEvent => {
-			if ( zoomToEvent.data ) {
-				theViewerMapEditor.zoomTo (
-					zoomToEvent.data.latLng,
-					zoomToEvent.data.geometry
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'layerchange',
-		layerChangeEvent => {
-			if ( layerChangeEvent.data ) {
-				theViewerMapEditor.setLayer ( layerChangeEvent.data.layer, layerChangeEvent.data.layer.url );
-			}
-		}
-	);
-	document.addEventListener (
-		'geolocationpositionchanged',
-		geoLocationPositionChangedEvent => {
-			if ( geoLocationPositionChangedEvent.data ) {
-				theViewerMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'geolocationstatuschanged',
-		geoLocationStatusChangedEvent => {
-			if ( geoLocationStatusChangedEvent.data ) {
-				theViewerMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
-			}
-		},
-		false
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourLoadDistantTravel
-@desc This method load a travel from a server file
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-async function ourLoadDistantTravel ( travelUrl ) {
-	let travelResponse = await fetch ( travelUrl );
-	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
-		let travelContent = await travelResponse.json ( );
-		new ViewerFileLoader ( ).openDistantFile ( travelContent );
-	}
-	else {
-		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO );
-		document.title = 'Travel & Notes';
-	}
-}
+import { TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -181,6 +64,24 @@ async function ourLoadDistantTravel ( travelUrl ) {
 
 class TravelNotesViewer {
 
+	#travelNotesLoaded = false;
+
+	/**
+	Load a travel from the server
+	*/
+
+	async #loadDistantTravel ( travelUrl ) {
+		let travelResponse = await fetch ( travelUrl );
+		if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
+			let travelContent = await travelResponse.json ( );
+			new ViewerFileLoader ( ).openDistantFile ( travelContent );
+		}
+		else {
+			theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO );
+			document.title = 'Travel & Notes';
+		}
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -191,39 +92,37 @@ class TravelNotesViewer {
 	*/
 
 	addReadOnlyMap ( travelUrl, addLayerToolbar ) {
-		if ( ourTravelNotesLoaded ) {
+		if ( this.#travelNotesLoaded ) {
 			return;
 		}
-		ourTravelNotesLoaded = true;
-		ourAddEventsListeners ( );
+		this.#travelNotesLoaded = true;
+
 		theAttributionsUI.createUI ( );
 		if ( addLayerToolbar ) {
 			theViewerLayersToolbarUI.createUI ( );
 		}
+
 		theViewerLayersToolbarUI.setMapLayer ( 'OSM - Color' );
 		if ( travelUrl ) {
-			ourLoadDistantTravel ( travelUrl );
+			this.loadDistantTravel ( travelUrl );
 		}
 	}
 }
 
-const OUR_TRAVEL_NOTES_VIEWER = new TravelNotesViewer ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of theTravelNotesViewer class
+@type {theTravelNotesViewer}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of TravelNotesViewer class
-	@type {TravelNotesViewer}
-	@constant
-	@global
+const theTravelNotesViewer = new TravelNotesViewer ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRAVEL_NOTES_VIEWER as theTravelNotesViewer
-};
+export default theTravelNotesViewer;
 
 /*
 --- End of TravelNotesViewer.js file ------------------------------------------------------------------------------------------
