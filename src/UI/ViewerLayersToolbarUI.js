@@ -24,7 +24,7 @@ Changes:
 		- Issue ♯135 : Remove innerHTML from code
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed ...
+Doc reviewed 20210826
 Tests ...
 */
 
@@ -58,7 +58,72 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class ClickMapLayerButtonEventListener
+@classdesc Click event listener for the map layer buttons
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickMapLayerButtonEventListener {
+
+	#mapLayers = null;
+
+	constructor ( mapLayers ) {
+		this.#mapLayers = mapLayers;
+	}
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		let mapLayer = this.#mapLayers [ Number.parseInt ( clickEvent.target.dataset.tanMapLayerId ) ];
+		theEventDispatcher.dispatch ( 'layerchange', { layer : mapLayer } );
+		theAttributionsUI.attributions = mapLayer.attribution;
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickGeoLocationButtonEventListener
+@classdesc Click event listener for the geo location button
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickGeoLocationButtonEventListener {
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		theGeoLocator.switch ( );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ClickZoomButtonEventListener
+@classdesc Click event listener for the zoom to travel button
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ClickZoomButtonEventListener {
+
+	handleEvent ( clickEvent ) {
+		clickEvent.stopPropagation ( );
+		new Zoomer ( ).zoomToTravel ( );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class ViewerLayersToolbarUI
 @classdesc This class is the Layer Toolbar on the left of the viewer screen.
  Displays buttons to change the background maps and manages the background maps list.
  Displays also a geo location button and a zoom to travel button.
@@ -89,57 +154,6 @@ class ViewerLayersToolbarUI {
 		}
 	];
 
-	/**
-	Click event listener for the layer buttons
-	*/
-
-	static #onMapLayerButtonClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		theEventDispatcher.dispatch ( 'layerchange', { layer : clickEvent.target.layer } );
-		theAttributionsUI.attributions = clickEvent.target.layer.attribution;
-	}
-
-	/**
-	Click event listener for the geo location button
-	@private
-	*/
-
-	static #onGeoLocationButtonClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		theGeoLocator.switch ( );
-	}
-
-	/**
-	Click event listener for the zoom to travel button
-	@private
-	*/
-
-	static #onZoomButtonClick ( clickEvent ) {
-		clickEvent.stopPropagation ( );
-		new Zoomer ( ).zoomToTravel ( );
-	}
-
-	/**
-	This method creates a layer button
-	@param {Layer} layer The layer for witch the button must be created
-	@private
-	*/
-
-	#createMapLayerButton ( layer ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
-				title : layer.name,
-				layer : layer,
-				textContent : layer.toolbar.text,
-				style : 'color:' + layer.toolbar.color + ';background-color:' + layer.toolbar.backgroundColor
-			},
-			this.#mapLayersToolbar
-		)
-			.addEventListener ( 'click', ViewerLayersToolbarUI.#onMapLayerButtonClick, false );
-	}
-
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -157,7 +171,7 @@ class ViewerLayersToolbarUI {
 
 		// Don't test the https protocol. On some mobile devices with an integreted GPS
 		// the geolocation is working also on http protocol
-		let geoLocationButton = theHTMLElementsFactory.create (
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -166,9 +180,9 @@ class ViewerLayersToolbarUI {
 				style : 'color:black;background-color:white'
 			},
 			this.#mapLayersToolbar
-		);
-		geoLocationButton.addEventListener ( 'click', ViewerLayersToolbarUI.#onGeoLocationButtonClick, false );
-		let zoomButton = theHTMLElementsFactory.create (
+		).addEventListener ( 'click', new ClickGeoLocationButtonEventListener ( ), false );
+
+		theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ViewerLayersToolbarUI-Button',
@@ -177,11 +191,23 @@ class ViewerLayersToolbarUI {
 				style : 'color:black;background-color:white'
 			},
 			this.#mapLayersToolbar
-		);
-		zoomButton.addEventListener ( 'click', ViewerLayersToolbarUI.onZoomButtonClick, false );
-		this.#mapLayers.forEach (
-			mapLayer => { this.#createMapLayerButton ( mapLayer ); }
-		);
+		).addEventListener ( 'click', new ClickZoomButtonEventListener ( ), false );
+
+		let clickMapLayerButtonEventListener = new ClickMapLayerButtonEventListener ( this.#mapLayers );
+		for ( let mapLayerCounter = 0; mapLayerCounter < this.#mapLayers.length; mapLayerCounter ++ ) {
+			let mapLayer = this.#mapLayers [ mapLayerCounter ];
+			theHTMLElementsFactory.create (
+				'div',
+				{
+					className : 'TravelNotes-ViewerLayersToolbarUI-Button',
+					title : mapLayer.name,
+					dataset : { MapLayerId : mapLayerCounter },
+					textContent : mapLayer.toolbar.text,
+					style : 'color:' + mapLayer.toolbar.color + ';background-color:' + mapLayer.toolbar.backgroundColor
+				},
+				this.#mapLayersToolbar
+			).addEventListener ( 'click', clickMapLayerButtonEventListener, false );
+		}
 	}
 
 	/**

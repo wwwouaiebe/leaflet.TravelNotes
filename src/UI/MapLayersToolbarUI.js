@@ -72,8 +72,8 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 
 @class
 @classdesc Wheel event listeners on the map layer buttons. Scroll the buttons
-@see {@link theMapLayersToolbarUI} for the one and only one instance of this class
 @hideconstructor
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
