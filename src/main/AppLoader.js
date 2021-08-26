@@ -45,8 +45,10 @@ Tests ...
 */
 
 import theMapEditor from '../mapEditor/MapEditor.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
-import { theIndexedDb } from '../roadbook/IndexedDb.js';
+import theIndexedDb from '../roadbook/IndexedDb.js';
+import theTravelHTMLViewsFactory from '../UI/TravelHTMLViewsFactory.js';
+import theUtilities from '../util/Utilities.js';
+import theMouseUI from '../UI/MouseUI.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theUI from '../UI/UI.js';
 import theTravelNotes from '../main/TravelNotes.js';
@@ -60,10 +62,46 @@ import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 
-import { LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK, PANE_ID } from '../util/Constants.js';
+import { SAVE_STATUS, LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK, PANE_ID } from '../util/Constants.js';
 
 const OUR_DEMO_PRINT_MAX_TILES = 120;
 const OUR_DEMO_MAX_MANEUVERS_NOTES = 10;
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class RoadbookUpdate
+@classdesc 'roadbookupdate' event listener
+to the document
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class RoadbookUpdate {
+
+	handleEvent ( ) {
+		theMouseUI.saveStatus = SAVE_STATUS.modified;
+
+		if ( theUtilities.storageAvailable ( 'localStorage' ) ) {
+			theIndexedDb.getOpenPromise ( )
+				.then ( ( ) => {
+					theIndexedDb.getWritePromise (
+						theTravelNotesData.UUID,
+						theTravelHTMLViewsFactory.getTravelHTML ( 'TravelNotes-Roadbook-' ).outerHTML
+					);
+				} )
+				.then ( ( ) => localStorage.setItem ( theTravelNotesData.UUID, Date.now ( ) ) )
+				.catch ( err => {
+					if ( err instanceof Error ) {
+						console.error ( err );
+					}
+				}
+				);
+		}
+	}
+}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -224,11 +262,7 @@ class AppLoader {
 			},
 			false
 		);
-		document.addEventListener (
-			'roadbookupdate',
-			( ) => newRoadbookUpdate ( ),
-			false
-		);
+		document.addEventListener ( 'roadbookupdate', new RoadbookUpdate ( ), false );
 		document.addEventListener (
 			'profileclosed',
 			profileClosedEvent => {

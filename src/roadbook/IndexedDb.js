@@ -20,7 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.7.0:
 		- created
-Doc reviewed 20200825
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210826
 Tests ...
 */
 
@@ -44,7 +46,6 @@ Tests ...
 */
 
 const OUR_DB_VERSION = 1;
-let ourDb = null;
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -59,6 +60,88 @@ let ourDb = null;
 
 class IndexedDb {
 
+	#indexedDb = null;
+
+	#UUID = null;
+	#data = null;
+
+	/**
+	Perform the open operations
+	@private
+	*/
+
+	#open ( onOk, onError ) {
+		if ( this.#indexedDb ) {
+			onOk ( );
+			return;
+		}
+		let openRequest = window.indexedDB.open ( 'TravelNotesDb', OUR_DB_VERSION );
+		openRequest.onerror = ( ) => {
+			this.#indexedDb = null;
+			onError ( new Error ( 'Not possible to open the db' ) );
+		};
+		openRequest.onsuccess = successEvent => {
+			this.#indexedDb = successEvent.target.result;
+			onOk ( );
+		};
+		openRequest.onupgradeneeded = upgradeEvent => {
+			this.#indexedDb = upgradeEvent.target.result;
+			this.#indexedDb.createObjectStore ( 'Travels', { keyPath : 'UUID' } );
+		};
+	}
+
+	/**
+	Perform the read operations
+	@private
+	*/
+
+	#read ( onOk, onError ) {
+		if ( ! this.#indexedDb ) {
+			onError ( new Error ( 'Database not opened' ) );
+			return;
+		}
+		let transaction = this.#indexedDb.transaction ( [ 'Travels' ], 'readonly' );
+		transaction.onerror = ( ) => onError ( new Error ( 'Transaction error' ) );
+
+		let travelsObjectStore = transaction.objectStore ( 'Travels' );
+		let getRequest = travelsObjectStore.get ( this.#UUID );
+		getRequest.onsuccess = successEvent => onOk ( successEvent.target.result ? successEvent.target.result.data : null );
+	}
+
+	/**
+	Perform the write operations
+	@private
+	*/
+
+	#write ( onOk, onError ) {
+		if ( ! this.#indexedDb ) {
+			onError ( new Error ( 'Database not opened' ) );
+			return;
+		}
+		let transaction = null;
+		try {
+			transaction = this.#indexedDb.transaction ( [ 'Travels' ], 'readwrite' );
+		}
+		catch ( err ) {
+			onError ( err );
+			return;
+		}
+		transaction.onerror = ( ) => onError ( new Error ( 'Transaction error' ) );
+		let travelsObjectStore = transaction.objectStore ( 'Travels' );
+		let putRequest = travelsObjectStore.put ( { UUID : this.#UUID, data : this.#data } );
+		putRequest.onsuccess = ( ) => onOk ( );
+	}
+
+	/**
+	Perform the close operations
+	@private
+	*/
+
+	#close ( ) {
+		this.#indexedDb.close ( );
+		this.#indexedDb = null;
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -69,27 +152,7 @@ class IndexedDb {
 	*/
 
 	getOpenPromise ( ) {
-		function openDb ( onOk, onError ) {
-			if ( ourDb ) {
-				onOk ( );
-				return;
-			}
-			let openRequest = window.indexedDB.open ( 'TravelNotesDb', OUR_DB_VERSION );
-			openRequest.onerror = function ( ) {
-				ourDb = null;
-				onError ( new Error ( 'Not possible to open the db' ) );
-			};
-			openRequest.onsuccess = function ( successEvent ) {
-				ourDb = successEvent.target.result;
-				onOk ( );
-			};
-			openRequest.onupgradeneeded = function ( upgradeEvent ) {
-				ourDb = upgradeEvent.target.result;
-				ourDb.createObjectStore ( 'Travels', { keyPath : 'UUID' } );
-			};
-		}
-
-		return new Promise ( openDb );
+		return new Promise ( ( onOk, onError ) => this.#open ( onOk, onError ) );
 	}
 
 	/**
@@ -100,24 +163,8 @@ class IndexedDb {
 	*/
 
 	getReadPromise ( UUID ) {
-		function read ( onOk, onError ) {
-			if ( ! ourDb ) {
-				onError ( new Error ( 'Database not opened' ) );
-				return;
-			}
-			let transaction = ourDb.transaction ( [ 'Travels' ], 'readonly' );
-			transaction.onerror = function ( ) {
-				onError ( new Error ( 'Transaction error' ) );
-			};
-
-			let travelsObjectStore = transaction.objectStore ( 'Travels' );
-			let getRequest = travelsObjectStore.get ( UUID );
-			getRequest.onsuccess = function ( successEvent ) {
-				onOk ( successEvent.target.result ? successEvent.target.result.data : null );
-			};
-		}
-
-		return new Promise ( read );
+		this.#UUID = UUID;
+		return new Promise ( ( onOk, onError ) => this.#read ( onOk, onError ) );
 	}
 
 	/**
@@ -128,30 +175,10 @@ class IndexedDb {
 	*/
 
 	getWritePromise ( UUID, data ) {
-		function write ( onOk, onError ) {
-			if ( ! ourDb ) {
-				onError ( new Error ( 'Database not opened' ) );
-				return;
-			}
-			let transaction = null;
-			try {
-				transaction = ourDb.transaction ( [ 'Travels' ], 'readwrite' );
-			}
-			catch ( err ) {
-				onError ( err );
-				return;
-			}
-			transaction.onerror = function ( ) {
-				onError ( new Error ( 'Transaction error' ) );
-			};
-			let travelsObjectStore = transaction.objectStore ( 'Travels' );
-			let putRequest = travelsObjectStore.put ( { UUID : UUID, data : data } );
-			putRequest.onsuccess = function ( ) {
-				onOk ( );
-			};
-		}
+		this.#UUID = UUID;
+		this.#data = data;
 
-		return new Promise ( write );
+		return new Promise ( ( onOk, onError ) => this.#write ( onOk, onError ) );
 	}
 
 	/**
@@ -160,47 +187,38 @@ class IndexedDb {
 	*/
 
 	closeDb ( UUID ) {
-		if ( ! ourDb ) {
+		if ( ! this.#indexedDb ) {
 			return;
 		}
 		if ( ! UUID ) {
-			ourDb.close ( );
-			ourDb = null;
+			this.#close ( );
 			return;
 		}
-		let transaction = ourDb.transaction ( [ 'Travels' ], 'readwrite' );
-		transaction.onerror = function ( ) {
-		};
+
+		let transaction = this.#indexedDb.transaction ( [ 'Travels' ], 'readwrite' );
+		transaction.onerror = ( ) => { };
 		let travelsObjectStore = transaction.objectStore ( 'Travels' );
+
 		let deleteRequest = travelsObjectStore.delete ( UUID );
-		deleteRequest.onerror = function ( ) {
-			ourDb.close ( );
-			ourDb = null;
-		};
-		deleteRequest.onsuccess = function ( ) {
-			ourDb.close ( );
-			ourDb = null;
-		};
+		deleteRequest.onerror = ( ) => this.#close ( );
+		deleteRequest.onsuccess = ( ) => this.#close ( );
 	}
 }
 
-const OUR_INDEXED_DB = new IndexedDb ( );
+const theIndexedDb = new IndexedDb ( );
 
-export {
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@desc The one and only one instance of IndexedDb class
+@type {IndexedDb}
+@constant
+@global
 
-	@desc The one and only one instance of IndexedDb class
-	@type {IndexedDb}
-	@constant
-	@global
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_INDEXED_DB as theIndexedDb
-};
+export default theIndexedDb;
 
 /*
 --- End of IndexedDb.js file --------------------------------------------------------------------------------------------------
