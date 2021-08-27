@@ -211,6 +211,7 @@ class TravelNotes {
 	/**
 	get the overpassApi url
 	*/
+
 	get overpassApiUrl ( ) { return theConfig.overpassApi.url; }
 
 	/**
