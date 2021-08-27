@@ -86,6 +86,8 @@ of Providers of TravelNotes
 
 class OpenRouteServiceRouteProvider extends BaseRouteProvider {
 
+	#userLanguage = 'fr';
+
 	/**
 	The provider key. Will be set by TravelNotes
 	@private
@@ -287,6 +289,9 @@ class OpenRouteServiceRouteProvider extends BaseRouteProvider {
 
 	get providerKey ( ) { return this.#providerKey.length; }
 	set providerKey ( providerKey ) { this.#providerKey = providerKey; }
+
+	get userLanguage ( ) { return this.#userLanguage; }
+	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
 window.TaN.addProvider ( new OpenRouteServiceRouteProvider ( ) );

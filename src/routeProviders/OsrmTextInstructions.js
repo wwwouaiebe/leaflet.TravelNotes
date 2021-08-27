@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v2.1.0:
 		- created
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210827
 Tests ...
 */
 
@@ -97,84 +99,10 @@ let languages =
 	abbreviations : {}
 };
 
-// references to avoid rewriting ourOsrmTextInstructions
+// references to avoid rewriting OsrmTextInstructions
 let instructions = languages.instructions;
 let grammars = languages.grammars;
 let abbreviations = languages.abbreviations;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourDirectionFromDegree
-@desc new version of the OsrmTextInstructions.directionFromDegree ( ) method
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourDirectionFromDegree ( language, degree ) {
-	const NNE = 20;
-	const ENE = 70;
-	const ESE = 110;
-	const SSE = 160;
-	const SSW = 200;
-	const WSW = 250;
-	const WNW = 290;
-	const NNW = 340;
-	const NORTH = 360;
-
-	if ( ! degree && ZERO !== degree ) {
-		return '';
-	}
-	else if ( ZERO > degree && NORTH < degree ) {
-		throw new Error ( 'Degree ' + degree + ' invalid' );
-	}
-	else if ( NNE >= degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.north;
-	}
-	else if ( ENE > degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.northeast;
-	}
-	else if ( ESE >= degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.east;
-	}
-	else if ( SSE > degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.southeast;
-	}
-	else if ( SSW >= degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.south;
-	}
-	else if ( WSW > degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.southwest;
-	}
-	else if ( WNW >= degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.west;
-	}
-	else if ( NNW > degree ) {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.northwest;
-	}
-	else {
-		return instructions[ language ][ OUR_VERSION ].constants.direction.north;
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourFetchJson
-@desc ...
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-async function ourFetchJson ( data, lngCode ) {
-	let response = await fetch ( 'TravelNotesProviders/languages/' + data + '/' + lngCode + '.json' );
-	if ( HTTP_STATUS_OK === response.status && response.ok ) {
-		let result = await response.json ( );
-		languages [ data ] [ lngCode ] = result;
-	}
-}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -188,6 +116,66 @@ async function ourFetchJson ( data, lngCode ) {
 */
 
 class OsrmTextInstructions 	{
+
+	/**
+	new version of the OsrmTextInstructions.directionFromDegree ( ) method
+	@private
+	*/
+
+	#directionFromDegree ( language, degree ) {
+		const NNE = 20;
+		const ENE = 70;
+		const ESE = 110;
+		const SSE = 160;
+		const SSW = 200;
+		const WSW = 250;
+		const WNW = 290;
+		const NNW = 340;
+		const NORTH = 360;
+
+		if ( ! degree && ZERO !== degree ) {
+			return '';
+		}
+		else if ( ZERO > degree && NORTH < degree ) {
+			throw new Error ( 'Degree ' + degree + ' invalid' );
+		}
+		else if ( NNE >= degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.north;
+		}
+		else if ( ENE > degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.northeast;
+		}
+		else if ( ESE >= degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.east;
+		}
+		else if ( SSE > degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.southeast;
+		}
+		else if ( SSW >= degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.south;
+		}
+		else if ( WSW > degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.southwest;
+		}
+		else if ( WNW >= degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.west;
+		}
+		else if ( NNW > degree ) {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.northwest;
+		}
+		else {
+			return instructions[ language ][ OUR_VERSION ].constants.direction.north;
+		}
+	}
+
+	async #fetchJson ( data, lngCode ) {
+		let response = await fetch ( 'TravelNotesProviders/languages/' + data + '/' + lngCode + '.json' );
+		if ( HTTP_STATUS_OK === response.status && response.ok ) {
+			let result = await response.json ( );
+			languages [ data ] [ lngCode ] = result;
+		}
+	}
+
 	constructor ( ) {
 		this.abbreviations = abbreviations;
 		Object.freeze ( this );
@@ -196,7 +184,7 @@ class OsrmTextInstructions 	{
 	loadLanguage ( lng ) {
 		let language = NOT_FOUND === OUR_OSRM_LANGUAGES.indexOf ( lng ) ? 'en' : lng;
 		[ 'instructions', 'grammars', 'abbreviations' ].forEach (
-			data => ourFetchJson ( data, language )
+			data => this.#fetchJson ( data, language )
 		);
 		return language;
 	}
@@ -210,7 +198,7 @@ class OsrmTextInstructions 	{
 	}
 
 	directionFromDegree ( language, degree ) {
-		return ourDirectionFromDegree ( language, degree );
+		return this.#directionFromDegree ( language, degree );
 	}
 
 	laneConfig ( step ) {
@@ -430,23 +418,20 @@ class OsrmTextInstructions 	{
 	}
 }
 
-const OUR_OSRM_TEXT_INSTRUCTIONS = new OsrmTextInstructions ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of OsrmTextInstructions class
+@type {OsrmTextInstructions}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of OsrmTextInstructions class
-	@type {OsrmTextInstructions}
-	@constant
-	@global
+const theOsrmTextInstructions = new OsrmTextInstructions ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_OSRM_TEXT_INSTRUCTIONS as theOsrmTextInstructions
-};
+export default theOsrmTextInstructions;
 
 /*
 --- End of OsrmTextInstructions.js file ---------------------------------------------------------------------------------------

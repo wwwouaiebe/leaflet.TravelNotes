@@ -84,6 +84,8 @@ of Providers of TravelNotes
 
 class GraphHopperRouteProvider extends BaseRouteProvider {
 
+	#userLanguage = 'fr';
+
 	/**
 	The provider key. Will be set by TravelNotes
 	@private
@@ -265,6 +267,8 @@ class GraphHopperRouteProvider extends BaseRouteProvider {
 	get providerKey ( ) { return this.#providerKey.length; }
 	set providerKey ( providerKey ) { this.#providerKey = providerKey; }
 
+	get userLanguage ( ) { return this.#userLanguage; }
+	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
 window.TaN.addProvider ( new GraphHopperRouteProvider ( ) );

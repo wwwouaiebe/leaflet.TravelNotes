@@ -51,7 +51,7 @@ import thePolylineEncoder from '../util/PolylineEncoder.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import Maneuver from '../data/Maneuver.js';
 import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';
-import { theOsrmTextInstructions } from '../routeProviders/OsrmTextInstructions.js';
+import theOsrmTextInstructions from '../routeProviders/OsrmTextInstructions.js';
 import { ICON_LIST } from '../routeProviders/IconList.js';
 import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 
@@ -71,6 +71,8 @@ of Providers of TravelNotes
 */
 
 class MapboxRouteProvider extends BaseRouteProvider {
+
+	#userLanguage = 'fr';
 
 	/**
 	The provider key. Will be set by TravelNotes
@@ -287,6 +289,8 @@ class MapboxRouteProvider extends BaseRouteProvider {
 	get providerKey ( ) { return this.#providerKey.length; }
 	set providerKey ( providerKey ) { this.#providerKey = providerKey; }
 
+	get userLanguage ( ) { return this.#userLanguage; }
+	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
 window.TaN.addProvider ( new MapboxRouteProvider ( ) );

@@ -56,6 +56,8 @@ Tests ...
 
 class BaseRouteProvider {
 
+	#userLanguage = 'fr';
+
 	/**
 	The provider key. Will be set by TravelNotes
 	@private
@@ -76,7 +78,6 @@ class BaseRouteProvider {
 	}
 
 	constructor ( ) {
-		this.userLanguage = 'fr';
 		Object.seal ( this );
 	}
 
@@ -102,6 +103,9 @@ class BaseRouteProvider {
 
 	get providerKey ( ) { return this.#providerKey.length; }
 	set providerKey ( providerKey ) { this.#providerKey = providerKey; }
+
+	get userLanguage ( ) { return this.#userLanguage; }
+	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
 export default BaseRouteProvider;
