@@ -80,11 +80,8 @@ import theUI from '../UI/UI.js';
 import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
-import Maneuver from '../data/Maneuver.js';
-import ItineraryPoint from '../data/ItineraryPoint.js';
 import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import BaseDialog from '../dialogs/BaseDialog.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
 import theMouseUI from '../UI/MouseUI.js';
@@ -204,36 +201,10 @@ class TravelNotes {
 	}
 
 	/**
-	Show an info, using theErrorsUI. Used by plugins.
-	*/
-
-	showInfo ( info ) {
-		theErrorsUI.showInfo ( info );
-	}
-
-	/**
-	get a new BaseDialog object. Used by plugins.
-	*/
-
-	get baseDialog ( ) { return new BaseDialog ( ); }
-
-	/**
 	get the Leaflet map object
 	*/
 
 	get map ( ) { return theTravelNotesData.map; }
-
-	/**
-	get a new Maneuver object. Used by plugins.
-	*/
-
-	get maneuver ( ) { return new Maneuver ( ); }
-
-	/**
-	get a new ItineraryPoint object. Used by plugins.
-	*/
-
-	get itineraryPoint ( ) { return new ItineraryPoint ( ); }
 
 	/**
 	theTravelNotes version
