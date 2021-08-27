@@ -201,6 +201,19 @@ class TravelNotes {
 	}
 
 	/**
+	Show an info, using theErrorsUI. Used by plugins.
+	*/
+
+	showInfo ( info ) {
+		theErrorsUI.showInfo ( info );
+	}
+
+	/**
+	get the overpassApi url
+	*/
+	get overpassApiUrl ( ) { return theConfig.overpassApi.url; }
+
+	/**
 	get the Leaflet map object
 	*/
 

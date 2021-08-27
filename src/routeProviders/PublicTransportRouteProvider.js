@@ -45,6 +45,9 @@ Tests ...
 
 import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
+import ItineraryPoint from '../data/ItineraryPoint.js';
+import Maneuver from '../data/Maneuver.js';
+import SelectDialog from '../dialogs/SelectDialog.js';
 
 /*
 
@@ -608,7 +611,7 @@ function ourCreateRoute ( route ) {
 			if ( NO_POINT_ADDED < addPoint && ALL_POINTS_ADDED > addPoint ) {
 
 				// an itinerary point is created from the node and is added to the itinerary
-				let itineraryPoint = window.TaN.itineraryPoint;
+				let itineraryPoint = new ItineraryPoint ( );
 				let node = ourNodesMap.get ( nodeId );
 				itineraryPoint.latLng = [ node.lat, node.lon ];
 				route.itinerary.itineraryPoints.add ( itineraryPoint );
@@ -617,7 +620,7 @@ function ourCreateRoute ( route ) {
 				let stopNode = ourStopsMap.get ( nodeId );
 				if ( stopNode ) {
 
-					let maneuver = window.TaN.maneuver;
+					let maneuver = new Maneuver ( );
 					let stopName = null;
 					if ( stopNode.tags && stopNode.tags.name ) {
 						stopName = stopNode.tags.name;
@@ -800,8 +803,8 @@ function ourParseResponse ( response, onOk, onError ) {
 */
 
 function ourGetRelationsUrl ( ) {
-	return 'https://lz4.overpass-api.de/api/interpreter?' +
-		'data=[out:json];node["public_transport"="stop_position"]["train"="yes"](around:400.0,' +
+	return window.TaN.overpassApiUrl +
+		'?data=[out:json];node["public_transport"="stop_position"]["train"="yes"](around:400.0,' +
 		ourRoute.wayPoints.first.lat.toFixed ( LAT_LNG.fixed ) +
 		',' +
 		ourRoute.wayPoints.first.lng.toFixed ( LAT_LNG.fixed ) +
@@ -822,11 +825,11 @@ function ourGetRelationsUrl ( ) {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourGetWayNodesUrl ( ) {
-	return 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];rel(' +
-		ourSelectedRelationId.toFixed ( ZERO ) +
+function ourGetWayNodesUrl ( relationId ) {
+	return window.TaN.overpassApiUrl + '?data=[out:json];rel(' +
+		relationId.toFixed ( ZERO ) +
 		');way(r)->.e;way.e["railway"="rail"];(._;>;rel(' +
-		ourSelectedRelationId.toFixed ( ZERO ) +
+		relationId.toFixed ( ZERO ) +
 		'););out;';
 }
 
@@ -846,33 +849,23 @@ function ourGetDialogPromise ( response ) {
 		return Promise.reject ( new Error ( 'No relations found' ) );
 	}
 
-	let baseDialog = window.TaN.baseDialog;
-
-	let selectDiv = document.createElement ( 'div' );
-	selectDiv.id = 'TravelNotes-SelectDialog-SelectDiv';
-	baseDialog.content.appendChild ( selectDiv );
-
-	let selectElement =	document.createElement ( 'select' );
-	selectElement.id = 'TravelNotes-SelectDialog-SelectElement';
-	selectDiv.appendChild ( selectElement );
-
-	function onOkButtonClick ( ) {
-		return ourSelectedRelationId = response.elements [ selectElement.selectedIndex ].id;
-	}
-
-	baseDialog.okButtonListener = onOkButtonClick;
-
+	let selectOptionsData = [];
 	response.elements.forEach (
 		dataElement => {
-			let optionElement = document.createElement ( 'option' );
-			optionElement.text = dataElement.tags.name;
-			selectElement.appendChild ( optionElement );
+			selectOptionsData.push ( { text : dataElement.tags.name, objId : dataElement.id } );
 		}
 	);
-	selectElement.selectedIndex = ZERO;
+
+	let selectDialog = new SelectDialog (
+		{
+			title : 'Relations',
+			text : 'select a relation : ',
+			selectOptionsData : selectOptionsData
+		}
+	);
 
 	// baseDialog.show ( ) return a Promise...
-	return baseDialog.show ( );
+	return selectDialog.show ( );
 
 }
 
@@ -897,7 +890,7 @@ function ourGetRoute ( onOk, onError ) {
 				if ( HTTP_STATUS_OK === responseRelations.status && responseRelations.ok ) {
 					responseRelations.json ( )
 						.then ( ourGetDialogPromise )
-						.then ( ( ) => fetch ( ourGetWayNodesUrl ( ) ) )
+						.then ( relationId => fetch ( ourGetWayNodesUrl ( relationId ) ) )
 						.then (
 							responseWayNodes => {
 								if ( HTTP_STATUS_OK === responseWayNodes.status && responseWayNodes.ok ) {
