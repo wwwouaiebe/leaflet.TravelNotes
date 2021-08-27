@@ -96,7 +96,7 @@ class BaseRouteProvider {
 
 	get title ( ) { return ''; }
 
-	get transitModes ( ) { return [ [ /* 'bike', 'pedestrian', 'car', 'train', 'line', 'circle' */ ] ]; }
+	get transitModes ( ) { return [ /* 'bike', 'pedestrian', 'car', 'train', 'line', 'circle' */ ]; }
 
 	get providerKeyNeeded ( ) { return true; }
 
