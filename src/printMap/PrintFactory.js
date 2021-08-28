@@ -74,8 +74,6 @@ const OUR_TILE_SIZE = 256;
 const OUR_LAT_LNG_TOLERANCE = 0.000001;
 const OUR_NOTE_Z_INDEX_OFFSET = 100;
 
-console.log ( theMapLayersCollection );
-
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
@@ -461,11 +459,7 @@ class PrintFactory {
 	*/
 
 	#getLayer ( ) {
-		console.log ( theMapLayersCollection );
-
-		// let layer = theMapLayersCollection.getMapLayer ( theTravelNotesData.travel.layerName );
-
-		let layer = theMapLayersCollection.defaultMapLayer;
+		let layer = theMapLayersCollection.getMapLayer ( theTravelNotesData.travel.layerName );
 		let url = theAPIKeysManager.getUrl ( layer );
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
@@ -527,7 +521,7 @@ class PrintFactory {
 	#printView ( view ) {
 		this.#viewsCounter ++;
 		let viewId = 'TravelNotes-RouteViewDiv' + this.#viewsCounter;
-		
+
 		// viewDiv is used by leaflet. We cannot seal viewDiv with theHTMLElementsFactory
 		let viewDiv = document.createElement ( 'div' );
 		viewDiv.className = 'TravelNotes-routeViewDiv';
@@ -675,7 +669,6 @@ class PrintFactory {
 	*/
 
 	print ( printData, routeObjId ) {
-		console.log ( theMapLayersCollection );
 		this.#route = theDataSearchEngine.getRoute ( routeObjId );
 		if ( ! this.#route ) {
 			return;
