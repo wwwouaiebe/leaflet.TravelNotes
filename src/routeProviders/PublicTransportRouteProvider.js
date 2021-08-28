@@ -217,7 +217,7 @@ class PublicTransportRouteProvider extends BaseRouteProvider {
 
 }
 
-window.TaN.addProvider ( new PublicTransportRouteProvider ( ) );
+window.TaN.addProvider ( PublicTransportRouteProvider );
 
 /*
 --- End of PublicTransportRouteProvider.js file -------------------------------------------------------------------------------

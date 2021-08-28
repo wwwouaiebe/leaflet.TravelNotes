@@ -293,7 +293,7 @@ class MapboxRouteProvider extends BaseRouteProvider {
 	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
-window.TaN.addProvider ( new MapboxRouteProvider ( ) );
+window.TaN.addProvider ( MapboxRouteProvider );
 
 /*
 --- End of MapboxRouteProvider.js file ----------------------------------------------------------------------------------------

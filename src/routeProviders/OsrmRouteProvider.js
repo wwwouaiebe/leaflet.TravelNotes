@@ -291,7 +291,7 @@ class OsrmRouteProvider extends BaseRouteProvider {
 	}
 }
 
-window.TaN.addProvider ( new OsrmRouteProvider ( ) );
+window.TaN.addProvider ( OsrmRouteProvider );
 
 /*
 --- End of OsrmRouteProvider.js file ------------------------------------------------------------------------------------------

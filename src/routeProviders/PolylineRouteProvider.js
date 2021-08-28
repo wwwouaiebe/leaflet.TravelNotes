@@ -403,7 +403,7 @@ class PolylineRouteProvider extends BaseRouteProvider {
 	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
-window.TaN.addProvider ( new PolylineRouteProvider ( ) );
+window.TaN.addProvider ( PolylineRouteProvider );
 
 /*
 --- End of PolylineRouteProvider.js file --------------------------------------------------------------------------------------

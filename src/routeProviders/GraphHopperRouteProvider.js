@@ -271,7 +271,7 @@ class GraphHopperRouteProvider extends BaseRouteProvider {
 	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
-window.TaN.addProvider ( new GraphHopperRouteProvider ( ) );
+window.TaN.addProvider ( GraphHopperRouteProvider );
 
 /*
 --- End of GraphHopperRouteProvider.js file -----------------------------------------------------------------------------------

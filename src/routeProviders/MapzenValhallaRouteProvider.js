@@ -308,7 +308,7 @@ class MapzenValhallaRouteProvider extends BaseRouteProvider {
 	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
-window.TaN.addProvider ( new MapzenValhallaRouteProvider ( ) );
+window.TaN.addProvider ( MapzenValhallaRouteProvider );
 
 /*
 --- End of MapzenValhallaRouteProvider.js file --------------------------------------------------------------------------------

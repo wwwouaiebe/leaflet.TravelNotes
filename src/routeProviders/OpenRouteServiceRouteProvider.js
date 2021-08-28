@@ -294,7 +294,7 @@ class OpenRouteServiceRouteProvider extends BaseRouteProvider {
 	set userLanguage ( userLanguage ) { this.#userLanguage = userLanguage; }
 }
 
-window.TaN.addProvider ( new OpenRouteServiceRouteProvider ( ) );
+window.TaN.addProvider ( OpenRouteServiceRouteProvider );
 
 /*
 --- End of OpenRouteServiceRouteProvider.js file ------------------------------------------------------------------------------

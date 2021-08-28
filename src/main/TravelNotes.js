@@ -196,8 +196,8 @@ class TravelNotes {
 	@param {Provider} provider The provider to add
 	*/
 
-	addProvider ( provider ) {
-		theAPIKeysManager.addProvider ( provider );
+	addProvider ( providerClass ) {
+		theAPIKeysManager.addProvider ( providerClass );
 	}
 
 	/**
