@@ -23,7 +23,9 @@ Changes:
 	- v2.0.0:
 		- Issue ♯134 : Remove node.setAttribute ( 'style', blablabla) in the code
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200816
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210828
 Tests ...
 */
 
@@ -55,96 +57,143 @@ const OUR_DRAG_MARGIN = 20;
 */
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewFloatWindow
-@desc constructor for FloatWindow objects
-@return {FloatWindow} an instance of FloatWindow object
+@class FloatWindowTopBarDragStartEventListener
+@classdesc dragstart event listener for the top bar
+@hideconstructor
 @private
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewFloatWindow ( ) {
+class FloatWindowTopBarDragStartEventListener {
 
-	let myWindowDiv = null;
-	let myHeaderDiv = null;
-	let myContentDiv = null;
+	#dragData = null;
 
-	let myStartDragX = ZERO;
-	let myStartDragY = ZERO;
-	let myWindowX = ZERO;
-	let myWindowY = ZERO;
-	let myScreenWidth = ZERO;
-	let myScreenHeight = ZERO;
-
-	let myOnClose = null;
-	let myOnUpdate = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnTopBarDragStart
-	@desc Drag start event listener for the top bar
-	@listens dragstart
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnTopBarDragStart ( dragStartEvent ) {
-		try {
-			dragStartEvent.dataTransfer.setData ( 'Text', '1' );
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
-		myStartDragX = dragStartEvent.screenX;
-		myStartDragY = dragStartEvent.screenY;
+	constructor ( dragData ) {
+		Object.seal ( this );
+		this.#dragData = dragData;
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	handleEvent ( dragStartEvent ) {
+		this.#dragData.dragStartX = dragStartEvent.screenX;
+		this.#dragData.dragStartY = dragStartEvent.screenY;
+		dragStartEvent.dataTransfer.dropEffect = 'move';
+		dragStartEvent.dataTransfer.effectAllowed = 'move';
+	}
+}
 
-	@function myOnTopBarDragEnd
-	@desc Drag end event listener for the top bar
-	@listens dragend
-	@private
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+@class FloatWindowTopBarDragEndEventListener
+@classdesc dragend event listener for the top bar
+@hideconstructor
+@private
 
-	function myOnTopBarDragEnd ( dragEndEvent ) {
-		myWindowX += dragEndEvent.screenX - myStartDragX;
-		myWindowY += dragEndEvent.screenY - myStartDragY;
-		myWindowX = Math.min (
-			Math.max ( myWindowX, OUR_DRAG_MARGIN ),
-			myScreenWidth - myWindowDiv.clientWidth - OUR_DRAG_MARGIN
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class FloatWindowTopBarDragEndEventListener {
+
+	#dragData = null;
+	#containerDiv = null;
+
+	constructor ( dragData ) {
+		Object.seal ( this );
+		this.#dragData = dragData;
+	}
+
+	handleEvent ( dragEndEvent ) {
+		let containerDiv = dragEndEvent.target.parentNode;
+		this.#dragData.windowX += dragEndEvent.screenX - this.#dragData.dragStartX;
+		this.#dragData.windowY += dragEndEvent.screenY - this.#dragData.dragStartY;
+		this.#dragData.windowX = Math.min (
+			Math.max ( this.#dragData.windowX, OUR_DRAG_MARGIN ),
+			theTravelNotesData.map.getContainer ( ).clientWidth - containerDiv.clientWidth - OUR_DRAG_MARGIN
 		);
-		myWindowY = Math.max ( myWindowY, OUR_DRAG_MARGIN );
+		this.#dragData.windowY = Math.max ( this.#dragData.windowY, OUR_DRAG_MARGIN );
 		let windowMaxHeight =
-			myScreenHeight - Math.max ( myWindowY, ZERO ) - OUR_DRAG_MARGIN;
-		myWindowDiv.style.top = String ( myWindowY ) + 'px';
-		myWindowDiv.style.left = String ( myWindowX ) + 'px';
-		myWindowDiv.style [ 'max-height' ] = String ( windowMaxHeight ) + 'px';
+			theTravelNotesData.map.getContainer ( ).clientHeight - Math.max ( this.#dragData.windowY, ZERO ) - OUR_DRAG_MARGIN;
+		containerDiv.style.top = String ( this.#dragData.windowY ) + 'px';
+		containerDiv.style.left = String ( this.#dragData.windowX ) + 'px';
+		containerDiv.style [ 'max-height' ] = String ( windowMaxHeight ) + 'px';
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class FloatWindow
+@classdesc This class is the base for all the floating windows
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class FloatWindow {
+
+	/**
+	Shared data for drag and drop operations
+	@private
+	*/
+
+	#dragData = Object.seal (
+		{
+			dragStartX : ZERO,
+			dragStartY : ZERO,
+			windowX : ZERO,
+			windowY : ZERO
+		}
+	);
+
+	/**
+	The window container
+	@private
+	*/
+
+	#containerDiv = null;
+
+	/**
+	The window top bar
+	@private
+	*/
+
+	#topBar = null;
+
+	/**
+	The window header
+	@private
+	*/
+
+	#headerDiv = null;
+
+	/**
+	The window content
+	@private
+	*/
+
+	#contentDiv = null;
+
+	/**
+	event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onTopBarDragStart : null,
+		onTopBarDragEnd : null
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateWindow
-	@desc This method creates the window
+	This method creates the window
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateWindow ( ) {
-		myScreenWidth = theTravelNotesData.map.getContainer ( ).clientWidth;
-		myScreenHeight = theTravelNotesData.map.getContainer ( ).clientHeight;
-		myWindowDiv = theHTMLElementsFactory.create (
+	#createContainerDiv ( ) {
+
+		this.#containerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-Container'
@@ -154,59 +203,21 @@ function ourNewFloatWindow ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClose
-	@desc This method closes the window
+	@desc This method creates the topbar
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myClose ( ) {
-		if ( myOnClose ) {
-			myOnClose ( );
-		}
-		document.body.removeChild ( myWindowDiv );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClose
-	@desc This method updates the window
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myUpdate ( args ) {
-		if ( myOnUpdate ) {
-			myOnUpdate ( args );
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateTopBar
-	@desc This method creates the window
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateTopBar ( ) {
-		let topBar = theHTMLElementsFactory.create (
+	#createTopBar ( ) {
+		this.#topBar = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-TopBar',
 				draggable : true
 			},
-			myWindowDiv
+			this.#containerDiv
 		);
-		topBar.addEventListener ( 'dragstart', myOnTopBarDragStart, false );
-		topBar.addEventListener ( 'dragend', myOnTopBarDragEnd, false );
+		this.#topBar.addEventListener ( 'dragstart', this.#eventListeners.onTopBarDragStart, false );
+		this.#topBar.addEventListener ( 'dragend', this.#eventListeners.onTopBarDragEnd, false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -215,136 +226,83 @@ function ourNewFloatWindow ( ) {
 				className : 'TravelNotes-FloatWindow-CancelButton',
 				title : theTranslator.getText ( 'FloatWindow - Close' )
 			},
-			topBar
-		)
-			.addEventListener ( 'click', myClose, false );
+			this.#topBar
+		).addEventListener ( 'click', ( ) => this.close ( ), false );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateHeaderDiv
-	@desc This method creates the header div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method creates the header div
 	*/
 
-	function myCreateHeaderDiv ( ) {
-		myHeaderDiv = theHTMLElementsFactory.create (
+	#createHeaderDiv ( ) {
+		this.#headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-HeaderDiv'
 			},
-			myWindowDiv
+			this.#containerDiv
 		);
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateHeaderDiv
-	@desc This method creates the content div
+	This method creates the content div
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateContentDiv ( ) {
-		myContentDiv = theHTMLElementsFactory.create (
+	#createContentDiv ( ) {
+		this.#contentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-FloatWindow-ContentDiv'
 			},
-			myWindowDiv
+			this.#containerDiv
 		);
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This class is the base for all the floating windows
-	@see {@link newFloatWindow} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class FloatWindow {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		Create the window directly on the screen
-		*/
-
-		createWindow ( ) {
-			myCreateWindow ( );
-			myCreateTopBar ( );
-			myCreateHeaderDiv ( );
-			myCreateContentDiv ( );
-		}
-
-		/**
-		Close the window
-		*/
-
-		close ( ) { myClose ( ); }
-
-		/**
-		A function that will be executed when the dialog is closed
-		*/
-
-		set onClose ( OnClose ) { myOnClose = OnClose; }
-
-		/**
-		Update the window
-		*/
-
-		update ( ...args ) { myUpdate ( args ); }
-
-		/**
-		A function that will be executed when the dialog is updated
-		*/
-
-		set onUpdate ( OnUpdate ) { myOnUpdate = OnUpdate; }
-
-		/**
-		The header of the window. Read only but remember it's an HTMLElement...
-		@readonly
-		*/
-
-		get header ( ) { return myHeaderDiv; }
-
-		/**
-		The content of the window. Read only but remember it's an HTMLElement...
-		@readonly
-		*/
-
-		get content ( ) { return myContentDiv; }
+	constructor ( ) {
+		this.#eventListeners.onTopBarDragStart = new FloatWindowTopBarDragStartEventListener ( this.#dragData );
+		this.#eventListeners.onTopBarDragEnd = new FloatWindowTopBarDragEndEventListener ( this.#dragData );
+		this.#createContainerDiv ( );
+		this.#createTopBar ( );
+		this.#createHeaderDiv ( );
+		this.#createContentDiv ( );
+		Object.seal ( this );
 	}
 
-	return new FloatWindow;
-}
-
-export {
-
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newFloatWindow
-	@desc constructor for FloatWindow objects
-	@return {FloatWindow} an instance of FloatWindow object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Close the window
 	*/
 
-	ourNewFloatWindow as newFloatWindow
-};
+	close ( ) {
+		this.#topBar.removeEventListener ( 'dragstart', this.#eventListeners.onTopBarDragStart, false );
+		this.#topBar.removeEventListener ( 'dragend', this.#eventListeners.onTopBarDragEnd, false );
+		this.#eventListeners.onTopBarDragStart = null;
+		this.#eventListeners.onTopBarDragEnd = null;
+		document.body.removeChild ( this.#containerDiv );
+	}
+
+	/**
+	Update the window
+	*/
+
+	update ( ) { }
+
+	/**
+	The header of the window. Read only but remember it's an HTMLElement...
+	@readonly
+	*/
+
+	get header ( ) { return this.#headerDiv; }
+
+	/**
+	The content of the window. Read only but remember it's an HTMLElement...
+	@readonly
+	*/
+
+	get content ( ) { return this.#contentDiv; }
+}
+
+export default FloatWindow;
 
 /*
 --- End of FloatWindow.js file ------------------------------------------------------------------------------------------------

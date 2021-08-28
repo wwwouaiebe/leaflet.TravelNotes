@@ -64,11 +64,8 @@ import Zoomer from '../core/Zoomer.js';
 
 class ProfileContextMenu extends BaseContextMenu {
 
-	#contextMenuEvent = null;
-
 	constructor ( contextMenuEvent, parentNode = null ) {
 		super ( contextMenuEvent, parentNode );
-		this.#contextMenuEvent = contextMenuEvent;
 	}
 
 	/* eslint-disable no-magic-numbers */
@@ -78,14 +75,14 @@ class ProfileContextMenu extends BaseContextMenu {
 		case 0 :
 			theNoteEditor.newRouteNote (
 				{
-					routeObjId : this.#contextMenuEvent.routeObjId,
-					lat : this.#contextMenuEvent.latlng.lat,
-					lng : this.#contextMenuEvent.latlng.lng
+					routeObjId : this.eventData.targetObjId,
+					lat : this.eventData.lat,
+					lng : this.eventData.lng
 				}
 			);
 			break;
 		case 1 :
-			new Zoomer ( ).zoomToLatLng ( [ this.#contextMenuEvent.latlng.lat, this.#contextMenuEvent.latlng.lng ] );
+			new Zoomer ( ).zoomToLatLng ( [ this.eventData.lat, this.eventData.lng ] );
 			break;
 		default :
 			break;

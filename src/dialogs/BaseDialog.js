@@ -242,7 +242,7 @@ class BaseDialog {
 	@private
 	*/
 
-	#CreateContainerDiv ( ) {
+	#createContainerDiv ( ) {
 
 		// the dialog is created
 		this.#containerDiv = theHTMLElementsFactory.create (
@@ -259,7 +259,7 @@ class BaseDialog {
 	@private
 	*/
 
-	#CreateTopBar ( ) {
+	#createTopBar ( ) {
 
 		this.#topBar = theHTMLElementsFactory.create (
 			'div',
@@ -422,8 +422,8 @@ class BaseDialog {
 
 	#createHTML ( ) {
 		this.#createBackgroundDiv ( );
-		this.#CreateContainerDiv ( );
-		this.#CreateTopBar ( );
+		this.#createContainerDiv ( );
+		this.#createTopBar ( );
 		this.#createHeaderDiv ( );
 		this.#createContentDiv ( );
 		this.#createErrorDiv ( );

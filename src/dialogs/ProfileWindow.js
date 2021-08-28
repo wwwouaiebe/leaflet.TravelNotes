@@ -24,19 +24,22 @@ Changes:
 		- Issue ♯99 : Add distance in the elevation window
 	- v2.0.0:
 		- Issue ♯135 : Remove innerHTML from code
-Doc reviewed 20200816
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210828
 Tests ...
 */
 
 import theTranslator from '../UI/Translator.js';
 import ObjId from '../data/ObjId.js';
-import { newFloatWindow } from '../dialogs/FloatWindow.js';
+import FloatWindow from '../dialogs/FloatWindow.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theGeometry from '../util/Geometry.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theUtilities from '../util/Utilities.js';
 import ProfileContextMenu from '../contextMenus/ProfileContextMenu.js';
 import ProfileFactory from '../core/ProfileFactory.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js';
 
 /**
@@ -60,44 +63,21 @@ import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js
 */
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewProfileWindow
-@desc constructor for ProfileWindow objects
-@return {ProfileWindow} an instance of ProfileWindow object
+@class BaseSvgEventListener
+@classdesc Base class for Svg event listeners
+@hideconstructor
 @private
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewProfileWindow ( ) {
+class BaseSvgEventListener {
 
-	let myLatLngObjId = ObjId.nextObjId;
-
-	let mySvg = null;
-	let myMarker = null;
-	let myElevText = null;
-	let myAscentText = null;
-	let myDistanceText = null;
-	let myProfileWindow = null;
-	let myAscentDiv = null;
-	let myRoute = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetlatLngElevOnRouteAtMousePosition
-	@desc This function gives the latitude, longitude and elevation of a route, depending of the mouse position
-	on the svg profile
-	@param {Event} mouseEvent The mouse event coming from the event listener that call this function
-	@return {LatLngElevOnRoute} An Object with the LatLng, elevation, ascent and distance of the mouse event on the route
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myGetlatLngElevOnRouteAtMousePosition ( mouseEvent ) {
-		let clientRect = mySvg.getBoundingClientRect ( );
+	getlatLngElevOnRouteAtMousePosition ( mouseEvent, profileSvg ) {
+		let route = theDataSearchEngine.getRoute ( Number.parseInt ( profileSvg.dataset.tanObjId ) );
+		let clientRect = profileSvg.getBoundingClientRect ( );
 		let routeDist =
 			(
 				( mouseEvent.clientX - clientRect.x -
@@ -110,288 +90,324 @@ function ourNewProfileWindow ( ) {
 					( SVG_PROFILE.width /
 						( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width )
 					) * clientRect.width )
-			) * myRoute.distance;
-		return theGeometry.getLatLngElevAtDist ( myRoute, routeDist );
+			) * route.distance;
+		if ( ZERO < routeDist && routeDist < route.distance ) {
+			return theGeometry.getLatLngElevAtDist ( route, routeDist );
+		}
+
+		return null;
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ContextMenuSvgEventListener
+@classdesc contextmenu event listener for svg profile
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ContextMenuSvgEventListener extends BaseSvgEventListener {
+
+	constructor ( ) {
+		super ( );
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	handleEvent ( mouseEvent ) {
+		mouseEvent.preventDefault ( );
+		mouseEvent.stopPropagation ( );
 
-	@function myOnSvgContextMenu
-	@desc mouse contextmenu on the profile svg event listener. Show a context menu
-	@listens contextmenu
-	@private
+		let profileSvg = mouseEvent.target;
+		while ( ! profileSvg.dataset.tanObjId ) {
+			profileSvg = profileSvg.parentNode;
+		}
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnSvgContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.preventDefault ( );
-		contextMenuEvent.stopPropagation ( );
-		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( contextMenuEvent );
+		let latLngElevOnRoute = this.getlatLngElevOnRouteAtMousePosition ( mouseEvent, profileSvg );
 		if ( latLngElevOnRoute ) {
-			contextMenuEvent.routeObjId = myRoute.objId;
-
-			// creating a fake leaflet contextmenuEvent...
-			contextMenuEvent.latlng = {
+			mouseEvent.latlng = {
 				lat : latLngElevOnRoute.latLng [ ZERO ],
 				lng : latLngElevOnRoute.latLng [ ONE ]
 			};
-			contextMenuEvent.originalEvent = {
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY
-			};
-			new ProfileContextMenu ( contextMenuEvent ).show ( );
+			new ProfileContextMenu ( mouseEvent ).show ( );
 		}
 	}
+}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-	@function myOnSvgMouseLeave
-	@desc mouse leave on the profile svg event listener. Remove the marker on the map
-	@listens mouseleave
-	@private
+@class MouseLeaveSvgEventListener
+@classdesc mouseleave event listener for svg profile
+@hideconstructor
+@private
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
-	function myOnSvgMouseLeave ( ) {
-		theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+class MouseLeaveSvgEventListener {
+
+	handleEvent ( mouseLeaveEvent ) {
+		mouseLeaveEvent.preventDefault ( );
+		mouseLeaveEvent.stopPropagation ( );
+		let profileSvg = mouseLeaveEvent.target;
+		while ( ! profileSvg.dataset.tanObjId ) {
+			profileSvg = profileSvg.parentNode;
+		}
+
+		theEventDispatcher.dispatch ( 'removeobject', { objId : Number.parseInt ( profileSvg.dataset.tanMarkerObjId ) } );
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class MouseMoveSvgEventListener
+@classdesc mousemove event listener for svg profile
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class MouseMoveSvgEventListener extends BaseSvgEventListener {
+
+	constructor ( ) {
+		super ( );
 	}
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	#marker = null;
+	#distanceText = null;
+	#elevText = null;
+	#ascentText = null;
+	#textAnchor = null;
+	#markerX = null;
+	#profileSvg = null;
 
-	@function myOnSvgMouseMove
-	@desc mouse move on the profile svg event listener. Display a text with the distance, elevation and ascent at
-	the given position. Show also a marker on the map
-	@listens mousemove
-	@private
+	#createSvgText ( text, markerY ) {
+		let svgText = document.createElementNS ( SVG_NS, 'text' );
+		svgText.appendChild ( document.createTextNode ( text ) );
+		svgText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
+		svgText.setAttributeNS ( null, 'x', this.#markerX );
+		svgText.setAttributeNS ( null, 'y', markerY );
+		svgText.setAttributeNS ( null, 'text-anchor', this.#textAnchor );
+		this.#profileSvg.appendChild ( svgText );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+		return svgText;
+	}
 
-	function myOnSvgMouseMove ( mouseEvent ) {
-		let clientRect = mySvg.getBoundingClientRect ( );
-		let latLngElevOnRoute = myGetlatLngElevOnRouteAtMousePosition ( mouseEvent );
+	handleEvent ( mouseEvent ) {
+
+		mouseEvent.preventDefault ( );
+		mouseEvent.stopPropagation ( );
+
+		this.#profileSvg = mouseEvent.target;
+		while ( ! this.#profileSvg.dataset.tanObjId ) {
+			this.#profileSvg = this.#profileSvg.parentNode;
+		}
+
+		let latLngElevOnRoute = this.getlatLngElevOnRouteAtMousePosition ( mouseEvent, this.#profileSvg );
 		if ( latLngElevOnRoute ) {
 
 			// itinerary point marker on the map
-			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+			let markerObjId = Number.parseInt ( this.#profileSvg.dataset.tanMarkerObjId );
+			theEventDispatcher.dispatch ( 'removeobject', { objId : markerObjId } );
 			theEventDispatcher.dispatch (
 				'additinerarypointmarker',
 				{
-					objId : myLatLngObjId,
+					objId : markerObjId,
 					latLng : latLngElevOnRoute.latLng
 				}
 			);
 
 			// Line and text on svg
-			if ( myMarker ) {
-				mySvg.removeChild ( myMarker );
-				mySvg.removeChild ( myDistanceText );
-				mySvg.removeChild ( myElevText );
-				mySvg.removeChild ( myAscentText );
+			if ( this.#marker ) {
+				this.#profileSvg.removeChild ( this.#marker );
+				this.#profileSvg.removeChild ( this.#distanceText );
+				this.#profileSvg.removeChild ( this.#elevText );
+				this.#profileSvg.removeChild ( this.#ascentText );
 			}
-			let markerX =
+			let clientRect = this.#profileSvg.getBoundingClientRect ( );
+			this.#markerX =
 				( ( TWO * SVG_PROFILE.margin ) + SVG_PROFILE.width ) *
 				( mouseEvent.clientX - clientRect.x ) / clientRect.width;
 			let markerY = SVG_PROFILE.margin + SVG_PROFILE.height;
 
 			// line
-			myMarker = document.createElementNS ( SVG_NS, 'polyline' );
-			myMarker.setAttributeNS (
+			this.#marker = document.createElementNS ( SVG_NS, 'polyline' );
+			this.#marker.setAttributeNS (
 				null,
 				'points',
-				String ( markerX ) + ',' + SVG_PROFILE.margin + ' ' + markerX + ',' + markerY
+				String ( this.#markerX ) + ',' + SVG_PROFILE.margin + ' ' + this.#markerX + ',' + markerY
 			);
-			myMarker.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-markerPolyline' );
-			mySvg.appendChild ( myMarker );
+			this.#marker.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-markerPolyline' );
+			this.#profileSvg.appendChild ( this.#marker );
 
 			// texts
-			let textAnchor = latLngElevOnRoute.routeDistance > myRoute.distance / TWO ? 'end' : 'start';
-			let deltaMarkerX =
-				latLngElevOnRoute.routeDistance > myRoute.distance / TWO
+			let route = theDataSearchEngine.getRoute ( Number.parseInt ( this.#profileSvg.dataset.tanObjId ) );
+			this.#textAnchor = latLngElevOnRoute.routeDistance > route.distance / TWO ? 'end' : 'start';
+			this.#markerX +=
+				latLngElevOnRoute.routeDistance > route.distance / TWO
 					?
 					-SVG_PROFILE.xDeltaText
 					:
 					SVG_PROFILE.xDeltaText;
 
 			// distance
-			myDistanceText = document.createElementNS ( SVG_NS, 'text' );
-			myDistanceText.appendChild (
-				document.createTextNode ( theUtilities.formatDistance ( latLngElevOnRoute.routeDistance ) )
+			this.#distanceText = this.#createSvgText (
+				theUtilities.formatDistance ( latLngElevOnRoute.routeDistance ),
+				SVG_PROFILE.margin + SVG_PROFILE.yDeltaText,
 			);
-			myDistanceText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
-			myDistanceText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
-			myDistanceText.setAttributeNS ( null, 'y', SVG_PROFILE.margin + SVG_PROFILE.yDeltaText );
-			myDistanceText.setAttributeNS ( null, 'text-anchor', textAnchor );
-			mySvg.appendChild ( myDistanceText );
 
-			// elevation
-			myElevText = document.createElementNS ( SVG_NS, 'text' );
-			myElevText.appendChild (
-				document.createTextNode (
-					'Alt. ' + latLngElevOnRoute.elev.toFixed ( ZERO ) + ' m.'
-				)
-			);
-			myElevText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
-			myElevText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
-			myElevText.setAttributeNS (
-				null,
-				'y',
+			this.#elevText = this.#createSvgText (
+				'Alt. ' + latLngElevOnRoute.elev.toFixed ( ZERO ) + ' m.',
 				SVG_PROFILE.margin + ( SVG_PROFILE.yDeltaText * TWO )
 			);
-			myElevText.setAttributeNS ( null, 'text-anchor', textAnchor );
-			mySvg.appendChild ( myElevText );
 
-			// pente
-			myAscentText = document.createElementNS ( SVG_NS, 'text' );
-			myAscentText.appendChild (
-				document.createTextNode (
-					'Pente ' + latLngElevOnRoute.ascent.toFixed ( ZERO ) + ' % '
-				)
-			);
-			myAscentText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevText' );
-			myAscentText.setAttributeNS ( null, 'x', markerX + deltaMarkerX );
-			myAscentText.setAttributeNS (
-				null,
-				'y',
+			this.#ascentText = this.#createSvgText (
+				'Pente ' + latLngElevOnRoute.ascent.toFixed ( ZERO ) + ' % ',
 				SVG_PROFILE.margin + ( SVG_PROFILE.yDeltaText * THREE )
 			);
-			myAscentText.setAttributeNS ( null, 'text-anchor', textAnchor );
-			mySvg.appendChild ( myAscentText );
 		}
+	}
+}
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ProfileWindow
+@classdesc a float window containing a route profile
+@augments FloatWindow
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ProfileWindow extends FloatWindow {
+
+	/**
+	The svg profile
+	@private
+	*/
+
+	#svg = null;
+
+	/**
+	A div under the svg profile with some texts
+	@private
+	*/
+
+	#ascentDiv = null;
+
+	/**
+	The route for witch the profile is diplayed
+	@private
+	*/
+
+	#route = null;
+
+	/**
+	Event listeners
+	@private
+	*/
+
+	#eventListeners = {
+		onSvgContextMenu : null,
+		onSvgMouseMove : null,
+		onSvgMouseLeave : null
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClean
-	@desc This function removes the svg and event listeners from the window
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	An objId for the position marker
 	*/
 
-	function myClean ( ) {
-		if ( mySvg ) {
-			mySvg.removeEventListener ( 'contextmenu', myOnSvgContextMenu, false );
-			mySvg.removeEventListener ( 'mousemove', myOnSvgMouseMove, false );
-			mySvg.removeEventListener ( 'mouseleave', myOnSvgMouseLeave, false );
-			theEventDispatcher.dispatch ( 'removeobject', { objId : myLatLngObjId } );
+	#markerObjId = ObjId.nextObjId;
 
-			myProfileWindow.content.removeChild ( myAscentDiv );
-			myProfileWindow.content.removeChild ( mySvg );
+	/**
+	This method removes the svg and event listeners from the window
+	@private
+	*/
+
+	#clean ( ) {
+		if ( this.#svg ) {
+			this.#svg.removeEventListener ( 'contextmenu', this.#eventListeners.onSvgContextMenu, false );
+			this.#svg.removeEventListener ( 'mousemove', this.#eventListeners.onSvgMouseMove, false );
+			this.#svg.removeEventListener ( 'mouseleave', this.#eventListeners.onSvgMouseLeave, false );
+
+			theEventDispatcher.dispatch ( 'removeobject', { objId : this.#markerObjId } );
+
+			this.content.removeChild ( this.#ascentDiv );
+			this.content.removeChild ( this.#svg );
 		}
 
-		mySvg = null;
-		myMarker = null;
-		myAscentText = null;
-		myDistanceText = null;
-		myElevText = null;
-		myAscentDiv = null;
+		this.#svg = null;
+		this.#ascentDiv = null;
+	}
+
+	constructor ( ) {
+		super ( );
+		this.#eventListeners.onSvgContextMenu = new ContextMenuSvgEventListener ( );
+		this.#eventListeners.onSvgMouseMove = new MouseMoveSvgEventListener ( );
+		this.#eventListeners.onSvgMouseLeave = new MouseLeaveSvgEventListener ( );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnClose
-	@desc This function closes the window
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Clean and close the window
 	*/
 
-	function myOnClose ( ) {
-		myClean ( );
+	close ( ) {
+		this.#clean ( );
 		theEventDispatcher.dispatch (
 			'profileclosed',
 			{
-				objId : myRoute.objId
+				objId : this.#route.objId
 			}
 		);
-
+		super.close ( );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myUpdate
-	@desc This function updates the window, removing the svg and adding a new one, build with the route given as parameter
-	@param {Route} route The route used to update the svg profile
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Update the window's content
 	*/
 
-	function myUpdate ( args ) {
-		myClean ( );
-		myRoute = args [ ZERO ];
-		mySvg = new ProfileFactory ( ).createSvg ( myRoute );
+	update ( route ) {
+		this.#clean ( );
+		this.#route = route;
+		this.#svg = new ProfileFactory ( ).createSvg ( this.#route );
+		this.#svg.dataset.tanObjId = route.objId;
+		this.#svg.dataset.tanMarkerObjId = this.#markerObjId;
 
-		myProfileWindow.header.textContent = theTranslator.getText (
+		this.header.textContent = theTranslator.getText (
 			'ProfileWindow - Profile {name}',
-			{ name : myRoute.computedName }
+			{ name : this.#route.computedName }
 		);
-		myProfileWindow.content.appendChild ( mySvg );
-		mySvg.addEventListener ( 'contextmenu', myOnSvgContextMenu, false );
-		mySvg.addEventListener ( 'mousemove', myOnSvgMouseMove, false );
-		mySvg.addEventListener ( 'mouseleave', myOnSvgMouseLeave, false );
+		this.content.appendChild ( this.#svg );
 
-		myAscentDiv = theHTMLElementsFactory.create (
+		this.#svg.addEventListener ( 'contextmenu', this.#eventListeners.onSvgContextMenu, false );
+		this.#svg.addEventListener ( 'mousemove', this.#eventListeners.onSvgMouseMove, false );
+		this.#svg.addEventListener ( 'mouseleave', this.#eventListeners.onSvgMouseLeave, false );
+
+		this.#ascentDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-ProfileWindow-Ascent',
 				textContent : theTranslator.getText (
 					'ProfileWindow - Ascent: {ascent} m. - Descent: {descent} m. - Distance: {distance}',
 					{
-						ascent : myRoute.itinerary.ascent.toFixed ( ZERO ),
-						descent : myRoute.itinerary.descent.toFixed ( ZERO ),
-						distance : theUtilities.formatDistance ( myRoute.distance )
+						ascent : this.#route.itinerary.ascent.toFixed ( ZERO ),
+						descent : this.#route.itinerary.descent.toFixed ( ZERO ),
+						distance : theUtilities.formatDistance ( this.#route.distance )
 					}
 				)
 			}
 		);
-		myProfileWindow.content.appendChild ( myAscentDiv );
+		this.content.appendChild ( this.#ascentDiv );
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class ProfileWindow
-	@classdesc a float window containing a route profile
-	@see {@link newProfileWindow} for constructor
-	@augments FloatWindow
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	myProfileWindow = newFloatWindow ( );
-	myProfileWindow.createWindow ( );
-	myProfileWindow.onClose = myOnClose;
-	myProfileWindow.onUpdate = myUpdate;
-
-	return myProfileWindow;
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newProfileWindow
-	@desc constructor of newProfileWindow objects
-	@return {ProfileWindow} an instance of a ProfileWindow object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewProfileWindow as newProfileWindow
-};
+export default ProfileWindow;
 
 /*
 --- End of ProfileWindow.js file ----------------------------------------------------------------------------------------------

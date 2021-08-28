@@ -49,7 +49,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import { newProfileWindow } from '../dialogs/ProfileWindow.js';
+import ProfileWindow from '../dialogs/ProfileWindow.js';
 import ProfileFactory from '../core/ProfileFactory.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { ZERO } from '../util/Constants.js';
@@ -158,7 +158,7 @@ class ProfileWindowsManager {
 	showProfile ( routeObjId ) {
 		let profileWindow = this.#profileWindows.get ( routeObjId );
 		if ( ! profileWindow ) {
-			profileWindow = newProfileWindow ( );
+			profileWindow = new ProfileWindow ( );
 		}
 		let route = theDataSearchEngine.getRoute ( routeObjId );
 		profileWindow.update ( route );
