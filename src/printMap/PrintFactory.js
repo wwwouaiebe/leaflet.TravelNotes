@@ -65,7 +65,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
 import theTranslator from '../UI/Translator.js';
-import theMapLayersCollection from '../UI/MapLayersToolbarUI.js';
+import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
@@ -74,86 +74,72 @@ const OUR_TILE_SIZE = 256;
 const OUR_LAT_LNG_TOLERANCE = 0.000001;
 const OUR_NOTE_Z_INDEX_OFFSET = 100;
 
+console.log ( theMapLayersCollection );
+
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewPrintFactory
-@desc constructor for PrintFactory objects
-@return {PrintFactory} an instance of PrintFactory object
-@private
+@class PrintFactory
+@classdesc This class manages the print of a route
+@see {@link newPrintFactory} for constructor
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewPrintFactory ( ) {
+class PrintFactory {
 
-	let myPrintData = null;
-	let myRoute = null;
-	let myPrintSize = null;
-	let myViews = [];
-	let myViewCounter = 0;
-	let myViewDiv = [];
-	let myRoutePolyline = null;
-	let myPrintToolbar = null;
-	let myPrintButton = null;
-	let myCancelButton = null;
-	let myTilesPage = 0;
-
-	/*
-	--- myOnAfterPrint function -----------------------------------------------------------------------------------------
-
-	This function restore the map after printing
-
-	-------------------------------------------------------------------------------------------------------------------
-	*/
+	#printData = null;
+	#route = null;
+	#printSize = null;
+	#views = [];
+	#viewsCounter = ZERO;
+	#viewsDiv = [];
+	#routePolyline = null;
+	#printToolbar = null;
+	#printButton = null;
+	#cancelButton = null;
+	#tilesPage = ZERO;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnAfterPrint
-	@desc remove the print views and restore the map and user interface after printing
+	Remove the print views and restore the map and user interface after printing
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnAfterPrint ( ) {
-		myViewDiv.forEach ( viewDiv => document.body.removeChild ( viewDiv ) );
-		myViewDiv.length = ZERO;
-		myPrintButton.removeEventListener (	'click', ( ) => window.print ( ), false );
-		myCancelButton.removeEventListener (	'click', myOnAfterPrint, false );
-		document.body.removeChild ( myPrintToolbar );
+	#onAfterPrint ( ) {
+		this.#viewsDiv.forEach ( viewDiv => document.body.removeChild ( viewDiv ) );
+		this.#viewsDiv.length = ZERO;
+		this.#printButton.removeEventListener (	'click', ( ) => window.print ( ), false );
+		this.#cancelButton.removeEventListener ( 'click', ( ) => this.#onAfterPrint ( ), false );
+		document.body.removeChild ( this.#printToolbar );
 
 		let childrens = document.body.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.remove ( 'TravelNotes-Hidden' );
 		}
 		theTravelNotesData.map.invalidateSize ( false );
-		window.removeEventListener ( 'afterprint', myOnAfterPrint, true );
+		window.removeEventListener ( 'afterprint', ( ) => this.#onAfterPrint ( ), true );
 		document.title =
 			'Travel & Notes' +
 			( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myComputePrintSize
-	@desc compute the print size in lat and lng transforming the dimension given in mm by the user.
+	Compute the print size in lat and lng transforming the dimension given in mm by the user.
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myComputePrintSize ( ) {
+	#computePrintSize ( ) {
 
 		let dummyDiv = theHTMLElementsFactory.create ( 'div', { }, document.body );
 		dummyDiv.style.position = 'absolute';
 		dummyDiv.style.top = '0';
 		dummyDiv.style.left = '0';
-		dummyDiv.style.width = String ( myPrintData.paperWidth - ( TWO * myPrintData.borderWidth ) ) + 'mm';
-		dummyDiv.style.height = String ( myPrintData.paperHeight - ( TWO * myPrintData.borderWidth ) ) + 'mm';
-		myTilesPage = Math.ceil ( dummyDiv.clientWidth / OUR_TILE_SIZE ) * Math.ceil ( dummyDiv.clientHeight / OUR_TILE_SIZE );
+		dummyDiv.style.width = String ( this.#printData.paperWidth - ( TWO * this.#printData.borderWidth ) ) + 'mm';
+		dummyDiv.style.height = String ( this.#printData.paperHeight - ( TWO * this.#printData.borderWidth ) ) + 'mm';
+		this.#tilesPage =
+			Math.ceil ( dummyDiv.clientWidth / OUR_TILE_SIZE ) *
+			Math.ceil ( dummyDiv.clientHeight / OUR_TILE_SIZE );
 		let topLeftScreen = theGeometry.screenCoordToLatLng ( ZERO, ZERO );
 		let bottomRightScreen = theGeometry.screenCoordToLatLng (
 			dummyDiv.clientWidth,
@@ -161,24 +147,19 @@ function ourNewPrintFactory ( ) {
 		);
 		document.body.removeChild ( dummyDiv );
 
-		let scale = theTravelNotesData.map.getZoomScale ( theTravelNotesData.map.getZoom ( ), myPrintData.zoomFactor );
-		myPrintSize = [
+		let scale = theTravelNotesData.map.getZoomScale ( theTravelNotesData.map.getZoom ( ), this.#printData.zoomFactor );
+		this.#printSize = [
 			Math.abs ( topLeftScreen [ LAT ] - bottomRightScreen [ LAT ] ) * scale,
 			Math.abs ( topLeftScreen [ LNG ] - bottomRightScreen [ LNG ] ) * scale
 		];
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myIsFirstPointOnView
-	@desc test if firstItineraryPoint is on the frame of currentView
+	Test if firstItineraryPoint is on the frame of currentView
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myIsFirstPointOnView ( currentView, firstItineraryPoint ) {
+	#isFirstPointOnView ( currentView, firstItineraryPoint ) {
 		if (
 			firstItineraryPoint.lat - currentView.bottomLeft.lat < OUR_LAT_LNG_TOLERANCE
 			||
@@ -196,17 +177,12 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myIsItineraryHorOrVer
-	@desc compute if the line defined by firstItineraryPoint  lastItineraryPoint
+	Compute if the line defined by firstItineraryPoint  lastItineraryPoint
 	is horizontal or vertical. If yes, the intersection of the line and currentView is returned
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myIsItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint ) {
+	#isItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint ) {
 		if ( firstItineraryPoint.lng === lastItineraryPoint.lng ) {
 
 			// Itinerary is vertical
@@ -231,25 +207,20 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myHaveViewOnlyOnePoint
-	@desc test if currentView is only a point. If yes an intermediatePoint is computed
+	Test if currentView is only a point. If yes an intermediatePoint is computed
 	to extend the view to the maximun possible
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myHaveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
+	#haveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
 		if (
 			currentView.bottomLeft.lat === currentView.upperRight.lat
 			&&
 			currentView.bottomLeft.lng === currentView.upperRight.lng
 		) {
 			let coef = Math.min (
-				Math.abs ( myPrintSize [ LAT ] / ( lastItineraryPoint.lat - firstItineraryPoint.lat ) ),
-				Math.abs ( myPrintSize [ LNG ] / ( lastItineraryPoint.lng - firstItineraryPoint.lng ) )
+				Math.abs ( this.#printSize [ LAT ] / ( lastItineraryPoint.lat - firstItineraryPoint.lat ) ),
+				Math.abs ( this.#printSize [ LNG ] / ( lastItineraryPoint.lng - firstItineraryPoint.lng ) )
 			);
 			return {
 				lat : firstItineraryPoint.lat + ( coef * ( lastItineraryPoint.lat - firstItineraryPoint.lat ) ),
@@ -260,16 +231,11 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myComputeIntermediatePoint
-	@desc See comments in the code
+	See comments in the code
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myComputeIntermediatePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
+	#computeIntermediatePoint ( currentView, firstItineraryPoint, lastItineraryPoint ) {
 
 		/*
 		we have to find the intersection of the line segment 'firstItineraryPoint -> lastItineraryPoint' with
@@ -304,17 +270,17 @@ function ourNewPrintFactory ( ) {
 		So we test first the 3 problems and then we compute the intersection if needed
 		*/
 
-		let intermediatePoint = myHaveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint );
+		let intermediatePoint = this.#haveViewOnlyOnePoint ( currentView, firstItineraryPoint, lastItineraryPoint );
 		if ( intermediatePoint ) {
 			return intermediatePoint;
 		}
 
-		intermediatePoint = myIsFirstPointOnView ( currentView, firstItineraryPoint );
+		intermediatePoint = this.#isFirstPointOnView ( currentView, firstItineraryPoint );
 		if ( intermediatePoint ) {
 			return intermediatePoint;
 		}
 
-		intermediatePoint = myIsItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint );
+		intermediatePoint = this.#isItineraryHorOrVer ( currentView, firstItineraryPoint, lastItineraryPoint );
 		if ( intermediatePoint ) {
 			return intermediatePoint;
 		}
@@ -389,21 +355,16 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myComputeViews
-	@desc compute the different views needed to print the maps
+	Compute the different views needed to print the maps
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myComputeViews ( ) {
+	#computeViews ( ) {
 
-		myViews = [];
+		this.#views = [];
 
 		// Iteration on the route
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		let itineraryPointsIterator = this.#route.itinerary.itineraryPoints.iterator;
 		let done = itineraryPointsIterator.done;
 
 		// First view is created with the first point
@@ -438,7 +399,7 @@ function ourNewPrintFactory ( ) {
 			];
 
 			// and comparing with the desired max view size
-			if ( myPrintSize [ LAT ] > tmpViewSize [ LAT ] && myPrintSize [ LNG ] > tmpViewSize [ LNG ] ) {
+			if ( this.#printSize [ LAT ] > tmpViewSize [ LAT ] && this.#printSize [ LNG ] > tmpViewSize [ LNG ] ) {
 
 				// the current itineraryPoint is inside the temporary view.
 				// the temporary view becomes the current view and we go to the next itinerary point
@@ -449,14 +410,14 @@ function ourNewPrintFactory ( ) {
 				if ( done ) {
 					currentView.entryPoint = entryPoint;
 					currentView.exitPoint = previousItineraryPoint;
-					myViews.push ( currentView );
+					this.#views.push ( currentView );
 				}
 			}
 			else {
 
 				// the itineraryPoint is outside the view. We have to compute an intermediate
 				// point (where the route intersect with the max size view).
-				previousItineraryPoint = myComputeIntermediatePoint (
+				previousItineraryPoint = this.#computeIntermediatePoint (
 					currentView,
 					previousItineraryPoint,
 					currentItineraryPoint
@@ -477,7 +438,7 @@ function ourNewPrintFactory ( ) {
 				currentView.exitPoint = previousItineraryPoint;
 
 				// and the view added to the list view
-				myViews.push ( currentView );
+				this.#views.push ( currentView );
 
 				// and a new view is created
 				currentView = {
@@ -486,7 +447,7 @@ function ourNewPrintFactory ( ) {
 				};
 				entryPoint = { lat : previousItineraryPoint.lat, lng : previousItineraryPoint.lng };
 			}
-			if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
+			if ( theConfig.printRouteMap.maxTiles < this.#views.length * this.#tilesPage ) {
 
 				// verifying that we don't have to mutch views
 				done = true;
@@ -495,17 +456,16 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetLayer
-	@desc creates a leaflet layer with the same map that the main map
+	Creates a leaflet layer with the same map that the main map
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetLayer ( ) {
-		let layer = theMapLayersCollection.getMapLayer ( theTravelNotesData.travel.layerName );
+	#getLayer ( ) {
+		console.log ( theMapLayersCollection );
+
+		// let layer = theMapLayersCollection.getMapLayer ( theTravelNotesData.travel.layerName );
+
+		let layer = theMapLayersCollection.defaultMapLayer;
 		let url = theAPIKeysManager.getUrl ( layer );
 		let leafletLayer = null;
 		if ( 'wmts' === layer.service.toLowerCase ( ) ) {
@@ -527,18 +487,13 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myGetNotesMarkers
-	@desc creates markers for notes
+	Creates markers for notes
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myGetNotesMarkers ( ) {
+	#getNotesMarkers ( ) {
 		let notesMarkers = [];
-		myRoute.notes.forEach (
+		this.#route.notes.forEach (
 			note => {
 				let icon = window.L.divIcon (
 					{
@@ -565,41 +520,34 @@ function ourNewPrintFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myPrintView
-	@desc creates a print view
+	Creates a print view
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myPrintView ( view ) {
-		myViewCounter ++;
-		let viewId = 'TravelNotes-RouteViewDiv' + myViewCounter;
-		let viewDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-routeViewDiv',
-				id : viewId
-			},
-			document.body
-		);
-		myViewDiv.push ( viewDiv );
+	#printView ( view ) {
+		this.#viewsCounter ++;
+		let viewId = 'TravelNotes-RouteViewDiv' + this.#viewsCounter;
+		
+		// viewDiv is used by leaflet. We cannot seal viewDiv with theHTMLElementsFactory
+		let viewDiv = document.createElement ( 'div' );
+		viewDiv.className = 'TravelNotes-routeViewDiv';
+		viewDiv.id = viewId;
+		document.body.appendChild ( viewDiv );
+		this.#viewsDiv.push ( viewDiv );
 
-		if ( myPrintData.pageBreak ) {
+		if ( this.#printData.pageBreak ) {
 			viewDiv.classList.add ( 'TravelNotes-PrintPageBreak' );
 		}
 
 		// setting the size given by the user in mm
-		viewDiv.style.width = String ( myPrintData.paperWidth ) + 'mm';
-		viewDiv.style.height = String ( myPrintData.paperHeight ) + 'mm';
+		viewDiv.style.width = String ( this.#printData.paperWidth ) + 'mm';
+		viewDiv.style.height = String ( this.#printData.paperHeight ) + 'mm';
 
 		// creating markers for notes
-		let layers = myPrintData.printNotes ? myGetNotesMarkers ( ) : [];
+		let layers = this.#printData.printNotes ? this.#getNotesMarkers ( ) : [];
 
 		// adding the leaflet map layer
-		layers.push ( myGetLayer ( ) );
+		layers.push ( this.#getLayer ( ) );
 
 		// adding entry point and exit point markers
 		layers.push (
@@ -616,7 +564,7 @@ function ourNewPrintFactory ( ) {
 		);
 
 		// adding the route
-		layers.push ( myRoutePolyline );
+		layers.push ( this.#routePolyline );
 
 		// creating the map
 		window.L.map (
@@ -628,26 +576,21 @@ function ourNewPrintFactory ( ) {
 					( view.bottomLeft.lat + view.upperRight.lat ) / TWO,
 					( view.bottomLeft.lng + view.upperRight.lng ) / TWO
 				],
-				zoom : myPrintData.zoomFactor,
-				minZoom : myPrintData.zoomFactor,
-				maxZoom : myPrintData.zoomFactor,
+				zoom : this.#printData.zoomFactor,
+				minZoom : this.#printData.zoomFactor,
+				maxZoom : this.#printData.zoomFactor,
 				layers : layers
 			}
 		);
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateToolbar
-	@desc creates the toolbar with the print and cancel button
+	creates the toolbar with the print and cancel button
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateToolbar ( ) {
-		myPrintToolbar = theHTMLElementsFactory.create (
+	#createToolbar ( ) {
+		this.#printToolbar = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PrintToolbar'
@@ -655,40 +598,35 @@ function ourNewPrintFactory ( ) {
 			document.body
 		);
 
-		myPrintButton = theHTMLElementsFactory.create (
+		this.#printButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Print' ),
 				textContent : '🖨️'
 			},
-			myPrintToolbar
+			this.#printToolbar
 		);
-		myPrintButton.addEventListener (	'click', ( ) => window.print ( ), false );
+		this.#printButton.addEventListener (	'click', ( ) => window.print ( ), false );
 
-		myCancelButton = theHTMLElementsFactory.create (
+		this.#cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
 				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
 				textContent : '❌'
 			},
-			myPrintToolbar
+			this.#printToolbar
 		);
-		myCancelButton.addEventListener (	'click', myOnAfterPrint, false );
+		this.#cancelButton.addEventListener (	'click', ( ) => this.#onAfterPrint ( ), false );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myPrintViews
-	@desc add the print views to the html page
+	Add the print views to the html page
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myPrintViews ( ) {
+	#printViews ( ) {
 
 		// adding classes to the body
 
@@ -701,97 +639,68 @@ function ourNewPrintFactory ( ) {
 				?
 				'maps'
 				:
-				theTravelNotesData.travel.name + ' - ' + myRoute.computedName + ' - maps';
-		myCreateToolbar ( );
+				theTravelNotesData.travel.name + ' - ' + this.#route.computedName + ' - maps';
+		this.#createToolbar ( );
 
-		window.addEventListener ( 'afterprint', myOnAfterPrint, true );
+		window.addEventListener ( 'afterprint', ( ) => this.#onAfterPrint ( ), true );
 
 		// creating the polyline for the route
 		// why we can create the polyline only once and we have to create markers and layers for each view?
 		let latLng = [];
-		let pointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		let pointsIterator = this.#route.itinerary.itineraryPoints.iterator;
 		while ( ! pointsIterator.done ) {
 			latLng.push ( pointsIterator.value.latLng );
 		}
-		myRoutePolyline = window.L.polyline (
+		this.#routePolyline = window.L.polyline (
 			latLng,
 			{
-				color : myRoute.color,
-				weight : myRoute.width
+				color : this.#route.color,
+				weight : this.#route.width
 			}
 		);
 
 		// adding views
-		myViewCounter = ZERO;
-		myViews.forEach ( myPrintView );
+		this.#viewsCounter = ZERO;
+		this.#views.forEach ( view => this.#printView ( view ) );
+	}
+
+	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class PrintFactory
-	@classdesc This class manages the print of a route
-	@see {@link newPrintFactory} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Hide the map and user interface, prepares the print views and add a toolbar on top of the screen
+	@param {PrintRouteMapOptions} printData the print options returned by the PrintRouteMapDialog
+	@param {!number} routeObjId The objId of the route to print
 	*/
 
-	class PrintFactory {
-
-		constructor ( ) {
-			Object.freeze ( this );
+	print ( printData, routeObjId ) {
+		console.log ( theMapLayersCollection );
+		this.#route = theDataSearchEngine.getRoute ( routeObjId );
+		if ( ! this.#route ) {
+			return;
 		}
+		this.#printData = printData;
+		this.#computePrintSize ( );
+		this.#computeViews ( );
 
-		/**
-		Hide the map and user interface, prepares the print views and add a toolbar on top of the screen
-		@param {PrintRouteMapOptions} printData the print options returned by the PrintRouteMapDialog
-		@param {!number} routeObjId The objId of the route to print
+		/*
+		// Remain for debugging
+		this.#views.forEach (
+			view => window.L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
+		);
+		console.log ( 'views :' + this.#views.length );
 		*/
 
-		print ( printData, routeObjId ) {
-			myRoute = theDataSearchEngine.getRoute ( routeObjId );
-			if ( ! myRoute ) {
-				return;
-			}
-			myPrintData = printData;
-			myComputePrintSize ( );
-			myComputeViews ( );
-
-			/*
-			// Remain for debugging
-			myViews.forEach (
-				view => window.L.rectangle ( [ view.bottomLeft, view.upperRight ] ).addTo ( theTravelNotesData.map )
-			);
-			console.log ( 'views :' + myViews.length );
-			*/
-
-			if ( theConfig.printRouteMap.maxTiles < myViews.length * myTilesPage ) {
-				theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
-				return;
-			}
-			myPrintViews ( );
+		if ( theConfig.printRouteMap.maxTiles < this.#views.length * this.#tilesPage ) {
+			theErrorsUI.showError ( theTranslator.getText ( 'PrintFactory - The maximum of allowed pages is reached.' ) );
+			return;
 		}
+		this.#printViews ( );
 	}
-
-	return new PrintFactory ( );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newPrintFactory
-	@desc constructor for PrintFactory objects
-	@return {PrintFactory} an instance of FileLoader object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewPrintFactory as newPrintFactory
-};
+export default PrintFactory;
 
 /*
 --- End of PrintFactory.js file -----------------------------------------------------------------------------------------------

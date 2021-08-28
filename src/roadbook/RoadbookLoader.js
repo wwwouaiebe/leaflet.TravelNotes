@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210828
 Tests ...
 */
 
@@ -47,6 +49,17 @@ import theIndexedDb from '../roadbook/IndexedDb.js';
 import theRoadbookUpdater from '../roadbook/RoadbookUpdater.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ShowTravelNotesChangeEventListener
+@classdesc change event listener for the show travel notes checkbox
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class ShowTravelNotesChangeEventListener {
 
 	handleEvent ( changeEvent ) {
@@ -55,6 +68,17 @@ class ShowTravelNotesChangeEventListener {
 		theRoadbookUpdater.toggleTravelNotes ( );
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ShowRouteNotesChangeEventListener
+@classdesc change event listener for the show route notes checkbox
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class ShowRouteNotesChangeEventListener {
 
@@ -65,6 +89,17 @@ class ShowRouteNotesChangeEventListener {
 	}
 }
 
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class ShowManeuverNotesChangeEventListener
+@classdesc change event listener for the show maneuver notes checkbox
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
 class ShowManeuverNotesChangeEventListener {
 
 	handleEvent ( changeEvent ) {
@@ -73,6 +108,17 @@ class ShowManeuverNotesChangeEventListener {
 		theRoadbookUpdater.toggleManeuversNotes ( );
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class StorageEventListener
+@classdesc storage event listener
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class StorageEventListener {
 	#UUID = null;
@@ -102,6 +148,17 @@ class StorageEventListener {
 			);
 	}
 }
+
+/**
+@--------------------------------------------------------------------------------------------------------------------------
+
+@class SaveButtonClickEventListener
+@classdesc click event listener for the save button
+@hideconstructor
+@private
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
 
 class SaveButtonClickEventListener {
 
@@ -138,7 +195,7 @@ class SaveButtonClickEventListener {
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class RoadbookLoader
-@classdesc coming soon...
+@classdesc This class load the roadbook,
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -146,15 +203,42 @@ class SaveButtonClickEventListener {
 
 class RoadbookLoader {
 
+	/**
+	UUID of the page
+	@private
+	*/
+
 	#UUID = null;
+
+	/**
+	The user language
+	@private
+	*/
+
 	#language = 'fr';
+
+	/**
+	A reference to the save button
+	@private
+	*/
+
 	#saveButton = null;
+
+	/**
+	checkboxes init
+	@private
+	*/
 
 	#initCheckboxes ( ) {
 		document.getElementById ( 'TravelNotes-Travel-ShowNotes' ).checked = theRoadbookUpdater.showTravelNotes;
 		document.getElementById ( 'TravelNotes-Routes-ShowNotes' ).checked = theRoadbookUpdater.showRouteNotes;
 		document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' ).checked = theRoadbookUpdater.showManeuversNotes;
 	}
+
+	/**
+	Adding event listeners
+	@private
+	*/
 
 	#addEventListeners ( ) {
 		document.getElementById ( 'TravelNotes-Travel-ShowNotes' )
@@ -165,6 +249,11 @@ class RoadbookLoader {
 			.addEventListener ( 'change', new ShowManeuverNotesChangeEventListener ( ) );
 	}
 
+	/**
+	Adding save button
+	@private
+	*/
+
 	#addSaveButton ( ) {
 		this.#saveButton = document.createElement ( 'button' );
 		this.#saveButton.id = 'TravelNotes-SaveButton';
@@ -174,6 +263,11 @@ class RoadbookLoader {
 		saveDiv.appendChild ( this.#saveButton );
 		document.getElementById ( 'TravelNotes-Roadbook-Menu' ).appendChild ( saveDiv );
 	}
+
+	/**
+	Opening the indexed db
+	@private
+	*/
 
 	#openIndexedDb ( ) {
 		theIndexedDb.getOpenPromise ( )
@@ -189,6 +283,11 @@ class RoadbookLoader {
 		window.addEventListener ( 'storage', new StorageEventListener ( this.#UUID ) );
 		window.addEventListener ( 'unload', ( ) => theIndexedDb.closeDb ( )	);
 	}
+
+	/**
+	Loading translations from server
+	@private
+	*/
 
 	#loadTranslations ( ) {
 		fetch (
@@ -215,6 +314,11 @@ class RoadbookLoader {
 			);
 	}
 
+	/**
+	Translating the page
+	@private
+	*/
+
 	#translatePage ( ) {
 		document.getElementById ( 'TravelNotes-Travel-ShowNotesLabel' ).textContent =
 		theTranslator.getText ( 'Roadbook - show travel notes' );
@@ -232,6 +336,10 @@ class RoadbookLoader {
 		this.#UUID = params.get ( 'page' );
 		this.#language = params.get ( 'lng' ) || 'fr';
 	}
+
+	/**
+	Loading the roadbook
+	*/
 
 	loadRoadbook ( ) {
 		this.#initCheckboxes ( );

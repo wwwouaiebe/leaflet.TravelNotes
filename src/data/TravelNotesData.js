@@ -56,25 +56,6 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@typedef {Object} Provider
-@interface
-@desc An object that stores the provider properties. Created by the plugins
-@property {string} icon The icon displayed in the provider toolbar, base64 encoded
-@property {string} name The name of the provider
-@property {string} title The title used for the icon
-@property {object} transitModes An array with the possible transit modes
-@property {boolean} providerKeyNeeded A boolean true when a provider key is needed
-@property {string} providerKey 	The provider key
-@property {string} userLanguage The user language
-@property {method} getPromiseRoute A method that start the routing
-@public
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
 @module TravelNotesData
 @private
 

@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210828
 Tests ...
 */
 
@@ -65,6 +67,10 @@ class RoadbookUpdater {
 	constructor ( ) {
 	}
 
+	/**
+	Toogle the visibility of the travel notes
+	*/
+
 	toggleTravelNotes ( ) {
 		document.querySelectorAll ( '.TravelNotes-Roadbook-Travel-Notes-Row' ).forEach (
 			note => {
@@ -77,6 +83,10 @@ class RoadbookUpdater {
 			}
 		);
 	}
+
+	/**
+	Toogle the visibility of the route notes
+	*/
 
 	toggleRouteNotes ( ) {
 		document.querySelectorAll ( '.TravelNotes-Roadbook-Route-Notes-Row' ).forEach (
@@ -91,6 +101,10 @@ class RoadbookUpdater {
 		);
 	}
 
+	/**
+	Toogle the visibility of the maneuver notes
+	*/
+
 	toggleManeuversNotes ( ) {
 		document.querySelectorAll ( '.TravelNotes-Roadbook-Route-Maneuvers-Row' ).forEach (
 			note => {
@@ -104,11 +118,19 @@ class RoadbookUpdater {
 		);
 	}
 
+	/**
+	Toogle the visibility of the all notes
+	*/
+
 	toggleNotes ( ) {
 		this.toggleTravelNotes ( );
 		this.toggleRouteNotes ( );
 		this.toggleManeuversNotes ( );
 	}
+
+	/**
+	Updating icons width and height
+	*/
 
 	updateIcons ( ) {
 		document.querySelectorAll (
@@ -127,6 +149,10 @@ class RoadbookUpdater {
 		);
 	}
 
+	/**
+	Updating roadbook
+	*/
+
 	updateRoadbook ( pageContent ) {
 		this.#travelNotesHtmlElement.textContent = '';
 		theHTMLSanitizer.sanitizeToHtmlElement ( pageContent, this.#travelNotesHtmlElement );
@@ -140,6 +166,17 @@ class RoadbookUpdater {
 	}
 
 }
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@desc The one and only one instance of RoadbookUpdater class
+@type {RoadbookUpdater}
+@constant
+@global
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
 const theRoadbookUpdater = new RoadbookUpdater ( );
 
