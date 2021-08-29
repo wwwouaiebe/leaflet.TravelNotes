@@ -49,6 +49,8 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 
 import { ZERO, ONE, LAT_LNG, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
 
+const ZOOM_DISPLACMENT = 50;
+
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
@@ -257,86 +259,84 @@ class BaseDialogKeydownEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogBackgroundEventListeners
-@classdesc Mouse event listeners on the background of the dialog boxes. Pan and zoom on the map.
+@class BaseDialogLeftPanEventListener
+@classdesc BaseDialog left pan event listener based on the EventListener API.
 @hideconstructor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogBackgroundEventListeners {
+class BaseDialogLeftPanEventListener {
 
-	/**
-	pan variables
-	@private
-	*/
+	#mapCenter = [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ];
 
-	static #panMapData = {
-		panOngoing : false,
-		startPanX : ZERO,
-		startPanY : ZERO,
-		mapCenter : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ]
-	};
-
-	/**
-	mouse down on background event listener
-	*/
-
-	static onMouseDown ( mouseEvent ) {
-		if ( 'TravelNotes-Background' !== mouseEvent.target.id ) {
+	handleEvent ( leftPanEvent ) {
+		if ( 'start' === leftPanEvent.action ) {
+			this.#mapCenter = theTravelNotesData.map.getCenter ( );
 			return;
 		}
-
-		BaseDialogBackgroundEventListeners.#panMapData.panOngoing = true;
-		BaseDialogBackgroundEventListeners.#panMapData.startPanX = mouseEvent.screenX;
-		BaseDialogBackgroundEventListeners.#panMapData.startPanY = mouseEvent.screenY;
-		BaseDialogBackgroundEventListeners.#panMapData.mapCenter = theTravelNotesData.map.getCenter ( );
+		let latLngAtStart = theGeometry.screenCoordToLatLng (
+			leftPanEvent.startX,
+			leftPanEvent.startY
+		);
+		let latLngAtEnd = theGeometry.screenCoordToLatLng ( leftPanEvent.endX, leftPanEvent.endY );
+		theTravelNotesData.map.panTo (
+			[
+				this.#mapCenter.lat +
+					latLngAtStart [ ZERO ] -
+					latLngAtEnd [ ZERO ],
+				this.#mapCenter.lng +
+					latLngAtStart [ ONE ] -
+					latLngAtEnd [ ONE ]
+			]
+		);
 	}
+}
 
-	/**
-	mouse move on background event listener
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onMouseMove ( mouseEvent ) {
-		if ( BaseDialogBackgroundEventListeners.#panMapData.panOngoing ) {
-			mouseEvent.preventDefault ( );
-			mouseEvent.stopPropagation ( );
-			let latLngAtStart = theGeometry.screenCoordToLatLng (
-				BaseDialogBackgroundEventListeners.#panMapData.startPanX,
-				BaseDialogBackgroundEventListeners.#panMapData.startPanY
-			);
-			let latLngAtEnd = theGeometry.screenCoordToLatLng ( mouseEvent.screenX, mouseEvent.screenY );
-			theTravelNotesData.map.panTo (
-				[
-					BaseDialogBackgroundEventListeners.#panMapData.mapCenter.lat +
-						latLngAtStart [ ZERO ] -
-						latLngAtEnd [ ZERO ],
-					BaseDialogBackgroundEventListeners.#panMapData.mapCenter.lng +
-						latLngAtStart [ ONE ] -
-						latLngAtEnd [ ONE ]
-				]
-			);
-		}
-	}
+@class BaseDialogRightPanEventListener
+@classdesc BaseDialog right pan event listener based on the EventListener API.
+@hideconstructor
+@private
 
-	/**
-	mouse up on background event listener
-	*/
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	static onMouseUp ( mouseEvent ) {
-		if ( 'TravelNotes-Background' !== mouseEvent.target.id ) {
+class BaseDialogRightPanEventListener {
+
+	#initialZoom = ZERO;
+	#startPoint = null;
+
+	handleEvent ( rightPanEvent ) {
+		if ( 'start' === rightPanEvent.action ) {
+			this.#initialZoom = theTravelNotesData.map.getZoom ( );
+			this.#startPoint = window.L.point ( rightPanEvent.clientX, rightPanEvent.clientY );
 			return;
 		}
-		BaseDialogBackgroundEventListeners.onMouseMove ( mouseEvent );
-		BaseDialogBackgroundEventListeners.#panMapData.panOngoing = false;
+		let zoom = Math.floor ( this.#initialZoom + ( ( rightPanEvent.startY - rightPanEvent.endY ) / ZOOM_DISPLACMENT ) );
+		zoom = Math.min ( theTravelNotesData.map.getMaxZoom ( ), zoom );
+		zoom = Math.max ( theTravelNotesData.map.getMinZoom ( ), zoom );
+		theTravelNotesData.map.setZoomAround ( this.#startPoint, zoom );
 	}
+}
 
-	/**
-	mouse wheel on background event listener
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onMouseWheel ( wheelEvent ) {
+@class BaseDialogWheelEventListener
+@classdesc BaseDialog wheel event listener based on the EventListener API.
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class BaseDialogWheelEventListener {
+
+	handleEvent ( wheelEvent ) {
 		if ( 'TravelNotes-Background' !== wheelEvent.target.id ) {
 			return;
 		}
@@ -349,16 +349,40 @@ class BaseDialogBackgroundEventListeners {
 			zoom
 		);
 	}
+}
 
-	/**
-	context menu on background event listener
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onContextMenu ( contextmenuEvent ) {
+@class BaseDialogContextMenuEventListener
+@classdesc BaseDialog context menu event listener based on the EventListener API.
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class BaseDialogContextMenuEventListener {
+
+	handleEvent ( contextmenuEvent ) {
 		contextmenuEvent.preventDefault ( );
 	}
+}
 
-	static onDragOver ( dragEvent ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class BaseDialogDragOverEventListener
+@classdesc BaseDialog drag over event listener based on the EventListener API.
+@hideconstructor
+@private
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class BaseDialogDragOverEventListener {
+
+	handleEvent ( dragEvent ) {
 		dragEvent.preventDefault ( );
 	}
 }
@@ -369,7 +393,11 @@ export {
 	BaseDialogTopBarDragStartEventListener,
 	BaseDialogTopBarDragEndEventListener,
 	BaseDialogKeydownEventListener,
-	BaseDialogBackgroundEventListeners
+	BaseDialogLeftPanEventListener,
+	BaseDialogRightPanEventListener,
+	BaseDialogWheelEventListener,
+	BaseDialogContextMenuEventListener,
+	BaseDialogDragOverEventListener
 };
 
 /*

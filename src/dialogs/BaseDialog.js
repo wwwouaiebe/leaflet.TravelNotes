@@ -120,8 +120,13 @@ import {
 	BaseDialogTopBarDragStartEventListener,
 	BaseDialogTopBarDragEndEventListener,
 	BaseDialogKeydownEventListener,
-	BaseDialogBackgroundEventListeners as theBackgroundEventListeners
+	BaseDialogLeftPanEventListener,
+	BaseDialogRightPanEventListener,
+	BaseDialogWheelEventListener,
+	BaseDialogContextMenuEventListener,
+	BaseDialogDragOverEventListener
 } from '../dialogs/BaseDialogEventListeners.js';
+import PanEventDispatcher from '../dialogs/PanEventDispatcher.js';
 
 // import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
 
@@ -160,6 +165,8 @@ class BaseDialog {
 	#cancelButton = {};
 	#topBar = {};
 	#secondButton = null;
+	#leftPanEventDispatcher = null;
+	#rightPanEventDispatcher = null;
 
 	/**
 	A flag to avoid all dialogs close when using the esc or enter keys
@@ -192,7 +199,12 @@ class BaseDialog {
 		onTopBarDragStart : null,
 		onTopBarDragEnd : null,
 		onCancelButtonClick : null,
-		onOkButtonClick : null
+		onOkButtonClick : null,
+		onLeftPan : null,
+		onRightPan : null,
+		onWheel : null,
+		onContextMenu : null,
+		onDragOver : null
 	};
 
 	/**
@@ -229,12 +241,19 @@ class BaseDialog {
 			{ id : 'TravelNotes-Background', className : 'TravelNotes-Background' }
 		);
 
-		this.#backgroundDiv.addEventListener ( 'dragover', theBackgroundEventListeners.onDragOver, false );
-		this.#backgroundDiv.addEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
-		this.#backgroundDiv.addEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
-		this.#backgroundDiv.addEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
-		this.#backgroundDiv.addEventListener ( 'wheel', theBackgroundEventListeners.onMouseWheel, false	);
-		this.#backgroundDiv.addEventListener ( 'contextmenu', theBackgroundEventListeners.onContextMenu, false );
+		this.#leftPanEventDispatcher = new PanEventDispatcher ( this.#backgroundDiv, PanEventDispatcher.LEFT_BUTTON );
+		this.#rightPanEventDispatcher = new PanEventDispatcher ( this.#backgroundDiv, PanEventDispatcher.RIGHT_BUTTON );
+
+		this.#eventListeners.onLeftPan = new BaseDialogLeftPanEventListener ( );
+		this.#backgroundDiv.addEventListener ( 'leftpan', this.#eventListeners.onLeftPan, false );
+		this.#eventListeners.onRightPan = new BaseDialogRightPanEventListener ( );
+		this.#backgroundDiv.addEventListener ( 'rightpan', this.#eventListeners.onRightPan, false );
+		this.#eventListeners.onDragOver = new BaseDialogDragOverEventListener ( );
+		this.#backgroundDiv.addEventListener ( 'dragover', this.#eventListeners.onDragOver, false );
+		this.#eventListeners.onWheel = new BaseDialogWheelEventListener ( );
+		this.#backgroundDiv.addEventListener ( 'wheel', this.#eventListeners.onWheel, false	);
+		this.#eventListeners.onContextMenu = new BaseDialogContextMenuEventListener ( );
+		this.#backgroundDiv.addEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
 	}
 
 	/**
@@ -489,12 +508,11 @@ class BaseDialog {
 	}
 
 	#destructor ( ) {
-		this.#backgroundDiv.removeEventListener ( 'dragover', theBackgroundEventListeners.onDragOver, false );
-		this.#backgroundDiv.removeEventListener ( 'mousedown', theBackgroundEventListeners.onMouseDown, false );
-		this.#backgroundDiv.removeEventListener ( 'mouseup', theBackgroundEventListeners.onMouseUp, false );
-		this.#backgroundDiv.removeEventListener ( 'mousemove', theBackgroundEventListeners.onMouseMove, false 	);
-		this.#backgroundDiv.removeEventListener ( 'wheel', theBackgroundEventListeners.onMouseWheel, false	);
-		this.#backgroundDiv.removeEventListener ( 'contextmenu', theBackgroundEventListeners.onContextMenu, false );
+		this.#backgroundDiv.removeEventListener ( 'dragover', this.#eventListeners.onDragOver, false );
+		this.#backgroundDiv.removeEventListener ( 'leftpan', this.#eventListeners.onLeftPan, false );
+		this.#backgroundDiv.removeEventListener ( 'rightpan', this.#eventListeners.onRightPan, false );
+		this.#backgroundDiv.removeEventListener ( 'wheel', this.#eventListeners.onWheel, false	);
+		this.#backgroundDiv.removeEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
 		document.removeEventListener ( 'keydown', this.#eventListeners.onKeydown, { capture : true } );
 		this.#topBar.removeEventListener ( 'dragstart', this.#eventListeners.onTopBarDragStart, false );
 		this.#topBar.removeEventListener ( 'dragend', this.#eventListeners.onTopBarDragEnd, false );
@@ -510,6 +528,9 @@ class BaseDialog {
 		this.#eventListeners.onTopBarDragEnd.destructor ( );
 		this.#eventListeners.onCancelButtonClick.destructor ( );
 		this.#eventListeners.onOkButtonClick.destructor ( );
+
+		this.#leftPanEventDispatcher.detach ( );
+		this.#rightPanEventDispatcher.detach ( );
 
 		document.body.removeChild ( this.#backgroundDiv );
 	}
