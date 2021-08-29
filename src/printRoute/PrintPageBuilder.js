@@ -10,6 +10,26 @@ import { ZERO, TWO } from '../util/Constants.js';
 
 const OUR_NOTE_Z_INDEX_OFFSET = 100;
 
+class PrintEventListener {
+
+	handleEvent ( ) {
+		window.print ( );
+	}
+}
+
+class AfterPrintEventListener {
+
+	#printPageBuilder = null;
+	constructor ( printPageBuilder ) {
+		this.#printPageBuilder = printPageBuilder;
+	}
+
+	handleEvent ( ) {
+		this.#printPageBuilder.onAfterPrint ( );
+		this.#printPageBuilder = null;
+	}
+}
+
 class PrintPageBuilder {
 
 	#printData = null;
@@ -21,28 +41,36 @@ class PrintPageBuilder {
 	#viewsCounter = ZERO;
 	#viewsDiv = [];
 	#routePolyline = null;
+	#eventsListeners = {
+		onPrint : null,
+		onAfterPrint : null
+	}
 
 	/**
 	Remove the print views and restore the map and user interface after printing
 	@private
 	*/
 
-	#onAfterPrint ( ) {
+	onAfterPrint ( ) {
 		this.#viewsDiv.forEach ( viewDiv => document.body.removeChild ( viewDiv ) );
 		this.#viewsDiv.length = ZERO;
-		this.#printButton.removeEventListener (	'click', ( ) => window.print ( ), false );
-		this.#cancelButton.removeEventListener ( 'click', ( ) => this.#onAfterPrint ( ), false );
+		this.#printButton.removeEventListener (	'click', this.#eventsListeners.onPrint, false );
+		this.#cancelButton.removeEventListener ( 'click', this.#eventsListeners.onAfterPrint, false );
 		document.body.removeChild ( this.#printToolbar );
 
 		let childrens = document.body.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.remove ( 'TravelNotes-Hidden' );
 		}
+
 		theTravelNotesData.map.invalidateSize ( false );
-		window.removeEventListener ( 'afterprint', ( ) => this.#onAfterPrint ( ), true );
 		document.title =
 			'Travel & Notes' +
 			( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );
+
+		window.removeEventListener ( 'afterprint', this.#eventsListeners.onAfterPrint, true );
+		this.#eventsListeners.onAfterPrint = null;
+		this.#eventsListeners.onPrint = null;
 	}
 
 	/**
@@ -50,7 +78,7 @@ class PrintPageBuilder {
 	@private
 	*/
 
-	#getLayer ( ) {
+	#getMapLayer ( ) {
 		let layer = theMapLayersCollection.getMapLayer ( theTravelNotesData.travel.layerName );
 		let url = theAPIKeysManager.getUrl ( layer );
 		let leafletLayer = null;
@@ -110,7 +138,7 @@ class PrintPageBuilder {
 	@private
 	*/
 
-	#printView ( view ) {
+	#createViewOnPage ( view ) {
 		this.#viewsCounter ++;
 		let viewId = 'TravelNotes-RouteViewDiv' + this.#viewsCounter;
 
@@ -133,7 +161,7 @@ class PrintPageBuilder {
 		let layers = this.#printData.printNotes ? this.#getNotesMarkers ( ) : [];
 
 		// adding the leaflet map layer
-		layers.push ( this.#getLayer ( ) );
+		layers.push ( this.#getMapLayer ( ) );
 
 		// adding entry point and exit point markers
 		layers.push (
@@ -188,38 +216,40 @@ class PrintPageBuilder {
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'PrintFactory - Print' ),
+				title : theTranslator.getText ( 'PrintPageBuilder - Print' ),
 				textContent : '🖨️'
 			},
 			this.#printToolbar
 		);
-		this.#printButton.addEventListener (	'click', ( ) => window.print ( ), false );
+		this.#printButton.addEventListener ( 'click', this.#eventsListeners.onPrint, false );
 
 		this.#cancelButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-Button',
-				title : theTranslator.getText ( 'PrintFactory - Cancel print' ),
+				title : theTranslator.getText ( 'PrintPageBuilder - Cancel print' ),
 				textContent : '❌'
 			},
 			this.#printToolbar
 		);
-		this.#cancelButton.addEventListener (	'click', ( ) => this.#onAfterPrint ( ), false );
+		this.#cancelButton.addEventListener (	'click', this.#eventsListeners.onAfterPrint, false );
 	}
 
 	/**
-	Add the print views to the html page
+	Hide existing HTMLElements, add the toolbar and prepare the polyline and add the views to the html page
 	@private
 	*/
 
-	printViews ( ) {
+	preparePage ( ) {
 
-		// adding classes to the body
+		// adding classes to the body, so all existing elements are hidden
 
 		let childrens = document.body.children;
 		for ( let counter = 0; counter < childrens.length; counter ++ ) {
 			childrens.item ( counter ).classList.add ( 'TravelNotes-Hidden' );
 		}
+
+		// modify the document title with the travel name and route name
 		document.title =
 			'' === theTravelNotesData.travel.name
 				?
@@ -228,7 +258,8 @@ class PrintPageBuilder {
 				theTravelNotesData.travel.name + ' - ' + this.#route.computedName + ' - maps';
 		this.#createToolbar ( );
 
-		window.addEventListener ( 'afterprint', ( ) => this.#onAfterPrint ( ), true );
+		// Adding afterprint event listener to the document
+		window.addEventListener ( 'afterprint', this.#eventsListeners.onAfterPrint, true );
 
 		// creating the polyline for the route
 		// why we can create the polyline only once and we have to create markers and layers for each view?
@@ -247,13 +278,16 @@ class PrintPageBuilder {
 
 		// adding views
 		this.#viewsCounter = ZERO;
-		this.#views.forEach ( view => this.#printView ( view ) );
+		this.#views.forEach ( view => this.#createViewOnPage ( view ) );
 	}
 
 	constructor ( route, views, printData ) {
 		this.#route = route;
 		this.#views = views;
 		this.#printData = printData;
+		this.#eventsListeners.onPrint = new PrintEventListener ( );
+		this.#eventsListeners.onAfterPrint = new AfterPrintEventListener ( this );
+		Object.seal ( this );
 	}
 }
 

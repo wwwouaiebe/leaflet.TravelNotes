@@ -528,15 +528,15 @@
 		"msgstr" : "Au moins un caractère spécial"
 	},
 	{
-		"msgid" : "PrintFactory - Print",
+		"msgid" : "PrintPageBuilder - Print",
 		"msgstr" : "Imprimer"
 	},
 	{
-		"msgid" : "PrintFactory - Cancel print",
+		"msgid" : "PrintPageBuilder - Cancel print",
 		"msgstr" : "Annuler l'impression"
 	},
 	{
-		"msgid" : "PrintFactory - The maximum of allowed pages is reached.",
+		"msgid" : "RoutePrinter - The maximum of allowed pages is reached.",
 		"msgstr" : "Le maximum de pages autorisé est atteint."
 	},
 	{

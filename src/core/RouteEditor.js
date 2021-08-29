@@ -86,7 +86,7 @@ import theGeometry from '../util/Geometry.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import PrintFactory from '../printMap/PrintFactory.js';
+import RoutePrinter from '../printRoute/RoutePrinter.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
@@ -589,7 +589,7 @@ class RouteEditor {
 	printRouteMap ( routeObjId ) {
 		new PrintRouteMapDialog ( )
 			.show ( )
-			.then ( printData => new PrintFactory ( ).print ( printData, routeObjId ) )
+			.then ( printData => new RoutePrinter ( ).print ( printData, routeObjId ) )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {

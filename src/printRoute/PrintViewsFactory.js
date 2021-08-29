@@ -316,6 +316,7 @@ class PrintViewsFactory {
 	constructor ( route, printSize ) {
 		this.#route = route;
 		this.#printSize = printSize;
+
 		this.#computeViews ( );
 	}
 
