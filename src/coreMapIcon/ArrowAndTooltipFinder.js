@@ -47,13 +47,7 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theTranslator from '../UI/Translator.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
-
-const ICON_POSITION = Object.freeze ( {
-	atStart : -ONE,
-	onRoute : ZERO,
-	atEnd : ONE
-} );
+import { ICON_POSITION } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

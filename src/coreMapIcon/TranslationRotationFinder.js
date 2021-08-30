@@ -47,15 +47,7 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theGeometry from '../util/Geometry.js';
 
-import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE, TWO, DEGREES } from '../util/Constants.js';
-
-const SVG_ZOOM = theConfig.note.svgIcon.zoom;
-const SVG_ANGLE_DISTANCE = theConfig.note.svgIcon.angleDistance;
-const ICON_POSITION = Object.freeze ( {
-	atStart : -ONE,
-	onRoute : ZERO,
-	atEnd : ONE
-} );
+import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE, TWO, DEGREES, ICON_POSITION } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -79,7 +71,7 @@ class TranslationRotationFinder {
 	computeTranslation ( ) {
 		this.#mapIconData.translation = theGeometry.subtrackPoints (
 			[ ICON_DIMENSIONS.svgViewboxDim / TWO, ICON_DIMENSIONS.svgViewboxDim / TWO ],
-			theGeometry.project ( this.#computeData.mapIconPosition.latLng, SVG_ZOOM )
+			theGeometry.project ( this.#computeData.mapIconPosition.latLng, theConfig.note.svgIcon.zoom )
 		);
 	}
 
@@ -90,7 +82,7 @@ class TranslationRotationFinder {
 
 	computeRotationAndDirection ( ) {
 
-		// searching points at least at 10 m ( SVG_ANGLE_DISTANCE ) from the icon point,
+		// searching points at least at 10 m ( theConfig.note.svgIcon.angleDistance ) from the icon point,
 		// one for rotation and one for direction
 		let distance = DISTANCE.defaultValue;
 		let rotationItineraryPoint = this.#computeData.route.itinerary.itineraryPoints.first;
@@ -99,13 +91,13 @@ class TranslationRotationFinder {
 
 		this.#computeData.route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				if ( this.#computeData.mapIconPosition.distance - distance > SVG_ANGLE_DISTANCE ) {
+				if ( this.#computeData.mapIconPosition.distance - distance > theConfig.note.svgIcon.angleDistance ) {
 					rotationItineraryPoint = itineraryPoint;
 				}
 				if (
 					distance - this.#computeData.mapIconPosition.distance
 					>
-					SVG_ANGLE_DISTANCE && ! directionPointReached
+					theConfig.note.svgIcon.angleDistance && ! directionPointReached
 				) {
 					directionItineraryPoint = itineraryPoint;
 					directionPointReached = true;
@@ -115,7 +107,7 @@ class TranslationRotationFinder {
 		);
 
 		let iconPoint = theGeometry.addPoints (
-			theGeometry.project ( this.#computeData.mapIconPosition.latLng, SVG_ZOOM ),
+			theGeometry.project ( this.#computeData.mapIconPosition.latLng, theConfig.note.svgIcon.zoom ),
 			this.#mapIconData.translation
 		);
 
@@ -126,7 +118,7 @@ class TranslationRotationFinder {
 			this.#computeData.route.itinerary.itineraryPoints.first.objId
 		) {
 			let rotationPoint = theGeometry.addPoints (
-				theGeometry.project ( rotationItineraryPoint.latLng, SVG_ZOOM ),
+				theGeometry.project ( rotationItineraryPoint.latLng, theConfig.note.svgIcon.zoom ),
 				this.#mapIconData.translation
 			);
 			this.#mapIconData.rotation =
@@ -156,7 +148,7 @@ class TranslationRotationFinder {
 			this.#computeData.route.itinerary.itineraryPoints.last.objId
 		) {
 			let directionPoint = theGeometry.addPoints (
-				theGeometry.project ( directionItineraryPoint.latLng, SVG_ZOOM ),
+				theGeometry.project ( directionItineraryPoint.latLng, theConfig.note.svgIcon.zoom ),
 				this.#mapIconData.translation
 			);
 			this.#computeData.direction = Math.atan (

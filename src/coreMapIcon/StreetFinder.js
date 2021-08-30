@@ -48,13 +48,7 @@ import theConfig from '../data/Config.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import theTranslator from '../UI/Translator.js';
 
-import { DISTANCE, INVALID_OBJ_ID, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
-
-const ICON_POSITION = Object.freeze ( {
-	atStart : -ONE,
-	onRoute : ZERO,
-	atEnd : ONE
-} );
+import { DISTANCE, INVALID_OBJ_ID, ZERO, ONE, TWO, NOT_FOUND, ICON_POSITION } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

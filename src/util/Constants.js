@@ -307,6 +307,24 @@ export const DEGREES = Object.freeze ( {
 
 /**
 
+@------------------------------------------------------------------------------------------------------------------------------
+
+@readonly
+@enum {Object}
+@desc Enum for Map svg icons
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+ */
+
+export const ICON_POSITION = Object.freeze ( {
+	atStart : -1,
+	onRoute : 0,
+	atEnd : 1
+} );
+
+/**
+
 @var {Array.<number>} MOUSE_WHEEL_FACTORS
 @desc An array with correction factors to use in the wheel event (wheelEvent.deltaX and wheelEvent.deltaY are dependant of
 wheelEvent.deltaMode and deltaMode is browser dependant...)

@@ -61,13 +61,7 @@ import StreetFinder from '../coreMapIcon/StreetFinder.js';
 import ArrowAndTooltipFinder from '../coreMapIcon/ArrowAndTooltipFinder.js';
 import TranslationRotationFinder from '../coreMapIcon/TranslationRotationFinder.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
-
-const ICON_POSITION = Object.freeze ( {
-	atStart : -ONE,
-	onRoute : ZERO,
-	atEnd : ONE
-} );
+import { ZERO, ICON_POSITION } from '../util/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
