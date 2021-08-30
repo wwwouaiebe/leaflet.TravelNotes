@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theRouteEditor from '../core/RouteEditor.js';
+import theRouter from '../core/Router.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ class ProviderToolbarProviderButton {
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		this.#providerToolbarUI.provider = this.#provider.name;
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**

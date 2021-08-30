@@ -68,7 +68,7 @@ import WayPoint from '../data/WayPoint.js';
 import Itinerary from '../data/Itinerary.js';
 import Note from '../data/Note.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import { ROUTE_EDITION_STATUS, DISTANCE, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, DISTANCE, ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Route' );
 
@@ -308,6 +308,28 @@ class Route {
 	*/
 
 	get objType ( ) { return OUR_OBJ_TYPE; }
+
+	/**
+	This method verify that all waypoints have valid coordinates ( reminder: a route have always a startpoint
+	and an endpoint!)
+	@return {boolean} true when all waypoints have valid coordinates
+	@private
+	*/
+
+	haveValidWayPoints ( ) {
+		let haveValidWayPoints = true;
+		this.wayPoints.forEach (
+			wayPoint => {
+				haveValidWayPoints =
+					haveValidWayPoints
+					&&
+					LAT_LNG.defaultValue !== wayPoint.lat
+					&&
+					LAT_LNG.defaultValue !== wayPoint.lng;
+			}
+		);
+		return haveValidWayPoints;
+	}
 
 	/**
 	An object literal with the WayPoint properties and without any methods.

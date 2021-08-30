@@ -73,12 +73,13 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theRouteEditor from '../core/RouteEditor.js';
 import WayPointPropertiesDialog from '../dialogs/WayPointPropertiesDialog.js';
 import GeoCoder from '../core/GeoCoder.js';
 import WayPoint from '../data/WayPoint.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
+import theRouter from '../core/Router.js';
+
 import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
 
 /**
@@ -175,7 +176,7 @@ class WayPointEditor {
 			}
 		);
 		theTravelNotesData.travel.editedRoute.wayPoints.swap ( wayPoint.objId, true );
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**
@@ -209,7 +210,7 @@ class WayPointEditor {
 				);
 				this.#renameWayPointWithGeocoder ( finalLatLng, wayPoint.objId );
 				theEventDispatcher.dispatch ( 'addwaypoint', { wayPoint : wayPoint, letter : letter } );
-				theRouteEditor.startRouting ( );
+				theRouter.startRouting ( );
 				break;
 			}
 		}
@@ -241,7 +242,7 @@ class WayPointEditor {
 		theEventDispatcher.dispatch ( 'setrouteslist' );
 		theEventDispatcher.dispatch ( 'showitinerary' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**
@@ -254,7 +255,7 @@ class WayPointEditor {
 		theTravelNotesData.travel.editedRoute.editionStatus = ROUTE_EDITION_STATUS.editedChanged;
 		theEventDispatcher.dispatch ( 'removeobject', { objId : wayPointObjId } );
 		theTravelNotesData.travel.editedRoute.wayPoints.remove ( wayPointObjId );
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**
@@ -280,7 +281,7 @@ class WayPointEditor {
 				letter : 'A'
 			}
 		);
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**
@@ -306,7 +307,7 @@ class WayPointEditor {
 				letter : 'B'
 			}
 		);
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**
@@ -320,7 +321,7 @@ class WayPointEditor {
 		this.#renameWayPointWithGeocoder (
 			theTravelNotesData.travel.editedRoute.wayPoints.getAt ( wayPointObjId ).latLng, wayPointObjId
 		);
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**

@@ -37,7 +37,7 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theRouteEditor from '../core/RouteEditor.js';
+import theRouter from '../core/Router.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ class ProviderToolbarTransitModeButton {
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		this.#providerToolbarUI.transitMode = this.#transitMode;
-		theRouteEditor.startRouting ( );
+		theRouter.startRouting ( );
 	}
 
 	/**
