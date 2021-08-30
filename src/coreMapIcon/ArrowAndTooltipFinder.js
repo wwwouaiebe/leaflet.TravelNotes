@@ -53,7 +53,9 @@ import { ICON_POSITION } from '../util/Constants.js';
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class ArrowAndTooltipFinder
-@classdesc coming soon...
+@classdesc Search:
+- the arrow to use for the direction to follow
+- the tooltip content
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +75,7 @@ class ArrowAndTooltipFinder {
 	This method set the direction arrow and tooltip
 	*/
 
-	findArrowAndTooltip ( ) {
+	findData ( ) {
 		if ( null !== this.#computeData.direction ) {
 			if ( this.#computeData.direction < theConfig.note.svgIcon.angleDirection.right ) {
 				this.#mapIconData.tooltip = theTranslator.getText ( 'MapIconDataBuilder - Turn right' );

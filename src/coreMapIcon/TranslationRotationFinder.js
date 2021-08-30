@@ -53,7 +53,11 @@ import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE, TWO, DEGREES, ICON_POSITION } fro
 @------------------------------------------------------------------------------------------------------------------------------
 
 @class TranslationRotationFinder
-@classdesc coming soon...
+@classdesc Search:
+- the translation needed to have the icon point in the middle of the icon
+- the rotation needed to have the entry point at the bottom of the icon
+- the direction to follow
+- adapt the icon if icon is on the start or the end point
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -64,11 +68,15 @@ class TranslationRotationFinder {
 	#computeData = null;
 	#mapIconData = null;
 
+	#rotationItineraryPoint = null;
+	#directionItineraryPoint = null;
+	#iconPoint = null;
+
 	/**
 	This method compute the translation needed to have the itinerary point in the middle of the svg
 	*/
 
-	computeTranslation ( ) {
+	#computeTranslation ( ) {
 		this.#mapIconData.translation = theGeometry.subtrackPoints (
 			[ ICON_DIMENSIONS.svgViewboxDim / TWO, ICON_DIMENSIONS.svgViewboxDim / TWO ],
 			theGeometry.project ( this.#computeData.mapIconPosition.latLng, theConfig.note.svgIcon.zoom )
@@ -76,56 +84,62 @@ class TranslationRotationFinder {
 	}
 
 	/**
-	this method compute the rotation needed to have the SVG oriented on the itinerary
-	and compute also the direction to take after the icon
+	Searching points at least at 10 m ( theConfig.note.svgIcon.angleDistance ) from the icon point,
+	one for rotation and one for direction
+	@private
 	*/
 
-	computeRotationAndDirection ( ) {
+	#searchPoints ( ) {
 
-		// searching points at least at 10 m ( theConfig.note.svgIcon.angleDistance ) from the icon point,
-		// one for rotation and one for direction
+		this.#rotationItineraryPoint = this.#computeData.route.itinerary.itineraryPoints.first;
+		this.#directionItineraryPoint = this.#computeData.route.itinerary.itineraryPoints.last;
 		let distance = DISTANCE.defaultValue;
-		let rotationItineraryPoint = this.#computeData.route.itinerary.itineraryPoints.first;
-		let directionItineraryPoint = this.#computeData.route.itinerary.itineraryPoints.last;
 		let directionPointReached = false;
 
 		this.#computeData.route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
 				if ( this.#computeData.mapIconPosition.distance - distance > theConfig.note.svgIcon.angleDistance ) {
-					rotationItineraryPoint = itineraryPoint;
+					this.#rotationItineraryPoint = itineraryPoint;
 				}
 				if (
 					distance - this.#computeData.mapIconPosition.distance
 					>
 					theConfig.note.svgIcon.angleDistance && ! directionPointReached
 				) {
-					directionItineraryPoint = itineraryPoint;
+					this.#directionItineraryPoint = itineraryPoint;
 					directionPointReached = true;
 				}
 				distance += itineraryPoint.distance;
 			}
 		);
 
-		let iconPoint = theGeometry.addPoints (
+		this.#iconPoint = theGeometry.addPoints (
 			theGeometry.project ( this.#computeData.mapIconPosition.latLng, theConfig.note.svgIcon.zoom ),
 			this.#mapIconData.translation
 		);
+	}
 
-		// computing rotation... if possible
+	/**
+	Computing rotation... if possible
+	@private
+	*/
+
+	#findRotation ( ) {
+
 		if (
 			this.#computeData.mapIconPosition.nearestItineraryPointObjId
 			!==
 			this.#computeData.route.itinerary.itineraryPoints.first.objId
 		) {
 			let rotationPoint = theGeometry.addPoints (
-				theGeometry.project ( rotationItineraryPoint.latLng, theConfig.note.svgIcon.zoom ),
+				theGeometry.project ( this.#rotationItineraryPoint.latLng, theConfig.note.svgIcon.zoom ),
 				this.#mapIconData.translation
 			);
 			this.#mapIconData.rotation =
 				Math.atan (
-					( iconPoint [ ONE ] - rotationPoint [ ONE ] )
+					( this.#iconPoint [ ONE ] - rotationPoint [ ONE ] )
 					/
-					( rotationPoint [ ZERO ] - iconPoint [ ZERO ] )
+					( rotationPoint [ ZERO ] - this.#iconPoint [ ZERO ] )
 				)
 				*
 				DEGREES.d180 / Math.PI;
@@ -135,32 +149,37 @@ class TranslationRotationFinder {
 			this.#mapIconData.rotation -= DEGREES.d270;
 
 			// point 0,0 of the svg is the UPPER left corner
-			if ( ZERO > rotationPoint [ ZERO ] - iconPoint [ ZERO ] ) {
+			if ( ZERO > rotationPoint [ ZERO ] - this.#iconPoint [ ZERO ] ) {
 				this.#mapIconData.rotation += DEGREES.d180;
 			}
 		}
+	}
 
-		// computing direction ... if possible
+	/**
+	Computing direction ... if possible
+	@private
+	*/
 
+	#findDirection ( ) {
 		if (
 			this.#computeData.mapIconPosition.nearestItineraryPointObjId
 			!==
 			this.#computeData.route.itinerary.itineraryPoints.last.objId
 		) {
 			let directionPoint = theGeometry.addPoints (
-				theGeometry.project ( directionItineraryPoint.latLng, theConfig.note.svgIcon.zoom ),
+				theGeometry.project ( this.#directionItineraryPoint.latLng, theConfig.note.svgIcon.zoom ),
 				this.#mapIconData.translation
 			);
 			this.#computeData.direction = Math.atan (
-				( iconPoint [ ONE ] - directionPoint [ ONE ] )
+				( this.#iconPoint [ ONE ] - directionPoint [ ONE ] )
 				/
-				( directionPoint [ ZERO ] - iconPoint [ ZERO ] )
+				( directionPoint [ ZERO ] - this.#iconPoint [ ZERO ] )
 			)
 				*
 				DEGREES.d180 / Math.PI;
 
 			// point 0,0 of the svg is the UPPER left corner
-			if ( ZERO > directionPoint [ ZERO ] - iconPoint [ ZERO ] ) {
+			if ( ZERO > directionPoint [ ZERO ] - this.#iconPoint [ ZERO ] ) {
 				this.#computeData.direction += DEGREES.d180;
 			}
 			this.#computeData.direction -= this.#mapIconData.rotation;
@@ -173,6 +192,14 @@ class TranslationRotationFinder {
 				this.#computeData.direction -= DEGREES.d360;
 			}
 		}
+	}
+
+	/**
+	Search if the icon is at the start or the end of the route and adapt data
+	@private
+	*/
+
+	#findPositionOnRoute ( ) {
 		if (
 			this.#computeData.mapIconPosition.nearestItineraryPointObjId
 			===
@@ -193,6 +220,19 @@ class TranslationRotationFinder {
 			this.#computeData.direction = null;
 			this.#computeData.positionOnRoute = ICON_POSITION.atEnd;
 		}
+	}
+
+	/**
+	this method compute the rotation needed to have the SVG oriented on the itinerary
+	and compute also the direction to take after the icon
+	*/
+
+	findData ( ) {
+		this.#computeTranslation ( );
+		this.#searchPoints ( );
+		this.#findRotation ( );
+		this.#findDirection ( );
+		this.#findPositionOnRoute ( );
 	}
 
 	constructor ( computeData, mapIconData ) {

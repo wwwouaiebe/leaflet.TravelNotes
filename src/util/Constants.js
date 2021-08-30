@@ -311,7 +311,7 @@ export const DEGREES = Object.freeze ( {
 
 @readonly
 @enum {Object}
-@desc Enum for Map svg icons
+@desc Enum for map svg icons
 @public
 
 @------------------------------------------------------------------------------------------------------------------------------

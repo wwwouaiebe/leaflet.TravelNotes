@@ -124,12 +124,9 @@ class DataBuilder {
 		this.#mapIconData.tooltip = '';
 		this.#mapIconData.streets = '';
 
-		let translationRotationFinder = new TranslationRotationFinder ( this.#computeData, this.#mapIconData );
-		translationRotationFinder.computeTranslation ( );
-		translationRotationFinder.computeRotationAndDirection ( );
-
-		new ArrowAndTooltipFinder ( this.#computeData, this.#mapIconData ).findArrowAndTooltip ( );
-		new StreetFinder ( this.#overpassAPIDataLoader, this.#computeData, this.#mapIconData ).findStreets ( );
+		new TranslationRotationFinder ( this.#computeData, this.#mapIconData ).findData ( );
+		new ArrowAndTooltipFinder ( this.#computeData, this.#mapIconData ).findData ( );
+		new StreetFinder ( this.#overpassAPIDataLoader, this.#computeData, this.#mapIconData ).findData ( );
 
 		return this.#mapIconData;
 	}
