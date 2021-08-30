@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file MapIconSvgBuilder.js
+@file SvgBuilder.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapIconSvgBuilder
+@module coreMapIcon
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,14 +51,14 @@ import { SVG_NS, ICON_DIMENSIONS, ZERO, ONE, TWO, NOT_FOUND } from '../util/Cons
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MapIconSvgBuilder
+@class SvgBuilder
 @classdesc This class is used to create  the svg for a map icon
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MapIconSvgBuilder {
+class SvgBuilder {
 
 	#route = null;
 	#overpassAPIDataLoader = null;
@@ -266,8 +266,8 @@ class MapIconSvgBuilder {
 	}
 }
 
-export default MapIconSvgBuilder;
+export default SvgBuilder;
 
 /*
---- End of MapIconSvgBuilder.js file ------------------------------------------------------------------------------------------
+--- End of SvgBuilder.js file ------------------------------------------------------------------------------------------
 */

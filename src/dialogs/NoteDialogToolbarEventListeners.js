@@ -45,7 +45,7 @@ Tests ...
 import theUtilities from '../util/Utilities.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import theTranslator from '../UI/Translator.js';
-import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
+import MapIconFromOsmFactory from '../coreMapIcon/MapIconFromOsmFactory.js';
 import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**

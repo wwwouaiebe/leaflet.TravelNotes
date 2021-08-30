@@ -65,8 +65,7 @@ This will be used for the note address
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapIconFromOsmFactory
-@private
+@module coreMapIcon
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -74,9 +73,9 @@ This will be used for the note address
 import theConfig from '../data/Config.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
-import MapIconSvgBuilder from '../core/MapIconSvgBuilder.js';
+import SvgBuilder from '../coreMapIcon/SvgBuilder.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
-import MapIconDataBuilder from '../core/MapIconDataBuilder.js';
+import DataBuilder from '../coreMapIcon/DataBuilder.js';
 
 import { ICON_DIMENSIONS, LAT_LNG, DISTANCE, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
 
@@ -155,13 +154,13 @@ class MapIconFromOsmFactory {
 
 	#buildIconAndAdress ( ) {
 
-		let mapIconData = new MapIconDataBuilder ( ).buildData (
+		let mapIconData = new DataBuilder ( ).buildData (
 			this.#route,
 			this.#overpassAPIDataLoader,
 			this.#mapIconPosition
 		);
 
-		let svgElement = new MapIconSvgBuilder ( ).buildSvg (
+		let svgElement = new SvgBuilder ( ).buildSvg (
 			this.#route,
 			this.#overpassAPIDataLoader,
 			mapIconData
