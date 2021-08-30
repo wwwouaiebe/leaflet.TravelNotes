@@ -38,20 +38,20 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module BaseContextMenuOperator
+@module contextMenus
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import {
-	KeydownKeyboardEventListener,
-	MouseClickCancelButtonEventListener,
-	MouseLeaveMenuItemEventListener,
-	MouseEnterMenuItemEventListener,
-	ClickMenuItemEventListener,
-	MouseLeaveContainerEventListener,
-	MouseEnterContainerEventListener
+	KeyboardKeydownEL,
+	CancelButtonClickEL,
+	MenuItemMouseLeaveEL,
+	MenuItemMouseEnterEL,
+	MenuItemClickEL,
+	ContainerMouseLeaveEL,
+	ContainerMouseEnterEL
 } from '../contextMenus/BaseContextMenuEventListeners.js';
 
 import { NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
@@ -156,13 +156,13 @@ class BaseContextMenuOperator {
 		this.#contextMenu = contextMenu;
 
 		// Event listeners creation
-		this.#eventListeners.onKeydownKeyboard = new KeydownKeyboardEventListener ( this );
-		this.#eventListeners.onMouseLeaveContainer = new MouseLeaveContainerEventListener ( this );
-		this.#eventListeners.onMouseEnterContainer = new MouseEnterContainerEventListener ( this );
-		this.#eventListeners.onMouseClickCancelButton = new MouseClickCancelButtonEventListener ( this );
-		this.#eventListeners.onClickMenuItem = new ClickMenuItemEventListener ( this );
-		this.#eventListeners.onMouseLeaveMenuItem = new MouseLeaveMenuItemEventListener ( this );
-		this.#eventListeners.onMouseEnterMenuItem = new MouseEnterMenuItemEventListener ( this );
+		this.#eventListeners.onKeydownKeyboard = new KeyboardKeydownEL ( this );
+		this.#eventListeners.onMouseLeaveContainer = new ContainerMouseLeaveEL ( this );
+		this.#eventListeners.onMouseEnterContainer = new ContainerMouseEnterEL ( this );
+		this.#eventListeners.onMouseClickCancelButton = new CancelButtonClickEL ( this );
+		this.#eventListeners.onClickMenuItem = new MenuItemClickEL ( this );
+		this.#eventListeners.onMouseLeaveMenuItem = new MenuItemMouseLeaveEL ( this );
+		this.#eventListeners.onMouseEnterMenuItem = new MenuItemMouseEnterEL ( this );
 
 		// Adding event listeners to the html elements of the menu
 		document.addEventListener ( 'keydown', this.#eventListeners.onKeydownKeyboard, true );

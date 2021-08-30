@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module BaseContextMenuEventListeners
+@module contextMenus
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -47,15 +47,14 @@ Tests ...
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class KeydownKeyboardEventListener
+@class KeyboardKeydownEL
 @classdesc keydown event listener for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class KeydownKeyboardEventListener {
+class KeyboardKeydownEL {
 
 	#menuOperator = null;
 
@@ -76,15 +75,14 @@ class KeydownKeyboardEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseClickCancelButtonEventListener
+@class CancelButtonClickEL
 @classdesc click event listener on the cancel button for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseClickCancelButtonEventListener {
+class CancelButtonClickEL {
 
 	#menuOperator = null;
 
@@ -105,15 +103,14 @@ class MouseClickCancelButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveMenuItemEventListener
+@class MenuItemMouseLeaveEL
 @classdesc mouseleave event listener on the menuItems for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveMenuItemEventListener {
+class MenuItemMouseLeaveEL {
 
 	#menuOperator = null;
 
@@ -134,15 +131,14 @@ class MouseLeaveMenuItemEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterMenuItemEventListener
+@class MenuItemMouseEnterEL
 @classdesc mouseenter event listener on the menuItems for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterMenuItemEventListener {
+class MenuItemMouseEnterEL {
 
 	#menuOperator = null;
 
@@ -163,15 +159,14 @@ class MouseEnterMenuItemEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ClickMenuItemEventListener
+@class MenuItemClickEL
 @classdesc click event listener on the menuItems for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickMenuItemEventListener {
+class MenuItemClickEL {
 
 	#menuOperator = null;
 
@@ -192,15 +187,14 @@ class ClickMenuItemEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveContainerEventListener
+@class ContainerMouseLeaveEL
 @classdesc mouseleave event listener on the container for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveContainerEventListener {
+class ContainerMouseLeaveEL {
 
 	#menuOperator = null;
 
@@ -221,15 +215,14 @@ class MouseLeaveContainerEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterContainerEventListener
+@class ContainerMouseEnterEL
 @classdesc  mouseenter event listener on the container for the context menus
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterContainerEventListener {
+class ContainerMouseEnterEL {
 
 	#menuOperator = null;
 
@@ -248,13 +241,13 @@ class MouseEnterContainerEventListener {
 }
 
 export {
-	KeydownKeyboardEventListener,
-	MouseClickCancelButtonEventListener,
-	MouseLeaveMenuItemEventListener,
-	MouseEnterMenuItemEventListener,
-	ClickMenuItemEventListener,
-	MouseLeaveContainerEventListener,
-	MouseEnterContainerEventListener
+	KeyboardKeydownEL,
+	CancelButtonClickEL,
+	MenuItemMouseLeaveEL,
+	MenuItemMouseEnterEL,
+	MenuItemClickEL,
+	ContainerMouseLeaveEL,
+	ContainerMouseEnterEL
 };
 
 /*
