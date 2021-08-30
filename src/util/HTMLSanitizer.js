@@ -70,6 +70,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable max-lines */
 import { SVG_NS, NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
 
 /**
@@ -501,6 +502,8 @@ class HTMLSanitizer {
 const theHTMLSanitizer = Object.freeze ( new HTMLSanitizer );
 
 export default theHTMLSanitizer;
+
+/* eslint-enable max-lines */
 
 /*
 --- End of HTMLSanitizer.js file ----------------------------------------------------------------------------------------------

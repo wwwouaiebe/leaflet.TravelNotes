@@ -96,68 +96,57 @@ class ConfigOverloader {
 	@private
 	*/
 
-	/* eslint-disable max-depth */
-
 	#copyObjectTo ( source, target ) {
 		if ( ( 'object' !== typeof source ) || ( 'object' !== typeof target ) ) {
 			return;
 		}
-		try {
 
-			// iteration on target.
-			for ( let property in target ) {
-				if ( 'object' === typeof target [ property ] ) {
-					this.#copyObjectTo ( source [ property ], target [ property ] );
-				}
-				else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
-					if ( 'string' === typeof ( target [ property ] ) ) {
-						if ( 'color' === property ) {
-							target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] )
-								||
-								target [ property ];
-						}
-						else if ( 'url' === property ) {
-							target [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
-						}
-						else {
-							target [ property ] =
-									theHTMLSanitizer.sanitizeToJsString ( source [ property ] );
-						}
-					}
-					else {
-						target [ property ] = source [ property ] || target [ property ];
-					}
-				}
+		// iteration on target.
+		for ( let property in target ) {
+			if ( 'object' === typeof target [ property ] ) {
+				this.#copyObjectTo ( source [ property ], target [ property ] );
 			}
-
-			// iteration on source
-			for ( let property in source ) {
-				if ( 'object' === typeof source [ property ] ) {
-					if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
-						target [ property ] = target [ property ] || [];
+			else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
+				if ( 'string' === typeof ( target [ property ] ) ) {
+					if ( 'color' === property ) {
+						target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] )
+							||
+							target [ property ];
+					}
+					else if ( 'url' === property ) {
+						target [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
 					}
 					else {
-						target [ property ] = target [ property ] || {};
+						target [ property ] =
+								theHTMLSanitizer.sanitizeToJsString ( source [ property ] );
 					}
-					this.#copyObjectTo ( source [ property ], target [ property ] );
-				}
-				else if ( 'string' === typeof ( target.property ) ) {
-					target [ property ] =
-								theHTMLSanitizer.sanitizeToHtmlString ( source [ property ], [] ).htmlString;
 				}
 				else {
-					target [ property ] = source [ property ];
+					target [ property ] = source [ property ] || target [ property ];
 				}
 			}
 		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
+
+		// iteration on source
+		for ( let property in source ) {
+			if ( 'object' === typeof source [ property ] ) {
+				if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
+					target [ property ] = target [ property ] || [];
+				}
+				else {
+					target [ property ] = target [ property ] || {};
+				}
+				this.#copyObjectTo ( source [ property ], target [ property ] );
+			}
+			else if ( 'string' === typeof ( target.property ) ) {
+				target [ property ] =
+							theHTMLSanitizer.sanitizeToHtmlString ( source [ property ], [] ).htmlString;
+			}
+			else {
+				target [ property ] = source [ property ];
 			}
 		}
 	}
-
-	/* eslint-enable max-depth */
 
 	/**
 	Freeze an object recursively
