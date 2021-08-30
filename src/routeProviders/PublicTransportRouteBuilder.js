@@ -45,6 +45,7 @@ Tests ...
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import Maneuver from '../data/Maneuver.js';
+import publicTransportData from '../routeProviders/PublicTransportData.js';
 
 import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE } from '../util/Constants.js';
 
@@ -111,104 +112,11 @@ And also we have to look at this:
 
 class PublicTransportRouteBuilder {
 
-	#newId = INVALID_OBJ_ID;
+	#selectedRelationId = INVALID_OBJ_ID;
 	#nodes3WaysCounter = ZERO;
 	#nodes3Ways = [];
-	#waysMap = new Map ( );
-	#nodesMap = new Map ( );
-	#stopsMap = new Map ( );
-	#selectedRelationId = INVALID_OBJ_ID;
 	#route = null;
-
-	/**
-	@private
-	*/
-
-	#firstOf ( array ) {
-		return array [ ZERO ];
-	}
-
-	/**
-	@private
-	*/
-
-	#lastOf ( array ) {
-		return array [ array.length - ONE ];
-	}
-
-	/**
-	@private
-	*/
-
-	#removeFrom ( array, value ) {
-		array.splice ( array.indexOf ( value ), ONE );
-	}
-
-	/**
-	@private
-	*/
-
-	#reverseWay ( way ) {
-
-		let oldStartNode = this.#nodesMap.get ( this.#firstOf ( way.nodesIds ) );
-		let oldEndNode = this.#nodesMap.get ( this.#lastOf ( way.nodesIds ) );
-
-		this.#removeFrom ( oldStartNode.startingWaysIds, way.id );
-		oldStartNode.endingWaysIds.push ( way.id );
-
-		this.#removeFrom ( oldEndNode.endingWaysIds, way.id );
-		oldEndNode.startingWaysIds.push ( way.id );
-
-		way.nodesIds.reverse ( );
-
-	}
-
-	/**
-	@private
-	*/
-
-	#mergeWays ( waysId1, waysId2 ) {
-
-		let way1 = this.#waysMap.get ( waysId1 );
-		let way2 = this.#waysMap.get ( waysId2 );
-
-		// reversing some ways, so :
-		// - the 2 ways have the same direction
-		// - the starting node of the merged way is the starting node of way1
-		// - the ending node of the merged way is the ending node of way2
-		// - the removed node is the ending node of way1
-
-		if ( this.#lastOf ( way1.nodesIds ) === this.#lastOf ( way2.nodesIds ) ) {
-			this.#reverseWay ( way2 );
-		}
-		else if ( this.#firstOf ( way1.nodesIds ) === this.#firstOf ( way2.nodesIds ) ) {
-			this.#reverseWay ( way1 );
-		}
-		else if ( this.#firstOf ( way1.nodesIds ) === this.#lastOf ( way2.nodesIds ) ) {
-			this.#reverseWay ( way1 );
-			this.#reverseWay ( way2 );
-
-		}
-
-		// removing the node at the merging node and all the starting or ending ways of the node
-		let mergedNode = this.#nodesMap.get ( way1.nodesIds.pop ( ) );
-		mergedNode.startingWaysIds = [];
-		mergedNode.endingWaysIds = [];
-
-		// and then merging the 2 ways
-		way1.nodesIds = way1.nodesIds.concat ( way2.nodesIds );
-		way1.distance += way2.distance;
-
-		// and changing the ending ways in the last node
-		let endNode = this.#nodesMap.get ( this.#lastOf ( way1.nodesIds ) );
-		this.#removeFrom ( endNode.endingWaysIds, way2.id );
-		endNode.endingWaysIds.push ( way1.id );
-
-		// finally we remove the second way from the ways map
-		this.#waysMap.delete ( way2.id );
-
-		return way1.id;
-	}
+	#publicTransportData = null;
 
 	/**
 	@private
@@ -233,16 +141,24 @@ class PublicTransportRouteBuilder {
 			);
 		}
 
-		let waysArray = Array.from ( this.#waysMap.values ( ) );
+		let waysArray = Array.from ( this.#publicTransportData.waysMap.values ( ) );
 		let loopCounter = ONE;
 		waysArray.forEach (
 			way => {
 				for ( let wayCounter = loopCounter; wayCounter < waysArray.length; wayCounter ++ ) {
 					let nodesIds = [];
-					nodesIds.push ( this.#nodesMap.get ( this.#firstOf ( way.nodesIds ) ) );
-					nodesIds.push ( this.#nodesMap.get ( this.#lastOf ( way.nodesIds ) ) );
-					nodesIds.push ( this.#nodesMap.get ( this.#firstOf ( waysArray [ wayCounter ].nodesIds ) ) );
-					nodesIds.push ( this.#nodesMap.get ( this.#lastOf ( waysArray [ wayCounter ].nodesIds ) ) );
+					nodesIds.push ( this.#publicTransportData.nodesMap.get (
+						this.#publicTransportData.firstOf ( way.nodesIds ) )
+					);
+					nodesIds.push ( this.#publicTransportData.nodesMap.get (
+						this.#publicTransportData.lastOf ( way.nodesIds ) )
+					);
+					nodesIds.push ( this.#publicTransportData.nodesMap.get (
+						this.#publicTransportData.firstOf ( waysArray [ wayCounter ].nodesIds ) )
+					);
+					nodesIds.push ( this.#publicTransportData.nodesMap.get (
+						this.#publicTransportData.lastOf ( waysArray [ wayCounter ].nodesIds ) )
+					);
 
 					computeDistances ( nodesIds [ ZERO ], nodesIds [ TWO ] );
 					computeDistances ( nodesIds [ ZERO ], nodesIds [ THREE ] );
@@ -265,76 +181,28 @@ class PublicTransportRouteBuilder {
 
 		// a new way is created and added to the way map, using the shortest distance
 		let newWay = {
-			id : this.#newId --,
+			id : publicTransportData.newId --,
 			type : 'way',
 			nodesIds : minDistance.nodesId,
 			distance : minDistance.distance
 		};
-		this.#waysMap.set ( newWay.id, newWay );
+		this.#publicTransportData.waysMap.set ( newWay.id, newWay );
 
 		// start and end node are is adapted
-		let startNode = this.#nodesMap.get ( minDistance.nodesId [ ZERO ] );
+		let startNode = this.#publicTransportData.nodesMap.get ( minDistance.nodesId [ ZERO ] );
 		let wayIdAtStart = startNode.startingWaysIds.concat ( startNode.endingWaysIds ) [ ZERO ];
 		startNode.startingWaysIds.push ( newWay.id );
-		let endNode = this.#nodesMap.get ( minDistance.nodesId [ ONE ] );
+		let endNode = this.#publicTransportData.nodesMap.get ( minDistance.nodesId [ ONE ] );
 		let wayIdAtEnd = endNode.startingWaysIds.concat ( endNode.endingWaysIds ) [ ZERO ];
 		endNode.endingWaysIds.push ( newWay.id );
 
 		// and the two ways merged with the new one
-		this.#mergeWays ( this.#mergeWays ( newWay.id, wayIdAtStart ), wayIdAtEnd );
+		this.#publicTransportData.mergeWays ( this.#publicTransportData.mergeWays ( newWay.id, wayIdAtStart ), wayIdAtEnd );
 
 		// and we restart recursively till all the possible ways are joined
-		if ( this.#waysMap.size > ( ( this.#nodes3WaysCounter * TWO ) + ONE ) ) {
+		if ( this.#publicTransportData.waysMap.size > ( ( this.#nodes3WaysCounter * TWO ) + ONE ) ) {
 			this.#removeHoles ( );
 		}
-	}
-
-	/**
-	@private
-	*/
-
-	#cloneNode ( nodeId ) {
-
-		let node = this.#nodesMap.get ( nodeId );
-
-		let clonedNode = {
-			id : this.#newId --,
-			lat : node.lat,
-			lon : node.lon,
-			type : 'node',
-			startingWaysIds : [],
-			endingWaysIds : [],
-			isNode3Ways : node.isNode3Ways
-		};
-
-		this.#nodesMap.set ( clonedNode.id, clonedNode );
-
-		return clonedNode.id;
-	}
-
-	/**
-	@private
-	*/
-
-	#cloneWay ( wayId ) {
-
-		let way = this.#waysMap.get ( wayId );
-
-		let clonedWay = {
-			id : this.#newId --,
-			type : 'way',
-			nodesIds : [],
-			distance : way.distance
-		};
-
-		way.nodesIds.forEach ( nodeId => clonedWay.nodesIds.push ( this.#cloneNode ( nodeId ) ) );
-
-		this.#nodesMap.get ( this.#firstOf ( clonedWay.nodesIds ) ).startingWaysIds.push ( clonedWay.id );
-		this.#nodesMap.get ( this.#lastOf ( clonedWay.nodesIds ) ).endingWaysIds.push ( clonedWay.id );
-
-		this.#waysMap.set ( clonedWay.id, clonedWay );
-
-		return clonedWay.id;
 	}
 
 	/**
@@ -352,7 +220,7 @@ class PublicTransportRouteBuilder {
 				let linkedWaysId = node.startingWaysIds.concat ( node.endingWaysIds );
 				linkedWaysId.forEach (
 					wayId => {
-						let way = this.#waysMap.get ( wayId );
+						let way = this.#publicTransportData.waysMap.get ( wayId );
 						if ( way.distance < shortestWaydistance ) {
 							shortestWaydistance = way.distance;
 							shortestWay = way;
@@ -361,32 +229,34 @@ class PublicTransportRouteBuilder {
 				);
 
 				// the shortest way is removed of the list of linked ways
-				this.#removeFrom ( linkedWaysId, shortestWay.id );
+				this.#publicTransportData.removeFrom ( linkedWaysId, shortestWay.id );
 
 				// cloning the shortest way
-				let clonedWay = this.#waysMap.get ( this.#cloneWay ( shortestWay.id ) );
+				let clonedWay = this.#publicTransportData.waysMap.get (
+					this.#publicTransportData.cloneWay ( shortestWay.id )
+				);
 
 				// and adapting the nodes in the cloned way...
 				let tmpNodeId = null;
-				if ( this.#firstOf ( shortestWay.nodesIds ) === node.id ) {
+				if ( this.#publicTransportData.firstOf ( shortestWay.nodesIds ) === node.id ) {
 					clonedWay.nodesIds.pop ( );
-					clonedWay.nodesIds.push ( this.#lastOf ( shortestWay.nodesIds ) );
-					tmpNodeId = this.#firstOf ( clonedWay.nodesIds );
+					clonedWay.nodesIds.push ( this.#publicTransportData.lastOf ( shortestWay.nodesIds ) );
+					tmpNodeId = this.#publicTransportData.firstOf ( clonedWay.nodesIds );
 				}
 				else {
 					clonedWay.nodesIds.shift ( );
-					clonedWay.nodesIds.unshift ( this.#firstOf ( shortestWay.nodesIds ) );
-					tmpNodeId = this.#lastOf ( clonedWay.nodesIds );
+					clonedWay.nodesIds.unshift ( this.#publicTransportData.firstOf ( shortestWay.nodesIds ) );
+					tmpNodeId = this.#publicTransportData.lastOf ( clonedWay.nodesIds );
 				}
 
 				// and in the last linked way
-				let lastWay = this.#waysMap.get ( linkedWaysId [ ONE ] );
+				let lastWay = this.#publicTransportData.waysMap.get ( linkedWaysId [ ONE ] );
 				lastWay.nodesIds [ lastWay.nodesIds.indexOf ( node.id ) ] = tmpNodeId;
 
 				// merging the 4 ways
-				this.#mergeWays (
-					this.#mergeWays (
-						this.#mergeWays (
+				this.#publicTransportData.mergeWays (
+					this.#publicTransportData.mergeWays (
+						this.#publicTransportData.mergeWays (
 							shortestWay.id,
 							clonedWay.id
 						),
@@ -409,7 +279,7 @@ class PublicTransportRouteBuilder {
 		let startStopDistance = Number.MAX_VALUE;
 		let endStopDistance = Number.MAX_VALUE;
 
-		this.#stopsMap.forEach (
+		this.#publicTransportData.stopsMap.forEach (
 			stopPoint => {
 				let distance = theSphericalTrigonometry.pointsDistance (
 					[ stopPoint.lat, stopPoint.lon ],
@@ -449,7 +319,7 @@ class PublicTransportRouteBuilder {
 
 		let addPoint = NO_POINT_ADDED;
 		let reversePoints = false; // the relation is not ordered, so it's possible we have to reverse
-		Array.from ( this.#waysMap.values ( ) )[ ZERO ].nodesIds.forEach (
+		Array.from ( this.#publicTransportData.waysMap.values ( ) )[ ZERO ].nodesIds.forEach (
 			nodeId => {
 				if ( NO_POINT_ADDED === addPoint && ( nodeId === startStop.id || nodeId === endStop.id ) ) {
 
@@ -466,12 +336,12 @@ class PublicTransportRouteBuilder {
 
 					// an itinerary point is created from the node and is added to the itinerary
 					let itineraryPoint = new ItineraryPoint ( );
-					let node = this.#nodesMap.get ( nodeId );
+					let node = this.#publicTransportData.nodesMap.get ( nodeId );
 					itineraryPoint.latLng = [ node.lat, node.lon ];
 					route.itinerary.itineraryPoints.add ( itineraryPoint );
 
 					// we verify that the node is not a stop, otherwise we add a maneuver.
-					let stopNode = this.#stopsMap.get ( nodeId );
+					let stopNode = this.#publicTransportData.stopsMap.get ( nodeId );
 					if ( stopNode ) {
 
 						let maneuver = new Maneuver ( );
@@ -556,115 +426,26 @@ class PublicTransportRouteBuilder {
 
 	}
 
-	/**
-	@private
-	*/
-
-	#createMaps ( elements ) {
-
-		this.#waysMap.clear ( );
-		this.#nodesMap.clear ( );
-		this.#stopsMap.clear ( );
-
-		// Elements are pushed in 2 maps: 1 for nodes and 1 for ways
-		elements.forEach (
-			element => {
-				switch ( element.type ) {
-				case 'way' :
-
-					// replacing the nodes property with the nodesId property to
-					// avoid confusion between nodes and nodesId. the element.nodes contains nodesIds!!
-					element.nodesIds = element.nodes;
-					delete element.nodes;
-					if ( TWO <= element.nodesIds.length ) {
-						element.distance = ZERO;
-						this.#waysMap.set ( element.id, element );
-					}
-					break;
-				case 'node' :
-					element.startingWaysIds = [];
-					element.endingWaysIds = [];
-					element.isNode3Ways = false;
-					this.#nodesMap.set ( element.id, element );
-					break;
-				case 'relation' :
-					element.members.forEach (
-						member => {
-
-							// extracting all nodes with role 'stop'
-							if ( 'node' === member.type && member.role && 'stop' === member.role ) {
-								this.#stopsMap.set ( member.ref, member.ref );
-							}
-						}
-					);
-					break;
-				default :
-					break;
-				}
-			}
-		);
-
-		// The stop map contain only the nodeId
-		// we replace the nodeId with the node when possible
-		this.#stopsMap.forEach (
-			nodeId => {
-				let node = this.#nodesMap.get ( nodeId );
-				if ( node ) {
-					this.#stopsMap.set ( nodeId, node );
-				}
-				else {
-					window.TaN.showInfo (
-						'the relation ' +
-						this.#selectedRelationId +
-						' have nodes not positionned on the railway ( node ' +
-						nodeId +
-						').' );
-					this.#stopsMap.delete ( nodeId );
-				}
-			}
-		);
-
-		// Starting and ending ways are added to each node and length computed
-		this.#waysMap.forEach (
-			way => {
-				this.#nodesMap.get ( this.#firstOf ( way.nodesIds ) ).startingWaysIds.push ( way.id );
-				this.#nodesMap.get ( this.#lastOf ( way.nodesIds ) ).endingWaysIds.push ( way.id );
-				let previousNode = null;
-				way.nodesIds.forEach (
-					nodeId => {
-						let node = this.#nodesMap.get ( nodeId );
-						if ( previousNode ) {
-							way.distance += theSphericalTrigonometry.pointsDistance (
-								[ node.lat, node.lon ], [ previousNode.lat, previousNode.lon ]
-							);
-						}
-						previousNode = node;
-					}
-				);
-			}
-		);
-	}
-
 	constructor ( route, selectedRelationId ) {
 		this.#route = route;
 		this.#selectedRelationId = selectedRelationId;
+		this.#publicTransportData = new publicTransportData ( selectedRelationId );
 	}
 
 	buildRoute ( response, onOk, onError ) {
 
 		// resetting variables
-		this.#newId = INVALID_OBJ_ID;
 		this.#nodes3Ways = [];
 		this.#nodes3WaysCounter = ZERO;
 
 		// maps creation
-		this.#createMaps ( response.elements );
+		this.#publicTransportData.createMaps ( response.elements );
 
 		// Searching all nodes where a way can start or end
 
 		// analysing the ways at each node
 		let nodeWithMoreThan3WaysFound = false;
-		this.#nodesMap.forEach (
+		this.#publicTransportData.nodesMap.forEach (
 			node => {
 				let waysIds = node.startingWaysIds.concat ( node.endingWaysIds );
 				switch ( waysIds.length ) {
@@ -679,7 +460,7 @@ class PublicTransportRouteBuilder {
 				case TWO :
 
 					// ways are merged
-					this.#mergeWays ( waysIds [ ZERO ], waysIds [ ONE ] );
+					this.#publicTransportData.mergeWays ( waysIds [ ZERO ], waysIds [ ONE ] );
 					break;
 				case THREE :
 					node.isNode3Ways = true;
@@ -710,7 +491,7 @@ class PublicTransportRouteBuilder {
 		}
 
 		// removing holes
-		if ( this.#waysMap.size > ( ( this.#nodes3WaysCounter * TWO ) + ONE ) ) {
+		if ( this.#publicTransportData.waysMap.size > ( ( this.#nodes3WaysCounter * TWO ) + ONE ) ) {
 			this.#removeHoles ( );
 			window.TaN.showInfo (
 				'Holes found in the OSM relation number ' +
