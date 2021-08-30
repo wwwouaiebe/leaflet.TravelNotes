@@ -52,7 +52,7 @@ import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 @class MouseEventListener
 @classdesc mouse event listener fro the target. Redispath the mouse events as leftpan or rightpan or middlepan events
 @hideconstructor
-#private
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -152,7 +152,7 @@ class MouseEventListener {
 @class PanEventDispatcher
 @classdesc Listen mouse event from an object and redispath the mouse events as leftpan or rightpan or middlepan events
 @hideconstructor
-#private
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

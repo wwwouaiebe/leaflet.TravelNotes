@@ -31,7 +31,6 @@ Tests ...
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
-
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
@@ -79,6 +78,7 @@ const ICON_POSITION = Object.freeze ( {
 @class MapIconDataBuilder
 @classdesc This class is used to search the data needed for the map icon creation
 @hideconstructor
+@todo review this class. To mutch lines...
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
