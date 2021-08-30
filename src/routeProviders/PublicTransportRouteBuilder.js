@@ -18,8 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 /*
 Changes:
-Doc reviewed ...
-Tests ...
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210830
 */
 
 /**
@@ -46,6 +47,7 @@ import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import Maneuver from '../data/Maneuver.js';
 import publicTransportData from '../routeProviders/PublicTransportData.js';
+import PublicTransportHolesRemover from '../routeProviders/PublicTransportHolesRemover.js';
 
 import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE } from '../util/Constants.js';
 
@@ -116,94 +118,6 @@ class PublicTransportRouteBuilder {
 	#nodes3Ways = [];
 	#route = null;
 	#publicTransportData = null;
-
-	/**
-	@private
-	*/
-
-	#removeHoles ( ) {
-
-		// for every start node or end node of each way we compute the distance
-		// to the start node and end node of all others ways
-
-		let distancesBetweenWays = [];
-
-		function computeDistances ( node1, node2 ) {
-			if ( node1.isNode3Ways || node2.isNode3Ways ) {
-				return;
-			}
-			distancesBetweenWays.push (
-				{
-					distance : theSphericalTrigonometry.pointsDistance ( [ node1.lat, node1.lon ], [ node2.lat, node2.lon ] ),
-					nodesId : [ node1.id, node2.id ]
-				}
-			);
-		}
-
-		let waysArray = Array.from ( this.#publicTransportData.waysMap.values ( ) );
-
-		let loopCounter = ONE;
-		waysArray.forEach (
-			way => {
-				for ( let wayCounter = loopCounter; wayCounter < waysArray.length; wayCounter ++ ) {
-					let nodesIds = [];
-					nodesIds.push ( this.#publicTransportData.nodesMap.get (
-						this.#publicTransportData.firstOf ( way.nodesIds ) )
-					);
-					nodesIds.push ( this.#publicTransportData.nodesMap.get (
-						this.#publicTransportData.lastOf ( way.nodesIds ) )
-					);
-					nodesIds.push ( this.#publicTransportData.nodesMap.get (
-						this.#publicTransportData.firstOf ( waysArray [ wayCounter ].nodesIds ) )
-					);
-					nodesIds.push ( this.#publicTransportData.nodesMap.get (
-						this.#publicTransportData.lastOf ( waysArray [ wayCounter ].nodesIds ) )
-					);
-
-					computeDistances ( nodesIds [ ZERO ], nodesIds [ TWO ] );
-					computeDistances ( nodesIds [ ZERO ], nodesIds [ THREE ] );
-					computeDistances ( nodesIds [ ONE ], nodesIds [ TWO ] );
-					computeDistances ( nodesIds [ ONE ], nodesIds [ THREE ] );
-				}
-				loopCounter ++;
-			}
-		);
-
-		// the shortest distance is searched
-		let minDistance = distancesBetweenWays [ ZERO ];
-		distancesBetweenWays.forEach (
-			distanceBetwwenWays => {
-				if ( distanceBetwwenWays.distance < minDistance.distance ) {
-					minDistance = distanceBetwwenWays;
-				}
-			}
-		);
-
-		// a new way is created and added to the way map, using the shortest distance
-		let newWay = {
-			id : publicTransportData.newId,
-			type : 'way',
-			nodesIds : minDistance.nodesId,
-			distance : minDistance.distance
-		};
-		this.#publicTransportData.waysMap.set ( newWay.id, newWay );
-
-		// start and end node are is adapted
-		let startNode = this.#publicTransportData.nodesMap.get ( minDistance.nodesId [ ZERO ] );
-		let wayIdAtStart = startNode.startingWaysIds.concat ( startNode.endingWaysIds ) [ ZERO ];
-		startNode.startingWaysIds.push ( newWay.id );
-		let endNode = this.#publicTransportData.nodesMap.get ( minDistance.nodesId [ ONE ] );
-		let wayIdAtEnd = endNode.startingWaysIds.concat ( endNode.endingWaysIds ) [ ZERO ];
-		endNode.endingWaysIds.push ( newWay.id );
-
-		// and the two ways merged with the new one
-		this.#publicTransportData.mergeWays ( this.#publicTransportData.mergeWays ( newWay.id, wayIdAtStart ), wayIdAtEnd );
-
-		// and we restart recursively till all the possible ways are joined
-		if ( this.#publicTransportData.waysMap.size > ( ( this.#publicTransportData.nodes3WaysCounter * TWO ) + ONE ) ) {
-			this.#removeHoles ( );
-		}
-	}
 
 	/**
 	@private
@@ -490,7 +404,7 @@ class PublicTransportRouteBuilder {
 
 		// removing holes
 		if ( this.#publicTransportData.waysMap.size > ( ( this.#publicTransportData.nodes3WaysCounter * TWO ) + ONE ) ) {
-			this.#removeHoles ( );
+			new PublicTransportHolesRemover ( this.#publicTransportData ). removeHoles ( );
 			window.TaN.showInfo (
 				'Holes found in the OSM relation number ' + this.#selectedRelationId + '. Try to correct OSM data.'
 			);
