@@ -367,7 +367,7 @@ class PrintViewsFactory {
 
 		this.#computeViews ( );
 	}
-	
+
 	/**
 	Get the views
 	*/

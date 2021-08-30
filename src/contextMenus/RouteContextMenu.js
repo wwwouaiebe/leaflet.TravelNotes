@@ -67,6 +67,7 @@ import theTranslator from '../UI/Translator.js';
 import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
+import AllManeuverNotesBuilder from '../core/AllManeuverNotesBuilder.js';
 
 import { ROUTE_EDITION_STATUS, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 
@@ -139,7 +140,7 @@ class RouteContextMenu extends BaseContextMenu {
 			);
 			break;
 		case 10 :
-			theNoteEditor.addAllManeuverNotes ( this.#routeObjId );
+			new AllManeuverNotesBuilder ( ).addAllManeuverNotes ( this.#routeObjId );
 			break;
 		case 11 :
 			theRouteEditor.saveEdition ( );

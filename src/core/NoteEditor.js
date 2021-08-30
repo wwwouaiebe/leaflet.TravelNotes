@@ -72,16 +72,13 @@ import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
-import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
-import MapIconFromOsmFactory from '../core/MapIconFromOsmFactory.js';
 import theConfig from '../data/Config.js';
 import WaitUI from '../UI/WaitUI.js';
-import TwoButtonsDialog from '../dialogs/TwoButtonsDialog.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
 import GeoCoder from '../core/GeoCoder.js';
 
-import { ZERO, ONE, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS, LAT_LNG } from '../util/Constants.js';
+import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -101,71 +98,6 @@ class NoteEditor {
 	#showSearchNoteDialog = null;
 
 	#maneuverCounter = ZERO;
-
-	/**
-	This method creates a new route note with data from osm
-	@param {OsmNoteData} osmNoteData The osm data needed for the note
-	@param {Route} route The route to witch the note will be attached
-	@fires noteupdated
-	@private
-	*/
-
-	#newNoteFromOsmData ( noteData, route ) {
-		let note = new Note ( );
-		for ( const property in noteData ) {
-			note [ property ] = noteData [ property ];
-		}
-
-		note.iconLatLng = note.latLng;
-		note.distance = theGeometry.getClosestLatLngDistance ( route, note.latLng ).distance;
-		note.chainedDistance = route.chainedDistance;
-		route.notes.add ( note );
-		theEventDispatcher.dispatch (
-			'noteupdated',
-			{
-				removedNoteObjId : INVALID_OBJ_ID,
-				addedNoteObjId : note.objId
-			}
-		);
-		theEventDispatcher.dispatch ( 'roadbookupdate' );
-	}
-
-	/**
-	This method add a note with data from osm for each maneuver of a route.
-	@param {Route} route The route to witch the notes will be attached
-	@param {maneuverLength} The number of maneuver to proceed !== route.itinerary.maneuvers.length
-	@fires updateitinerary
-	@fires roadbookupdate
-	@private
-	*/
-
-	async #addAllManeuverNotes ( route, maneuverLength ) {
-		this.#waitUI = new WaitUI ( );
-		this.#waitUI.createUI ( );
-		let maneuverIterator = route.itinerary.maneuvers.iterator;
-		while ( ! maneuverIterator.done ) {
-			this.#waitUI.showInfo (
-				theTranslator.getText (
-					'NoteEditor - Creating note',
-					{ noteNumber : maneuverIterator.index + ONE, notesLength : maneuverLength }
-				)
-			);
-
-			let latLng = route.itinerary.itineraryPoints.getAt ( maneuverIterator.value.itineraryPointObjId ).latLng;
-			let svgIconData = await new MapIconFromOsmFactory ( ).getIconAndAdressAsync ( latLng, route.objId );
-			if ( svgIconData.statusOk ) {
-				this.#newNoteFromOsmData ( svgIconData.noteData, route );
-			}
-			else {
-				console.error ( 'An error occurs when creating the svg icon ' + maneuverIterator.index );
-			}
-		}
-		route.notes.sort ( ( first, second ) => first.distance - second.distance );
-		theEventDispatcher.dispatch ( 'updateitinerary' );
-		theEventDispatcher.dispatch ( 'roadbookupdate' );
-		this.#waitUI.close ( );
-		this.#waitUI = null;
-	}
 
 	/**
 	This method add or update a note to theTravelNotesData and to the map
@@ -247,47 +179,6 @@ class NoteEditor {
 	}
 
 	/**
-	This method search route data for the nearest route of a given point
-	@param {Array.<number>} latLng The latitude and longitude of the point
-	@return {RouteData} A routeData object
-	@private
-	*/
-
-	#getNearestRouteData ( latLng ) {
-		let nearestRouteData = {
-			distance : Number.MAX_VALUE,
-			route : null,
-			distanceOnRoute : ZERO,
-			latLngOnRoute : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ]
-		};
-
-		function selectRoute ( route ) {
-			if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
-				let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, latLng );
-				if ( pointAndDistance ) {
-					let distanceToRoute = theSphericalTrigonometry.pointsDistance (
-						latLng,
-						pointAndDistance.latLng
-					);
-					if ( distanceToRoute < nearestRouteData.distance ) {
-						nearestRouteData.route = route;
-						nearestRouteData.distance = distanceToRoute;
-						nearestRouteData.latLngOnRoute = pointAndDistance.latLng;
-						nearestRouteData.distanceOnRoute = pointAndDistance.distance;
-					}
-				}
-			}
-		}
-
-		theTravelNotesData.travel.routes.forEach ( selectRoute );
-		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-			selectRoute ( theTravelNotesData.travel.editedRoute );
-		}
-
-		return Object.freeze ( nearestRouteData );
-	}
-
-	/**
 	This method construct a new search note object
 	@param {Object} data The search data coming from osm
 	@param {boolean} osmSearchNoteDialog a boolean indicating when the note dialog must be showed
@@ -315,58 +206,6 @@ class NoteEditor {
 
 	changeOsmSearchNoteDialog ( ) {
 		this.#showSearchNoteDialog = ! this.osmSearchNoteDialog;
-	}
-
-	/**
-	This method add a note with data from osm for each maneuver of a route
-	A confirmation message is showed before starting.
-	@param {!number} routeObjId The Route objId
-	@fires updateitinerary
-	@fires noteupdated
-	@fires roadbookupdate
-	*/
-
-	addAllManeuverNotes ( routeObjId ) {
-		let route = theDataSearchEngine.getRoute ( routeObjId );
-		let maneuverIterator = route.itinerary.maneuvers.iterator;
-		let maneuverLength = ZERO;
-		while ( ! maneuverIterator.done ) {
-			if (
-				! ( 'kDepartDefault' === maneuverIterator.value.iconName && ! maneuverIterator.first )
-				&&
-				! ( 'kArriveDefault' === maneuverIterator.value.iconName && ! maneuverIterator.last )
-			) {
-				maneuverLength ++;
-			}
-		}
-
-		if ( theConfig.note.maxManeuversNotes < maneuverLength ) {
-			theErrorsUI.showError (
-				theTranslator.getText ( 'NoteEditor - max maneuvers notes reached {maneuversLength}{maxManeuversNotes}',
-					{ maneuversLength : maneuverLength, maxManeuversNotes : theConfig.note.maxManeuversNotes } )
-			);
-			return;
-		}
-
-		new TwoButtonsDialog (
-			{
-				title : theTranslator.getText ( 'NoteEditor - Add a note for each maneuver' ),
-				text : theTranslator.getText (
-					'NoteEditor - Add a note for each maneuver. Are you sure?',
-					{ noteLength : maneuverLength }
-				),
-				secondButtonText : '❌'
-			}
-		)
-			.show ( )
-			.then ( ( ) => this.#addAllManeuverNotes ( route, maneuverLength ) )
-			.catch (
-				err => {
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-				}
-			);
 	}
 
 	/**
@@ -410,7 +249,7 @@ class NoteEditor {
 			note.latLng = [ data.osmElement.lat, data.osmElement.lon ];
 		}
 		else {
-			let nearestRouteData = this.#getNearestRouteData ( [ data.osmElement.lat, data.osmElement.lon ] );
+			let nearestRouteData = theDataSearchEngine.getNearestRouteData ( [ data.osmElement.lat, data.osmElement.lon ] );
 			if ( ! nearestRouteData.route ) {
 				theErrorsUI.showError ( theTranslator.getText ( 'NoteEditor - No route was found' ) );
 				return;
@@ -606,7 +445,7 @@ class NoteEditor {
 
 	attachNoteToRoute ( noteObjId ) {
 		let note = theDataSearchEngine.getNoteAndRoute ( noteObjId ).note;
-		let nearestRouteData = this.#getNearestRouteData ( note.latLng );
+		let nearestRouteData = theDataSearchEngine.getNearestRouteData ( note.latLng );
 
 		if ( nearestRouteData.route ) {
 			theTravelNotesData.travel.notes.remove ( noteObjId );
