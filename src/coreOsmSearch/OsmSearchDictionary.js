@@ -38,13 +38,13 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchDictionary
+@module OsmSearch
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import OsmSearchDictionaryItem from '../core/OsmSearchDictionaryItem.js';
+import DictionaryItem from '../coreOsmSearch/DictionaryItem.js';
 import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
 
 /**
@@ -52,7 +52,7 @@ import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
 
 @class OsmSearchDictionary
 @classdesc This class contains the OsmSearch dictionary and methods to perform changes in the dictionary
-@see {@link OsmSearchDictionaryItem} for dictionary items
+@see {@link DictionaryItem} for dictionary items
 @see {@link theOsmSearchDictionary} for the one and only one instance of this class
 @hideconstructor
 
@@ -85,13 +85,13 @@ class OsmSearchDictionary {
 
 	constructor ( ) {
 		this.#itemsMap = new Map ( );
-		this.#dictionary = new OsmSearchDictionaryItem ( 'All', true );
+		this.#dictionary = new DictionaryItem ( 'All', true );
 		this.#itemsMap.set ( this.#dictionary.objId, this.#dictionary );
 		this.#itemsArray = [ this.#dictionary.items ];
 	}
 
 	/**
-	Split a line from the csv file into words and add a OsmSearchDictionaryItem or a filterTag to the dictionary
+	Split a line from the csv file into words and add a DictionaryItem or a filterTag to the dictionary
 	@private
 	*/
 
@@ -106,7 +106,7 @@ class OsmSearchDictionary {
 			word => {
 				if ( '' !== word ) {
 					if ( NOT_FOUND === word.indexOf ( '=' ) ) {
-						this.#currentItem = new OsmSearchDictionaryItem ( word );
+						this.#currentItem = new DictionaryItem ( word );
 						this.#itemsMap.set ( this.#currentItem.objId, this.#currentItem );
 						this.#itemsArray [ wordPos ].push ( this.#currentItem );
 						this.#itemsArray [ wordPos + ONE ] = this.#currentItem.items;
@@ -135,7 +135,7 @@ class OsmSearchDictionary {
 	}
 
 	/**
-	Parse the content of the TravelNotesSearchDictionaryXX.csv and build a tree of OsmSearchDictionaryItem
+	Parse the content of the TravelNotesSearchDictionaryXX.csv and build a tree of DictionaryItem
 	with this content
 	*/
 

@@ -162,7 +162,7 @@
 	},
 	"overpassApi": {
 		"timeOut":40,
-		"url":"https://overpass.openstreetmap.fr/api/interpreter"
+		"url":"https://lz4.overpass-api.de/api/interpreter"
 	},
 	"printRouteMap":
 	{

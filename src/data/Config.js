@@ -229,7 +229,7 @@ let theConfig = {
 	},
 	overpassApi : {
 		timeOut : 40,
-		url : 'https://lz4.overpass-api.de/api/interpreter'
+		url : 'https://lz4.overpass-api.de/api/interpreter' // "https://overpass.openstreetmap.fr/api/interpreter"
 	},
 	printRouteMap :
 	{

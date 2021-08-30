@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file OsmSearchDictionaryItem.js
+@file DictionaryItem.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchDictionaryItem
+@module DictionaryItem
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,13 +51,13 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class OsmSearchDictionaryItem
+@class DictionaryItem
 @classdesc This class is used to represent a branch of the dictionary tree.
 @private
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class OsmSearchDictionaryItem {
+class DictionaryItem {
 
 	#objId = INVALID_OBJ_ID;
 
@@ -79,12 +79,12 @@ class OsmSearchDictionaryItem {
 	get objId ( ) { return this.#objId; }
 }
 
-export default OsmSearchDictionaryItem;
+export default DictionaryItem;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of OsmSearchDictionaryItem.js file
+end of DictionaryItem.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

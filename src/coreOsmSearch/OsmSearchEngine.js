@@ -42,8 +42,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchEngine
-@private
+@module OsmSearch
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -51,7 +50,7 @@ Tests ...
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
-import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
+import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theGeometry from '../util/Geometry.js';
 
 import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
@@ -198,7 +197,7 @@ class OsmSearchEngine	{
 	/**
 	Search all selected items on the tree dictionary and for each selected item, add it to a list of selected items
 	and add the first tag to the root tags map.
-	@param {OsmSearchDictionaryItem} item The item from witch the search start. Recursive function. The first
+	@param {DictionaryItem} item The item from witch the search start. Recursive function. The first
 	call start with this.#dictionary
 	@private
 	*/

@@ -48,7 +48,7 @@ import ObjId from '../data/ObjId.js';
 import theConfig from '../data/Config.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theOsmSearchEngine from '../core/OsmSearchEngine.js';
+import theOsmSearchEngine from '../coreOsmSearch/OsmSearchEngine.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**

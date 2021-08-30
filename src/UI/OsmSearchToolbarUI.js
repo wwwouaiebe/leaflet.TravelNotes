@@ -45,8 +45,8 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theOsmSearchEngine from '../core/OsmSearchEngine.js';
-import theOsmSearchDictionary from '../core/OsmSearchDictionary.js';
+import theOsmSearchEngine from '../coreOsmSearch/OsmSearchEngine.js';
+import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theTranslator from '../UI/Translator.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
