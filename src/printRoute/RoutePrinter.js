@@ -17,9 +17,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 /*
---- printFactory.js file ----------------------------------------------------------------------------------------------
-This file contains:
-	-
 Changes:
 	- v1.9.0:
 		- created
@@ -32,10 +29,10 @@ Changes:
 		- Issue ♯135 : Remove innerHTML from code
 		- Issue ♯136 : Remove html entities from js string
 		- Issue ♯146 : Add the travel name in the document title...
-Doc reviewed 20200508
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210830
 Tests ...
-
------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
