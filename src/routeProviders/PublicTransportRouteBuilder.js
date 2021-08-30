@@ -113,7 +113,6 @@ And also we have to look at this:
 class PublicTransportRouteBuilder {
 
 	#selectedRelationId = INVALID_OBJ_ID;
-	#nodes3WaysCounter = ZERO;
 	#nodes3Ways = [];
 	#route = null;
 	#publicTransportData = null;
@@ -142,6 +141,7 @@ class PublicTransportRouteBuilder {
 		}
 
 		let waysArray = Array.from ( this.#publicTransportData.waysMap.values ( ) );
+
 		let loopCounter = ONE;
 		waysArray.forEach (
 			way => {
@@ -181,7 +181,7 @@ class PublicTransportRouteBuilder {
 
 		// a new way is created and added to the way map, using the shortest distance
 		let newWay = {
-			id : publicTransportData.newId --,
+			id : publicTransportData.newId,
 			type : 'way',
 			nodesIds : minDistance.nodesId,
 			distance : minDistance.distance
@@ -200,7 +200,7 @@ class PublicTransportRouteBuilder {
 		this.#publicTransportData.mergeWays ( this.#publicTransportData.mergeWays ( newWay.id, wayIdAtStart ), wayIdAtEnd );
 
 		// and we restart recursively till all the possible ways are joined
-		if ( this.#publicTransportData.waysMap.size > ( ( this.#nodes3WaysCounter * TWO ) + ONE ) ) {
+		if ( this.#publicTransportData.waysMap.size > ( ( this.#publicTransportData.nodes3WaysCounter * TWO ) + ONE ) ) {
 			this.#removeHoles ( );
 		}
 	}
@@ -436,7 +436,7 @@ class PublicTransportRouteBuilder {
 
 		// resetting variables
 		this.#nodes3Ways = [];
-		this.#nodes3WaysCounter = ZERO;
+		this.#publicTransportData.nodes3WaysCounter = ZERO;
 
 		// maps creation
 		this.#publicTransportData.createMaps ( response.elements );
@@ -465,7 +465,7 @@ class PublicTransportRouteBuilder {
 				case THREE :
 					node.isNode3Ways = true;
 					this.#nodes3Ways.push ( node );
-					this.#nodes3WaysCounter ++;
+					this.#publicTransportData.nodes3WaysCounter ++;
 					break;
 				default :
 					nodeWithMoreThan3WaysFound = true;
@@ -484,24 +484,20 @@ class PublicTransportRouteBuilder {
 
 		if ( nodeWithMoreThan3WaysFound ) {
 
-			onError ( new Error (
-				'A node with more than 3 ways was found in the relation.See the console for more infos'
-			) );
+			onError ( new Error ( 'A node with more than 3 ways was found in the relation.See the console for more infos' ) );
 			return;
 		}
 
 		// removing holes
-		if ( this.#publicTransportData.waysMap.size > ( ( this.#nodes3WaysCounter * TWO ) + ONE ) ) {
+		if ( this.#publicTransportData.waysMap.size > ( ( this.#publicTransportData.nodes3WaysCounter * TWO ) + ONE ) ) {
 			this.#removeHoles ( );
 			window.TaN.showInfo (
-				'Holes found in the OSM relation number ' +
-				this.#selectedRelationId +
-				'. Try to correct OSM data.'
+				'Holes found in the OSM relation number ' + this.#selectedRelationId + '. Try to correct OSM data.'
 			);
 		}
 
 		// merging paths at nodes with 3 ways
-		if ( ZERO < this.#nodes3WaysCounter ) {
+		if ( ZERO < this.#publicTransportData.nodes3WaysCounter ) {
 			this.#merge3WaysNodes ( );
 		}
 
