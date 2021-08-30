@@ -43,6 +43,7 @@ Tests ...
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
+/* eslint-disable max-lines */
 
 import PasswordDialog from '../dialogs/PasswordDialog.js';
 import DataEncryptor from '../util/DataEncryptor.js';
@@ -592,6 +593,8 @@ export {
 	SaveKeysToUnsecureFileButtonEventListener,
 	NewAPIKeyButtonEventListener
 };
+
+/* eslint-enable max-lines */
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

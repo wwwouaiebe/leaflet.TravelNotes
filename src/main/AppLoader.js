@@ -44,6 +44,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
+/* eslint-disable max-lines */
+
 import theMapEditor from '../mapEditor/MapEditor.js';
 import theIndexedDb from '../roadbook/IndexedDb.js';
 import theTravelHTMLViewsFactory from '../UI/TravelHTMLViewsFactory.js';
@@ -669,6 +671,8 @@ class AppLoader {
 }
 
 export default AppLoader;
+
+/* eslint-enable max-lines */
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

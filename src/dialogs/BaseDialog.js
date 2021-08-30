@@ -111,6 +111,8 @@ Box model
 +-------------------------------------------------------------------------------------------------------------------+
 */
 
+/* eslint-disable max-lines */
+
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
@@ -648,6 +650,8 @@ class BaseDialog {
 }
 
 export default BaseDialog;
+
+/* eslint-enable max-lines */
 
 /*
 --- End of BaseDialog.js file -------------------------------------------------------------------------------------------------
