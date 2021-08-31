@@ -72,7 +72,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Geometry
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ const HUNDRED = 100;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class Geometry
 @classdesc This class contains methods for geometry operations requiring call to Leaflet functions
 @see {@link theGeometry} for the one and only one instance of this class
 @hideconstructor

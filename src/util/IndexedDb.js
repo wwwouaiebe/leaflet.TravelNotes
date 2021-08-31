@@ -39,7 +39,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module IndexedDb
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ const OUR_DB_VERSION = 1;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class IndexedDb
 @classdesc This class contains methods for accessing the window.indexedDb
 @see {@link theIndexedDb} for the one and only one instance of this class
 @hideconstructor

@@ -41,7 +41,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module EventDispatcher
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -293,7 +293,7 @@ and when the geolocation marker must be removed from the map
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class EventDispatcher
 @classdesc This class contains methods for dispatching events
 @see {@link theEventDispatcher} for the one and only one instance of this class
 @hideconstructor
