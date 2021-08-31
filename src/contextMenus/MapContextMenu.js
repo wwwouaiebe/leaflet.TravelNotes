@@ -51,7 +51,7 @@ Tests ...
 
 import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';

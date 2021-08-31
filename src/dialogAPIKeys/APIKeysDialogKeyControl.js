@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import ObjId from '../data/ObjId.js';

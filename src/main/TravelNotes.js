@@ -83,11 +83,11 @@ import ViewerFileLoader from '../core/ViewerFileLoader.js';
 import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
-import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
+import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
 import theMouseUI from '../UI/MouseUI.js';
 import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**

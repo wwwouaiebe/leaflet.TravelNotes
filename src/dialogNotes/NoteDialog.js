@@ -79,7 +79,7 @@ import NoteDialogPhoneControl from '../dialogNotes/NoteDialogPhoneControl.js';
 import NoteDialogPreviewControl from '../dialogNotes/NoteDialogPreviewControl.js';
 import { NoteDialogGeoCoderHelper } from '../dialogNotes/NoteDialogEventListeners.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import Note from '../data/Note.js';
 import theConfig from '../data/Config.js';
 

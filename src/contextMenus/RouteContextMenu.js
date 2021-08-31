@@ -63,7 +63,7 @@ import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';

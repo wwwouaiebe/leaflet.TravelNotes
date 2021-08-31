@@ -50,7 +50,7 @@ import theGeometry from '../util/Geometry.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theConfig from '../data/Config.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import TwoButtonsDialog from '../dialogs/TwoButtonsDialog.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 

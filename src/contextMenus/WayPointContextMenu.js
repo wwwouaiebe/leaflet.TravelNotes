@@ -52,7 +52,7 @@ Tests ...
 import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**

@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
+import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

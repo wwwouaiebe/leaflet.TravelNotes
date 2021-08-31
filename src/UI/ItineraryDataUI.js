@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
+import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 import ManeuverContextMenu from '../contextMenus/ManeuverContextMenu.js';

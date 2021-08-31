@@ -68,7 +68,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theRouteEditor from '../core/RouteEditor.js';

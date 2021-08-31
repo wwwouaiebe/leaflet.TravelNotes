@@ -47,7 +47,7 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';

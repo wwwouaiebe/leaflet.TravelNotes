@@ -93,7 +93,7 @@ Tests ...
 
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import {
 	EditionButtonsClickEL,

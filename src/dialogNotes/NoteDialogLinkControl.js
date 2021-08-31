@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theConfig from '../data/Config.js';
 import {
 	AllControlsFocusEL,

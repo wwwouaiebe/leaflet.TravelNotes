@@ -56,7 +56,7 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import BaseContextMenuOperator from '../contextMenus/BaseContextMenuOperator.js';
 

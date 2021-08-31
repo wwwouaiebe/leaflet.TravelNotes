@@ -51,7 +51,7 @@ Tests ...
 */
 
 import PaneUI from '../UI/PaneUI.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import ItineraryControlUI from '../UI/ItineraryControlUI.js';
 import ItineraryDataUI from '../UI/ItineraryDataUI.js';

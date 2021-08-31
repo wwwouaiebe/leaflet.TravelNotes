@@ -45,8 +45,8 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
-import theTranslator from '../UI/Translator.js';
+import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';
+import theTranslator from '../util/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 

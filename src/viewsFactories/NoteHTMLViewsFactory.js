@@ -38,15 +38,14 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteHTMLViewsFactory
-@private
+@module viewsFactories
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theUtilities from '../util/Utilities.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';

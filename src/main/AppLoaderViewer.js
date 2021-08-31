@@ -48,7 +48,7 @@ import theConfig from '../data/Config.js';
 import ConfigOverloader from '../data/ConfigOverloader.js';
 import theTravelNotesViewer from '../main/TravelNotesViewer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theViewerLayersToolbarUI from '../UI/ViewerLayersToolbarUI.js';
 import MapEditorViewer from '../coreMapEditor/MapEditorViewer.js';
 import theGeoLocator from '../core/GeoLocator.js';

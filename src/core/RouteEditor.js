@@ -72,7 +72,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';

@@ -30,7 +30,7 @@ Doc reviewed 20210828
 Tests ...
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import ObjId from '../data/ObjId.js';
 import FloatWindow from '../dialogFloatWindow/FloatWindow.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';

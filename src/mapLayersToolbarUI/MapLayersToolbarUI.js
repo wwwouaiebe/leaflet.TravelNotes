@@ -46,21 +46,20 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapLayersToolbarUI
-@private
+@module mapLayersToolbarUI
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
-import MapLayersToolbarButton from '../UI/MapLayersToolbarButton.js';
-import MapLayersToolbarLink from '../UI/MapLayersToolbarLink.js';
+import MapLayersToolbarButton from '../mapLayersToolbarUI/MapLayersToolbarButton.js';
+import MapLayersToolbarLink from '../mapLayersToolbarUI/MapLayersToolbarLink.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 
 import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
@@ -70,15 +69,14 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class ButtonsContainerWheelEV
 @classdesc Wheel event listeners on the map layer buttons. Scroll the buttons
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class WheelButtonsEventListener {
+class ButtonsContainerWheelEV {
 
 	#mapLayersToolbarUI = null;
 
@@ -278,7 +276,7 @@ class MapLayersToolbarUI {
 	}
 
 	constructor ( ) {
-		this.#onWheelButtonsEventListener = new WheelButtonsEventListener ( this, this.#wheelEventData );
+		this.#onWheelButtonsEventListener = new ButtonsContainerWheelEV ( this, this.#wheelEventData );
 		Object.freeze ( this );
 	}
 

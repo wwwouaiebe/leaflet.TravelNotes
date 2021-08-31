@@ -60,7 +60,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import PrintViewsFactory from '../printRoute/PrintViewsFactory.js';
 import PrintPageBuilder from '../printRoute/PrintPageBuilder.js';
 

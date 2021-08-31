@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RouteHTMLViewsFactory
+@module viewsFactories
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -48,9 +48,9 @@ import ObjId from '../data/ObjId.js';
 import ProfileFactory from '../core/ProfileFactory.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theUtilities from '../util/Utilities.js';
-import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
+import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
 import { ZERO, DISTANCE } from '../util/Constants.js';

@@ -65,7 +65,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import NoteDialog from '../dialogNotes/NoteDialog.js';
 import Note from '../data/Note.js';

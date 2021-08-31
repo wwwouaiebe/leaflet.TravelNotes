@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapLayersToolbarLink
+@module mapLayersToolbarUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -49,15 +49,14 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterLayerToolbarLinkEventListener
+@class LinkMouseEnterEV
 @classdesc mouse enter event listener for the link
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterLayerToolbarLinkEventListener {
+class LinkMouseEnterEV {
 
 	/**
 	Mouse enter event listener. Inverse the button color
@@ -73,15 +72,14 @@ class MouseEnterLayerToolbarLinkEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveLayerToolbarLinkEventListener
+@class LinkMouseLeaveEV
 @classdesc mouse leave event listener for the link
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveLayerToolbarLinkEventListener {
+class LinkMouseLeaveEV {
 
 	/**
 	Mouse leave event listener. Inverse the button color
@@ -141,8 +139,8 @@ class MapLayersToolbarLink {
 			parentNode
 		);
 		theHTMLElementsFactory.create ( 'a', linkProperties, this.#linkButton );
-		this.#eventListeners.mouseEnter = new MouseEnterLayerToolbarLinkEventListener ( );
-		this.#eventListeners.mouseLeave = new MouseLeaveLayerToolbarLinkEventListener ( );
+		this.#eventListeners.mouseEnter = new LinkMouseEnterEV ( );
+		this.#eventListeners.mouseLeave = new LinkMouseLeaveEV ( );
 		this.#linkButton.addEventListener ( 'mouseenter', this.#eventListeners.mouseEnter, false );
 		this.#linkButton.addEventListener ( 'mouseleave', this.#eventListeners.mouseLeave, false );
 	}

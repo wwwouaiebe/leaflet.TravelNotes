@@ -56,7 +56,7 @@ Tests ...
 import BaseDialog from '../dialogBase/BaseDialog.js';
 import APIKeysDialogToolbar from '../dialogAPIKeys/APIKeysDialogToolbar.js';
 import { APIKeyDeletedEL } from '../dialogAPIKeys/APIKeysDialogEventListeners.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import APIKeysDialogKeyControl from '../dialogAPIKeys/APIKeysDialogKeyControl.js';
 

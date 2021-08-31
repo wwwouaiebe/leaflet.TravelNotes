@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import { AllControlsInputEL } from '../dialogNotes/NoteDialogEventListeners.js';
 import { ICON_DIMENSIONS } from '../util/Constants.js';
 

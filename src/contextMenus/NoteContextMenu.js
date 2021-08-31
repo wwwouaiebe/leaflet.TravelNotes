@@ -54,7 +54,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import Zoomer from '../core/Zoomer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 

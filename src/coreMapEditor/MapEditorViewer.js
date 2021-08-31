@@ -68,8 +68,8 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
-import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
+import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';
+import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import { RouteMouseOverOrMoveEL } from '../coreMapEditor/RouteEventListeners.js';
 
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';

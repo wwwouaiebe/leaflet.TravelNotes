@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { RedSliderInputEL, ColorInputEL, ColorButtonClickEL }
 	from '../dialogColorControl/ColorControlEventListeners.js';

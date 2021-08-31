@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theIndexedDb from '../util/IndexedDb.js';
 import theRoadbookUpdater from '../roadbook/RoadbookUpdater.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';

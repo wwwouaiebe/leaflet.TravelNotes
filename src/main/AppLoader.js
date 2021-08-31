@@ -48,7 +48,7 @@ Tests ...
 
 import theMapEditor from '../coreMapEditor/MapEditor.js';
 import theIndexedDb from '../util/IndexedDb.js';
-import theTravelHTMLViewsFactory from '../UI/TravelHTMLViewsFactory.js';
+import theTravelHTMLViewsFactory from '../viewsFactories/TravelHTMLViewsFactory.js';
 import theUtilities from '../util/Utilities.js';
 import theMouseUI from '../UI/MouseUI.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
@@ -57,7 +57,7 @@ import theTravelNotes from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
 import ConfigOverloader from '../data/ConfigOverloader.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';

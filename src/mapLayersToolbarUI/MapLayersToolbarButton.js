@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapLayersToolbarButton
+@module mapLayersToolbarUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -52,15 +52,14 @@ import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterLayerToolbarButtonEventListener
+@class LayerButtonMouseEnterEV
 @classdesc mouse enter event listener for the button
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterLayerToolbarButtonEventListener {
+class LayerButtonMouseEnterEV {
 
 	#mapLayer = null;
 
@@ -82,15 +81,14 @@ class MouseEnterLayerToolbarButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveLayerToolbarButtonEventListener
+@class LayerButtonMouseLeaveEV
 @classdesc mouse leave event listener for the button
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveLayerToolbarButtonEventListener {
+class LayerButtonMouseLeaveEV {
 
 	#mapLayer = null;
 
@@ -112,15 +110,14 @@ class MouseLeaveLayerToolbarButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickEventLayerToolbarButtonEventListener
+@class LayerButtonClickEV
 @classdesc click event listener for the button
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickEventLayerToolbarButtonEventListener {
+class LayerButtonClickEV {
 
 	#mapLayer = null;
 
@@ -191,9 +188,9 @@ class MapLayersToolbarButton {
 			parentNode
 		);
 
-		this.#eventListeners.mouseEnter = new MouseEnterLayerToolbarButtonEventListener ( mapLayer );
-		this.#eventListeners.mouseLeave = new MouseLeaveLayerToolbarButtonEventListener ( mapLayer );
-		this.#eventListeners.click = new ClickEventLayerToolbarButtonEventListener ( mapLayer );
+		this.#eventListeners.mouseEnter = new LayerButtonMouseEnterEV ( mapLayer );
+		this.#eventListeners.mouseLeave = new LayerButtonMouseLeaveEV ( mapLayer );
+		this.#eventListeners.click = new LayerButtonClickEV ( mapLayer );
 
 		this.#buttonHTMLElement.addEventListener ( 'mouseenter', this.#eventListeners.mouseEnter, false );
 		this.#buttonHTMLElement.addEventListener ( 'mouseleave', this.#eventListeners.mouseLeave, false );

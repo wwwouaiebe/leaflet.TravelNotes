@@ -43,7 +43,7 @@ Tests ...
 */
 
 import theUtilities from '../util/Utilities.js';
-import theTranslator from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
