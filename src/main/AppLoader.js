@@ -50,7 +50,7 @@ import theMapEditor from '../coreMapEditor/MapEditor.js';
 import theIndexedDb from '../util/IndexedDb.js';
 import theTravelHTMLViewsFactory from '../viewsFactories/TravelHTMLViewsFactory.js';
 import theUtilities from '../util/Utilities.js';
-import theMouseUI from '../UI/MouseUI.js';
+import theMouseUI from '../mouseUI/MouseUI.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theUI from '../UI/UI.js';
 import theTravelNotes from '../main/TravelNotes.js';

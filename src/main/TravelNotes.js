@@ -84,7 +84,7 @@ import theCurrentVersion from '../data/Version.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
-import theMouseUI from '../UI/MouseUI.js';
+import theMouseUI from '../mouseUI/MouseUI.js';
 import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theTranslator from '../util/Translator.js';
