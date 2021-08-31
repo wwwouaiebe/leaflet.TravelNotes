@@ -38,29 +38,27 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RoadbookLoader
-@private
+@module roadbook
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import theTranslator from '../UI/Translator.js';
-import theIndexedDb from '../roadbook/IndexedDb.js';
+import theIndexedDb from '../util/IndexedDb.js';
 import theRoadbookUpdater from '../roadbook/RoadbookUpdater.js';
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ShowTravelNotesChangeEventListener
+@class ShowTravelNotesChangeEL
 @classdesc change event listener for the show travel notes checkbox
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ShowTravelNotesChangeEventListener {
+class ShowTravelNotesChangeEL {
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -72,15 +70,14 @@ class ShowTravelNotesChangeEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ShowRouteNotesChangeEventListener
+@class ShowRouteNotesChangeEL
 @classdesc change event listener for the show route notes checkbox
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ShowRouteNotesChangeEventListener {
+class ShowRouteNotesChangeEL {
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -92,15 +89,14 @@ class ShowRouteNotesChangeEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ShowManeuverNotesChangeEventListener
+@class ShowManeuverNotesChangeEL
 @classdesc change event listener for the show maneuver notes checkbox
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ShowManeuverNotesChangeEventListener {
+class ShowManeuverNotesChangeEL {
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -112,15 +108,14 @@ class ShowManeuverNotesChangeEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class StorageEventListener
+@class StorageEL
 @classdesc storage event listener
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class StorageEventListener {
+class StorageEL {
 	#UUID = null;
 
 	constructor ( UUID ) {
@@ -152,15 +147,14 @@ class StorageEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class SaveButtonClickEventListener
+@class SaveButtonClickEL
 @classdesc click event listener for the save button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class SaveButtonClickEventListener {
+class SaveButtonClickEL {
 
 	handleEvent ( ) {
 		try {
@@ -242,11 +236,11 @@ class RoadbookLoader {
 
 	#addEventListeners ( ) {
 		document.getElementById ( 'TravelNotes-Travel-ShowNotes' )
-			.addEventListener ( 'change', new ShowTravelNotesChangeEventListener ( ) );
+			.addEventListener ( 'change', new ShowTravelNotesChangeEL ( ) );
 		document.getElementById ( 'TravelNotes-Routes-ShowNotes' )
-			.addEventListener ( 'change', new ShowRouteNotesChangeEventListener ( ) );
+			.addEventListener ( 'change', new ShowRouteNotesChangeEL ( ) );
 		document.getElementById ( 'TravelNotes-Routes-ShowManeuvers' )
-			.addEventListener ( 'change', new ShowManeuverNotesChangeEventListener ( ) );
+			.addEventListener ( 'change', new ShowManeuverNotesChangeEL ( ) );
 	}
 
 	/**
@@ -257,7 +251,7 @@ class RoadbookLoader {
 	#addSaveButton ( ) {
 		this.#saveButton = document.createElement ( 'button' );
 		this.#saveButton.id = 'TravelNotes-SaveButton';
-		this.#saveButton.addEventListener ( 'click', new SaveButtonClickEventListener ( ) );
+		this.#saveButton.addEventListener ( 'click', new SaveButtonClickEL ( ) );
 		let saveDiv = document.createElement ( 'div' );
 		saveDiv.id = 'TravelNotes-SaveDiv';
 		saveDiv.appendChild ( this.#saveButton );
@@ -280,7 +274,7 @@ class RoadbookLoader {
 					}
 				}
 			);
-		window.addEventListener ( 'storage', new StorageEventListener ( this.#UUID ) );
+		window.addEventListener ( 'storage', new StorageEL ( this.#UUID ) );
 		window.addEventListener ( 'unload', ( ) => theIndexedDb.closeDb ( )	);
 	}
 

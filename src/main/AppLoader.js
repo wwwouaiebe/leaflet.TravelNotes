@@ -47,7 +47,7 @@ Tests ...
 /* eslint-disable max-lines */
 
 import theMapEditor from '../coreMapEditor/MapEditor.js';
-import theIndexedDb from '../roadbook/IndexedDb.js';
+import theIndexedDb from '../util/IndexedDb.js';
 import theTravelHTMLViewsFactory from '../UI/TravelHTMLViewsFactory.js';
 import theUtilities from '../util/Utilities.js';
 import theMouseUI from '../UI/MouseUI.js';
