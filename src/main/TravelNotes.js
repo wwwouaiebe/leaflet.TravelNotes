@@ -86,7 +86,7 @@ import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import theMapLayersToolbarUI from '../UI/MapLayersToolbarUI.js';
 import theMouseUI from '../UI/MouseUI.js';
 import theAttributionsUI from '../AttributionsUI/AttributionsUI.js';
-import theErrorsUI from '../UI/ErrorsUI.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theTranslator from '../UI/Translator.js';
 import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 

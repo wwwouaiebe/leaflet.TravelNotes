@@ -74,7 +74,7 @@ import theEventDispatcher from '../util/EventDispatcher.js';
 import DataEncryptor from '../util/DataEncryptor.js';
 import PasswordDialog from '../dialogPassword/PasswordDialog.js';
 import theTranslator from '../UI/Translator.js';
-import theErrorsUI from '../UI/ErrorsUI.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';
 
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';

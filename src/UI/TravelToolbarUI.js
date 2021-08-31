@@ -50,7 +50,7 @@ import theTravelEditor from '../core/TravelEditor.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import FileLoader from '../core/FileLoader.js';
 import theConfig from '../data/Config.js';
-import theErrorsUI from '../UI/ErrorsUI.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theUtilities from '../util/Utilities.js';
 
 import { INVALID_OBJ_ID, ZERO } from '../util/Constants.js';

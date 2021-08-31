@@ -62,7 +62,7 @@ import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theErrorsUI from '../UI/ErrorsUI.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
 
 import { SAVE_STATUS, LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK, PANE_ID } from '../util/Constants.js';
 
