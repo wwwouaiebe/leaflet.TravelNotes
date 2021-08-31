@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module APIKeysDialogToolbar
+@module dialogAPIKeys
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -48,13 +48,13 @@ import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import {
-	RestoreKeysFromUnsecureFileButtonEventListener,
-	ReloadKeysFromServerButtonEventListener,
-	RestoreKeysFromSecureFileButtonEventListener,
-	SaveKeysToSecureFileButtonEventListener,
-	SaveKeysToUnsecureFileButtonEventListener,
-	NewAPIKeyButtonEventListener
-} from '../dialogs/APIKeysDialogEventListeners.js';
+	RestoreFromUnsecureFileButtonClickEL,
+	ReloadFromServerButtonClickEL,
+	RestoreFromSecureFileButtonClickEL,
+	SaveToSecureFileButtonClickEL,
+	SaveToUnsecureFileButtonClickEL,
+	NewAPIKeyButtonClickEL
+} from '../dialogAPIKeys/APIKeysDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ class APIKeysDialogToolbar {
 			this.#rootHTMLElement
 		);
 		this.#reloadKeysFromServerButtonEventListener =
-			new ReloadKeysFromServerButtonEventListener ( this.#APIKeysDialog );
+			new ReloadFromServerButtonClickEL ( this.#APIKeysDialog );
 		this.#reloadKeysFromServerButton.addEventListener (
 			'click',
 			this.#reloadKeysFromServerButtonEventListener,
@@ -144,7 +144,7 @@ class APIKeysDialogToolbar {
 			this.#rootHTMLElement
 		);
 		this.#saveKeysToSecureFileButtonEventListener =
-			new SaveKeysToSecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls );
+			new SaveToSecureFileButtonClickEL ( this.#APIKeysDialog, this.#APIKeysControls );
 		this.#saveKeysToSecureFileButton.addEventListener (
 			'click',
 			this.#saveKeysToSecureFileButtonEventListener,
@@ -168,7 +168,7 @@ class APIKeysDialogToolbar {
 			this.#rootHTMLElement
 		);
 		this.#restoreKeysFromSecureFileButtonEventListener =
-			new RestoreKeysFromSecureFileButtonEventListener ( this.#APIKeysDialog );
+			new RestoreFromSecureFileButtonClickEL ( this.#APIKeysDialog );
 		this.#restoreKeysFromSecureFileButton.addEventListener (
 			'click',
 			this.#restoreKeysFromSecureFileButtonEventListener,
@@ -192,7 +192,7 @@ class APIKeysDialogToolbar {
 			this.#rootHTMLElement
 		);
 		this.#newAPIKeyButtonEventListener =
-			new NewAPIKeyButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls );
+			new NewAPIKeyButtonClickEL ( this.#APIKeysDialog, this.#APIKeysControls );
 		this.#newAPIKeyButton.addEventListener (
 			'click',
 			this.#newAPIKeyButtonEventListener,
@@ -216,7 +216,7 @@ class APIKeysDialogToolbar {
 			this.#rootHTMLElement
 		);
 		this.#saveKeysToUnsecureFileButtonEventListener =
-			new SaveKeysToUnsecureFileButtonEventListener ( this.#APIKeysDialog, this.#APIKeysControls );
+			new SaveToUnsecureFileButtonClickEL ( this.#APIKeysDialog, this.#APIKeysControls );
 		this.#saveKeysToUnsecureFileButton.addEventListener (
 			'click',
 			this.#saveKeysToUnsecureFileButtonEventListener,
@@ -240,7 +240,7 @@ class APIKeysDialogToolbar {
 			this.#rootHTMLElement
 		);
 		this.#restoreKeysFromUnsecureFileButtonEventListener =
-			new RestoreKeysFromUnsecureFileButtonEventListener ( this.#APIKeysDialog );
+			new RestoreFromUnsecureFileButtonClickEL ( this.#APIKeysDialog );
 		this.#restoreKeysFromUnsecureFileButton.addEventListener (
 			'click',
 			this.#restoreKeysFromUnsecureFileButtonEventListener,
@@ -269,11 +269,6 @@ class APIKeysDialogToolbar {
 			this.#createRestoreKeysFromUnsecureFileButton ( );
 		}
 	}
-
-	/**
-	constructor
-	@param {boolean} haveAPIKeysFile A boolean indicating if a APIKeys file was found on the server whenthe apps is launching
-	*/
 
 	constructor ( APIKeysDialog, APIKeysControls, haveAPIKeysFile ) {
 		this.#APIKeysDialog = APIKeysDialog;

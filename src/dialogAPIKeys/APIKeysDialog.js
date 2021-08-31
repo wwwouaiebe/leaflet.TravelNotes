@@ -48,18 +48,17 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module APIKeysDialog
-@private
+@module dialogAPIKeys
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import BaseDialog from '../dialogBase/BaseDialog.js';
-import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
-import { OnAPIKeyDeletedEventListener } from '../dialogs/APIKeysDialogEventListeners.js';
+import APIKeysDialogToolbar from '../dialogAPIKeys/APIKeysDialogToolbar.js';
+import { APIKeyDeletedEL } from '../dialogAPIKeys/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
+import APIKeysDialogKeyControl from '../dialogAPIKeys/APIKeysDialogKeyControl.js';
 
 import { ZERO } from '../util/Constants.js';
 
@@ -106,7 +105,7 @@ class APIKeysDialog extends BaseDialog {
 
 	#createAPIKeysControlsContainer ( ) {
 		this.#APIKeysControlsContainer = theHTMLElementsFactory.create ( 'div' );
-		this.#onAPIKeyDeletedEventListener = new OnAPIKeyDeletedEventListener ( this, this.#APIKeysControls );
+		this.#onAPIKeyDeletedEventListener = new APIKeyDeletedEL ( this, this.#APIKeysControls );
 		this.#APIKeysControlsContainer.addEventListener (
 			'apikeydeleted',
 			this.#onAPIKeyDeletedEventListener,

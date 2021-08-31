@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module APIKeysDialogKeyControl
+@module dialogAPIKeys
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -53,15 +53,14 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ClickDeleteButtonEventListener
+@class DeleteButtonClickEL
 @classdesc Event listener for click event on the delete key button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickDeleteButtonEventListener {
+class DeleteButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -156,7 +155,7 @@ class APIKeysDialogKeyControl {
 			},
 			this.#rootHTMLElement
 		)
-			.addEventListener ( 'click', new ClickDeleteButtonEventListener ( ), false );
+			.addEventListener ( 'click', new DeleteButtonClickEL ( ), false );
 	}
 
 	/**

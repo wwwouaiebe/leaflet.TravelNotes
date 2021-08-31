@@ -66,7 +66,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import APIKeysDialog from '../dialogs/APIKeysDialog.js';
+import APIKeysDialog from '../dialogAPIKeys/APIKeysDialog.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';

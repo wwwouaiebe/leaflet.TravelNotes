@@ -38,32 +38,31 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module APIKeysDialogEventListeners
+@module dialogAPIKeys
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
-/* eslint-disable max-lines */
 
 import PasswordDialog from '../dialogs/PasswordDialog.js';
 import DataEncryptor from '../util/DataEncryptor.js';
 import theUtilities from '../util/Utilities.js';
-import theTranslator from '../UI/Translator.js';
-import APIKeysDialogKeyControl from '../dialogs/APIKeysDialogKeyControl.js';
+import APIKeysDialogKeyControl from '../dialogAPIKeys/APIKeysDialogKeyControl.js';
+import { DataEncryptorHandlers, SaveAPIKeysHelper } from '../dialogAPIKeys/APIKeysDialogHelpers.js';
+
 import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OpenSecureFileInputEventListener
+@class APIKeyDeletedEL
 @classdesc Event listener for the apikeydeleted event
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OnAPIKeyDeletedEventListener {
+class APIKeyDeletedEL {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
@@ -78,10 +77,6 @@ class OnAPIKeyDeletedEventListener {
 		this.#APIKeysControls = null;
 	}
 
-	/**
-	Event listener method
-	*/
-
 	handleEvent ( ApiKeyDeletedEvent ) {
 		ApiKeyDeletedEvent.stopPropagation ( );
 		this.#APIKeysControls.delete ( ApiKeyDeletedEvent.data.objId );
@@ -92,15 +87,14 @@ class OnAPIKeyDeletedEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OpenSecureFileInputEventListener
-@classdesc Event listener for change event on the open unsecure file input
+@class OpenUnsecureFileChangeEL
+@classdesc change event listener for the open unsecure file input
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OpenUnsecureFileInputEventListener {
+class OpenUnsecureFileChangeEL {
 
 	#APIKeysDialog = null;
 
@@ -111,10 +105,6 @@ class OpenUnsecureFileInputEventListener {
 	destructor ( ) {
 		this.#APIKeysDialog = null;
 	}
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -139,32 +129,27 @@ class OpenUnsecureFileInputEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class RestoreKeysFromUnsecureFileButtonEventListener
-@classdesc Event listener for click event on the restore keys from unsecure file button based on the EventListener API.
+@class RestoreFromUnsecureFileButtonClickEL
+@classdesc click event listener for the restore keys from unsecure file button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class RestoreKeysFromUnsecureFileButtonEventListener {
+class RestoreFromUnsecureFileButtonClickEL {
 
 	#APIKeysDialog = null;
 	#openUnsecureFileInputEventListener = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
-		this.#openUnsecureFileInputEventListener = new OpenUnsecureFileInputEventListener ( this.#APIKeysDialog );
+		this.#openUnsecureFileInputEventListener = new OpenUnsecureFileChangeEL ( this.#APIKeysDialog );
 	}
 
 	destructor ( ) {
 		this.#APIKeysDialog = null;
 		this.#openUnsecureFileInputEventListener.destructor ( );
 	}
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -177,89 +162,27 @@ class RestoreKeysFromUnsecureFileButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class DataEncryptorEventListeners
-@classdesc onOkDecrypt and onErrorDecrypt event listeners for DataEncryptor
+@class ReloadFromServerButtonClickEL
+@classdesc click event listener for the reload keys from server file button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class DataEncryptorEventListeners {
+class ReloadFromServerButtonClickEL {
 
 	#APIKeysDialog = null;
+	#dataEncryptorHandlers = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		this.#dataEncryptorHandlers = new DataEncryptorHandlers ( this.#APIKeysDialog );
 	}
 
 	destructor ( ) {
 		this.#APIKeysDialog = null;
+		this.#dataEncryptorHandlers.destructor ( );
 	}
-
-	/**
-	onErrorDecrypt handler for the DataEncryptor
-	*/
-
-	onErrorDecrypt ( err ) {
-		this.#APIKeysDialog.hideWait ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
-		if ( err && 'Canceled by user' !== err ) {
-			this.#APIKeysDialog.showError (
-				theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' )
-			);
-		}
-	}
-
-	/**
-	onOkDecrypt handler for the DataEncryptor
-	*/
-
-	onOkDecrypt ( data ) {
-		try {
-			this.#APIKeysDialog.addAPIKeys (
-				JSON.parse ( new TextDecoder ( ).decode ( data ) )
-			);
-		}
-		catch ( err ) {
-			this.onErrorDecrypt ( err );
-			return;
-		}
-		this.#APIKeysDialog.hideWait ( );
-		this.#APIKeysDialog.hideError ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-}
-
-/**
-@--------------------------------------------------------------------------------------------------------------------------
-
-@class ReloadKeysFromServerButtonEventListener
-@classdesc Event listener for click event on the reload keys from server file button based on the EventListener API.
-@hideconstructor
-@private
-
-@--------------------------------------------------------------------------------------------------------------------------
-*/
-
-class ReloadKeysFromServerButtonEventListener {
-
-	#APIKeysDialog = null;
-	#dataEncryptorEventListener = null;
-
-	constructor ( APIKeysDialog ) {
-		this.#APIKeysDialog = APIKeysDialog;
-		this.#dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
-	}
-
-	destructor ( ) {
-		this.#APIKeysDialog = null;
-		this.#dataEncryptorEventListener.destructor ( );
-	}
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -275,21 +198,21 @@ class ReloadKeysFromServerButtonEventListener {
 							data => {
 								new DataEncryptor ( ).decryptData (
 									data,
-									tmpData => { this.#dataEncryptorEventListener.onOkDecrypt ( tmpData ); },
-									err => { this.#dataEncryptorEventListener.onErrorDecrypt ( err ); },
+									tmpData => { this.#dataEncryptorHandlers.onOkDecrypt ( tmpData ); },
+									err => { this.#dataEncryptorHandlers.onErrorDecrypt ( err ); },
 									new PasswordDialog ( false ).show ( )
 								);
 							}
 						);
 					}
 					else {
-						this.#dataEncryptorEventListener.onErrorDecrypt ( new Error ( 'Invalid http status' ) );
+						this.#dataEncryptorHandlers.onErrorDecrypt ( new Error ( 'Invalid http status' ) );
 					}
 				}
 			)
 			.catch (
 				err => {
-					this.#dataEncryptorEventListener.onErrorDecrypt ( err );
+					this.#dataEncryptorHandlers.onErrorDecrypt ( err );
 					if ( err instanceof Error ) {
 						console.error ( err );
 					}
@@ -301,36 +224,27 @@ class ReloadKeysFromServerButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OpenSecureFileInputEventListener
-@classdesc Event listener for change event on the open secure file input
+@class OpenSecureFileChangeEL
+@classdesc Change event listener for the open secure file input
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OpenSecureFileInputEventListener {
+class OpenSecureFileChangeEL {
 
 	#APIKeysDialog = null;
-	#dataEncryptorEventListener = null;
+	#dataEncryptorHandlers = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
-		this.#dataEncryptorEventListener = new DataEncryptorEventListeners ( this.#APIKeysDialog );
+		this.#dataEncryptorHandlers = new DataEncryptorHandlers ( this.#APIKeysDialog );
 	}
 
 	destructor ( ) {
 		this.#APIKeysDialog = null;
-		this.#dataEncryptorEventListener.destructor ( );
+		this.#dataEncryptorHandlers.destructor ( );
 	}
-
-	/**
-	Event listener method
-	*/
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -340,8 +254,8 @@ class OpenSecureFileInputEventListener {
 		fileReader.onload = ( ) => {
 			new DataEncryptor ( ).decryptData (
 				fileReader.result,
-				data => { this.#dataEncryptorEventListener.onOkDecrypt ( data ); },
-				err => { this.#dataEncryptorEventListener.onErrorDecrypt ( err ); },
+				data => { this.#dataEncryptorHandlers.onOkDecrypt ( data ); },
+				err => { this.#dataEncryptorHandlers.onErrorDecrypt ( err ); },
 				new PasswordDialog ( false ).show ( )
 			);
 		};
@@ -352,32 +266,27 @@ class OpenSecureFileInputEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class RestoreKeysFromSecureFileButtonEventListener
-@classdesc Event listener for click event on the restore keys from secure file button based on the EventListener API.
+@class RestoreFromSecureFileButtonClickEL
+@classdesc click event listener for the restore keys from secure file button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class RestoreKeysFromSecureFileButtonEventListener {
+class RestoreFromSecureFileButtonClickEL {
 
 	#APIKeysDialog = null;
 	#openSecureFileInputEventListener = null;
 
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
-		this.#openSecureFileInputEventListener = new OpenSecureFileInputEventListener ( this.#APIKeysDialog );
+		this.#openSecureFileInputEventListener = new OpenSecureFileChangeEL ( this.#APIKeysDialog );
 	}
 
 	destructor ( ) {
 		this.#APIKeysDialog = null;
 		this.#openSecureFileInputEventListener.destructor ( );
 	}
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -389,97 +298,33 @@ class RestoreKeysFromSecureFileButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class SaveAPIKeysHelper
-@classdesc shared methods for save to file buttons
+@class SaveToSecureFileButtonClickEL
+@classdesc Click event listener for the saveAPIKeys to secure file button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class SaveAPIKeysHelper {
-
-	#APIKeysControls = null;
-
-	constructor ( APIKeysControls ) {
-		this.#APIKeysControls = APIKeysControls;
-	}
-
-	destructor ( ) {
-		this.#APIKeysControls = null;
-	}
-
-	/**
-	Transform the APIKeysControls value into a JSON string
-	*/
-
-	getAPIKeysJsonString ( ) {
-		let APIKeys = [];
-		this.#APIKeysControls.forEach (
-			APIKeyControl => { APIKeys.push ( APIKeyControl.APIKey ); }
-		);
-		return JSON.stringify ( APIKeys );
-	}
-
-}
-
-/**
-@--------------------------------------------------------------------------------------------------------------------------
-
-@class SaveKeysToSecureFileButtonEventListener
-@classdesc Event listener for click event on the saveAPIKeys to secure file button based on the EventListener API.
-@hideconstructor
-@private
-
-@--------------------------------------------------------------------------------------------------------------------------
-*/
-
-class SaveKeysToSecureFileButtonEventListener {
+class SaveToSecureFileButtonClickEL {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
 	#saveAPIKeysHelper = null;
+	#dataEncryptorHandlers = null;
 
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
 		this.#saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
+		this.#dataEncryptorHandlers = new DataEncryptorHandlers ( this.#APIKeysDialog );
 	}
 
 	destructor ( ) {
 		this.#APIKeysDialog = null;
 		this.#APIKeysControls = null;
 		this.#saveAPIKeysHelper.destructor ( );
+		this.#dataEncryptorHandlers.destructor ( );
 	}
-
-	/**
-	onOkEncrypt handler for the DataEncryptor
-	@private
-	*/
-
-	#onOkEncrypt ( data ) {
-		this.#APIKeysDialog.hideError ( );
-		this.#APIKeysDialog.hideWait ( );
-		theUtilities.saveFile ( 'APIKeys', data );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-
-	/**
-	onErrorEncrypt handler for the DataEncryptor
-	@private
-	*/
-
-	#onErrorEncrypt ( ) {
-		this.#APIKeysDialog.showError (
-			theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' )
-		);
-		this.#APIKeysDialog.hideWait ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
-	}
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -492,8 +337,8 @@ class SaveKeysToSecureFileButtonEventListener {
 
 		new DataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( this.#saveAPIKeysHelper.getAPIKeysJsonString ( ) ),
-			data => this.#onOkEncrypt ( data ),
-			( ) => this.#onErrorEncrypt ( ),
+			data => this.#dataEncryptorHandlers.onOkEncrypt ( data ),
+			( ) => this.#dataEncryptorHandlers.onErrorEncrypt ( ),
 			new PasswordDialog ( true ).show ( )
 		);
 	}
@@ -502,15 +347,14 @@ class SaveKeysToSecureFileButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class SaveKeysToUnsecureFileButtonEventListener
-@classdesc Event listener for click event on the saveAPIKeys to unsecure file button based on the EventListener API.
+@class SaveToUnsecureFileButtonClickEL
+@classdesc Click event listener for the saveAPIKeys to unsecure file button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class SaveKeysToUnsecureFileButtonEventListener {
+class SaveToUnsecureFileButtonClickEL {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
@@ -527,10 +371,6 @@ class SaveKeysToUnsecureFileButtonEventListener {
 		this.#APIKeysControls = null;
 		this.#saveAPIKeysHelper.destructor ( );
 	}
-
-	/**
-	Event listener method
-	*/
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -548,15 +388,14 @@ class SaveKeysToUnsecureFileButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class NewAPIKeyButtonEventListener
-@classdesc Event listener for click event on the add new APIKey button based on the EventListener API.
+@class NewAPIKeyButtonClickEL
+@classdesc Click event listener for the add new APIKey button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class NewAPIKeyButtonEventListener {
+class NewAPIKeyButtonClickEL {
 
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
@@ -571,10 +410,6 @@ class NewAPIKeyButtonEventListener {
 		this.#APIKeysControls = null;
 	}
 
-	/**
-	Event listener method
-	*/
-
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		let APIKey = Object.seal ( { providerName : '', providerKey : '' } );
@@ -585,16 +420,14 @@ class NewAPIKeyButtonEventListener {
 }
 
 export {
-	OnAPIKeyDeletedEventListener,
-	RestoreKeysFromUnsecureFileButtonEventListener,
-	ReloadKeysFromServerButtonEventListener,
-	RestoreKeysFromSecureFileButtonEventListener,
-	SaveKeysToSecureFileButtonEventListener,
-	SaveKeysToUnsecureFileButtonEventListener,
-	NewAPIKeyButtonEventListener
+	APIKeyDeletedEL,
+	RestoreFromUnsecureFileButtonClickEL,
+	ReloadFromServerButtonClickEL,
+	RestoreFromSecureFileButtonClickEL,
+	SaveToSecureFileButtonClickEL,
+	SaveToUnsecureFileButtonClickEL,
+	NewAPIKeyButtonClickEL
 };
-
-/* eslint-enable max-lines */
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
