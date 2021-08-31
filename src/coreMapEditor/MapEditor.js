@@ -61,8 +61,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapEditor
-@private
+@module coreMapEditor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -73,11 +72,20 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import MapEditorViewer from '../coreMapEditor/MapEditorViewer.js';
-import EditedRouteEventListeners from '../coreMapEditor/EditedRouteEventListeners.js';
-import NoteBulletEventListeners from '../coreMapEditor/NoteBulletEventListeners.js';
-import NoteMarkerEventListeners from '../coreMapEditor/NoteMarkerEventListeners.js';
-import WayPointEventListeners from '../coreMapEditor/WayPointEventListeners.js';
-import RouteEventListeners from '../coreMapEditor/RouteEventListeners.js';
+import EditedRouteMouseOverEL from '../coreMapEditor/EditedRouteEventListeners.js';
+import {
+	NoteBulletDragEndEL,
+	NoteBulletDragEL,
+	NoteBulletMouseEnterEL,
+	NoteBulletMouseLeaveEL
+} from '../coreMapEditor/NoteBulletEventListeners.js';
+import {
+	NoteMarkerContextMenuEL,
+	NoteMarkerDragEndEL,
+	NoteMarkerDragEL
+} from '../coreMapEditor/NoteMarkerEventListeners.js';
+import { WayPointContextMenuEL, WayPointDragEndEL } from '../coreMapEditor/WayPointEventListeners.js';
+import { RouteContextMenuEL } from '../coreMapEditor/RouteEventListeners.js';
 import { ROUTE_EDITION_STATUS, LAT_LNG, INVALID_OBJ_ID, TWO, WAY_POINT_ICON_SIZE } from '../util/Constants.js';
 
 const OUR_MARKER_BOUNDS_PRECISION = 0.01;
@@ -147,21 +155,21 @@ class MapEditor	extends MapEditorViewer {
 			let polyline = theTravelNotesData.mapObjects.get ( addedRouteObjId );
 
 			if ( ! theTravelNotesData.travel.readOnly ) {
-				window.L.DomEvent.on ( polyline, 'contextmenu', RouteEventListeners.onContextMenu );
-				window.L.DomEvent.on ( polyline, 'mouseover', EditedRouteEventListeners.onMouseOver );
+				window.L.DomEvent.on ( polyline, 'contextmenu', RouteContextMenuEL.handleEvent );
+				window.L.DomEvent.on ( polyline, 'mouseover', EditedRouteMouseOverEL.handleEvent );
 
 				let notesIterator = route.notes.iterator;
 				while ( ! notesIterator.done ) {
 					let layerGroup = theTravelNotesData.mapObjects.get ( notesIterator.value.objId );
 					let marker = layerGroup.getLayer ( layerGroup.markerId );
 					let bullet = layerGroup.getLayer ( layerGroup.bulletId );
-					window.L.DomEvent.on ( bullet, 'dragend', NoteBulletEventListeners.onDragEnd );
-					window.L.DomEvent.on ( bullet, 'drag',	NoteBulletEventListeners.onDrag );
-					window.L.DomEvent.on ( bullet, 'mouseenter', NoteBulletEventListeners.onMouseEnter );
-					window.L.DomEvent.on ( bullet, 'mouseleave', NoteBulletEventListeners.onMouseLeave );
-					window.L.DomEvent.on ( marker, 'contextmenu', NoteMarkerEventListeners.onContextMenu );
-					window.L.DomEvent.on ( marker, 'dragend', NoteMarkerEventListeners.onDragEnd );
-					window.L.DomEvent.on ( marker, 'drag', NoteMarkerEventListeners.onDrag );
+					window.L.DomEvent.on ( bullet, 'dragend', NoteBulletDragEndEL.handleEvent );
+					window.L.DomEvent.on ( bullet, 'drag',	NoteBulletDragEL.handleEvent );
+					window.L.DomEvent.on ( bullet, 'mouseenter', NoteBulletMouseEnterEL.handleEvent );
+					window.L.DomEvent.on ( bullet, 'mouseleave', NoteBulletMouseLeaveEL.handleEvent );
+					window.L.DomEvent.on ( marker, 'contextmenu', NoteMarkerContextMenuEL.handleEvent );
+					window.L.DomEvent.on ( marker, 'dragend', NoteMarkerDragEndEL.handleEvent );
+					window.L.DomEvent.on ( marker, 'drag', NoteMarkerDragEL.handleEvent );
 				}
 			}
 
@@ -222,13 +230,13 @@ class MapEditor	extends MapEditorViewer {
 				noteObjects.marker.openPopup ( );
 			}
 			if ( ! theTravelNotesData.travel.readOnly ) {
-				window.L.DomEvent.on ( noteObjects.bullet, 'dragend', NoteBulletEventListeners.onDragEnd );
-				window.L.DomEvent.on ( noteObjects.bullet, 'drag',	NoteBulletEventListeners.onDrag );
-				window.L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	NoteBulletEventListeners.onMouseEnter );
-				window.L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	NoteBulletEventListeners.onMouseLeave );
-				window.L.DomEvent.on ( noteObjects.marker, 'contextmenu', NoteMarkerEventListeners.onContextMenu );
-				window.L.DomEvent.on ( noteObjects.marker, 'dragend', NoteMarkerEventListeners.onDragEnd );
-				window.L.DomEvent.on ( noteObjects.marker, 'drag', NoteMarkerEventListeners.onDrag );
+				window.L.DomEvent.on ( noteObjects.bullet, 'dragend', NoteBulletDragEndEL.handleEvent );
+				window.L.DomEvent.on ( noteObjects.bullet, 'drag',	NoteBulletDragEL.handleEvent );
+				window.L.DomEvent.on ( noteObjects.bullet, 'mouseenter',	NoteBulletMouseEnterEL.handleEvent );
+				window.L.DomEvent.on ( noteObjects.bullet, 'mouseleave',	NoteBulletMouseLeaveEL.handleEvent );
+				window.L.DomEvent.on ( noteObjects.marker, 'contextmenu', NoteMarkerContextMenuEL.handleEvent );
+				window.L.DomEvent.on ( noteObjects.marker, 'dragend', NoteMarkerDragEndEL.handleEvent );
+				window.L.DomEvent.on ( noteObjects.marker, 'drag', NoteMarkerDragEL.handleEvent );
 			}
 		}
 	}
@@ -303,14 +311,14 @@ class MapEditor	extends MapEditorViewer {
 			-WAY_POINT_ICON_SIZE / TWO
 		];
 
-		window.L.DomEvent.on ( marker, 'contextmenu', WayPointEventListeners.onContextMenu );
+		window.L.DomEvent.on ( marker, 'contextmenu', WayPointContextMenuEL.handleEvent );
 
 		// ... and added to the map...
 		marker.objId = wayPoint.objId;
 		this.addToMap ( wayPoint.objId, marker );
 
 		// ... and a dragend event listener is created
-		window.L.DomEvent.on ( marker, 'dragend', WayPointEventListeners.onDragEnd );
+		window.L.DomEvent.on ( marker, 'dragend', WayPointDragEndEL.handleEvent );
 	}
 
 	/**

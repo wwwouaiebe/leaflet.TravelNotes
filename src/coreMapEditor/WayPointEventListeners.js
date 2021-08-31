@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file newClass.js
+@file WayPointEventListeners.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module WayPointEventListeners
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,38 +51,40 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class WayPointEventListeners
-@classdesc This class contains the event listeners for the waypoints
+@class WayPointDragEndEL
+@classdesc contextmenu event listener for the waypoint marker
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class WayPointEventListeners {
+class WayPointContextMenuEL {
 
-	/**
-	contextmenu event listener
-	@listens contextmenu
-	*/
-
-	static onContextMenu ( contextMenuEvent ) {
+	static handleEvent ( contextMenuEvent ) {
 		new WayPointContextMenu ( contextMenuEvent ).show ( );
 	}
+}
 
-	/**
-	dragend event listener
-	@listens dragend
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onDragEnd ( dragEndEvent ) {
+@class WayPointDragEndEL
+@classdesc dragend event listener for the waypoint marker
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class WayPointDragEndEL {
+
+	static handleEvent ( dragEndEvent ) {
 		let draggedWayPoint = theTravelNotesData.travel.editedRoute.wayPoints.getAt ( dragEndEvent.target.objId );
 		draggedWayPoint.latLng = [ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ];
 		theWayPointEditor.wayPointDragEnd ( dragEndEvent.target.objId );
 	}
 }
 
-export default WayPointEventListeners;
+export { WayPointContextMenuEL, WayPointDragEndEL };
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

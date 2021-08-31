@@ -57,7 +57,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module MapEditorViewer
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -70,49 +70,13 @@ import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteHTMLViewsFactory from '../UI/RouteHTMLViewsFactory.js';
 import theNoteHTMLViewsFactory from '../UI/NoteHTMLViewsFactory.js';
+import { RouteMouseOverOrMoveEL } from '../coreMapEditor/RouteEventListeners.js';
 
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
 
 const OUR_DEFAULT_MAX_ZOOM = 18;
 const OUR_DEFAULT_MIN_ZOOM = 0;
 const OUR_NOTE_Z_INDEX_OFFSET = 100;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class RouteEventListeners
-@classdesc This class contains the event listeners for the routes
-@hideconstructor
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class RouteEventListeners {
-
-	/**
-	mouse over and mousemove event listeners
-	@listens mouseover
-	@listens mousemove
-	*/
-
-	static onMouseOverOrMove ( mapEvent ) {
-		let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
-		let distance = theGeometry.getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
-			.distance;
-		distance += route.chainedDistance;
-		distance = theUtilities.formatDistance ( distance );
-		let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
-		polyline.closeTooltip ( );
-		let tooltipText = route.computedName;
-		if ( ! theTravelNotesData.travel.readOnly ) {
-			tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
-			tooltipText += distance;
-		}
-		polyline.setTooltipContent ( tooltipText );
-		polyline.openTooltip ( mapEvent.latlng );
-	}
-}
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -297,8 +261,8 @@ class MapEditorViewer {
 				route.computedName,
 				{ sticky : true, direction : 'right' }
 			);
-			window.L.DomEvent.on ( polyline, 'mouseover', RouteEventListeners.onMouseOverOrMove );
-			window.L.DomEvent.on ( polyline, 'mousemove', RouteEventListeners.onMouseOverOrMove );
+			window.L.DomEvent.on ( polyline, 'mouseover', RouteMouseOverOrMoveEL.handleEvent );
+			window.L.DomEvent.on ( polyline, 'mousemove', RouteMouseOverOrMoveEL.handleEvent );
 		}
 
 		polyline.bindPopup (

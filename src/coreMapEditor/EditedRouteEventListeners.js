@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module EditedRouteEventListeners
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -48,20 +48,26 @@ import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import TempWayPointMarkerEventListeners from '../coreMapEditor/TempWayPointMarkerEventListeners.js';
+import {
+	TempWayPointMarkerELData,
+	TempWayPointMarkerMouseOutEL,
+	TempWayPointMarkerDragStartEL,
+	TempWayPointMarkerContextMenuEL,
+	TempWayPointMarkerDragEndEL
+} from '../coreMapEditor/TempWayPointMarkerEventListeners.js';
 import { ROUTE_EDITION_STATUS, NOT_FOUND, ZERO, ONE, TWO, WAY_POINT_ICON_SIZE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class EditedRouteEventListeners
-@classdesc This class contains the event listeners for the edited route
+@class EditedRouteMouseOverEL
+@classdesc mouseover event listeners for the edited route
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class EditedRouteEventListeners {
+class EditedRouteMouseOverEL {
 
 	static #showDragTooltip = ONE;
 
@@ -70,12 +76,12 @@ class EditedRouteEventListeners {
 	@listens mouseover
 	*/
 
-	static onMouseOver ( mapEvent ) {
+	static handleEvent ( mapEvent ) {
 		let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
 		if ( ROUTE_EDITION_STATUS.notEdited !== route.editionStatus ) {
-			TempWayPointMarkerEventListeners.tempWayPointInitialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
-			if ( TempWayPointMarkerEventListeners.tempWayPointMarker ) {
-				TempWayPointMarkerEventListeners.tempWayPointMarker.setLatLng ( mapEvent.latlng );
+			TempWayPointMarkerELData.initialLatLng = [ mapEvent.latlng.lat, mapEvent.latlng.lng ];
+			if ( TempWayPointMarkerELData.marker ) {
+				TempWayPointMarkerELData.marker.setLatLng ( mapEvent.latlng );
 			}
 			else {
 
@@ -85,7 +91,7 @@ class EditedRouteEventListeners {
 				'"></div><div class="TravelNotes-Map-WayPointText">?</div>';
 
 				// a leaflet marker is created...
-				TempWayPointMarkerEventListeners.tempWayPointMarker = window.L.marker (
+				TempWayPointMarkerELData.marker = window.L.marker (
 					mapEvent.latlng,
 					{
 						icon : window.L.divIcon (
@@ -105,42 +111,42 @@ class EditedRouteEventListeners {
 				if (
 					NOT_FOUND === theConfig.route.showDragTooltip
 					||
-					EditedRouteEventListeners.#showDragTooltip <= theConfig.route.showDragTooltip
+					EditedRouteMouseOverEL.#showDragTooltip <= theConfig.route.showDragTooltip
 				) {
-					EditedRouteEventListeners.#showDragTooltip ++;
-					TempWayPointMarkerEventListeners.tempWayPointMarker.bindTooltip (
+					EditedRouteMouseOverEL.#showDragTooltip ++;
+					TempWayPointMarkerELData.marker.bindTooltip (
 						theTranslator.getText ( 'MapEditor - Drag and drop to add a waypoint' )
 					);
-					TempWayPointMarkerEventListeners.tempWayPointMarker.getTooltip ( ).options.offset = [	ZERO, ZERO ];
+					TempWayPointMarkerELData.marker.getTooltip ( ).options.offset = [	ZERO, ZERO ];
 
 				}
-				TempWayPointMarkerEventListeners.tempWayPointMarker.addTo ( theTravelNotesData.map );
+				TempWayPointMarkerELData.marker.addTo ( theTravelNotesData.map );
 				window.L.DomEvent.on (
-					TempWayPointMarkerEventListeners.tempWayPointMarker,
+					TempWayPointMarkerELData.marker,
 					'mouseout',
-					TempWayPointMarkerEventListeners.onMouseOut
+					TempWayPointMarkerMouseOutEL.handleEvent
 				);
 				window.L.DomEvent.on (
-					TempWayPointMarkerEventListeners.tempWayPointMarker,
+					TempWayPointMarkerELData.marker,
 					'dragstart',
-					TempWayPointMarkerEventListeners.onDragStart
+					TempWayPointMarkerDragStartEL.handleEvent
 				);
 				window.L.DomEvent.on (
-					TempWayPointMarkerEventListeners.tempWayPointMarker,
+					TempWayPointMarkerELData.marker,
 					'dragend',
-					TempWayPointMarkerEventListeners.onDragEnd
+					TempWayPointMarkerDragEndEL.handleEvent
 				);
 				window.L.DomEvent.on (
-					TempWayPointMarkerEventListeners.tempWayPointMarker,
+					TempWayPointMarkerELData.marker,
 					'contextmenu',
-					TempWayPointMarkerEventListeners.onContextMenu
+					TempWayPointMarkerContextMenuEL.handleEvent
 				);
 			}
 		}
 	}
 }
 
-export default EditedRouteEventListeners;
+export default EditedRouteMouseOverEL;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

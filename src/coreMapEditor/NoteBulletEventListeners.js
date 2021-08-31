@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteBulletEventListeners
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -53,21 +53,16 @@ import theGeometry from '../util/Geometry.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteBulletEventListeners
-@classdesc This class contains the event listeners for the notes bullets
+@class NoteBulletDragEndEL
+@classdesc dragend event listener for the notes bullet
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteBulletEventListeners {
+class NoteBulletDragEndEL {
 
-	/**
-	dragend event listener
-	@listens dragend
-	*/
-
-	static onDragEnd ( dragEndEvent ) {
+	static handleEvent ( dragEndEvent ) {
 
 		// the TravelNotes note and route are searched...
 		let noteAndRoute = theDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId );
@@ -113,39 +108,68 @@ class NoteBulletEventListeners {
 		// and the HTML page is adapted
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
+}
 
-	/**
-	drag event listener
-	@listens drag
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onDrag ( dragEvent ) {
+@class NoteBulletDragEL
+@classdesc drag event listener for the notes bullet
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NoteBulletDragEL {
+
+	static handleEvent ( dragEvent ) {
 		let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
 		let draggedLayerGroup = theTravelNotesData.mapObjects.get ( dragEvent.target.objId );
 		draggedLayerGroup.getLayer ( draggedLayerGroup.polylineId )
 			.setLatLngs ( [ [ dragEvent.latlng.lat, dragEvent.latlng.lng ], draggedNote.iconLatLng ] );
 	}
+}
 
-	/**
-	mouseenter event listener
-	@listens mouseenter
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onMouseEnter ( mouseEnterEvent ) {
+@class NoteBulletMouseEnterEL
+@classdesc mouseenter event listener for the notes bullet
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NoteBulletMouseEnterEL {
+
+	static handleEvent ( mouseEnterEvent ) {
 		mouseEnterEvent.originalEvent.target.style.opacity = theConfig.note.grip.moveOpacity;
 	}
+}
 
-	/**
-	mouseleave event listener
-	@listens mouseleave
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onMouseLeave ( mouseLeaveEvent ) {
+@class NoteBulletMouseLeaveEL
+@classdesc mouseleave event listener for the notes bullet
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NoteBulletMouseLeaveEL {
+
+	static handleEvent ( mouseLeaveEvent ) {
 		mouseLeaveEvent.originalEvent.target.style.opacity = theConfig.note.grip.opacity;
 	}
 }
 
-export default NoteBulletEventListeners;
+export {
+	NoteBulletDragEndEL,
+	NoteBulletDragEL,
+	NoteBulletMouseEnterEL,
+	NoteBulletMouseLeaveEL
+};
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

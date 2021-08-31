@@ -42,7 +42,7 @@ import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteMarkerEventListeners
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,31 +51,33 @@ import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteMarkerEventListeners
-@classdesc This class contains the event listeners for the notes markers
+@class NoteMarkerContextMenuEL
+@classdesc contextmenu event listener for the notes marker
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteMarkerEventListeners {
+class NoteMarkerContextMenuEL {
 
-	/**
-	contextmenu event listener
-	@listens contextmenu
-	*/
-
-	static onContextMenu ( contextMenuEvent ) {
+	static handleEvent ( contextMenuEvent ) {
 		new NoteContextMenu ( contextMenuEvent ).show ( );
 	}
+}
 
-	/**
-	dragend event listener
-	@listens dragend
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onDragEnd ( dragEndEvent ) {
+@class NoteMarkerDragEndEL
+@classdesc dragend event listener for the notes marker
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NoteMarkerDragEndEL {
+
+	static handleEvent ( dragEndEvent ) {
 
 		// The TravelNotes note linked to the marker is searched...
 		let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEndEvent.target.objId ).note;
@@ -94,13 +96,21 @@ class NoteMarkerEventListeners {
 				[ draggedNote.latLng, draggedNote.iconLatLng ]
 			);
 	}
+}
 
-	/**
-	drag event listener
-	@listens drag
-	*/
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	static onDrag ( dragEvent ) {
+@class NoteMarkerDragEL
+@classdesc drag event listener for the notes marker
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class NoteMarkerDragEL {
+
+	static handleEvent ( dragEvent ) {
 
 		// The TravelNotes note linked to the marker is searched...
 		let draggedNote = theDataSearchEngine.getNoteAndRoute ( dragEvent.target.objId ).note;
@@ -114,7 +124,11 @@ class NoteMarkerEventListeners {
 	}
 }
 
-export default NoteMarkerEventListeners;
+export {
+	NoteMarkerContextMenuEL,
+	NoteMarkerDragEndEL,
+	NoteMarkerDragEL
+};
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

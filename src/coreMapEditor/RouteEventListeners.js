@@ -38,39 +38,71 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RouteEventListeners
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
+import theGeometry from '../util/Geometry.js';
+import theUtilities from '../util/Utilities.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import { ZERO } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RouteEventListeners
-@classdesc This class contains the event listeners for the routes
+@class RouteMouseOverOrMoveEL
+@classdesc mouseover and mousemove event listener for the routes
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteEventListeners {
+class RouteMouseOverOrMoveEL {
 
-	/**
-	contextmenu event listener
-	@listens contextmenu
-	*/
+	static handleEvent ( mapEvent ) {
+		let route = theDataSearchEngine.getRoute ( mapEvent.target.objId );
+		let distance = theGeometry.getClosestLatLngDistance ( route, [ mapEvent.latlng.lat, mapEvent.latlng.lng ] )
+			.distance;
+		distance += route.chainedDistance;
+		distance = theUtilities.formatDistance ( distance );
+		let polyline = theTravelNotesData.mapObjects.get ( mapEvent.target.objId );
+		polyline.closeTooltip ( );
+		let tooltipText = route.computedName;
+		if ( ! theTravelNotesData.travel.readOnly ) {
+			tooltipText += ( ZERO === tooltipText.length ? '' : ' - ' );
+			tooltipText += distance;
+		}
+		polyline.setTooltipContent ( tooltipText );
+		polyline.openTooltip ( mapEvent.latlng );
+	}
+}
 
-	static onContextMenu ( contextMenuEvent ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class RouteContextMenuEL
+@classdesc contextmenu event listener for the routes
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class RouteContextMenuEL {
+
+	static handleEvent ( contextMenuEvent ) {
 		window.L.DomEvent.stopPropagation ( contextMenuEvent );
 		new RouteContextMenu ( contextMenuEvent ).show ( );
 	}
 }
 
-export default RouteEventListeners;
+export {
+	RouteMouseOverOrMoveEL,
+	RouteContextMenuEL
+};
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

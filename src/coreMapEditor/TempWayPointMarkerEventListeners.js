@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module TempWayPointMarkerEventListeners
+@module coreMapEditor
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -53,90 +53,126 @@ import { ZERO, ONE } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TempWayPointMarkerEventListeners
-@classdesc This class contains the event listeners for the temp waypoint
+@class TempWayPointMarkerELData
+@classdesc This class contains shared data by the event listeners for the temp waypoint
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TempWayPointMarkerEventListeners {
+class TempWayPointMarkerELData {
+	static marker = null;
+	static initialLatLng = null;
+}
 
-	static tempWayPointMarker = null;
-	static tempWayPointInitialLatLng = null;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	mouseout event listener
-	@listens mouseout
-	*/
+@class TempWayPointMarkerMouseOutEL
+@classdesc mouseout event listener for the temp waypoint marker
+@hideconstructor
 
-	static onMouseOut ( ) {
-		if ( TempWayPointMarkerEventListeners.tempWayPointMarker ) {
-			window.L.DomEvent.off ( TempWayPointMarkerEventListeners.tempWayPointMarker );
-			theTravelNotesData.map.removeLayer ( TempWayPointMarkerEventListeners.tempWayPointMarker );
-			TempWayPointMarkerEventListeners.tempWayPointMarker = null;
-		}
-	}
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	/**
-	dragstart event listener
-	@listens dragstart
-	*/
+class TempWayPointMarkerMouseOutEL {
 
-	static onDragStart ( ) {
-		window.L.DomEvent.off (
-			TempWayPointMarkerEventListeners.tempWayPointMarker,
-			'mouseout',
-			TempWayPointMarkerEventListeners.onMouseOut
-		);
-	}
-
-	/**
-	contextmenu event listener
-	@listens contextmenu
-	*/
-
-	static onContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.latlng.lat = TempWayPointMarkerEventListeners.tempWayPointInitialLatLng [ ZERO ];
-		contextMenuEvent.latlng.lng = TempWayPointMarkerEventListeners.tempWayPointInitialLatLng [ ONE ];
-		contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
-		new RouteContextMenu ( contextMenuEvent ).show ( );
-	}
-
-	/**
-	dragend event listener
-	@listens dragend
-	@private
-	*/
-
-	static onDragEnd ( dragEndEvent ) {
-		theWayPointEditor.addWayPointOnRoute (
-			TempWayPointMarkerEventListeners.tempWayPointInitialLatLng,
-			[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
-		);
-		if ( TempWayPointMarkerEventListeners.tempWayPointMarker ) {
-			window.L.DomEvent.off (
-				TempWayPointMarkerEventListeners.tempWayPointMarker,
-				'dragstart',
-				TempWayPointMarkerEventListeners.onDragStart
-			);
-			window.L.DomEvent.off (
-				TempWayPointMarkerEventListeners.tempWayPointMarker,
-				'dragend',
-				TempWayPointMarkerEventListeners.onDragEnd
-			);
-			window.L.DomEvent.off (
-				TempWayPointMarkerEventListeners.tempWayPointMarker,
-				'contextmenu',
-				TempWayPointMarkerEventListeners.onContextMenu
-			);
-			theTravelNotesData.map.removeLayer ( TempWayPointMarkerEventListeners.tempWayPointMarker );
-			TempWayPointMarkerEventListeners.tempWayPointMarker = null;
+	static handleEvent ( ) {
+		if ( TempWayPointMarkerELData.marker ) {
+			window.L.DomEvent.off ( TempWayPointMarkerELData.marker );
+			theTravelNotesData.map.removeLayer ( TempWayPointMarkerELData.marker );
+			TempWayPointMarkerELData.marker = null;
 		}
 	}
 }
 
-export default TempWayPointMarkerEventListeners;
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class TempWayPointMarkerMouseOutEL
+@classdesc dragstart event listener for the temp waypoint marker
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TempWayPointMarkerDragStartEL {
+
+	static handleEvent ( ) {
+		window.L.DomEvent.off (
+			TempWayPointMarkerELData.marker,
+			'mouseout',
+			TempWayPointMarkerMouseOutEL.handleEvent
+		);
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class TempWayPointMarkerMouseOutEL
+@classdesc contextmenu event listener for the temp waypoint marker
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TempWayPointMarkerContextMenuEL {
+
+	static handleEvent ( contextMenuEvent ) {
+		contextMenuEvent.latlng.lat = TempWayPointMarkerELData.initialLatLng [ ZERO ];
+		contextMenuEvent.latlng.lng = TempWayPointMarkerELData.initialLatLng [ ONE ];
+		contextMenuEvent.target.objId = theTravelNotesData.travel.editedRoute.objId;
+		new RouteContextMenu ( contextMenuEvent ).show ( );
+	}
+}
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class TempWayPointMarkerDragEndEL
+@classdesc dragend event listener for the temp waypoint marker
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class TempWayPointMarkerDragEndEL {
+
+	static handleEvent ( dragEndEvent ) {
+		theWayPointEditor.addWayPointOnRoute (
+			TempWayPointMarkerELData.initialLatLng,
+			[ dragEndEvent.target.getLatLng ( ).lat, dragEndEvent.target.getLatLng ( ).lng ]
+		);
+		if ( TempWayPointMarkerELData.marker ) {
+			window.L.DomEvent.off (
+				TempWayPointMarkerELData.marker,
+				'dragstart',
+				TempWayPointMarkerDragStartEL.handleEvent
+			);
+			window.L.DomEvent.off (
+				TempWayPointMarkerELData.marker,
+				'dragend',
+				TempWayPointMarkerDragEndEL.handleEvent
+			);
+			window.L.DomEvent.off (
+				TempWayPointMarkerELData.marker,
+				'contextmenu',
+				TempWayPointMarkerContextMenuEL.handleEvent
+			);
+			theTravelNotesData.map.removeLayer ( TempWayPointMarkerELData.marker );
+			TempWayPointMarkerELData.marker = null;
+		}
+	}
+}
+
+export {
+	TempWayPointMarkerELData,
+	TempWayPointMarkerMouseOutEL,
+	TempWayPointMarkerDragStartEL,
+	TempWayPointMarkerContextMenuEL,
+	TempWayPointMarkerDragEndEL
+};
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
