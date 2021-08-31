@@ -43,7 +43,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module WayPointPropertiesDialog
+@module dialogs
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ import theConfig from '../data/Config.js';
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class WayPointPropertiesDialogV3 extends BaseDialog {
+class WayPointPropertiesDialog extends BaseDialog {
 
 	/**
 	A reference to the edited wayPoint
@@ -238,7 +238,7 @@ class WayPointPropertiesDialogV3 extends BaseDialog {
 	get title ( ) { return theTranslator.getText ( 'WayPointPropertiesDialog - Waypoint properties' ); }
 }
 
-export default WayPointPropertiesDialogV3;
+export default WayPointPropertiesDialog;
 
 /*
 --- End of NoteDialog.js file -------------------------------------------------------------------------------------------------

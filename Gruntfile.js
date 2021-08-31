@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 		'src/css/Background.css', 'src/css/WaitAnimation.css', 'src/contextMenus/BaseContextMenu.css',
 		'src/dialogs/AboutDialog.css', 'src/dialogAPIKeys/APIKeysDialog.css', 'src/dialogBase/BaseDialog.css', 'src/dialogColorControl/ColorControl.css', 'src/dialogNotes/NoteDialog.css', 
 		'src/dialogs/PrintRouteMapDialog.css', 'src/dialogs/RoutePropertiesDialog.css', 'src/dialogs/TwoButtonsDialog.css', 'src/dialogs/WayPointPropertiesDialog.css',
-		'src/dialogs/FloatWindow.css', 'src/dialogPassword/PasswordDialog.css', 
+		'src/dialogFloatWindow/FloatWindow.css', 'src/dialogPassword/PasswordDialog.css', 
 		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css',
 		'src/UI/ItineraryPaneUI.css', 'src/UI/MapLayersToolbarUI.css', 'src/UI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
 		'src/UI/ProvidersToolbarUI.css', 'src/UI/TravelNotesPaneUI.css', 'src/UI/TravelNotesToolbarUI.css', 'src/UI/TravelUI.css', 'src/UI/RoutesListUI.css',

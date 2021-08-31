@@ -50,8 +50,7 @@ const OUR_DRAG_MARGIN = 20;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module FloatWindow
-@private
+@module dialogFloatWindow
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -59,15 +58,14 @@ const OUR_DRAG_MARGIN = 20;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class FloatWindowTopBarDragStartEventListener
+@class TopBarDragStartEL
 @classdesc dragstart event listener for the top bar
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class FloatWindowTopBarDragStartEventListener {
+class TopBarDragStartEL {
 
 	#dragData = null;
 
@@ -87,15 +85,14 @@ class FloatWindowTopBarDragStartEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class FloatWindowTopBarDragEndEventListener
+@class TopBarDragEndEL
 @classdesc dragend event listener for the top bar
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class FloatWindowTopBarDragEndEventListener {
+class TopBarDragEndEL {
 
 	#dragData = null;
 	#containerDiv = null;
@@ -260,8 +257,8 @@ class FloatWindow {
 	}
 
 	constructor ( ) {
-		this.#eventListeners.onTopBarDragStart = new FloatWindowTopBarDragStartEventListener ( this.#dragData );
-		this.#eventListeners.onTopBarDragEnd = new FloatWindowTopBarDragEndEventListener ( this.#dragData );
+		this.#eventListeners.onTopBarDragStart = new TopBarDragStartEL ( this.#dragData );
+		this.#eventListeners.onTopBarDragEnd = new TopBarDragEndEL ( this.#dragData );
 		this.#createContainerDiv ( );
 		this.#createTopBar ( );
 		this.#createHeaderDiv ( );

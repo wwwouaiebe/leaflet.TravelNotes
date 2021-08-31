@@ -32,7 +32,7 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import ObjId from '../data/ObjId.js';
-import FloatWindow from '../dialogs/FloatWindow.js';
+import FloatWindow from '../dialogFloatWindow/FloatWindow.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theGeometry from '../util/Geometry.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
@@ -56,8 +56,7 @@ import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ProfileWindow
-@private
+@module dialogProfileWindow
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -65,15 +64,14 @@ import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BaseSvgEventListener
+@class BaseSvgEL
 @classdesc Base class for Svg event listeners
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseSvgEventListener {
+class BaseSvgEL {
 
 	getlatLngElevOnRouteAtMousePosition ( mouseEvent, profileSvg ) {
 		let route = theDataSearchEngine.getRoute ( Number.parseInt ( profileSvg.dataset.tanObjId ) );
@@ -102,15 +100,14 @@ class BaseSvgEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ContextMenuSvgEventListener
+@class SvgContextMenuEL
 @classdesc contextmenu event listener for svg profile
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ContextMenuSvgEventListener extends BaseSvgEventListener {
+class SvgContextMenuEL extends BaseSvgEL {
 
 	constructor ( ) {
 		super ( );
@@ -139,15 +136,14 @@ class ContextMenuSvgEventListener extends BaseSvgEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveSvgEventListener
+@class SvgMouseLeaveEL
 @classdesc mouseleave event listener for svg profile
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveSvgEventListener {
+class SvgMouseLeaveEL {
 
 	handleEvent ( mouseLeaveEvent ) {
 		mouseLeaveEvent.preventDefault ( );
@@ -164,15 +160,14 @@ class MouseLeaveSvgEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class MouseMoveSvgEventListener
+@class SvgMouseMoveEL
 @classdesc mousemove event listener for svg profile
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseMoveSvgEventListener extends BaseSvgEventListener {
+class SvgMouseMoveEL extends BaseSvgEL {
 
 	constructor ( ) {
 		super ( );
@@ -348,9 +343,9 @@ class ProfileWindow extends FloatWindow {
 
 	constructor ( ) {
 		super ( );
-		this.#eventListeners.onSvgContextMenu = new ContextMenuSvgEventListener ( );
-		this.#eventListeners.onSvgMouseMove = new MouseMoveSvgEventListener ( );
-		this.#eventListeners.onSvgMouseLeave = new MouseLeaveSvgEventListener ( );
+		this.#eventListeners.onSvgContextMenu = new SvgContextMenuEL ( );
+		this.#eventListeners.onSvgMouseMove = new SvgMouseMoveEL ( );
+		this.#eventListeners.onSvgMouseLeave = new SvgMouseLeaveEL ( );
 	}
 
 	/**

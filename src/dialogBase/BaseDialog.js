@@ -127,7 +127,7 @@ import {
 	BackgroundContextMenuEL,
 	BackgroundDragOverEL
 } from '../dialogbase/BaseDialogEventListeners.js';
-import PanEventDispatcher from '../dialogs/PanEventDispatcher.js';
+import PanEventDispatcher from '../dialogPanEventDispatcher/PanEventDispatcher.js';
 
 // import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
 

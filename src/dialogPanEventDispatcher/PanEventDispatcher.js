@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module PanEventDispatcher
+@module dialogPanEventDispatcher
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -49,15 +49,14 @@ import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEventListener
+@class MouseEL
 @classdesc mouse event listener fro the target. Redispath the mouse events as leftpan or rightpan or middlepan events
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEventListener {
+class MouseEL {
 
 	#panOngoing = false;
 	#startPanX = ZERO;
@@ -152,7 +151,6 @@ class MouseEventListener {
 @class PanEventDispatcher
 @classdesc Listen mouse event from an object and redispath the mouse events as leftpan or rightpan or middlepan events
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -190,7 +188,7 @@ class PanEventDispatcher {
 	constructor ( target, button = ZERO ) {
 
 		this.#target = target;
-		this.#eventListener = new MouseEventListener ( target, button );
+		this.#eventListener = new MouseEL ( target, button );
 		this.#target.addEventListener ( 'mousedown', this.#eventListener );
 		this.#target.addEventListener ( 'mouseup', this.#eventListener );
 		this.#target.addEventListener ( 'mousemove', this.#eventListener );
