@@ -70,7 +70,6 @@ const OUR_BOTTOM_TEXT_PROFILE = SVG_PROFILE.margin + SVG_PROFILE.height + ( SVG_
 
 @class
 @classdesc This class provides methods to build a Route profile
-@see {@link newProfileFactory} for constructor
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------

@@ -56,7 +56,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 @classdesc A saveAsDialog object completed for making a partial save of the edited travel
 Create an instance of the dialog, then execute the show ( ) method. The selected values are returned as parameter of the
 succes handler of the Promise returned by the show ( ) method.
-@augments BaseDialog
+@extends BaseDialog
 @example
 new SaveAsDialog (  )
 	.show ( )

@@ -274,7 +274,7 @@ class SvgMouseMoveEL extends BaseSvgEL {
 
 @class ProfileWindow
 @classdesc a float window containing a route profile
-@augments FloatWindow
+@extends FloatWindow
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------

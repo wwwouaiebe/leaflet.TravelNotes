@@ -60,7 +60,6 @@ import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class ViewerFileLoader
 @classdesc This class load a file from a web server and display the travel
-@see {@link newViewerFileLoader} for constructor
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------

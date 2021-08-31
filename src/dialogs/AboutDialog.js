@@ -67,7 +67,7 @@ import theCurrentVersion from '../data/Version.js';
 
 @class AboutDialog
 @classdesc This class is the 'About' dialog
-@augments BaseDialog
+@extends BaseDialog
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------

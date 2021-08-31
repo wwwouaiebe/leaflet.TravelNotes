@@ -83,8 +83,7 @@ newTwoButtonsDialog (
 	.show ( )
 	.then ( ( ) => doSomethingOnOkButtonClick )
 	.catch ( error => doSomethingWithTheError );
-@see {@link newTwoButtonsDialog} for constructor
-@augments BaseDialog
+@extends BaseDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------

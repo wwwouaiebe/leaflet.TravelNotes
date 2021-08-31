@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module PrintPageBuilder
+@module PrintRoute
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -59,15 +59,14 @@ const OUR_NOTE_Z_INDEX_OFFSET = 100;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class PrintEventListener
+@class PrintEL
 @classdesc click event listener for the print button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class PrintEventListener {
+class PrintEL {
 
 	handleEvent ( ) {
 		window.print ( );
@@ -77,15 +76,14 @@ class PrintEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class AfterPrintEventListener
+@class AfterPrintEL
 @classdesc afterprint Event listener the document
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class AfterPrintEventListener {
+class AfterPrintEL {
 
 	#printPageBuilder = null;
 	constructor ( printPageBuilder ) {
@@ -104,7 +102,6 @@ class AfterPrintEventListener {
 @class PrintPageBuilder
 @classdesc Build the html page for print
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -364,8 +361,8 @@ class PrintPageBuilder {
 		this.#route = route;
 		this.#views = views;
 		this.#printData = printData;
-		this.#eventsListeners.onPrint = new PrintEventListener ( );
-		this.#eventsListeners.onAfterPrint = new AfterPrintEventListener ( this );
+		this.#eventsListeners.onPrint = new PrintEL ( );
+		this.#eventsListeners.onAfterPrint = new AfterPrintEL ( this );
 		Object.seal ( this );
 	}
 }

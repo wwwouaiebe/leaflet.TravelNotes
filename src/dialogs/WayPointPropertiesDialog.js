@@ -60,7 +60,7 @@ import theConfig from '../data/Config.js';
 
 @class WayPointPropertiesDialog
 @classdesc This is the WayPointProerties dialog
-@augments BaseDialog
+@extends BaseDialog
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
