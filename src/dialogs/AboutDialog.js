@@ -59,7 +59,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import BaseDialog from '../dialogs/BaseDialog.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theCurrentVersion from '../data/Version.js';
 

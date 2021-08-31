@@ -63,7 +63,7 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import BaseDialog from '../dialogs/BaseDialog.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 

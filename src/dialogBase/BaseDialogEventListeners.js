@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module BaseDialogEventListeners
+@module dialogBase
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -54,15 +54,14 @@ const ZOOM_DISPLACMENT = 50;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogOkButtonClickEventListener
-@classdesc Event listener for click event on the ok button based on the EventListener API.
+@class OkButtonClickEL
+@classdesc click event listener for the ok button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogOkButtonClickEventListener {
+class OkButtonClickEL {
 
 	#baseDialog = null;
 
@@ -87,15 +86,14 @@ class BaseDialogOkButtonClickEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogCancelButtonClickEventListener
-@classdesc Event listener for click event on the cancel button based on the EventListener API.
+@class CancelButtonClickEL
+@classdesc click event listener for the cancel button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogCancelButtonClickEventListener {
+class CancelButtonClickEL {
 
 	#baseDialog = null;
 
@@ -120,15 +118,14 @@ class BaseDialogCancelButtonClickEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogTopBarDragStartEventListener
-@classdesc Event listener for dragstart event on the top bar based on the EventListener API.
+@class TopBarDragStartEL
+@classdesc dragstart event listener for the top bar
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogTopBarDragStartEventListener {
+class TopBarDragStartEL {
 
 	#dragData = null;
 
@@ -156,15 +153,14 @@ class BaseDialogTopBarDragStartEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogTopBarDragEndEventListener
-@classdesc Event listener for dragend event on the top bar based on the EventListener API.
+@class TopBarDragEndEL
+@classdesc dragend event event listener for the top bar
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogTopBarDragEndEventListener {
+class TopBarDragEndEL {
 
 	#dragData = null;
 	#containerDiv = null;
@@ -215,15 +211,14 @@ class BaseDialogTopBarDragEndEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogKeydownEventListener
-@classdesc BaseDialog keydown event listener based on the EventListener API.
+@class KeyboardKeydownEL
+@classdesc keydown event listener
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogKeydownEventListener {
+class KeyboardKeydownEL {
 
 	#baseDialog = null;
 
@@ -259,15 +254,14 @@ class BaseDialogKeydownEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogLeftPanEventListener
-@classdesc BaseDialog left pan event listener based on the EventListener API.
+@class BackgroundLeftPanEL
+@classdesc leftpan event listener for the background
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogLeftPanEventListener {
+class BackgroundLeftPanEL {
 
 	#mapCenter = [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ];
 
@@ -297,15 +291,14 @@ class BaseDialogLeftPanEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogRightPanEventListener
-@classdesc BaseDialog right pan event listener based on the EventListener API.
+@class BackgroundRightPanEL
+@classdesc rightpan event listener for the background
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogRightPanEventListener {
+class BackgroundRightPanEL {
 
 	#initialZoom = ZERO;
 	#startPoint = null;
@@ -326,15 +319,14 @@ class BaseDialogRightPanEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogWheelEventListener
-@classdesc BaseDialog wheel event listener based on the EventListener API.
+@class BackgroundWheelEL
+@classdesc wheel event listener for the background
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogWheelEventListener {
+class BackgroundWheelEL {
 
 	handleEvent ( wheelEvent ) {
 		if ( 'TravelNotes-Background' !== wheelEvent.target.id ) {
@@ -354,15 +346,14 @@ class BaseDialogWheelEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogContextMenuEventListener
-@classdesc BaseDialog context menu event listener based on the EventListener API.
+@class BackgroundContextMenuEL
+@classdesc contextmenu event listener for the background
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogContextMenuEventListener {
+class BackgroundContextMenuEL {
 
 	handleEvent ( contextmenuEvent ) {
 		contextmenuEvent.preventDefault ( );
@@ -372,15 +363,14 @@ class BaseDialogContextMenuEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class BaseDialogDragOverEventListener
+@class BackgroundDragOverEL
 @classdesc BaseDialog drag over event listener based on the EventListener API.
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class BaseDialogDragOverEventListener {
+class BackgroundDragOverEL {
 
 	handleEvent ( dragEvent ) {
 		dragEvent.preventDefault ( );
@@ -388,16 +378,16 @@ class BaseDialogDragOverEventListener {
 }
 
 export {
-	BaseDialogOkButtonClickEventListener,
-	BaseDialogCancelButtonClickEventListener,
-	BaseDialogTopBarDragStartEventListener,
-	BaseDialogTopBarDragEndEventListener,
-	BaseDialogKeydownEventListener,
-	BaseDialogLeftPanEventListener,
-	BaseDialogRightPanEventListener,
-	BaseDialogWheelEventListener,
-	BaseDialogContextMenuEventListener,
-	BaseDialogDragOverEventListener
+	OkButtonClickEL,
+	CancelButtonClickEL,
+	TopBarDragStartEL,
+	TopBarDragEndEL,
+	KeyboardKeydownEL,
+	BackgroundLeftPanEL,
+	BackgroundRightPanEL,
+	BackgroundWheelEL,
+	BackgroundContextMenuEL,
+	BackgroundDragOverEL
 };
 
 /*

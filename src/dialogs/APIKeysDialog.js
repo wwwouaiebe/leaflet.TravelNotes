@@ -54,7 +54,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialog from '../dialogs/BaseDialog.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
 import APIKeysDialogToolbar from '../dialogs/APIKeysDialogToolbar.js';
 import { OnAPIKeyDeletedEventListener } from '../dialogs/APIKeysDialogEventListeners.js';
 import theTranslator from '../UI/Translator.js';

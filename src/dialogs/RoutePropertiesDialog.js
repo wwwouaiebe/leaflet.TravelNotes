@@ -55,7 +55,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialog from '../dialogs/BaseDialog.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
 import theTranslator from '../UI/Translator.js';
 import ColorControl from '../dialogs/ColorControl.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';

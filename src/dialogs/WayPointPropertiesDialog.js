@@ -49,7 +49,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import BaseDialog from '../dialogs/BaseDialog.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import GeoCoder from '../core/GeoCoder.js';
