@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OverpassAPIDataLoader
+@module core
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ import { ZERO, TWO, LAT_LNG, DISTANCE, HTTP_STATUS_OK, OSM_COUNTRY_ADMIN_LEVEL }
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class OverpassAPIDataLoader
 @classdesc This class is used to search osm data with the OverpassAPI
 @hideconstructor
 

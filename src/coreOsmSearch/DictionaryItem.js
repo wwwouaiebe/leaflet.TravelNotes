@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module DictionaryItem
+@module coreOsmSearch
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +53,8 @@ import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 @class DictionaryItem
 @classdesc This class is used to represent a branch of the dictionary tree.
-@private
+@hideconstructor
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 

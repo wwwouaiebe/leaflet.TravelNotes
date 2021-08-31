@@ -42,7 +42,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearch
+@module coreOsmSearch
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -60,7 +60,7 @@ const SEARCH_DIMENSION = 5000;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class OsmSearchEngine
 @classdesc This class search the osm data
 @see {@link theOsmSearchEngine} for the one and only one instance of this class
 @hideconstructor

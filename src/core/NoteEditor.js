@@ -83,7 +83,7 @@ import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constan
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class NoteEditor
 @classdesc This class contains all the needed methods fot Notes creation or modifications
 @see {@link theNoteEditor} for the one and only one instance of this class
 @hideconstructor
