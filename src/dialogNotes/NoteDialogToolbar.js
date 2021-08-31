@@ -85,7 +85,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogToolbar
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -96,10 +96,10 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import {
-	EditionButtonsEventListener,
-	IconSelectEventListener,
-	OpenFileButtonEventListener,
-	ToogleContentsButtonEventListener
+	EditionButtonsClickEL,
+	IconSelectorChangeEL,
+	OpenFileButtonClickEL,
+	ToogleContentsButtonClickEL
 } from '../dialogNotes/NoteDialogToolbarEventListeners.js';
 
 import { NOT_FOUND, ZERO } from '../util/Constants.js';
@@ -259,10 +259,10 @@ class NoteDialogToolbar {
 				id : 'TravelNotes-NoteDialog-ToolbarDiv'
 			}
 		);
-		this.#eventListeners.onIconSelectChange = new IconSelectEventListener ( this.#noteDialog );
-		this.#eventListeners.onToogleContentsButtonClick = new ToogleContentsButtonEventListener ( this.#noteDialog );
-		this.#eventListeners.onOpenFileButtonClick = new OpenFileButtonEventListener ( this );
-		this.#eventListeners.onEditionButtonClick = new EditionButtonsEventListener ( this.#noteDialog );
+		this.#eventListeners.onIconSelectChange = new IconSelectorChangeEL ( this.#noteDialog );
+		this.#eventListeners.onToogleContentsButtonClick = new ToogleContentsButtonClickEL ( this.#noteDialog );
+		this.#eventListeners.onOpenFileButtonClick = new OpenFileButtonClickEL ( this );
+		this.#eventListeners.onEditionButtonClick = new EditionButtonsClickEL ( this.#noteDialog );
 
 		this.#addToolbarElements ( );
 	}

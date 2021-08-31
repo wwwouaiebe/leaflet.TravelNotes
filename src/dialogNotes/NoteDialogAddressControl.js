@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogAddressControl
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -47,9 +47,9 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import {
-	AddressButtonEventListener,
-	FocusControlEventListener,
-	InputUpdatedEventListener
+	AddressButtonClickEL,
+	AllControlsFocusEL,
+	AllControlsInputEL
 } from '../dialogNotes/NoteDialogEventListeners.js';
 
 /**
@@ -142,9 +142,9 @@ class NoteDialogAddressControl {
 			this.#addressInputDiv
 		);
 
-		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
-		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#eventListeners.onAddressButtonClick = new AddressButtonEventListener ( this.#noteDialog, this.#latLng );
+		this.#eventListeners.onFocusControl = new AllControlsFocusEL ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new AllControlsInputEL ( this.#noteDialog );
+		this.#eventListeners.onAddressButtonClick = new AddressButtonClickEL ( this.#noteDialog, this.#latLng );
 		this.#addressInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
 		this.#addressInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 		this.#addressButton.addEventListener ( 'click', this.#eventListeners.onAddressButtonClick );

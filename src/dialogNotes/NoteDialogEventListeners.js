@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogEventListeners
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -52,9 +52,8 @@ import GeoCoder from '../core/GeoCoder.js';
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class NoteDialogGeoCoderHelper
-@classdesc Helper class for the GeoCoder usage
+@classdesc Helper class for the address button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -104,15 +103,14 @@ class NoteDialogGeoCoderHelper {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class AddressButtonEventListener
-@classdesc Event listener for click event on the address button based on the EventListener API.
+@class AddressButtonClickEL
+@classdesc Click event listener for the AddressButtonClickEL class
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class AddressButtonEventListener {
+class AddressButtonClickEL {
 
 	#noteDialog = null;
 	#latLng = null;
@@ -138,15 +136,14 @@ class AddressButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class FocusControlEventListener
-@classdesc Event listener for focus event on the controls button based on the EventListener API.
+@class AllControlsFocusEL
+@classdesc Focus event listener for all controls
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class FocusControlEventListener {
+class AllControlsFocusEL {
 
 	#noteDialog = null;
 	#disableFocusControl = false;
@@ -174,15 +171,14 @@ class FocusControlEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class BlurUrlInputEventListener
-@classdesc Event listener for blur event on the url control based on the EventListener API.
+@class UrlInputBlurEL
+@classdesc blur event listener for url input
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class BlurUrlInputEventListener {
+class UrlInputBlurEL {
 
 	#noteDialog = null;
 
@@ -213,15 +209,14 @@ class BlurUrlInputEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class InputUpdatedEventListener
-@classdesc Event listener for input event on the controls based on the EventListener API.
+@class AllControlsInputEL
+@classdesc input event listener for all control
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class InputUpdatedEventListener {
+class AllControlsInputEL {
 
 	#noteDialog = null;
 
@@ -242,11 +237,11 @@ class InputUpdatedEventListener {
 }
 
 export {
-	AddressButtonEventListener,
+	AddressButtonClickEL,
 	NoteDialogGeoCoderHelper,
-	FocusControlEventListener,
-	BlurUrlInputEventListener,
-	InputUpdatedEventListener
+	AllControlsFocusEL,
+	UrlInputBlurEL,
+	AllControlsInputEL
 };
 
 /*

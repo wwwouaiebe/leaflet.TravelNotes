@@ -72,7 +72,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import DataEncryptor from '../util/DataEncryptor.js';
-import PasswordDialog from '../dialogs/PasswordDialog.js';
+import PasswordDialog from '../dialogPassword/PasswordDialog.js';
 import theTranslator from '../UI/Translator.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
 import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';

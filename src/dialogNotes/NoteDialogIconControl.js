@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogIconControl
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
-import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
+import { AllControlsFocusEL, AllControlsInputEL } from '../dialogNotes/NoteDialogEventListeners.js';
 
 const OUR_DEFAULT_ICON = '?????';
 
@@ -108,8 +108,8 @@ class NoteDialogIconControl {
 			this.#iconDiv
 		);
 
-		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
-		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#eventListeners.onFocusControl = new AllControlsFocusEL ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new AllControlsInputEL ( this.#noteDialog );
 		this.#iconTextArea.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
 		this.#iconTextArea.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 	}

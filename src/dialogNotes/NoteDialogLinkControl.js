@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogLinkControl
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -48,9 +48,9 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import {
-	FocusControlEventListener,
-	BlurUrlInputEventListener,
-	InputUpdatedEventListener
+	AllControlsFocusEL,
+	UrlInputBlurEL,
+	AllControlsInputEL
 } from '../dialogNotes/NoteDialogEventListeners.js';
 
 import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
@@ -165,9 +165,9 @@ class NoteDialogLinkControl {
 			this.#linkInputDiv
 		);
 
-		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, true );
-		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#eventListeners.onBlurUrlInput = new BlurUrlInputEventListener ( this.#noteDialog );
+		this.#eventListeners.onFocusControl = new AllControlsFocusEL ( this.#noteDialog, true );
+		this.#eventListeners.onInputUpdated = new AllControlsInputEL ( this.#noteDialog );
+		this.#eventListeners.onBlurUrlInput = new UrlInputBlurEL ( this.#noteDialog );
 		this.#linkInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
 		this.#linkInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 		this.#linkInput.addEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );

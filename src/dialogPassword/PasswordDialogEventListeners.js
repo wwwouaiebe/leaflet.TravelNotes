@@ -36,7 +36,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module PasswordDialogEventListeners
+@module dialogPassword
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -45,15 +45,14 @@ Tests ...
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OnMouseDownEyeEventListener
+@class EyeMouseDownEL
 @classdesc mousedown event listener for the eye button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OnMouseDownEyeEventListener {
+class EyeMouseDownEL {
 
 	#passwordInput = null;
 
@@ -74,7 +73,7 @@ class OnMouseDownEyeEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OnMouseUpEyeEventListener
+@class EyeMouseUpEL
 @classdesc mouseup event listener for the eye button
 @hideconstructor
 @private
@@ -82,7 +81,7 @@ class OnMouseDownEyeEventListener {
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OnMouseUpEyeEventListener {
+class EyeMouseUpEL {
 
 	#passwordInput = null;
 
@@ -101,7 +100,7 @@ class OnMouseUpEyeEventListener {
 	}
 }
 
-export { OnMouseDownEyeEventListener, OnMouseUpEyeEventListener };
+export { EyeMouseDownEL, EyeMouseUpEL };
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------

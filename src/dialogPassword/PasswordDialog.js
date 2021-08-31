@@ -43,8 +43,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module PasswordDialog
-@private
+@module dialogPassword
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -52,7 +51,7 @@ Tests ...
 import theTranslator from '../UI/Translator.js';
 import BaseDialog from '../dialogBase/BaseDialog.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import { OnMouseDownEyeEventListener, OnMouseUpEyeEventListener } from '../dialogs/PasswordDialogEventListeners.js';
+import { EyeMouseDownEL, EyeMouseUpEL } from '../dialogPassword/PasswordDialogEventListeners.js';
 
 const OUR_PSWD_MIN_LENGTH = 12;
 
@@ -108,8 +107,8 @@ class PasswordDialog extends BaseDialog {
 		this.#verifyPassword = verifyPassword;
 		this.#passwordDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-PasswordDialog-PasswordDiv' } );
 		this.#passwordInput = theHTMLElementsFactory.create ( 'input', { type : 'password' }, this.#passwordDiv );
-		this.#onMouseDownEyeEventListener = new OnMouseDownEyeEventListener ( this.#passwordInput );
-		this.#onMouseUpEyeEventListener = new OnMouseUpEyeEventListener ( this.#passwordInput );
+		this.#onMouseDownEyeEventListener = new EyeMouseDownEL ( this.#passwordInput );
+		this.#onMouseUpEyeEventListener = new EyeMouseUpEL ( this.#passwordInput );
 		this.#eyeSpan = theHTMLElementsFactory.create (
 			'span',
 			{

@@ -36,7 +36,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogToolbarEventListeners
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,15 +51,14 @@ import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class EditionButtonsEventListener
-@classdesc Event listener for click event on the edition buttons based on the EventListener API.
+@class EditionButtonsClickEL
+@classdesc click event listener for the edition buttons
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class EditionButtonsEventListener {
+class EditionButtonsClickEL {
 
 	#noteDialog = null;
 
@@ -117,15 +116,14 @@ class EditionButtonsEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class IconSelectEventListener
-@classdesc Event listener for change event on the icon select based on the EventListener API.
+@class IconSelectorChangeEL
+@classdesc change event listener for the icon selector
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class IconSelectEventListener {
+class IconSelectorChangeEL {
 
 	#noteDialog = null;
 
@@ -181,10 +179,6 @@ class IconSelectEventListener {
 		this.#noteDialog = null;
 	}
 
-	/**
-	Change event listener for the select icon on the toolbar
-	*/
-
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
 		let preDefinedIcon = theNoteDialogToolbarData.getIconData ( changeEvent.target.selectedIndex );
@@ -208,15 +202,14 @@ class IconSelectEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ToogleContentsButtonEventListener
-@classdesc Event listener for click event on the toogle button based on the EventListener API.
+@class ToogleContentsButtonClickEL
+@classdesc click event listener for the toogle button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ToogleContentsButtonEventListener {
+class ToogleContentsButtonClickEL {
 
 	#noteDialog = null;
 
@@ -241,15 +234,14 @@ class ToogleContentsButtonEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OpenFileInputEventListener
-@classdesc Event listener for change event on the temp file input based on the EventListener API.
+@class OpenFileInputChangeEL
+@classdesc change event listener for the temp open file input
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OpenFileInputEventListener {
+class OpenFileInputChangeEL {
 
 	#noteDialogToolbar = null;
 
@@ -285,15 +277,14 @@ class OpenFileInputEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class OpenFileButtonEventListener
-@classdesc Event listener for click event on the open file button based on the EventListener API.
+@class OpenFileButtonClickEL
+@classdesc click event listener for the open file button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class OpenFileButtonEventListener {
+class OpenFileButtonClickEL {
 
 	#noteDialogToolbar = null;
 
@@ -311,15 +302,15 @@ class OpenFileButtonEventListener {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
-		theUtilities.openFile ( new OpenFileInputEventListener ( this.#noteDialogToolbar ), '.json' );
+		theUtilities.openFile ( new OpenFileInputChangeEL ( this.#noteDialogToolbar ), '.json' );
 	}
 }
 
 export {
-	EditionButtonsEventListener,
-	IconSelectEventListener,
-	OpenFileButtonEventListener,
-	ToogleContentsButtonEventListener
+	EditionButtonsClickEL,
+	IconSelectorChangeEL,
+	OpenFileButtonClickEL,
+	ToogleContentsButtonClickEL
 };
 
 /*

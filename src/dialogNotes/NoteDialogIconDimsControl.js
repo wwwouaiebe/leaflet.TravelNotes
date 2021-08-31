@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogIconDimsControl
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
+import { AllControlsInputEL } from '../dialogNotes/NoteDialogEventListeners.js';
 import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**
@@ -130,7 +130,7 @@ class NoteDialogIconDimsControl {
 			this.#iconDimsDiv
 		);
 
-		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#eventListeners.onInputUpdated = new AllControlsInputEL ( this.#noteDialog );
 		this.#iconWidthInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 		this.#iconHeightInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 	}

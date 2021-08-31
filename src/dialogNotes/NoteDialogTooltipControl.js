@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogTooltipControl
+@module dialogNotes
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
+import { AllControlsFocusEL, AllControlsInputEL } from '../dialogNotes/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -104,8 +104,8 @@ class NoteDialogTooltipControl {
 			this.#tooltipDiv
 		);
 
-		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
-		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
+		this.#eventListeners.onFocusControl = new AllControlsFocusEL ( this.#noteDialog, false );
+		this.#eventListeners.onInputUpdated = new AllControlsInputEL ( this.#noteDialog );
 		this.#tooltipInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
 		this.#tooltipInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 	}
