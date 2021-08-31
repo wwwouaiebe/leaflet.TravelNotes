@@ -50,7 +50,7 @@ import theTravelNotesViewer from '../main/TravelNotesViewer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 import theViewerLayersToolbarUI from '../UI/ViewerLayersToolbarUI.js';
-import ViewerMapEditor from '../mapEditor/ViewerMapEditor.js';
+import MapEditorViewer from '../coreMapEditor/MapEditorViewer.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import Zoomer from '../core/Zoomer.js';
 
@@ -105,7 +105,7 @@ class AppLoaderViewer {
 	#addLayerToolbar = false;
 	#originAndPath = window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'TravelNotes';
 
-	static #viewerMapEditor = new ViewerMapEditor ( );
+	static #mapEditorViewer = new MapEditorViewer ( );
 
 	/**
 	Loading event listeners
@@ -118,7 +118,7 @@ class AppLoaderViewer {
 			'routeupdated',
 			updateRouteEvent => {
 				if ( updateRouteEvent.data ) {
-					AppLoaderViewer.#viewerMapEditor.addRoute (
+					AppLoaderViewer.#mapEditorViewer.addRoute (
 						updateRouteEvent.data.addedRouteObjId
 					);
 				}
@@ -129,7 +129,7 @@ class AppLoaderViewer {
 			'noteupdated',
 			updateNoteEvent => {
 				if ( updateNoteEvent.data ) {
-					AppLoaderViewer.#viewerMapEditor.addNote (
+					AppLoaderViewer.#mapEditorViewer.addNote (
 						updateNoteEvent.data.addedNoteObjId
 					);
 				}
@@ -140,7 +140,7 @@ class AppLoaderViewer {
 			'zoomto',
 			zoomToEvent => {
 				if ( zoomToEvent.data ) {
-					AppLoaderViewer.#viewerMapEditor.zoomTo (
+					AppLoaderViewer.#mapEditorViewer.zoomTo (
 						zoomToEvent.data.latLng,
 						zoomToEvent.data.geometry
 					);
@@ -152,7 +152,7 @@ class AppLoaderViewer {
 			'layerchange',
 			layerChangeEvent => {
 				if ( layerChangeEvent.data ) {
-					AppLoaderViewer.#viewerMapEditor.setLayer ( layerChangeEvent.data.layer, layerChangeEvent.data.layer.url );
+					AppLoaderViewer.#mapEditorViewer.setLayer ( layerChangeEvent.data.layer, layerChangeEvent.data.layer.url );
 				}
 			}
 		);
@@ -160,7 +160,7 @@ class AppLoaderViewer {
 			'geolocationpositionchanged',
 			geoLocationPositionChangedEvent => {
 				if ( geoLocationPositionChangedEvent.data ) {
-					AppLoaderViewer.#viewerMapEditor.onGeolocationPositionChanged (
+					AppLoaderViewer.#mapEditorViewer.onGeolocationPositionChanged (
 						geoLocationPositionChangedEvent.data.position
 					);
 				}
@@ -171,7 +171,7 @@ class AppLoaderViewer {
 			'geolocationstatuschanged',
 			geoLocationStatusChangedEvent => {
 				if ( geoLocationStatusChangedEvent.data ) {
-					AppLoaderViewer.#viewerMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
+					AppLoaderViewer.#mapEditorViewer.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
 				}
 			},
 			false

@@ -72,12 +72,12 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../util/Geometry.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
-import ViewerMapEditor from '../mapEditor/ViewerMapEditor.js';
-import EditedRouteEventListeners from '../mapEditor/EditedRouteEventListeners.js';
-import NoteBulletEventListeners from '../mapEditor/NoteBulletEventListeners.js';
-import NoteMarkerEventListeners from '../mapEditor/NoteMarkerEventListeners.js';
-import WayPointEventListeners from '../mapEditor/WayPointEventListeners.js';
-import RouteEventListeners from '../mapEditor/RouteEventListeners.js';
+import MapEditorViewer from '../coreMapEditor/MapEditorViewer.js';
+import EditedRouteEventListeners from '../coreMapEditor/EditedRouteEventListeners.js';
+import NoteBulletEventListeners from '../coreMapEditor/NoteBulletEventListeners.js';
+import NoteMarkerEventListeners from '../coreMapEditor/NoteMarkerEventListeners.js';
+import WayPointEventListeners from '../coreMapEditor/WayPointEventListeners.js';
+import RouteEventListeners from '../coreMapEditor/RouteEventListeners.js';
 import { ROUTE_EDITION_STATUS, LAT_LNG, INVALID_OBJ_ID, TWO, WAY_POINT_ICON_SIZE } from '../util/Constants.js';
 
 const OUR_MARKER_BOUNDS_PRECISION = 0.01;
@@ -87,7 +87,7 @@ const OUR_MARKER_BOUNDS_PRECISION = 0.01;
 
 @class MapEditor
 @classdesc This class performs all the read/write updates on the map
-@extends ViewerMapEditor
+@extends MapEditorViewer
 @inheritdoc
 @see {@link theMapEditor} for the one and only one instance of this class
 @hideconstructor
@@ -95,7 +95,7 @@ const OUR_MARKER_BOUNDS_PRECISION = 0.01;
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MapEditor	extends ViewerMapEditor {
+class MapEditor	extends MapEditorViewer {
 
 	/**
 	Remove a Leaflet object from the map

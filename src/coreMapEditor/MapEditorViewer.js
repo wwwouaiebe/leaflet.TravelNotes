@@ -34,7 +34,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file ViewerMapEditor.js
+@file MapEditorViewer.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -57,7 +57,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ViewerMapEditor
+@module MapEditorViewer
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ class RouteEventListeners {
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ViewerMapEditor {
+class MapEditorViewer {
 
 	#currentLayer = null;
 
@@ -459,8 +459,8 @@ class ViewerMapEditor {
 
 }
 
-export default ViewerMapEditor;
+export default MapEditorViewer;
 
 /*
---- End of ViewerMapEditor.js file --------------------------------------------------------------------------------------------
+--- End of MapEditorViewer.js file --------------------------------------------------------------------------------------------
 */

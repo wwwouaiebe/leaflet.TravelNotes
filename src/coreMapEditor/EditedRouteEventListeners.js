@@ -48,7 +48,7 @@ import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTranslator from '../UI/Translator.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import TempWayPointMarkerEventListeners from '../mapEditor/TempWayPointMarkerEventListeners.js';
+import TempWayPointMarkerEventListeners from '../coreMapEditor/TempWayPointMarkerEventListeners.js';
 import { ROUTE_EDITION_STATUS, NOT_FOUND, ZERO, ONE, TWO, WAY_POINT_ICON_SIZE } from '../util/Constants.js';
 
 /**
