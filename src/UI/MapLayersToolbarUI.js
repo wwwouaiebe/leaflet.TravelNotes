@@ -57,7 +57,7 @@ import theTranslator from '../UI/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import theAttributionsUI from '../AttributionsUI/AttributionsUI.js';
+import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import MapLayersToolbarButton from '../UI/MapLayersToolbarButton.js';
 import MapLayersToolbarLink from '../UI/MapLayersToolbarLink.js';

@@ -47,7 +47,7 @@ Tests ...
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import theAttributionsUI from '../AttributionsUI/AttributionsUI.js';
+import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
