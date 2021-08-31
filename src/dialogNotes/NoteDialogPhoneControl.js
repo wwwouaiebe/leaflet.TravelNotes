@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogPopupControl.js
+@file NoteDialogPhoneControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogPopupControl
+@module NoteDialogPhoneControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,20 +46,19 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import theConfig from '../data/Config.js';
-import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
+import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogPopupControl
-@classdesc This class is the popupContent control of the NoteDialog
+@class NoteDialogPhoneControl
+@classdesc This class is the phone control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogPopupControl {
+class NoteDialogPhoneControl {
 
 	/**
 	A reference to the noteDialog
@@ -73,8 +72,9 @@ class NoteDialogPopupControl {
 	@private
 	*/
 
-	#popupDiv = null;
-	#popupTextArea = null;
+	#phoneHeaderDiv = null;
+	#phoneInputDiv = null;
+	#phoneInput = null;
 
 	/**
 	Event listeners
@@ -87,33 +87,50 @@ class NoteDialogPopupControl {
 	}
 
 	constructor ( noteDialog ) {
+
 		this.#noteDialog = noteDialog;
-		this.#popupDiv = theHTMLElementsFactory.create (
+
+		this.#phoneHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-DataDiv',
-				textContent : theTranslator.getText ( 'NoteDialog - Text' )
+				className : 'TravelNotes-NoteDialog-DataDiv'
 			}
 		);
-		this.#popupTextArea = theHTMLElementsFactory.create (
-			'textarea',
+
+		theHTMLElementsFactory.create (
+			'text',
 			{
-				className : 'TravelNotes-NoteDialog-TextArea',
-				rows : theConfig.noteDialog.areaHeight.popupContent,
-				dataset : { Name : 'popupContent' }
+				value : '\u00a0' + theTranslator.getText ( 'NoteDialog - Phone' )
 			},
-			this.#popupDiv
+			this.#phoneHeaderDiv
+		);
+
+		this.#phoneInputDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-NoteDialog-DataDiv'
+			}
+		);
+
+		this.#phoneInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'text',
+				className : 'TravelNotes-NoteDialog-InputText',
+				dataset : { Name : 'phone' }
+			},
+			this.#phoneInputDiv
 		);
 
 		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
 		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#popupTextArea.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#popupTextArea.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#phoneInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#phoneInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 	}
 
 	destructor ( ) {
-		this.#popupTextArea.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#popupTextArea.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#phoneInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#phoneInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
 		this.#eventListeners.onFocusControl.destructor ( );
 		this.#eventListeners.onInputUpdated.destructor ( );
 		this.#noteDialog = null;
@@ -124,24 +141,24 @@ class NoteDialogPopupControl {
 	@readonly
 	*/
 
-	get HTMLElements ( ) { return [ this.#popupDiv ]; }
+	get HTMLElements ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
 
 	/**
-	The popupcontent value in the control
+	The phone number in the control
 	*/
 
-	get popupContent ( ) { return this.#popupTextArea.value; }
+	get phone ( ) { return this.#phoneInput.value; }
 
-	set popupContent ( Value ) { this.#popupTextArea.value = Value; }
+	set phone ( Value ) { this.#phoneInput.value = Value; }
 
 }
 
-export default NoteDialogPopupControl;
+export default NoteDialogPhoneControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogPopupControl.js file
+end of NoteDialogPhoneControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

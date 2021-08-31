@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogLinkControl.js
+@file NoteDialogAddressControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogLinkControl
+@module NoteDialogAddressControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,26 +46,23 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import theConfig from '../data/Config.js';
 import {
+	AddressButtonEventListener,
 	FocusControlEventListener,
-	BlurUrlInputEventListener,
 	InputUpdatedEventListener
-} from '../dialogs/NoteDialogEventListeners.js';
-
-import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+} from '../dialogNotes/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogLinkControl
-@classdesc This class is the url control of the NoteDialog
+@class NoteDialogAddressControl
+@classdesc This class is the address control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogLinkControl {
+class NoteDialogAddressControl {
 
 	/**
 	A reference to the noteDialog
@@ -79,9 +76,17 @@ class NoteDialogLinkControl {
 	@private
 	*/
 
-	#linkHeaderDiv = null;
-	#linkInputDiv = null;
-	#linkInput = null;
+	#addressHeaderDiv = null;
+	#addressInputDiv = null;
+	#addressInput = null;
+	#addressButton = null;
+
+	/**
+	The latLng used for geocoding
+	@private
+	*/
+
+	#latLng = null;
 
 	/**
 	Event listeners
@@ -91,96 +96,67 @@ class NoteDialogLinkControl {
 	#eventListeners = {
 		onFocusControl : null,
 		onInputUpdated : null,
-		onBlurUrlInput : null
-	}
-
-	/**
-	The Devil button...
-	@private
-	*/
-
-	#createTheDevilButton ( latLng ) {
-		if ( theConfig.noteDialog.theDevil.addButton ) {
-			theHTMLElementsFactory.create (
-				'text',
-				{
-					value : '👿'
-				},
-				theHTMLElementsFactory.create (
-					'a',
-					{
-						href : 'https://www.google.com/maps/@' +
-							latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) + ',' +
-							latLng [ ONE ].toFixed ( LAT_LNG.fixed ) + ',' +
-							theConfig.noteDialog.theDevil.zoomFactor + 'z',
-						target : '_blank',
-						title : 'Reminder! The devil will know everything about you'
-					},
-					theHTMLElementsFactory.create (
-						'div',
-						{
-							className : 'TravelNotes-BaseDialog-Button',
-							title : 'Reminder! The devil will know everything about you'
-						},
-						this.#linkHeaderDiv
-					)
-				)
-			);
-		}
+		onAddressButtonClick : null
 	}
 
 	constructor ( noteDialog, latLng ) {
 		this.#noteDialog = noteDialog;
-		this.#linkHeaderDiv = theHTMLElementsFactory.create (
+		this.#latLng = latLng;
+		this.#addressHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			}
 		);
-
-		this.#createTheDevilButton ( latLng );
+		this.#addressButton = theHTMLElementsFactory.create (
+			'div',
+			{
+				className : 'TravelNotes-BaseDialog-Button',
+				title : theTranslator.getText ( 'NoteDialog - Reset address' ),
+				textContent : '🔄'
+			},
+			this.#addressHeaderDiv
+		);
 
 		theHTMLElementsFactory.create (
 			'text',
 			{
-				value : theTranslator.getText ( 'NoteDialog - Link' )
+				value : theTranslator.getText ( 'NoteDialog - Address' )
 			},
-			this.#linkHeaderDiv
+			this.#addressHeaderDiv
 		);
 
-		this.#linkInputDiv = theHTMLElementsFactory.create (
+		this.#addressInputDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			}
 		);
-
-		this.#linkInput = theHTMLElementsFactory.create (
+		this.#addressInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				dataset : { Name : 'url' }
+				dataset : { Name : 'address' }
 			},
-			this.#linkInputDiv
+			this.#addressInputDiv
 		);
 
-		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, true );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
 		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#eventListeners.onBlurUrlInput = new BlurUrlInputEventListener ( this.#noteDialog );
-		this.#linkInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#linkInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
-		this.#linkInput.addEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );
+		this.#eventListeners.onAddressButtonClick = new AddressButtonEventListener ( this.#noteDialog, this.#latLng );
+		this.#addressInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#addressInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#addressButton.addEventListener ( 'click', this.#eventListeners.onAddressButtonClick );
 	}
 
 	destructor ( ) {
-		this.#linkInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#linkInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
-		this.#linkInput.removeEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );
+		this.#addressInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#addressInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#addressButton.removeEventListener ( 'click', this.#eventListeners.onAddressButtonClick );
 		this.#eventListeners.onFocusControl.destructor ( );
 		this.#eventListeners.onInputUpdated.destructor ( );
-		this.#eventListeners.onBlurUrlInput.destructor ( );
-		this.#noteDialog = null;
+		this.#eventListeners.onAddressButtonClick.destructor ( );
 	}
 
 	/**
@@ -188,24 +164,26 @@ class NoteDialogLinkControl {
 	@readonly
 	*/
 
-	get HTMLElements ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
+	get HTMLElements ( ) {
+		return [ this.#addressHeaderDiv, this.#addressInputDiv ];
+	}
 
 	/**
-	The url value in the control
+	The address value in the control
 	*/
 
-	get url ( ) { return this.#linkInput.value; }
+	get address ( ) { return this.#addressInput.value; }
 
-	set url ( Value ) { this.#linkInput.value = Value; }
+	set address ( Value ) { this.#addressInput.value = Value; }
 
 }
 
-export default NoteDialogLinkControl;
+export default NoteDialogAddressControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogLinkControl.js file
+end of NoteDialogAddressControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

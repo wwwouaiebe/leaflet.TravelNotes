@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogAddressControl.js
+@file NoteDialogTooltipControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogAddressControl
+@module NoteDialogTooltipControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,23 +46,19 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import {
-	AddressButtonEventListener,
-	FocusControlEventListener,
-	InputUpdatedEventListener
-} from '../dialogs/NoteDialogEventListeners.js';
+import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogAddressControl
-@classdesc This class is the address control of the NoteDialog
+@class NoteDialogTooltipControl
+@classdesc This class is the tooltipContent control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogAddressControl {
+class NoteDialogTooltipControl {
 
 	/**
 	A reference to the noteDialog
@@ -76,17 +72,8 @@ class NoteDialogAddressControl {
 	@private
 	*/
 
-	#addressHeaderDiv = null;
-	#addressInputDiv = null;
-	#addressInput = null;
-	#addressButton = null;
-
-	/**
-	The latLng used for geocoding
-	@private
-	*/
-
-	#latLng = null;
+	#tooltipDiv = null;
+	#tooltipInput = null
 
 	/**
 	Event listeners
@@ -95,68 +82,40 @@ class NoteDialogAddressControl {
 
 	#eventListeners = {
 		onFocusControl : null,
-		onInputUpdated : null,
-		onAddressButtonClick : null
+		onInputUpdated : null
 	}
 
-	constructor ( noteDialog, latLng ) {
+	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
-		this.#latLng = latLng;
-		this.#addressHeaderDiv = theHTMLElementsFactory.create (
+		this.#tooltipDiv = theHTMLElementsFactory.create (
 			'div',
 			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
+				className : 'TravelNotes-NoteDialog-DataDiv',
+				textContent : theTranslator.getText ( 'NoteDialog - Tooltip content' )
 			}
 		);
-		this.#addressButton = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-BaseDialog-Button',
-				title : theTranslator.getText ( 'NoteDialog - Reset address' ),
-				textContent : '🔄'
-			},
-			this.#addressHeaderDiv
-		);
-
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : theTranslator.getText ( 'NoteDialog - Address' )
-			},
-			this.#addressHeaderDiv
-		);
-
-		this.#addressInputDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				className : 'TravelNotes-NoteDialog-DataDiv'
-			}
-		);
-		this.#addressInput = theHTMLElementsFactory.create (
+		this.#tooltipInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				dataset : { Name : 'address' }
+				dataset : { Name : 'tooltipContent' }
 			},
-			this.#addressInputDiv
+			this.#tooltipDiv
 		);
 
 		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
 		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#eventListeners.onAddressButtonClick = new AddressButtonEventListener ( this.#noteDialog, this.#latLng );
-		this.#addressInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#addressInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
-		this.#addressButton.addEventListener ( 'click', this.#eventListeners.onAddressButtonClick );
+		this.#tooltipInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#tooltipInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 	}
 
 	destructor ( ) {
-		this.#addressInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#addressInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
-		this.#addressButton.removeEventListener ( 'click', this.#eventListeners.onAddressButtonClick );
+		this.#tooltipInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#tooltipInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
 		this.#eventListeners.onFocusControl.destructor ( );
 		this.#eventListeners.onInputUpdated.destructor ( );
-		this.#eventListeners.onAddressButtonClick.destructor ( );
+		this.#noteDialog = null;
 	}
 
 	/**
@@ -164,26 +123,24 @@ class NoteDialogAddressControl {
 	@readonly
 	*/
 
-	get HTMLElements ( ) {
-		return [ this.#addressHeaderDiv, this.#addressInputDiv ];
-	}
+	get HTMLElements ( ) { return [ this.#tooltipDiv ]; }
 
 	/**
-	The address value in the control
+	the tooltip value in the control
 	*/
 
-	get address ( ) { return this.#addressInput.value; }
+	get tooltipContent ( ) { return this.#tooltipInput.value; }
 
-	set address ( Value ) { this.#addressInput.value = Value; }
+	set tooltipContent ( Value ) { this.#tooltipInput.value = Value; }
 
 }
 
-export default NoteDialogAddressControl;
+export default NoteDialogTooltipControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogAddressControl.js file
+end of NoteDialogTooltipControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

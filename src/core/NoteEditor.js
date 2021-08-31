@@ -67,7 +67,7 @@ Tests ...
 
 import theTranslator from '../UI/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import NoteDialog from '../dialogs/NoteDialog.js';
+import NoteDialog from '../dialogNotes/NoteDialog.js';
 import Note from '../data/Note.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
@@ -75,7 +75,7 @@ import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
 import WaitUI from '../UI/WaitUI.js';
 import theErrorsUI from '../UI/ErrorsUI.js';
-import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
+import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import GeoCoder from '../core/GeoCoder.js';
 
 import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';

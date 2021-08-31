@@ -91,7 +91,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
+import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
@@ -100,7 +100,7 @@ import {
 	IconSelectEventListener,
 	OpenFileButtonEventListener,
 	ToogleContentsButtonEventListener
-} from '../dialogs/NoteDialogToolbarEventListeners.js';
+} from '../dialogNotes/NoteDialogToolbarEventListeners.js';
 
 import { NOT_FOUND, ZERO } from '../util/Constants.js';
 

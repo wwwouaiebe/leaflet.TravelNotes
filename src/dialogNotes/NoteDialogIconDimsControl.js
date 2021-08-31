@@ -46,7 +46,7 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
+import { InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
 import { ICON_DIMENSIONS } from '../util/Constants.js';
 
 /**

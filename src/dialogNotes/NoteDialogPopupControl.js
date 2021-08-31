@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogTooltipControl.js
+@file NoteDialogPopupControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogTooltipControl
+@module NoteDialogPopupControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,19 +46,20 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
+import theConfig from '../data/Config.js';
+import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogNotes/NoteDialogEventListeners.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogTooltipControl
-@classdesc This class is the tooltipContent control of the NoteDialog
+@class NoteDialogPopupControl
+@classdesc This class is the popupContent control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogTooltipControl {
+class NoteDialogPopupControl {
 
 	/**
 	A reference to the noteDialog
@@ -72,8 +73,8 @@ class NoteDialogTooltipControl {
 	@private
 	*/
 
-	#tooltipDiv = null;
-	#tooltipInput = null
+	#popupDiv = null;
+	#popupTextArea = null;
 
 	/**
 	Event listeners
@@ -87,32 +88,32 @@ class NoteDialogTooltipControl {
 
 	constructor ( noteDialog ) {
 		this.#noteDialog = noteDialog;
-		this.#tooltipDiv = theHTMLElementsFactory.create (
+		this.#popupDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv',
-				textContent : theTranslator.getText ( 'NoteDialog - Tooltip content' )
+				textContent : theTranslator.getText ( 'NoteDialog - Text' )
 			}
 		);
-		this.#tooltipInput = theHTMLElementsFactory.create (
-			'input',
+		this.#popupTextArea = theHTMLElementsFactory.create (
+			'textarea',
 			{
-				type : 'text',
-				className : 'TravelNotes-NoteDialog-InputText',
-				dataset : { Name : 'tooltipContent' }
+				className : 'TravelNotes-NoteDialog-TextArea',
+				rows : theConfig.noteDialog.areaHeight.popupContent,
+				dataset : { Name : 'popupContent' }
 			},
-			this.#tooltipDiv
+			this.#popupDiv
 		);
 
 		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
 		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#tooltipInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#tooltipInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#popupTextArea.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#popupTextArea.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
 	}
 
 	destructor ( ) {
-		this.#tooltipInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#tooltipInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#popupTextArea.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#popupTextArea.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
 		this.#eventListeners.onFocusControl.destructor ( );
 		this.#eventListeners.onInputUpdated.destructor ( );
 		this.#noteDialog = null;
@@ -123,24 +124,24 @@ class NoteDialogTooltipControl {
 	@readonly
 	*/
 
-	get HTMLElements ( ) { return [ this.#tooltipDiv ]; }
+	get HTMLElements ( ) { return [ this.#popupDiv ]; }
 
 	/**
-	the tooltip value in the control
+	The popupcontent value in the control
 	*/
 
-	get tooltipContent ( ) { return this.#tooltipInput.value; }
+	get popupContent ( ) { return this.#popupTextArea.value; }
 
-	set tooltipContent ( Value ) { this.#tooltipInput.value = Value; }
+	set popupContent ( Value ) { this.#popupTextArea.value = Value; }
 
 }
 
-export default NoteDialogTooltipControl;
+export default NoteDialogPopupControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogTooltipControl.js file
+end of NoteDialogPopupControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

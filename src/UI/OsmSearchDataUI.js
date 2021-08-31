@@ -47,7 +47,7 @@ Tests ...
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
-import theNoteDialogToolbarData from '../dialogs/NoteDialogToolbarData.js';
+import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import OsmSearchContextMenu from '../contextMenus/OsmSearchContextMenu.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import ObjId from '../data/ObjId.js';

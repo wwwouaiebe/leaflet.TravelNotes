@@ -27,7 +27,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@file NoteDialogPhoneControl.js
+@file NoteDialogLinkControl.js
 @copyright Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
 @license GNU General Public License
 @private
@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteDialogPhoneControl
+@module NoteDialogLinkControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -46,19 +46,26 @@ Tests ...
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTranslator from '../UI/Translator.js';
-import { FocusControlEventListener, InputUpdatedEventListener } from '../dialogs/NoteDialogEventListeners.js';
+import theConfig from '../data/Config.js';
+import {
+	FocusControlEventListener,
+	BlurUrlInputEventListener,
+	InputUpdatedEventListener
+} from '../dialogNotes/NoteDialogEventListeners.js';
+
+import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class NoteDialogPhoneControl
-@classdesc This class is the phone control of the NoteDialog
+@class NoteDialogLinkControl
+@classdesc This class is the url control of the NoteDialog
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class NoteDialogPhoneControl {
+class NoteDialogLinkControl {
 
 	/**
 	A reference to the noteDialog
@@ -72,9 +79,9 @@ class NoteDialogPhoneControl {
 	@private
 	*/
 
-	#phoneHeaderDiv = null;
-	#phoneInputDiv = null;
-	#phoneInput = null;
+	#linkHeaderDiv = null;
+	#linkInputDiv = null;
+	#linkInput = null;
 
 	/**
 	Event listeners
@@ -83,56 +90,96 @@ class NoteDialogPhoneControl {
 
 	#eventListeners = {
 		onFocusControl : null,
-		onInputUpdated : null
+		onInputUpdated : null,
+		onBlurUrlInput : null
 	}
 
-	constructor ( noteDialog ) {
+	/**
+	The Devil button...
+	@private
+	*/
 
+	#createTheDevilButton ( latLng ) {
+		if ( theConfig.noteDialog.theDevil.addButton ) {
+			theHTMLElementsFactory.create (
+				'text',
+				{
+					value : '👿'
+				},
+				theHTMLElementsFactory.create (
+					'a',
+					{
+						href : 'https://www.google.com/maps/@' +
+							latLng [ ZERO ].toFixed ( LAT_LNG.fixed ) + ',' +
+							latLng [ ONE ].toFixed ( LAT_LNG.fixed ) + ',' +
+							theConfig.noteDialog.theDevil.zoomFactor + 'z',
+						target : '_blank',
+						title : 'Reminder! The devil will know everything about you'
+					},
+					theHTMLElementsFactory.create (
+						'div',
+						{
+							className : 'TravelNotes-BaseDialog-Button',
+							title : 'Reminder! The devil will know everything about you'
+						},
+						this.#linkHeaderDiv
+					)
+				)
+			);
+		}
+	}
+
+	constructor ( noteDialog, latLng ) {
 		this.#noteDialog = noteDialog;
-
-		this.#phoneHeaderDiv = theHTMLElementsFactory.create (
+		this.#linkHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			}
 		);
+
+		this.#createTheDevilButton ( latLng );
 
 		theHTMLElementsFactory.create (
 			'text',
 			{
-				value : '\u00a0' + theTranslator.getText ( 'NoteDialog - Phone' )
+				value : theTranslator.getText ( 'NoteDialog - Link' )
 			},
-			this.#phoneHeaderDiv
+			this.#linkHeaderDiv
 		);
 
-		this.#phoneInputDiv = theHTMLElementsFactory.create (
+		this.#linkInputDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-DataDiv'
 			}
 		);
 
-		this.#phoneInput = theHTMLElementsFactory.create (
+		this.#linkInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				className : 'TravelNotes-NoteDialog-InputText',
-				dataset : { Name : 'phone' }
+				dataset : { Name : 'url' }
 			},
-			this.#phoneInputDiv
+			this.#linkInputDiv
 		);
 
-		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, false );
+		this.#eventListeners.onFocusControl = new FocusControlEventListener ( this.#noteDialog, true );
 		this.#eventListeners.onInputUpdated = new InputUpdatedEventListener ( this.#noteDialog );
-		this.#phoneInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#phoneInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#eventListeners.onBlurUrlInput = new BlurUrlInputEventListener ( this.#noteDialog );
+		this.#linkInput.addEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#linkInput.addEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#linkInput.addEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );
 	}
 
 	destructor ( ) {
-		this.#phoneInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
-		this.#phoneInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#linkInput.removeEventListener ( 'focus', this.#eventListeners.onFocusControl );
+		this.#linkInput.removeEventListener ( 'input', this.#eventListeners.onInputUpdated );
+		this.#linkInput.removeEventListener ( 'blur', this.#eventListeners.onBlurUrlInput );
 		this.#eventListeners.onFocusControl.destructor ( );
 		this.#eventListeners.onInputUpdated.destructor ( );
+		this.#eventListeners.onBlurUrlInput.destructor ( );
 		this.#noteDialog = null;
 	}
 
@@ -141,24 +188,24 @@ class NoteDialogPhoneControl {
 	@readonly
 	*/
 
-	get HTMLElements ( ) { return [ this.#phoneHeaderDiv, this.#phoneInputDiv ]; }
+	get HTMLElements ( ) { return [ this.#linkHeaderDiv, this.#linkInputDiv ]; }
 
 	/**
-	The phone number in the control
+	The url value in the control
 	*/
 
-	get phone ( ) { return this.#phoneInput.value; }
+	get url ( ) { return this.#linkInput.value; }
 
-	set phone ( Value ) { this.#phoneInput.value = Value; }
+	set url ( Value ) { this.#linkInput.value = Value; }
 
 }
 
-export default NoteDialogPhoneControl;
+export default NoteDialogLinkControl;
 
 /*
 @------------------------------------------------------------------------------------------------------------------------------
 
-end of NoteDialogPhoneControl.js file
+end of NoteDialogLinkControl.js file
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
