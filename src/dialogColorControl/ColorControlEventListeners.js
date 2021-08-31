@@ -38,27 +38,26 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ColorControlEventListeners
+@module ColorControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import Color from '../dialogs/Color.js';
+import Color from '../dialogColorControl/Color.js';
 import { ZERO, COLOR_CONTROL } from '../util/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class RedSliderEventListener
-@classdesc Event listener for input event on the red slider based on the EventListener API.
+@class RedSliderInputEL
+@classdesc Input event listener for the red slider
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class RedSliderEventListener {
+class RedSliderInputEL {
 
 	#redSlider = null;
 	#colorButtons = null;
@@ -99,15 +98,14 @@ class RedSliderEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ColorInputEventListener
-@classdesc Event listener for input event on the color inputs based on the EventListener API.
+@class ColorInputEL
+@classdesc Input event for the color inputs
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ColorInputEventListener {
+class ColorInputEL {
 
 	#colorControl = null;
 	#inputs = null;
@@ -140,15 +138,14 @@ class ColorInputEventListener {
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class ColorButtonClickEventListener
-@classdesc Event listener for click event on the color buttons based on the EventListener API.
+@class ColorButtonClickEL
+@classdesc click event listener for the color buttons
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class ColorButtonClickEventListener {
+class ColorButtonClickEL {
 
 	#colorControl = null;
 
@@ -174,9 +171,9 @@ class ColorButtonClickEventListener {
 }
 
 export {
-	RedSliderEventListener,
-	ColorInputEventListener,
-	ColorButtonClickEventListener
+	RedSliderInputEL,
+	ColorInputEL,
+	ColorButtonClickEL
 };
 
 /*

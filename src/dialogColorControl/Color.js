@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Color
+@module ColorControl
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,8 +51,9 @@ const FIVE = 5;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
-@classdesc a simple helper classe for the ColorControl
+@class Color
+@classdesc a simple helper class for the ColorControl
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -63,17 +64,13 @@ class Color {
 	#green = COLOR_CONTROL.maxColorValue;
 	#blue = COLOR_CONTROL.maxColorValue;
 
-	/**
+	/*
 	@param {?number} red The red value of the color. Must be between 0 and 255. If null set to 255
 	@param {?number} green The green value of the color. Must be between 0 and 255. If null set to 255
 	@param {?number} blue The blue value of the color. Must be between 0 and 255. If null set to 255
 	*/
 
 	constructor ( red, green, blue ) {
-
-		/**
-		The red value of the color
-		*/
 
 		this.#red =
 			'number' === typeof red && COLOR_CONTROL.maxColorValue >= red && COLOR_CONTROL.minColorValue <= red
@@ -82,20 +79,12 @@ class Color {
 				:
 				COLOR_CONTROL.maxColorValue;
 
-		/**
-		The green value of the color
-		*/
-
 		this.#green =
 			'number' === typeof green && COLOR_CONTROL.maxColorValue >= green && COLOR_CONTROL.minColorValue <= green
 				?
 				green
 				:
 				COLOR_CONTROL.maxColorValue;
-
-		/**
-		The blue value of the color
-		*/
 
 		this.#blue =
 			'number' === typeof blue && COLOR_CONTROL.maxColorValue >= blue && COLOR_CONTROL.minColorValue <= blue

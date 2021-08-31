@@ -39,16 +39,15 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module ColorControl
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 import theTranslator from '../UI/Translator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import { RedSliderEventListener, ColorInputEventListener, ColorButtonClickEventListener }
-	from '../dialogs/ColorControlEventListeners.js';
-import Color from '../dialogs/Color.js';
+import { RedSliderInputEL, ColorInputEL, ColorButtonClickEL }
+	from '../dialogColorControl/ColorControlEventListeners.js';
+import Color from '../dialogColorControl/Color.js';
 
 import { ZERO, COLOR_CONTROL } from '../util/Constants.js';
 
@@ -125,7 +124,7 @@ class ColorControl {
 	#createColorButtonsDiv ( ) {
 		let colorButtonsDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
 		let cellColor = new Color ( COLOR_CONTROL.initialRed, COLOR_CONTROL.minColorValue, COLOR_CONTROL.minColorValue 	);
-		this.#eventListeners.onColorButtonClick = new ColorButtonClickEventListener ( this );
+		this.#eventListeners.onColorButtonClick = new ColorButtonClickEL ( this );
 
 		for ( let rowCounter = ZERO; rowCounter < COLOR_CONTROL.rowsNumber; ++ rowCounter ) {
 			let colorButtonsRowDiv = theHTMLElementsFactory.create ( 'div', null, colorButtonsDiv );
@@ -170,7 +169,7 @@ class ColorControl {
 			redSliderDiv
 		);
 
-		this.#eventListeners.onRedSliderInput = new RedSliderEventListener ( this.#redSliderInput, this.#colorButtons );
+		this.#eventListeners.onRedSliderInput = new RedSliderInputEL ( this.#redSliderInput, this.#colorButtons );
 		this.#redSliderInput.addEventListener ( 'input', this.#eventListeners.onRedSliderInput, false );
 
 		this.#redSliderInput.focus ( );
@@ -205,7 +204,7 @@ class ColorControl {
 	#createColorInputsDiv ( ) {
 		this.#rgbDiv = theHTMLElementsFactory.create ( 'div', null, this.#colorDiv );
 
-		this.#eventListeners.onColorInput = new ColorInputEventListener ( this, this.#inputs );
+		this.#eventListeners.onColorInput = new ColorInputEL ( this, this.#inputs );
 
 		this.#inputs.red = this.#createColorInput (
 			theTranslator.getText ( 'ColorControl - Red' ),
@@ -236,10 +235,6 @@ class ColorControl {
 		);
 		this.#colorSampleDiv.style [ 'background-color' ] = this.#newColor.cssColor;
 	}
-
-	/**
-	@param {string} cssColor the initial color of the control in the css hex format ( #rrggbb )
-	*/
 
 	constructor ( cssColor ) {
 
