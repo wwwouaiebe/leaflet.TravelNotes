@@ -105,7 +105,7 @@ class DataEncryptorHandlers {
 	@private
 	*/
 
-	#onOkEncrypt ( data ) {
+	onOkEncrypt ( data ) {
 		this.#APIKeysDialog.hideError ( );
 		this.#APIKeysDialog.hideWait ( );
 		theUtilities.saveFile ( 'APIKeys', data );
@@ -117,7 +117,7 @@ class DataEncryptorHandlers {
 	@private
 	*/
 
-	#onErrorEncrypt ( ) {
+	onErrorEncrypt ( ) {
 		this.#APIKeysDialog.showError (
 			theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' )
 		);
