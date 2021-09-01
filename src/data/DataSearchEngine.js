@@ -20,10 +20,12 @@ Changes:
 	- v1.4.0:
 		- created from DataManager
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20200731
+		- Issue ♯65 : Time to go to ES6 modules?
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -53,13 +55,17 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module DataSearchEngine
+@module data
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theGeometry from '../util/Geometry.js';
+import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
+
+import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -74,8 +80,49 @@ import { theTravelNotesData } from '../data/TravelNotesData.js';
 
 class DataSearchEngine {
 
+	#setNearestRouteData ( route, latLng, nearestRouteData ) {
+		if ( route.objId !== theTravelNotesData.editedRouteObjId ) {
+			let pointAndDistance = theGeometry.getClosestLatLngDistance ( route, latLng );
+			if ( pointAndDistance ) {
+				let distanceToRoute = theSphericalTrigonometry.pointsDistance (
+					latLng,
+					pointAndDistance.latLng
+				);
+				if ( distanceToRoute < nearestRouteData.distance ) {
+					nearestRouteData.route = route;
+					nearestRouteData.distance = distanceToRoute;
+					nearestRouteData.latLngOnRoute = pointAndDistance.latLng;
+					nearestRouteData.distanceOnRoute = pointAndDistance.distance;
+				}
+			}
+		}
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
+	}
+
+	/**
+	This method search route data for the nearest route of a given point
+	@param {Array.<number>} latLng The latitude and longitude of the point
+	@return {RouteData} A routeData object
+	@private
+	*/
+
+	getNearestRouteData ( latLng ) {
+		let nearestRouteData = {
+			distance : Number.MAX_VALUE,
+			route : null,
+			distanceOnRoute : ZERO,
+			latLngOnRoute : [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ]
+		};
+
+		theTravelNotesData.travel.routes.forEach ( route => this.#setNearestRouteData ( route, latLng, nearestRouteData ) );
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+			this.#setNearestRouteData ( theTravelNotesData.travel.editedRoute, latLng, nearestRouteData );
+		}
+
+		return Object.freeze ( nearestRouteData	);
 	}
 
 	/**
@@ -141,23 +188,20 @@ class DataSearchEngine {
 	}
 }
 
-const OUR_DATA_SEARCH_ENGINE = new DataSearchEngine ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of DataSearchEngine class
+@type {DataSearchEngine}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of DataSearchEngine class
-	@type {DataSearchEngine}
-	@constant
-	@global
+const theDataSearchEngine = new DataSearchEngine ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_DATA_SEARCH_ENGINE as theDataSearchEngine
-};
+export default theDataSearchEngine;
 
 /*
 --- End of DataSearchEngine.js file -------------------------------------------------------------------------------------------

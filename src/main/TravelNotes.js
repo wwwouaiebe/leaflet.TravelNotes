@@ -20,8 +20,8 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #26 : added confirmation message before leaving the page when data modified.
-		- Issue #27 : push directly the route in the editor when starting a new travel
+		- Issue ♯26 : added confirmation message before leaving the page when data modified.
+		- Issue ♯27 : push directly the route in the editor when starting a new travel
 	- v1.3.0:
 		- Improved myReadURL method
 		- Working with Promise at startup
@@ -32,21 +32,23 @@ Changes:
 		- moving file functions from TravelEditor to the new FileLoader
 		- added loading of osmSearch
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear
-		- Issue #63 : Find a better solution for provider keys upload
-		- Issue #75 : Merge Maps and TravelNotes
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear
+		- Issue ♯63 : Find a better solution for provider keys upload
+		- Issue ♯75 : Merge Maps and TravelNotes
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #137 : Remove html tags from json files
-		- Issue #139 : Remove Globals
-		- Issue #140 : Remove userData
+		- Issue ♯137 : Remove html tags from json files
+		- Issue ♯139 : Remove Globals
+		- Issue ♯140 : Remove userData
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200824
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -64,273 +66,34 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module TravelNotes
+@module main
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
-import { theMapEditor } from '../core/MapEditor.js';
-import { theViewerMapEditor } from '../core/ViewerMapEditor.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
-import { theUI } from '../UI/UI.js';
-import { newTravel } from '../data/Travel.js';
-import { newRoute } from '../data/Route.js';
-import { newViewerFileLoader } from '../core/ViewerFileLoader.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { newManeuver } from '../data/Maneuver.js';
-import { newItineraryPoint } from '../data/ItineraryPoint.js';
-import { theCurrentVersion } from '../data/Version.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newMapContextMenu } from '../contextMenus/MapContextMenu.js';
-import { newRoadbookUpdate } from '../roadbook/RoadbookUpdate.js';
-import { theLayersToolbarUI } from '../UI/LayersToolbarUI.js';
-import { theMouseUI } from '../UI/MouseUI.js';
-import { theAttributionsUI } from '../UI/AttributionsUI.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { theIndexedDb } from '../roadbook/IndexedDb.js';
-import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { theTranslator } from '../UI/Translator.js';
+import theConfig from '../data/Config.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theRouteEditor from '../core/RouteEditor.js';
+import theAPIKeysManager from '../core/APIKeysManager.js';
+import theUI from '../UI/UI.js';
+import Travel from '../data/Travel.js';
+import Route from '../data/Route.js';
+import ViewerFileLoader from '../core/ViewerFileLoader.js';
+import theCurrentVersion from '../data/Version.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
+import MapContextMenu from '../contextMenus/MapContextMenu.js';
+import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
+import theMouseUI from '../mouseUI/MouseUI.js';
+import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
+import theTranslator from '../util/Translator.js';
 import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
 
-let ourTravelNotesLoaded = false;
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourAddEventsListeners
-@desc This method add the document events listeners
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddEventsListeners ( ) {
-	document.addEventListener (
-		'routeupdated',
-		updateRouteEvent => {
-			if ( updateRouteEvent.data ) {
-				theMapEditor.updateRoute (
-					updateRouteEvent.data.removedRouteObjId,
-					updateRouteEvent.data.addedRouteObjId
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'routepropertiesupdated',
-		updateRoutePropertiesEvent => {
-			if ( updateRoutePropertiesEvent.data ) {
-				theMapEditor.updateRouteProperties (
-					updateRoutePropertiesEvent.data.routeObjId
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'noteupdated',
-		updateNoteEvent => {
-			if ( updateNoteEvent.data ) {
-				theMapEditor.updateNote (
-					updateNoteEvent.data.removedNoteObjId,
-					updateNoteEvent.data.addedNoteObjId
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'removeobject',
-		removeObjectEvent => {
-			if ( removeObjectEvent.data ) {
-				theMapEditor.removeObject (
-					removeObjectEvent.data.objId
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener ( 'removeallobjects',	( ) => theMapEditor.removeAllObjects ( ), false );
-	document.addEventListener (
-		'zoomto',
-		zoomToEvent => {
-			if ( zoomToEvent.data ) {
-				theViewerMapEditor.zoomTo (
-					zoomToEvent.data.latLng,
-					zoomToEvent.data.geometry
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'additinerarypointmarker',
-		addItineraryPointMarkerEvent => {
-			if ( addItineraryPointMarkerEvent.data ) {
-				theMapEditor.addItineraryPointMarker (
-					addItineraryPointMarkerEvent.data.objId,
-					addItineraryPointMarkerEvent.data.latLng
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'addsearchpointmarker',
-		addSearchPointMarkerEvent => {
-			if ( addSearchPointMarkerEvent.data ) {
-				theMapEditor.addSearchPointMarker (
-					addSearchPointMarkerEvent.data.objId,
-					addSearchPointMarkerEvent.data.latLng,
-					addSearchPointMarkerEvent.data.geometry
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'addrectangle',
-		addRectangleEvent => {
-			if ( addRectangleEvent.data ) {
-				theMapEditor.addRectangle (
-					addRectangleEvent.data.objId,
-					addRectangleEvent.data.bounds,
-					addRectangleEvent.data.properties
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'addwaypoint',
-		addWayPointEvent => {
-			if ( addWayPointEvent.data ) {
-				theMapEditor.addWayPoint (
-					addWayPointEvent.data.wayPoint,
-					addWayPointEvent.data.letter
-				);
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'layerchange',
-		layerChangeEvent => {
-			if ( layerChangeEvent.data ) {
-				theMapEditor.setLayer ( layerChangeEvent.data.layer );
-			}
-		}
-	);
-	document.addEventListener (
-		'geolocationpositionchanged',
-		geoLocationPositionChangedEvent => {
-			if ( geoLocationPositionChangedEvent.data ) {
-				theViewerMapEditor.onGeolocationPositionChanged ( geoLocationPositionChangedEvent.data.position );
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'geolocationstatuschanged',
-		geoLocationStatusChangedEvent => {
-			if ( geoLocationStatusChangedEvent.data ) {
-				theViewerMapEditor.onGeolocationStatusChanged ( geoLocationStatusChangedEvent.data.status );
-			}
-		},
-		false
-	);
-	document.addEventListener (
-		'roadbookupdate',
-		( ) => newRoadbookUpdate ( ),
-		false
-	);
-	document.addEventListener (
-		'profileclosed',
-		profileClosedEvent => {
-			if ( profileClosedEvent.data ) {
-				theProfileWindowsManager.onProfileClosed ( profileClosedEvent.data.objId );
-			}
-		},
-		false
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourAddUnloadEventsListeners
-@desc This method add the document events listeners for read/write travels, having a warning before unload and using storage.
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddUnloadEventsListeners ( ) {
-	window.addEventListener (
-		'unload',
-		( ) => {
-			localStorage.removeItem ( theTravelNotesData.UUID );
-		}
-	);
-	window.addEventListener (
-		'beforeunload',
-		beforeUnloadEvent => {
-			theIndexedDb.closeDb ( theTravelNotesData.UUID );
-			if ( theConfig.travelNotes.haveBeforeUnloadWarning ) {
-				beforeUnloadEvent.returnValue = 'x';
-				return 'x';
-			}
-		}
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnMapContextMenu
-@desc context menu event listener for the map
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnMapContextMenu ( contextMenuEvent ) {
-	if ( ! theTravelNotesData.travel.readOnly ) {
-		newMapContextMenu ( contextMenuEvent ).show ( );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourLoadDistantTravel
-@desc This method load a travel from a server file
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-async function ourLoadDistantTravel ( travelUrl ) {
-	let travelResponse = fetch ( travelUrl );
-	if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
-		let travelContent = await travelResponse.json ( );
-		newViewerFileLoader ( ).openDistantFile ( travelContent );
-	}
-	else {
-		theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO	);
-		document.title = 'Travel & Notes';
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
+@class TravelNotes
 @classdesc This class is the entry point of the application.
 @see {@link theTravelNotes} for the one and only one instance of this class
 @hideconstructor
@@ -339,6 +102,29 @@ async function ourLoadDistantTravel ( travelUrl ) {
 */
 
 class TravelNotes {
+
+	/**
+	Guard to avoid a second upload
+	#private
+	*/
+
+	#travelNotesLoaded = false;
+
+	/**
+	Load a travel from the server
+	*/
+
+	async #loadDistantTravel ( travelUrl ) {
+		let travelResponse = fetch ( travelUrl );
+		if ( HTTP_STATUS_OK === travelResponse.status && travelResponse.ok ) {
+			let travelContent = await travelResponse.json ( );
+			new ViewerFileLoader ( ).openDistantFile ( travelContent );
+		}
+		else {
+			theTravelNotesData.map.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], TWO	);
+			document.title = 'Travel & Notes';
+		}
+	}
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -350,17 +136,16 @@ class TravelNotes {
 	*/
 
 	addReadOnlyMap ( map, travelUrl ) {
-		if ( ourTravelNotesLoaded ) {
+		if ( this.#travelNotesLoaded ) {
 			return;
 		}
-		ourTravelNotesLoaded = true;
-		ourAddEventsListeners ( );
+		this.#travelNotesLoaded = true;
 		if ( map ) {
 			theTravelNotesData.map = map;
 		}
 		theAttributionsUI.createUI ( );
-		theLayersToolbarUI.setLayer ( 'OSM - Color' );
-		ourLoadDistantTravel ( travelUrl );
+		theMapLayersToolbarUI.setMapLayer ( 'OSM - Color' );
+		this.#loadDistantTravel ( travelUrl );
 	}
 
 	/**
@@ -369,26 +154,24 @@ class TravelNotes {
 	*/
 
 	addControl ( map, divControlId ) {
-		if ( ourTravelNotesLoaded ) {
+		if ( this.#travelNotesLoaded ) {
 			return;
 		}
-		ourTravelNotesLoaded = true;
-		ourAddEventsListeners ( );
-		ourAddUnloadEventsListeners ( );
+		this.#travelNotesLoaded = true;
 		if ( map ) {
 			theTravelNotesData.map = map;
-			theTravelNotesData.map.on ( 'contextmenu', ourOnMapContextMenu );
+			theTravelNotesData.map.on ( 'contextmenu', contextMenuEvent => new MapContextMenu ( contextMenuEvent ) .show ( ) );
 		}
-		theTravelNotesData.travel = newTravel ( );
-		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+		theTravelNotesData.travel = new Travel ( );
+		theTravelNotesData.travel.routes.add ( new Route ( ) );
 		theUI.createUI ( document.getElementById ( divControlId ) );
 		theAttributionsUI.createUI ( );
 		theAPIKeysManager.setKeysFromServerFile ( );
 		if ( theConfig.layersToolbarUI.haveLayersToolbarUI ) {
-			theLayersToolbarUI.createUI ( );
+			theMapLayersToolbarUI.createUI ( );
 		}
 		else {
-			theLayersToolbarUI.setLayer ( 'OSM - Color' );
+			theMapLayersToolbarUI.setMapLayer ( 'OSM - Color' );
 		}
 
 		if ( theConfig.mouseUI.haveMouseUI ) {
@@ -413,8 +196,8 @@ class TravelNotes {
 	@param {Provider} provider The provider to add
 	*/
 
-	addProvider ( provider ) {
-		theAPIKeysManager.addProvider ( provider );
+	addProvider ( providerClass ) {
+		theAPIKeysManager.addProvider ( providerClass );
 	}
 
 	/**
@@ -426,10 +209,10 @@ class TravelNotes {
 	}
 
 	/**
-	get a new BaseDialog object. Used by plugins.
+	get the overpassApi url
 	*/
 
-	get baseDialog ( ) { return newBaseDialog ( ); }
+	get overpassApiUrl ( ) { return theConfig.overpassApi.url; }
 
 	/**
 	get the Leaflet map object
@@ -438,41 +221,26 @@ class TravelNotes {
 	get map ( ) { return theTravelNotesData.map; }
 
 	/**
-	get a new Maneuver object. Used by plugins.
-	*/
-
-	get maneuver ( ) { return newManeuver ( ); }
-
-	/**
-	get a new ItineraryPoint object. Used by plugins.
-	*/
-
-	get itineraryPoint ( ) { return newItineraryPoint ( ); }
-
-	/**
 	theTravelNotes version
 	*/
 
 	get version ( ) { return theCurrentVersion; }
 }
 
-const OUR_TRAVEL_NOTES = new TravelNotes ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of TravelNotes class
+@type {TravelNotes}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of TravelNotes class
-	@type {TravelNotes}
-	@constant
-	@global
+const theTravelNotes = new TravelNotes ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRAVEL_NOTES as theTravelNotes
-};
+export default theTravelNotes;
 
 /*
 --- End of TravelNotes.js file ------------------------------------------------------------------------------------------------

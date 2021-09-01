@@ -17,10 +17,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-Doc reviewed 20200825
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 
------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
 */
 
 /**
@@ -37,15 +39,29 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module DataEncryptor
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewDataEncryptor ( ) {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-	function myImportKey ( pswd ) {
+@class DataEncryptor
+@classdesc This class is used to encrypt an decrypt data with a password
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class DataEncryptor {
+
+	#salt = null;
+
+	/* eslint-disable no-magic-numbers */
+
+	#importKey ( pswd ) {
 		return window.crypto.subtle.importKey (
 			'raw',
 			pswd,
@@ -55,15 +71,11 @@ function ourNewDataEncryptor ( ) {
 		);
 	}
 
-	/* eslint-disable no-magic-numbers */
-
-	function myDeriveKey ( deriveKey ) {
+	#deriveKey ( deriveKey, salt ) {
 		return window.crypto.subtle.deriveKey (
 			{
 				name : 'PBKDF2',
-				salt : new window.TextEncoder ( ).encode (
-					'Tire la chevillette la bobinette cherra. Le Petit Chaperon rouge tira la chevillette.'
-				),
+				salt : new window.TextEncoder ( ).encode ( salt ),
 				iterations : 1000000,
 				hash : 'SHA-256'
 			},
@@ -77,112 +89,87 @@ function ourNewDataEncryptor ( ) {
 		);
 	}
 
-	/* eslint-disable-next-line max-params */
-	function myDecryptData ( data, onOk, onError, pswdPromise ) {
-		function decrypt ( decryptKey ) {
-			return window.crypto.subtle.decrypt (
-				{
-					name : 'AES-GCM',
-					iv : new Uint8Array ( data.slice ( 0, 16 ) )
-				},
-				decryptKey,
-				new Uint8Array ( data.slice ( 16 ) )
-			);
-		}
+	#decrypt ( decryptKey, data ) {
+		return window.crypto.subtle.decrypt (
+			{
+				name : 'AES-GCM',
+				iv : new Uint8Array ( data.slice ( 0, 16 ) )
+			},
+			decryptKey,
+			new Uint8Array ( data.slice ( 16 ) )
+		);
+	}
+
+	#encrypt ( encryptKey, ivBytes, data ) {
+		return window.crypto.subtle.encrypt (
+			{
+				name : 'AES-GCM',
+				iv : ivBytes
+			},
+			encryptKey,
+			data
+		);
+	}
+
+	/*
+	@param {string} salt Salt to be used for encoding and decoding operations. If none, a default value is provided.
+	*/
+
+	constructor ( salt ) {
+		this.#salt = salt || 'Tire la chevillette la bobinette cherra. Le Petit Chaperon rouge tira la chevillette.';
+		Object.freeze ( this );
+	}
+
+	/* eslint-disable max-params */
+
+	/**
+	This method encrypt data with a password
+	@param {Uint8Array} data The data to encrypt. See TextEncoder ( ) to transform string to Uint8Array
+	@param {function} onOk A function to execute when the encryption succeeds
+	@param {function} onError A function to execute when the encryption fails
+	@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
+	*/
+
+	encryptData ( data, onOk, onError, pswdPromise ) {
+		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
 		pswdPromise
-			.then ( myImportKey )
-			.then ( myDeriveKey )
-			.then ( decrypt )
+			.then ( this.#importKey )
+			.then ( deriveKey => this.#deriveKey ( deriveKey, this.#salt ) )
+			.then ( encryptKey => this.#encrypt ( encryptKey, ivBytes, data ) )
+			.then (
+				cipherText => {
+					onOk (
+						new Blob (
+							[ ivBytes, new Uint8Array ( cipherText ) ],
+							{ type : 'application/octet-stream' }
+						)
+					);
+				}
+			)
+			.catch ( onError );
+	}
+
+	/**
+	This method decrypt data with a password
+	@param {Uint8Array} data The data to decrypt. See TextDecoder ( ) to transform Uint8Array to string
+	@param {function} onOk A function to execute when the decryption succeeds
+	@param {function} onError A function to execute when the decryption fails
+	@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
+	*/
+
+	decryptData ( data, onOk, onError, pswdPromise ) {
+		pswdPromise
+			.then ( this.#importKey )
+			.then ( deriveKey => this.#deriveKey ( deriveKey, this.#salt ) )
+			.then ( decryptKey => this.#decrypt ( decryptKey, data ) )
 			.then ( onOk )
 			.catch ( onError );
 	}
-
-	/* eslint-disable-next-line max-params */
-	function myEncryptData ( data, onOk, onError, pswdPromise ) {
-		let ivBytes = window.crypto.getRandomValues ( new Uint8Array ( 16 ) );
-		function encrypt ( encryptKey ) {
-			return window.crypto.subtle.encrypt (
-				{
-					name : 'AES-GCM',
-					iv : ivBytes
-				},
-				encryptKey,
-				data
-			);
-		}
-		function returnValue ( cipherText ) {
-			onOk (
-				new Blob (
-					[ ivBytes, new Uint8Array ( cipherText ) ],
-					{ type : 'application/octet-stream' }
-				)
-			);
-		}
-		pswdPromise
-			.then ( myImportKey )
-			.then ( myDeriveKey )
-			.then ( encrypt )
-			.then ( returnValue )
-			.catch ( onError );
-	}
+	/* eslint-disable max-params */
 	/* eslint-enable no-magic-numbers */
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This class is used to encrypt an decrypt data with a password
-	@see {@link newDataEncryptor} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class DataEncryptor {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		@param {Uint8Array} data The data to encrypt. See TextEncoder ( ) to transform string to Uint8Array
-		@param {function} onOk A function to execute when the encryption succeeds
-		@param {function} onError A function to execute when the encryption fails
-		@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
-		*/
-
-		/* eslint-disable-next-line max-params */
-		encryptData ( data, onOk, onError, pswdPromise ) { myEncryptData ( data, onOk, onError, pswdPromise ); }
-
-		/**
-		@param {Uint8Array} data The data to decrypt. See TextDecoder ( ) to transform Uint8Array to string
-		@param {function} onOk A function to execute when the decryption succeeds
-		@param {function} onError A function to execute when the decryption fails
-		@param {Promise} pswdPromise A Promise that fullfil with a password. Typically a dialog...
-		*/
-
-		/* eslint-disable-next-line max-params */
-		decryptData ( data, onOk, onError, pswdPromise ) { myDecryptData ( data, onOk, onError, pswdPromise ); }
-	}
-
-	return new DataEncryptor ( );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newDataEncryptor
-	@desc constructor for DataEncryptor objects
-	@return {DataEncryptor} an instance of DataEncryptor object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewDataEncryptor as newDataEncryptor
-};
+export default DataEncryptor;
 
 /*
 --- End of DataEncryptor.js file ----------------------------------------------------------------------------------------------

@@ -1,0 +1,110 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file BaseDialog.css
+@desc CSS for the BaseDialog
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+	- v2.2.0:
+		- Issue #155 : Enable pan and zoom on the map when a dialog is displayed
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-BaseDialog-Container {
+	z-index: 1200;
+	position: absolute;
+	background-color: white;
+	border-style: solid;
+	border-width: 0.1em;
+	cursor: default;
+	max-height: 90vh;
+	box-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
+}
+
+.TravelNotes-BaseDialog-TopBar {
+	background-color: lightgray;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+}
+
+.TravelNotes-BaseDialog-TopBar:hover {
+	background-color: darkred;
+}
+
+.TravelNotes-BaseDialog-TopBar:hover,
+.TravelNotes-BaseDialog-TopBar:active {
+	cursor: grab;
+}
+
+.TravelNotes-BaseDialog-CancelButton {
+	background-color: white;
+	width: 1.5em;
+	text-align: center;
+}
+
+.TravelNotes-BaseDialog-CancelButton:hover {
+	cursor: default;
+}
+
+.TravelNotes-BaseDialog-HeaderDiv,
+.TravelNotes-BaseDialog-ContentDiv,
+.TravelNotes-BaseDialog-ErrorDiv,
+.TravelNotes-BaseDialog-WaitDiv,
+.TravelNotes-BaseDialog-FooterDiv {
+	padding: 0.5em;
+}
+
+.TravelNotes-BaseDialog-HeaderDiv {
+	text-align: center;
+	font-weight: bold;
+}
+
+.TravelNotes-BaseDialog-ContentDiv {
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-color: lightgray;
+	border-width: 0.1em;
+	overflow: auto;
+}
+
+.TravelNotes-BaseDialog-ErrorDiv {
+	background-color: red;
+	color: white;
+}
+
+.TravelNotes-BaseDialog-Button {
+	display: inline-block;
+	width: 2em;
+	text-align: center;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+}
+
+.TravelNotes-BaseDialog-Button:hover {
+	border-color: black;
+}
+
+/*
+--- End of BaseDialog.css -----------------------------------------------------------------------------------------------------
+*/

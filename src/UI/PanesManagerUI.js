@@ -25,12 +25,14 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-Doc reviewed 20200817
+		- Issue ♯135 : Remove innerHTML from code
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -48,114 +50,57 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@typedef {Object} PaneUI
-@interface
-@see {@link PanesManagerUI} for pane UI management
-@see {@link ItineraryPaneUI} for existing panes
-@see {@link TravelNotesPaneUI} for existing panes
-@see {@link OsmSearchPaneUI} for existing panes
-@desc An object that can be displayed as a pane
-@property {function} remove A function that do the cleaning of the pane data div
-@property {function} add A function that add all the needed HTMLElements in the pane data div
-@property {function} getId A function that gives a unique identifier for the PaneUI
-@property {function} getButtonText A function that return the text to be displayed in the pane button
-@property {function} setPaneDivs A function that set the pane data div and pane control div
-@public
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
 @module PanesManagerUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import { MOUSE_WHEEL_FACTORS, PANE_ID } from '../util/Constants.js';
 
-let ourActivePaneId = PANE_ID.invalidPane;
-let ourPanes = new Map ( );
-let ourPaneDataDiv = null;
-let ourPaneControlDiv = null;
-
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourRemoveActivePane
-@desc This method remove the content of the Data Pane Div
-@private
+@class PaneButtonClickEL
+@classdesc click event listener for the mane buttons
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourRemoveActivePane ( ) {
-	if ( PANE_ID.invalidPane !== ourActivePaneId ) {
-		ourPanes.get ( ourActivePaneId ).remove ( );
-		ourPaneDataDiv.textContent = '';
+class PaneButtonClickEL {
+
+	#paneManagerUI = null;
+
+	constructor ( paneManagerUI ) {
+		this.#paneManagerUI = paneManagerUI;
+	}
+
+	handleEvent ( clickEvent ) {
+		this.#paneManagerUI.showPane ( clickEvent.target.dataset.tanPaneId );
 	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourShowPane
-@desc Show a pane
-@param paneId the pane id to show
-@private
+@class PaneDataDivWheelEL
+@classdesc wheel event listeners for the PaneDataDiv
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourShowPane ( paneId ) {
-	ourRemoveActivePane ( );
-	ourActivePaneId = paneId;
-	ourPanes.get ( ourActivePaneId ).add ( );
-	document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
-		paneButton => {
-			if ( paneButton.paneId === ourActivePaneId ) {
-				paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
-			}
-			else {
-				paneButton.classList.remove ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
-			}
+class PaneDataDivWheelEL {
+
+	constructor ( ) {
+	}
+
+	handleEvent ( wheelEvent ) {
+		if ( wheelEvent.deltaY ) {
+			wheelEvent.target.scrollTop +=
+				wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
 		}
-	);
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnPaneButtonClick
-@desc click event listener for the pane buttons
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnPaneButtonClick ( clickEvent ) {
-	ourShowPane ( clickEvent.target.paneId );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnPaneDataDivWheel
-@desc Wheel event listener for Data Pane Div
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnPaneDataDivWheel ( wheelEvent ) {
-	if ( wheelEvent.deltaY ) {
-		wheelEvent.target.scrollTop +=
-			wheelEvent.deltaY * MOUSE_WHEEL_FACTORS [ wheelEvent.deltaMode ];
+		wheelEvent.stopPropagation ( );
 	}
-	wheelEvent.stopPropagation ( );
 }
 
 /**
@@ -163,7 +108,6 @@ function ourOnPaneDataDivWheel ( wheelEvent ) {
 
 @class
 @classdesc This class manages the differents panes on the UI
-@see {@link thePanesManagerUI} for the one and only one instance of this class
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -171,20 +115,27 @@ function ourOnPaneDataDivWheel ( wheelEvent ) {
 
 class PanesManagerUI {
 
-	constructor ( ) {
-		Object.freeze ( this );
-	}
+	#activePaneId = PANE_ID.invalidPane;
+	#panes = new Map ( );
+	#paneData = null;
+	#paneControl = null;
+	#headerDiv = null;
 
 	/**
-	creates the data panes on the user interface
-	@param {HTMLElement} uiMainDiv The HTML element in witch the different elements of the UI have to be created
+	This method remove the content of the Data Pane Div
+	@private
 	*/
 
-	createUI ( uiMainDiv ) {
-		if ( ourPaneDataDiv ) {
-			return;
+	#removeActivePane ( ) {
+		if ( PANE_ID.invalidPane !== this.#activePaneId ) {
+			this.#panes.get ( this.#activePaneId ).remove ( );
+			this.#paneData.textContent = '';
 		}
-		let headerDiv = theHTMLElementsFactory.create (
+	}
+
+	constructor ( uiMainDiv ) {
+		Object.seal ( this );
+		this.#headerDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-UI-FlexRowDiv'
@@ -192,7 +143,7 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 
-		ourPaneControlDiv = theHTMLElementsFactory.create (
+		this.#paneControl = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PanesManagerUI-PaneControlsDiv'
@@ -200,28 +151,14 @@ class PanesManagerUI {
 			uiMainDiv
 		);
 
-		ourPaneDataDiv = theHTMLElementsFactory.create (
+		this.#paneData = theHTMLElementsFactory.create (
 			'div',
 			{
 				id : 'TravelNotes-PanesManagerUI-PaneDataDiv'
 			},
 			uiMainDiv
 		);
-		ourPaneDataDiv.addEventListener ( 'wheel', ourOnPaneDataDivWheel, false );
-		ourPanes.forEach (
-			pane => {
-				theHTMLElementsFactory.create (
-					'div',
-					{
-						textContent : pane.getButtonText ( ),
-						className : 'TravelNotes-PanesManagerUI-PaneButton',
-						paneId : pane.getId ( )
-					},
-					headerDiv
-				).addEventListener ( 'click', ourOnPaneButtonClick, false );
-				pane.setPaneDivs ( ourPaneDataDiv, ourPaneControlDiv );
-			}
-		);
+		this.#paneData.addEventListener ( 'wheel', new PaneDataDivWheelEL ( ) );
 	}
 
 	/**
@@ -229,8 +166,18 @@ class PanesManagerUI {
 	@param {PaneUI} paneUI The pane to add
 	*/
 
-	addPane ( paneUI ) {
-		ourPanes.set ( paneUI.getId ( ), paneUI );
+	addPane ( paneClass ) {
+		let pane = new paneClass ( this.#paneData, this.#paneControl );
+		this.#panes.set ( pane.getPaneId ( ), pane );
+		theHTMLElementsFactory.create (
+			'div',
+			{
+				textContent : pane.getButtonText ( ),
+				className : 'TravelNotes-PanesManagerUI-PaneButton',
+				dataset : { PaneId : pane.getPaneId ( ) }
+			},
+			this.#headerDiv
+		).addEventListener ( 'click', new PaneButtonClickEL ( this ) );
 	}
 
 	/**
@@ -239,7 +186,19 @@ class PanesManagerUI {
 	*/
 
 	showPane ( paneId ) {
-		ourShowPane ( paneId );
+		this.#removeActivePane ( );
+		this.#activePaneId = paneId;
+		this.#panes.get ( this.#activePaneId ).add ( );
+		document.querySelectorAll ( '.TravelNotes-PanesManagerUI-PaneButton' ).forEach (
+			paneButton => {
+				if ( paneButton.dataset.tanPaneId === this.#activePaneId ) {
+					paneButton.classList.add ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
+				}
+				else {
+					paneButton.classList.remove ( 'TravelNotes-PanesManagerUI-ActivePaneButton' );
+				}
+			}
+		);
 	}
 
 	/**
@@ -248,29 +207,13 @@ class PanesManagerUI {
 	*/
 
 	updatePane ( paneId ) {
-		if ( paneId === ourActivePaneId ) {
-			ourShowPane ( paneId );
+		if ( paneId === this.#activePaneId ) {
+			this.showPane ( paneId );
 		}
 	}
 }
 
-const OUR_PANES_MANAGER_UI = new PanesManagerUI ( );
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@desc The one and only one instance of PanesManagerUI class
-	@type {PanesManagerUI}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_PANES_MANAGER_UI as thePanesManagerUI
-};
+export default PanesManagerUI;
 
 /*
 --- End of dataPanesUI.js file ------------------------------------------------------------------------------------------------

@@ -21,12 +21,14 @@ Changes:
 		- created
 	-v1.7.0:
 		- modified way of working for myPointsDistance ( )
-		- issue #89 : Add elevation graph => new method getLatLngElevAtDist ( )
+		- Issue ♯89 : Add elevation graph => new method getLatLngElevAtDist ( )
 	- v1.9.0:
-		- issue #101 : Add a print command for a route
+		- Issue ♯101 : Add a print command for a route
 	- v1.13.0:
-		- Issue #125 : Outphase osmSearch and add it to TravelNotes
-Doc reviewed 20200824
+		- Issue ♯125 : Outphase osmSearch and add it to TravelNotes
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -70,13 +72,13 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Geometry
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTravelNotesData } from '../data/TravelNotesData.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
 import { DISTANCE, ZERO, ONE, TWO, DEGREES, LAT_LNG, EARTH_RADIUS } from '../util/Constants.js';
 
 const HUNDRED = 100;
@@ -84,7 +86,7 @@ const HUNDRED = 100;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class Geometry
 @classdesc This class contains methods for geometry operations requiring call to Leaflet functions
 @see {@link theGeometry} for the one and only one instance of this class
 @hideconstructor
@@ -140,7 +142,7 @@ class Geometry {
 	}
 
 	/**
-	This function search the nearest point on a route from a given point and compute the distance
+	This method search the nearest point on a route from a given point and compute the distance
 	between the beginning of the route and the nearest point
 	@param {Route} route The route object to be used
 	@param {Array.<number>} latLng The latitude and longitude of the point
@@ -213,7 +215,7 @@ class Geometry {
 	}
 
 	/**
-	This function returns a window.L.latLngBounds that represents a square
+	This method returns a window.L.latLngBounds that represents a square
 	@param {Array.<number>} latLngCenter The latitude and longitude of the center of the square
 	@param {number} dimension The half length of the square side in meter.
 	*/
@@ -233,7 +235,7 @@ class Geometry {
 	}
 
 	/**
-	This function transforms a lat lng coordinate to pixel coordinate relative to the CRS origin using the Leaflet
+	This method transforms a lat lng coordinate to pixel coordinate relative to the CRS origin using the Leaflet
 	method map.project
 	@param {Array.<number>} latLng The latitude and longitude of the point
 	@param {number} zoom The zoom factor to use
@@ -286,23 +288,20 @@ class Geometry {
 	}
 }
 
-const OUR_GEOMETRY = new Geometry ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of Geometry class
+@type {Geometry}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of Geometry class
-	@type {Geometry}
-	@constant
-	@global
+const theGeometry = new Geometry ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_GEOMETRY as theGeometry
-};
+export default theGeometry;
 
 /*
 --- End of Geometry.js file ---------------------------------------------------------------------------------------------------

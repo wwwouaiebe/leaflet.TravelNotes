@@ -20,8 +20,10 @@ Changes:
 	- v1.4.0:
 		- Initialization changed
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20200731
+		- Issue ♯65 : Time to go to ES6 modules?
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -39,7 +41,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ObjId
+@module data
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -47,40 +49,29 @@ Tests ...
 
 import { ZERO } from '../util/Constants.js';
 
-let theTravelNotesObjId = ZERO;
-
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewObjId
-@desc Generator for ObjId
-@return {!number} a unique ObjId
-@private
+@class ObjId
+@classdesc objId's generator
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewObjId ( ) {
-	++ theTravelNotesObjId;
-	return theTravelNotesObjId;
-}
+class ObjId {
 
-export {
+	static #objId = ZERO;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newObjId
-	@desc Generator for ObjId
-	@return {!number} a unique ObjId
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	get a unique objId
 	*/
 
-	ourNewObjId as newObjId
+	static get nextObjId ( ) { return ( ++ ObjId.#objId ); }
 
-};
+}
+
+export default ObjId;
 
 /*
 --- End of ObjId.js file ------------------------------------------------------------------------------------------------------

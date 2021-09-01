@@ -20,10 +20,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.6.0:
 		- created
-		- Issue #69 : ContextMenu and ContextMenuFactory are unclear.
+		- Issue ♯69 : ContextMenu and ContextMenuFactory are unclear.
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
-Doc reviewed 20200727
+		- Issue ♯120 : Review the UserInterface
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -41,130 +43,100 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module NoteContextMenu
+@module contextMenus
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseContextMenu } from '../contextMenus/BaseContextMenu.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { theNoteEditor } from '../core/NoteEditor.js';
-import { newZoomer } from '../core/Zoomer.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theTranslator } from '../UI/Translator.js';
+import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
+import theNoteEditor from '../core/NoteEditor.js';
+import Zoomer from '../core/Zoomer.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theTranslator from '../util/Translator.js';
 
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewNoteContextMenu
-@desc constructor of NoteContextMenu objects
-@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-When null, the body of the html page is selected
-@return {NoteContextMenu} an instance of a NoteContextMenu object
-@listens mouseenter mouseleave click keydown keypress keyup
-@private
+@class NoteContextMenu
+@classdesc this class implements the BaseContextMenu class for the notes
+@extends BaseContextMenu
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewNoteContextMenu ( contextMenuEvent, parentDiv ) {
+class NoteContextMenu extends BaseContextMenu {
 
-	let myNoteObjId = contextMenuEvent.noteObjId || contextMenuEvent.target.objId;
-	let myZoomer = newZoomer ( );
+	#noteObjId = INVALID_OBJ_ID;
+	#route = null;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	constructor ( contextMenuEvent, parentNode = null ) {
+		super ( contextMenuEvent, parentNode );
+		this.#noteObjId = this.eventData.targetObjId;
+		this.#route = theDataSearchEngine.getNoteAndRoute ( this.#noteObjId ).route;
+	}
 
-	@function myGetMenuItems
-	@desc get an array with the menu items
-	@return {array.<MenuItem>} the menu items
-	@private
+	/* eslint-disable no-magic-numbers */
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	doAction ( selectedItemObjId ) {
+		switch ( selectedItemObjId ) {
+		case 0 :
+			theNoteEditor.editNote ( this.#noteObjId );
+			break;
+		case 1 :
+			theNoteEditor.removeNote ( this.#noteObjId );
+			break;
+		case 2 :
+			new Zoomer ( ).zoomToNote ( this.#noteObjId );
+			break;
+		case 3 :
+			if ( this.#route ) {
+				theNoteEditor.detachNoteFromRoute ( this.#noteObjId );
+			}
+			else {
+				theNoteEditor.attachNoteToRoute ( this.#noteObjId );
+			}
+			break;
+		default :
+			break;
+		}
+	}
 
-	function myGetMenuItems ( ) {
+	/* eslint-enable no-magic-numbers */
 
-		let route = theDataSearchEngine.getNoteAndRoute ( myNoteObjId ).route;
-
+	get menuItems ( ) {
 		return [
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
-				action : theNoteEditor.editNote,
-				param : myNoteObjId
+				itemText : theTranslator.getText ( 'NoteContextMenu - Edit this note' ),
+				isActive : true
 			},
 			{
-				context : theNoteEditor,
-				name : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
-				action : theNoteEditor.removeNote,
-				param : myNoteObjId
+				itemText : theTranslator.getText ( 'NoteContextMenu - Delete this note' ),
+				isActive : true
 			},
 			{
-				context : myZoomer,
-				name : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
-				action : myZoomer.zoomToNote,
-				param : myNoteObjId
+				itemText : theTranslator.getText ( 'NoteContextMenu - Zoom to note' ),
+				isActive : true
 			},
 			{
-				context : theNoteEditor,
-				name :
-					route
+				itemText : theTranslator.getText (
+					this.#route
 						?
-						theTranslator.getText ( 'NoteContextMenu - Detach note from route' )
+						'NoteContextMenu - Detach note from route'
 						:
-						theTranslator.getText ( 'NoteContextMenu - Attach note to route' ),
-				action :
-					theTravelNotesData.travel.routes.length !== ZERO
-					&&
-					INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
-						?
-						( route ? theNoteEditor.detachNoteFromRoute : theNoteEditor.attachNoteToRoute )
-						:
-						null,
-				param : myNoteObjId
+						'NoteContextMenu - Attach note to route'
+				),
+				isActive : INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId
 			}
 		];
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class NoteContextMenu
-	@classdesc a BaseContextMenu object with items completed for Notes
-	@see {@link newNoteContextMenu} for constructor
-	@augments BaseContextMenu
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	return newBaseContextMenu ( contextMenuEvent, myGetMenuItems ( ), parentDiv );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newNoteContextMenu
-	@desc constructor of NoteContextMenu objects
-	@param  {event} contextMenuEvent the event that have triggered the menu (can be a JS event or a Leaflet event)
-	@param {HTMLElement} [parentDiv] the html element in witch the menu will be added.
-	When null, the body of the html page is selected
-	@return {NoteContextMenu} an instance of a NoteContextMenu object
-	@listens mouseenter mouseleave click keydown keypress keyup
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewNoteContextMenu as newNoteContextMenu
-};
+export default NoteContextMenu;
 
 /*
 --- End of NoteContextMenu.js file --------------------------------------------------------------------------------------------

@@ -21,10 +21,12 @@ Changes:
 	- v1.4.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
-Doc reviewed 20200818
+		- Issue ♯120 : Review the UserInterface
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -43,346 +45,86 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module ItineraryPaneUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHTMLViewsFactory } from '../UI/HTMLViewsFactory.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
-import { newNoteContextMenu } from '../contextMenus/NoteContextMenu.js';
-import { newManeuverContextMenu } from '../contextMenus/ManeuverContextMenu.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { INVALID_OBJ_ID, LAT_LNG, PANE_ID } from '../util/Constants.js';
+import PaneUI from '../UI/PaneUI.js';
+import theTranslator from '../util/Translator.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import ItineraryControlUI from '../UI/ItineraryControlUI.js';
+import ItineraryDataUI from '../UI/ItineraryDataUI.js';
+import { INVALID_OBJ_ID, PANE_ID } from '../util/Constants.js';
 
-function ourNewItineraryPaneUI ( ) {
+/**
+@--------------------------------------------------------------------------------------------------------------------------
 
-	let myShowNotes = theConfig.itineraryPaneUI.showNotes;
-	let myShowManeuvers = theConfig.itineraryPaneUI.showManeuvers;
-	let myPaneDataDiv = null;
-	let myPaneControlDiv = null;
-	let myCheckBoxesDiv = null;
-	let myRouteHeader = null;
-	let myShowNotesCheckBox = null;
-	let myShowManeuversCheckBox = null;
+@class ItineraryPaneUI
+@classdesc This class manages the itinerary pane UI
+@see {@link PanesManagerUI} for pane UI management
+@extends PaneUI
+@hideconstructor
+
+@--------------------------------------------------------------------------------------------------------------------------
+*/
+
+class ItineraryPaneUI extends PaneUI {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnManeuverOrNoteContextMenu
-	@desc context menu event listener for maneuvers and notes
+	the ItineraryDataUI Object
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnManeuverOrNoteContextMenu ( contextMenuEvent ) {
-		contextMenuEvent.stopPropagation ( );
-		contextMenuEvent.preventDefault ( );
-		let element = contextMenuEvent.target;
-		while ( ! element.latLng ) {
-			element = element.parentNode;
-		}
-		contextMenuEvent.latlng = { lat : LAT_LNG.defaultValue, lng : LAT_LNG.defaultValue };
-		contextMenuEvent.fromUI = true;
-		contextMenuEvent.originalEvent =
-			{
-				clientX : contextMenuEvent.clientX,
-				clientY : contextMenuEvent.clientY,
-				latLng : element.latLng
-			};
-		if ( element.maneuverObjId ) {
-			contextMenuEvent.maneuverObjId = element.maneuverObjId;
-			newManeuverContextMenu ( contextMenuEvent, myPaneDataDiv.parentNode ).show ( );
-		}
-		else if ( element.noteObjId ) {
-			contextMenuEvent.noteObjId = element.noteObjId;
-			newNoteContextMenu ( contextMenuEvent, myPaneDataDiv.parentNode ).show ( );
-		}
-	}
+	#itineraryDataUI = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnManeuverOrNoteMouseEnter
-	@desc mouse enter event listener for maneuvers and notes
+	the ItineraryControlUI Object
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnManeuverOrNoteMouseEnter ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		theEventDispatcher.dispatch (
-			'additinerarypointmarker',
-			{
-				objId : mouseEvent.target.objId,
-				latLng : mouseEvent.target.latLng
-			}
-		);
+	#itineraryControlUI = null;
+
+	constructor ( paneData, paneControl ) {
+		super ( paneData, paneControl );
+		this.#itineraryDataUI = new ItineraryDataUI ( this.paneData );
+		this.#itineraryControlUI = new ItineraryControlUI ( this.paneControl, this.#itineraryDataUI );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnManeuverOrNoteMouseLeave
-	@desc mouse leave event listener for maneuvers and notes
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method removes all the elements from the data div and control div
 	*/
 
-	function myOnManeuverOrNoteMouseLeave ( mouseEvent ) {
-		mouseEvent.stopPropagation ( );
-		theEventDispatcher.dispatch ( 'removeobject', { objId : mouseEvent.target.objId } );
+	remove ( ) {
+		this.#itineraryDataUI.clearData ( );
+		this.#itineraryControlUI.clearControl ( );
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnShowNotesClick
-	@desc click event listener for show notes check box
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method add the  maneuver and notes to the data div and controls to the controls div
 	*/
 
-	function myOnShowNotesClick ( clickEvent ) {
-		myShowNotes = clickEvent.target.checked;
-		document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Notes-Row' ).forEach (
-			noteRow => { noteRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnShowManeuversClick
-	@desc click event listener for show maneuvers check box
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myOnShowManeuversClick ( clickEvent ) {
-		myShowManeuvers = clickEvent.target.checked;
-		document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row' ).forEach (
-			maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClearPaneControlDiv
-	@desc Remove all controls from the pane controls div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myClearPaneControlDiv ( ) {
-		if ( myCheckBoxesDiv ) {
-			if ( myShowManeuversCheckBox ) {
-				myShowManeuversCheckBox.removeEventListener ( 'click', myOnShowManeuversClick, false );
-				myCheckBoxesDiv.removeChild ( myShowManeuversCheckBox );
-				myShowManeuversCheckBox = null;
-			}
-			if ( myShowNotesCheckBox ) {
-				myShowNotesCheckBox.removeEventListener ( 'click', myOnShowNotesClick, false );
-				myCheckBoxesDiv.removeChild ( myShowNotesCheckBox );
-				myShowNotesCheckBox = null;
-			}
-			myPaneControlDiv.removeChild ( myCheckBoxesDiv );
-			myCheckBoxesDiv = null;
-		}
-		if ( myRouteHeader ) {
-			myPaneControlDiv.removeChild ( myRouteHeader );
-			myRouteHeader = null;
+	add ( ) {
+		if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
+			this.#itineraryDataUI.addData ( );
+			this.#itineraryControlUI.addControl ( );
 		}
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myClearPaneDataDiv
-	@desc Remove all notes and maneuvers from the pane data div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method returns the pane id
 	*/
 
-	function myClearPaneDataDiv ( ) {
-		document.querySelectorAll (
-			'.TravelNotes-ItineraryPaneUI-Route-Notes-Row, .TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row'
-		).forEach (
-			row => {
-				row.removeEventListener ( 'contextmenu', myOnManeuverOrNoteContextMenu, false );
-				row.removeEventListener ( 'mouseenter', myOnManeuverOrNoteMouseEnter, false );
-				row.removeEventListener ( 'mouseleave', myOnManeuverOrNoteMouseLeave, false );
-			}
-		);
-		let routeAndNotesElement = document.querySelector ( '.TravelNotes-ItineraryPaneUI-Route-ManeuversAndNotes' );
-		if ( routeAndNotesElement ) {
-			myPaneDataDiv.removeChild ( routeAndNotesElement );
-		}
-	}
+	getPaneId ( ) { return PANE_ID.itineraryPane; }
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddControls
-	@desc Create the controls div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method returns the text to add in the pane button
 	*/
 
-	function myAddControls ( ) {
-		myCheckBoxesDiv = theHTMLElementsFactory.create ( 'div', null, myPaneControlDiv );
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : theTranslator.getText ( 'ItineraryPaneUI - Show notes' )
-			},
-			myCheckBoxesDiv
-		);
-		myShowNotesCheckBox = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'checkbox',
-				id : 'TravelNotes-ItineraryPane-ShowNotesInput',
-				checked : myShowNotes
-			},
-			myCheckBoxesDiv
-		);
-		myShowNotesCheckBox.addEventListener ( 'click', myOnShowNotesClick, false );
-		theHTMLElementsFactory.create (
-			'text',
-			{
-				value : theTranslator.getText ( 'ItineraryPaneUI - Show maneuvers' )
-			},
-			myCheckBoxesDiv
-		);
-		myShowManeuversCheckBox = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'checkbox',
-				id : 'TravelNotes-ItineraryPane-ShowManeuversInput',
-				checked : myShowManeuvers
-			},
-			myCheckBoxesDiv
-		);
-		myShowManeuversCheckBox.addEventListener ( 'click', myOnShowManeuversClick, false );
-		myRouteHeader =
-			theHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-ItineraryPaneUI-', theTravelNotesData.travel.editedRoute );
-		myPaneControlDiv.appendChild ( myRouteHeader );
-	}
+	getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Itinerary' ); }
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myAddData
-	@desc Add notes and maneuvers to the pane data div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myAddData ( ) {
-		myPaneDataDiv.appendChild (
-			theHTMLViewsFactory.getEditedRouteManeuversAndNotesHTML ( 'TravelNotes-ItineraryPaneUI-' )
-		);
-
-		document.querySelectorAll (
-			'.TravelNotes-ItineraryPaneUI-Route-Notes-Row, .TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row'
-		).forEach (
-			row => {
-				row.addEventListener ( 'contextmenu', myOnManeuverOrNoteContextMenu, false );
-				row.addEventListener ( 'mouseenter', myOnManeuverOrNoteMouseEnter, false );
-				row.addEventListener ( 'mouseleave', myOnManeuverOrNoteMouseLeave, false );
-			}
-		);
-		if ( ! myShowNotes ) {
-			document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Notes-Row' ).forEach (
-				noteRow => { noteRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-			);
-		}
-		if ( ! myShowManeuvers ) {
-			document.querySelectorAll ( '.TravelNotes-ItineraryPaneUI-Route-Maneuvers-Row' ).forEach (
-				maneuverRow => { maneuverRow.classList.toggle ( 'TravelNotes-Hidden' ); }
-			);
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class ItineraryPaneUI
-	@classdesc This class manages the itinerary pane UI
-	@see {@link newItineraryPaneUI} for constructor
-	@see {@link PanesManagerUI} for pane UI management
-	@implements {PaneUI}
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class ItineraryPaneUI {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		This function removes all the elements from the data div and control div
-		*/
-
-		remove ( ) {
-			myClearPaneDataDiv ( );
-			myClearPaneControlDiv ( );
-		}
-
-		/**
-		This function add the  maneuver and notes to the data div and controls to the controls div
-		*/
-
-		add ( ) {
-			if ( INVALID_OBJ_ID !== theTravelNotesData.editedRouteObjId ) {
-				myAddControls ( );
-				myAddData ( );
-			}
-		}
-
-		/**
-		This function returns the pane id
-		*/
-
-		getId ( ) { return PANE_ID.itineraryPane; }
-
-		/**
-		This function returns the text to add in the pane button
-		*/
-
-		getButtonText ( ) { return theTranslator.getText ( 'PanesManagerUI - Itinerary' ); }
-
-		/**
-		Set the pane data div and pane control div
-		*/
-
-		setPaneDivs ( paneDataDiv, paneControlDiv ) {
-			myPaneDataDiv = paneDataDiv;
-			myPaneControlDiv = paneControlDiv;
-		}
-	}
-
-	return new ItineraryPaneUI ( );
 }
 
-export { ourNewItineraryPaneUI as newItineraryPaneUI };
+export default ItineraryPaneUI;
 
 /*
 --- End of ItineraryPaneUI.js file ------------------------------------------------------------------------------------

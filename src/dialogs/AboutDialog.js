@@ -23,13 +23,15 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯68 : Review all existing promises.
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
-Doc reviewed 20200812
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -49,89 +51,67 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module AboutDialog
-@private
+@module dialogs
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { theCurrentVersion } from '../data/Version.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../util/Translator.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theCurrentVersion from '../data/Version.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function myNewAboutDialog
-@desc constructor for AboutDialog objects
-@return {AboutDialog} an instance of AboutDialog object
-@private
+@class AboutDialog
+@classdesc This class is the 'About' dialog
+@extends BaseDialog
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function myNewAboutDialog ( ) {
+class AboutDialog extends BaseDialog {
+
+	#aboutDiv = null;
+
+	constructor ( ) {
+
+		super ( );
+		this.#aboutDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-AboutDialog-AboutDiv' } );
+
+		theHTMLSanitizer.sanitizeToHtmlElement (
+			'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
+				'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
+				'or any later version.</p>' +
+				'<p>Copyright - 2017 2021 - wwwouaiebe</p>' +
+				'<p>Contact : <a href="https://www.ouaie.be/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
+				'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
+				'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
+				'<p>Version : ' + theCurrentVersion + '.' +
+				'<p>This program uses:' +
+				' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
+				' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
+				'Project-OSRM/osrm-text-instructions</a> and ' +
+				' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p>',
+			this.#aboutDiv
+		);
+	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class AboutDialog
-	@classdesc a BaseDialog object adapted for the About dialog
-	@see {@link newAboutDialog} for constructor
-	@augments BaseDialog
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
+	@readonly
 	*/
 
-	let aboutDialog = newBaseDialog ( );
-	aboutDialog.title = theTranslator.getText ( 'AboutDialog - About Travel & Notes' );
+	get contentHTMLElements ( ) { return [ this.#aboutDiv ]; }
 
-	let aboutString =
-		'<div id="TravelNotes-AboutDialog-AboutDiv">' +
-		'<p>This  program is free software; you can redistribute it and/or modify it under the terms of the ' +
-		'GNU General Public License as published by the Free Software Foundation; either version 3 of the License, ' +
-		'or any later version.</p>' +
-		'<p>Copyright - 2017 2021 - wwwouaiebe</p>' +
-		'<p>Contact : <a href="https://www.ouaie.be/blog/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
-		'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
-		'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
-		'<p>Version : ' + theCurrentVersion + '.' +
-		'<p>This program uses:' +
-		' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
-		' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +
-		'Project-OSRM/osrm-text-instructions</a> and ' +
-		' <a href="https://github.com/drolbr/Overpass-API" target="_blank">the Overpass API</a></p></div>';
+	get title ( ) { return theTranslator.getText ( 'AboutDialog - About Travel & Notes' ); }
 
-	theHTMLSanitizer.sanitizeToHtmlElement ( aboutString, aboutDialog.content );
-
-	aboutDialog.show ( )
-		.then ( )
-		.catch (
-			err => {
-				if ( err instanceof Error ) {
-					console.error ( err );
-				}
-			}
-		);
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newAboutDialog
-	@desc constructor for AboutDialog objects
-	@return {AboutDialog} an instance of AboutDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	myNewAboutDialog as newAboutDialog
-};
+export default AboutDialog;
 
 /*
 --- End of AboutDialog.js file ------------------------------------------------------------------------------------------------

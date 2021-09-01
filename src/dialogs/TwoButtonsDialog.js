@@ -20,8 +20,10 @@ Changes:
 	- v1.11.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-Doc reviewed 20200815
+		- Issue ♯135 : Remove innerHTML from code
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -53,124 +55,75 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module TwoButtonsDialog
+@module dialogs
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewRoutePropertiesDialog
-@desc constructor for TwoButtonsDialog objects
-@param {TwoButtonsDialogContent} content A TwoButtonsDialogContent object with the content to be displayed in the dialog
-@return {TwoButtonsDialog} an instance of TwoButtonsDialog object
-@private
+@class TwoButtonsDialog
+@classdesc A customizable dialog with two buttons.
+Create an instance of the dialog, then execute the show ( ) method. The Promise returned by the show ( ) method fullfil
+when the first button is used and reject when the second button or the cancel button on the topbar is used
+@example
+newTwoButtonsDialog (
+	{
+		title : 'Two buttons dialog',
+		firstButtonText : 'Yes',
+		secondButtonText : 'No',
+		text : 'This is a sample of TwoButtonsDialog
+	}
+)
+	.show ( )
+	.then ( ( ) => doSomethingOnOkButtonClick )
+	.catch ( error => doSomethingWithTheError );
+@extends BaseDialog
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewTwoButtonsDialog ( content ) {
+class TwoButtonsDialog extends BaseDialog {
+
+	#options = null;
+
+	constructor ( options = {} ) {
+		super ( options );
+		this.#options = options;
+	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class TwoButtonsDialog
-	@classdesc A customizable dialog with two buttons.
-	Create an instance of the dialog, then execute the show ( ) method. The Promise returned by the show ( ) method fullfil
-	when the first button is used and reject when the second button or the cancel button on the topbar is used
-	@example
-	newTwoButtonsDialog (
-		{
-			title : 'Two buttons dialog',
-			okButtonContent : 'Yes',
-			secondButtonContent : 'No',
-			textContent : 'This is a sample of TwoButtonsDialog
-		}
-	)
-		.show ( )
-		.then ( ( ) => doSomethingOnOkButtonClick )
-		.catch ( error => doSomethingWithTheError );
-	@see {@link newTwoButtonsDialog} for constructor
-	@augments BaseDialog
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
+	Can be overloaded in the derived classes
+	@readonly
 	*/
 
-	let myTwoButtonsDialog = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDialog
-	@desc This method creates the dialog
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateDialog ( ) {
-
-		myTwoButtonsDialog = newBaseDialog ( );
-		myTwoButtonsDialog.footer.classList.add ( 'TravelNotes-TwoButtonsDialog-FooterDiv' );
-		myTwoButtonsDialog.title = content.title || '';
-		myTwoButtonsDialog.okButton.classList.add ( 'TravelNotes-TwoButtonsDialog-Button' );
-		if ( content.okButtonContent ) {
-			myTwoButtonsDialog.okButton.textContent = content.okButtonContent;
-		}
-		if ( content.secondButtonContent ) {
-			let secondButton = theHTMLElementsFactory.create (
-				'div',
-				{
-					textContent : content.secondButtonContent,
-					className :	'TravelNotes-BaseDialog-Button TravelNotes-TwoButtonsDialog-Button'
-				},
-				myTwoButtonsDialog.footer
-			);
-			secondButton.addEventListener (
-				'click',
-				( ) => myTwoButtonsDialog.cancelButton.click ( ),
-				true
-			);
-		}
-		if ( content.textContent ) {
+	get contentHTMLElements ( ) {
+		return [
 			theHTMLElementsFactory.create (
 				'div',
 				{
-					id : 'TravelNotes-TwoButtonsDialog-MessageDiv',
-					textContent : content.textContent
-				},
-				myTwoButtonsDialog.content
-			);
-		}
+					textContent : this.#options.text || ''
+				}
+			)
+		];
 	}
 
-	myCreateDialog ( );
-
-	return myTwoButtonsDialog;
-}
-
-export {
-
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newTwoButtonsDialog
-	@desc constructor for TwoButtonsDialog objects
-	@param {TwoButtonsDialogContent} content A TwoButtonsDialogContent object with the content to be displayed in the dialog
-	@return {TwoButtonsDialog} an instance of TwoButtonsDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	Get the title of the dialog. Can be overloaded in the derived classes
+	@readonly
 	*/
 
-	ourNewTwoButtonsDialog as newTwoButtonsDialog
-};
+	get title ( ) { return this.#options.title || ''; }
+}
+
+export default TwoButtonsDialog;
 
 /*
 --- End of TwoButtonsDialog.js file -------------------------------------------------------------------------------------------

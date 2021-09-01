@@ -21,10 +21,12 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
-Doc reviewed 20200846
+		- Issue ♯120 : Review the UserInterface
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -42,7 +44,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module HTMLElementsFactory
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,34 +53,8 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourAddProperties
-@desc This method add the properties to the created element
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourAddProperties ( element, properties ) {
-	for ( let property in properties ) {
-		try {
-			element [ property ] = properties [ property ];
-		}
-		catch ( err ) {
-			if ( err instanceof Error ) {
-				console.error ( err );
-			}
-		}
-	}
-	if ( element.target ) {
-		element.rel = 'noopener noreferrer';
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
-@classdesc Wrapper for function for creation of html elements
+@class HTMLElementsFactory
+@classdesc ...
 @see {@link theHTMLElementsFactory} for the one and only one instance of this class
 @hideconstructor
 
@@ -86,9 +62,48 @@ function ourAddProperties ( element, properties ) {
 */
 
 class HTMLElementsFactory {
+
+	/**
+	#addProperties
+	@desc This method add the properties to the created element
+	@private
+	*/
+
+	#addProperties ( element, properties ) {
+		for ( let property in properties ) {
+			try {
+				if ( 'dataset' === property ) {
+					let datasetObject = properties.dataset;
+					for ( let valueName in datasetObject ) {
+						element.dataset [ 'tan' + valueName ] = datasetObject [ valueName ];
+					}
+				}
+				else {
+					element [ property ] = properties [ property ];
+				}
+			}
+			catch ( err ) {
+				if ( err instanceof Error ) {
+					console.error ( err );
+				}
+			}
+		}
+		if ( element.target ) {
+			element.rel = 'noopener noreferrer';
+		}
+	}
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
+
+	/**
+	Create an HTMLElement Object
+	@param {string} tagName the tag of the HTMLElement to create
+	@param {?object} properties An object with properties to add to the HTMLElement
+	@param {?HTMLElement} parentNode The parent node to witch the HTMLElement will be attached
+	@return {HTMLElement} the created HTMLElement
+	*/
 
 	create ( tagName, properties, parentNode ) {
 		let element = null;
@@ -96,9 +111,14 @@ class HTMLElementsFactory {
 			element = document.createTextNode ( properties.value || '' );
 		}
 		else {
-			element = document.createElement ( tagName );
+			if ( 'select' === tagName.toLowerCase ( ) ) {
+				element = document.createElement ( tagName );
+			}
+			else {
+				element = Object.seal ( document.createElement ( tagName ) );
+			}
 			if ( properties ) {
-				ourAddProperties ( element, properties );
+				this.#addProperties ( element, properties );
 			}
 		}
 		if ( parentNode ) {
@@ -108,23 +128,20 @@ class HTMLElementsFactory {
 	}
 }
 
-const OUR_HTML_ELEMENTS_FACTORY = new HTMLElementsFactory ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of HTMLElementsFactory class
+@type {HTMLElementsFactory}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of HTMLElementsFactory class
-	@type {HTMLElementsFactory}
-	@constant
-	@global
+const theHTMLElementsFactory = new HTMLElementsFactory ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_HTML_ELEMENTS_FACTORY as theHTMLElementsFactory
-};
+export default theHTMLElementsFactory;
 
 /*
 --- End of HTMLElementsFactory.js file ----------------------------------------------------------------------------------------

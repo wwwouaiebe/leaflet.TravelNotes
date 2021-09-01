@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v2.1.0:
 		- created
-Doc reviewed 20200803
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -37,7 +39,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module PolylineEncoder
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -52,37 +54,6 @@ const OUR_NUMBER32 = 0x20;
 const OUR_NUMBER63 = 0x3f;
 const OUR_DOT5 = 0.5;
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourPython2Round
-@desc This function round a number in the same way than Python 2
-@param {number} value The value to round
-@return {number} The rounded value
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourPython2Round ( value ) {
-	return Math.floor ( Math.abs ( value ) + OUR_DOT5 ) * ( ZERO <= value ? ONE : -ONE );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
-@classdesc Encoder/decoder to encode or decode a polyline into a string.
-Based on Mark McClure polyline encoder (more info needed...)
-@see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
-@see https://github.com/graphhopper/directions-api-js-client/blob/master/src/GHUtil.js GHUtil.prototype.decodePath
-@see https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-@see https://github.com/mapbox/polyline
-@see {@link thePolylineEncoder} for the one and only one instance of this class
-@hideconstructor
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
 /*
 Encoded Polyline Algorithm Format
 
@@ -148,18 +119,94 @@ Latitude Longitude	Latitude	Longitude  	Change In  	Change In  	Encoded 	Encoded
 Encoded polyline: _p~iF~ps|U_ulLnnqC_mqNvxq`@
 */
 
-class polylineEncoder {
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@class PolylineEncoder
+@classdesc Encoder/decoder to encode or decode a polyline into a string.
+Based on Mark McClure polyline encoder (more info needed...)
+@see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
+@see https://github.com/graphhopper/directions-api-js-client/blob/master/src/GHUtil.js GHUtil.prototype.decodePath
+@see https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+@see https://github.com/mapbox/polyline
+@see {@link thePolylineEncoder} for the one and only one instance of this class
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+class PolylineEncoder {
+
+	/**
+	This method round a number in the same way than Python 2
+	@param {number} value The value to round
+	@return {number} The rounded value
+	@private
+	*/
+
+	#python2Round ( value ) {
+		return Math.floor ( Math.abs ( value ) + OUR_DOT5 ) * ( ZERO <= value ? ONE : -ONE );
+	}
+
+	/**
+	Helper method for the encode...
+	@private
+	*/
+
+	#encodeDelta ( current, previous, factorD ) {
+		let currentCoordRound = this.#python2Round ( current * factorD );
+		let previousCoordRound = this.#python2Round ( previous * factorD );
+		let coordinateDelta = currentCoordRound - previousCoordRound;
+		/* eslint-disable no-bitwise */
+		coordinateDelta <<= ONE;
+		if ( ZERO > currentCoordRound - previousCoordRound ) {
+			coordinateDelta = ~ coordinateDelta;
+		}
+		let outputDelta = '';
+		while ( OUR_NUMBER32 <= coordinateDelta ) {
+			outputDelta += String.fromCharCode ( ( OUR_NUMBER32 | ( coordinateDelta & OUR_NUMBER31 ) ) + OUR_NUMBER63 );
+			coordinateDelta >>= OUR_NUMBER5;
+		}
+		/* eslint-enable no-bitwise */
+		outputDelta += String.fromCharCode ( coordinateDelta + OUR_NUMBER63 );
+		return outputDelta;
+	}
+
+	/**
+	tmp variable for decode and decodeDelta methods communication (cannot use parameter the two functions are modifying the
+	value )
+	@private
+	*/
+
+	#index = ZERO;
+
+	/**
+	Helper method for the decode...
+	@private
+	*/
+
+	#decodeDelta ( encodedString ) {
+		let byte = null;
+		let shift = ZERO;
+		let result = ZERO;
+		do {
+			byte = encodedString.charCodeAt ( this.#index ++ ) - OUR_NUMBER63;
+			/* eslint-disable no-bitwise */
+			result |= ( byte & OUR_NUMBER31 ) << shift;
+			shift += OUR_NUMBER5;
+		} while ( OUR_NUMBER32 <= byte );
+		return ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
+		/* eslint-enable no-bitwise */
+	}
 
 	constructor ( ) {
 		Object.freeze ( this );
 	}
 
-	/*
+	/**
 	encode an array of coordinates to a string ( coordinates can be 1d or 2d or 3d or more...)
-
 	@param {array.<array.<number>>} coordinates the coordinates to encode
 	@param {Array.<number>} precisions an array with the precision to use for each dimension
-
 	@return {string} the encoded coordinates
 	*/
 
@@ -171,46 +218,25 @@ class polylineEncoder {
 		let dimensions = precisions.length;
 		let factors = Array.from ( precisions, precision => Math.pow ( OUR_NUMBER10, precision ) );
 
-		function encodeDelta ( current, previous, factorD ) {
-			let currentCoordRound = ourPython2Round ( current * factorD );
-			let previousCoordRound = ourPython2Round ( previous * factorD );
-			let coordinateDelta = currentCoordRound - previousCoordRound;
-			/* eslint-disable no-bitwise */
-			coordinateDelta <<= ONE;
-			if ( ZERO > currentCoordRound - previousCoordRound ) {
-				coordinateDelta = ~ coordinateDelta;
-			}
-			let outputDelta = '';
-			while ( OUR_NUMBER32 <= coordinateDelta ) {
-				outputDelta += String.fromCharCode ( ( OUR_NUMBER32 | ( coordinateDelta & OUR_NUMBER31 ) ) + OUR_NUMBER63 );
-				coordinateDelta >>= OUR_NUMBER5;
-			}
-			/* eslint-enable no-bitwise */
-			outputDelta += String.fromCharCode ( coordinateDelta + OUR_NUMBER63 );
-			return outputDelta;
-		}
-
 		let output = '';
 		for ( let counter = 0; counter < dimensions; counter ++ ) {
-			output += encodeDelta ( coordinatesArray [ ZERO ] [ counter ], ZERO, factors [ counter ] );
+			output += this.#encodeDelta ( coordinatesArray [ ZERO ] [ counter ], ZERO, factors [ counter ] );
 		}
 		for ( let coordCounter = ONE; coordCounter < coordinatesArray.length; coordCounter ++ ) {
 			let currentCoord = coordinatesArray [ coordCounter ];
 			let previousCoord = coordinatesArray [ coordCounter - ONE ];
 			for ( let counter = 0; counter < dimensions; counter ++ ) {
-				output += encodeDelta ( currentCoord [ counter ], previousCoord [ counter ], factors [ counter ] );
+				output += this.#encodeDelta ( currentCoord [ counter ], previousCoord [ counter ], factors [ counter ] );
 			}
 		}
 
 		return output;
 	}
 
-	/*
+	/**
 	decode a string into an array of coordinates (coordinates can be 1d, 2d, 3d or more...)
-
 	@param {string } encodedString the string to decode
 	@param {Array.<number>} precisions an array with the precision to use for each dimension
-
 	@return {array.<array.<number>>} the decoded coordinates
 	*/
 
@@ -220,29 +246,15 @@ class polylineEncoder {
 			return [ ];
 		}
 
-		let index = ZERO;
+		this.#index = ZERO;
 		let allDecodedValues = [];
 		let factors = Array.from ( precisions, precision => Math.pow ( OUR_NUMBER10, precision ) );
 		let tmpValues = new Array ( dimensions ).fill ( ZERO );
 
-		function decodeDelta ( ) {
-			let byte = null;
-			let shift = ZERO;
-			let result = ZERO;
-			do {
-				byte = encodedString.charCodeAt ( index ++ ) - OUR_NUMBER63;
-				/* eslint-disable no-bitwise */
-				result |= ( byte & OUR_NUMBER31 ) << shift;
-				shift += OUR_NUMBER5;
-			} while ( OUR_NUMBER32 <= byte );
-			return ( ( result & ONE ) ? ~ ( result >> ONE ) : ( result >> ONE ) );
-			/* eslint-enable no-bitwise */
-		}
-
-		while ( index < encodedString.length ) {
+		while ( this.#index < encodedString.length ) {
 			let decodedValues = new Array ( dimensions ).fill ( ZERO );
 			for ( let coordCounter = 0; coordCounter < dimensions; coordCounter ++ ) {
-				tmpValues [ coordCounter ] += decodeDelta ( );
+				tmpValues [ coordCounter ] += this.#decodeDelta ( encodedString );
 				decodedValues [ coordCounter ] = tmpValues [ coordCounter ] / factors [ coordCounter ];
 			}
 			allDecodedValues.push ( decodedValues );
@@ -252,23 +264,20 @@ class polylineEncoder {
 	}
 }
 
-const OUR_POLYLINE_ENCODER = new polylineEncoder ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of PolylineEncoder class
+@type {PolylineEncoder}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of polylineEncoder class
-	@type {PolylineEncoder}
-	@constant
-	@global
+const thePolylineEncoder = new PolylineEncoder ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_POLYLINE_ENCODER as thePolylineEncoder
-};
+export default thePolylineEncoder;
 
 /*
 --- End of PolylineEncoder.js file --------------------------------------------------------------------------------------------

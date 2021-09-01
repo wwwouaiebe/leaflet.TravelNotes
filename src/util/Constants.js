@@ -20,11 +20,11 @@ Changes:
 	- v1.12.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200825
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -42,13 +42,43 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Constants
-@private
+@module util
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
 /* eslint no-magic-numbers: "off" */
+
+/**
+
+@------------------------------------------------------------------------------------------------------------------------------
+
+@readonly
+@enum {Object}
+@desc Enum for the ColorControl
+@property {number} minColorValue
+@property {number} maxColorValue
+@property {number} rowsNumber
+@property {number} cellsNumber
+@property {number} deltaColor
+@property {number} sliderMaxValue
+@property {number} sliderStep
+@property {number} initialRed
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+ */
+
+export const COLOR_CONTROL = Object.freeze ( {
+	minColorValue : 0,
+	maxColorValue : 255,
+	rowsNumber : 6,
+	cellsNumber : 6,
+	deltaColor : 51,
+	sliderMaxValue : 100,
+	sliderStep : 20,
+	initialRed : 0
+} );
 
 /**
 
@@ -276,6 +306,24 @@ export const DEGREES = Object.freeze ( {
 
 /**
 
+@------------------------------------------------------------------------------------------------------------------------------
+
+@readonly
+@enum {Object}
+@desc Enum for map svg icons
+@public
+
+@------------------------------------------------------------------------------------------------------------------------------
+ */
+
+export const ICON_POSITION = Object.freeze ( {
+	atStart : -1,
+	onRoute : 0,
+	atEnd : 1
+} );
+
+/**
+
 @var {Array.<number>} MOUSE_WHEEL_FACTORS
 @desc An array with correction factors to use in the wheel event (wheelEvent.deltaX and wheelEvent.deltaY are dependant of
 wheelEvent.deltaMode and deltaMode is browser dependant...)
@@ -311,6 +359,10 @@ export const OSM_COUNTRY_ADMIN_LEVEL = '2';
 export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export const EARTH_RADIUS = 6371e3;
+
+export const WAY_POINT_ICON_SIZE = 20;
+
+export const DIALOG_DRAG_MARGIN = 20;
 
 /*
 --- End of Constants.js file --------------------------------------------------------------------------------------------------

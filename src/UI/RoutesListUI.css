@@ -1,0 +1,18 @@
+/* --- routes list --- */
+
+.TravelNotes-TravelUI-RoutesListDiv {
+	flex-shrink: 0;
+	max-height: 20em;
+	overflow: auto;
+}
+
+.TravelNotes-TravelUI-RoutesList-Item {
+	margin-left: 2em;
+	margin-right: 0.5em;
+	border-bottom-style: solid;
+	border-bottom-width: 0.1em;
+}
+
+.TravelNotes-TravelUI-RoutesList-HiddenItem {
+	color: gray;
+}

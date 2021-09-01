@@ -29,20 +29,21 @@ module.exports = function(grunt) {
 		'src/css/Print.css',
 		'src/css/RoutesForMap.css' ,'src/css/RoutesForUI.css', 'src/css/RoutesForSvgProfile.css',
 		'src/css/WayPointsForMap.css',
-		'src/css/Background.css', 'src/css/WaitAnimation.css', 'src/contextMenus/ContextMenu.css',
-		'src/dialogs/AboutDialog.css', 'src/dialogs/APIKeysDialog.css', 'src/dialogs/BaseDialog.css', 'src/dialogs/ColorDialog.css', 'src/dialogs/NoteDialog.css', 
+		'src/css/Background.css', 'src/css/WaitAnimation.css', 'src/contextMenus/BaseContextMenu.css',
+		'src/dialogs/AboutDialog.css', 'src/dialogAPIKeys/APIKeysDialog.css', 'src/dialogBase/BaseDialog.css', 'src/dialogColorControl/ColorControl.css', 'src/dialogNotes/NoteDialog.css', 
 		'src/dialogs/PrintRouteMapDialog.css', 'src/dialogs/RoutePropertiesDialog.css', 'src/dialogs/TwoButtonsDialog.css', 'src/dialogs/WayPointPropertiesDialog.css',
-		'src/dialogs/FloatWindow.css',
-		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css',
-		'src/UI/ItineraryPaneUI.css', 'src/UI/LayersToolbarUI.css', 'src/UI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
-		'src/UI/ProvidersToolbarUI.css', 'src/UI/TravelNotesPaneUI.css', 'src/UI/TravelNotesToolbarUI.css', 'src/UI/TravelUI.css', 'src/UI/UI.css', 'src/UI/WaitUI.css',
+		'src/dialogFloatWindow/FloatWindow.css', 'src/dialogPassword/PasswordDialog.css', 
+		'src/AttributionsUI/AttributionsUI.css', 'src/ErrorsUI/ErrorsUI.css',
+		'src/UI/ItineraryPaneUI.css', 'src/mapLayersToolbarUI/MapLayersToolbarUI.css', 'src/mouseUI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
+		'src/UI/ProvidersToolbarUI.css', 'src/UI/TravelNotesPaneUI.css', 'src/UI/TravelNotesToolbarUI.css', 'src/UI/TravelUI.css', 'src/UI/RoutesListUI.css',
+		'src/UI/UI.css', 'src/waitUI/WaitUI.css',
 		'src/css/Hidden.css' // must always be the last css
 	];
 	let travelNotesViewerCss = [ 
 		'src/css/Map.css', 
 		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesForMap.css', 
 		'src/css/RoutesForMap.css',
-		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css'
+		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/viewerLayersToolbarUI/ViewerLayersToolbarUI.css'
 	];
 	let travelNotesRoadbookCss = [ 
 		'src/css/TravelForRoadbook.css',
@@ -88,6 +89,12 @@ module.exports = function(grunt) {
 		},	
 		cssmin: {
 			options: {
+				// don't remove this. Colors must not be changed in css to avois problems with data uri
+				compatibility : {
+					properties : {
+						colors : false
+					}
+				},
 				mergeIntoShorthands: false,
 				roundingPrecision: -1
 			},
@@ -408,16 +415,18 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			  debug: ['debug', 'tmp', 'out'],
-			  release: ['TechDoc', 'dist', 'gh-page', 'tmp', 'out'],
-			  end: ['tmp', 'out' ]
+			doc: ['TechDoc'],
+			debug: ['debug', 'tmp', 'out'],
+			release: ['TechDoc', 'dist', 'gh-page', 'tmp', 'out'],
+			end: [ 'tmp', 'out' ]
 		},
 		jsdoc : {
 			doc : {
 				src: ['src/**/*.js'],
 				options: {
 					destination : 'TechDoc',
-					configure : "JSDocConf/JSDocConf.json"
+					configure : "JSDocConf/JSDocConf.json"/*,
+					private : true*/
 				}
 			}
 		}		
@@ -433,8 +442,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
-	grunt.registerTask('doc', [ 'jsdoc' ]);
-	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug', 'copy:debug','clean:end', ]);
+	grunt.registerTask('doc', [ 'clean:doc','jsdoc' ]);
+	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug','copy:debug','clean:end', ]);
 	grunt.registerTask('docs', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
 	grunt.registerTask('release', [ 'clean:release', 'eslint', 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

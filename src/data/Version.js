@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Changes:
 	- v1.4.0:
 		- created from DataManager
-Doc reviewed 20200728
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -36,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Version
+@module data
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -56,30 +58,27 @@ Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! War
 						 //      o     \\
 						 \==============/
 
-You have also to adapt the version in the ourUpgrade ( ) method of
-Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint
+You have also to adapt the version in the #upgradeObject ( ) method of
+Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint.
 
-and change the version in the package.json file and run npm audit fix.
+And change the version in the package.json file and run npm audit fix.
 
 */
 
-const OUR_CURRENT_VERSION = '2.3.0';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The current version of TravelNotes
+@type {string}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The version number
-	@type {string}
-	@constant
-	@global
+const theCurrentVersion = '2.3.0';
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_CURRENT_VERSION as theCurrentVersion
-};
+export default theCurrentVersion;
 
 /*
 --- End of Version.js file ----------------------------------------------------------------------------------------------------

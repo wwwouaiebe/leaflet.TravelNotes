@@ -21,20 +21,22 @@ Changes:
 		- created from DataManager
 		- added searchPointMarker, previousSearchLimit, nextSearchLimit to config
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #63 : Find a better solution for provider keys upload
-		- Issue #75 : Merge Maps and TravelNotes
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯63 : Find a better solution for provider keys upload
+		- Issue ♯75 : Merge Maps and TravelNotes
 	- v1.9.0:
-		- issue #101 : Add a print command for a route
+		- Issue ♯101 : Add a print command for a route
 	- v1.11.0:
-		- Issue #110 : Add a command to create a SVG icon from osm for each maneuver
+		- Issue ♯110 : Add a command to create a SVG icon from osm for each maneuver
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #136 : Remove html entities from js string
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #139 : Remove Globals
-Doc reviewed 20200731
+		- Issue ♯136 : Remove html entities from js string
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯139 : Remove Globals
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -52,16 +54,24 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Config
+@module data
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
+@class Config
+@classdesc Class used to store the configuration of the code
+@hideconstructor
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 /* eslint-disable no-magic-numbers */
-let ourPrivateConfig = {
+
+let theConfig = {
 	APIKeys : {
 		saveToSessionStorage : true
 	},
@@ -69,10 +79,6 @@ let ourPrivateConfig = {
 		haveUnsecureButtons : true,
 		showAPIKeys : true,
 		showButton : true
-	},
-	colorDialog : {
-		haveSlider : true,
-		initialRed : 0
 	},
 	contextMenu : {
 		timeout : 1500
@@ -100,7 +106,7 @@ let ourPrivateConfig = {
 	},
 	geoLocation : {
 		marker : {
-			color : '#ff0000',
+			color : '\u0023ff0000',
 			radius : 11
 		},
 		options : {
@@ -118,7 +124,7 @@ let ourPrivateConfig = {
 	},
 	itineraryPoint : {
 		marker : {
-			color : '#ff0000',
+			color : '\u0023ff0000',
 			fill : false,
 			radius : 7,
 			weight : 2
@@ -157,7 +163,7 @@ let ourPrivateConfig = {
 		haveBackground : false,
 		maxManeuversNotes : 100,
 		polyline : {
-			color : '#808080',
+			color : '\u0023808080',
 			weight : 1
 		},
 		reverseGeocoding : false,
@@ -199,23 +205,23 @@ let ourPrivateConfig = {
 	},
 	osmSearch : {
 		nextSearchLimit : {
-			color : '#ff0000',
+			color : '\u0023ff0000',
 			fill : false,
 			weight : 1
 		},
 		previousSearchLimit : {
-			color : '#006400',
+			color : '\u0023006400',
 			fill : false,
 			weight : 1
 		},
 		searchPointMarker : {
-			color : '#006400',
+			color : '\u0023006400',
 			fill : false,
 			radius : 20,
 			weight : 4
 		},
 		searchPointPolyline : {
-			color : '#006400',
+			color : '\u0023006400',
 			fill : false,
 			weight : 4
 		},
@@ -223,7 +229,7 @@ let ourPrivateConfig = {
 	},
 	overpassApi : {
 		timeOut : 40,
-		url : 'https://lz4.overpass-api.de/api/interpreter'
+		url : 'https://lz4.overpass-api.de/api/interpreter' // "https://overpass.openstreetmap.fr/api/interpreter"
 	},
 	printRouteMap :
 	{
@@ -236,14 +242,14 @@ let ourPrivateConfig = {
 		borderWidth : 30,
 		zoomFactor : 15,
 		entryPointMarker : {
-			color : '#00ff00',
+			color : '\u002300ff00',
 			weight : 4,
 			radius : 10,
 			fill : true,
 			fillOpacity : 1
 		},
 		exitPointMarker : {
-			color : '#ff0000',
+			color : '\u0023ff0000',
 			weight : 4,
 			radius : 10,
 			fill : true,
@@ -251,7 +257,7 @@ let ourPrivateConfig = {
 		}
 	},
 	route : {
-		color : '#ff0000',
+		color : '\u0023ff0000',
 		dashArray : 0,
 		dashChoices : [
 			{
@@ -305,174 +311,7 @@ let ourPrivateConfig = {
 };
 /* eslint-enable no-magic-numbers */
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourCopyObjectTo
-@desc copy the properties between two objects
-@param {Object} source The source object
-@param {Object} target The target object
-@example
-This method:
-- search recursively all target properties
-- foreach found property, search the same property in source
-- copy the property value from source to target if found
-- search recursively all sources properties
-- foreach found property search the same property in target
-- copy the property value from source to target
-So:
-- if a property is missing in the user config, the property is selected from the default config
-- if a property is in the user config but missing in the default config, the property is also added (and reminder
-  that the user can have more dashChoices than the default config )
-- if a property is changed in the user config, the property is adapted
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/* eslint-disable max-depth */
-
-function ourCopyObjectTo ( source, target ) {
-	if ( ( 'object' !== typeof source ) || ( 'object' !== typeof target ) ) {
-		return;
-	}
-	try {
-
-		// iteration on target.
-		for ( let property in target ) {
-			if ( 'object' === typeof target [ property ] ) {
-				ourCopyObjectTo ( source [ property ], target [ property ] );
-			}
-			else if ( typeof ( source [ property ] ) === typeof ( target [ property ] ) ) {
-				if ( 'string' === typeof ( target [ property ] ) ) {
-					if ( 'color' === property ) {
-						target [ property ] = theHTMLSanitizer.sanitizeToColor ( source [ property ] ) || target [ property ];
-					}
-					else if ( 'url' === property ) {
-						target [ property ] = theHTMLSanitizer.sanitizeToUrl ( source [ property ] ).url;
-					}
-					else {
-						target [ property ] =
-								theHTMLSanitizer.sanitizeToJsString ( source [ property ] );
-					}
-				}
-				else {
-					target [ property ] = source [ property ] || target [ property ];
-				}
-			}
-		}
-
-		// iteration on source
-		for ( let property in source ) {
-			if ( 'object' === typeof source [ property ] ) {
-				if ( '[object Array]' === Object.prototype.toString.call ( source [ property ] ) ) {
-					target [ property ] = target [ property ] || [];
-				}
-				else {
-					target [ property ] = target [ property ] || {};
-				}
-				ourCopyObjectTo ( source [ property ], target [ property ] );
-			}
-			else if ( 'string' === typeof ( target.property ) ) {
-				target [ property ] =
-							theHTMLSanitizer.sanitizeToHtmlString ( source [ property ], [] ).htmlString;
-			}
-			else {
-				target [ property ] = source [ property ];
-			}
-		}
-	}
-	catch ( err ) {
-		if ( err instanceof Error ) {
-			console.error ( err );
-		}
-	}
-}
-
-/* eslint-enable max-depth */
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourFreeze
-@desc Freeze an object recursively
-@param {Object} object The object to freeze
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourFreeze ( object ) {
-	for ( let property in object ) {
-		if ( 'object' === typeof object [ property ] ) {
-			object [ property ] = ourFreeze ( object [ property ] );
-		}
-	}
-
-	return Object.freeze ( object );
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@class
-@classdesc Class used to store the configuration of the code
-@see {@link theConfig} for the one and only one instance of this class
-@hideconstructor
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-class Config {
-	get APIKeys ( ) { return ourPrivateConfig.APIKeys; }
-	get APIKeysDialog ( ) { return ourPrivateConfig.APIKeysDialog; }
-	get colorDialog ( ) { return ourPrivateConfig.colorDialog; }
-	get contextMenu ( ) { return ourPrivateConfig.contextMenu; }
-	get errorsUI ( ) { return ourPrivateConfig.errorsUI; }
-	get geoCoder ( ) { return ourPrivateConfig.geoCoder; }
-	get geoLocation ( ) { return ourPrivateConfig.geoLocation; }
-	get itineraryPaneUI ( ) { return ourPrivateConfig.itineraryPaneUI; }
-	get itineraryPoint ( ) { return ourPrivateConfig.itineraryPoint; }
-	get layersToolbarUI ( ) { return ourPrivateConfig.layersToolbarUI; }
-	get map ( ) { return ourPrivateConfig.map; }
-	get mouseUI ( ) { return ourPrivateConfig.mouseUI; }
-	get nominatim ( ) { return ourPrivateConfig.nominatim; }
-	get note ( ) { return ourPrivateConfig.note; }
-	get noteDialog ( ) { return ourPrivateConfig.noteDialog; }
-	get osmSearch ( ) { return ourPrivateConfig.osmSearch; }
-	get overpassApi ( ) { return ourPrivateConfig.overpassApi; }
-	get printRouteMap ( ) { return ourPrivateConfig.printRouteMap; }
-	get route ( ) { return ourPrivateConfig.route; }
-	get routeEditor ( ) { return ourPrivateConfig.routeEditor; }
-	get travelEditor ( ) { return ourPrivateConfig.travelEditor; }
-	get travelNotes ( ) { return ourPrivateConfig.travelNotes; }
-	get travelNotesToolbarUI ( ) { return ourPrivateConfig.travelNotesToolbarUI; }
-	get wayPoint ( ) { return ourPrivateConfig.wayPoint; }
-
-	overload ( source ) {
-		ourCopyObjectTo ( source, ourPrivateConfig );
-		ourPrivateConfig = ourFreeze ( ourPrivateConfig );
-	}
-
-}
-
-let ourConfig = new Config;
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@desc The one and only one instance of Config class
-	@type {Config}
-	@constant
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourConfig as theConfig
-};
+export default theConfig;
 
 /*
 --- End of Config.js file -----------------------------------------------------------------------------------------------------

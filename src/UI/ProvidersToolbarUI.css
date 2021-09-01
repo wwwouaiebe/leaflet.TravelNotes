@@ -50,14 +50,6 @@ Changes:
 	border-color: black;
 }
 
-.TravelNotes-ProvidersToolbarUI-InactiveImgButton {
-	visibility: hidden;
-	width: 0;
-	padding: 0;
-	margin: 0;
-	border-width: 0;
-}
-
 /*
 --- End of ProvidersToolbarUI.css ---------------------------------------------------------------------------------------------
 */

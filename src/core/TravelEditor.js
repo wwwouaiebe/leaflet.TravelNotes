@@ -20,27 +20,29 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #26 : added confirmation message before leaving the page when data modified.
-		- Issue #27 : push directly the route in the editor when starting a new travel
-		- Issue #31 : Add a command to import from others maps
-		- Issue #34 : Add a command to show all routes
-		- Issue #37 : Add the file name and mouse coordinates somewhere
+		- Issue ♯26 : added confirmation message before leaving the page when data modified.
+		- Issue ♯27 : push directly the route in the editor when starting a new travel
+		- Issue ♯31 : Add a command to import from others maps
+		- Issue ♯34 : Add a command to show all routes
+		- Issue ♯37 : Add the file name and mouse coordinates somewhere
 	- v1.3.0:
 		- moved JSON.parse, due to use of Promise
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- moving file functions from TravelEditor to the new FileLoader
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.7.0:
-		- Issue #90 : Open profiles are not closed when opening a travel or when starting a new travel
+		- Issue ♯90 : Open profiles are not closed when opening a travel or when starting a new travel
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	-v2.2.0:
-		- Issue #129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200810
+		- Issue ♯129 : Add an indicator when the travel is modified and not saved
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -58,65 +60,26 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module TravelEditor
+@module core
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theConfig } from '../data/Config.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { theRouteEditor } from '../core/RouteEditor.js';
-import { theUtilities } from '../util/Utilities.js';
-import { newRoute } from '../data/Route.js';
-import { newTravel } from '../data/Travel.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { newFileCompactor } from '../core/FileCompactor.js';
-import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
+import theTranslator from '../util/Translator.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
+import theRouteEditor from '../core/RouteEditor.js';
+import theUtilities from '../util/Utilities.js';
+import Route from '../data/Route.js';
+import Travel from '../data/Travel.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
+import FileCompactor from '../core/FileCompactor.js';
+import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
-import { theMouseUI } from '../UI/MouseUI.js';
-import { newSaveAsDialog } from '../dialogs/SaveAsDialog.js';
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourSaveAsTravel
-@desc This function save the travel to a file, removing notes and maneuvers, depending of the user choice.
-@param {Object} removeData an object describing witch data must be saved
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourSaveAsTravel ( removeData ) {
-
-	let saveAsTravel = newTravel ( );
-	saveAsTravel.jsonObject = theTravelNotesData.travel.jsonObject;
-	saveAsTravel.name += '-partial';
-	let routesIterator = saveAsTravel.routes.iterator;
-	while ( ! routesIterator.done ) {
-		routesIterator.value.hidden = false;
-	}
-	if ( removeData.removeTravelNotes ) {
-		saveAsTravel.notes.removeAll ( );
-	}
-	if ( removeData.removeRoutesNotes ) {
-		routesIterator = saveAsTravel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			routesIterator.value.notes.removeAll ( );
-		}
-	}
-	if ( removeData.removeManeuvers ) {
-		routesIterator = saveAsTravel.routes.iterator;
-		while ( ! routesIterator.done ) {
-			routesIterator.value.itinerary.maneuvers.removeAll ( );
-		}
-	}
-	let compressedSaveAsTravel = newFileCompactor ( ).compress ( saveAsTravel );
-	theUtilities.saveFile ( compressedSaveAsTravel.name + '.trv', JSON.stringify ( compressedSaveAsTravel ) );
-}
+import theMouseUI from '../mouseUI/MouseUI.js';
+import SaveAsDialog from '../dialogs/SaveAsDialog.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -130,6 +93,44 @@ function ourSaveAsTravel ( removeData ) {
 */
 
 class TravelEditor {
+
+	/**
+	This method save the travel to a file, removing notes and maneuvers, depending of the user choice.
+	@param {Object} removeData an object describing witch data must be saved
+	@private
+	*/
+
+	#saveAsTravel ( removeData ) {
+
+		let saveAsTravel = new Travel ( );
+		saveAsTravel.jsonObject = theTravelNotesData.travel.jsonObject;
+		saveAsTravel.name += '-partial';
+		let routesIterator = saveAsTravel.routes.iterator;
+		while ( ! routesIterator.done ) {
+			routesIterator.value.hidden = false;
+		}
+		if ( removeData.removeTravelNotes ) {
+			saveAsTravel.notes.removeAll ( );
+		}
+		if ( removeData.removeRoutesNotes ) {
+			routesIterator = saveAsTravel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.notes.removeAll ( );
+			}
+		}
+		if ( removeData.removeManeuvers ) {
+			routesIterator = saveAsTravel.routes.iterator;
+			while ( ! routesIterator.done ) {
+				routesIterator.value.itinerary.maneuvers.removeAll ( );
+			}
+		}
+		let compressedSaveAsTravel = new FileCompactor ( ).compress ( saveAsTravel );
+		theUtilities.saveFile (
+			compressedSaveAsTravel.name + '.trv',
+			JSON.stringify ( compressedSaveAsTravel ),
+			'application/json'
+		);
+	}
 
 	constructor ( ) {
 		Object.freeze ( this );
@@ -169,9 +170,8 @@ class TravelEditor {
 			return;
 		}
 
-		let saveAsDialog = newSaveAsDialog ( );
-		saveAsDialog.show ( )
-			.then ( removeData => ourSaveAsTravel ( removeData ) )
+		new SaveAsDialog ( ).show ( )
+			.then ( removeData => { this.#saveAsTravel ( removeData ); } )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {
@@ -194,8 +194,8 @@ class TravelEditor {
 		while ( ! routesIterator.done ) {
 			routesIterator.value.hidden = false;
 		}
-		let compressedTravel = newFileCompactor ( ).compress ( theTravelNotesData.travel );
-		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ) );
+		let compressedTravel = new FileCompactor ( ).compress ( theTravelNotesData.travel );
+		theUtilities.saveFile ( compressedTravel.name + '.trv', JSON.stringify ( compressedTravel ), 'application/json' );
 		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
 
@@ -218,10 +218,10 @@ class TravelEditor {
 		}
 		theProfileWindowsManager.deleteAllProfiles ( );
 		theEventDispatcher.dispatch ( 'removeallobjects' );
-		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = new Route ( );
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-		theTravelNotesData.travel = newTravel ( );
-		theTravelNotesData.travel.routes.add ( newRoute ( ) );
+		theTravelNotesData.travel = new Travel ( );
+		theTravelNotesData.travel.routes.add ( new Route ( ) );
 		theEventDispatcher.dispatch ( 'setrouteslist' );
 		theEventDispatcher.dispatch ( 'showitinerary' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
@@ -231,26 +231,22 @@ class TravelEditor {
 		}
 		theMouseUI.saveStatus = SAVE_STATUS.saved;
 	}
-
 }
 
-const OUR_TRAVEL_EDITOR = new TravelEditor ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of TravelEditor class
+@type {TravelEditor}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of TravelEditor class
-	@type {TravelEditor}
-	@constant
-	@global
+const theTravelEditor = new TravelEditor ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_TRAVEL_EDITOR as theTravelEditor
-};
+export default theTravelEditor;
 
 /*
 --- End of TravelEditor.js file -----------------------------------------------------------------------------------------------

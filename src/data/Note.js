@@ -21,10 +21,12 @@ Changes:
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
-Doc reviewed 20200731
+		- Issue ♯138 : Protect the app - control html entries done by user.
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -42,7 +44,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Note
+@module data
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -50,153 +52,138 @@ Tests ...
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-import { newObjId } from '../data/ObjId.js';
-import { newObjType } from '../data/ObjType.js';
-import { LAT_LNG, DISTANCE, ZERO, ONE } from '../util/Constants.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
+import ObjId from '../data/ObjId.js';
+import ObjType from '../data/ObjType.js';
+import { LAT_LNG, DISTANCE, ZERO, ONE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
-const OUR_OBJ_TYPE = newObjType ( 'Note' );
-const OUR_OBJ_IDS = new WeakMap ( );
-const OUR_DEFAULT_ICON_SIZE = 0;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourUpdateStyles
-@desc transform a style attribute to a class attribute for conversion from 1.13.0 to 2.0.0 version
-@param {string} somethingText
-@return {string} the modified text
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourUpdateStyles ( somethingText ) {
-	let returnValue = somethingText
-		.replaceAll ( /style='color:white;background-color:red'/g, 'class=\'TravelNotes-Note-WhiteRed\'' )
-		.replaceAll ( /style='color:white;background-color:green'/g, 'class=\'TravelNotes-Note-WhiteGreen\'' )
-		.replaceAll ( /style='color:white;background-color:blue'/g, 'class=\'TravelNotes-Note-WhiteBlue\'' )
-		.replaceAll ( /style='color:white;background-color:brown'/g, 'class=\'TravelNotes-Note-WhiteBrown\'' )
-		.replaceAll ( /style='color:white;background-color:black'/g, 'class=\'TravelNotes-Note-WhiteBlack\'' )
-		.replaceAll ( /style='border:solid 0.1em'/g, 'class=\'TravelNotes-Note-BlackWhite\'' )
-		.replaceAll ( /style='background-color:white;'/g, 'class=\'TravelNotes-Note-Knooppunt\'' )
-		.replaceAll ( /style='fill:green;font:bold 120px sans-serif;'/g, '' )
-		.replaceAll ( /style='fill:none;stroke:green;stroke-width:10;'/g, '' );
-	return returnValue;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourUpgrade
-@desc performs the upgrade
-@param {Object} note a note to upgrade
-@throws {Error} when the note version is invalid
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-/* eslint-disable-next-line complexity */
-function ourUpgrade ( note ) {
-	switch ( note.objType.version ) {
-	case '1.0.0' :
-	case '1.1.0' :
-	case '1.2.0' :
-	case '1.3.0' :
-	case '1.4.0' :
-	case '1.5.0' :
-	case '1.6.0' :
-	case '1.7.0' :
-	case '1.7.1' :
-	case '1.8.0' :
-	case '1.9.0' :
-	case '1.10.0' :
-	case '1.11.0' :
-	case '1.12.0' :
-	case '1.13.0' :
-		if ( 'string' === typeof ( note.iconHeight ) ) {
-			note.iconHeight = Number.parseInt ( note.iconHeight );
-		}
-		if ( 'string' === typeof ( note.iconWidth ) ) {
-			note.iconWidth = Number.parseInt ( note.iconWidth );
-		}
-		note.iconContent = ourUpdateStyles ( note.iconContent );
-		note.popupContent = ourUpdateStyles ( note.popupContent );
-		note.tooltipContent = ourUpdateStyles ( note.tooltipContent );
-		note.phone = ourUpdateStyles ( note.phone );
-		note.address = ourUpdateStyles ( note.address );
-		// eslint break omitted intentionally
-	case '2.0.0' :
-	case '2.1.0' :
-	case '2.2.0' :
-		note.objType.version = '2.3.0';
-		break;
-	default :
-		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourValidate
-@desc verify that the parameter can be transformed to a Note and performs the upgrate if needed
-@param {Object} something an object to validate
-@return {Object} the validated object
-@throws {Error} when the parameter is invalid
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourValidate ( something ) {
-	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
-	}
-	OUR_OBJ_TYPE.validate ( something.objType );
-	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-		ourUpgrade ( something );
-	}
-	let properties = Object.getOwnPropertyNames ( something );
-	[
-		'iconHeight',
-		'iconWidth',
-		'iconContent',
-		'popupContent',
-		'tooltipContent',
-		'phone',
-		'url',
-		'address',
-		'iconLat',
-		'iconLng',
-		'lat',
-		'lng',
-		'distance',
-		'chainedDistance',
-		'objId'
-	].forEach (
-		property => {
-			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
-			}
-		}
-	);
-	return something;
-}
+const OUR_OBJ_TYPE = new ObjType ( 'Note' );
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class Note
 @classdesc This class represent a note
-@see {@link newNote} for constructor
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class Note	{
+class Note {
+
+	#objId = INVALID_OBJ_ID;;
+
+	/**
+	Transform a style attribute to a class attribute for conversion from 1.13.0 to 2.0.0 version
+	@param {string} somethingText
+	@return {string} the modified text
+	@private
+	*/
+
+	#UpdateStyles ( somethingText ) {
+		let returnValue = somethingText
+			.replaceAll ( /style='color:white;background-color:red'/g, 'class=\'TravelNotes-Note-WhiteRed\'' )
+			.replaceAll ( /style='color:white;background-color:green'/g, 'class=\'TravelNotes-Note-WhiteGreen\'' )
+			.replaceAll ( /style='color:white;background-color:blue'/g, 'class=\'TravelNotes-Note-WhiteBlue\'' )
+			.replaceAll ( /style='color:white;background-color:brown'/g, 'class=\'TravelNotes-Note-WhiteBrown\'' )
+			.replaceAll ( /style='color:white;background-color:black'/g, 'class=\'TravelNotes-Note-WhiteBlack\'' )
+			.replaceAll ( /style='border:solid 0.1em'/g, 'class=\'TravelNotes-Note-BlackWhite\'' )
+			.replaceAll ( /style='background-color:white;'/g, 'class=\'TravelNotes-Note-Knooppunt\'' )
+			.replaceAll ( /style='fill:green;font:bold 120px sans-serif;'/g, '' )
+			.replaceAll ( /style='fill:none;stroke:green;stroke-width:10;'/g, '' );
+		return returnValue;
+	}
+
+	/**
+	Performs the upgrade
+	@param {Object} note a note to upgrade
+	@throws {Error} when the note version is invalid
+	@private
+	*/
+
+	/* eslint-disable-next-line complexity */
+	#upgradeObject ( note ) {
+		switch ( note.objType.version ) {
+		case '1.0.0' :
+		case '1.1.0' :
+		case '1.2.0' :
+		case '1.3.0' :
+		case '1.4.0' :
+		case '1.5.0' :
+		case '1.6.0' :
+		case '1.7.0' :
+		case '1.7.1' :
+		case '1.8.0' :
+		case '1.9.0' :
+		case '1.10.0' :
+		case '1.11.0' :
+		case '1.12.0' :
+		case '1.13.0' :
+			if ( 'string' === typeof ( note.iconHeight ) ) {
+				note.iconHeight = Number.parseInt ( note.iconHeight );
+			}
+			if ( 'string' === typeof ( note.iconWidth ) ) {
+				note.iconWidth = Number.parseInt ( note.iconWidth );
+			}
+			note.iconContent = this.#UpdateStyles ( note.iconContent );
+			note.popupContent = this.#UpdateStyles ( note.popupContent );
+			note.tooltipContent = this.#UpdateStyles ( note.tooltipContent );
+			note.phone = this.#UpdateStyles ( note.phone );
+			note.address = this.#UpdateStyles ( note.address );
+			// eslint break omitted intentionally
+		case '2.0.0' :
+		case '2.1.0' :
+		case '2.2.0' :
+			note.objType.version = '2.3.0';
+			break;
+		default :
+			throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+		}
+	}
+
+	/**
+	Verify that the parameter can be transformed to a Note and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+	*/
+
+	#validateObject ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
+		}
+		OUR_OBJ_TYPE.validate ( something.objType );
+		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+			this.#upgradeObject ( something );
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		[
+			'iconHeight',
+			'iconWidth',
+			'iconContent',
+			'popupContent',
+			'tooltipContent',
+			'phone',
+			'url',
+			'address',
+			'iconLat',
+			'iconLng',
+			'lat',
+			'lng',
+			'distance',
+			'chainedDistance',
+			'objId'
+		].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
+				}
+			}
+		);
+		return something;
+	}
+
 	constructor ( ) {
 
 		/**
@@ -204,14 +191,14 @@ class Note	{
 		@type {!number}
 		*/
 
-		this.iconHeight = OUR_DEFAULT_ICON_SIZE;
+		this.iconHeight = ICON_DIMENSIONS.height;
 
 		/**
 		the width of the icon associated to the note
 		@type {!number}
 		*/
 
-		this.iconWidth = OUR_DEFAULT_ICON_SIZE;
+		this.iconWidth = ICON_DIMENSIONS.width;
 
 		/**
 		the html needed to display the icon
@@ -299,7 +286,7 @@ class Note	{
 
 		this.chainedDistance = DISTANCE.defaultValue;
 
-		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+		this.#objId = ObjId.nextObjId;
 
 		Object.seal ( this );
 	}
@@ -348,7 +335,7 @@ class Note	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
+	get objId ( ) { return this.#objId; }
 
 	/**
 	An object literal with the Note properties and without any methods.
@@ -372,14 +359,14 @@ class Note	{
 			lng : parseFloat ( this.lng.toFixed ( LAT_LNG.fixed ) ),
 			distance : parseFloat ( this.distance.toFixed ( DISTANCE.fixed ) ),
 			chainedDistance : parseFloat ( this.chainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : OUR_OBJ_IDS.get ( this ),
+			objId : this.#objId,
 			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = ourValidate ( something );
-		this.iconHeight = otherthing.iconHeight || OUR_DEFAULT_ICON_SIZE;
-		this.iconWidth = otherthing.iconWidth || OUR_DEFAULT_ICON_SIZE;
+		let otherthing = this.#validateObject ( something );
+		this.iconHeight = otherthing.iconHeight || ICON_DIMENSIONS.height;
+		this.iconWidth = otherthing.iconWidth || ICON_DIMENSIONS.width;
 		this.iconContent = otherthing.iconContent || '';
 		this.popupContent = otherthing.popupContent || '';
 		this.tooltipContent = otherthing.tooltipContent || '';
@@ -392,7 +379,7 @@ class Note	{
 		this.lng = otherthing.lng || LAT_LNG.defaultValue;
 		this.distance = otherthing.distance || DISTANCE.invalid;
 		this.chainedDistance = otherthing.chainedDistance || DISTANCE.defaultValue;
-		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+		this.#objId = ObjId.nextObjId;
 		this.validateData ( true );
 	}
 
@@ -406,10 +393,10 @@ class Note	{
 	/* eslint-disable-next-line complexity, max-statements */
 	validateData ( verbose ) {
 		if ( 'number' !== typeof ( this.iconHeight ) ) {
-			this.iconHeight = OUR_DEFAULT_ICON_SIZE;
+			this.iconHeight = ICON_DIMENSIONS.height;
 		}
 		if ( 'number' !== typeof ( this.iconWidth ) ) {
-			this.iconWidth = OUR_DEFAULT_ICON_SIZE;
+			this.iconWidth = ICON_DIMENSIONS.width;
 		}
 		if ( 'string' === typeof ( this.iconContent ) ) {
 			let result = theHTMLSanitizer.sanitizeToHtmlString ( this.iconContent );
@@ -493,36 +480,7 @@ class Note	{
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNewNote
-@desc Constructor for a Note object
-@return {Note} an instance of a Note object
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewNote ( ) {
-	return new Note ( );
-}
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newNote
-	@desc Constructor for a Note object
-	@return {Note} an instance of a Note object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewNote as newNote
-};
+export default Note;
 
 /*
 --- End of Note.js file -------------------------------------------------------------------------------------------------------

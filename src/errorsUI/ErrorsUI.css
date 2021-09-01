@@ -1,0 +1,72 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file ErrorsUI.css
+@desc CSS for the ErrorsUI
+Changes:
+	- v1.0.0:
+		- created
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+#TravelNotes-ErrorsUI {
+	position: absolute;
+	bottom: 10em;
+	left: calc(50% - 25em);
+	width: 50em;
+	color: transparent;
+	background-color: transparent;
+	z-index: 1300;
+}
+
+#TravelNotes-ErrorsUI-CancelButton {
+	background-color: white;
+}
+
+#TravelNotes-ErrorsUI-Message,
+#TravelNotes-ErrorsUI-HelpInputDiv {
+	margin: 0.5em;
+}
+
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Error {
+	color: white;
+	background-color: red;
+}
+
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Warning {
+	color: black;
+	background-color: orange;
+}
+
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Info {
+	color: black;
+	background-color: white;
+}
+
+#TravelNotes-ErrorsUI.TravelNotes-ErrorsUI-Help {
+	color: black;
+	background-color: white;
+}
+
+/*
+--- End of ErrorsUI.css -------------------------------------------------------------------------------------------------------
+*/

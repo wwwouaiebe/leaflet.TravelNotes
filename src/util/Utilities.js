@@ -16,8 +16,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /*
 Changes:
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-Doc reviewed 20200825
+		- Issue ♯65 : Time to go to ES6 modules?
+	- v2.4.0:
+		- Issue ♯174 : UUID generator is not rfc 4122 compliant
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -35,19 +39,19 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Utilities
+@module util
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
+import theTranslator from '../util/Translator.js';
 import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class Utilities
 @classdesc This class contains utility methods
 @see {@link theUtilities} for the one and only one instance of this class
 @hideconstructor
@@ -62,20 +66,41 @@ class Utilities {
 	}
 
 	/**
-	Gives an UUID
+	Gives an UUID conform to the rfc 4122 section 4.4
 	*/
 
 	get UUID ( ) {
-		const UUID_LENGHT = 8;
-		const UUID_STRLENGHT = 4;
-		let randomValues = new Uint16Array ( UUID_LENGHT );
-		const UUID_SEPARATORS = [ '', '-', '-', '-', '-', '', '', '' ];
+		const UUID_LENGHT = 16;
+		const UUID_STRLENGHT = 2;
+		let randomValues = new Uint8Array ( UUID_LENGHT );
+		const UUID_SEPARATORS = [ '', '', '', '-', '', '-', '', '-', '', '-', '', '', '', '', '', '' ];
+
 		window.crypto.getRandomValues ( randomValues );
+
+		/* eslint-disable no-bitwise */
+		/* eslint-disable no-magic-numbers */
+		/*
+		rfc 4122 section 4.4 : Set the four most significant bits (bits 12 through 15) of the
+		time_hi_and_version field to the 4-bit version number from section 4.1.3.
+		*/
+
+		randomValues [ 6 ] = ( randomValues [ 6 ] & 0x0f ) | 0x40;
+
+		/*
+		rfc 4122 section 4.4 : Set the two most significant bits (bits 6 and 7) of the
+		clock_seq_hi_and_reserved to zero and one, respectively.
+		*/
+
+		randomValues [ 8 ] = ( randomValues [ 8 ] & 0x3f ) | 0x80;
+		/* eslint-enable no-bitwise */
+		/* eslint-enable no-magic-numbers */
+
 		let UUID = '';
 		for ( let counter = ZERO; counter < UUID_LENGHT; counter ++ ) {
 			UUID += randomValues [ counter ].toString ( HEXADECIMAL ).padStart ( UUID_STRLENGHT, '0' ) +
 				UUID_SEPARATORS [ counter ];
 		}
+
 		return UUID;
 	}
 
@@ -98,6 +123,26 @@ class Utilities {
 	}
 
 	/**
+	Open a file
+	@param {function} eventListener a change event listener to use when the file is opened
+
+	*/
+
+	openFile ( eventListener, acceptFileType ) {
+		let openFileInput = document.createElement ( 'input' );
+		openFileInput.type = 'file';
+		if ( acceptFileType ) {
+			openFileInput.accept = acceptFileType;
+		}
+		openFileInput.addEventListener (
+			'change',
+			eventListener,
+			false
+		);
+		openFileInput.click ( );
+	}
+
+	/**
 	Save a string to a file
 	@param {string} fileName The file name
 	@param {string} fileContent The file content
@@ -106,9 +151,15 @@ class Utilities {
 
 	saveFile ( fileName, fileContent, fileMimeType ) {
 		try {
-			let objURL = window.URL.createObjectURL (
-				new File ( [ fileContent ], fileName, { type : fileMimeType || 'text/plain' } )
-			);
+			let objURL = null;
+			if ( fileMimeType ) {
+				objURL = window.URL.createObjectURL (
+					new File ( [ fileContent ], fileName, { type : fileMimeType } )
+				);
+			}
+			else {
+				objURL = URL.createObjectURL ( fileContent );
+			}
 			let element = document.createElement ( 'a' );
 			element.setAttribute ( 'href', objURL );
 			element.setAttribute ( 'download', fileName );
@@ -228,23 +279,20 @@ class Utilities {
 	}
 }
 
-const OUR_UTILITIES = new Utilities ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of Utilities class
+@type {Utilities}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of Utilities class
-	@type {Utilities}
-	@constant
-	@global
+const theUtilities = new Utilities ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_UTILITIES as theUtilities
-};
+export default theUtilities;
 
 /*
 --- End of Utilities.js file --------------------------------------------------------------------------------------------------

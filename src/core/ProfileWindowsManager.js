@@ -21,8 +21,10 @@ Changes:
 	- v1.7.0:
 		- created
 	- v1.8.0:
-		- Issue #98 : Elevation is not modified in the itinerary pane
-Doc reviewed 20200805
+		- Issue ♯98 : Elevation is not modified in the itinerary pane
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -40,20 +42,17 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ProfileWindowsManager
+@module core
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { newProfileWindow } from '../dialogs/ProfileWindow.js';
-import { newProfileFactory } from '../core/ProfileFactory.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
+import theConfig from '../data/Config.js';
+import ProfileWindow from '../dialogProfileWindow/ProfileWindow.js';
+import ProfileFactory from '../core/ProfileFactory.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { ZERO } from '../util/Constants.js';
-
-let ourProfileWindows = new Map ( );
-let ourProfileFactory = newProfileFactory ( );
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -68,6 +67,8 @@ let ourProfileFactory = newProfileFactory ( );
 
 class ProfileWindowsManager {
 
+	#profileWindows = new Map ( );
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
@@ -79,11 +80,11 @@ class ProfileWindowsManager {
 	*/
 
 	createProfile ( route ) {
-		let profileWindow = ourProfileWindows.get ( route.objId );
+		let profileWindow = this.#profileWindows.get ( route.objId );
 
 		if ( route.itinerary.hasProfile ) {
 			if ( theConfig.route.elev.smooth ) {
-				ourProfileFactory.smooth ( route );
+				new ProfileFactory ( ).smooth ( route );
 			}
 			route.itinerary.ascent = ZERO;
 			route.itinerary.descent = ZERO;
@@ -116,12 +117,12 @@ class ProfileWindowsManager {
 	*/
 
 	updateProfile ( oldRouteObjId, newRoute ) {
-		let profileWindow = ourProfileWindows.get ( oldRouteObjId );
+		let profileWindow = this.#profileWindows.get ( oldRouteObjId );
 		if ( profileWindow ) {
-			ourProfileWindows.delete ( oldRouteObjId );
+			this.#profileWindows.delete ( oldRouteObjId );
 			if ( newRoute && newRoute.itinerary.hasProfile ) {
 				profileWindow.update ( newRoute );
-				ourProfileWindows.set ( newRoute.objId, profileWindow );
+				this.#profileWindows.set ( newRoute.objId, profileWindow );
 			}
 			else {
 				profileWindow.close ( );
@@ -135,7 +136,7 @@ class ProfileWindowsManager {
 	*/
 
 	deleteProfile ( objId ) {
-		let profileWindow = ourProfileWindows.get ( objId );
+		let profileWindow = this.#profileWindows.get ( objId );
 		if ( profileWindow ) {
 			profileWindow.close ( );
 		}
@@ -146,7 +147,7 @@ class ProfileWindowsManager {
 	*/
 
 	deleteAllProfiles ( ) {
-		ourProfileWindows.forEach ( profileWindow => profileWindow.close ( ) );
+		this.#profileWindows.forEach ( profileWindow => profileWindow.close ( ) );
 	}
 
 	/**
@@ -155,13 +156,13 @@ class ProfileWindowsManager {
 	*/
 
 	showProfile ( routeObjId ) {
-		let profileWindow = ourProfileWindows.get ( routeObjId );
+		let profileWindow = this.#profileWindows.get ( routeObjId );
 		if ( ! profileWindow ) {
-			profileWindow = newProfileWindow ( );
+			profileWindow = new ProfileWindow ( );
 		}
 		let route = theDataSearchEngine.getRoute ( routeObjId );
 		profileWindow.update ( route );
-		ourProfileWindows.set ( routeObjId, profileWindow );
+		this.#profileWindows.set ( routeObjId, profileWindow );
 	}
 
 	/**
@@ -171,29 +172,25 @@ class ProfileWindowsManager {
 	*/
 
 	onProfileClosed ( objId ) {
-		ourProfileWindows.delete ( objId );
+		this.#profileWindows.delete ( objId );
 	}
 
 }
 
-const OUR_PROFILE_WINDOWS_MANAGER = new ProfileWindowsManager ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of ProfileWindowsManager class
+@type {ProfileWindowsManager}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of ProfileWindowsManager class
-	@type {ProfileWindowsManager}
-	@constant
-	@global
+const theProfileWindowsManager = new ProfileWindowsManager ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_PROFILE_WINDOWS_MANAGER as theProfileWindowsManager
-
-};
+export default theProfileWindowsManager;
 
 /*
 --- End of ProfileWindowsManager.js file --------------------------------------------------------------------------------------

@@ -9,9 +9,13 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018,
+        "ecmaVersion": "latest",
         "sourceType": "module"
     },
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"requireConfigFile": false
+	},
     "rules": {
 		"curly" : [ "warn" ],
 		"complexity" : [ "warn", 20 ],
@@ -67,6 +71,7 @@
 		"key-spacing" : [ "warn", { "beforeColon": true , "afterColon": true , "mode": "strict" } ],
 		"keyword-spacing" : [ "warn" ],
 		"lines-around-comment" : [ "warn", { "beforeBlockComment": true , "afterBlockComment": true , "beforeLineComment": true , "afterLineComment": false} ],
+		"max-lines" : [ "warn", { "max": 300, "skipBlankLines": true , "skipComments": true } ],
 		"max-depth" : [ "warn" , { "max" : 4 } ],
 		"max-len" : [ "warn" , { "code" : 128 } ],
 		"max-nested-callbacks" : [ "warn" , { "max" : 3 } ],

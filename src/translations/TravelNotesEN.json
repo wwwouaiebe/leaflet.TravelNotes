@@ -68,20 +68,16 @@
 		"msgstr" : "An error occurs when reading the API keys"
 	},
 	{
-		"msgid" : "ColorDialog - Blue",
+		"msgid" : "ColorControl - Blue",
 		"msgstr" : "Blue"
 	},
 	{
-		"msgid" : "ColorDialog - Green",
+		"msgid" : "ColorControl - Green",
 		"msgstr" : "Green"
 	},
 	{
-		"msgid" : "ColorDialog - Red",
+		"msgid" : "ColorControl - Red",
 		"msgstr" : "Red"
-	},
-	{
-		"msgid" : "ColorDialog - Colors",
-		"msgstr" : "Colors"
 	},
 	{
 		"msgid" : "ContextMenu - Close",
@@ -120,99 +116,107 @@
 		"msgstr" : "Not possible to select {provider}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Address",
+		"msgid" : "NoteHTMLViewsFactory - Address",
 		"msgstr" : "Address"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Ascent",
+		"msgid" : "RouteHTMLViewsFactory - Ascent",
 		"msgstr" : "Ascent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Descent",
+		"msgid" : "RouteHTMLViewsFactory - Descent",
 		"msgstr" : "Descent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance from start of travel",
+		"msgid" : "NoteHTMLViewsFactory - Distance from start of travel",
 		"msgstr" : "Distance from start of travel"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Distance from start of route",
+		"msgid" : "NoteHTMLViewsFactory - Distance from start of route",
 		"msgstr" : "Distance from start of route"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Duration",
+		"msgid" : "RouteHTMLViewsFactory - Distance from start of travel",
+		"msgstr" : "Distance from start of travel"
+	},
+	{
+		"msgid" : "RouteHTMLViewsFactory - Distance from start of route",
+		"msgstr" : "Distance from start of route"
+	},
+	{
+		"msgid" : "RouteHTMLViewsFactory - Duration",
 		"msgstr" : "Time"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
+		"msgid" : "RouteHTMLViewsFactory - Itinerary computed by {provider} and optimized for {transitMode}",
 		"msgstr" : "Itinerary computed by {provider} and optimized for {transitMode}"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Link",
+		"msgid" : "NoteHTMLViewsFactory - Link",
 		"msgstr" : "Link\u00A0:\u00A0"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next maneuver after",
+		"msgid" : "RouteHTMLViewsFactory - Next maneuver after",
 		"msgstr" : "Next maneuver after"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Next note after",
+		"msgid" : "NoteHTMLViewsFactory - Next note after",
 		"msgstr" : "Next note after"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - OpenStreetMap contributors",
+		"msgid" : "TravelHTMLViewsFactory - OpenStreetMap contributors",
 		"msgstr" : "OpenStreetMap contributors"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Phone",
+		"msgid" : "NoteHTMLViewsFactory - Phone",
 		"msgstr" : "☎️"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Send a sms to",
+		"msgid" : "NoteHTMLViewsFactory - Send a sms to",
 		"msgstr" : " or send a sms to "
 	},
 	{
-		"msgid" : "HTMLViewsFactory - call",
+		"msgid" : "NoteHTMLViewsFactory - call",
 		"msgstr" : "Call "
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Profile",
+		"msgid" : "RouteHTMLViewsFactory - Profile",
 		"msgstr" : "Profile"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Route distance",
+		"msgid" : "RouteHTMLViewsFactory - Route distance",
 		"msgstr" : "Route distance"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode bike",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode bike",
 		"msgstr" : "a bike"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode car",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode car",
 		"msgstr" : "a car"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode pedestrian",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode pedestrian",
 		"msgstr" : "a pedestrian"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - TransitMode train",
+		"msgid" : "RouteHTMLViewsFactory - TransitMode train",
 		"msgstr" : "the train"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel ascent",
+		"msgid" : "travelHTMLViewsFactory - Travel ascent",
 		"msgstr" : "Travel ascent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel descent",
+		"msgid" : "TravelHTMLViewsFactory - Travel descent",
 		"msgstr" : "Travel descent"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel distance",
+		"msgid" : "TravelHTMLViewsFactory - Travel distance",
 		"msgstr" : "Travel distance"
 	},
 	{
-		"msgid" : "HTMLViewsFactory - Travel footer",
+		"msgid" : "TravelHTMLViewsFactory - Travel footer",
 		"msgstr" : "Done with "
 	},
 	{
@@ -222,10 +226,6 @@
 	{
 		"msgid" : "ItineraryPaneUI - Show maneuvers",
 		"msgstr" : "Maneuvers"
-	},
-	{
-		"msgid" : "LayersToolbarUI - Layers",
-		"msgstr" : "Maps"
 	},
 	{
 		"msgid" : "ManeuverContextMenu - Replace with a maneuver note",
@@ -286,6 +286,66 @@
 	{
 		"msgid" : "MapEditor - Drag and drop to add a waypoint",
 		"msgstr" : "Drag and drop to add a waypoint or right click for the menu"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - at the small roundabout on the ground",
+		"msgstr" : " at the small roundabout on the ground"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Start",
+		"msgstr" : "Start"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Stop",
+		"msgstr" : "End"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Continue",
+		"msgstr" : "Continue"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn right",
+		"msgstr" : "Turn right"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn slight right",
+		"msgstr" : "Turn slight right"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn slight left",
+		"msgstr" : "Turn slight left"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn left",
+		"msgstr" : "Turn left"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn sharp left",
+		"msgstr" : "Turn sharp left"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - Turn sharp right",
+		"msgstr" : "Turn sharp right"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - rcnRef",
+		"msgstr" : " (node-point {rcnRef})"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - entry roundabout",
+		"msgstr" : " to enter the roundabout"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - exit roundabout",
+		"msgstr" : " to exit the roundabout"
+	},
+	{
+		"msgid" : "MapIconDataBuilder - continue roundabout",
+		"msgstr" : " and continue in the roundabout"
+	},
+	{
+		"msgid" : "MapLayersToolbarUI - Layers",
+		"msgstr" : "Maps"
 	},
 	{
 		"msgid" : "NoteContextMenu - Attach note to route",
@@ -468,15 +528,15 @@
 		"msgstr" : "At least one special character"
 	},
 	{
-		"msgid" : "PrintFactory - Print",
+		"msgid" : "PrintPageBuilder - Print",
 		"msgstr" : "Print"
 	},
 	{
-		"msgid" : "PrintFactory - Cancel print",
+		"msgid" : "PrintPageBuilder - Cancel print",
 		"msgstr" : "Cancel print"
 	},
 	{
-		"msgid" : "PrintFactory - The maximum of allowed pages is reached.",
+		"msgid" : "RoutePrinter - The maximum of allowed pages is reached.",
 		"msgstr" : "The maximum of allowed pages is reached."
 	},
 	{
@@ -678,62 +738,6 @@
 	{
 		"msgid" : "SaveAsDialog - Remove Maneuvers",
 		"msgstr" : "Remove Maneuvers"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - at the small roundabout on the ground",
-		"msgstr" : " at the small roundabout on the ground"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Start",
-		"msgstr" : "Start"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Stop",
-		"msgstr" : "End"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Continue",
-		"msgstr" : "Continue"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn right",
-		"msgstr" : "Turn right"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn slight right",
-		"msgstr" : "Turn slight right"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn slight left",
-		"msgstr" : "Turn slight left"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn left",
-		"msgstr" : "Turn left"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn sharp left",
-		"msgstr" : "Turn sharp left"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - Turn sharp right",
-		"msgstr" : "Turn sharp right"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - rcnRef",
-		"msgstr" : " (node-point {rcnRef})"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - entry roundabout",
-		"msgstr" : " to enter the roundabout"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - exit roundabout",
-		"msgstr" : " to exit the roundabout"
-	},
-	{
-		"msgid" : "SvgIconFromOsmFactory - continue roundabout",
-		"msgstr" : " and continue in the roundabout"
 	},
 	{
 		"msgid" : "TravelEditor - Cannot remove an edited route",

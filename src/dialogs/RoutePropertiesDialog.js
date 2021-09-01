@@ -20,18 +20,18 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #36: Add a linetype property to route
+		- Issue ♯36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #63 : Find a better solution for provider keys upload
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯63 : Find a better solution for provider keys upload
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
-	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-Doc reviewed 20200815
+		- Issue ♯120 : Review the UserInterface
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -49,16 +49,17 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RoutePropertiesDialog
+@module dialogs
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
-import { theConfig } from '../data/Config.js';
-import { newColorDialog } from '../dialogs/ColorDialog.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
+import theTranslator from '../util/Translator.js';
+import ColorControl from '../dialogColorControl/ColorControl.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theConfig from '../data/Config.js';
 import { ZERO } from '../util/Constants.js';
 
 const OUR_ROUTE_MIN_WIDTH = 1;
@@ -67,163 +68,100 @@ const OUR_ROUTE_MAX_WIDTH = 40;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewRoutePropertiesDialog
-@desc constructor for RoutePropertiesDialog objects
-@param {Route} route The route for wich the properties have to be edited
-@return {RoutePropertiesDialog} an instance of RoutePropertiesDialog object
-@private
+@class RoutePropertiesDialog
+@classdesc This class is the route properties dialog
+@extends BaseDialog
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewRoutePropertiesDialog ( route ) {
+class RoutePropertiesDialog extends BaseDialog {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class RoutePropertiesDialog
-	@classdesc A ColorDialog object completed for edition of route properties
-	Create an instance of the dialog, then execute the show ( ) method. The edited route is given as parameter of the
-	succes handler of the Promise returned by the show ( ) method.
-	@example
-	newRoutePropertiesDialog ( route )
-		.show ( )
-		.then ( route => doSomethingWithTheRoute )
-		.catch ( error => doSomethingWithTheError );
-	@see {@link newRoutePropertiesDialog} for constructor
-	@augments ColorDialog
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	let myRoutePropertiesDialog = null;
-
-	let myRoutePropertiesDiv = null;
-	let myNameInput = null;
-	let myWidthInput = null;
-	let myChainInput = null;
-	let myDashSelect = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnOkButtonClick
-	@desc Event listener for the ok button
+	A reference to the route
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOkButtonClick ( ) {
-		route.color = document.querySelector ( '#TravelNotes-ColorDialog-ColorSampleDiv' ).color.cssColor;
-		if ( route.computedName !== myNameInput.value ) {
-			route.name = myNameInput.value;
-		}
-		route.width = parseInt ( myWidthInput.value );
-		route.chain = myChainInput.checked;
-		route.dashArray = myDashSelect.selectedIndex;
-
-		route.validateData ( );
-
-		return route;
-	}
+	#route = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDialog
-	@desc This method creates the dialog
+	The colorControl object used in the dialog
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateDialog ( ) {
-		myRoutePropertiesDialog = newColorDialog ( route.color );
-		myRoutePropertiesDialog.title = theTranslator.getText ( 'RoutePropertiesDialog - Route properties' );
-		myRoutePropertiesDialog.okButtonListener = myOnOkButtonClick;
-	}
+	#colorControl = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateRoutePropertiesDiv
-	@desc This method creates the route properties div
+	The route name input in the dialog
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateRoutePropertiesDiv ( ) {
-		myRoutePropertiesDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-RoutePropertiesDialog-MainDataDiv'
-			}
-		);
-		myRoutePropertiesDialog.content.insertBefore (
-			myRoutePropertiesDiv,
-			myRoutePropertiesDialog.content.firstChild
-		);
-	}
+	#nameInput = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateNameDiv
-	@desc This method creates the name div
+	The route width input in the dialog
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateNameDiv ( ) {
-		let nameDiv = theHTMLElementsFactory.create ( 'div', null, myRoutePropertiesDiv );
-		theHTMLElementsFactory.create (
+	#widthInput = null;
+
+	/**
+	The route dash select in the dialog
+	@private
+	*/
+
+	#dashSelect = null;
+
+	/**
+	The route chain check box in the dialog
+	@private
+	*/
+
+	#chainInput = null;
+
+	/**
+	This method creates the name div
+	@private
+	*/
+
+	#createNameDiv ( ) {
+		let nameHeaderDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : theTranslator.getText ( 'RoutePropertiesDialog - Name' )
-			},
-			nameDiv
+			}
 		);
-		let inputNameDiv = theHTMLElementsFactory.create (
+		let nameInputDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
 				id : 'TravelNotes-RoutePropertiesDialog-NameInputDiv'
-			},
-			nameDiv
+			}
 		);
-		myNameInput = theHTMLElementsFactory.create (
+		this.#nameInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
 				id : 'TravelNotes-RoutePropertiesDialog-NameInput',
-				value : route.computedName
+				value : this.#route.computedName
 			},
-			inputNameDiv
+			nameInputDiv
 		);
-
+		return [ nameHeaderDiv, nameInputDiv ];
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateWidthDiv
-	@desc This method creates the route width div
+	This method creates the route width div
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateWidthDiv ( ) {
+	#createWidthDiv ( ) {
 		let widthDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-RoutePropertiesDialog-DataDiv'
-			},
-			myRoutePropertiesDiv
+			}
 		);
 		theHTMLElementsFactory.create (
 			'text',
@@ -233,34 +171,30 @@ function ourNewRoutePropertiesDialog ( route ) {
 			theHTMLElementsFactory.create ( 'span', null, widthDiv )
 		);
 
-		myWidthInput = theHTMLElementsFactory.create (
+		this.#widthInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'number',
 				id : 'TravelNotes-RoutePropertiesDialog-WidthInput',
-				value : route.width,
+				value : this.#route.width,
 				min : OUR_ROUTE_MIN_WIDTH,
 				max : OUR_ROUTE_MAX_WIDTH
 			},
 			widthDiv
 		);
+
+		return widthDiv;
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDashDiv
-	@desc This method creates the route dash div
+	This method creates the route dash div
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateDashDiv ( ) {
+	#createDashDiv ( ) {
 		let dashDiv = theHTMLElementsFactory.create (
 			'div',
-			{ className : 'TravelNotes-RoutePropertiesDialog-DataDiv'			},
-			myRoutePropertiesDiv
+			{ className : 'TravelNotes-RoutePropertiesDialog-DataDiv' }
 		);
 		theHTMLElementsFactory.create (
 			'text',
@@ -269,30 +203,28 @@ function ourNewRoutePropertiesDialog ( route ) {
 			},
 			theHTMLElementsFactory.create ( 'span', null, dashDiv )
 		);
-		myDashSelect = theHTMLElementsFactory.create ( 'select', null, dashDiv );
+		this.#dashSelect = theHTMLElementsFactory.create ( 'select', null, dashDiv );
 		let dashChoices = theConfig.route.dashChoices;
 		for ( let optionsCounter = ZERO; optionsCounter < dashChoices.length; optionsCounter ++ ) {
-			myDashSelect.add ( theHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
+			this.#dashSelect.add ( theHTMLElementsFactory.create ( 'option', { text : dashChoices [ optionsCounter ].text } ) );
 		}
-		myDashSelect.selectedIndex = route.dashArray < dashChoices.length ? route.dashArray : ZERO;
+		this.#dashSelect.selectedIndex = this.#route.dashArray < dashChoices.length ? this.#route.dashArray : ZERO;
+
+		return dashDiv;
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateChainDiv
-	@desc This method creates the route chain div
+	This method creates the route chain div
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateChainDiv ( ) {
+	#createChainDiv ( ) {
 		let chainDiv = theHTMLElementsFactory.create (
 			'div',
-			{ className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
-				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'			},
-			myRoutePropertiesDiv
+			{
+				className : 'TravelNotes-RoutePropertiesDialog-DataDiv',
+				id : 'TravelNotes-RoutePropertiesDialog-ChainDiv'
+			}
 		);
 		theHTMLElementsFactory.create (
 			'text',
@@ -302,64 +234,101 @@ function ourNewRoutePropertiesDialog ( route ) {
 			theHTMLElementsFactory.create ( 'span', null, chainDiv )
 		);
 
-		myChainInput = theHTMLElementsFactory.create (
+		this.#chainInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'checkbox',
-				checked : route.chain
+				checked : this.#route.chain
 			},
 			chainDiv
 		);
+
+		return chainDiv;
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateColorHeaderDiv
-	@desc This method creates the color header div
+	This method creates the color header div
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateColorHeaderDiv ( ) {
-		theHTMLElementsFactory.create (
+	#createColorHeaderDiv ( ) {
+		return theHTMLElementsFactory.create (
 			'div',
 			{
 				textContent : theTranslator.getText ( 'RoutePropertiesDialog - Color' ),
 				id : 'TravelNotes-RoutePropertiesDialog-ColorHeaderDiv'
-			},
-			myRoutePropertiesDiv
+			}
 		);
 	}
 
-	myCreateDialog ( );
-	myCreateRoutePropertiesDiv ( );
-	myCreateNameDiv ( );
-	myCreateWidthDiv ( );
-	myCreateDashDiv ( );
-	myCreateChainDiv ( );
-	myCreateColorHeaderDiv ( );
-
-	return myRoutePropertiesDialog;
-}
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newRoutePropertiesDialog
-	@desc constructor for RoutePropertiesDialog objects
-	@param {Route} route The route to edit at the dialog opening
-	@return {RoutePropertiesDialog} an instance of RoutePropertiesDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	/*
+	constructor
+	@param {Route} route The route for witch the properties are edited
 	*/
 
-	ourNewRoutePropertiesDialog as newRoutePropertiesDialog
-};
+	constructor ( route ) {
+		super ( );
+		this.#route = route;
+		this.#colorControl = new ColorControl ( route.color );
+	}
+
+	/**
+	Overload of the BaseDialog.onCancel ( ) method.
+	*/
+
+	onCancel ( ) {
+		this.#colorControl.destructor ( );
+		super.onCancel ( );
+	}
+
+	/**
+	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked.
+	Push the new route properties in the route and validate the route
+	*/
+
+	onOk ( ) {
+
+		this.#route.color = this.#colorControl.cssColor;
+		if ( this.#route.computedName !== this.#nameInput.value ) {
+			this.#route.name = this.#nameInput.value;
+		}
+		this.#route.width = parseInt ( this.#widthInput.value );
+		this.#route.chain = this.#chainInput.checked;
+		this.#route.dashArray = this.#dashSelect.selectedIndex;
+
+		this.#route.validateData ( );
+		this.#colorControl.destructor ( );
+
+		super.onOk ( );
+	}
+
+	/**
+	Get the title of the dialog
+	@readonly
+	*/
+
+	get title ( ) { return theTranslator.getText ( 'RoutePropertiesDialog - Route properties' ); }
+
+	/**
+	Overload of the BaseDialog.contentHTMLElements property.
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
+	@readonly
+	*/
+
+	get contentHTMLElements ( ) {
+		return [].concat (
+
+			this.#createNameDiv ( ),
+			this.#createWidthDiv ( ),
+			this.#createDashDiv ( ),
+			this.#createChainDiv ( ),
+			this.#createColorHeaderDiv ( ),
+			this.#colorControl.HTMLElements
+		);
+	}
+}
+
+export default RoutePropertiesDialog;
 
 /*
 --- End of RoutePropertiesDialog.js file --------------------------------------------------------------------------------------

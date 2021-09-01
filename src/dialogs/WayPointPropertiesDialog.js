@@ -20,11 +20,13 @@ Changes:
 	- v1.12.0:
 		- created
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue ♯135 : Remove innerHTML from code
+		- Issue ♯138 : Protect the app - control html entries done by user.
 	- v2.2.0:
-		- Issue #64 : Improve geocoding
-Doc reviewed 20200816
+		- Issue ♯64 : Improve geocoding
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 /**
@@ -41,240 +43,202 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module WayPointPropertiesDialog
+@module dialogs
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { newBaseDialog } from '../dialogs/BaseDialog.js';
-import { theHTMLElementsFactory } from '../util/HTMLElementsFactory.js';
-import { theTranslator } from '../UI/Translator.js';
-import { newGeoCoder } from '../core/GeoCoder.js';
-import { theConfig } from '../data/Config.js';
+import BaseDialog from '../dialogBase/BaseDialog.js';
+import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../util/Translator.js';
+import GeoCoder from '../core/GeoCoder.js';
+import theConfig from '../data/Config.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewWayPointPropertiesDialog
-@desc constructor for WayPointPropertiesDialog objects
-@param {WayPoint} wayPoint The wayPoint for wich the properties have to be edited
-@return {WayPointPropertiesDialog} an instance of WayPointPropertiesDialog object
-@private
+@class WayPointPropertiesDialog
+@classdesc This is the WayPointProerties dialog
+@extends BaseDialog
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewWayPointPropertiesDialog ( wayPoint ) {
+class WayPointPropertiesDialog extends BaseDialog {
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class WayPointPropertiesDialog
-	@classdesc A BaseDialog object completed for edition of WayPoint properties
-	Create an instance of the dialog, then execute the show ( ) method. The edited WayPoint is given as parameter of the
-	succes handler of the Promise returned by the show ( ) method.
-	@example
-	newWayPointPropertiesDialog ( wayPoint )
-		.show ( )
-		.then ( wayPoint => doSomethingWithTheWayPoint )
-		.catch ( error => doSomethingWithTheError );
-	@see {@link newWayPointPropertiesDialog} for constructor
-	@augments BaseDialog
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	let myWayPointPropertiesDialog = null;
-	let myWayPointDataDiv = null;
-	let myNameInput = null;
-	let myAddressInput = null;
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnOkButtonClick
-	@desc Event listener for the ok button
+	A reference to the edited wayPoint
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnOkButtonClick ( ) {
-
-		wayPoint.name = myNameInput.value;
-		wayPoint.address = myAddressInput.value;
-		wayPoint.validateData ( );
-
-		return wayPoint;
-	}
+	#wayPoint = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myOnResetAddressButtonClick
-	@desc Event listener for the reset address button
+	The address input HTMLElement
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myOnResetAddressButtonClick ( clickEvent ) {
+	#addressInput = null;
+
+	/**
+	The reser address button
+	@private
+	*/
+
+	#resetAddressButton = null;
+
+	/**
+	The name input HTMLElement
+	@private
+	*/
+
+	#nameInput = null;
+
+	/**
+	Click on the reset address button event listener
+	@private
+	*/
+
+	async handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		if ( ! theConfig.wayPoint.reverseGeocoding ) {
 			return;
 		}
-
-		myWayPointPropertiesDialog.okButton.classList.add ( 'TravelNotes-Hidden' );
-		let geoCoder = newGeoCoder ( );
-		geoCoder.getPromiseAddress ( wayPoint.latLng )
-			.then (
-				geoCoderData => {
-					myWayPointPropertiesDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
-					if ( theConfig.wayPoint.geocodingIncludeName ) {
-						myNameInput.value = geoCoderData.name;
-					}
-					let address = geoCoderData.street;
-					if ( '' !== geoCoderData.city ) {
-						address += ' ' + geoCoderData.city;
-					}
-					myAddressInput.value = address;
-				}
-			)
-			.catch (
-				err => {
-					myWayPointPropertiesDialog.okButton.classList.remove ( 'TravelNotes-Hidden' );
-					if ( err instanceof Error ) {
-						console.error ( err );
-					}
-				}
-			);
+		this.showWait ( );
+		let geoCoder = new GeoCoder ( );
+		let address = await geoCoder.getAddressAsync ( this.#wayPoint.latLng );
+		this.hideWait ( );
+		if ( address.statusOk ) {
+			if ( theConfig.wayPoint.geocodingIncludeName ) {
+				this.#nameInput.value = address.name;
+			}
+			let addressString = address.street;
+			if ( '' !== address.city ) {
+				addressString += ' ' + address.city;
+			}
+			this.#addressInput.value = addressString;
+		}
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDialog
-	@desc This method creates the dialog
+	Create the address control HTMLElements
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateDialog ( ) {
-		myWayPointPropertiesDialog = newBaseDialog ( );
-		myWayPointPropertiesDialog.title = theTranslator.getText ( 'WayPointPropertiesDialog - Waypoint properties' );
-		myWayPointPropertiesDialog.okButtonListener = myOnOkButtonClick;
-		myWayPointDataDiv = theHTMLElementsFactory.create (
-			'div',
-			{
-				id : 'TravelNotes-WayPointPropertiesDialog-DataDiv'
-			},
-			myWayPointPropertiesDialog.content );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateNameDiv
-	@desc This method creates the name div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateNameDiv ( ) {
-		theHTMLElementsFactory.create (
-			'div',
-			{
-				textContent : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
-			},
-			myWayPointDataDiv
-		);
-		myNameInput = theHTMLElementsFactory.create (
-			'input',
-			{
-				type : 'text',
-				value : wayPoint.name,
-				className : 'TravelNotes-WayPointPropertiesDialog-Input'
-			},
-			theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
-		);
-	}
-
-	function myCreateResetButton ( ) {
-		theHTMLElementsFactory.create (
+	#createAddressControl ( ) {
+		let addressHeaderDiv = theHTMLElementsFactory.create ( 'div' );
+		this.#resetAddressButton = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-BaseDialog-Button',
 				title : theTranslator.getText ( 'WayPointPropertiesDialog - Reset address' ),
 				textContent : '🔄'
 			},
-			theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
-		)
-			.addEventListener (
-				'click',
-				myOnResetAddressButtonClick,
-				false
-			);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateAddressDiv
-	@desc This method creates the name div
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateAddressDiv ( ) {
-
+			addressHeaderDiv
+		);
+		this.#resetAddressButton.addEventListener ( 'click', this, false ); // You understand?
 		theHTMLElementsFactory.create (
 			'text',
 			{
 				value : theTranslator.getText ( 'WayPointPropertiesDialog - Address' )
 			},
-			theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
+			addressHeaderDiv
 		);
 
-		myAddressInput = theHTMLElementsFactory.create (
+		let addressInputDiv = theHTMLElementsFactory.create ( 'div' );
+		this.#addressInput = theHTMLElementsFactory.create (
 			'input',
 			{
 				type : 'text',
-				value : wayPoint.address,
+				value : this.#wayPoint.address,
 				className : 'TravelNotes-WayPointPropertiesDialog-Input'
 			},
-			theHTMLElementsFactory.create ( 'div', null, myWayPointDataDiv )
+			addressInputDiv
+		);
+
+		return [ addressHeaderDiv, addressInputDiv ];
+	}
+
+	/**
+	Create the name control HTMLElements
+	@private
+	*/
+
+	#createNameControl ( ) {
+		let nameHeaderDiv = theHTMLElementsFactory.create (
+			'div',
+			{
+				textContent : theTranslator.getText ( 'WayPointPropertiesDialog - Name' )
+			}
+		);
+		let nameInputDiv = theHTMLElementsFactory.create ( 'div' );
+		this.#nameInput = theHTMLElementsFactory.create (
+			'input',
+			{
+				type : 'text',
+				value : this.#wayPoint.name,
+				className : 'TravelNotes-WayPointPropertiesDialog-Input'
+			},
+			nameInputDiv
+		);
+
+		return [ nameHeaderDiv, nameInputDiv ];
+	}
+
+	/**
+	constructor
+	@param {WayPoint} The wayPoint to modify
+	*/
+
+	constructor ( wayPoint ) {
+		super ( );
+		this.#wayPoint = wayPoint;
+
+	}
+
+	/**
+	Overload of the BaseDialog.onCancel ( ) method.
+	*/
+
+	onCancel ( ) {
+		this.#resetAddressButton.removeEventListener ( 'click', this, false	);
+		super.onCancel ( );
+	}
+
+	/**
+	Overload of the BaseDialog.onOk ( ) method. Called when the Ok button is clicked
+	*/
+
+	onOk ( ) {
+		this.#wayPoint.address = this.#addressInput.value;
+		this.#wayPoint.name = this.#nameInput.value;
+		this.#resetAddressButton.removeEventListener ( 'click', this, false	);
+		super.onOk ( );
+	}
+
+	/**
+	Get an array with the HTMLElements that have to be added in the content of the dialog.
+	@readonly
+	*/
+
+	get contentHTMLElements ( ) {
+		return [ ].concat (
+			this.#createNameControl ( ),
+			this.#createAddressControl ( )
 		);
 	}
 
-	myCreateDialog ( );
-	myCreateResetButton ( );
-	myCreateNameDiv ( );
-	myCreateAddressDiv ( );
-
-	return myWayPointPropertiesDialog;
-}
-
-export {
-
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newWayPointPropertiesDialog
-	@desc constructor for WayPointPropertiesDialog objects
-	@param {WayPoint} wayPoint The wayPoint for wich the properties have to be edited
-	@return {WayPointPropertiesDialog} an instance of WayPointPropertiesDialog object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	The title of the dialog
+	@readonly
 	*/
 
-	ourNewWayPointPropertiesDialog as newWayPointPropertiesDialog
-};
+	get title ( ) { return theTranslator.getText ( 'WayPointPropertiesDialog - Waypoint properties' ); }
+}
+
+export default WayPointPropertiesDialog;
 
 /*
 --- End of NoteDialog.js file -------------------------------------------------------------------------------------------------

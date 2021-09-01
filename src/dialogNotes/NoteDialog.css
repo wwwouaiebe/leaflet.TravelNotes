@@ -1,0 +1,112 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file NoteDialog.css
+@desc CSS for the NoteDialog
+Changes:
+	- v1.12.0:
+		- Issue #120 : Review the UserInterface
+	- v2.0.0:
+		- Issue #138 : Protect the app - control html entries done by user.
+		- Issue #144 : Add an error message when a bad json file is loaded from the noteDialog
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.TravelNotes-BaseDialog-Container {
+	max-width: 44em;
+}
+
+#TravelNotes-NoteDialog-ToolbarDiv {
+	max-width: 39em;
+}
+
+#TravelNotes-NoteDialog-IconSelect {
+	margin-right: 0.2em;
+}
+
+.TravelNotes-NoteDialog-EditorButton {
+	display: inline-block;
+	text-align: center;
+	border-style: solid;
+	border-width: 0.1em;
+	border-color: white;
+	margin: 0.1em;
+	padding: 0.1em;
+}
+
+.TravelNotes-NoteDialog-EditorButton span {
+	padding-right: 0.2em;
+	padding-left: 0.2em;
+}
+
+.TravelNotes-NoteDialog-EditorButton:hover {
+	border-color: black;
+}
+
+.TravelNotes-NoteDialog-TextArea {
+	width: 39em;
+}
+
+.TravelNotes-NoteDialog-InputText {
+	width: 38em;
+}
+
+.TravelNotes-NoteDialog-NumberInput {
+	margin-right: 0.5em;
+	width: 3em;
+}
+
+.TravelNotes-NoteDialog-PreviewDiv > div {
+	margin-top: 1em;
+	padding-top: 1em;
+	border-top-style: solid;
+	border-top-width: 0.1em;
+	display: flex;
+	flex-direction: row;
+	max-width: 43em;
+	background-color: lightgray;
+}
+
+.TravelNotes-NoteDialog-Travel-Notes-IconCell {
+	min-height: 20px;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
+	margin-left: auto;
+	background-color: white;
+}
+
+.TravelNotes-NoteDialog-Travel-Notes-Cell {
+	padding: 0.3em;
+	flex-shrink: 1;
+	border-style: solid;
+	border-width: 0.1em;
+	margin-left: 1em;
+	margin-right: auto;
+	max-width: calc(43em - 40px);
+	max-height: 11em;
+	overflow: auto;
+	background-color: white;
+}
+
+/*
+--- End of NoteDialog.css -----------------------------------------------------------------------------------------------------
+*/

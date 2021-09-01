@@ -1,0 +1,98 @@
+/*
+Copyright - 2017 2021 - wwwouaiebe - Contact: https://www.ouaie.be/
+
+This  program is free software;
+you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/**
+@------------------------------------------------------------------------------------------------------------------------------
+
+@file MapLayersToolbarUI.css
+@desc CSS for the MapLayersToolbarUI
+Changes:
+	- v1.0.0:
+		- created
+
+@------------------------------------------------------------------------------------------------------------------------------
+*/
+
+#TravelNotes-MapLayersToolbarUI {
+	position: absolute;
+	width: 3em;
+	top: 0;
+	left: 0;
+	z-index: 1300;
+	display: flex;
+	flex-direction: column;
+	height: auto;
+	max-height: 100vh;
+}
+
+#TravelNotes-MapLayersToolbarUI-Header {
+	transform-origin: bottom right;
+	transform: rotateZ(-90deg) translateY(-6em) translateX(4em);
+	text-align: center;
+	width: 8em;
+	height: 2em;
+	font-size: 1em;
+	font-weight: bold;
+	color: white;
+	background-color: black;
+	padding: 0.5em;
+	margin: 0;
+	flex-shrink: 0;
+}
+
+#TravelNotes-MapLayersToolbarUI-Buttons {
+	background-color: white;
+	color: black;
+	flex-shrink: 2;
+	flex-grow: 2;
+	overflow: hidden;
+}
+
+.TravelNotes-MapLayersToolbarUI-Button {
+	padding: 0.5em;
+	text-align: center;
+	margin: 0;
+	font-weight: bold;
+	height: 1.1em;
+}
+
+.TravelNotes-MapLayersToolbarUI-LinkButton-Enter {
+	color: white;
+	background-color: black;
+}
+
+.TravelNotes-MapLayersToolbarUI-LinkButton-Leave {
+	color: black;
+	background-color: white;
+}
+
+.TravelNotes-MapLayersToolbarUI-Button > a {
+	text-decoration: none;
+}
+
+.TravelNotes-MapLayersToolbarUI-Button > a:hover {
+	text-decoration: none;
+}
+
+.TravelNotes-MapLayersToolbarUI-Button:hover {
+	cursor: pointer;
+}
+
+/*
+--- End of MapLayersToolbarUI.css ---------------------------------------------------------------------------------------------
+*/

@@ -21,32 +21,34 @@ Changes:
 	- v1.0.0:
 		- created
 	- v1.1.0:
-		- Issue #28 : Disable "select this point as start point " and "select this point as end point"
+		- Issue ♯28 : Disable "select this point as start point " and "select this point as end point"
 			when a start point or end point is already present
-		- Issue #30 : Add a context menu with delete command to the waypoints
-		- Issue #33 : Add a command to hide a route
-		- Issue #34 : Add a command to show all routes
+		- Issue ♯30 : Add a context menu with delete command to the waypoints
+		- Issue ♯33 : Add a command to hide a route
+		- Issue ♯34 : Add a command to show all routes
 	- v1.3.0:
 		- added cutRoute method (not tested...)
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 		- modified getClosestLatLngDistance to avoid crash on empty routes
-		- fixed issue #45
+		- fixed Issue ♯45
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
-		- Issue #62 : Remove time from route popup when readonly travel.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯62 : Remove time from route popup when readonly travel.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #66 : Work with promises for dialogs
-		- Issue #70 : Put the get...HTML functions outside of the editors
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯66 : Work with promises for dialogs
+		- Issue ♯70 : Put the get...HTML functions outside of the editors
+		- Issue ♯68 : Review all existing promises.
 	- v1.9.0:
-		- issue #101 : Add a print command for a route
+		- Issue ♯101 : Add a print command for a route
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
-Doc reviewed 20200806
+		- Issue ♯138 : Protect the app - control html entries done by user.
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -64,242 +66,26 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RouteEditor
+@module core
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theTranslator } from '../UI/Translator.js';
-import { theAPIKeysManager } from '../core/APIKeysManager.js';
-import { theTravelNotesData } from '../data/TravelNotesData.js';
-import { theErrorsUI } from '../UI/ErrorsUI.js';
-import { theDataSearchEngine } from '../data/DataSearchEngine.js';
-import { newRoute } from '../data/Route.js';
-import { newGpxFactory } from '../core/GpxFactory.js';
-import { newRoutePropertiesDialog } from '../dialogs/RoutePropertiesDialog.js';
-import { newPrintRouteMapDialog } from '../dialogs/PrintRouteMapDialog.js';
-import { theEventDispatcher } from '../util/EventDispatcher.js';
-import { theGeometry } from '../util/Geometry.js';
-import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
-import { newZoomer } from '../core/Zoomer.js';
-import { theProfileWindowsManager } from '../core/ProfileWindowsManager.js';
-import { newPrintFactory } from '../printMap/PrintFactory.js';
-import { ROUTE_EDITION_STATUS, DISTANCE, LAT_LNG, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import theTranslator from '../util/Translator.js';
+import theAPIKeysManager from '../core/APIKeysManager.js';
+import theTravelNotesData from '../data/TravelNotesData.js';
+import theErrorsUI from '../errorsUI/ErrorsUI.js';
+import theDataSearchEngine from '../data/DataSearchEngine.js';
+import Route from '../data/Route.js';
+import GpxFactory from '../core/GpxFactory.js';
+import RoutePropertiesDialog from '../dialogs/RoutePropertiesDialog.js';
+import PrintRouteMapDialog from '../dialogs/PrintRouteMapDialog.js';
+import theEventDispatcher from '../util/EventDispatcher.js';
+import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
+import RoutePrinter from '../printRoute/RoutePrinter.js';
 
-let ourMustZoomToRouteAfterRouting = false;
-let ourRoutingRequestStarted = false;
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourComputeRouteDistances
-@desc This method compute the route, itineraryPoints and maneuvers distances
-@param {Route} route The route for witch the distances are computed
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourComputeRouteDistances ( route ) {
-
-	// Computing the distance between itineraryPoints
-	let itineraryPointsIterator = route.itinerary.itineraryPoints.iterator;
-	let maneuverIterator = route.itinerary.maneuvers.iterator;
-
-	itineraryPointsIterator.done;
-	maneuverIterator.done;
-
-	maneuverIterator.value.distance = DISTANCE.defaultValue;
-	maneuverIterator.done;
-	route.distance = DISTANCE.defaultValue;
-	route.duration = DISTANCE.defaultValue;
-
-	while ( ! itineraryPointsIterator.done ) {
-		itineraryPointsIterator.previous.distance = theSphericalTrigonometry.pointsDistance (
-			itineraryPointsIterator.previous.latLng,
-			itineraryPointsIterator.value.latLng
-		);
-		route.distance += itineraryPointsIterator.previous.distance;
-		maneuverIterator.previous.distance += itineraryPointsIterator.previous.distance;
-		if ( maneuverIterator.value.itineraryPointObjId === itineraryPointsIterator.value.objId ) {
-			route.duration += maneuverIterator.previous.duration;
-			maneuverIterator.value.distance = DISTANCE.defaultValue;
-			if (
-				maneuverIterator.next
-				&&
-				maneuverIterator.value.itineraryPointObjId === maneuverIterator.next.itineraryPointObjId
-			) {
-
-				// 2 maneuvers on the same itineraryPoint. We skip the first maneuver
-				maneuverIterator.done;
-				maneuverIterator.value.distance = DISTANCE.defaultValue;
-			}
-			maneuverIterator.done;
-
-		}
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourChainRoutes
-@desc This method recompute the distances when routes are chained
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourChainRoutes ( ) {
-	let routesIterator = theTravelNotesData.travel.routes.iterator;
-	let chainedDistance = DISTANCE.defaultValue;
-	while ( ! routesIterator.done ) {
-		if ( routesIterator.value.chain ) {
-			routesIterator.value.chainedDistance = chainedDistance;
-			chainedDistance += routesIterator.value.distance;
-		}
-		else {
-			routesIterator.value.chainedDistance = DISTANCE.defaultValue;
-		}
-		let notesIterator = routesIterator.value.notes.iterator;
-		while ( ! notesIterator.done ) {
-			notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
-		}
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourHaveValidWayPoints
-@desc This method verify that all waypoints have valid coordinates ( reminder: a route have always a startpoint
-and an endpoint!)
-@param {Route} route The route for witch the waypoints are verified
-@return {boolean} true when all waypoints have valid coordinates
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourHaveValidWayPoints ( route ) {
-	let haveValidWayPoints = true;
-	route.wayPoints.forEach (
-		wayPoint => {
-			haveValidWayPoints =
-				haveValidWayPoints
-				&&
-				LAT_LNG.defaultValue !== wayPoint.lat
-				&&
-				LAT_LNG.defaultValue !== wayPoint.lng;
-		}
-	);
-	return haveValidWayPoints;
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnRoutingError
-@desc Error handler for the startRouting method
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnRoutingError ( err ) {
-	ourRoutingRequestStarted = false;
-	theErrorsUI.showError ( err );
-	if ( err instanceof Error ) {
-		console.error ( err );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourOnRoutingOk
-@desc Success handler for the startRouting method
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourOnRoutingOk ( ) {
-
-	ourRoutingRequestStarted = false;
-
-	theTravelNotesData.travel.editedRoute.itinerary.validateData ( );
-
-	let maneuversIterator = theTravelNotesData.travel.editedRoute.itinerary.maneuvers.iterator;
-	while ( ! maneuversIterator.done ) {
-		maneuversIterator.value.validateData ( );
-	}
-
-	let itineraryPointsIterator = theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.iterator;
-	while ( ! itineraryPointsIterator.done ) {
-		itineraryPointsIterator.value.validateData ( );
-	}
-
-	ourComputeRouteDistances ( theTravelNotesData.travel.editedRoute );
-
-	// Placing the waypoints on the itinerary
-	if ( 'circle' !== theTravelNotesData.travel.editedRoute.itinerary.transitMode ) {
-		let wayPointsIterator = theTravelNotesData.travel.editedRoute.wayPoints.iterator;
-		while ( ! wayPointsIterator.done ) {
-			if ( wayPointsIterator.first ) {
-				wayPointsIterator.value.latLng =
-					theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.first.latLng;
-			}
-			else if ( wayPointsIterator.last ) {
-				wayPointsIterator.value.latLng =
-					theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.last.latLng;
-			}
-			else {
-				wayPointsIterator.value.latLng = theGeometry.getClosestLatLngDistance (
-					theTravelNotesData.travel.editedRoute,
-					wayPointsIterator.value.latLng
-				).latLng;
-			}
-		}
-	}
-
-	// the position of the notes linked to the route is recomputed
-	let notesIterator = theTravelNotesData.travel.editedRoute.notes.iterator;
-	while ( ! notesIterator.done ) {
-		let latLngDistance = theGeometry.getClosestLatLngDistance (
-			theTravelNotesData.travel.editedRoute,
-			notesIterator.value.latLng
-		);
-		notesIterator.value.latLng = latLngDistance.latLng;
-		notesIterator.value.distance = latLngDistance.distance;
-	}
-
-	ourChainRoutes ( );
-
-	// and the notes sorted
-	theTravelNotesData.travel.editedRoute.notes.sort (
-		( first, second ) => first.distance - second.distance
-	);
-
-	if ( ourMustZoomToRouteAfterRouting ) {
-		newZoomer ( ).zoomToRoute ( theTravelNotesData.travel.editedRoute.objId );
-	}
-
-	theProfileWindowsManager.createProfile ( theTravelNotesData.travel.editedRoute );
-
-	theEventDispatcher.dispatch (
-		'routeupdated',
-		{
-			removedRouteObjId : theTravelNotesData.travel.editedRoute.objId,
-			addedRouteObjId : theTravelNotesData.travel.editedRoute.objId
-		}
-	);
-
-	theEventDispatcher.dispatch ( 'roadbookupdate' );
-	theEventDispatcher.dispatch ( 'showitinerary' );
-	theEventDispatcher.dispatch ( 'setrouteslist' );
-}
+import { ROUTE_EDITION_STATUS, DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
@@ -330,10 +116,10 @@ class RouteEditor {
 	*/
 
 	addRoute ( ) {
-		let route = newRoute ( );
+		let route = new Route ( );
 		theTravelNotesData.travel.routes.add ( route );
 		if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
-			ourChainRoutes ( );
+			this.chainRoutes ( );
 			theEventDispatcher.dispatch ( 'setrouteslist' );
 			theEventDispatcher.dispatch ( 'roadbookupdate' );
 		}
@@ -403,7 +189,7 @@ class RouteEditor {
 		}
 
 		// The edited route is pushed in the editors
-		theTravelNotesData.travel.editedRoute = newRoute ( );
+		theTravelNotesData.travel.editedRoute = new Route ( );
 		initialRoute.editionStatus = ROUTE_EDITION_STATUS.editedNoChange;
 
 		// Route is cloned, so we can have a cancel button in the editor
@@ -415,7 +201,7 @@ class RouteEditor {
 			theTravelNotesData.editedRouteObjId,
 			theTravelNotesData.travel.editedRoute
 		);
-		ourChainRoutes ( );
+		this.chainRoutes ( );
 		theEventDispatcher.dispatch (
 			'routeupdated',
 			{
@@ -469,32 +255,10 @@ class RouteEditor {
 
 		theTravelNotesData.travel.routes.remove ( routeToDeleteObjId );
 		theProfileWindowsManager.deleteProfile ( routeToDeleteObjId );
-		ourChainRoutes ( );
+		this.chainRoutes ( );
 
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
 		theEventDispatcher.dispatch ( 'setrouteslist' );
-	}
-
-	/**
-	This method removes a maneuver from the edited route
-	@param {!number} maneuverObjId The objId of the Maneuver to remove.
-	@fires showitinerary
-	@fires roadbookupdate
-	*/
-
-	removeManeuver ( maneuverObjId ) {
-		let previousManeuver =
-			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.previous (
-				maneuverObjId,
-				maneuver => DISTANCE.defaultValue < maneuver.distance
-			)
-			||
-			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.first;
-		previousManeuver.distance +=
-			theTravelNotesData.travel.editedRoute.itinerary.maneuvers.getAt ( maneuverObjId ).distance;
-		theTravelNotesData.travel.editedRoute.itinerary.maneuvers.remove ( maneuverObjId );
-		theEventDispatcher.dispatch ( 'showitinerary' );
-		theEventDispatcher.dispatch ( 'roadbookupdate' );
 	}
 
 	/**
@@ -503,7 +267,7 @@ class RouteEditor {
 	*/
 
 	saveGpx ( routeObjId ) {
-		newGpxFactory ( ).routeToGpx ( routeObjId );
+		new GpxFactory ( ).routeToGpx ( routeObjId );
 	}
 
 	/**
@@ -511,31 +275,20 @@ class RouteEditor {
 	*/
 
 	chainRoutes ( ) {
-		ourChainRoutes ( );
-	}
-
-	/**
-	This method start the routing for the edited route.
-	@async
-	@fires routeupdated
-	@fires showitinerary
-	@fires roadbookupdate
-	*/
-
-	startRouting ( ) {
-		if (
-			( ! ourRoutingRequestStarted )
-			&&
-			ourHaveValidWayPoints ( theTravelNotesData.travel.editedRoute )
-		) {
-			ourMustZoomToRouteAfterRouting = ZERO === theTravelNotesData.travel.editedRoute.itinerary.itineraryPoints.length;
-			ourRoutingRequestStarted = true;
-			let routeProvider = theTravelNotesData.providers.get ( theTravelNotesData.routing.provider.toLowerCase ( ) );
-			theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
-			theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
-			routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
-				.then ( ourOnRoutingOk )
-				.catch ( ourOnRoutingError );
+		let routesIterator = theTravelNotesData.travel.routes.iterator;
+		let chainedDistance = DISTANCE.defaultValue;
+		while ( ! routesIterator.done ) {
+			if ( routesIterator.value.chain ) {
+				routesIterator.value.chainedDistance = chainedDistance;
+				chainedDistance += routesIterator.value.distance;
+			}
+			else {
+				routesIterator.value.chainedDistance = DISTANCE.defaultValue;
+			}
+			let notesIterator = routesIterator.value.notes.iterator;
+			while ( ! notesIterator.done ) {
+				notesIterator.value.chainedDistance = routesIterator.value.chainedDistance;
+			}
 		}
 	}
 
@@ -550,7 +303,7 @@ class RouteEditor {
 	saveEdition ( ) {
 
 		// the edited route is cloned
-		let clonedRoute = newRoute ( );
+		let clonedRoute = new Route ( );
 		clonedRoute.jsonObject = theTravelNotesData.travel.editedRoute.jsonObject;
 
 		// and the initial route replaced with the clone
@@ -587,8 +340,8 @@ class RouteEditor {
 		);
 
 		theTravelNotesData.editedRouteObjId = INVALID_OBJ_ID;
-		theTravelNotesData.travel.editedRoute = newRoute ( );
-		ourChainRoutes ( );
+		theTravelNotesData.travel.editedRoute = new Route ( );
+		this.chainRoutes ( );
 
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
 		theEventDispatcher.dispatch ( 'setrouteslist' );
@@ -607,12 +360,13 @@ class RouteEditor {
 
 	routeProperties ( routeObjId ) {
 		let route = theDataSearchEngine.getRoute ( routeObjId );
-		let routePropertiesDialog = newRoutePropertiesDialog ( route );
+		let routePropertiesDialog = new RoutePropertiesDialog ( route );
 
 		routePropertiesDialog.show ( ).then (
 			( ) => {
-				ourChainRoutes ( );
-				if ( ourHaveValidWayPoints ( route ) ) {
+				this.chainRoutes ( );
+
+				if ( route.haveValidWayPoints ( ) ) {
 					theEventDispatcher.dispatch (
 						'routepropertiesupdated',
 						{
@@ -641,9 +395,9 @@ class RouteEditor {
 	*/
 
 	printRouteMap ( routeObjId ) {
-		newPrintRouteMapDialog ( )
+		new PrintRouteMapDialog ( )
 			.show ( )
-			.then ( printData => newPrintFactory ( ).print ( printData, routeObjId ) )
+			.then ( printData => new RoutePrinter ( ).print ( printData, routeObjId ) )
 			.catch (
 				err => {
 					if ( err instanceof Error ) {
@@ -734,23 +488,20 @@ class RouteEditor {
 	}
 }
 
-const OUR_ROUTE_EDITOR = new RouteEditor ( );
+/**
+@------------------------------------------------------------------------------------------------------------------------------
 
-export {
+@desc The one and only one instance of RouteEditor class
+@type {RouteEditor}
+@constant
+@global
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+@------------------------------------------------------------------------------------------------------------------------------
+*/
 
-	@desc The one and only one instance of RouteEditor class
-	@type {RouteEditor}
-	@constant
-	@global
+const theRouteEditor = new RouteEditor ( );
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	OUR_ROUTE_EDITOR as theRouteEditor
-};
+export default theRouteEditor;
 
 /*
 --- End of RouteEditor.js file ------------------------------------------------------------------------------------------------

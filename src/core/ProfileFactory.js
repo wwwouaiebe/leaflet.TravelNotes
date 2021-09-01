@@ -21,10 +21,12 @@ Changes:
 	- v1.7.0:
 		- created
 	- v1.8.0:
-		- Issue #98 : Elevation is not modified in the itinerary pane
+		- Issue ♯98 : Elevation is not modified in the itinerary pane
 	- v2.0.0:
-		- Issue #135 : Remove innerHTML from code
-Doc reviewed 20200805
+		- Issue ♯135 : Remove innerHTML from code
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -42,13 +44,13 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ProfileFactory
+@module core
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
+import theConfig from '../data/Config.js';
 import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, DISTANCE } from '../util/Constants.js';
 
 const TEN = 10;
@@ -66,47 +68,40 @@ const OUR_BOTTOM_TEXT_PROFILE = SVG_PROFILE.margin + SVG_PROFILE.height + ( SVG_
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewProfileFactory
-@desc constructor of ProfileFactory object
-@return {ProfileFactory} an instance of ProfileFactory object
-@private
+@class
+@classdesc This class provides methods to build a Route profile
+@hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewProfileFactory ( ) {
+class ProfileFactory {
 
-	let mySvg = null;
-	let myVScale = ONE;
-	let myHScale = ONE;
+	#route = null;
 
-	let myMinElev = Number.MAX_VALUE;
-	let myMaxElev = ZERO;
-	let myDeltaElev = ZERO;
+	#smoothDistance = ZERO;
+	#smoothPoints = theConfig.route.elev.smoothPoints;
 
-	let myRoute = null;
+	#svg = null;
+	#VScale = ONE;
+	#HScale = ONE;
 
-	let mySmoothDistance = ZERO;
-	let mySmoothCoefficient = theConfig.route.elev.smoothCoefficient;
-	let mySmoothPoints = theConfig.route.elev.smoothPoints;
+	#minElev = Number.MAX_VALUE;
+	#maxElev = ZERO;
+	#deltaElev = ZERO;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function createTmpPoints
-	@desc this method creates a map with temporary points that are all at the same distance.
+	This method creates a map with temporary points that are all at the same distance.
 	Elevation of tmp points is computed from the elevation of the route to smooth
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function createTmpPoints ( ) {
+	#createTmpPoints ( ) {
 
 		let tmpPointsDistance = 0;
 		let tmpPointElev = 0;
 		let tmpPoints = [];
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		let itineraryPointsIterator = this.#route.itinerary.itineraryPoints.iterator;
 		let itineraryPointsDistance = 0;
 
 		// going to the first itinerary point
@@ -121,7 +116,7 @@ function ourNewProfileFactory ( ) {
 
 		// loop on next itinerary points
 		while ( ! done ) {
-			tmpPointsDistance += mySmoothDistance;
+			tmpPointsDistance += this.#smoothDistance;
 
 			// loop on the itinerary points till we pass the itinerary point distance
 			while ( tmpPointsDistance >= itineraryPointsDistance && ! done ) {
@@ -141,46 +136,41 @@ function ourNewProfileFactory ( ) {
 		}
 
 		// last itinerary point is added
-		tmpPoints.push ( { distance : itineraryPointsDistance, elev : myRoute.itinerary.itineraryPoints.last.elev } );
+		tmpPoints.push ( { distance : itineraryPointsDistance, elev : this.#route.itinerary.itineraryPoints.last.elev } );
 
 		return tmpPoints;
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function createSmoothPoints
-	@creates a map form the tmppoints with smooth elevation
+	Create a map from the tmppoints with smooth elevation
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function createSmoothPoints ( ) {
-		let tmpPoints = createTmpPoints ( );
+	#createSmoothPoints ( ) {
+		let tmpPoints = this.#createTmpPoints ( );
 		let smoothPoints = new Map;
 
-		let deltaElev = ( tmpPoints [ mySmoothPoints ].elev - tmpPoints [ ZERO ].elev ) / mySmoothPoints;
+		let deltaElev = ( tmpPoints [ this.#smoothPoints ].elev - tmpPoints [ ZERO ].elev ) / this.#smoothPoints;
 
 		let pointCounter = ZERO;
 
 		// Computing the first elevs
-		for ( pointCounter = ZERO; pointCounter < mySmoothPoints; pointCounter ++ ) {
+		for ( pointCounter = ZERO; pointCounter < this.#smoothPoints; pointCounter ++ ) {
 			smoothPoints.set (
-				pointCounter * mySmoothDistance,
+				pointCounter * this.#smoothDistance,
 				{
-					distance : pointCounter * mySmoothDistance,
+					distance : pointCounter * this.#smoothDistance,
 					elev : tmpPoints [ ZERO ].elev + ( deltaElev * pointCounter )
 				}
 			);
 		}
 
 		// Computing next elevs
-		for ( pointCounter = mySmoothPoints; pointCounter < tmpPoints.length - mySmoothPoints; pointCounter ++ ) {
+		for ( pointCounter = this.#smoothPoints; pointCounter < tmpPoints.length - this.#smoothPoints; pointCounter ++ ) {
 			let elevSum = ZERO;
 			for (
-				let pointNumber = pointCounter - mySmoothPoints;
-				pointCounter + mySmoothPoints >= pointNumber;
+				let pointNumber = pointCounter - this.#smoothPoints;
+				pointCounter + this.#smoothPoints >= pointNumber;
 				pointNumber ++
 			) {
 				elevSum += tmpPoints [ pointNumber ].elev;
@@ -189,34 +179,34 @@ function ourNewProfileFactory ( ) {
 				tmpPoints [ pointCounter ].distance,
 				{
 					distance : tmpPoints [ pointCounter ].distance,
-					elev : elevSum / ( ( mySmoothPoints * TWO ) + ONE )
+					elev : elevSum / ( ( this.#smoothPoints * TWO ) + ONE )
 				}
 			);
 		}
 
 		pointCounter --;
 
-		deltaElev = mySmoothDistance * (
+		deltaElev = this.#smoothDistance * (
 			tmpPoints [ tmpPoints.length - ONE ].elev -
-				tmpPoints [ tmpPoints.length - ONE - mySmoothPoints ].elev
+				tmpPoints [ tmpPoints.length - ONE - this.#smoothPoints ].elev
 		) /
 			(
 				tmpPoints [ tmpPoints.length - ONE ].distance -
-				tmpPoints [ tmpPoints.length - ONE - mySmoothPoints ].distance
+				tmpPoints [ tmpPoints.length - ONE - this.#smoothPoints ].distance
 			);
 
 		// Computing the last elevs
 		smoothPoints.set (
-			tmpPoints [ pointCounter ].distance + mySmoothDistance,
+			tmpPoints [ pointCounter ].distance + this.#smoothDistance,
 			{
-				distance : tmpPoints [ pointCounter ].distance + mySmoothDistance,
+				distance : tmpPoints [ pointCounter ].distance + this.#smoothDistance,
 				elev : tmpPoints [ pointCounter ].elev + deltaElev
 			}
 		);
 		smoothPoints.set (
-			tmpPoints [ pointCounter ].distance + ( mySmoothDistance * TWO ),
+			tmpPoints [ pointCounter ].distance + ( this.#smoothDistance * TWO ),
 			{
-				distance : tmpPoints [ pointCounter ].distance + ( mySmoothDistance * TWO ),
+				distance : tmpPoints [ pointCounter ].distance + ( this.#smoothDistance * TWO ),
 				elev : tmpPoints [ pointCounter ].elev + ( deltaElev * TWO )
 			}
 		);
@@ -225,21 +215,164 @@ function ourNewProfileFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function mySmooth
-	@desc this method smooth the elevations of the route
-	@param {Route} route The Route to smooth
+	This method creates the profile polyline in the svg element
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function mySmooth ( route ) {
+	#createProfilePolyline ( ) {
+		let pointsAttribute = '';
+		let distance = ZERO;
+		let xPolyline = ZERO;
+		let yPolyline = ZERO;
+		this.#route.itinerary.itineraryPoints.forEach (
+			itineraryPoint => {
+				xPolyline = ( SVG_PROFILE.margin + ( this.#HScale * distance ) ).toFixed ( ZERO );
+				yPolyline =
+					(
+						SVG_PROFILE.margin +
+						( this.#VScale * ( this.#maxElev - itineraryPoint.elev ) )
+					)
+						.toFixed ( ZERO );
+				pointsAttribute += xPolyline + ',' + yPolyline + ' ';
+				distance += itineraryPoint.distance;
+			}
+		);
+		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
+		polyline.setAttributeNS ( null, 'points', pointsAttribute );
+		polyline.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-profilePolyline' );
+		this.#svg.appendChild ( polyline );
+	}
+
+	/**
+	This method creates the frame polyline in the svg element
+	@private
+	*/
+
+	#createFramePolyline ( ) {
+		let pointsAttribute =
+			OUR_LEFT_PROFILE + ',' + OUR_TOP_PROFILE + ' ' + OUR_LEFT_PROFILE + ',' + OUR_BOTTOM_PROFILE + ' ' +
+			OUR_RIGHT_PROFILE + ',' + OUR_BOTTOM_PROFILE + ' ' + OUR_RIGHT_PROFILE + ',' + OUR_TOP_PROFILE;
+		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
+		polyline.setAttributeNS ( null, 'points', pointsAttribute );
+		polyline.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-framePolyline' );
+		this.#svg.appendChild ( polyline );
+	}
+
+	/**
+	This method creates the distance texts in the svg element
+	@private
+	*/
+
+	#createDistanceTexts ( ) {
+
+		let minDelta = Number.MAX_VALUE;
+		let selectedScale = 0;
+		SVG_PROFILE.hScales.forEach (
+			scale => {
+				let currentDelta = Math.abs ( ( this.#route.distance / OUR_MAX_X_LEGEND_NUMBER ) - scale );
+				if ( currentDelta < minDelta ) {
+					minDelta = currentDelta;
+					selectedScale = scale;
+				}
+			}
+		);
+		let distance = Math.ceil ( this.#route.chainedDistance / selectedScale ) * selectedScale;
+		while ( distance < this.#route.distance + this.#route.chainedDistance ) {
+			let distanceText = document.createElementNS ( SVG_NS, 'text' );
+
+			distanceText.appendChild (
+				document.createTextNode (
+					DISTANCE.metersInKm < selectedScale || ZERO < this.#route.chainedDistance
+						?
+						( distance / DISTANCE.metersInKm ) + ' km'
+						:
+						distance + ' m '
+				)
+			);
+			distanceText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-distLegend' );
+			distanceText.setAttributeNS (
+				null,
+				'x',
+				SVG_PROFILE.margin + ( ( distance - this.#route.chainedDistance ) * this.#HScale )
+			);
+			distanceText.setAttributeNS ( null, 'y', OUR_BOTTOM_TEXT_PROFILE );
+			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
+			this.#svg.appendChild ( distanceText );
+			distance += selectedScale;
+		}
+	}
+
+	/**
+	This method creates the elevation texts in the svg element
+	@private
+	*/
+
+	#createElevTexts ( ) {
+
+		let minDelta = Number.MAX_VALUE;
+		let selectedScale = ZERO;
+		SVG_PROFILE.vScales.forEach (
+			scale => {
+				let currentDelta = Math.abs ( ( this.#deltaElev / OUR_MAX_Y_LEGEND_NUMBER ) - scale );
+				if ( currentDelta < minDelta ) {
+					minDelta = currentDelta;
+					selectedScale = scale;
+				}
+			}
+		);
+		let elev = Math.ceil ( this.#minElev / selectedScale ) * selectedScale;
+		while ( elev < this.#maxElev ) {
+			let elevTextY = SVG_PROFILE.margin + ( ( this.#maxElev - elev ) * this.#VScale );
+			let rightElevText = document.createElementNS ( SVG_NS, 'text' );
+			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
+			rightElevText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevLegend' );
+			rightElevText.setAttributeNS ( null, 'x', OUR_RIGHT_TEXT_PROFILE );
+			rightElevText.setAttributeNS ( null, 'y', elevTextY );
+			rightElevText.setAttributeNS ( null, 'text-anchor', 'start' );
+			this.#svg.appendChild ( rightElevText );
+			let leftElevText = document.createElementNS ( SVG_NS, 'text' );
+			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
+			leftElevText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevLegend' );
+			leftElevText.setAttributeNS ( null, 'x', OUR_LEFT_TEXT_PROFILE );
+			leftElevText.setAttributeNS ( null, 'y', elevTextY );
+			leftElevText.setAttributeNS ( null, 'text-anchor', 'end' );
+			this.#svg.appendChild ( leftElevText );
+			elev += selectedScale;
+		}
+
+	}
+
+	/**
+	This method creates the svg element
+	@private
+	*/
+
+	#createSvgElement ( ) {
+		this.#svg = document.createElementNS ( SVG_NS, 'svg' );
+		this.#svg.setAttributeNS (
+			null,
+			'viewBox',
+			'0 0 ' + ( SVG_PROFILE.width + ( TWO * SVG_PROFILE.margin ) ) +
+			' ' + ( SVG_PROFILE.height + ( TWO * SVG_PROFILE.margin ) )
+		);
+		this.#svg.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile' );
+	}
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
+	/**
+	This method smooth the Route elevation. Some elevations are not correct due to imprecisions in the elev files
+	so it's needed to smooth these strange elevs
+	@param {Route} route The Route to smooth
+	*/
+
+	smooth ( route ) {
 
 		// some computations to prepare the job...
-		myRoute = route;
-		let itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		this.#route = route;
+		let itineraryPointsIterator = this.#route.itinerary.itineraryPoints.iterator;
 		let distance = ZERO;
 		let elev = ZERO;
 		while ( ! itineraryPointsIterator.done ) {
@@ -253,15 +386,15 @@ function ourNewProfileFactory ( ) {
 
 		}
 
-		mySmoothDistance = Math.floor ( mySmoothCoefficient / ( elev / distance ) ) * TEN;
-		if ( distance <= TWO * mySmoothPoints * mySmoothDistance ) {
+		this.#smoothDistance = Math.floor ( theConfig.route.elev.smoothCoefficient / ( elev / distance ) ) * TEN;
+		if ( distance <= TWO * this.#smoothPoints * this.#smoothDistance ) {
 			return;
 		}
 
 		// creating smooth points
-		let smoothPoints = createSmoothPoints ( );
+		let smoothPoints = this.#createSmoothPoints ( );
 
-		itineraryPointsIterator = myRoute.itinerary.itineraryPoints.iterator;
+		itineraryPointsIterator = this.#route.itinerary.itineraryPoints.iterator;
 
 		// we skip the first itinerary point
 		itineraryPointsIterator.done;
@@ -270,9 +403,9 @@ function ourNewProfileFactory ( ) {
 		// loop on the itinerary point to push the smooth elev
 		while ( ! itineraryPointsIterator.done ) {
 			let previousIronPoint = smoothPoints.get (
-				Math.floor ( itineraryPointsTotalDistance / mySmoothDistance ) * mySmoothDistance );
+				Math.floor ( itineraryPointsTotalDistance / this.#smoothDistance ) * this.#smoothDistance );
 			let nextIronPoint = smoothPoints.get (
-				Math.ceil ( itineraryPointsTotalDistance / mySmoothDistance ) * mySmoothDistance );
+				Math.ceil ( itineraryPointsTotalDistance / this.#smoothDistance ) * this.#smoothDistance );
 			if ( previousIronPoint && nextIronPoint ) {
 				let deltaDist = itineraryPointsTotalDistance - previousIronPoint.distance;
 				let ascentFactor = ( nextIronPoint.elev - previousIronPoint.elev ) /
@@ -284,264 +417,39 @@ function ourNewProfileFactory ( ) {
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateProfilePolyline
-	@desc this method creates the profile polyline in the svg element
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateProfilePolyline ( ) {
-		let pointsAttribute = '';
-		let distance = ZERO;
-		let xPolyline = ZERO;
-		let yPolyline = ZERO;
-		myRoute.itinerary.itineraryPoints.forEach (
-			itineraryPoint => {
-				xPolyline = ( SVG_PROFILE.margin + ( myHScale * distance ) ).toFixed ( ZERO );
-				yPolyline =
-					(
-						SVG_PROFILE.margin +
-						( myVScale * ( myMaxElev - itineraryPoint.elev ) )
-					)
-						.toFixed ( ZERO );
-				pointsAttribute += xPolyline + ',' + yPolyline + ' ';
-				distance += itineraryPoint.distance;
-			}
-		);
-		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
-		polyline.setAttributeNS ( null, 'points', pointsAttribute );
-		polyline.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-profilePolyline' );
-		mySvg.appendChild ( polyline );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateFramePolyline
-	@desc this method creates the frame polyline in the svg element
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateFramePolyline ( ) {
-		let pointsAttribute =
-			OUR_LEFT_PROFILE + ',' + OUR_TOP_PROFILE + ' ' + OUR_LEFT_PROFILE + ',' + OUR_BOTTOM_PROFILE + ' ' +
-			OUR_RIGHT_PROFILE + ',' + OUR_BOTTOM_PROFILE + ' ' + OUR_RIGHT_PROFILE + ',' + OUR_TOP_PROFILE;
-		let polyline = document.createElementNS ( SVG_NS, 'polyline' );
-		polyline.setAttributeNS ( null, 'points', pointsAttribute );
-		polyline.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-framePolyline' );
-		mySvg.appendChild ( polyline );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateDistanceTexts
-	@desc this method creates the distance texts in the svg element
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateDistanceTexts ( ) {
-
-		let minDelta = Number.MAX_VALUE;
-		let selectedScale = 0;
-		SVG_PROFILE.hScales.forEach (
-			scale => {
-				let currentDelta = Math.abs ( ( myRoute.distance / OUR_MAX_X_LEGEND_NUMBER ) - scale );
-				if ( currentDelta < minDelta ) {
-					minDelta = currentDelta;
-					selectedScale = scale;
-				}
-			}
-		);
-		let distance = Math.ceil ( myRoute.chainedDistance / selectedScale ) * selectedScale;
-		while ( distance < myRoute.distance + myRoute.chainedDistance ) {
-			let distanceText = document.createElementNS ( SVG_NS, 'text' );
-
-			distanceText.appendChild (
-				document.createTextNode (
-					DISTANCE.metersInKm < selectedScale || ZERO < myRoute.chainedDistance
-						?
-						( distance / DISTANCE.metersInKm ) + ' km'
-						:
-						distance + ' m '
-				)
-			);
-			distanceText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-distLegend' );
-			distanceText.setAttributeNS (
-				null,
-				'x',
-				SVG_PROFILE.margin + ( ( distance - myRoute.chainedDistance ) * myHScale )
-			);
-			distanceText.setAttributeNS ( null, 'y', OUR_BOTTOM_TEXT_PROFILE );
-			distanceText.setAttributeNS ( null, 'text-anchor', 'start' );
-			mySvg.appendChild ( distanceText );
-			distance += selectedScale;
-		}
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateElevTexts
-	@desc this method creates the elevation texts in the svg element
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateElevTexts ( ) {
-
-		let minDelta = Number.MAX_VALUE;
-		let selectedScale = ZERO;
-		SVG_PROFILE.vScales.forEach (
-			scale => {
-				let currentDelta = Math.abs ( ( myDeltaElev / OUR_MAX_Y_LEGEND_NUMBER ) - scale );
-				if ( currentDelta < minDelta ) {
-					minDelta = currentDelta;
-					selectedScale = scale;
-				}
-			}
-		);
-		let elev = Math.ceil ( myMinElev / selectedScale ) * selectedScale;
-		while ( elev < myMaxElev ) {
-			let elevTextY = SVG_PROFILE.margin + ( ( myMaxElev - elev ) * myVScale );
-			let rightElevText = document.createElementNS ( SVG_NS, 'text' );
-			rightElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
-			rightElevText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevLegend' );
-			rightElevText.setAttributeNS ( null, 'x', OUR_RIGHT_TEXT_PROFILE );
-			rightElevText.setAttributeNS ( null, 'y', elevTextY );
-			rightElevText.setAttributeNS ( null, 'text-anchor', 'start' );
-			mySvg.appendChild ( rightElevText );
-			let leftElevText = document.createElementNS ( SVG_NS, 'text' );
-			leftElevText.appendChild ( document.createTextNode ( elev.toFixed ( ZERO ) ) );
-			leftElevText.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile-elevLegend' );
-			leftElevText.setAttributeNS ( null, 'x', OUR_LEFT_TEXT_PROFILE );
-			leftElevText.setAttributeNS ( null, 'y', elevTextY );
-			leftElevText.setAttributeNS ( null, 'text-anchor', 'end' );
-			mySvg.appendChild ( leftElevText );
-			elev += selectedScale;
-		}
-
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateSvgElement
-	@desc this method creates the svg element
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCreateSvgElement ( ) {
-		mySvg = document.createElementNS ( SVG_NS, 'svg' );
-		mySvg.setAttributeNS (
-			null,
-			'viewBox',
-			'0 0 ' + ( SVG_PROFILE.width + ( TWO * SVG_PROFILE.margin ) ) +
-			' ' + ( SVG_PROFILE.height + ( TWO * SVG_PROFILE.margin ) )
-		);
-		mySvg.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile' );
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCreateSvg
-	@desc this method creates the svg with the Route profile. This svg is displayed in the profile window and in the roadbook
+	this method creates the svg with the Route profile. This svg is displayed in the profile window and in the roadbook
 	@param {Route} route The route for witch the svg must be created
 	@return the svg element with the profile
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myCreateSvg ( route ) {
+	createSvg ( route ) {
 
 		// Doing some computations for min and max elev and scale...
-		myRoute = route;
-		myMinElev = Number.MAX_VALUE;
-		myMaxElev = ZERO;
-		myRoute.itinerary.itineraryPoints.forEach (
+		this.#route = route;
+		this.#minElev = Number.MAX_VALUE;
+		this.#maxElev = ZERO;
+		this.#route.itinerary.itineraryPoints.forEach (
 			itineraryPoint => {
-				myMaxElev = Math.max ( myMaxElev, itineraryPoint.elev );
-				myMinElev = Math.min ( myMinElev, itineraryPoint.elev );
+				this.#maxElev = Math.max ( this.#maxElev, itineraryPoint.elev );
+				this.#minElev = Math.min ( this.#minElev, itineraryPoint.elev );
 			}
 		);
-		myDeltaElev = myMaxElev - myMinElev;
-		myVScale = SVG_PROFILE.height / myDeltaElev;
-		myHScale = SVG_PROFILE.width / myRoute.distance;
+		this.#deltaElev = this.#maxElev - this.#minElev;
+		this.#VScale = SVG_PROFILE.height / this.#deltaElev;
+		this.#HScale = SVG_PROFILE.width / this.#route.distance;
 
 		// ... then creates the svg
-		myCreateSvgElement ( );
-		myCreateProfilePolyline ( );
-		myCreateFramePolyline ( );
-		myCreateElevTexts ( );
-		myCreateDistanceTexts ( );
+		this.#createSvgElement ( );
+		this.#createProfilePolyline ( );
+		this.#createFramePolyline ( );
+		this.#createElevTexts ( );
+		this.#createDistanceTexts ( );
 
-		return mySvg;
+		return this.#svg;
 	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class
-	@classdesc This class provides methods to build a Route profile
-	@see {@link newProfileFactory} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	class ProfileFactory {
-
-		constructor ( ) {
-			Object.freeze ( this );
-		}
-
-		/**
-		This method smooth the Route elevation. Some elevations are not correct due to imprecisions in the elev files
-		so it's needed to smooth these strange elevs
-		@param {Route} route The Route to smooth
-		*/
-
-		smooth ( route ) { mySmooth ( route ); }
-
-		/**
-		this method creates the svg with the Route profile. This svg is displayed in the profile window and in the roadbook
-		@param {Route} route The route for witch the svg must be created
-		@return the svg element with the profile
-		*/
-
-		createSvg ( route ) { return myCreateSvg ( route ); }
-	}
-
-	return new ProfileFactory ( );
 }
 
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newProfileFactory
-	@desc constructor for ProfileFactory objects
-	@return {ProfileFactory} an instance of ProfileFactory object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewProfileFactory as newProfileFactory
-};
+export default ProfileFactory;
 
 /*
 --- End of ProfileFactory.js file ---------------------------------------------------------------------------------------------

@@ -24,16 +24,18 @@ Changes:
 		- Working with Promise
 		- returning the complete Nominatim responce in place of a computed address
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
-		- Issue #68 : Review all existing promises.
+		- Issue ♯65 : Time to go to ES6 modules?
+		- Issue ♯68 : Review all existing promises.
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
-		- Issue #148 : Nominatim gives bad responses for cities... find a temporary solution.
+		- Issue ♯138 : Protect the app - control html entries done by user.
+		- Issue ♯148 : Nominatim gives bad responses for cities... find a temporary solution.
 	- v2.2.0:
-		- Issue #64 : Improve geocoding
-Doc reviewed 20200802
+		- Issue ♯64 : Improve geocoding
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 
 -----------------------------------------------------------------------------------------------------------------------
@@ -58,6 +60,7 @@ Tests ...
 @property {string} name The name of the point or an empty string
 @property {string} street The house number and the street of the point or an empty string
 @property {string} city The city of the point or an empty string
+@property {boolean} statusOk A status indicating that all the requests are executed correctly
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -65,288 +68,68 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module GeoCoder
+@module core
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { theConfig } from '../data/Config.js';
-import { ZERO, ONE, TWO, HTTP_STATUS_OK, OSM_COUNTRY_ADMIN_LEVEL } from '../util/Constants.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { theSphericalTrigonometry } from '../util/SphericalTrigonometry.js';
+import theConfig from '../data/Config.js';
+import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 
-const OUR_QUERY_DISTANCE = Math.max (
-	theConfig.geoCoder.distances.hamlet,
-	theConfig.geoCoder.distances.village,
-	theConfig.geoCoder.distances.city,
-	theConfig.geoCoder.distances.town
-);
+import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
 
 /**
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 
-@function ourNewGeoCoder
-@desc constructor for GeoCoder objects
-@return {GeoCoder} an instance of GeoCoder object
-@private
+@class GeoCoder
+@classdesc This class call Nominatim and parse the response
+@hideconstructor
 
-@------------------------------------------------------------------------------------------------------------------------------
+@--------------------------------------------------------------------------------------------------------------------------
 */
 
-function ourNewGeoCoder ( ) {
+class GeoCoder {
 
-	let myLatLng = null;
+	#nominatimStatusOk = true;
 
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
+	#queryDistance = Math.max (
+		theConfig.geoCoder.distances.hamlet,
+		theConfig.geoCoder.distances.village,
+		theConfig.geoCoder.distances.city,
+		theConfig.geoCoder.distances.town
+	);
 
-	@function myParseOverpassData
-	@desc This function parse the overpass data, seraching a city name and a place name in the data.
-	City name is the osm area name with the greater admin_level (but smaller than 9 ).
-	Place name is the osm area name with the greater admin_level (but greater than 8 ) or the nearest node
-	with a place tag and values of hamlet, village, city or town.
-	@return {Object} an object with the city, place and country foud
-	@private
+	#latLng = null;
 
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
+	#overpassAPIDataLoader = null;
 
-	function myParseOverpassData ( overpassData ) {
-		let osmCityAdminLevel = theConfig.geoCoder.osmCityAdminLevel.DEFAULT;
-
-		let adminNames = [];
-		let places = {
-			hamlet : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.hamlet
-			},
-			village : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.village
-			},
-			city : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.city
-			},
-			town : {
-				name : null,
-				distance : Number.MAX_VALUE,
-				maxDistance : theConfig.geoCoder.distances.town
-			}
-		};
-		overpassData.elements.forEach (
-			element => {
-				if ( 'area' === element.type ) {
-					let elementName = element.tags.name;
-					if (
-						theConfig.nominatim.language &&
-						'*' !== theConfig.nominatim.language &&
-						element.tags [ 'name:' + theConfig.nominatim.language ]
-					) {
-						elementName = element.tags [ 'name:' + theConfig.nominatim.language ];
-					}
-					adminNames [ Number.parseInt ( element.tags.admin_level ) ] = elementName;
-					if ( OSM_COUNTRY_ADMIN_LEVEL === element.tags.admin_level ) {
-						osmCityAdminLevel =
-							theConfig.geoCoder.osmCityAdminLevel [ element.tags [ 'ISO3166-1' ] ] || osmCityAdminLevel;
-					}
-				}
-				if (
-					'node' === element.type &&
-					element.tags &&
-					element.tags.place &&
-					places [ element.tags.place ] &&
-					element.tags.name
-				) {
-					let nodeDistance = theSphericalTrigonometry.pointsDistance ( myLatLng, [ element.lat, element.lon ] );
-					let place = places [ element.tags.place ];
-					if ( place.maxDistance > nodeDistance && place.distance > nodeDistance ) {
-						place.distance = nodeDistance;
-						place.name = element.tags.name;
-					}
-				}
-			}
-		);
-
-		let adminCity = null;
-		let adminHamlet = null;
-
-		for ( let namesCounter = TWO; namesCounter < adminNames.length; namesCounter ++ ) {
-			if ( 'undefined' !== typeof ( adminNames [ namesCounter ] ) ) {
-				if ( osmCityAdminLevel >= namesCounter ) {
-					adminCity = adminNames [ namesCounter ];
-				}
-				else {
-					adminHamlet = adminNames [ namesCounter ];
-				}
-			}
-		}
-
-		let placeName = null;
-		let placeDistance = Number.MAX_VALUE;
-
-		Object.values ( places ).forEach (
-			place => {
-				if ( place.distance < placeDistance ) {
-					placeDistance = place.distance;
-					placeName = place.name;
-				}
-			}
-		);
-
-		placeName = adminHamlet || placeName;
-		if ( placeName === adminCity ) {
-			placeName = null;
-		}
-
-		return {
-			city : adminCity,
-			place : placeName,
-			country : adminNames [ OSM_COUNTRY_ADMIN_LEVEL ]
-		};
-	}
+	#nominatimData = null;
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myParseNominatimData
-	@desc This function parse the nominatim data, seraching a street name, a house number and a name from osm data
-	@return {Object} an object with the street, name and country found.
+	this method merge the data from Nominatim and theOverpassAPI
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myParseNominatimData ( nominatimData ) {
-		let street = '';
-		if ( ! nominatimData.error ) {
-
-			// street
-			if ( nominatimData.address.house_number ) {
-				street += nominatimData.address.house_number + ' ';
-			}
-			if ( nominatimData.address.road ) {
-				street += nominatimData.address.road + ' ';
-			}
-			else if ( nominatimData.address.pedestrian ) {
-				street += nominatimData.address.pedestrian + ' ';
-			}
-
-			return {
-				street : street,
-				nameDetails : nominatimData.namedetails.name,
-				country : nominatimData.address.country
-			};
-		}
-		return {
-			street : null,
-			nameDetails : null,
-			country : null
-		};
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myCallProviders
-	@desc This function prepare the call to Nominatim and OverpassAPI
-	@return {Promise} a promise that will be fullfilled when the provider calls are done
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	function myCallProviders ( ) {
-		let NominatimUrl =
-			theConfig.nominatim.url + 'reverse?format=json&lat=' +
-			myLatLng [ ZERO ] + '&lon=' + myLatLng [ ONE ] +
-			'&zoom=18&addressdetails=1&namedetails=1';
-		let nominatimLanguage = theConfig.nominatim.language;
-		if ( nominatimLanguage && '*' !== nominatimLanguage ) {
-			NominatimUrl += '&accept-language=' + nominatimLanguage;
-		}
-		let nominatimHeaders = new Headers ( );
-		if ( nominatimLanguage && '*' === nominatimLanguage ) {
-			nominatimHeaders.append ( 'accept-language', '' );
-		}
-
-		/*
-		https://lz4.overpass-api.de/api/interpreter?
-			data=[out:json][timeout:40];
-			is_in(50.644242,5.572354)->.e;area.e[admin_level][boundary="administrative"];out;
-			node(around:1500,50.644242,5.572354)[place];out;
-		*/
-
-		let overpassAPIUrl = theConfig.overpassApi.url +
-			'?data=[out:json][timeout:' + theConfig.overpassApi.timeOut + '];' +
-			'is_in(' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
-			')->.e;area.e[admin_level][boundary="administrative"];out;' +
-			'node(around:' + OUR_QUERY_DISTANCE + ',' + myLatLng [ ZERO ] + ',' + myLatLng [ ONE ] +
-			')[place];out;';
-
-		return Promise.allSettled (
-			[
-				fetch ( NominatimUrl, { headers : nominatimHeaders } ),
-				fetch ( overpassAPIUrl )
-			]
-		);
-	}
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myParseResponses
-	@desc This function parse the responses from Nominatim and OverpassAPI and call the onOk or onError functions
-	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	async function myParseResponses ( data, onOk, onError ) {
-		let nominatimResponse = data[ ZERO ].value;
-		let overpassResponse = data[ ONE ].value;
-		if (
-			'fulfilled' !== data[ ZERO ].status
-			||
-			'fulfilled' !== data[ ONE ].status
-			||
-			HTTP_STATUS_OK !== nominatimResponse.status
-			||
-			! nominatimResponse.ok
-			||
-			HTTP_STATUS_OK !== overpassResponse.status
-			||
-			! overpassResponse.ok
-		) {
-			onError ( new Error ( 'error when calling Nominatim or OverpassAPI' ) );
-			return;
-		}
-
-		let	nominatimData = myParseNominatimData ( await nominatimResponse.json ( ) );
-		let overpassData = myParseOverpassData ( await overpassResponse.json ( ) );
-
+	#mergeData ( ) {
 		let city = null;
-		if ( overpassData ) {
-			city = overpassData.city;
-			if ( overpassData.place ) {
-				city += ' (' + overpassData.place + ')';
+		if ( this.#overpassAPIDataLoader.city ) {
+			city = this.#overpassAPIDataLoader.city;
+			if ( this.#overpassAPIDataLoader.place ) {
+				city += ' (' + this.#overpassAPIDataLoader.place + ')';
 			}
 			if ( ! city ) {
-				city = overpassData.country;
+				city = this.#overpassAPIDataLoader.country;
 			}
 		}
-
 		let street = null;
 		let nameDetails = null;
-		if ( nominatimData ) {
-			street = nominatimData.street;
-			nameDetails = nominatimData.nameDetails || '';
+		if ( this.#nominatimData ) {
+			street = this.#nominatimData.street;
+			nameDetails = this.#nominatimData.nameDetails || '';
 			if ( ! city ) {
-				city = nominatimData.country;
+				city = this.#nominatimData.country;
 			}
 		}
 
@@ -358,78 +141,138 @@ function ourNewGeoCoder ( ) {
 			nameDetails = '';
 		}
 
-		onOk (
-			Object.freeze (
-				{
-					name : theHTMLSanitizer.sanitizeToJsString ( nameDetails ),
-					street : theHTMLSanitizer.sanitizeToJsString ( street ),
-					city : theHTMLSanitizer.sanitizeToJsString ( city )
-				}
-			)
+		return Object.freeze (
+			{
+				name : theHTMLSanitizer.sanitizeToJsString ( nameDetails ),
+				street : theHTMLSanitizer.sanitizeToJsString ( street ),
+				city : theHTMLSanitizer.sanitizeToJsString ( city ),
+				statusOk : this.#nominatimStatusOk // && this.#overpassAPIDataLoader.statusOk
+			}
 		);
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function myExecutePromiseAddress
-	@desc This function ...
+	This method...
 	@private
-
-	@--------------------------------------------------------------------------------------------------------------------------
 	*/
 
-	function myExecutePromiseAddress ( onOk, onError ) {
-		myCallProviders ( ).then ( data => myParseResponses ( data, onOk, onError ) );
+	#parseNominatimData ( nominatimData ) {
+		let street = '';
+		if ( nominatimData.error ) {
+			this.#nominatimStatusOk = false;
+		}
+		else {
+
+			// street
+			if ( nominatimData.address.house_number ) {
+				street += nominatimData.address.house_number + ' ';
+			}
+			if ( nominatimData.address.road ) {
+				street += nominatimData.address.road + ' ';
+			}
+			else if ( nominatimData.address.pedestrian ) {
+				street += nominatimData.address.pedestrian + ' ';
+			}
+			this.#nominatimData = {
+				street : street,
+				nameDetails : nominatimData.namedetails.name,
+				country : nominatimData.address.country
+			};
+		}
 	}
 
 	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@class GeoCoder
-	@classdesc This class call Nominatim and parse the response
-	@see {@link newGeoCoder} for constructor
-	@hideconstructor
-
-	@--------------------------------------------------------------------------------------------------------------------------
+	This method...
+	@private
 	*/
 
-	class GeoCoder {
-
-		constructor ( ) {
-			Object.freeze ( this );
+	async #loadNominatimData ( ) {
+		let nominatimUrl =
+			theConfig.nominatim.url + 'reverse?format=json&lat=' +
+			this.#latLng [ ZERO ] + '&lon=' + this.#latLng [ ONE ] +
+			'&zoom=18&addressdetails=1&namedetails=1';
+		let nominatimLanguage = theConfig.nominatim.language;
+		if ( nominatimLanguage && '*' !== nominatimLanguage ) {
+			nominatimUrl += '&accept-language=' + nominatimLanguage;
+		}
+		let nominatimHeaders = new Headers ( );
+		if ( nominatimLanguage && '*' === nominatimLanguage ) {
+			nominatimHeaders.append ( 'accept-language', '' );
 		}
 
-		/**
-		get a Promise that will search an address from a point
-		@param {Array.<number>} latLng the lat and lng of the point for witch the address is searched
-		@return {Promise} a Promise that fulfill with the address from Nominatim and OverpassAPI responses
-		*/
-
-		getPromiseAddress ( latLng ) {
-			myLatLng = latLng;
-			return new Promise ( myExecutePromiseAddress );
+		let nominatimResponse = await fetch ( nominatimUrl, { headers : nominatimHeaders } );
+		if (
+			HTTP_STATUS_OK === nominatimResponse.status
+			&&
+			nominatimResponse.ok
+		) {
+			this.#nominatimStatusOk = this.#nominatimStatusOk && true;
+			let nominatimData = await nominatimResponse.json ( );
+			this.#parseNominatimData ( nominatimData );
+		}
+		else {
+			this.#nominatimStatusOk = false;
 		}
 	}
 
-	return new GeoCoder ( );
+	/**
+	This method...
+	@private
+	*/
+
+	#getOverpassQueries ( ) {
+		return [
+			'is_in(' + this.#latLng [ ZERO ] + ',' + this.#latLng [ ONE ] +
+			')->.e;area.e[admin_level][boundary="administrative"];out;' +
+			'node(around:' + this.#queryDistance + ',' + this.#latLng [ ZERO ] + ',' + this.#latLng [ ONE ] +
+			')[place];out;'
+		];
+	}
+
+	async #execGetAddress ( ) {
+		this.#nominatimStatusOk = true;
+		this.#nominatimData = null;
+		this.#overpassAPIDataLoader = new OverpassAPIDataLoader (
+			{ searchWays : false, searchRelations : false, setGeometry : true }
+		);
+		await this.#overpassAPIDataLoader.loadData ( this.#getOverpassQueries ( ), this.#latLng );
+		await this.#loadNominatimData ( );
+		return this.#mergeData ( );
+	}
+
+	async #exeGetAdressWithPromise ( onOk, onError ) {
+		let result = await this.#execGetAddress ( );
+		if ( result.statusOk ) {
+			onOk ( result );
+		}
+		else {
+			onError ( 'An error occurs...' );
+		}
+	}
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
+	/**
+	This method search an address from a latitude and longitude
+	@param {Array.<number>} latLng the latitude and longitude to be used to search the address
+	@return {GeoCoderAddress} the address at the given point. The GeoCoderAddress.statusOk must be verified
+	before using the data.
+	*/
+
+	async getAddressAsync ( latLng ) {
+		this.#latLng = latLng;
+		return this.#execGetAddress ( );
+	}
+
+	getAddressWithPromise ( latLng ) {
+		this.#latLng = latLng;
+		return new Promise ( ( onOk, onError ) => this.#exeGetAdressWithPromise ( onOk, onError ) );
+	}
+
 }
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newGeoCoder
-	@desc constructor for GeoCoder objects
-	@return {GeoCoder} an instance of GeoCoder object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewGeoCoder as newGeoCoder
-};
+export default GeoCoder;
 
 /*
 --- End of GeoCoder.js file ---------------------------------------------------------------------------------------------------

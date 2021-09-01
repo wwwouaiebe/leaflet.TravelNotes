@@ -18,21 +18,23 @@ Changes:
 	- v1.0.0:
 		- created
 	-v1.1.0:
-		- Issue #33: Add a command to hide a route
-		- Issue #36: Add a linetype property to route
+		- Issue ♯33: Add a command to hide a route
+		- Issue ♯36: Add a linetype property to route
 	- v1.4.0:
 		- Replacing DataManager with TravelNotesData, Config, Version and DataSearchEngine
 	- v1.5.0:
-		- Issue #52 : when saving the travel to the file, save also the edited route.
+		- Issue ♯52 : when saving the travel to the file, save also the edited route.
 	- v1.6.0:
-		- Issue #65 : Time to go to ES6 modules?
+		- Issue ♯65 : Time to go to ES6 modules?
 	- v1.8.0:
-		- Issue #100 : Fix circular dependancies with Collection
+		- Issue ♯100 : Fix circular dependancies with Collection
 	- v1.12.0:
-		- Issue #120 : Review the UserInterface
+		- Issue ♯120 : Review the UserInterface
 	- v2.0.0:
-		- Issue #138 : Protect the app - control html entries done by user.
-Doc reviewed 20200731
+		- Issue ♯138 : Protect the app - control html entries done by user.
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
+Doc reviewed 20210901
 Tests ...
 */
 
@@ -50,7 +52,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module Route
+@module data
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -58,124 +60,114 @@ Tests ...
 
 /* eslint no-fallthrough: ["error", { "commentPattern": "eslint break omitted intentionally" }]*/
 
-import { theConfig } from '../data/Config.js';
-import { newObjId } from '../data/ObjId.js';
-import { newObjType } from '../data/ObjType.js';
-import { newCollection } from '../data/Collection.js';
-import { newWayPoint } from '../data/WayPoint.js';
-import { newItinerary } from '../data/Itinerary.js';
-import { newNote } from '../data/Note.js';
-import { theHTMLSanitizer } from '../util/HTMLSanitizer.js';
-import { ROUTE_EDITION_STATUS, DISTANCE, ZERO } from '../util/Constants.js';
+import theConfig from '../data/Config.js';
+import ObjId from '../data/ObjId.js';
+import ObjType from '../data/ObjType.js';
+import Collection from '../data/Collection.js';
+import WayPoint from '../data/WayPoint.js';
+import Itinerary from '../data/Itinerary.js';
+import Note from '../data/Note.js';
+import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import { ROUTE_EDITION_STATUS, DISTANCE, ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
 
-const OUR_OBJ_TYPE = newObjType ( 'Route' );
-const OUR_OBJ_IDS = new WeakMap ( );
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourUpgrade
-@desc performs the upgrade
-@param {Object} route a route to upgrade
-@throws {Error} when the route version is invalid
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourUpgrade ( route ) {
-	switch ( route.objType.version ) {
-	case '1.0.0' :
-		route.dashArray = ZERO;
-		route.hidden = false;
-		// eslint break omitted intentionally
-	case '1.1.0' :
-	case '1.2.0' :
-	case '1.3.0' :
-	case '1.4.0' :
-		route.edited = ROUTE_EDITION_STATUS.notEdited;
-		// eslint break omitted intentionally
-	case '1.5.0' :
-	case '1.6.0' :
-	case '1.7.0' :
-	case '1.7.1' :
-	case '1.8.0' :
-	case '1.9.0' :
-	case '1.10.0' :
-	case '1.11.0' :
-		route.editionStatus = route.edited;
-		// eslint break omitted intentionally
-	case '1.12.0' :
-	case '1.13.0' :
-	case '2.0.0' :
-	case '2.1.0' :
-	case '2.2.0' :
-		route.objType.version = '2.3.0';
-		break;
-	default :
-		throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
-	}
-}
-
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourValidate
-@desc verify that the parameter can be transformed to a Route and performs the upgrate if needed
-@param {Object} something an object to validate
-@return {Object} the validated object
-@throws {Error} when the parameter is invalid
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourValidate ( something ) {
-	if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
-		throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
-	}
-	OUR_OBJ_TYPE.validate ( something.objType );
-	if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
-		ourUpgrade ( something );
-	}
-	let properties = Object.getOwnPropertyNames ( something );
-	[
-		'name',
-		'wayPoints',
-		'notes',
-		'itinerary',
-		'width',
-		'color',
-		'dashArray',
-		'chain',
-		'distance',
-		'duration',
-		'editionStatus',
-		'hidden',
-		'chainedDistance',
-		'objId'
-	].forEach (
-		property => {
-			if ( ! properties.includes ( property ) ) {
-				throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
-			}
-		}
-	);
-	return something;
-}
+const OUR_OBJ_TYPE = new ObjType ( 'Route' );
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
 @class Route
 @classdesc This class represent a route
-@see {@link newRoute} for constructor
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
 
-class Route	{
+class Route {
+
+	#objId = INVALID_OBJ_ID;;
+
+	/**
+	Performs the upgrade
+	@param {Object} route a route to upgrade
+	@throws {Error} when the route version is invalid
+	@private
+	*/
+
+	#upgradeObject ( route ) {
+		switch ( route.objType.version ) {
+		case '1.0.0' :
+			route.dashArray = ZERO;
+			route.hidden = false;
+			// eslint break omitted intentionally
+		case '1.1.0' :
+		case '1.2.0' :
+		case '1.3.0' :
+		case '1.4.0' :
+			route.edited = ROUTE_EDITION_STATUS.notEdited;
+			// eslint break omitted intentionally
+		case '1.5.0' :
+		case '1.6.0' :
+		case '1.7.0' :
+		case '1.7.1' :
+		case '1.8.0' :
+		case '1.9.0' :
+		case '1.10.0' :
+		case '1.11.0' :
+			route.editionStatus = route.edited;
+			// eslint break omitted intentionally
+		case '1.12.0' :
+		case '1.13.0' :
+		case '2.0.0' :
+		case '2.1.0' :
+		case '2.2.0' :
+			route.objType.version = '2.3.0';
+			break;
+		default :
+			throw new Error ( 'invalid version for ' + OUR_OBJ_TYPE.name );
+		}
+	}
+
+	/**
+	Verify that the parameter can be transformed to a Route and performs the upgrate if needed
+	@param {Object} something an object to validate
+	@return {Object} the validated object
+	@throws {Error} when the parameter is invalid
+	@private
+	*/
+
+	#validateObject ( something ) {
+		if ( ! Object.getOwnPropertyNames ( something ).includes ( 'objType' ) ) {
+			throw new Error ( 'No objType for ' + OUR_OBJ_TYPE.name );
+		}
+		OUR_OBJ_TYPE.validate ( something.objType );
+		if ( OUR_OBJ_TYPE.version !== something.objType.version ) {
+			this.#upgradeObject ( something );
+		}
+		let properties = Object.getOwnPropertyNames ( something );
+		[
+			'name',
+			'wayPoints',
+			'notes',
+			'itinerary',
+			'width',
+			'color',
+			'dashArray',
+			'chain',
+			'distance',
+			'duration',
+			'editionStatus',
+			'hidden',
+			'chainedDistance',
+			'objId'
+		].forEach (
+			property => {
+				if ( ! properties.includes ( property ) ) {
+					throw new Error ( 'No ' + property + ' for ' + OUR_OBJ_TYPE.name );
+				}
+			}
+		);
+		return something;
+	}
 
 	constructor ( ) {
 
@@ -192,9 +184,9 @@ class Route	{
 		@readonly
 		*/
 
-		this.wayPoints = newCollection ( newWayPoint );
-		this.wayPoints.add ( newWayPoint ( ) );
-		this.wayPoints.add ( newWayPoint ( ) );
+		this.wayPoints = new Collection ( WayPoint );
+		this.wayPoints.add ( new WayPoint ( ) );
+		this.wayPoints.add ( new WayPoint ( ) );
 
 		/**
 		a Collection of Notes
@@ -202,14 +194,14 @@ class Route	{
 		@readonly
 		*/
 
-		this.notes = newCollection ( newNote );
+		this.notes = new Collection ( Note );
 
 		/**
 		the Route Itinerary
 		@type {Itinerary}
 		*/
 
-		this.itinerary = newItinerary ( );
+		this.itinerary = new Itinerary ( );
 
 		/**
 		the width of the Leaflet polyline used to represent the Route on the map
@@ -278,7 +270,7 @@ class Route	{
 
 		this.hidden = false;
 
-		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+		this.#objId = ObjId.nextObjId;
 
 		Object.seal ( this );
 	}
@@ -307,7 +299,7 @@ class Route	{
 	@type {!number}
 	*/
 
-	get objId ( ) { return OUR_OBJ_IDS.get ( this ); }
+	get objId ( ) { return this.#objId; }
 
 	/**
 	the ObjType of the Route.
@@ -316,6 +308,28 @@ class Route	{
 	*/
 
 	get objType ( ) { return OUR_OBJ_TYPE; }
+
+	/**
+	This method verify that all waypoints have valid coordinates ( reminder: a route have always a startpoint
+	and an endpoint!)
+	@return {boolean} true when all waypoints have valid coordinates
+	@private
+	*/
+
+	haveValidWayPoints ( ) {
+		let haveValidWayPoints = true;
+		this.wayPoints.forEach (
+			wayPoint => {
+				haveValidWayPoints =
+					haveValidWayPoints
+					&&
+					LAT_LNG.defaultValue !== wayPoint.lat
+					&&
+					LAT_LNG.defaultValue !== wayPoint.lng;
+			}
+		);
+		return haveValidWayPoints;
+	}
 
 	/**
 	An object literal with the WayPoint properties and without any methods.
@@ -338,18 +352,18 @@ class Route	{
 			editionStatus : this.editionStatus,
 			hidden : this.hidden,
 			chainedDistance : parseFloat ( this.chainedDistance.toFixed ( DISTANCE.fixed ) ),
-			objId : OUR_OBJ_IDS.get ( this ),
+			objId : this.#objId,
 			objType : OUR_OBJ_TYPE.jsonObject
 		};
 	}
 	set jsonObject ( something ) {
-		let otherthing = ourValidate ( something );
+		let otherthing = this.#validateObject ( something );
 		this.name = otherthing.name || '';
 		this.wayPoints.jsonObject = otherthing.wayPoints || [];
 		this.notes.jsonObject = otherthing.notes || [];
-		this.itinerary.jsonObject = otherthing.itinerary || newItinerary ( ).jsonObject;
+		this.itinerary.jsonObject = otherthing.itinerary || new Itinerary ( ).jsonObject;
 		this.width = otherthing.width || theConfig.route.width;
-		this.color = otherthing.color || '#000000';
+		this.color = otherthing.color || '\u0023000000';
 		this.dashArray = otherthing.dashArray || ZERO;
 		this.chain = otherthing.chain || false;
 		this.distance = otherthing.distance;
@@ -357,7 +371,7 @@ class Route	{
 		this.editionStatus = otherthing.editionStatus || ROUTE_EDITION_STATUS.notEdited;
 		this.hidden = otherthing.hidden || false;
 		this.chainedDistance = otherthing.chainedDistance;
-		OUR_OBJ_IDS.set ( this, newObjId ( ) );
+		this.#objId = ObjId.nextObjId;
 		this.validateData ( );
 	}
 
@@ -411,37 +425,7 @@ class Route	{
 	}
 }
 
-/**
-@------------------------------------------------------------------------------------------------------------------------------
-
-@function ourNewRoute
-@desc Constructor for a Route object
-@return {Route} an instance of a Route object
-@private
-
-@------------------------------------------------------------------------------------------------------------------------------
-*/
-
-function ourNewRoute ( ) {
-
-	return new Route ( );
-}
-
-export {
-
-	/**
-	@--------------------------------------------------------------------------------------------------------------------------
-
-	@function newRoute
-	@desc Constructor for a Route object
-	@return {Route} an instance of a Route object
-	@global
-
-	@--------------------------------------------------------------------------------------------------------------------------
-	*/
-
-	ourNewRoute as newRoute
-};
+export default Route;
 
 /*
 --- End of Route.js file ------------------------------------------------------------------------------------------------------
