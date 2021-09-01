@@ -39,7 +39,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsrmTextInstructions
+@module routeProviders
 @see https://github.com/Project-OSRM/osrm-text-instructions
 
 @desc This file is an adaptation for ES6 of the osrm-text-instruction project
