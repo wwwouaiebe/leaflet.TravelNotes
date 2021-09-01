@@ -39,7 +39,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module TravelToolbarUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -58,13 +57,13 @@ import { INVALID_OBJ_ID, ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickSaveAsButtonEventListener
+@class SaveAsButtonClickEL
 @classdesc click event listener for the SaveAs button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickSaveAsButtonEventListener {
+class SaveAsButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -76,13 +75,13 @@ class ClickSaveAsButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickCancelButtonEventListener
+@class CancelButtonClickEL
 @classdesc click event listener for the Cancel button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickCancelButtonEventListener {
+class CancelButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ();
@@ -96,13 +95,13 @@ class ClickCancelButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickSaveButtonEventListener
+@class SaveButtonClickEL
 @classdesc click event listener for the Save button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickSaveButtonEventListener {
+class SaveButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -113,13 +112,13 @@ class ClickSaveButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class OpenInputChangeEventListener
+@class OpenInputChangeEL
 @classdesc change event listener for the input associated to the open button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class OpenInputChangeEventListener {
+class OpenInputChangeEL {
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -143,13 +142,13 @@ class OpenInputChangeEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickOpenButtonEventListener
+@class OpenButtonClickEL
 @classdesc click event listener for the open button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickOpenButtonEventListener {
+class OpenButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -165,20 +164,20 @@ class ClickOpenButtonEventListener {
 			return;
 		}
 
-		theUtilities.openFile ( new OpenInputChangeEventListener ( ), '.trv' );
+		theUtilities.openFile ( new OpenInputChangeEL ( ), '.trv' );
 	}
 }
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ImportInputChangeEventListener
+@class ImportInputChangeEL
 @classdesc change event listener for the input associated to the import button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ImportInputChangeEventListener {
+class ImportInputChangeEL {
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -203,18 +202,18 @@ class ImportInputChangeEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickImportButtonEventListener
+@class ImportButtonClickEL
 @classdesc click event listener for the import button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickImportButtonEventListener {
+class ImportButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		if ( INVALID_OBJ_ID === theTravelNotesData.editedRouteObjId ) {
-			theUtilities.openFile ( new ImportInputChangeEventListener ( ), '.trv' );
+			theUtilities.openFile ( new ImportInputChangeEL ( ), '.trv' );
 		}
 		else {
 			theErrorsUI.showError (
@@ -253,7 +252,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', new ClickSaveAsButtonEventListener ( ), false );
+			.addEventListener ( 'click', new SaveAsButtonClickEL ( ), false );
 	}
 
 	/**
@@ -271,7 +270,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', new ClickCancelButtonEventListener ( ), false );
+			.addEventListener ( 'click', new CancelButtonClickEL ( ), false );
 	}
 
 	/**
@@ -289,7 +288,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', new ClickSaveButtonEventListener ( ), false );
+			.addEventListener ( 'click', new SaveButtonClickEL ( ), false );
 	}
 
 	/**
@@ -308,7 +307,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', new ClickOpenButtonEventListener ( ), false );
+			.addEventListener ( 'click', new OpenButtonClickEL ( ), false );
 	}
 
 	/**
@@ -326,7 +325,7 @@ class TravelToolbarUI {
 			},
 			this.#buttonsDiv
 		)
-			.addEventListener ( 'click', new ClickImportButtonEventListener ( ), false );
+			.addEventListener ( 'click', new ImportButtonClickEL ( ), false );
 	}
 
 	/**

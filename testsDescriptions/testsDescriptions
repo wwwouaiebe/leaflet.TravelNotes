@@ -1,0 +1,127 @@
+RouteEditor
+-----------
+
+RouteEditor.addRoute ( )
+	- Entry points : 
+		- TravelUI -> AddRouteButtonClickEL
+		- MapContextMenu
+	- Tests :
+		- Add a route when no route is edited => a new route is created and edition started
+		- Add a route when a route is edited but not modified => a new route is created and edition started
+		- Add a route when a route is edited and modified => a new route is created but not edited
+		
+RouteEditor.editRoute ( )
+	- Entry points :
+		- RouteContextMenu (from the map and from theUI)
+		- Launching of the apps from theTravelNotes.addControl ( ) when theConfig.travelEditor.startupRouteEdition is true.
+	- Tests :
+		- Try to edit a route when another route is edited and changed => the command must be disabled in the RouteContextMenu
+		- Edit a route created with the provider XXX when this provider is not available => an error message is displayed
+		- Edit a route when another route is edited and not changed => the current edition is canceled and the selected route edited
+		- Edit a route when no route is edited => the selected route is edited
+		- Points to verify when a route is edited: 
+			- the transit mode and the provider must be adapted to the transit mode and provider defined in the edited route
+			- the itinerary must be displayed in the UI
+			- the route must be showed as edited in the route list (red bullet)
+			- the itinerary points are added to the route on the map
+			
+RouteEditor.removeRoute ( )
+	- Entry points :
+		- RouteContextMenu (from the map and from theUI)
+	- Tests :
+		- Try to remove a route when the route is edited and changed => the command must be disabled in the RouteContextMenu
+		- Remove a route when the route is edited and not changed => the route is removed
+		- remove a route when the route is not edited => the route is removed
+		- Points to verify :
+			- the route list must be updated
+			- the roadbook must be updated
+			- the itinerary must be removed from the UI if the route was edited
+			- the route must be removed from the map
+			- if the route have a profile displayed, the profile must be closed
+			- if the route was chained, distances have to be adapted for all the routes and route notes
+
+RouteEditor.saveGpx ( )
+	- Entry points :
+		- RouteContextMenu (from the map and from theUI)
+	- Tests :
+		- Try the command on a route without starting or ending way point => the command must be disabled in the RouteContextMenu
+		- Start the command => the app propose to save a file
+		- Points to verify :
+			- verify that the gpx file is a valid gpx
+			
+RouteEditor.saveEdition ( )
+	- Entry points : 
+		- RouteContextMenu (from the map and from theUI)
+	- Tests :
+		- Try the command on a not edited route => the command must be disabled in the RouteContextMenu
+		- Save an edited route => the route edition is saved and closed
+		- Points to verify :
+			- the route list must be updated
+			- the roadbook must be updated
+			- the itinerary must be removed from the UI if the route was edited
+			- the itinerary points are removed from the route on the map
+		
+RouteEditor.cancelEdition ( )			
+	- Entry points : 
+		- RouteContextMenu (from the map and from theUI)
+	- Tests :
+		- Try the command on a not edited route => the command must be disabled in the RouteContextMenu
+		- Cancel an edited route => the route edition is cancelled and previous state of the route restored
+		- Points to verify :
+			- the route list must be updated
+			- the roadbook must be updated
+			- the itinerary must be removed from the UI if the route was edited
+			- the itinerary points are removed from the route on the map
+			- if the route have a profile displayed, the profile must be updated
+			- if the route was chained, distances have to be adapted for all the routes and route notes
+			
+RouteEditor.routeProperties ( )
+	- Entry points : 
+		- RouteContextMenu (from the map and from theUI)
+	- Tests :
+		- Try the command on an hidden route => the command must be disabled in the RouteContextMenu
+		- Start the command => the RouteProperties dialog must be displayed
+		- Points to verify :
+			- the route list must be updated ( chain indicator, route name )
+			- the roadbook must be updated ( distances, travel, route name )
+			- the itinerary must be updated ( distances )
+			- the route must be changed on the map ( color, width, linetype )
+		- See also :
+			- tests for the RouteProperties dialog
+		
+RouteEditor.printRouteMap ( )
+	- Entry points : 
+		- RouteContextMenu (from the map and from theUI)
+	-Tests : 
+		- the command is active only when theConfig.printRouteMap.isEnabled is true
+		- Start the command...
+		- See also :
+			- tests for the printRoute page
+			
+RouteEditor.showRoute ( )
+RouteEditor.hideRoute ( )
+	- Entry points :
+		- RouteContextMenu ( from the map and from theUI for hideRoute, from the UI only for showRoute )
+	- Tests :
+		- start the command from the edited route => the command must be disabled in the RouteContextMenu
+		- Start the command from an hidden route => the route must be visible
+		- start the command from a visible and not edited route => the route must be hidden
+		- Points to verify :
+			- an hidden route must be displayed in gray in the route list
+			- an hidden route can be edited from the UI
+			
+RouteEditor.showRoutes ( )
+RouteEditor.hideRoutes ( )
+	- Entry points :
+		- MapContextMenu
+	- Tests :
+		- start the command => all the routes are visible or hidden
+
+Others commands related to routes not in theRouteEditor :
+	- theNoteEditor.newRouteNote ( )		
+	- AllManeuverNotesBuilder ( ).addAllManeuverNotes ( )	
+	- theProfileWindowsManager.showProfile ( )
+	- Zoomer ( ).zoomToRoute ( )
+		
+----------------------------------------------------------------------------------------------------------------
+

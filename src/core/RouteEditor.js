@@ -140,14 +140,6 @@ class RouteEditor {
 	*/
 
 	editRoute ( routeObjId ) {
-		if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
-
-			// not possible to edit - the current edited route is not saved or cancelled
-			theErrorsUI.showError (
-				theTranslator.getText ( 'RouteEditor - Not possible to edit a route without a save or cancel' )
-			);
-			return;
-		}
 
 		// We verify that the provider  for this route is available
 		let initialRoute = theDataSearchEngine.getRoute ( routeObjId );
@@ -233,16 +225,8 @@ class RouteEditor {
 				routeToDeleteObjId === theTravelNotesData.travel.editedRoute.objId
 			)
 		) {
-			if ( ROUTE_EDITION_STATUS.editedChanged === theTravelNotesData.travel.editedRoute.editionStatus ) {
-
-				// cannot remove the route currently edited and changed
-				theErrorsUI.showError ( theTranslator.getText ( 'TravelEditor - Cannot remove an edited route' ) );
-				return;
-			}
-
 			routeToDeleteObjId = theTravelNotesData.editedRouteObjId;
 			this.cancelEdition ( );
-
 		}
 
 		theEventDispatcher.dispatch (

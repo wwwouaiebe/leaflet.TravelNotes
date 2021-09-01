@@ -130,8 +130,8 @@ class RoutesListUI {
 				{
 					draggable : true,
 					className :
-						'TravelNotes-TravelUI-routesListHTMLElement-Item TravelNotes-UI-MoveCursor' +
-						( routesIterator.value.hidden ? ' TravelNotes-TravelUI-routesListHTMLElement-HiddenItem' : '' ),
+						'TravelNotes-TravelUI-RoutesList-Item TravelNotes-UI-MoveCursor' +
+						( routesIterator.value.hidden ? ' TravelNotes-TravelUI-RoutesList-HiddenItem' : '' ),
 					dataset : { ObjId : route.objId },
 					textContent : routeName
 				},
