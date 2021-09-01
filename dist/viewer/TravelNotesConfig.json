@@ -4,13 +4,9 @@
 		"saveToSessionStorage":true
 	},
 	"APIKeysDialog":{
-		"haveUnsecureButtons":false,
+		"haveUnsecureButtons":true,
 		"showAPIKeys":false,
 		"showButton":true
-	},
-	"colorDialog" : {
-		"haveSlider" : true,
-		"initialRed" : 0
 	},
 	"contextMenu":
 	{
