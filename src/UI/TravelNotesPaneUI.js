@@ -44,7 +44,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module TravelNotesPaneUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -59,13 +58,13 @@ import { PANE_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TravelNoteDragStartEventListener
+@class TravelNoteDragStartEL
 @classdesc dragstart event listener for the travel notes
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TravelNoteDragStartEventListener {
+class TravelNoteDragStartEL {
 
 	constructor ( ) {
 	}
@@ -87,13 +86,13 @@ class TravelNoteDragStartEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TravelNoteDragOverEventListener
+@class TravelNoteDragOverEL
 @classdesc dragover event listener for the travel notes
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TravelNoteDragOverEventListener {
+class TravelNoteDragOverEL {
 
 	constructor ( ) {
 	}
@@ -106,13 +105,13 @@ class TravelNoteDragOverEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TravelNoteDropEventListener
+@class TravelNoteDropEL
 @classdesc drop event listener for the travel notes
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TravelNoteDropEventListener {
+class TravelNoteDropEL {
 
 	constructor ( ) {
 	}
@@ -136,13 +135,13 @@ class TravelNoteDropEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TravelNoteContextMenuEventListener
+@class TravelNoteContextMenuEL
 @classdesc contextmenu event listener for the travel notes
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class TravelNoteContextMenuEventListener {
+class TravelNoteContextMenuEL {
 
 	#paneData = null;
 
@@ -187,10 +186,10 @@ class TravelNotesPaneUI extends PaneUI {
 
 	constructor ( paneData, paneControl ) {
 		super ( paneData, paneControl );
-		this.#eventListeners.onDragStart = new TravelNoteDragStartEventListener ( );
-		this.#eventListeners.onDragOver = new TravelNoteDragOverEventListener ( );
-		this.#eventListeners.onDrop = new TravelNoteDropEventListener ( );
-		this.#eventListeners.onContextMenu = new TravelNoteContextMenuEventListener ( paneData );
+		this.#eventListeners.onDragStart = new TravelNoteDragStartEL ( );
+		this.#eventListeners.onDragOver = new TravelNoteDragOverEL ( );
+		this.#eventListeners.onDrop = new TravelNoteDropEL ( );
+		this.#eventListeners.onContextMenu = new TravelNoteContextMenuEL ( paneData );
 	}
 
 	/**

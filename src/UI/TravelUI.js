@@ -63,7 +63,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module TravelUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -80,13 +79,13 @@ import RoutesListUI from '../UI/RoutesListUI.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ChangeTravelNameInputEventListener
+@class TravelNameChangeEL
 @classdesc change event listener for the TravelName input
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ChangeTravelNameInputEventListener {
+class TravelNameChangeEL {
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -102,13 +101,13 @@ class ChangeTravelNameInputEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickExpandButtonEventListener
+@class ExpandButtonClickEL
 @classdesc click event listener for the ExpandRoutes button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickExpandButtonEventListener {
+class ExpandButtonClickEL {
 
 	#routesListUI = null;
 	constructor ( routesListUI ) {
@@ -133,13 +132,13 @@ class ClickExpandButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickAddRouteButtonEventListener
+@class AddRouteButtonClickEL
 @classdesc click event listener for the addRoute button
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickAddRouteButtonEventListener {
+class AddRouteButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -193,7 +192,7 @@ class TravelUI {
 			},
 			travelNameDiv
 		);
-		this.#travelNameInput.addEventListener ( 'change', new ChangeTravelNameInputEventListener ( ), false );
+		this.#travelNameInput.addEventListener ( 'change', new TravelNameChangeEL ( ), false );
 	}
 
 	/**
@@ -211,7 +210,7 @@ class TravelUI {
 			},
 			this.#routesHeaderDiv
 		)
-			.addEventListener ( 'click', new ClickAddRouteButtonEventListener ( ), false );
+			.addEventListener ( 'click', new AddRouteButtonClickEL ( ), false );
 	}
 
 	/**
@@ -256,7 +255,7 @@ class TravelUI {
 		this.#routesListUI = new RoutesListUI ( uiMainDiv );
 		this.#expandRoutesButton.addEventListener (
 			'click',
-			new ClickExpandButtonEventListener ( this.#routesListUI ),
+			new ExpandButtonClickEL ( this.#routesListUI ),
 			false
 		);
 	}

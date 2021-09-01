@@ -51,7 +51,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module PanesManagerUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -62,14 +61,13 @@ import { MOUSE_WHEEL_FACTORS, PANE_ID } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class PaneButtonClickEventListener
+@class PaneButtonClickEL
 @classdesc click event listener for the mane buttons
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class PaneButtonClickEventListener {
+class PaneButtonClickEL {
 
 	#paneManagerUI = null;
 
@@ -85,14 +83,13 @@ class PaneButtonClickEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class PaneDataDivWheelEventListener
+@class PaneDataDivWheelEL
 @classdesc wheel event listeners for the PaneDataDiv
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class PaneDataDivWheelEventListener {
+class PaneDataDivWheelEL {
 
 	constructor ( ) {
 	}
@@ -161,7 +158,7 @@ class PanesManagerUI {
 			},
 			uiMainDiv
 		);
-		this.#paneData.addEventListener ( 'wheel', new PaneDataDivWheelEventListener ( ) );
+		this.#paneData.addEventListener ( 'wheel', new PaneDataDivWheelEL ( ) );
 	}
 
 	/**
@@ -180,7 +177,7 @@ class PanesManagerUI {
 				dataset : { PaneId : pane.getPaneId ( ) }
 			},
 			this.#headerDiv
-		).addEventListener ( 'click', new PaneButtonClickEventListener ( this ) );
+		).addEventListener ( 'click', new PaneButtonClickEL ( this ) );
 	}
 
 	/**

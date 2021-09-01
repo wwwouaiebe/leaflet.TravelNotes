@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 		'src/AttributionsUI/AttributionsUI.css', 'src/ErrorsUI/ErrorsUI.css',
 		'src/UI/ItineraryPaneUI.css', 'src/mapLayersToolbarUI/MapLayersToolbarUI.css', 'src/mouseUI/MouseUI.css', 'src/UI/OsmSearchPaneUI.css', 'src/UI/PanesManagerUI.css', 
 		'src/UI/ProvidersToolbarUI.css', 'src/UI/TravelNotesPaneUI.css', 'src/UI/TravelNotesToolbarUI.css', 'src/UI/TravelUI.css', 'src/UI/RoutesListUI.css',
-		'src/UI/UI.css', 'src/UI/WaitUI.css',
+		'src/UI/UI.css', 'src/waitUI/WaitUI.css',
 		'src/css/Hidden.css' // must always be the last css
 	];
 	let travelNotesViewerCss = [ 

@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RoutesListUI
+@module TravelUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -47,11 +47,11 @@ Tests ...
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import {
-	RouteDragStartEventListener,
-	RouteDropEventListener,
-	RouteContextMenuEventListener,
-	RoutesListDragOverEventListener,
-	RoutesListWheelEventListener
+	RouteDragStartEL,
+	RouteDropEL,
+	RouteContextMenuEL,
+	RoutesListDragOverEL,
+	RoutesListWheelEL
 } from '../UI/RoutesListUIEventListeners.js';
 
 /**
@@ -76,15 +76,15 @@ class RoutesListUI {
 	Event listeners
 	*/
 
-	#routeContextMenuEventListener = new RouteContextMenuEventListener ( );
-	#routeDropEventListener = new RouteDropEventListener ( );
-	#routeDragStartEventListener = new RouteDragStartEventListener ( );
+	#routeContextMenuEventListener = new RouteContextMenuEL ( );
+	#routeDropEventListener = new RouteDropEL ( );
+	#routeDragStartEventListener = new RouteDragStartEL ( );
 
 	constructor ( UIMainHTMLElement ) {
 		Object.seal ( this );
 		this.#routesListHTMLElement = theHTMLElementsFactory.create ( 'div', null, UIMainHTMLElement );
-		this.#routesListHTMLElement.addEventListener ( 'dragover', new RoutesListDragOverEventListener ( ) );
-		this.#routesListHTMLElement.addEventListener ( 'wheel', new RoutesListWheelEventListener ( ) );
+		this.#routesListHTMLElement.addEventListener ( 'dragover', new RoutesListDragOverEL ( ) );
+		this.#routesListHTMLElement.addEventListener ( 'wheel', new RoutesListWheelEL ( ) );
 	}
 
 	/*

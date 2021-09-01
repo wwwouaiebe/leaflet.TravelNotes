@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ItineraryDataUI
+@module ItineraryPaneUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -54,14 +54,13 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ContextMenuManeuverEventListener
+@class ManeuverContextMenuEL
 @classdesc contextmenu event listener for the maneuvers
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ContextMenuManeuverEventListener {
+class ManeuverContextMenuEL {
 
 	#paneData = null;
 
@@ -84,14 +83,13 @@ class ContextMenuManeuverEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ContextMenuNoteEventListener
+@class NoteContextMenuEL
 @classdesc contextmenu event listener for the notes
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ContextMenuNoteEventListener {
+class NoteContextMenuEL {
 
 	#paneData = null;
 
@@ -114,14 +112,13 @@ class ContextMenuNoteEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterManeuverEventListener
+@class ManeuverMouseEnterEL
 @classdesc mouseenter event listener for maneuvers
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterManeuverEventListener {
+class ManeuverMouseEnterEL {
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		theEventDispatcher.dispatch (
@@ -142,14 +139,13 @@ class MouseEnterManeuverEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterNoteEventListener
+@class NoteMouseEnterEL
 @classdesc mouseenter event listener for notes
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterNoteEventListener {
+class NoteMouseEnterEL {
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -169,14 +165,13 @@ class MouseEnterNoteEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseleaveNoteOrManeuverEventListener
+@class NoteOrManeuverMouseLeaveEL
 @classdesc mouseleave event listener notes and maneuvers
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseleaveNoteOrManeuverEventListener {
+class NoteOrManeuverMouseLeaveEL {
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -238,11 +233,11 @@ class ItineraryDataUI {
 
 	constructor ( paneData ) {
 		this.#paneData = paneData;
-		this.#eventListeners.onContextMenuManeuver = new ContextMenuManeuverEventListener ( this.#paneData );
-		this.#eventListeners.onContextMenuNote = new ContextMenuNoteEventListener ( this.#paneData );
-		this.#eventListeners.onMouseEnterManeuver = new MouseEnterManeuverEventListener ( );
-		this.#eventListeners.onMouseEnterNote = new MouseEnterNoteEventListener ( );
-		this.#eventListeners.onMouseLeave = new MouseleaveNoteOrManeuverEventListener ( );
+		this.#eventListeners.onContextMenuManeuver = new ManeuverContextMenuEL ( this.#paneData );
+		this.#eventListeners.onContextMenuNote = new NoteContextMenuEL ( this.#paneData );
+		this.#eventListeners.onMouseEnterManeuver = new ManeuverMouseEnterEL ( );
+		this.#eventListeners.onMouseEnterNote = new NoteMouseEnterEL ( );
+		this.#eventListeners.onMouseLeave = new NoteOrManeuverMouseLeaveEL ( );
 	}
 
 	/**

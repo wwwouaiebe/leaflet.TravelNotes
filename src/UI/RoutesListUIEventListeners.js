@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module RoutesListUIEventListeners
+@module TravelUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -52,13 +52,13 @@ import { MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RoutesListDragOverEventListener
+@class RoutesListDragOverEL
 @classdesc dragover event listener for the RoutesList based on the EventListener API.
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RoutesListDragOverEventListener {
+class RoutesListDragOverEL {
 
 	constructor ( ) {
 	}
@@ -75,13 +75,13 @@ class RoutesListDragOverEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RouteDragStartEventListener
+@class RouteDragStartEL
 @classdesc dragstart event listener for the routes based on the EventListener API.
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteDragStartEventListener {
+class RouteDragStartEL {
 
 	constructor ( ) {
 	}
@@ -107,13 +107,13 @@ class RouteDragStartEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RouteDropEventListener
+@class RouteDropEL
 @classdesc drop event listener for the routes based on the EventListener API.
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteDropEventListener {
+class RouteDropEL {
 
 	constructor ( ) {
 	}
@@ -137,13 +137,13 @@ class RouteDropEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RoutesListWheelEventListener
+@class RoutesListWheelEL
 @classdesc wheel event listener for the RoutesList based on the EventListener API.
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RoutesListWheelEventListener {
+class RoutesListWheelEL {
 
 	constructor ( ) {
 	}
@@ -162,13 +162,13 @@ class RoutesListWheelEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RouteContextMenuEventListener
+@class RouteContextMenuEL
 @classdesc contextmenu event listener for the routes based on the EventListener API.
-@private
+
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RouteContextMenuEventListener {
+class RouteContextMenuEL {
 
 	constructor ( ) {
 	}
@@ -181,11 +181,11 @@ class RouteContextMenuEventListener {
 }
 
 export {
-	RouteDragStartEventListener,
-	RouteDropEventListener,
-	RouteContextMenuEventListener,
-	RoutesListDragOverEventListener,
-	RoutesListWheelEventListener
+	RouteDragStartEL,
+	RouteDropEL,
+	RouteContextMenuEL,
+	RoutesListDragOverEL,
+	RoutesListWheelEL
 };
 
 /*

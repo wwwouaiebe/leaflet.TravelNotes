@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module ItineraryControlUI
+@module ItineraryPaneUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -53,14 +53,13 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class InputNotesCheckboxEventListener
+@class NotesCheckboxInputEL
 @classdesc input event listener for the show notes checkbox
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class InputNotesCheckboxEventListener {
+class NotesCheckboxInputEL {
 
 	#itineraryDataUI = null;
 
@@ -77,14 +76,13 @@ class InputNotesCheckboxEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class InputManeuverCheckboxEventListener
+@class ManeuverCheckboxInputEL
 @classdesc input event listener for the show maneuver checkbox
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class InputManeuverCheckboxEventListener {
+class ManeuverCheckboxInputEL {
 
 	#itineraryDataUI = null;
 
@@ -148,8 +146,8 @@ class ItineraryControlUI {
 
 	constructor ( paneControl, itineraryDataUI ) {
 		this.#paneControl = paneControl;
-		this.#eventListeners.onInputNotesCheckbox = new InputNotesCheckboxEventListener ( itineraryDataUI );
-		this.#eventListeners.onInputManeuverCheckbox = new InputManeuverCheckboxEventListener ( itineraryDataUI );
+		this.#eventListeners.onInputNotesCheckbox = new NotesCheckboxInputEL ( itineraryDataUI );
+		this.#eventListeners.onInputManeuverCheckbox = new ManeuverCheckboxInputEL ( itineraryDataUI );
 		this.#itineraryDataUI = itineraryDataUI;
 	}
 

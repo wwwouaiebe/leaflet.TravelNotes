@@ -90,14 +90,14 @@ class ClickSearchButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickExpandButtonEventListener
+@class ExpandButtonClickEL
 @classdesc click event listener for the expand tree button
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickExpandButtonEventListener {
+class ExpandButtonClickEL {
 
 	#osmSearchTreeUI = null;
 
@@ -201,7 +201,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', new ClickExpandButtonEventListener ( osmSearchTreeUI ), false );
+			.addEventListener ( 'click', new ExpandButtonClickEL ( osmSearchTreeUI ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
