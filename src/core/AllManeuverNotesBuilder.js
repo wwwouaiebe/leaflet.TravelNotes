@@ -43,7 +43,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import WaitUI from '../UI/WaitUI.js';
+import WaitUI from '../waitUI/WaitUI.js';
 import MapIconFromOsmFactory from '../coreMapIcon/MapIconFromOsmFactory.js';
 import Note from '../data/Note.js';
 import theGeometry from '../util/Geometry.js';

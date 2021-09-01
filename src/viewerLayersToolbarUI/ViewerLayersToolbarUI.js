@@ -43,7 +43,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module ViewerLayersToolbarUI
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -58,15 +57,14 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickMapLayerButtonEventListener
+@class MapLayerButtonClickEL
 @classdesc Click event listener for the map layer buttons
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickMapLayerButtonEventListener {
+class MapLayerButtonClickEL {
 
 	#mapLayers = null;
 
@@ -85,15 +83,14 @@ class ClickMapLayerButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickGeoLocationButtonEventListener
+@class GeoLocationButtonClickEL
 @classdesc Click event listener for the geo location button
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickGeoLocationButtonEventListener {
+class GeoLocationButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -104,15 +101,14 @@ class ClickGeoLocationButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickZoomButtonEventListener
+@class ZoomButtonClickEL
 @classdesc Click event listener for the zoom to travel button
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickZoomButtonEventListener {
+class ZoomButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -180,7 +176,7 @@ class ViewerLayersToolbarUI {
 				style : 'color:black;background-color:white'
 			},
 			this.#mapLayersToolbar
-		).addEventListener ( 'click', new ClickGeoLocationButtonEventListener ( ), false );
+		).addEventListener ( 'click', new GeoLocationButtonClickEL ( ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -191,9 +187,9 @@ class ViewerLayersToolbarUI {
 				style : 'color:black;background-color:white'
 			},
 			this.#mapLayersToolbar
-		).addEventListener ( 'click', new ClickZoomButtonEventListener ( ), false );
+		).addEventListener ( 'click', new ZoomButtonClickEL ( ), false );
 
-		let clickMapLayerButtonEventListener = new ClickMapLayerButtonEventListener ( this.#mapLayers );
+		let clickMapLayerButtonEventListener = new MapLayerButtonClickEL ( this.#mapLayers );
 		for ( let mapLayerCounter = 0; mapLayerCounter < this.#mapLayers.length; mapLayerCounter ++ ) {
 			let mapLayer = this.#mapLayers [ mapLayerCounter ];
 			theHTMLElementsFactory.create (

@@ -69,14 +69,14 @@ const OUR_MIN_BUTTONS_VISIBLE = 3;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ButtonsContainerWheelEV
+@class ButtonsContainerWheelEL
 @classdesc Wheel event listeners on the map layer buttons. Scroll the buttons
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ButtonsContainerWheelEV {
+class ButtonsContainerWheelEL {
 
 	#mapLayersToolbarUI = null;
 
@@ -276,7 +276,7 @@ class MapLayersToolbarUI {
 	}
 
 	constructor ( ) {
-		this.#onWheelButtonsEventListener = new ButtonsContainerWheelEV ( this, this.#wheelEventData );
+		this.#onWheelButtonsEventListener = new ButtonsContainerWheelEL ( this, this.#wheelEventData );
 		Object.freeze ( this );
 	}
 

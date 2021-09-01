@@ -49,14 +49,14 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LinkMouseEnterEV
+@class LinkMouseEnterEL
 @classdesc mouse enter event listener for the link
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LinkMouseEnterEV {
+class LinkMouseEnterEL {
 
 	/**
 	Mouse enter event listener. Inverse the button color
@@ -72,14 +72,14 @@ class LinkMouseEnterEV {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LinkMouseLeaveEV
+@class LinkMouseLeaveEL
 @classdesc mouse leave event listener for the link
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LinkMouseLeaveEV {
+class LinkMouseLeaveEL {
 
 	/**
 	Mouse leave event listener. Inverse the button color
@@ -139,8 +139,8 @@ class MapLayersToolbarLink {
 			parentNode
 		);
 		theHTMLElementsFactory.create ( 'a', linkProperties, this.#linkButton );
-		this.#eventListeners.mouseEnter = new LinkMouseEnterEV ( );
-		this.#eventListeners.mouseLeave = new LinkMouseLeaveEV ( );
+		this.#eventListeners.mouseEnter = new LinkMouseEnterEL ( );
+		this.#eventListeners.mouseLeave = new LinkMouseLeaveEL ( );
 		this.#linkButton.addEventListener ( 'mouseenter', this.#eventListeners.mouseEnter, false );
 		this.#linkButton.addEventListener ( 'mouseleave', this.#eventListeners.mouseLeave, false );
 	}

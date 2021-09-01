@@ -52,14 +52,14 @@ import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LayerButtonMouseEnterEV
+@class LayerButtonMouseEnterEL
 @classdesc mouse enter event listener for the button
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LayerButtonMouseEnterEV {
+class LayerButtonMouseEnterEL {
 
 	#mapLayer = null;
 
@@ -81,14 +81,14 @@ class LayerButtonMouseEnterEV {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LayerButtonMouseLeaveEV
+@class LayerButtonMouseLeaveEL
 @classdesc mouse leave event listener for the button
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LayerButtonMouseLeaveEV {
+class LayerButtonMouseLeaveEL {
 
 	#mapLayer = null;
 
@@ -110,14 +110,14 @@ class LayerButtonMouseLeaveEV {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class LayerButtonClickEV
+@class LayerButtonClickEL
 @classdesc click event listener for the button
 @hideconstructor
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class LayerButtonClickEV {
+class LayerButtonClickEL {
 
 	#mapLayer = null;
 
@@ -188,9 +188,9 @@ class MapLayersToolbarButton {
 			parentNode
 		);
 
-		this.#eventListeners.mouseEnter = new LayerButtonMouseEnterEV ( mapLayer );
-		this.#eventListeners.mouseLeave = new LayerButtonMouseLeaveEV ( mapLayer );
-		this.#eventListeners.click = new LayerButtonClickEV ( mapLayer );
+		this.#eventListeners.mouseEnter = new LayerButtonMouseEnterEL ( mapLayer );
+		this.#eventListeners.mouseLeave = new LayerButtonMouseLeaveEL ( mapLayer );
+		this.#eventListeners.click = new LayerButtonClickEL ( mapLayer );
 
 		this.#buttonHTMLElement.addEventListener ( 'mouseenter', this.#eventListeners.mouseEnter, false );
 		this.#buttonHTMLElement.addEventListener ( 'mouseleave', this.#eventListeners.mouseLeave, false );

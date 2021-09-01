@@ -73,7 +73,7 @@ import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theGeometry from '../util/Geometry.js';
 import theConfig from '../data/Config.js';
-import WaitUI from '../UI/WaitUI.js';
+import WaitUI from '../waitUI/WaitUI.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import GeoCoder from '../core/GeoCoder.js';
