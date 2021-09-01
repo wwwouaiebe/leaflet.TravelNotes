@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 		'src/css/Map.css', 
 		'src/css/Notes.css', 'src/css/NotesIcons.css', 'src/css/NotesForMap.css', 
 		'src/css/RoutesForMap.css',
-		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/UI/ViewerLayersToolbarUI.css'
+		'src/UI/AttributionsUI.css', 'src/UI/ErrorsUI.css','src/viewerLayersToolbarUI/ViewerLayersToolbarUI.css'
 	];
 	let travelNotesRoadbookCss = [ 
 		'src/css/TravelForRoadbook.css',
