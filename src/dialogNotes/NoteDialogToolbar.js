@@ -27,7 +27,7 @@ Changes:
 		- Issue ♯144 : Add an error message when a bad json file is loaded from the noteDialog
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210730
+Doc reviewed 20210901
 Tests ...
 */
 

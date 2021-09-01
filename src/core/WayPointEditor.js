@@ -35,7 +35,7 @@ Changes:
 		- Issue ♯170 : The apps crash when renaming a waypoint and then saving the route before the end of the renaming...
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed 20210715
+Doc reviewed 20210901
 Tests ...
 */
 

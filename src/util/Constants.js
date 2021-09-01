@@ -24,7 +24,7 @@ Changes:
 		- Issue ♯138 : Protect the app - control html entries done by user.
 	-v2.2.0:
 		- Issue ♯129 : Add an indicator when the travel is modified and not saved
-Doc reviewed 20200825
+Doc reviewed 20210901
 Tests ...
 */
 

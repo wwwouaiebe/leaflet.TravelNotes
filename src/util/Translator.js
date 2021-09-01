@@ -23,7 +23,7 @@ Changes:
 		- Issue ♯137 : Remove html tags from json files
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
-Doc reviewed ...
+Doc reviewed 20210901
 Tests ...
 */
 
