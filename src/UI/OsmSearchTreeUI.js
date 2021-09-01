@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchTreeUI
+@module OsmSearchPaneUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -51,14 +51,13 @@ import { ZERO, MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ChangeCheckboxEventListener
+@class TreeCheckboxChangeEL
 @classdesc change event listener for the tree checkboxes
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ChangeCheckboxEventListener {
+class TreeCheckboxChangeEL {
 
 	#osmSearchTreeUI = null;
 
@@ -80,14 +79,13 @@ class ChangeCheckboxEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class WheelEventListener
+@class TreeWheelEL
 @classdesc wheel event listener
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class WheelEventListener {
+class TreeWheelEL {
 
 	handleEvent ( wheelEvent ) {
 		wheelEvent.stopPropagation ( );
@@ -102,14 +100,13 @@ class WheelEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickArrowEventListener
+@class TreeArrowClickEL
 @classdesc cick event listener for the tree arrows
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickArrowEventListener {
+class TreeArrowClickEL {
 
 	#osmSearchTreeUI = null;
 
@@ -215,8 +212,8 @@ class OsmSearchTreeUI {
 
 	constructor ( ) {
 
-		this.#eventListeners.onChangeCheckbox = new ChangeCheckboxEventListener ( this );
-		this.#eventListeners.onClickArrow = new ClickArrowEventListener ( this );
+		this.#eventListeners.onChangeCheckbox = new TreeCheckboxChangeEL ( this );
+		this.#eventListeners.onClickArrow = new TreeArrowClickEL ( this );
 
 		this.#treeHTMLElement = theHTMLElementsFactory.create (
 			'div',
@@ -224,7 +221,7 @@ class OsmSearchTreeUI {
 				id : 'TravelNotes-OsmSearchPaneUI-SearchTree'
 			}
 		);
-		this.#treeHTMLElement.addEventListener ( 'wheel', new WheelEventListener ( ), false );
+		this.#treeHTMLElement.addEventListener ( 'wheel', new TreeWheelEL ( ), false );
 
 		theOsmSearchDictionary.dictionary.name = '';
 		this.#addItem ( theOsmSearchDictionary.dictionary );

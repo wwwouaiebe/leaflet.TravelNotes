@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchDataUI
+@module OsmSearchPaneUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -57,14 +57,13 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ContextMenuSearchResultEventListener
+@class SearchResultContextMenuEL
 @classdesc contextmenu event listener for search result
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ContextMenuSearchResultEventListener {
+class SearchResultContextMenuEL {
 
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
@@ -83,14 +82,13 @@ class ContextMenuSearchResultEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseEnterSearchResultEventListener
+@class SearchResultMouseEnterEL
 @classdesc mouseenter event listener for search result
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseEnterSearchResultEventListener {
+class SearchResultMouseEnterEL {
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -110,14 +108,13 @@ class MouseEnterSearchResultEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class MouseLeaveSearchResultEventListener
+@class SearchResultMouseLeaveEL
 @classdesc mouseenter event listener for search result
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class MouseLeaveSearchResultEventListener {
+class SearchResultMouseLeaveEL {
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -339,9 +336,9 @@ class OsmSearchDataUI {
 
 	constructor ( paneData ) {
 		this.#paneData = paneData;
-		this.#eventListeners.onContextMenu = new ContextMenuSearchResultEventListener ( );
-		this.#eventListeners.onMouseEnter = new MouseEnterSearchResultEventListener ( );
-		this.#eventListeners.onMouseLeave = new MouseLeaveSearchResultEventListener ( );
+		this.#eventListeners.onContextMenu = new SearchResultContextMenuEL ( );
+		this.#eventListeners.onMouseEnter = new SearchResultMouseEnterEL ( );
+		this.#eventListeners.onMouseLeave = new SearchResultMouseLeaveEL ( );
 	}
 
 	/**

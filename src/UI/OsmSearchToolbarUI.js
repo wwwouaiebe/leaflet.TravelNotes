@@ -38,7 +38,7 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module OsmSearchToolbarUI
+@module OsmSearchPaneUI
 @private
 
 @------------------------------------------------------------------------------------------------------------------------------
@@ -56,14 +56,13 @@ import { ZERO } from '../util/Constants.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickSearchButtonEventListener
+@class SearchButtonClickEL
 @classdesc click event listener for the search button
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickSearchButtonEventListener {
+class SearchButtonClickEL {
 
 	#osmSearchTreeUI = null;
 	#osmSearchWaitUI = null;
@@ -92,7 +91,6 @@ class ClickSearchButtonEventListener {
 
 @class ExpandButtonClickEL
 @classdesc click event listener for the expand tree button
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -115,14 +113,13 @@ class ExpandButtonClickEL {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickCollapseButtonEventListener
+@class CollapseButtonClickEL
 @classdesc click event listener for the collapse tree button
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickCollapseButtonEventListener {
+class CollapseButtonClickEL {
 
 	#osmSearchTreeUI = null;
 
@@ -140,14 +137,13 @@ class ClickCollapseButtonEventListener {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class ClickClearButtonEventListener
+@class ClearButtonClickEL
 @classdesc click event listener for the clear tree button
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class ClickClearButtonEventListener {
+class ClearButtonClickEL {
 
 	#osmSearchTreeUI = null;
 
@@ -190,7 +186,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', new ClickSearchButtonEventListener ( osmSearchTreeUI, osmSearchWaitUI ), false );
+			.addEventListener ( 'click', new SearchButtonClickEL ( osmSearchTreeUI, osmSearchWaitUI ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -212,7 +208,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', new ClickCollapseButtonEventListener ( osmSearchTreeUI ), false );
+			.addEventListener ( 'click', new CollapseButtonClickEL ( osmSearchTreeUI ), false );
 
 		theHTMLElementsFactory.create (
 			'div',
@@ -224,7 +220,7 @@ class OsmSearchToolbarUI {
 			},
 			this.#toolbarHTMLElement
 		)
-			.addEventListener ( 'click', new ClickClearButtonEventListener ( osmSearchTreeUI ), false );
+			.addEventListener ( 'click', new ClearButtonClickEL ( osmSearchTreeUI ), false );
 
 	}
 
