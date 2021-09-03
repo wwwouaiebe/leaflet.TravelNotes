@@ -1,3 +1,3 @@
 # data
 
-This folder contains  the data tier classes
+This folder contains  the data layer classes
