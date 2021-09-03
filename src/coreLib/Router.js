@@ -44,10 +44,10 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
-import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
+import theSphericalTrigonometry from '../coreLib/SphericalTrigonometry.js';
 import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theRouteEditor from '../core/RouteEditor.js';

@@ -48,7 +48,7 @@ Tests 20210902
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';

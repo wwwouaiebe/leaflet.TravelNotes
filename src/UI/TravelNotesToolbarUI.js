@@ -55,7 +55,7 @@ import theConfig from '../data/Config.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import { GEOLOCATION_STATUS } from '../util/Constants.js';
 
 /**

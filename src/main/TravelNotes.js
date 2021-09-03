@@ -81,7 +81,7 @@ import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
 import theCurrentVersion from '../data/Version.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
 import theMouseUI from '../mouseUI/MouseUI.js';

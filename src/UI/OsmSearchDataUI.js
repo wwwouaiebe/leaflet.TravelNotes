@@ -49,7 +49,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import OsmSearchContextMenu from '../contextMenus/OsmSearchContextMenu.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import ObjId from '../data/ObjId.js';
 
 import { ZERO } from '../util/Constants.js';

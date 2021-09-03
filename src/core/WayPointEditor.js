@@ -76,8 +76,8 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import WayPointPropertiesDialog from '../dialogs/WayPointPropertiesDialog.js';
 import GeoCoder from '../coreLib/GeoCoder.js';
 import WayPoint from '../data/WayPoint.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
-import theGeometry from '../util/Geometry.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theRouter from '../coreLib/Router.js';
 
 import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';

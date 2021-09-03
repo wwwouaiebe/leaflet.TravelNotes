@@ -65,7 +65,7 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';

@@ -45,7 +45,7 @@ Tests ...
 */
 
 import PasswordDialog from '../dialogPassword/PasswordDialog.js';
-import DataEncryptor from '../util/DataEncryptor.js';
+import DataEncryptor from '../coreLib/DataEncryptor.js';
 import theUtilities from '../util/Utilities.js';
 import APIKeysDialogKeyControl from '../dialogAPIKeys/APIKeysDialogKeyControl.js';
 import { DataEncryptorHandlers, SaveAPIKeysHelper } from '../dialogAPIKeys/APIKeysDialogHelpers.js';

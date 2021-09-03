@@ -81,7 +81,7 @@ import Route from '../data/Route.js';
 import GpxFactory from '../coreLib/GpxFactory.js';
 import RoutePropertiesDialog from '../dialogs/RoutePropertiesDialog.js';
 import PrintRouteMapDialog from '../dialogs/PrintRouteMapDialog.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import RoutePrinter from '../printRoute/RoutePrinter.js';
 

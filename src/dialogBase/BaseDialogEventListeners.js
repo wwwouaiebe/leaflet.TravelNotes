@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
 import { ZERO, ONE, LAT_LNG, DIALOG_DRAG_MARGIN } from '../util/Constants.js';

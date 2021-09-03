@@ -69,7 +69,7 @@ Tests 20210902
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import MapEditorViewer from '../coreMapEditor/MapEditorViewer.js';
 import EditedRouteMouseOverEL from '../coreMapEditor/EditedRouteEventListeners.js';

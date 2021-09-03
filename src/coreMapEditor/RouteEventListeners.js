@@ -46,7 +46,7 @@ Tests 20210902
 
 import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theUtilities from '../util/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import { ZERO } from '../util/Constants.js';

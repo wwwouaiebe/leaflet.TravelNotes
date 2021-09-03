@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 
 import { ICON_DIMENSIONS, DISTANCE, ZERO, ONE, TWO, DEGREES, ICON_POSITION } from '../util/Constants.js';
 

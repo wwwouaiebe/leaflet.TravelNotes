@@ -58,7 +58,7 @@ import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 import theConfig from '../data/Config.js';
 import theTranslator from '../util/Translator.js';
 import PrintViewsFactory from '../printRoute/PrintViewsFactory.js';

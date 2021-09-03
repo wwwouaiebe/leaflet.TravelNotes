@@ -47,11 +47,11 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
-import theGeometry from '../util/Geometry.js';
+import theGeometry from '../coreLib/Geometry.js';
 
 import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
 

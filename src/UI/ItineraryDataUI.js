@@ -48,7 +48,7 @@ import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js
 import theTravelNotesData from '../data/TravelNotesData.js';
 import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 import ManeuverContextMenu from '../contextMenus/ManeuverContextMenu.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import { ZERO } from '../util/Constants.js';
 
 /**

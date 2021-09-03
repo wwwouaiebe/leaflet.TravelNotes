@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
+import theSphericalTrigonometry from '../coreLib/SphericalTrigonometry.js';
 
 import { ZERO, TWO, LAT_LNG, DISTANCE, HTTP_STATUS_OK, OSM_COUNTRY_ADMIN_LEVEL } from '../util/Constants.js';
 

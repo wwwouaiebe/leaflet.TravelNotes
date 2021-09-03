@@ -48,7 +48,7 @@ import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theOsmSearchEngine from '../coreOsmSearch/OsmSearchEngine.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theTranslator from '../util/Translator.js';
-import theEventDispatcher from '../util/EventDispatcher.js';
+import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
 import { ZERO } from '../util/Constants.js';

@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
+import theSphericalTrigonometry from '../coreLib/SphericalTrigonometry.js';
 import theTranslator from '../util/Translator.js';
 
 import { DISTANCE, INVALID_OBJ_ID, ZERO, ONE, TWO, NOT_FOUND, ICON_POSITION } from '../util/Constants.js';
