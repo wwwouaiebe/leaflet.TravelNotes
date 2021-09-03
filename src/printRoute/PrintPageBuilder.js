@@ -50,7 +50,7 @@ import theConfig from '../data/Config.js';
 import theTranslator from '../util/Translator.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 import { ZERO, TWO } from '../util/Constants.js';
 

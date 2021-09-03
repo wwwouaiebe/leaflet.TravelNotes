@@ -72,7 +72,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import TravelToolbarUI from '../UI/TravelToolbarUI.js';
 import RoutesListUI from '../UI/RoutesListUI.js';
 

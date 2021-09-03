@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import ObjId from '../data/ObjId.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 

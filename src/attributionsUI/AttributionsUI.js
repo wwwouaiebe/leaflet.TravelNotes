@@ -51,7 +51,7 @@ Tests ...
 */
 
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

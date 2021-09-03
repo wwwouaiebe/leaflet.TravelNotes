@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 import { ZERO, ONE, ICON_DIMENSIONS } from '../util/Constants.js';
 

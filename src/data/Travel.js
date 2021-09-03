@@ -62,7 +62,7 @@ import ObjType from '../data/ObjType.js';
 import Collection from '../data/Collection.js';
 import Route from '../data/Route.js';
 import Note from '../data/Note.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import { INVALID_OBJ_ID } from '../util/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Travel' );

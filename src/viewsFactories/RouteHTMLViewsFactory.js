@@ -47,7 +47,7 @@ Tests ...
 import ObjId from '../data/ObjId.js';
 import ProfileFactory from '../coreLib/ProfileFactory.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import theTranslator from '../util/Translator.js';
 import theUtilities from '../util/Utilities.js';
 import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';

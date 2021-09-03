@@ -67,7 +67,7 @@ import Collection from '../data/Collection.js';
 import WayPoint from '../data/WayPoint.js';
 import Itinerary from '../data/Itinerary.js';
 import Note from '../data/Note.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import { ROUTE_EDITION_STATUS, DISTANCE, ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Route' );

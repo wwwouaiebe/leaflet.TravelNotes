@@ -61,7 +61,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

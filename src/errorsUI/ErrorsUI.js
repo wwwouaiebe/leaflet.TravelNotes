@@ -52,7 +52,7 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theHTMLSanitizer from '../util/HTMLSanitizer.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import theTranslator from '../util/Translator.js';
 
 /**
