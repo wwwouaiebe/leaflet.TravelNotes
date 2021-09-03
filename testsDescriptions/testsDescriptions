@@ -445,7 +445,7 @@ Commands lauched by event listeners on the map :
 			- the routing start when a start point and an end point are linked to the route
 		
 	- Entry point :
-		- theTravelNotes.addControl ( ) 
+		- Launching of the apps from theTravelNotes.addControl ( )
 	- Tests :
 		- right click on the map => the MapContextMenu is displayed
 
@@ -519,10 +519,34 @@ Zoomer ( ).zoomToLatLng ( )
 
 ----------------------------------------------------------------------------------------------------------------
 
+APIKeysManager
+--------------
 
 
+APIKeysManager.setKeysFromServerFile ( )
+	- Entry point :
+		- Launching of the apps from theTravelNotes.addControl ( ) when an APIKeys file is found
+	- Tests :
+		- Start the apps
+		- Points to verify :
+			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
+			
+APIKeysManager.setKeysFromDialog ( )
+	- Entry point : ApiKeysButtonClickEL
+		- Launching of the apps from theTravelNotes.addControl ( ) when an APIKeys file is found
+	- Tests :
+		- Start the command => the APIKeysDialog is displayed => APIKeys are adapted
+		- Points to verify :
+			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
 
+APIKeysManager.addProvider ( )
 
+	- Entry point : 
+		- theTravelNotes.addProvider method called by plugins
+	- Tests :
+		- Start the apps with plugins installed
+		- Points to verify :
+			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
 
 
 
