@@ -1,45 +1,199 @@
-TravelEditor
-------------
-
-TravelEditor.saveAsTravel ( )
-	- Entry points :
-		- TravelToolbarUI -> SaveAsButtonClickEL
+AllManeuverNotesBuilder
+-----------------------
+		
+AllManeuverNotesBuilder ( ).addAllManeuverNotes ( )
+	- Entry point :
+		- RouteContextMenu
 	- Tests :
-		- Start the command => A dialog box is displayed => Select your choices + ok => the travel is saved with some data removed
-		- Points to verify :
-			- verify that the correct data are removed or saved
+		- Start the command => a confirmation dialog box is displayed => Maneuver notes are added
 
-TravelEditor.saveTravel ( )
-	- Entry points :
-		- TravelToolbarUI -> SaveButtonClickEL
-		- Tests :
-			- Start the command => the app propose to save a file
+----------------------------------------------------------------------------------------------------------------
+
+APIKeysManager
+--------------
+
+APIKeysManager.setKeysFromServerFile ( )
+	- Entry point :
+		- Launching of the apps from theTravelNotes.addControl ( ) when an APIKeys file is found
+	- Tests :
+		- Start the apps
+		- Points to verify :
+			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
 			
-TravelEditor.newTravel ( )
-	- Entry points : 
-		- TravelToolbarUI -> CancelButtonClickEL
-		- Tests :
-			- Start the command => A confirmation dialog box is displayed => The current travel is removed
-			- Points to verify:
-				- The roadbook is empty
-				- The route list is cleaned
-				- The itinirerary is empty
-				- The map is empty
-				- The travel name is empty and the page title updated.
-
-TravelEditor.routeDropped ( )
-	Entry points :
-		- Drag and drop a route in the route list UI
+APIKeysManager.setKeysFromDialog ( )
+	- Entry point : 
+		- TravelNotesToolbarUI -> ApiKeysButtonClickEL
 	- Tests :
-		- Start a drag and drop of a route => the routes are reordered
+		- Start the command => the APIKeysDialog is displayed => APIKeys are adapted
 		- Points to verify :
-			- the route list is updated
-			- the roadbook is updated
-			- the distances are updated
+			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected when the dialog is closed
 
-Others commands related to travel not in theTravelEditor :
-	- FileLoader ( ).openLocalFile ( )
-	- FileLoader ( ).mergeLocalFile ( )
+APIKeysManager.addProvider ( )
+	- Entry point : 
+		- theTravelNotes.addProvider method called by plugins
+	- Tests :
+		- Start the apps with plugins installed
+		- Points to verify :
+			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
+
+----------------------------------------------------------------------------------------------------------------
+
+FileLoader
+----------
+
+FileLoader ( ).openLocalFile ( )
+	- Entry point : 
+		- TravelToolbarUI -> OpenButtonClickEL
+	- Tests :
+		- Start the command => A file selector is displayed => the file is opened
+
+FileLoader ( ).mergeLocalFile ( )
+	- Entry point : 
+		- TravelToolbarUI -> ImportButtonClickEL
+	- Tests :
+		- Start the command => A file selector is displayed => the file is merged in the current file
+
+----------------------------------------------------------------------------------------------------------------
+
+GeoLocator
+----------
+
+theGeoLocator.switch ( )
+	- Entry point :
+		- TravelNotestoolbarUI -> GeoLocatorButtonClickEL
+	- Tests : 
+		- Start the command => the current position is show or hidden on the map
+		- Points to verify :
+			- test and refuse authorisation
+
+----------------------------------------------------------------------------------------------------------------
+
+NoteEditor
+----------
+
+NoteEditor.newTravelNote ( )
+	Entry points : 
+		- MapContextMenu
+	- Tests :
+		- Start the command => the NoteDialog is displayed => a travel note is added
+		- Points to verify :
+			- the note is added to the map
+			- the note is added to the travel notes pane
+			- the roadbook is updated
+
+NoteEditor.newRouteNote ( )
+	Entry points :
+		- RouteContextMenu ( from the map only )
+		- ProfileContextMenu
+	- Tests :
+		- Start the command => the NoteDialog is displayed => a route note is added
+		- Points to verify :
+			- the note is added to the map
+			- the note is added to the itinerary pane
+			- the note distance is correct and the notes ordered by distance
+			- the roadbook is updated
+
+NoteEditor.newSearchNote ( )
+	Entry points :
+		- OsmSearchContextMenu ( Add a travel note )
+		- OsmSearchContextMenu ( Add a route note )
+	- Tests :
+		- Start the command => the NoteDialog can be displayed => a route note or a travel note is added
+		- Points to verify :
+			- the note is added to the map
+			- the note is added to the itinerary pane ( for a route note )
+			- the note distance is correct and the notes ordered by distance
+			- the roadbook is updated
+			- the note is added to the travel notes pane ( for a travel note )
+			- the note tooltip and popup are correct
+
+NoteEditor.changeOsmSearchNoteDialog ( )
+	Entry points :
+		- OsmSearchContextMenu 
+	- Tests :
+		- Start the command => Nothing occurs
+		- Points to verify :
+			- the NoteDialog is displayed or not displayed, depending of the command, each time a search note is created
+
+NoteEditor.editNote ( )
+	Entry points :
+		- NoteContextMenu ( from a note on the map, a note in the itinerary pane or a note in the travel notes pane )
+	- Tests :
+		- Start the command => the NoteDialog is displayed => the note is updated
+		- Points to verify :
+			- the node is modified in the roadbook
+			- the note is modified in the itinerary pane ( for route note )
+			- the note is modified in the travel notes pane ( for travel notes )
+			- the note is modified on the map
+			- the note tooltip on the map is eventually modified
+			- the note popup on the map is modified
+
+NoteEditor.removeNote ( )
+	Entry points :
+		- NoteContextMenu ( from a note on the map, a note in the itinerary pane or a note in the travel notes pane )
+	- Tests :
+		- Start the command => the note is removed
+		- Points to verify :
+			- the note is removed from the roadbook
+			- the note is removed from the itinerary pane ( for route note )
+			- the note is removed from the travel notes pane ( for travel notes )
+			- the note is removed from the map
+			- the distances are modified
+
+NoteEditor.hideNotes ( )
+	Entry points :
+		- MapContextMenu
+	- Tests :
+		- Start the command => all the notes are hidden on the map only
+
+NoteEditor.showNotes ( )
+	Entry points :
+		- MapContextMenu
+	- Tests :
+		- Start the command => all the notes are visible on the map, except the route notes linked to an hidden route
+
+NoteEditor.attachNoteToRoute ( )
+	Entry points :
+		- NoteContextMenu ( from the map and the UI - the command is active only when no route is edited and only for travel notes )
+	- Tests :
+		- Start the command => the travel note is transformed into a route note
+		- Points to verify :
+			- the roadbook is updated
+			- the travel notes pane is updated
+			- distances are mdified
+
+NoteEditor.detachNoteFromRoute ( )
+	Entry points :
+		- NoteContextMenu ( from the map and the UI - the command is active only when no route is edited and only for route notes )
+	- Tests :
+		- Start
+		- Points to verify :
+			- the roadbook is updated
+			- the travel notes pane is updated
+			- distances are mdified
+
+NoteEditor.travelNoteDropped ( )
+	- Entry points :
+		- Drag and drop a note in the travel notes pane
+	- Tests :
+		- Start a drag and drop of a travel note => the travel notes are reordered
+		- Points to verify :
+			- the travel notes pane is updated
+			- the roadbook is updated
+
+Others commands related to notes not in theNoteEditor :
+	- Zoomer ( ).zoomToNote ( )
+	
+----------------------------------------------------------------------------------------------------------------
+
+ProfileWindowsManager
+---------------------
+
+theProfileWindowsManager.showProfile ( )
+	- Entry points :
+		- RouteContextMenu
+	- Tests :
+		- Start the command => the profile is show.
 		
 ----------------------------------------------------------------------------------------------------------------
 
@@ -171,121 +325,59 @@ Others commands related to routes not in theRouteEditor :
 		
 ----------------------------------------------------------------------------------------------------------------
 
-NoteEditor
-----------
+TravelEditor
+------------
 
-NoteEditor.newTravelNote ( )
-	Entry points : 
-		- MapContextMenu
+TravelEditor.saveAsTravel ( )
+	- Entry points :
+		- TravelToolbarUI -> SaveAsButtonClickEL
 	- Tests :
-		- Start the command => the NoteDialog is displayed => a travel note is added
+		- Start the command => A dialog box is displayed => Select your choices + ok => the travel is saved with some data removed
 		- Points to verify :
-			- the note is added to the map
-			- the note is added to the travel notes pane
+			- verify that the correct data are removed or saved
+
+TravelEditor.saveTravel ( )
+	- Entry points :
+		- TravelToolbarUI -> SaveButtonClickEL
+		- Tests :
+			- Start the command => the app propose to save a file
+			
+TravelEditor.newTravel ( )
+	- Entry points : 
+		- TravelToolbarUI -> CancelButtonClickEL
+		- Tests :
+			- Start the command => A confirmation dialog box is displayed => The current travel is removed
+			- Points to verify:
+				- The roadbook is empty
+				- The route list is cleaned
+				- The itinirerary is empty
+				- The map is empty
+				- The travel name is empty and the page title updated.
+
+TravelEditor.routeDropped ( )
+	Entry points :
+		- Drag and drop a route in the route list UI
+	- Tests :
+		- Start a drag and drop of a route => the routes are reordered
+		- Points to verify :
+			- the route list is updated
 			- the roadbook is updated
+			- the distances are updated
 
-NoteEditor.newRouteNote ( )
-	Entry points :
-		- RouteContextMenu ( from the map only )
-		- ProfileContextMenu
+Others commands related to travel not in theTravelEditor :
+	- FileLoader ( ).openLocalFile ( )
+	- FileLoader ( ).mergeLocalFile ( )
+		
+----------------------------------------------------------------------------------------------------------------
+
+ViewerFileLoader
+----------------
+
+ViewerFileLoader( ).openDistantFile ( )
+	- Entry point : 
+		- theTravelNotes.addReadOnlyMap ( )
 	- Tests :
-		- Start the command => the NoteDialog is displayed => a route note is added
-		- Points to verify :
-			- the note is added to the map
-			- the note is added to the itinerary pane
-			- the note distance is correct and the notes ordered by distance
-			- the roadbook is updated
-
-NoteEditor.newSearchNote ( )
-	Entry points :
-		- OsmSearchContextMenu ( Add a travel note )
-		- OsmSearchContextMenu ( Add a route note )
-	- Tests :
-		- Start the command => the NoteDialog can be displayed => a route note or a travel note is added
-		- Points to verify :
-			- the note is added to the map
-			- the note is added to the itinerary pane ( for a route note )
-			- the note distance is correct and the notes ordered by distance
-			- the roadbook is updated
-			- the note is added to the travel notes pane ( for a travel note )
-			- the note tooltip and popup are correct
-
-NoteEditor.changeOsmSearchNoteDialog ( )
-	Entry points :
-		- OsmSearchContextMenu 
-	- Tests :
-		- Start the command => Nothing occurs
-		- Points to verify :
-			- the NoteDialog is displayed or not displayed, depending of the command, each time a search note is created
-
-NoteEditor.editNote ( )
-	Entry points :
-		- NoteContextMenu ( from a note on the map, a note in the itinerary pane or a note in the travel notes pane )
-	- Tests :
-		- Start the command => the NoteDialog is displayed => the note is updated
-		- Points to verify :
-			- the node is modified in the roadbook
-			- the note is modified in the itinerary pane ( for route note )
-			- the note is modified in the travel notes pane ( for travel notes )
-			- the note is modified on the map
-			- the note tooltip on the map is eventually modified
-			- the note popup on the map is modified
-
-NoteEditor.removeNote ( )
-	Entry points :
-		- NoteContextMenu ( from a note on the map, a note in the itinerary pane or a note in the travel notes pane )
-	- Tests :
-		- Start the command => the note is removed
-		- Points to verify :
-			- the note is removed from the roadbook
-			- the note is removed from the itinerary pane ( for route note )
-			- the note is removed from the travel notes pane ( for travel notes )
-			- the note is removed from the map
-			- the distances are modified
-
-NoteEditor.hideNotes ( )
-	Entry points :
-		- MapContextMenu
-	- Tests :
-		- Start the command => all the notes are hidden on the map only
-
-NoteEditor.showNotes ( )
-	Entry points :
-		- MapContextMenu
-	- Tests :
-		- Start the command => all the notes are visible on the map, except the route notes linked to an hidden route
-
-NoteEditor.attachNoteToRoute ( )
-	Entry points :
-		- NoteContextMenu ( from the map and the UI - the command is active only when no route is edited and only for travel notes )
-	- Tests :
-		- Start the command => the travel note is transformed into a route note
-		- Points to verify :
-			- the roadbook is updated
-			- the travel notes pane is updated
-			- distances are mdified
-
-NoteEditor.detachNoteFromRoute ( )
-	Entry points :
-		- NoteContextMenu ( from the map and the UI - the command is active only when no route is edited and only for route notes )
-	- Tests :
-		- Start
-		- Points to verify :
-			- the roadbook is updated
-			- the travel notes pane is updated
-			- distances are mdified
-
-NoteEditor.travelNoteDropped ( )
-	Entry Points :
-		- Drag and drop a note in the travel notes pane
-	- Tests :
-		- Start a drag and drop of a travel note => the travel notes are reordered
-		- Points to verify :
-			- the travel notes pane is updated
-			- the roadbook is updated
-
-Others commands related to notes not in theNoteEditor :
-	- Zoomer ( ).zoomToNote ( )
+		- Launch the apps with a travel file in the url => the file is opened in read only mode
 	
 ----------------------------------------------------------------------------------------------------------------
 
@@ -360,6 +452,50 @@ WayPointEditor.wayPointProperties ( )
 		- Points to verify :
 			- the route name must also be modified
 		
+----------------------------------------------------------------------------------------------------------------
+
+Zoomer
+---------
+
+Zoomer ( ).zoomToTravel ( )
+	Entry points :
+		- MapContextMenu
+		- FileLoader ( ) after the loading of a travel
+	- Tests :
+		- Start the command => a zoom is performed on the travel
+
+Zoomer ( ).zoomToRoute ( )
+	Entry points :
+		- RouteContextMenu
+		- theRouter 
+	- Tests :
+		- Start the command => a zoom is performed on the route, included notes
+
+Zoomer ( ).zoomToNote ( )
+	Entry points :
+		- NoteContextMenu ( on the map, the itinerary pane or the travel notes pane )
+	- Tests :
+		- Start the command => a zoom is performed on the note
+
+Zoomer ( ).zoomToManeuver ( )
+	Entry points :
+		- ManeuverContextMenu ( on the itinerary pane )
+	- Tests :
+		- Start the command => a zoom is performed on the maneuver location
+
+Zoomer ( ).zoomToPoi ( )
+	Entry points :
+		- OsmSearchContextMenu
+	- Tests :
+		- Start the command => a zoom is performed on the search result
+
+Zoomer ( ).zoomToLatLng ( )
+	Entry points :
+		- ProfileContextMenu
+	- Tests :
+		- Start the command => a zoom is performed on the location
+
+
 ----------------------------------------------------------------------------------------------------------------
 
 MapEditor
@@ -451,111 +587,107 @@ Commands lauched by event listeners on the map :
 
 ----------------------------------------------------------------------------------------------------------------
 
-Router
----------
+UI
 
-theRouter.startRouting ( )
-	Entry points :
-		- WayPointEditor.addWayPoint
-		- WayPointEditor.addWayPointOnRoute
-		- WayPointEditor.reverseWayPoints
-		- WayPointEditor.removeWayPoint
-		- WayPointEditor.setStartPoint
-		- WayPointEditor.setEndPoint
-		- WayPointEditor.wayPointDragEnd
-		- ProviderToolbarProviderButton ( click )
-		- ProviderToolbarTransitModeButton (click )
-	- Tests :
-		- Start one of the commands linked to the entry points
-		- Points to verify :
-			- way points are moved to the route
-			- distances are recomputed
-			- a zoom is performed on the route only for the first routing request
-			- the roadbook is updatedthe itinerary is updated 
-			- the route list is updated
-
-----------------------------------------------------------------------------------------------------------------
-
-Zoomer
----------
-
-Zoomer ( ).zoomToTravel ( )
-	Entry points :
-		- MapContextMenu
-		- FileLoader ( ) after the loading of a travel
-	- Tests :
-		- Start the command => a zoom is performed on the travel
-
-Zoomer ( ).zoomToRoute ( )
-	Entry points :
-		- RouteContextMenu
-		- theRouter 
-	- Tests :
-		- Start the command => a zoom is performed on the route, included notes
-
-Zoomer ( ).zoomToNote ( )
-	Entry points :
-		- NoteContextMenu ( on the map, the itinerary pane or the travel notes pane )
-	- Tests :
-		- Start the command => a zoom is performed on the note
-
-Zoomer ( ).zoomToManeuver ( )
-	Entry points :
-		- ManeuverContextMenu ( on the itinerary pane )
-	- Tests :
-		- Start the command => a zoom is performed on the maneuver location
-
-Zoomer ( ).zoomToPoi ( )
-	Entry points :
-		- OsmSearchContextMenu
-	- Tests :
-		- Start the command => a zoom is performed on the search result
-
-Zoomer ( ).zoomToLatLng ( )
-	Entry points :
-		- ProfileContextMenu
-	- Tests :
-		- Start the command => a zoom is performed on the location
-
-----------------------------------------------------------------------------------------------------------------
-
-APIKeysManager
---------------
-
-
-APIKeysManager.setKeysFromServerFile ( )
+Commands lauched by event listeners on the UI :
+		
 	- Entry point :
-		- Launching of the apps from theTravelNotes.addControl ( ) when an APIKeys file is found
+		- TravelToolbarUI -> TravelNameChangeEL
 	- Tests :
-		- Start the apps
-		- Points to verify :
-			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
-			
-APIKeysManager.setKeysFromDialog ( )
-	- Entry point : ApiKeysButtonClickEL
-		- Launching of the apps from theTravelNotes.addControl ( ) when an APIKeys file is found
+		- Change the name of the travel => the page title is updated	
+
+	- Entry point :
+		- TravelToolbarUI -> ExpandButtonClickEL
 	- Tests :
-		- Start the command => the APIKeysDialog is displayed => APIKeys are adapted
-		- Points to verify :
-			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
+		- Click on the button => the route list is hidden or collapsed	
 
-APIKeysManager.addProvider ( )
-
-	- Entry point : 
-		- theTravelNotes.addProvider method called by plugins
+	- Entry point :
+		- ItineraryControlUI -> NotesCheckboxInputEL
 	- Tests :
-		- Start the apps with plugins installed
-		- Points to verify :
-			- the provider and routing buttons on the ProvidersToolbarUI are correctly selected
+		- Click on the checkbox => The notes are visible or hidden in the itinerary pane	
+	- Entry point :
+		- ItineraryControlUI -> ManeuverCheckboxInputEL
+	- Tests :
+		- Click on the checkbox => The maneuvers are visible or hidden in the itinerary pane	
+		
+	- Entry point :
+		- ItineraryDataUI -> ManeuverContextMenuEL
+	- Tests :
+		- right click on a maneuver in the itinerary pane => the ManeuverContextMenu is displayed
+		
+	- Entry point :
+		- ItineraryDataUI -> NoteContextMenuEL
+	- Tests :
+		-  right click on a note in the itinerary pane => the NoteContextMenu is displayed
+		
+	- Entry point :
+		- ItineraryDataUI -> ManeuverMouseEnterEL
+	- Tests :
+		- Move the mouse on a maneuver in the itinerary pane => a marker is added on the map at the maneuver position
+		
+	- Entry point :
+		- ItineraryDataUI -> NoteMouseEnterEL
+	- Tests :
+		- Move the mouse on a maneuver in the itinerary pane => a marker is added on the map at the maneuver position
+		
+	- Entry point :
+		- ItineraryDataUI -> NoteOrManeuverMouseLeaveEL
+	- Tests :
+		- Remove the mouse from a maneuver or note in the itinerary pane => the marker is removed	
+	
+	- Entry point :
+		- TravelNotesPaneUI -> TravelNoteDropEL
+	- Tests :
+		- Drag and drop a note in the travelNotes pane => the notes are rordered	
 
+	- Entry point :
+		- TravelNotesPaneUI -> TravelNoteContextMenuEL
+	- Tests :
+		- right click on a note in the travelNotes pane => the NoteContextMenu is displayed
+		
+	- Entry point :
+		- OsmSearchToolbarUI -> SearchButtonClickEL
+	- Tests :
+		- click on the button => a new search is started	
+		
+	- Entry point :
+		- OsmSearchToolbarUI -> ExpandButtonClickEL
+	- Tests :
+		- click on the button => the tree is expanded	
+		
+	- Entry point :
+		- OsmSearchToolbarUI -> CollapseButtonClickEL
+	- Tests :
+		- click on the button => the tree is collapsed
+		
+	- Entry point :
+		- OsmSearchToolbarUI -> ClearButtonClickEL
+	- Tests :
+		- click on the button => all the items in the tree are deselected
+		
+	- Entry point :
+		- OsmSearchTreeUI -> TreeCheckboxChangeEL
+	- Tests :
+		- click on the checkbox => all subitems are selected
 
+		
+	- Entry point :
+		- OsmSearchTreeUI -> TreeArrowClickEL
+	- Tests :
+		- 	click on the arrow -> the item is expanded or collapsed	
 
+	- Entry point :
+		- OsmSearchDataUI -> SearchResultContextMenuEL
+	- Tests :
+		- right click on a search result in the osm search pane => the OsmSearchContextMenu is displayed
 
+	- Entry point :
+		- OsmSearchDataUI -> SearchResultMouseEnterEL
+	- Tests :
+		- Move the mouse on a search result in the osm search pane => a marker is added on the map at the search result position
 
-
-
-
-
-
-
+	- Entry point :
+		- OsmSearchDataUI -> SearchResultMouseLeaveEL
+	- Tests :
+		- Remove the mouse from a search result in the osm search pane => the marker is removed	
 
