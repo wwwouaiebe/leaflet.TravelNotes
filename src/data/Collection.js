@@ -50,7 +50,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { ZERO, ONE, TWO, NOT_FOUND } from '../main/Constants.js';
 
 const OUR_SWAP_UP = -1;
 const OUR_SWAP_DOWN = 1;

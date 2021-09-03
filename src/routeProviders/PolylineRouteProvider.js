@@ -50,7 +50,7 @@ import ItineraryPoint from '../data/ItineraryPoint.js';
 import Maneuver from '../data/Maneuver.js';
 import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';
 
-import { ZERO, ONE, TWO, LAT, LNG, DEGREES } from '../util/Constants.js';
+import { ZERO, ONE, TWO, LAT, LNG, DEGREES } from '../main/Constants.js';
 
 const OUR_HALF_PI = Math.PI / TWO;
 

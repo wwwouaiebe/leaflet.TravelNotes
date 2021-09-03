@@ -79,7 +79,7 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { DISTANCE, ZERO, ONE, TWO, DEGREES, LAT_LNG, EARTH_RADIUS } from '../util/Constants.js';
+import { DISTANCE, ZERO, ONE, TWO, DEGREES, LAT_LNG, EARTH_RADIUS } from '../main/Constants.js';
 
 const HUNDRED = 100;
 

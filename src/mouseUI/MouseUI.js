@@ -50,11 +50,11 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
-import theUtilities from '../util/Utilities.js';
-import { SAVE_STATUS } from '../util/Constants.js';
+import theUtilities from '../UILib/Utilities.js';
+import { SAVE_STATUS } from '../main/Constants.js';
 
 const OUR_SAVE_TIME = 300000;
 

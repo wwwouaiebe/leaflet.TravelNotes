@@ -48,13 +48,13 @@ import theConfig from '../data/Config.js';
 import ConfigOverloader from '../data/ConfigOverloader.js';
 import theTravelNotesViewer from '../main/TravelNotesViewer.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theViewerLayersToolbarUI from '../viewerLayersToolbarUI/ViewerLayersToolbarUI.js';
 import MapEditorViewer from '../coreMapEditor/MapEditorViewer.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import Zoomer from '../core/Zoomer.js';
 
-import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, HTTP_STATUS_OK } from '../main/Constants.js';
 
 const OUR_VIEWER_DEFAULT_ZOOM = 2;
 

@@ -54,7 +54,7 @@ Tests ...
 
 import ObjId from '../data/ObjId.js';
 import ObjType from '../data/ObjType.js';
-import { LAT_LNG, DISTANCE, ZERO, ONE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
+import { LAT_LNG, DISTANCE, ZERO, ONE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../main/Constants.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Note' );

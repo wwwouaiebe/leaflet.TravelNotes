@@ -66,13 +66,13 @@ Tests ...
 import theConfig from '../data/Config.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../coreLib/Geometry.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';
 import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import { RouteMouseOverOrMoveEL } from '../coreMapEditor/RouteEventListeners.js';
 
-import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../util/Constants.js';
+import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../main/Constants.js';
 
 const OUR_DEFAULT_MAX_ZOOM = 18;
 const OUR_DEFAULT_MIN_ZOOM = 0;

@@ -65,7 +65,7 @@ Tests 20210902
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import NoteDialog from '../dialogNotes/NoteDialog.js';
 import Note from '../data/Note.js';
@@ -78,7 +78,7 @@ import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import GeoCoder from '../coreLib/GeoCoder.js';
 
-import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
+import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

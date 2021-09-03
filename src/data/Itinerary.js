@@ -59,7 +59,7 @@ import Collection from '../data/Collection.js';
 import ItineraryPoint from '../data/ItineraryPoint.js';
 import Maneuver from '../data/Maneuver.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../main/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'Itinerary' );
 

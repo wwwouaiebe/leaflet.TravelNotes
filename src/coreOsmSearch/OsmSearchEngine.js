@@ -53,7 +53,7 @@ import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theGeometry from '../coreLib/Geometry.js';
 
-import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { ZERO, ONE, LAT_LNG } from '../main/Constants.js';
 
 const SEARCH_DIMENSION = 5000;
 

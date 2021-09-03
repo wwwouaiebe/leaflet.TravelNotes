@@ -52,10 +52,10 @@ Tests ...
 import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import Zoomer from '../core/Zoomer.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { LAT_LNG, INVALID_OBJ_ID } from '../util/Constants.js';
+import { LAT_LNG, INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

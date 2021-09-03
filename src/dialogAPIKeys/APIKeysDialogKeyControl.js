@@ -44,11 +44,11 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theConfig from '../data/Config.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import ObjId from '../data/ObjId.js';
-import { INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

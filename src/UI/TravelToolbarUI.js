@@ -43,16 +43,16 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theTravelEditor from '../core/TravelEditor.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import FileLoader from '../core/FileLoader.js';
 import theConfig from '../data/Config.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 
-import { INVALID_OBJ_ID, ZERO } from '../util/Constants.js';
+import { INVALID_OBJ_ID, ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

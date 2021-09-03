@@ -58,15 +58,15 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import theConfig from '../data/Config.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';
-import { DISTANCE, ZERO } from '../util/Constants.js';
+import { DISTANCE, ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

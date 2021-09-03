@@ -49,7 +49,7 @@ import theConfig from '../data/Config.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theOsmSearchEngine from '../coreOsmSearch/OsmSearchEngine.js';
-import { INVALID_OBJ_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

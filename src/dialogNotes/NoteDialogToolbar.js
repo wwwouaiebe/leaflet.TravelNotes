@@ -92,8 +92,8 @@ Tests ...
 */
 
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../util/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import {
 	EditionButtonsClickEL,
@@ -102,7 +102,7 @@ import {
 	ToogleContentsButtonClickEL
 } from '../dialogNotes/NoteDialogToolbarEventListeners.js';
 
-import { NOT_FOUND, ZERO } from '../util/Constants.js';
+import { NOT_FOUND, ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

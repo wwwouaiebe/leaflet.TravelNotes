@@ -56,11 +56,11 @@ Tests ...
 */
 
 import BaseDialog from '../dialogBase/BaseDialog.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import ColorControl from '../dialogColorControl/ColorControl.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theConfig from '../data/Config.js';
-import { ZERO } from '../util/Constants.js';
+import { ZERO } from '../main/Constants.js';
 
 const OUR_ROUTE_MIN_WIDTH = 1;
 const OUR_ROUTE_MAX_WIDTH = 40;

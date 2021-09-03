@@ -54,7 +54,7 @@ import {
 	ContainerMouseEnterEL
 } from '../contextMenus/BaseContextMenuEventListeners.js';
 
-import { NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
+import { NOT_FOUND, ZERO, ONE, TWO } from '../main/Constants.js';
 import theConfig from '../data/Config.js';
 
 /**

@@ -63,13 +63,13 @@ import theNoteEditor from '../core/NoteEditor.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import AllManeuverNotesBuilder from '../core/AllManeuverNotesBuilder.js';
 
-import { ROUTE_EDITION_STATUS, ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, ZERO, INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

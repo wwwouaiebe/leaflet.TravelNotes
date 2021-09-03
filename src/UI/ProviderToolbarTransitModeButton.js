@@ -35,8 +35,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theRouter from '../coreLib/Router.js';
 
 /**

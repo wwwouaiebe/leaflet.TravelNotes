@@ -47,7 +47,7 @@ Tests 20210903
 
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theConfig from '../data/Config.js';
-import { GEOLOCATION_STATUS, ONE } from '../util/Constants.js';
+import { GEOLOCATION_STATUS, ONE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

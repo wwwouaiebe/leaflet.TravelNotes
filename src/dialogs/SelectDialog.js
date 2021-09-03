@@ -45,8 +45,8 @@ Tests ...
 */
 
 import BaseDialog from '../dialogBase/BaseDialog.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import { ZERO } from '../util/Constants.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import { ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

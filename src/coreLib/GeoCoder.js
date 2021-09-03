@@ -78,7 +78,7 @@ import theConfig from '../data/Config.js';
 import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
-import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

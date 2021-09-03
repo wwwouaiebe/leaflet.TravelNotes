@@ -65,7 +65,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theGeometry from '../coreLib/Geometry.js';
 import theSphericalTrigonometry from '../coreLib/SphericalTrigonometry.js';
 
-import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -44,8 +44,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theUtilities from '../util/Utilities.js';
-import theTranslator from '../util/Translator.js';
+import theUtilities from '../UILib/Utilities.js';
+import theTranslator from '../UILib/Translator.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

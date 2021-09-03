@@ -62,7 +62,7 @@ Tests ...
 */
 
 import BaseDialog from '../dialogBase/BaseDialog.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

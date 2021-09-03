@@ -55,16 +55,16 @@ Tests ...
 */
 
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theGeometry from '../coreLib/Geometry.js';
 import theConfig from '../data/Config.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import PrintViewsFactory from '../printRoute/PrintViewsFactory.js';
 import PrintPageBuilder from '../printRoute/PrintPageBuilder.js';
 
-import { ZERO, TWO, LAT, LNG } from '../util/Constants.js';
+import { ZERO, TWO, LAT, LNG } from '../main/Constants.js';
 
 const OUR_TILE_SIZE = 256;
 

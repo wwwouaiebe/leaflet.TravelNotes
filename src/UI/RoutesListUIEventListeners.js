@@ -47,7 +47,7 @@ Tests ...
 import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theTravelEditor from '../core/TravelEditor.js';
 
-import { MOUSE_WHEEL_FACTORS } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

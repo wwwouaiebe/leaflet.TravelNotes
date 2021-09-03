@@ -58,10 +58,10 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import ProviderToolbarTransitModeButton from '../UI/ProviderToolbarTransitModeButton.js';
 import ProviderToolbarProviderButton from '../UI/ProviderToolbarProviderButton.js';
-import { NOT_FOUND, ZERO } from '../util/Constants.js';
+import { NOT_FOUND, ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import {
 	RouteDragStartEL,
 	RouteDropEL,

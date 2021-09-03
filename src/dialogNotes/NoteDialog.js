@@ -79,11 +79,11 @@ import NoteDialogPhoneControl from '../dialogNotes/NoteDialogPhoneControl.js';
 import NoteDialogPreviewControl from '../dialogNotes/NoteDialogPreviewControl.js';
 import { NoteDialogGeoCoderHelper } from '../dialogNotes/NoteDialogEventListeners.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import Note from '../data/Note.js';
 import theConfig from '../data/Config.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

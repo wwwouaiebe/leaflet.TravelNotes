@@ -77,7 +77,7 @@ import SvgBuilder from '../coreMapIcon/SvgBuilder.js';
 import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import DataBuilder from '../coreMapIcon/DataBuilder.js';
 
-import { ICON_DIMENSIONS, LAT_LNG, DISTANCE, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';
+import { ICON_DIMENSIONS, LAT_LNG, DISTANCE, INVALID_OBJ_ID, ZERO, ONE } from '../main/Constants.js';
 
 const SEARCH_AROUND_FACTOR = 1.5;
 

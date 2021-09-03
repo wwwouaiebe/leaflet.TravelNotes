@@ -39,14 +39,13 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module util
-@private
+@module UILib
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
-import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../util/Constants.js';
+import theTranslator from '../UILib/Translator.js';
+import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

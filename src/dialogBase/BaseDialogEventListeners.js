@@ -47,7 +47,7 @@ Tests ...
 import theGeometry from '../coreLib/Geometry.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
-import { ZERO, ONE, LAT_LNG, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
+import { ZERO, ONE, LAT_LNG, DIALOG_DRAG_MARGIN } from '../main/Constants.js';
 
 const ZOOM_DISPLACMENT = 50;
 

@@ -46,14 +46,14 @@ Tests ...
 
 import ObjId from '../data/ObjId.js';
 import ProfileFactory from '../coreLib/ProfileFactory.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import theTranslator from '../util/Translator.js';
-import theUtilities from '../util/Utilities.js';
+import theTranslator from '../UILib/Translator.js';
+import theUtilities from '../UILib/Utilities.js';
 import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
-import { ZERO, DISTANCE } from '../util/Constants.js';
+import { ZERO, DISTANCE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

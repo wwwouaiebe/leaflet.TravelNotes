@@ -57,12 +57,12 @@ Tests ...
 */
 
 import PaneUI from '../UI/PaneUI.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import OsmSearchLimitsUI from '../UI/OsmSearchLimitsUI.js';
 import OsmSearchDataUI from '../UI/OsmSearchDataUI.js';
 import OsmSearchControlUI from '../UI/OsmSearchControlUI.js';
 
-import { PANE_ID } from '../util/Constants.js';
+import { PANE_ID } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

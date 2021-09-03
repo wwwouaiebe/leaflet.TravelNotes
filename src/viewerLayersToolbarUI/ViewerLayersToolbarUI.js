@@ -49,10 +49,10 @@ Tests ...
 
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theGeoLocator from '../core/GeoLocator.js';
 import Zoomer from '../core/Zoomer.js';
-import { ZERO } from '../util/Constants.js';
+import { ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

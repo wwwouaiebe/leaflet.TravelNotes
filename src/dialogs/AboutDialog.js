@@ -56,8 +56,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../util/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
 import BaseDialog from '../dialogBase/BaseDialog.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import theCurrentVersion from '../data/Version.js';

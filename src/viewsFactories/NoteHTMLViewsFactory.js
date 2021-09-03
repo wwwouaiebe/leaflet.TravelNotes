@@ -43,14 +43,14 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import theTranslator from '../util/Translator.js';
-import theUtilities from '../util/Utilities.js';
+import theTranslator from '../UILib/Translator.js';
+import theUtilities from '../UILib/Utilities.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 
-import { ICON_DIMENSIONS, ZERO, ONE } from '../util/Constants.js';
+import { ICON_DIMENSIONS, ZERO, ONE } from '../main/Constants.js';
 
 const OUR_LINKS_MAX_LENGTH = 40;
 const OUR_MIN_NOTES_DISTANCE = 9;

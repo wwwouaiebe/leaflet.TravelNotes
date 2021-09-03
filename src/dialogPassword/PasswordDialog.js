@@ -48,9 +48,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import BaseDialog from '../dialogBase/BaseDialog.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import { EyeMouseDownEL, EyeMouseUpEL } from '../dialogPassword/PasswordDialogEventListeners.js';
 
 const OUR_PSWD_MIN_LENGTH = 12;

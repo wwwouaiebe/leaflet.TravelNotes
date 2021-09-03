@@ -45,7 +45,7 @@ Tests ...
 */
 
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import GeoCoder from '../coreLib/GeoCoder.js';
 
 /**

@@ -46,11 +46,11 @@ Tests ...
 
 import PasswordDialog from '../dialogPassword/PasswordDialog.js';
 import DataEncryptor from '../coreLib/DataEncryptor.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import APIKeysDialogKeyControl from '../dialogAPIKeys/APIKeysDialogKeyControl.js';
 import { DataEncryptorHandlers, SaveAPIKeysHelper } from '../dialogAPIKeys/APIKeysDialogHelpers.js';
 
-import { ZERO, ONE, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, HTTP_STATUS_OK } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

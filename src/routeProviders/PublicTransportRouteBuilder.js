@@ -49,7 +49,7 @@ import Maneuver from '../data/Maneuver.js';
 import publicTransportData from '../routeProviders/PublicTransportData.js';
 import PublicTransportHolesRemover from '../routeProviders/PublicTransportHolesRemover.js';
 
-import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID, ONE, TWO, THREE } from '../main/Constants.js';
 
 /*
 

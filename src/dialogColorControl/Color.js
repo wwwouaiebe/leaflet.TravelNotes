@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, TWO, THREE, HEXADECIMAL, COLOR_CONTROL } from '../util/Constants.js';
+import { ZERO, ONE, TWO, THREE, HEXADECIMAL, COLOR_CONTROL } from '../main/Constants.js';
 
 const FIVE = 5;
 

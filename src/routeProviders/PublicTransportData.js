@@ -45,7 +45,7 @@ Doc reviewed 20210901
 
 import theSphericalTrigonometry from '../coreLib/SphericalTrigonometry.js';
 
-import { ZERO, INVALID_OBJ_ID, ONE, TWO } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID, ONE, TWO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

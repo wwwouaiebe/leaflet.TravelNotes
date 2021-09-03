@@ -58,7 +58,7 @@ Tests ...
 */
 
 import theConfig from '../data/Config.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import TravelUI from '../UI/TravelUI.js';
 import PanesManagerUI from '../UI/PanesManagerUI.js';
 import ProvidersToolbarUI from '../UI/ProvidersToolbarUI.js';
@@ -66,7 +66,7 @@ import TravelNotesToolbarUI from '../UI/TravelNotesToolbarUI.js';
 import ItineraryPaneUI from '../UI/ItineraryPaneUI.js';
 import TravelNotesPaneUI from '../UI/TravelNotesPaneUI.js';
 import OsmSearchPaneUI from '../UI/OsmSearchPaneUI.js';
-import { ONE } from '../util/Constants.js';
+import { ONE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

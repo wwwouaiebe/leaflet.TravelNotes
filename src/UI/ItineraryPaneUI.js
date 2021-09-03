@@ -50,11 +50,11 @@ Tests ...
 */
 
 import PaneUI from '../UI/PaneUI.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import ItineraryControlUI from '../UI/ItineraryControlUI.js';
 import ItineraryDataUI from '../UI/ItineraryDataUI.js';
-import { INVALID_OBJ_ID, PANE_ID } from '../util/Constants.js';
+import { INVALID_OBJ_ID, PANE_ID } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

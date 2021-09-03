@@ -50,13 +50,13 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theConfig from '../data/Config.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theGeoLocator from '../core/GeoLocator.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
-import { GEOLOCATION_STATUS } from '../util/Constants.js';
+import { GEOLOCATION_STATUS } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

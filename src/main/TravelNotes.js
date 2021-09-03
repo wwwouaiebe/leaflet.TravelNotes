@@ -87,8 +87,8 @@ import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
 import theMouseUI from '../mouseUI/MouseUI.js';
 import theAttributionsUI from '../attributionsUI/AttributionsUI.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
-import theTranslator from '../util/Translator.js';
-import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../util/Constants.js';
+import theTranslator from '../UILib/Translator.js';
+import { LAT_LNG, TWO, SAVE_STATUS, HTTP_STATUS_OK } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

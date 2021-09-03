@@ -56,10 +56,10 @@ Tests ...
 
 import ObjId from '../data/ObjId.js';
 import ObjType from '../data/ObjType.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
-import { LAT_LNG, ZERO, ONE, INVALID_OBJ_ID } from '../util/Constants.js';
+import { LAT_LNG, ZERO, ONE, INVALID_OBJ_ID } from '../main/Constants.js';
 
 const OUR_OBJ_TYPE = new ObjType ( 'WayPoint' );
 

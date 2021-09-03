@@ -71,7 +71,7 @@ Tests ...
 */
 
 /* eslint-disable max-lines */
-import { SVG_NS, NOT_FOUND, ZERO, ONE, TWO } from '../util/Constants.js';
+import { SVG_NS, NOT_FOUND, ZERO, ONE, TWO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

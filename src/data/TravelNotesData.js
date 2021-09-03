@@ -63,8 +63,8 @@ Tests ...
 */
 
 import Travel from '../data/Travel.js';
-import theUtilities from '../util/Utilities.js';
-import { INVALID_OBJ_ID } from '../util/Constants.js';
+import theUtilities from '../UILib/Utilities.js';
+import { INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

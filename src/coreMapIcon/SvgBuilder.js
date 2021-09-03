@@ -46,7 +46,7 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import theGeometry from '../coreLib/Geometry.js';
-import { SVG_NS, ICON_DIMENSIONS, ZERO, ONE, TWO, NOT_FOUND } from '../util/Constants.js';
+import { SVG_NS, ICON_DIMENSIONS, ZERO, ONE, TWO, NOT_FOUND } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

@@ -56,11 +56,11 @@ Tests ...
 */
 
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../util/Translator.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import BaseContextMenuOperator from '../contextMenus/BaseContextMenuOperator.js';
 
-import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../main/Constants.js';
 
 // import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
 

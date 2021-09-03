@@ -112,8 +112,8 @@ Box model
 
 /* eslint-disable max-lines */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../util/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 import {
 	OkButtonClickEL,
@@ -131,7 +131,7 @@ import PanEventDispatcher from '../dialogPanEventDispatcher/PanEventDispatcher.j
 
 // import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
 
-import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../util/Constants.js';
+import { ZERO, TWO, DIALOG_DRAG_MARGIN } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

@@ -47,9 +47,9 @@ Tests ...
 /* eslint-disable max-lines */
 
 import theMapEditor from '../coreMapEditor/MapEditor.js';
-import theIndexedDb from '../util/IndexedDb.js';
+import theIndexedDb from '../UILib/IndexedDb.js';
 import theTravelHTMLViewsFactory from '../viewsFactories/TravelHTMLViewsFactory.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import theMouseUI from '../mouseUI/MouseUI.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theUI from '../UI/UI.js';
@@ -57,14 +57,14 @@ import theTravelNotes from '../main/TravelNotes.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
 import ConfigOverloader from '../data/ConfigOverloader.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 
-import { SAVE_STATUS, LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK, PANE_ID } from '../util/Constants.js';
+import { SAVE_STATUS, LAT_LNG, ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK, PANE_ID } from '../main/Constants.js';
 
 const OUR_DEMO_PRINT_MAX_TILES = 120;
 const OUR_DEMO_MAX_MANEUVERS_NOTES = 10;

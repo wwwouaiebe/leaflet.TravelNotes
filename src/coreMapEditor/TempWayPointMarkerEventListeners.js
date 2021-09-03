@@ -48,7 +48,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import RouteContextMenu from '../contextMenus/RouteContextMenu.js';
 import theWayPointEditor from '../core/WayPointEditor.js';
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

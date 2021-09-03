@@ -44,10 +44,10 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../util/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
 import { AllControlsInputEL } from '../dialogNotes/NoteDialogEventListeners.js';
-import { ICON_DIMENSIONS } from '../util/Constants.js';
+import { ICON_DIMENSIONS } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

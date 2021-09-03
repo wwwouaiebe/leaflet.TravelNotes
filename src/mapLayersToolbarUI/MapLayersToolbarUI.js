@@ -51,8 +51,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../util/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
@@ -62,7 +62,7 @@ import MapLayersToolbarButton from '../mapLayersToolbarUI/MapLayersToolbarButton
 import MapLayersToolbarLink from '../mapLayersToolbarUI/MapLayersToolbarLink.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 
-import { MOUSE_WHEEL_FACTORS, ZERO } from '../util/Constants.js';
+import { MOUSE_WHEEL_FACTORS, ZERO } from '../main/Constants.js';
 
 const OUR_MIN_BUTTONS_VISIBLE = 3;
 

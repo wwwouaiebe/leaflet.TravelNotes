@@ -53,7 +53,7 @@ import Maneuver from '../data/Maneuver.js';
 import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';
 import theOsrmTextInstructions from '../routeProviders/OsrmTextInstructions.js';
 import { ICON_LIST } from '../routeProviders/IconList.js';
-import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, TWO, LAT_LNG, HTTP_STATUS_OK } from '../main/Constants.js';
 
 const OUR_MAPBOX_LAT_LNG_ROUND = 6;
 

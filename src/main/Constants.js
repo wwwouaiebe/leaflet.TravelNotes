@@ -24,6 +24,8 @@ Changes:
 		- Issue ♯138 : Protect the app - control html entries done by user.
 	-v2.2.0:
 		- Issue ♯129 : Add an indicator when the travel is modified and not saved
+	- v3.0.0:
+		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210901
 Tests ...
 */
@@ -42,7 +44,8 @@ Tests ...
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@module util
+@module main
+@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */

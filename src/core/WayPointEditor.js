@@ -80,7 +80,7 @@ import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theGeometry from '../coreLib/Geometry.js';
 import theRouter from '../coreLib/Router.js';
 
-import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, LAT_LNG, TWO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -30,17 +30,17 @@ Doc reviewed 20210901
 Tests ...
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import ObjId from '../data/ObjId.js';
 import FloatWindow from '../dialogFloatWindow/FloatWindow.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theGeometry from '../coreLib/Geometry.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import ProfileContextMenu from '../contextMenus/ProfileContextMenu.js';
 import ProfileFactory from '../coreLib/ProfileFactory.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
-import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js';
+import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

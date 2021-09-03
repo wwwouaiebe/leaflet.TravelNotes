@@ -44,8 +44,8 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
-import theTranslator from '../util/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
 import theConfig from '../data/Config.js';
 import {
 	AllControlsFocusEL,
@@ -53,7 +53,7 @@ import {
 	AllControlsInputEL
 } from '../dialogNotes/NoteDialogEventListeners.js';
 
-import { ZERO, ONE, LAT_LNG } from '../util/Constants.js';
+import { ZERO, ONE, LAT_LNG } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

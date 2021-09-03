@@ -49,11 +49,11 @@ Tests ...
 */
 
 import PaneUI from '../UI/PaneUI.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import theNoteEditor from '../core/NoteEditor.js';
 import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
-import { PANE_ID } from '../util/Constants.js';
+import { PANE_ID } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

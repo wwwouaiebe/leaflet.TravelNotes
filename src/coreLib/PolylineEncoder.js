@@ -45,7 +45,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE } from '../main/Constants.js';
 
 const OUR_NUMBER5 = 5;
 const OUR_NUMBER10 = 10;

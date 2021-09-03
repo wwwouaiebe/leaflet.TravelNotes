@@ -48,7 +48,7 @@ Tests ...
 
 import BaseContextMenu from '../contextMenus/BaseContextMenu.js';
 import Zoomer from '../core/Zoomer.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

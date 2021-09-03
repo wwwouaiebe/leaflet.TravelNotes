@@ -57,7 +57,7 @@ Tests ...
 */
 
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import { ZERO, ONE } from '../util/Constants.js';
+import { ZERO, ONE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

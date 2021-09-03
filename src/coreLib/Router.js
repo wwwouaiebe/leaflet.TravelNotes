@@ -52,7 +52,7 @@ import Zoomer from '../core/Zoomer.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import theRouteEditor from '../core/RouteEditor.js';
 
-import { DISTANCE, ZERO } from '../util/Constants.js';
+import { DISTANCE, ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

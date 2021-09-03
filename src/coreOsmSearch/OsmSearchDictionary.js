@@ -45,7 +45,7 @@ Tests ...
 */
 
 import DictionaryItem from '../coreOsmSearch/DictionaryItem.js';
-import { NOT_FOUND, ZERO, ONE } from '../util/Constants.js';
+import { NOT_FOUND, ZERO, ONE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

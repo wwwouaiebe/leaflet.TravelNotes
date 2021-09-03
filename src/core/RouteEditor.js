@@ -72,7 +72,7 @@ Tests 20210902
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
@@ -85,7 +85,7 @@ import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import RoutePrinter from '../printRoute/RoutePrinter.js';
 
-import { ROUTE_EDITION_STATUS, DISTANCE, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, DISTANCE, INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -29,10 +29,10 @@ Doc reviewed 20210901
 Tests ...
 */
 
-import theTranslator from '../util/Translator.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theTranslator from '../UILib/Translator.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import { ZERO } from '../util/Constants.js';
+import { ZERO } from '../main/Constants.js';
 
 const OUR_DRAG_MARGIN = 20;
 

@@ -86,7 +86,7 @@ import {
 } from '../coreMapEditor/NoteMarkerEventListeners.js';
 import { WayPointContextMenuEL, WayPointDragEndEL } from '../coreMapEditor/WayPointEventListeners.js';
 import { RouteContextMenuEL } from '../coreMapEditor/RouteEventListeners.js';
-import { ROUTE_EDITION_STATUS, LAT_LNG, INVALID_OBJ_ID, TWO, WAY_POINT_ICON_SIZE } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, LAT_LNG, INVALID_OBJ_ID, TWO, WAY_POINT_ICON_SIZE } from '../main/Constants.js';
 
 const OUR_MARKER_BOUNDS_PRECISION = 0.01;
 

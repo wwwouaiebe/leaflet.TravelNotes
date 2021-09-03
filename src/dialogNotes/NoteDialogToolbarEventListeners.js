@@ -44,11 +44,11 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import MapIconFromOsmFactory from '../coreMapIcon/MapIconFromOsmFactory.js';
-import { ZERO, INVALID_OBJ_ID } from '../util/Constants.js';
+import { ZERO, INVALID_OBJ_ID } from '../main/Constants.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------

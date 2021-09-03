@@ -67,9 +67,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theRouteEditor from '../core/RouteEditor.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';

@@ -66,18 +66,18 @@ Tests 20210902
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import theUtilities from '../util/Utilities.js';
+import theUtilities from '../UILib/Utilities.js';
 import Route from '../data/Route.js';
 import Travel from '../data/Travel.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import FileCompactor from '../coreLib/FileCompactor.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
-import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
+import { INVALID_OBJ_ID, SAVE_STATUS } from '../main/Constants.js';
 import theMouseUI from '../mouseUI/MouseUI.js';
 import SaveAsDialog from '../dialogs/SaveAsDialog.js';
 

@@ -46,7 +46,7 @@ Tests ...
 
 import theSphericalTrigonometry from '../coreLib/SphericalTrigonometry.js';
 
-import { ZERO, ONE, TWO, THREE } from '../util/Constants.js';
+import { ZERO, ONE, TWO, THREE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

@@ -44,15 +44,15 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theConfig from '../data/Config.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theMapLayersCollection from '../data/MapLayersCollection.js';
 import theAPIKeysManager from '../core/APIKeysManager.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
-import { ZERO, TWO } from '../util/Constants.js';
+import { ZERO, TWO } from '../main/Constants.js';
 
 const OUR_NOTE_Z_INDEX_OFFSET = 100;
 

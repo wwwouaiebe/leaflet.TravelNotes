@@ -46,7 +46,7 @@ Tests 20210902
 
 import theConfig from '../data/Config.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import {
 	TempWayPointMarkerELData,
@@ -55,7 +55,7 @@ import {
 	TempWayPointMarkerContextMenuEL,
 	TempWayPointMarkerDragEndEL
 } from '../coreMapEditor/TempWayPointMarkerEventListeners.js';
-import { ROUTE_EDITION_STATUS, NOT_FOUND, ZERO, ONE, TWO, WAY_POINT_ICON_SIZE } from '../util/Constants.js';
+import { ROUTE_EDITION_STATUS, NOT_FOUND, ZERO, ONE, TWO, WAY_POINT_ICON_SIZE } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

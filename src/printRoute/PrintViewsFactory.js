@@ -44,7 +44,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { LAT, LNG } from '../util/Constants.js';
+import { LAT, LNG } from '../main/Constants.js';
 
 const OUR_LAT_LNG_TOLERANCE = 0.000001;
 

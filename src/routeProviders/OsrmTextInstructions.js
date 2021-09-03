@@ -55,7 +55,7 @@ Don't rename variables for compatibility with osrm-text-instructions
 
 /* eslint-disable max-lines */
 
-import { ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, NOT_FOUND, HTTP_STATUS_OK } from '../main/Constants.js';
 
 const OUR_OSRM_LANGUAGES = [
 	'ar',

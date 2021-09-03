@@ -58,7 +58,7 @@ Tests 20210903
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theMouseUI from '../mouseUI/MouseUI.js';
@@ -69,7 +69,7 @@ import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import Zoomer from '../core/Zoomer.js';
 
-import { INVALID_OBJ_ID, ROUTE_EDITION_STATUS, SAVE_STATUS } from '../util/Constants.js';
+import { INVALID_OBJ_ID, ROUTE_EDITION_STATUS, SAVE_STATUS } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

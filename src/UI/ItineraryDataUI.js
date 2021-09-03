@@ -49,7 +49,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import NoteContextMenu from '../contextMenus/NoteContextMenu.js';
 import ManeuverContextMenu from '../contextMenus/ManeuverContextMenu.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
-import { ZERO } from '../util/Constants.js';
+import { ZERO } from '../main/Constants.js';
 
 /**
 @------------------------------------------------------------------------------------------------------------------------------

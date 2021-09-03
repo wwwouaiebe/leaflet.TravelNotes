@@ -44,9 +44,9 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import theTranslator from '../util/Translator.js';
+import theTranslator from '../UILib/Translator.js';
 import theConfig from '../data/Config.js';
-import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
+import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import {
 	RestoreFromUnsecureFileButtonClickEL,
 	ReloadFromServerButtonClickEL,

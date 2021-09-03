@@ -45,7 +45,7 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../util/Constants.js';
+import { ZERO, ONE, LAT_LNG, HTTP_STATUS_OK } from '../main/Constants.js';
 import SelectDialog from '../dialogs/SelectDialog.js';
 import PublicTransportRouteBuilder from '../routeProviders/PublicTransportRouteBuilder.js';
 import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';
