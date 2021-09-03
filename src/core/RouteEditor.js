@@ -78,7 +78,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import Route from '../data/Route.js';
-import GpxFactory from '../core/GpxFactory.js';
+import GpxFactory from '../coreLib/GpxFactory.js';
 import RoutePropertiesDialog from '../dialogs/RoutePropertiesDialog.js';
 import PrintRouteMapDialog from '../dialogs/PrintRouteMapDialog.js';
 import theEventDispatcher from '../util/EventDispatcher.js';

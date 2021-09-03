@@ -75,7 +75,7 @@ import theUtilities from '../util/Utilities.js';
 import Route from '../data/Route.js';
 import Travel from '../data/Travel.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
-import FileCompactor from '../core/FileCompactor.js';
+import FileCompactor from '../coreLib/FileCompactor.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import { INVALID_OBJ_ID, SAVE_STATUS } from '../util/Constants.js';
 import theMouseUI from '../mouseUI/MouseUI.js';

@@ -45,7 +45,7 @@ Tests ...
 */
 
 import ObjId from '../data/ObjId.js';
-import ProfileFactory from '../core/ProfileFactory.js';
+import ProfileFactory from '../coreLib/ProfileFactory.js';
 import theHTMLElementsFactory from '../util/HTMLElementsFactory.js';
 import theHTMLSanitizer from '../util/HTMLSanitizer.js';
 import theTranslator from '../util/Translator.js';

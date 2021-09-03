@@ -64,7 +64,7 @@ import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theMouseUI from '../mouseUI/MouseUI.js';
 import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
 import theRouteEditor from '../core/RouteEditor.js';
-import FileCompactor from '../core/FileCompactor.js';
+import FileCompactor from '../coreLib/FileCompactor.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theProfileWindowsManager from '../core/ProfileWindowsManager.js';
 import Zoomer from '../core/Zoomer.js';

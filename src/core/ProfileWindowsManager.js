@@ -50,7 +50,7 @@ Tests ...
 
 import theConfig from '../data/Config.js';
 import ProfileWindow from '../dialogProfileWindow/ProfileWindow.js';
-import ProfileFactory from '../core/ProfileFactory.js';
+import ProfileFactory from '../coreLib/ProfileFactory.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { ZERO } from '../util/Constants.js';
 

@@ -38,7 +38,7 @@ import theGeometry from '../util/Geometry.js';
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theUtilities from '../util/Utilities.js';
 import ProfileContextMenu from '../contextMenus/ProfileContextMenu.js';
-import ProfileFactory from '../core/ProfileFactory.js';
+import ProfileFactory from '../coreLib/ProfileFactory.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../util/Constants.js';
 

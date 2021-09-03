@@ -74,7 +74,7 @@ import theConfig from '../data/Config.js';
 import theDataSearchEngine from '../data/DataSearchEngine.js';
 import theSphericalTrigonometry from '../util/SphericalTrigonometry.js';
 import SvgBuilder from '../coreMapIcon/SvgBuilder.js';
-import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
+import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import DataBuilder from '../coreMapIcon/DataBuilder.js';
 
 import { ICON_DIMENSIONS, LAT_LNG, DISTANCE, INVALID_OBJ_ID, ZERO, ONE } from '../util/Constants.js';

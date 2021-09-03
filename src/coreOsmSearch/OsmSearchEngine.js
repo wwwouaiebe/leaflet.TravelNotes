@@ -49,7 +49,7 @@ Tests ...
 
 import theEventDispatcher from '../util/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
-import OverpassAPIDataLoader from '../core/OverpassAPIDataLoader.js';
+import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theGeometry from '../util/Geometry.js';
 

@@ -76,7 +76,7 @@ import theConfig from '../data/Config.js';
 import WaitUI from '../waitUI/WaitUI.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
 import theNoteDialogToolbarData from '../dialogNotes/NoteDialogToolbarData.js';
-import GeoCoder from '../core/GeoCoder.js';
+import GeoCoder from '../coreLib/GeoCoder.js';
 
 import { ZERO, DISTANCE, INVALID_OBJ_ID, ICON_DIMENSIONS } from '../util/Constants.js';
 
