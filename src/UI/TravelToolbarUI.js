@@ -85,7 +85,7 @@ class CancelButtonClickEL {
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ();
-		theTravelEditor.clear ( );
+		theTravelEditor.newTravel ( );
 		document.title =
 			'Travel & Notes' +
 			( '' === theTravelNotesData.travel.name ? '' : ' - ' + theTravelNotesData.travel.name );

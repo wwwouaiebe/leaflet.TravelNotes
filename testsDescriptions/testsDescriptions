@@ -1,3 +1,48 @@
+TravelEditor
+------------
+
+TravelEditor.saveAsTravel ( )
+	- Entry points :
+		- TravelToolbarUI -> SaveAsButtonClickEL
+	- Tests :
+		- Start the command => A dialog box is displayed => Select your choices + ok => the travel is saved with some data removed
+		- Points to verify :
+			- verify that the correct data are removed or saved
+
+TravelEditor.saveTravel ( )
+	- Entry points :
+		- TravelToolbarUI -> SaveButtonClickEL
+		- Tests :
+			- Start the command => the app propose to save a file
+			
+TravelEditor.newTravel ( )
+	- Entry points : 
+		- TravelToolbarUI -> CancelButtonClickEL
+		- Tests :
+			- Start the command => A confirmation dialog box is displayed => The current travel is removed
+			- Points to verify:
+				- The roadbook is empty
+				- The route list is cleaned
+				- The itinirerary is empty
+				- The map is empty
+				- The travel name is empty and the page title updated.
+
+TravelEditor.routeDropped ( )
+	Entry points :
+		- Drag and drop a route in the route list UI
+	- Tests :
+		- Start a drag and drop of a route => the routes are reordered
+		- Points to verify :
+			- the route list is updated
+			- the roadbook is updated
+			- the distances are updated
+
+Others commands related to travel not in theTravelEditor :
+	- FileLoader ( ).openLocalFile ( )
+	- FileLoader ( ).mergeLocalFile ( )
+		
+----------------------------------------------------------------------------------------------------------------
+
 RouteEditor
 -----------
 
@@ -86,6 +131,7 @@ RouteEditor.routeProperties ( )
 			- the roadbook must be updated ( distances, travel, route name )
 			- the itinerary must be updated ( distances )
 			- the route must be changed on the map ( color, width, linetype )
+			- all changes made in the RouteProperties dialog are reported on the map, the roadbook the route list and the itinerary
 		- See also :
 			- tests for the RouteProperties dialog
 		
@@ -103,9 +149,9 @@ RouteEditor.hideRoute ( )
 	- Entry points :
 		- RouteContextMenu ( from the map and from theUI for hideRoute, from the UI only for showRoute )
 	- Tests :
-		- start the command from the edited route => the command must be disabled in the RouteContextMenu
+		- Start the command from the edited route => the command must be disabled in the RouteContextMenu
 		- Start the command from an hidden route => the route must be visible
-		- start the command from a visible and not edited route => the route must be hidden
+		- Start the command from a visible and not edited route => the route must be hidden
 		- Points to verify :
 			- an hidden route must be displayed in gray in the route list
 			- an hidden route can be edited from the UI
@@ -115,7 +161,7 @@ RouteEditor.hideRoutes ( )
 	- Entry points :
 		- MapContextMenu
 	- Tests :
-		- start the command => all the routes are visible or hidden
+		- Start the command => all the routes are visible or hidden
 
 Others commands related to routes not in theRouteEditor :
 	- theNoteEditor.newRouteNote ( )		
@@ -124,4 +170,368 @@ Others commands related to routes not in theRouteEditor :
 	- Zoomer ( ).zoomToRoute ( )
 		
 ----------------------------------------------------------------------------------------------------------------
+
+NoteEditor
+----------
+
+NoteEditor.newTravelNote ( )
+	Entry points : 
+		- MapContextMenu
+	- Tests :
+		- Start the command => the NoteDialog is displayed => a travel note is added
+		- Points to verify :
+			- the note is added to the map
+			- the note is added to the travel notes pane
+			- the roadbook is updated
+
+NoteEditor.newRouteNote ( )
+	Entry points :
+		- RouteContextMenu ( from the map only )
+		- ProfileContextMenu
+	- Tests :
+		- Start the command => the NoteDialog is displayed => a route note is added
+		- Points to verify :
+			- the note is added to the map
+			- the note is added to the itinerary pane
+			- the note distance is correct and the notes ordered by distance
+			- the roadbook is updated
+
+NoteEditor.newSearchNote ( )
+	Entry points :
+		- OsmSearchContextMenu ( Add a travel note )
+		- OsmSearchContextMenu ( Add a route note )
+	- Tests :
+		- Start the command => the NoteDialog can be displayed => a route note or a travel note is added
+		- Points to verify :
+			- the note is added to the map
+			- the note is added to the itinerary pane ( for a route note )
+			- the note distance is correct and the notes ordered by distance
+			- the roadbook is updated
+			- the note is added to the travel notes pane ( for a travel note )
+			- the note tooltip and popup are correct
+
+NoteEditor.changeOsmSearchNoteDialog ( )
+	Entry points :
+		- OsmSearchContextMenu 
+	- Tests :
+		- Start the command => Nothing occurs
+		- Points to verify :
+			- the NoteDialog is displayed or not displayed, depending of the command, each time a search note is created
+
+NoteEditor.editNote ( )
+	Entry points :
+		- NoteContextMenu ( from a note on the map, a note in the itinerary pane or a note in the travel notes pane )
+	- Tests :
+		- Start the command => the NoteDialog is displayed => the note is updated
+		- Points to verify :
+			- the node is modified in the roadbook
+			- the note is modified in the itinerary pane ( for route note )
+			- the note is modified in the travel notes pane ( for travel notes )
+			- the note is modified on the map
+			- the note tooltip on the map is eventually modified
+			- the note popup on the map is modified
+
+NoteEditor.removeNote ( )
+	Entry points :
+		- NoteContextMenu ( from a note on the map, a note in the itinerary pane or a note in the travel notes pane )
+	- Tests :
+		- Start the command => the note is removed
+		- Points to verify :
+			- the note is removed from the roadbook
+			- the note is removed from the itinerary pane ( for route note )
+			- the note is removed from the travel notes pane ( for travel notes )
+			- the note is removed from the map
+			- the distances are modified
+
+NoteEditor.hideNotes ( )
+	Entry points :
+		- MapContextMenu
+	- Tests :
+		- Start the command => all the notes are hidden on the map only
+
+NoteEditor.showNotes ( )
+	Entry points :
+		- MapContextMenu
+	- Tests :
+		- Start the command => all the notes are visible on the map, except the route notes linked to an hidden route
+
+NoteEditor.attachNoteToRoute ( )
+	Entry points :
+		- NoteContextMenu ( from the map and the UI - the command is active only when no route is edited and only for travel notes )
+	- Tests :
+		- Start the command => the travel note is transformed into a route note
+		- Points to verify :
+			- the roadbook is updated
+			- the travel notes pane is updated
+			- distances are mdified
+
+NoteEditor.detachNoteFromRoute ( )
+	Entry points :
+		- NoteContextMenu ( from the map and the UI - the command is active only when no route is edited and only for route notes )
+	- Tests :
+		- Start
+		- Points to verify :
+			- the roadbook is updated
+			- the travel notes pane is updated
+			- distances are mdified
+
+NoteEditor.travelNoteDropped ( )
+	Entry Points :
+		- Drag and drop a note in the travel notes pane
+	- Tests :
+		- Start a drag and drop of a travel note => the travel notes are reordered
+		- Points to verify :
+			- the travel notes pane is updated
+			- the roadbook is updated
+
+Others commands related to notes not in theNoteEditor :
+	- Zoomer ( ).zoomToNote ( )
+	
+----------------------------------------------------------------------------------------------------------------
+
+WayPointEditor
+--------------
+
+WayPointEditor.setStartPoint ( )
+	Entry points :
+		- MapContextMenu ( the command is disabled when no route is edited or when the edited route have already a start point )
+		- OsmSearchContextMenu ( the command is disabled when no route is edited or when the edited route have already a start point )
+	- Tests :
+		- Start the command => a green waypoint is added to the map
+		- Points to verify :
+			- the routing start when a start point and an end point are linked to the route
+
+WayPointEditor.setEndPoint ( )
+	Entry points :
+		- MapContextMenu ( the command is disabled when no route is edited or when the edited route have already an end point )
+		- OsmSearchContextMenu ( the command is disabled when no route is edited or when the edited route have already an end point )
+	- Tests :
+		- Start the command => a red waypoint is added to the map
+		- Points to verify :
+			- the routing start when a start point and an end point are linked to the route
+
+WayPointEditor.addWayPoint ( )
+	Entry points :
+	Entry points :
+		- MapContextMenu ( the command is disabled when no route is edited )
+		- OsmSearchContextMenu ( the command is disabled when no route is edited )
+	- Tests :
+		- Start the command => an orange waypoint is added to the map
+		- Points to verify :
+			- the routing start when a start point and an end point are linked to the route
+
+WayPointEditor.removeWayPoint ( )
+	Entry points :
+		- WayPointContextMenu ( the command is disabled for start point and end point )
+	- Tests :
+		- Start the command => the way point is removed
+		- Points to verify :
+			- the routing start when a start point and an end point are linked to the route
+
+WayPointEditor.addWayPointOnRoute ( )
+	Entry points :
+		- TempWayPointMarkerDragEndEL
+	- Tests :
+		- set the mouse on the edited route => a gray temporary way point is displayed => drag and drop this temporary way point => a new orange way point is added
+		- Points to verify :
+		- the routing start
+
+WayPointEditor.reverseWayPoints ( )
+	Entry points :
+		- RouteContextMenu ( on the map and on the UI - the command is enabled only for the edited route )
+	- Tests :
+		- Start the command => the way point are reversed
+		- Points to verify :
+			- the routing start when a start point and an end point are linked to the route
+
+WayPointEditor.wayPointDragEnd ( )
+	Entry points :
+		- WayPointDragEndEL
+	- Tests :
+		- Drag and drop a green, orange or red way point => the way point is moved to the drop point 
+		- Points to verify:
+			- the routing start when a start point and an end point are linked to the route
+
+WayPointEditor.wayPointProperties ( )
+	Entry points :
+		- WayPointContextMenu
+	- Tests :
+		- Start the command => the WayPointPropertiesDialog is displayed => the name of the way point is modified
+		- Points to verify :
+			- the route name must also be modified
+		
+----------------------------------------------------------------------------------------------------------------
+
+MapEditor
+---------
+
+Commands lauched by event listeners on the map :
+
+	- Entry point :
+		- NoteBulletDragEndEL
+	- Tests :
+		- Drag and drop the bullet of a route note on the map => the bullet remain linked to the route near the drop point
+		- Points to verify : 
+			- route notes are sorted
+			- the roadbook is updated
+			- the itinerary is updated
+		- Drag and drop the bullet of a travel note on the map => the bullet remain at the drop point
+		- Points to verify : 
+			- the roadbook is updated
+			- the travel notes pane is updated
+			
+	- Entry point :
+		- NoteBulletDragEL
+	- Tests :
+		- Drag the bullet of a note on the map => the polyline move with the bullet, the icon don't move
+	
+	- Entry point : 
+		- NoteBulletMouseEnterEL
+	- Tests :
+		- Move the mouse on the bullet on the map => the style of the bullet changes
+		
+	- Entry point : 
+		- NoteMarkerDragEL
+	- Tests :
+		- Drag the icon of a note on the map => the polyline move with the icon, the bullet don't move
+		
+	- Entry point :
+		- NoteMarkerDragEndEL
+	- Tests :
+		- Drag and drop the icon of a note on the map => the icon stay at the drop point
+		
+	- Entry point :
+		- NoteMarkerContextMenuEL
+	- Tests :
+		- right click on a note on the map => the NoteContextMenu is displayed
+		
+	- Entry point :
+		- RouteMouseOverOrMoveEL
+	- Tests :
+		- move the mouse on a not edited chained route on the map => the route name is displayed with the distance since the beginning of the travel
+		- move the mouse on a not edited and not chained route on the map => the route name is displayed with the distance since the beginning of the route
+	
+	- Entry point :
+		- RouteMouseOverOrMoveEL
+	- Tests : 
+		- right click on a route on the map => the RouteContextMenu is displayed
+		
+	- Entry point : 
+		- EditedRouteMouseOverEL
+	-Tests :
+		- move the mouse on the edited route on the map => a gray way point is displayed at the mouse position
+		- move the mouse to leave the route => the gray way point is removed
+		
+	- Entry point :
+		- TempWayPointMarkerDragEndEL
+	-Tests : 
+		- Drag and drop the gray way point => the gray way point is transformed into an orange way point and the routing start
+		
+	- Entry point :
+		- TempWayPointMarkerContextMenuEL
+	- Tests :
+		- right click on a gray way point => the RouteContextMenu is displayed
+		
+	- Entry point :
+		- WayPointContextMenuEL
+	- Tests :
+		- right click on a green, orange or red way point => the WayPointContextMenu is displayed
+		
+	- Entry point :
+		- WayPointDragEndEL
+	- Tests :
+		- Drag and drop a green, orange or red way point => the way point is moved to the drop point 
+		- Points to verify:
+			- the routing start when a start point and an end point are linked to the route
+		
+	- Entry point :
+		- theTravelNotes.addControl ( ) 
+	- Tests :
+		- right click on the map => the MapContextMenu is displayed
+
+----------------------------------------------------------------------------------------------------------------
+
+Router
+---------
+
+theRouter.startRouting ( )
+	Entry points :
+		- WayPointEditor.addWayPoint
+		- WayPointEditor.addWayPointOnRoute
+		- WayPointEditor.reverseWayPoints
+		- WayPointEditor.removeWayPoint
+		- WayPointEditor.setStartPoint
+		- WayPointEditor.setEndPoint
+		- WayPointEditor.wayPointDragEnd
+		- ProviderToolbarProviderButton ( click )
+		- ProviderToolbarTransitModeButton (click )
+	- Tests :
+		- Start one of the commands linked to the entry points
+		- Points to verify :
+			- way points are moved to the route
+			- distances are recomputed
+			- a zoom is performed on the route only for the first routing request
+			- the roadbook is updatedthe itinerary is updated 
+			- the route list is updated
+
+----------------------------------------------------------------------------------------------------------------
+
+Zoomer
+---------
+
+Zoomer ( ).zoomToTravel ( )
+	Entry points :
+		- MapContextMenu
+		- FileLoader ( ) after the loading of a travel
+	- Tests :
+		- Start the command => a zoom is performed on the travel
+
+Zoomer ( ).zoomToRoute ( )
+	Entry points :
+		- RouteContextMenu
+		- theRouter 
+	- Tests :
+		- Start the command => a zoom is performed on the route, included notes
+
+Zoomer ( ).zoomToNote ( )
+	Entry points :
+		- NoteContextMenu ( on the map, the itinerary pane or the travel notes pane )
+	- Tests :
+		- Start the command => a zoom is performed on the note
+
+Zoomer ( ).zoomToManeuver ( )
+	Entry points :
+		- ManeuverContextMenu ( on the itinerary pane )
+	- Tests :
+		- Start the command => a zoom is performed on the maneuver location
+
+Zoomer ( ).zoomToPoi ( )
+	Entry points :
+		- OsmSearchContextMenu
+	- Tests :
+		- Start the command => a zoom is performed on the search result
+
+Zoomer ( ).zoomToLatLng ( )
+	Entry points :
+		- ProfileContextMenu
+	- Tests :
+		- Start the command => a zoom is performed on the location
+
+----------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

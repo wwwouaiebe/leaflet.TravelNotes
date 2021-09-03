@@ -21,7 +21,7 @@ Changes:
 	- v3.0.0:
 		- Issue ♯175 : Private and static fields and methods are coming
 Doc reviewed 20210901
-Tests ...
+Tests 20210902
 */
 
 /**
@@ -229,7 +229,7 @@ class Router {
 			let routeProvider = theTravelNotesData.providers.get ( theTravelNotesData.routing.provider.toLowerCase ( ) );
 			theTravelNotesData.travel.editedRoute.itinerary.provider = routeProvider.name;
 			theTravelNotesData.travel.editedRoute.itinerary.transitMode = theTravelNotesData.routing.transitMode;
-			routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute, null )
+			routeProvider.getPromiseRoute ( theTravelNotesData.travel.editedRoute )
 				.then ( ( ) => this.#onRoutingOk ( ) )
 				.catch ( ( ) => this.#onRoutingError ( ) );
 		}
