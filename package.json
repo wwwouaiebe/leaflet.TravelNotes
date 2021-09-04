@@ -7,6 +7,10 @@
     "leaflet": "latest"
   },
   "devDependencies": {
+    "@babel/core": "latest",
+    "@babel/eslint-parser": "latest",
+    "clean-css": "latest",
+    "eslint": "latest",
     "grunt": "latest",
     "grunt-contrib-clean": "latest",
     "grunt-contrib-copy": "latest",
@@ -16,16 +20,12 @@
     "grunt-rollup": "latest",
     "grunt-stylelint": "latest",
     "grunt-terser": "latest",
-    "@babel/core": "latest",
-    "@babel/eslint-parser": "latest",
-    "eslint": "latest",
-    "rollup": "latest",
-    "terser": "latest",
     "jsdoc": "latest",
-    "clean-css": "latest",
     "osrm-text-instructions": "latest",
+    "rollup": "latest",
     "stylelint": "latest",
-    "stylelint-config-standard": "latest"
+    "stylelint-config-standard": "latest",
+    "terser": "latest"
   },
   "repository": {
     "type": "git",

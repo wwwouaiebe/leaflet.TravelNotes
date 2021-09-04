@@ -45,7 +45,7 @@ nav {
 	position: fixed;
 	top: 0;
 	left:0;
-	width:18em;
+	width:32em;
 	height: 100vh;
 	background-color: black;
 	color: white;
@@ -72,8 +72,8 @@ nav h3 {
 #main {
 	position: absolute;
 	top:0;
-	left: 18em;
-	width: calc(100vw -18em);
+	left: 32em;
+	width: calc(100vw - 32em);
 }
 #main h1 {
 	font-size: 200%;
@@ -116,7 +116,7 @@ h4 {
 	padding-right: 0.5em;
 }
 
-.type-signature,
+.type-signature
 {
 	font-size: 80%;
 	color: gray;
@@ -147,4 +147,3 @@ thead tr
 
 th { border-right: 1px solid #aaa; }
 tr > th:last-child { border-right: 1px solid #ddd; }
-*/
