@@ -15,7 +15,7 @@ When running grunt, the source files are verified with eslint and rollup. If an 
 
 ## What's the difference between debug and release modes?
 
-In debug mode, the appligation is installed in the leaflet.TravelNotes/debug folder and uses directly the sources files as ES6 modules. that's the more easy way to develop and debug the application.
+In debug mode, the application is installed in the leaflet.TravelNotes/debug folder and uses directly the sources files as ES6 modules. that's the more easy way to develop and debug the application.
 
 In release mode the application is installed in the leaflet.TravelNotes/dist folder and in the leaflet.TravelNotes/gh-page folder. The leaflet.TravelNotes/gh-page folder contains all the needed files
 to run the application, included last version of leaflet. 
@@ -47,7 +47,7 @@ All the context menus are derived from the __BaseContextMenu__ class and are bas
 
 ## Dialogs
 
-In the same way, some user action are displaying a dialog. The action is suspended till the user click on the ok button and then restarted.
+In the same way, some user actions are displaying a dialog. The action is suspended till the user click on the ok button and then restarted.
 
 All dialogs are derived from the __BaseDialog__ class and are also based on the Promise API.
 
@@ -57,7 +57,7 @@ When the html page is loaded, some global objects are build (see in the technica
 
 Then the __AppLoader.loadApp ( )__ method is called from the file main.js. This method will first load all the json and csv files with the application configutation from the server.
 
-When the configuration is completely lauched, the method call:
+When the configuration is completely launched, the method call:
 - the __TravelNotes.addReadOnlyMap ( )__ method when a travel file name is given in the parameters of the url
 - the __TravelNotes.addControl ( )__ method when no travel file name is given
 
