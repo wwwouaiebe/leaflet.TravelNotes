@@ -39,11 +39,23 @@ of the classes __MapEditor__ and __UI__ to update the map and the UI.
 
 Seems to be simple, but remember that there are quite 200 event listeners in the app.
 
+## Context menus
+
+Some user actions are displaying a context menu. In that case the action is stopped till the user select something in the context menu and then the action selected in the context menu executed.
+
+All the context menus are derived from the __BaseContextMenu__ class and are based on the Promise API.
+
+## Dialogs
+
+In the same way, somme user action are displaying a dialog. The action is suspended till the user click on the ok button and then restarted.
+
+All dialogs are derived from the __BaseDialog__ class and are also based on the Promise API.
+
 ## Loading of the application
 
 When the html page is loaded, some global objects are build (see in the technical documentation Global with name starting with __the...__).
 
-Then the __AppLoader.loadApp ( )__ method is called from the file main.js. This method will first load from the server all the json and csv files with the application configutation.
+Then the __AppLoader.loadApp ( )__ method is called from the file main.js. This method will first load all the json and csv files with the application configutation from the server.
 
 When the configuration is completely lauched, the method call:
 - the __TravelNotes.addReadOnlyMap ( )__ method when a travel file name is given in the parameters of the url
