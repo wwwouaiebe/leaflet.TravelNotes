@@ -47,7 +47,7 @@ All the context menus are derived from the __BaseContextMenu__ class and are bas
 
 ## Dialogs
 
-In the same way, somme user action are displaying a dialog. The action is suspended till the user click on the ok button and then restarted.
+In the same way, some user action are displaying a dialog. The action is suspended till the user click on the ok button and then restarted.
 
 All dialogs are derived from the __BaseDialog__ class and are also based on the Promise API.
 
@@ -60,3 +60,11 @@ Then the __AppLoader.loadApp ( )__ method is called from the file main.js. This 
 When the configuration is completely lauched, the method call:
 - the __TravelNotes.addReadOnlyMap ( )__ method when a travel file name is given in the parameters of the url
 - the __TravelNotes.addControl ( )__ method when no travel file name is given
+
+## Classes, classes, classes....
+
+Don't search. You will not find the __function__ keyword in the application. Everything is based on classes and objects!
+
+Arrows functions only are used when Javascript expect a function (and arrows functions are usefull to preserve the value of the __this__ keyword).
+
+And remember that event listeners can also be objects.
