@@ -51,7 +51,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class WayPointDragEndEL
+@class WayPointContextMenuEL
 @classdesc contextmenu event listener for the waypoint marker
 @hideconstructor
 

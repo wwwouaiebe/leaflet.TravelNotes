@@ -89,7 +89,7 @@ class TempWayPointMarkerMouseOutEL {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TempWayPointMarkerMouseOutEL
+@class TempWayPointMarkerDragStartEL
 @classdesc dragstart event listener for the temp waypoint marker
 @hideconstructor
 
@@ -110,7 +110,7 @@ class TempWayPointMarkerDragStartEL {
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class TempWayPointMarkerMouseOutEL
+@class TempWayPointMarkerContextMenuEL
 @classdesc contextmenu event listener for the temp waypoint marker
 @hideconstructor
 

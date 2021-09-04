@@ -78,7 +78,6 @@ class EyeMouseDownEL {
 @class EyeMouseUpEL
 @classdesc mouseup event listener for the eye button
 @hideconstructor
-@private
 
 @--------------------------------------------------------------------------------------------------------------------------
 */

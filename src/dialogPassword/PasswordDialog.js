@@ -44,7 +44,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module dialogPassword
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -59,9 +58,10 @@ const OUR_PSWD_MIN_LENGTH = 12;
 /**
 @--------------------------------------------------------------------------------------------------------------------------
 
-@class
+@class PasswordDialog
 @classdesc This class is the password dialog
 @extends BaseDialog
+@hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------
 */
@@ -98,7 +98,7 @@ class PasswordDialog extends BaseDialog {
 	#onMouseDownEyeEventListener = null;
 	#onMouseUpEyeEventListener = null;
 
-	/**
+	/*
 	The constructor
 	@param {boolean} verifyPassword When true the password must be conform to the password rules
 	*/

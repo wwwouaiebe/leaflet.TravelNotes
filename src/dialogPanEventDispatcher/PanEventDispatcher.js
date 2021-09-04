@@ -39,7 +39,6 @@ Tests ...
 @------------------------------------------------------------------------------------------------------------------------------
 
 @module dialogPanEventDispatcher
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
@@ -178,7 +177,7 @@ class PanEventDispatcher {
 	#target = null;
 	#eventListener = null;
 
-	/**
+	/*
 	constructor
 	@param {HTMLElement} target The target for the event dispatcher
 	@param {!number} button The button to use. must be PanEventDispatcher.LEFT_BUTTON or PanEventDispatcher.MIDDLE_BUTTON

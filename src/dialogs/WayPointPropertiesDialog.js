@@ -187,7 +187,7 @@ class WayPointPropertiesDialog extends BaseDialog {
 		return [ nameHeaderDiv, nameInputDiv ];
 	}
 
-	/**
+	/*
 	constructor
 	@param {WayPoint} The wayPoint to modify
 	*/
