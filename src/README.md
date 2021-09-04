@@ -10,7 +10,7 @@ the map (notes, routes, waypoints) or on the user interface (UI), a drag and dro
 This event is captured by an event listener (one of the classes with the name finishing with __...EL__) and the event listener call a method, mainly in one of the object in the __core__ module / folder.
 
 When the action is performed, the map and the UI have to be updated with the new/modifed/deleted data. So at the end of the procedure a new event is dispatched to the document with the data
-( see the __**coreLib/EventDispatcher.js**__ file ). This second event is captured by an event listener on the document (see  main/AppLoader.#addEventsListeners ( ) method). This event listener call the appropriate methods 
+( see the __coreLib/EventDispatcher.js__ file ). This second event is captured by an event listener on the document (see  __AppLoader.#addEventsListeners ( )__ method). This event listener call the appropriate methods 
 of the classes __coreMapEditor/MapEditor__ and __UI/UI__ to update the map and the UI.
 
 ## Loading of the application
