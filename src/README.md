@@ -13,6 +13,8 @@ When the action is performed, the map and the UI have to be updated with the new
 ( see the __coreLib/EventDispatcher.js__ file ). This second event is captured by an event listener on the document (see  __AppLoader.#addEventsListeners ( )__ method). This event listener call the appropriate methods 
 of the classes __coreMapEditor/MapEditor__ and __UI/UI__ to update the map and the UI.
 
+Seems to be simple, but remember that there are quite 200 event listeners in tha app.
+
 ## Loading of the application
 
 When the html page is loaded, some global objects are build (see in the technical documentation Global with name starting with __the...__).
