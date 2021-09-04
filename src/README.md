@@ -1,17 +1,17 @@
-# What to do if you wil change the application
+# What to do if you wil change the application?
 
-First, you need Node.js and a local web server installed on your computer. Having GitHub Desktop and a Git shell will also facilate your life.
+First, you need Node.js and a local web server installed on your computer. Having GitHub Desktop and a Git shell will also facilitate your life.
 
 Then clone leaflet.TravelNotes in your GitHub repository and install it on your computer.
 
-Open a Node.js command prompt or a Git shell and go to the directory where leaflet.TravelNote is installed run __npm install leafletTravelNotes__. All the needed Node package wil be installed.
+Open a Node.js command prompt or a Git shell and go to the directory where leaflet.TravelNote is installed and run __npm install leafletTravelNotes__. All the needed Node packages wil be installed.
 
-From the Node.js or Git shell run:
+From the Node.js command prompt or Git shell run:
 - __grunt__ to build the application in debug mode
 - __grunt docs__ to build the application in debug mode and build the technical documentation
 - __grunt release__ to build the application in release mode and build the technical documentation
 
-When running grunt, the source files are verified with eslint and rollup. If an error is found, grunt is stopped and the build not executed, so you have to coorect all the errors before you can run the application.
+When running grunt, the source files are verified with eslint and rollup. If an error is found, grunt is stopped and the build not executed, so you have to correct all the errors before you can run the application.
 
 ## What's the difference between debug and release modes?
 
@@ -20,7 +20,7 @@ In debug mode, the appligation is installed in the leaflet.TravelNotes/debug fol
 In release mode the application is installed in the leaflet.TravelNotes/dist folder and in the leaflet.TravelNotes/gh-page folder. The leaflet.TravelNotes/gh-page folder contains all the needed files
 to run the application, included last version of leaflet. 
 
-In release mode, all the js sources files are grouped in one big js file with rollup and then this file is minified with terser, so the file is quite imposible to understand if an error occurs at the exution time.
+In release mode, all the js sources files are grouped in one big js file with rollup and then this file is minified with terser, so the file is quite imposible to understand if an error occurs at the execution time.
 
 # How the application works
 
@@ -31,13 +31,13 @@ All user actions are based on events.
 The user do an action, mainly with the mouse on the screen and this action trigger an event. Events can be a right mouse click, a mouse move, a mouse over, a mouse wheel on an object on 
 the map (notes, routes, waypoints) or on the user interface (UI), a drag and drop operation on the map or on the UI...
 
-This event is captured by an event listener (one of the classes with the name finishing with __...EL__) and the event listener call a method, mainly in one of the object in the __core__ module / folder.
+This event is captured by an event listener (one of the classes with the name finishing with __...EL__) and the event listener call a method, mainly in one of the global objects in the __core__ module / folder.
 
 When the action is performed, the map and the UI have to be updated with the new/modifed/deleted data. So at the end of the procedure a new event is dispatched to the document with the data
 ( see the __coreLib/EventDispatcher.js__ file ). This second event is captured by an event listener on the document (see  __AppLoader.#addEventsListeners ( )__ method). This event listener call the appropriate methods 
-of the classes __coreMapEditor/MapEditor__ and __UI/UI__ to update the map and the UI.
+of the classes __MapEditor__ and __UI__ to update the map and the UI.
 
-Seems to be simple, but remember that there are quite 200 event listeners in tha app.
+Seems to be simple, but remember that there are quite 200 event listeners in the app.
 
 ## Loading of the application
 
