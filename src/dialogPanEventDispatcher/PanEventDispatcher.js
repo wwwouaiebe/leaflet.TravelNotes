@@ -113,7 +113,11 @@ class MouseEL {
 	handleEvent ( mouseEvent ) {
 		switch ( mouseEvent.type ) {
 		case 'mousedown' :
-			if ( mouseEvent.button === this.#button ) {
+			if ( 
+				mouseEvent.button === this.#button 
+				&& 
+				mouseEvent.target === this.#target
+			) {
 				this.#startPanX = mouseEvent.screenX;
 				this.#startPanY = mouseEvent.screenY;
 				this.#panOngoing = true;

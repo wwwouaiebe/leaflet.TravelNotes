@@ -120,7 +120,11 @@ class GeoLocator {
 	#start ( ) {
 		this.#status = GEOLOCATION_STATUS.active;
 		theEventDispatcher.dispatch ( 'geolocationstatuschanged', { status : this.#status } );
-		navigator.geolocation.getCurrentPosition ( this.#showPosition, this.#error, theConfig.geoLocation.options );
+		navigator.geolocation.getCurrentPosition (
+			position => this.#showPosition ( position ),
+			positionError => this.#error ( positionError ),
+			theConfig.geoLocation.options
+		);
 		this.#watchId = navigator.geolocation.watchPosition (
 			this.#showPosition,
 			this.#error,
