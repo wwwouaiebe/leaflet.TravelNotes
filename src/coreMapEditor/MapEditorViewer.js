@@ -71,6 +71,7 @@ import theTravelNotesData from '../data/TravelNotesData.js';
 import theRouteHTMLViewsFactory from '../viewsFactories/RouteHTMLViewsFactory.js';
 import theNoteHTMLViewsFactory from '../viewsFactories/NoteHTMLViewsFactory.js';
 import { RouteMouseOverOrMoveEL } from '../coreMapEditor/RouteEventListeners.js';
+import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 import { GEOLOCATION_STATUS, ROUTE_EDITION_STATUS, ZERO, ONE, TWO } from '../main/Constants.js';
 
@@ -173,9 +174,11 @@ class MapEditorViewer {
 
 		// a popup is binded to the the marker...
 		marker.bindPopup (
-			layer => theNoteHTMLViewsFactory.getNoteTextHTML (
-				'TravelNotes-Map-',
-				theDataSearchEngine.getNoteAndRoute ( layer.objId )
+			layer => theHTMLSanitizer.clone (
+				theNoteHTMLViewsFactory.getNoteTextHTML (
+					'TravelNotes-Map-',
+					theDataSearchEngine.getNoteAndRoute ( layer.objId )
+				)
 			)
 		);
 
