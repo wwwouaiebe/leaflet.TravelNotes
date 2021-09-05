@@ -152,6 +152,10 @@ class WayPointEditor {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

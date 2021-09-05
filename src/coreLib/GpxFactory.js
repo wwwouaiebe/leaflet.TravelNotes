@@ -181,6 +181,10 @@ class GpxFactory {
 		theUtilities.saveFile ( fileName, this.#myGpxString );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

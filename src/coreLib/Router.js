@@ -210,6 +210,14 @@ class Router {
 		theEventDispatcher.dispatch ( 'setrouteslist' );
 	}
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	This method start the routing for the edited route.
 	@async

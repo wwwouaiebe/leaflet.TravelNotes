@@ -81,6 +81,10 @@ class CollectionIterator {
 
 	#index = NOT_FOUND;
 
+	/*
+	constructor
+	*/
+
 	constructor ( collection ) {
 		this.#collection = collection;
 		Object.freeze ( this );
@@ -224,6 +228,11 @@ class Collection {
 
 		return this.#array [ index ];
 	}
+
+	/*
+	constructor
+	@param {class} classCollection The class of objects that have to be stored in the collection
+	*/
 
 	constructor ( classCollection ) {
 		this.#classCollection = classCollection;

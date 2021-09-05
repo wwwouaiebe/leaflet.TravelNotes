@@ -63,6 +63,10 @@ class MapLayersCollection {
 	#defaultMapLayer = null;
 	#mapLayersAdded = false;
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		this.#defaultMapLayer = new MapLayer (
 			{

@@ -184,6 +184,10 @@ class Note {
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

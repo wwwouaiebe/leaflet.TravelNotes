@@ -75,6 +75,7 @@ class DictionaryItem {
 			this.isRoot = true;
 		}
 		this.#objId = ObjId.nextObjId;
+		Object.seal ( this );
 	}
 
 	get objId ( ) { return this.#objId; }

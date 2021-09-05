@@ -69,6 +69,10 @@ class ProfileWindowsManager {
 
 	#profileWindows = new Map ( );
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

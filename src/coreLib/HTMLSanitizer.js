@@ -271,6 +271,10 @@ class HTMLSanitizer {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/*
@@ -312,6 +316,8 @@ class HTMLSanitizer {
 		this.#validityMap.set ( 'svg', [ 'xmlns', 'viewBox', 'class' ] );
 		this.#validityMap.set ( 'text', [ 'x', 'y', 'text-anchor' ] );
 		this.#validityMap.set ( 'polyline', [ 'points', 'class', 'transform' ] );
+
+		Object.freeze ( this );
 	}
 
 	/**

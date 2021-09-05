@@ -66,9 +66,14 @@ class ArrowAndTooltipFinder {
 	#computeData = null;
 	#mapIconData = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( computeData, mapIconData ) {
 		this.#computeData = computeData;
 		this.#mapIconData = mapIconData;
+		Object.freeze ( this );
 	}
 
 	/**

@@ -62,8 +62,6 @@ import BaseContextMenuOperator from '../contextMenus/BaseContextMenuOperator.js'
 
 import { ZERO, INVALID_OBJ_ID, LAT_LNG } from '../main/Constants.js';
 
-// import GarbageCollectorTester from '../util/GarbageCollectorTester.js';
-
 const OUR_MENU_MARGIN = 20;
 
 /**
@@ -78,13 +76,6 @@ const OUR_MENU_MARGIN = 20;
 */
 
 class BaseContextMenu {
-
-	/**
-	Garbage collector testing. Only for memory free tests on dev.
-	@private
-	*/
-
-	// #garbageCollectorTester = new GarbageCollectorTester ( );
 
 	/**
 	The active menu container. Needed to close the menu when
@@ -233,6 +224,42 @@ class BaseContextMenu {
 
 	}
 
+	/*
+	constructor
+	@param {Event} contextMenuEvent. The event that have triggered the menu
+	@param {Object} parentNode The parent node of the menu. Can be null for leaflet objects
+	*/
+
+	constructor ( contextMenuEvent, parentNode ) {
+
+		if ( BaseContextMenu.#currentMenu ) {
+
+			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
+			BaseContextMenu.#currentMenu.onCancel ( );
+			return;
+		}
+
+		this.#eventData.clientX = contextMenuEvent.clientX || contextMenuEvent.originalEvent.clientX || ZERO;
+		this.#eventData.clientY = contextMenuEvent.clientY || contextMenuEvent.originalEvent.clientY || ZERO;
+		this.#eventData.lat = contextMenuEvent.latlng ? contextMenuEvent.latlng.lat : LAT_LNG.defaultValue;
+		this.#eventData.lng = contextMenuEvent.latlng ? contextMenuEvent.latlng.lng : LAT_LNG.defaultValue;
+		if ( contextMenuEvent.target.objId ) {
+
+			// Needed for leaflet objects
+			this.#eventData.targetObjId = contextMenuEvent.target.objId;
+		}
+		else if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
+			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.target.dataset.tanObjId );
+		}
+		this.#eventData.haveParentNode = null !== parentNode;
+		Object.freeze ( this.#eventData );
+
+		this.#htmlElements.parentNode = parentNode || document.body;
+
+		BaseContextMenu.#currentMenu = this;
+		Object.freeze ( this );
+	}
+
 	/**
 	onOk method used by the menu operator
 	*/
@@ -272,37 +299,6 @@ class BaseContextMenu {
 					}
 				}
 			);
-	}
-
-	constructor ( contextMenuEvent, parentNode ) {
-
-		if ( BaseContextMenu.#currentMenu ) {
-
-			// the menu is already opened, so we suppose the user will close the menu by clicking outside...
-			BaseContextMenu.#currentMenu.onCancel ( );
-			return;
-		}
-
-		this.#eventData.clientX = contextMenuEvent.clientX || contextMenuEvent.originalEvent.clientX || ZERO;
-		this.#eventData.clientY = contextMenuEvent.clientY || contextMenuEvent.originalEvent.clientY || ZERO;
-		this.#eventData.lat = contextMenuEvent.latlng ? contextMenuEvent.latlng.lat : LAT_LNG.defaultValue;
-		this.#eventData.lng = contextMenuEvent.latlng ? contextMenuEvent.latlng.lng : LAT_LNG.defaultValue;
-		if ( contextMenuEvent.target.objId ) {
-
-			// Needed for leaflet objects
-			this.#eventData.targetObjId = contextMenuEvent.target.objId;
-		}
-		else if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
-			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.target.dataset.tanObjId );
-		}
-		this.#eventData.haveParentNode = null !== parentNode;
-		Object.freeze ( this.#eventData );
-
-		this.#htmlElements.parentNode = parentNode || document.body;
-
-		BaseContextMenu.#currentMenu = this;
-		Object.seal ( this );
-
 	}
 
 	/**

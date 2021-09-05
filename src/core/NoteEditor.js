@@ -178,11 +178,8 @@ class NoteEditor {
 		return note;
 	}
 
-	/**
-	This method construct a new search note object
-	@param {Object} data The search data coming from osm
-	@param {boolean} osmSearchNoteDialog a boolean indicating when the note dialog must be showed
-	@private
+	/*
+	constructor
 	*/
 
 	constructor ( ) {

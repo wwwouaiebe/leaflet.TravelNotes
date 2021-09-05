@@ -149,6 +149,10 @@ class Itinerary	{
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

@@ -173,6 +173,10 @@ class Travel {
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

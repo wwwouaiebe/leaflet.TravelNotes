@@ -276,12 +276,17 @@ class OverpassAPIDataLoader {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( options ) {
 		if ( options ) {
 			for ( const [ key, value ] of Object.entries ( options ) ) {
 				this.#options [ key ] = value;
 			}
 		}
+		Object.freeze ( this );
 	}
 
 	/**

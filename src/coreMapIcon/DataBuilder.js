@@ -95,8 +95,11 @@ class DataBuilder {
 		directionArrow : ' '
 	}
 
-	constructor ( ) {
+	/*
+	constructor
+	*/
 
+	constructor ( ) {
 		Object.freeze ( this );
 	}
 

@@ -111,6 +111,7 @@ class DataEncryptor {
 	}
 
 	/*
+	constructor
 	@param {string} salt Salt to be used for encoding and decoding operations. If none, a default value is provided.
 	*/
 

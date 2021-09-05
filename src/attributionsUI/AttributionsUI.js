@@ -68,6 +68,10 @@ class AttributionsUI {
 
 	#attributionsDiv = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

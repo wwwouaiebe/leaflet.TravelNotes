@@ -247,6 +247,10 @@ class MapIconFromOsmFactory {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

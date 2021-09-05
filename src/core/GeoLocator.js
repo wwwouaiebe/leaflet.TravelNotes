@@ -128,6 +128,10 @@ class GeoLocator {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

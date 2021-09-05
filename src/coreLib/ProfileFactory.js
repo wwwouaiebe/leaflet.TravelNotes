@@ -358,6 +358,10 @@ class ProfileFactory {
 		this.#svg.setAttributeNS ( null, 'class', 'TravelNotes-Route-SvgProfile' );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

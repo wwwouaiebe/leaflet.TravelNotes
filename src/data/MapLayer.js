@@ -85,6 +85,10 @@ class MapLayer	{
 	#attribution = null;
 	#getCapabilitiesUrl = null;
 
+	/*
+	constructor
+	*/
+
 	/* eslint-disable-next-line complexity, max-statements */
 	constructor ( jsonLayer ) {
 		if ( jsonLayer.name && 'string' === typeof ( jsonLayer.name ) ) {

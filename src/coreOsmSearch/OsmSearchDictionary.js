@@ -83,13 +83,6 @@ class OsmSearchDictionary {
 	#filterTagsArray = null;
 	#currentItem = null;
 
-	constructor ( ) {
-		this.#itemsMap = new Map ( );
-		this.#dictionary = new DictionaryItem ( 'All', true );
-		this.#itemsMap.set ( this.#dictionary.objId, this.#dictionary );
-		this.#itemsArray = [ this.#dictionary.items ];
-	}
-
 	/**
 	Split a line from the csv file into words and add a DictionaryItem or a filterTag to the dictionary
 	@private
@@ -132,6 +125,18 @@ class OsmSearchDictionary {
 		if ( filterTags ) {
 			this.#filterTagsArray.push ( filterTags );
 		}
+	}
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		this.#itemsMap = new Map ( );
+		this.#dictionary = new DictionaryItem ( 'All', true );
+		this.#itemsMap.set ( this.#dictionary.objId, this.#dictionary );
+		this.#itemsArray = [ this.#dictionary.items ];
+		Object.freeze ( this );
 	}
 
 	/**

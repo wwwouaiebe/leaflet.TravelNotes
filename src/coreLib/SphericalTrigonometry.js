@@ -78,6 +78,10 @@ class SphericalTrigonometry {
 		return ( ( Lng + DEGREES.d540 ) % DEGREES.d360 ) - DEGREES.d180;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

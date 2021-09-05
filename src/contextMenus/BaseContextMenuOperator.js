@@ -150,6 +150,11 @@ class BaseContextMenuOperator {
 			.classList.add ( 'TravelNotes-ContextMenu-ItemSelected' );
 	}
 
+	/*
+	constructor
+	@param {Event} contextMenu. The ContextMenu for witch the operator is made
+	*/
+
 	constructor ( contextMenu ) {
 
 		// saving the reference to the menu
@@ -176,6 +181,7 @@ class BaseContextMenuOperator {
 				menuItemHTMLElement.addEventListener ( 'mouseenter', this.#eventListeners.onMouseEnterMenuItem );
 			}
 		);
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {

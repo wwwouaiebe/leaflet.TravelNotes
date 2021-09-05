@@ -169,6 +169,10 @@ class Route {
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

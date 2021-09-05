@@ -60,6 +60,7 @@ class KeyboardKeydownEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -88,6 +89,7 @@ class CancelButtonClickEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -116,6 +118,7 @@ class MenuItemMouseLeaveEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -144,6 +147,7 @@ class MenuItemMouseEnterEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -172,6 +176,7 @@ class MenuItemClickEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -200,6 +205,7 @@ class ContainerMouseLeaveEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -228,6 +234,7 @@ class ContainerMouseEnterEL {
 
 	constructor ( menuOperator ) {
 		this.#menuOperator = menuOperator;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {

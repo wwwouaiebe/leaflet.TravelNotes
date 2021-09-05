@@ -83,12 +83,15 @@ class TravelNotesData {
 	#routing = Object.seal ( { provider : '', transitMode : '' } );
 	#UUID = theUtilities.UUID;
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**
 		The Leaflet map object
 		@type {object}
-		@see {@link https://leafletjs.com/reference-1.6.0.html#map}
 		*/
 
 		this.map = null;

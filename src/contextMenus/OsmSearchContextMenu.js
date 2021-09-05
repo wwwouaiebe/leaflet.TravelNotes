@@ -73,6 +73,12 @@ class OsmSearchContextMenu extends BaseContextMenu {
 	#osmElement = null;
 	#latLng = LAT_LNG.defaultValue;
 
+	/*
+	constructor
+	@param {Event} contextMenuEvent. The event that have triggered the menu
+	@param {Object} parentNode The parent node of the menu. Can be null for leaflet objects
+	*/
+
 	constructor ( contextMenuEvent, parentNode = null ) {
 		super ( contextMenuEvent, parentNode );
 		this.#osmElement =

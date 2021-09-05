@@ -65,6 +65,10 @@ class ObjType {
 	#objTypeName = '';
 	#validObjTypeNames = [ 'Itinerary', 'ItineraryPoint', 'Maneuver', 'Note', 'Route', 'Travel', 'WayPoint' ];
 
+	/*
+	constructor
+	*/
+
 	constructor ( objTypeName ) {
 		if ( NOT_FOUND === this.#validObjTypeNames.indexOf ( objTypeName ) ) {
 			throw new Error ( 'Invalid ObjType name : ' + objTypeName );

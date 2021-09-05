@@ -241,8 +241,11 @@ class SvgBuilder {
 		this.#svgElement.appendChild ( svgText );
 	}
 
-	constructor ( ) {
+	/*
+	constructor
+	*/
 
+	constructor ( ) {
 		Object.freeze ( this );
 	}
 

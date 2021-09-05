@@ -90,8 +90,12 @@ class Zoomer {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
-		Object.freeze ( this );
+		Object.seal ( this );
 	}
 
 	/**

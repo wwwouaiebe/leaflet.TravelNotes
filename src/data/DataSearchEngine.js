@@ -98,6 +98,10 @@ class DataSearchEngine {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

@@ -230,6 +230,10 @@ class OsmSearchEngine	{
 		return searchBounds;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

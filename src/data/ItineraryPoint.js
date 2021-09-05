@@ -137,6 +137,10 @@ class ItineraryPoint {
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

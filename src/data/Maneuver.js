@@ -138,6 +138,10 @@ class Maneuver {
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

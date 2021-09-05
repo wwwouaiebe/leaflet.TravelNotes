@@ -199,6 +199,10 @@ class PolylineEncoder {
 		/* eslint-enable no-bitwise */
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

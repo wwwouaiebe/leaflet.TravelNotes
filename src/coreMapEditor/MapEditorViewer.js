@@ -208,6 +208,10 @@ class MapEditorViewer {
 		return Object.freeze ( { marker : marker, polyline : polyline, bullet : bullet } );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

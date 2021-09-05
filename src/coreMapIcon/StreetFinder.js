@@ -361,10 +361,15 @@ class StreetFinder {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( overpassAPIDataLoader, computeData, mapIconData ) {
 		this.#overpassAPIDataLoader = overpassAPIDataLoader;
 		this.#computeData = computeData;
 		this.#mapIconData = mapIconData;
+		Object.freeze ( this );
 	}
 
 	/**

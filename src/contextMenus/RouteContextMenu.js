@@ -87,9 +87,14 @@ class RouteContextMenu extends BaseContextMenu {
 	#routeObjId = INVALID_OBJ_ID;
 	#route = null;
 
+	/*
+	constructor
+	@param {Event} contextMenuEvent. The event that have triggered the menu
+	@param {Object} parentNode The parent node of the menu. Can be null for leaflet objects
+	*/
+
 	constructor ( contextMenuEvent, parentNode = null ) {
 		super ( contextMenuEvent, parentNode );
-
 		this.#routeObjId = this.eventData.targetObjId;
 		this.#route = theDataSearchEngine.getRoute ( this.#routeObjId );
 	}

@@ -67,6 +67,10 @@ import { ROUTE_EDITION_STATUS, INVALID_OBJ_ID } from '../main/Constants.js';
 
 class ViewerFileLoader {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

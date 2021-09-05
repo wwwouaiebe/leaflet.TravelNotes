@@ -303,6 +303,10 @@ and when the geolocation marker must be removed from the map
 
 class EventDispatcher {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

@@ -222,6 +222,16 @@ class TranslationRotationFinder {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
+	constructor ( computeData, mapIconData ) {
+		this.#computeData = computeData;
+		this.#mapIconData = mapIconData;
+		Object.freeze ( this );
+	}
+
 	/**
 	this method compute the rotation needed to have the SVG oriented on the itinerary
 	and compute also the direction to take after the icon
@@ -234,12 +244,6 @@ class TranslationRotationFinder {
 		this.#findDirection ( );
 		this.#findPositionOnRoute ( );
 	}
-
-	constructor ( computeData, mapIconData ) {
-		this.#computeData = computeData;
-		this.#mapIconData = mapIconData;
-	}
-
 }
 
 export default TranslationRotationFinder;

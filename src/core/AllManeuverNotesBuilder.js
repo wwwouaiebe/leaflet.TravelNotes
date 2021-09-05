@@ -135,6 +135,14 @@ class AllManeuverNotesBuilder {
 		this.#waitUI = null;
 	}
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	This method add a note with data from osm for each maneuver of a route
 	A confirmation message is showed before starting.

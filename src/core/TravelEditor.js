@@ -132,6 +132,10 @@ class TravelEditor {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

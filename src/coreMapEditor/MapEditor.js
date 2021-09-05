@@ -120,9 +120,12 @@ class MapEditor	extends MapEditorViewer {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
-		Object.freeze ( this );
 	}
 
 	/**

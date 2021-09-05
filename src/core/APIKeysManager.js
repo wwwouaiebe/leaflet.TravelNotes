@@ -222,6 +222,10 @@ class APIKeysManager {
 		theEventDispatcher.dispatch ( 'providersadded' );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

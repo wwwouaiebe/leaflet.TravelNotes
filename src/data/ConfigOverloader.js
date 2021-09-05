@@ -163,6 +163,14 @@ class ConfigOverloader {
 		Object.freeze ( object );
 	}
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Overload the default config with another config. The config can be overloaded only once!
 	*/

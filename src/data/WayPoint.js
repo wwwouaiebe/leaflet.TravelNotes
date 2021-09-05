@@ -140,6 +140,10 @@ class WayPoint {
 		return something;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 
 		/**

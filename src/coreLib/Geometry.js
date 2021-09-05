@@ -96,6 +96,10 @@ const HUNDRED = 100;
 
 class Geometry {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}
