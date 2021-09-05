@@ -273,10 +273,12 @@ class MapEditorViewer {
 		}
 
 		polyline.bindPopup (
-			layer => {
-				let popupRoute = theDataSearchEngine.getRoute ( layer.objId );
-				return theRouteHTMLViewsFactory.getRouteHeaderHTML ( 'TravelNotes-Map-', popupRoute );
-			}
+			layer => theHTMLSanitizer.clone (
+				theRouteHTMLViewsFactory.getRouteHeaderHTML (
+					'TravelNotes-Map-',
+					theDataSearchEngine.getRoute ( layer.objId )
+				)
+			)
 		);
 
 		// left click event
