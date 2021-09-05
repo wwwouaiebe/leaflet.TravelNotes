@@ -174,7 +174,7 @@ class BaseDialog {
 	@private
 	*/
 
-	keyboardEventListenerEnabled = true;
+	#keyboardELEnabled = true;
 
 	/**
 	Data for drag ond drop operations
@@ -505,6 +505,7 @@ class BaseDialog {
 		Object.freeze ( this );
 		this.#options = options;
 		this.#eventListeners.onKeydown = new KeyboardKeydownEL ( this );
+		this.#keyboardELEnabled = true;
 	}
 
 	#destructor ( ) {
@@ -644,6 +645,9 @@ class BaseDialog {
 		this.#errorDiv.textContent = '';
 		this.#errorDiv.classList.add ( 'TravelNotes-Hidden' );
 	}
+
+	get keyboardELEnabled ( ) { return this.#keyboardELEnabled; }
+	set keyboardELEnabled ( keyboardELEnabled ) { this.#keyboardELEnabled = keyboardELEnabled; }
 
 }
 

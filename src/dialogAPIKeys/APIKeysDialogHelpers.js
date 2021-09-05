@@ -80,7 +80,7 @@ class DataEncryptorHandlers {
 
 	onErrorDecrypt ( err ) {
 		this.#APIKeysDialog.hideWait ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+		this.#APIKeysDialog.keyboardELEnabled = true;
 		if ( err && 'Canceled by user' !== err ) {
 			this.#APIKeysDialog.showError (
 				theTranslator.getText ( 'APIKeysDialog - An error occurs when reading the file' )
@@ -104,7 +104,7 @@ class DataEncryptorHandlers {
 		}
 		this.#APIKeysDialog.hideWait ( );
 		this.#APIKeysDialog.hideError ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+		this.#APIKeysDialog.keyboardELEnabled = true;
 	}
 
 	/**
@@ -116,7 +116,7 @@ class DataEncryptorHandlers {
 		this.#APIKeysDialog.hideError ( );
 		this.#APIKeysDialog.hideWait ( );
 		theUtilities.saveFile ( 'APIKeys', data );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+		this.#APIKeysDialog.keyboardELEnabled = true;
 	}
 
 	/**
@@ -129,7 +129,7 @@ class DataEncryptorHandlers {
 			theTranslator.getText ( 'APIKeysDialog - An error occurs when saving the keys' )
 		);
 		this.#APIKeysDialog.hideWait ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = true;
+		this.#APIKeysDialog.keyboardELEnabled = true;
 	}
 
 }

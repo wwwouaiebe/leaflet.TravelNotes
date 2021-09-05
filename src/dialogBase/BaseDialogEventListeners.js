@@ -257,7 +257,7 @@ class KeyboardKeydownEL {
 
 	handleEvent ( keyDownEvent ) {
 
-		if ( ! this.#baseDialog.keyboardEventListenerEnabled ) {
+		if ( ! this.#baseDialog.keyboardELEnabled ) {
 			return;
 		}
 

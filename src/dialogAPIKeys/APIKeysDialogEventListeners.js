@@ -208,7 +208,7 @@ class ReloadFromServerButtonClickEL {
 		clickEvent.stopPropagation ( );
 		this.#APIKeysDialog.hideError ( );
 		this.#APIKeysDialog.showWait ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
+		this.#APIKeysDialog.keyboardELEnabled = false;
 
 		fetch ( window.location.href.substr ( ZERO, window.location.href.lastIndexOf ( '/' ) + ONE ) + 'APIKeys' )
 			.then (
@@ -274,7 +274,7 @@ class OpenSecureFileChangeEL {
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
 		this.#APIKeysDialog.showWait ( );
-		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
+		this.#APIKeysDialog.keyboardELEnabled = false;
 		let fileReader = new FileReader ( );
 		fileReader.onload = ( ) => {
 			new DataEncryptor ( ).decryptData (
@@ -368,7 +368,7 @@ class SaveToSecureFileButtonClickEL {
 		}
 		this.#APIKeysDialog.showWait ( );
 
-		this.#APIKeysDialog.keyboardEventListenerEnabled = false;
+		this.#APIKeysDialog.keyboardELEnabled = false;
 
 		new DataEncryptor ( ).encryptData (
 			new window.TextEncoder ( ).encode ( this.#saveAPIKeysHelper.getAPIKeysJsonString ( ) ),
