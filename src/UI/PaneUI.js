@@ -53,6 +53,7 @@ import { PANE_ID } from '../main/Constants.js';
 @class PaneUI
 @classdesc Base class for panes
 @see {@link PanesManagerUI} for pane UI management
+@abstract
 @hideconstructor
 
 @--------------------------------------------------------------------------------------------------------------------------

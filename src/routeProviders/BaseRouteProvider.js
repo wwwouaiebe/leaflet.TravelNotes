@@ -50,6 +50,7 @@ Tests ...
 @class BaseRouteProvider
 @classdesc coming soon...
 @hideconstructor
+@abstract
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
