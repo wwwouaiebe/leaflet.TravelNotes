@@ -246,15 +246,6 @@ class NoteDialog extends BaseDialog {
 			}
 		}
 
-		// saving values in the note.
-		this.getControlsValues ( this.#note );
-
-		// latLng can change for map icons, so we save the value from the preview note
-		this.#note.latLng = this.#previewNote.latLng;
-
-		// Sanitizing the html code entered by the user
-		this.#note.validateData ( );
-
 		return true;
 	}
 
@@ -265,6 +256,15 @@ class NoteDialog extends BaseDialog {
 
 	onOk ( ) {
 		if ( super.onOk ( ) ) {
+
+			// saving values in the note.
+			this.getControlsValues ( this.#note );
+
+			// latLng can change for map icons, so we save the value from the preview note
+			this.#note.latLng = this.#previewNote.latLng;
+
+			// Sanitizing the html code entered by the user
+			this.#note.validateData ( );
 			this.#destructor ( );
 		}
 	}

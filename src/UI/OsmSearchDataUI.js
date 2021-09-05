@@ -394,6 +394,10 @@ class OsmSearchDataUI {
 			this.#paneData.firstChild.removeEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
 			this.#paneData.firstChild.removeEventListener ( 'mouseenter', this.#eventListeners.onMouseEnter, false );
 			this.#paneData.firstChild.removeEventListener ( 'mouseleave', this.#eventListeners.onMouseLeave, false );
+			theEventDispatcher.dispatch (
+				'removeobject',
+				{ objId : Number.parseInt ( this.#paneData.firstChild.dataset.tanObjId ) }
+			);
 			this.#paneData.removeChild ( this.#paneData.firstChild );
 		}
 	}

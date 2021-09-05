@@ -230,8 +230,9 @@ class APIKeysDialog extends BaseDialog {
 		this.#APIKeysControls.forEach (
 			APIKeyControl => APIKeys.push ( APIKeyControl.APIKey )
 		);
-		this.#destructor ( );
-		super.onOk ( APIKeys );
+		if ( super.onOk ( APIKeys ) ) {
+			this.#destructor ( );
+		}
 	}
 
 	/**
