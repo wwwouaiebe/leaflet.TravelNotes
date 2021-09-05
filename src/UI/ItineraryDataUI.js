@@ -93,7 +93,12 @@ class NoteContextMenuEL {
 
 	#paneData = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( paneData ) {
+		Object.freeze ( this );
 		this.#paneData = paneData;
 	}
 
@@ -119,6 +124,15 @@ class NoteContextMenuEL {
 */
 
 class ManeuverMouseEnterEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		theEventDispatcher.dispatch (
@@ -147,6 +161,14 @@ class ManeuverMouseEnterEL {
 
 class NoteMouseEnterEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
 		theEventDispatcher.dispatch (
@@ -172,6 +194,14 @@ class NoteMouseEnterEL {
 */
 
 class NoteOrManeuverMouseLeaveEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -230,6 +260,10 @@ class ItineraryDataUI {
 		onMouseEnter : null,
 		onMouseLeave : null
 	};
+
+	/*
+	constructor
+	*/
 
 	constructor ( paneData ) {
 		this.#paneData = paneData;

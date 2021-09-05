@@ -78,8 +78,12 @@ class BaseRouteProvider {
 		// to be implemented in the derived classes
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	get icon ( ) {

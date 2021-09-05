@@ -226,6 +226,10 @@ class GraphHopperRouteProvider extends BaseRouteProvider {
 			);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
 	}

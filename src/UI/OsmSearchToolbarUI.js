@@ -67,7 +67,12 @@ class SearchButtonClickEL {
 	#osmSearchTreeUI = null;
 	#osmSearchWaitUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI, osmSearchWaitUI ) {
+		Object.freeze ( this );
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 		this.#osmSearchWaitUI = osmSearchWaitUI;
 	}
@@ -99,7 +104,12 @@ class ExpandButtonClickEL {
 
 	#osmSearchTreeUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI ) {
+		Object.freeze ( this );
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 	}
 
@@ -123,7 +133,12 @@ class CollapseButtonClickEL {
 
 	#osmSearchTreeUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI ) {
+		Object.freeze ( this );
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 	}
 
@@ -147,7 +162,12 @@ class ClearButtonClickEL {
 
 	#osmSearchTreeUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI ) {
+		Object.freeze ( this );
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 	}
 
@@ -172,7 +192,12 @@ class OsmSearchToolbarUI {
 
 	#toolbarHTMLElement = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI, osmSearchWaitUI ) {
+		Object.freeze ( this );
 
 		this.#toolbarHTMLElement = theHTMLElementsFactory.create (
 			'div'

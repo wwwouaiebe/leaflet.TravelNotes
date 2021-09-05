@@ -184,6 +184,10 @@ class PublicTransportRouteProvider extends BaseRouteProvider {
 			);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
 	}

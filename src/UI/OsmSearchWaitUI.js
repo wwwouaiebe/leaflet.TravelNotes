@@ -72,6 +72,10 @@ class OsmSearchWaitUI {
 
 	#waitBullet = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		this.#waitDiv = theHTMLElementsFactory.create (
 			'div',

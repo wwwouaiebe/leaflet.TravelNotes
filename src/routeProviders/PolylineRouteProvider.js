@@ -372,6 +372,10 @@ class PolylineRouteProvider extends BaseRouteProvider {
 		catch ( err ) { onError ( err ); }
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
 	}

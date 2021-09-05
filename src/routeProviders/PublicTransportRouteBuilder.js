@@ -340,7 +340,12 @@ class PublicTransportRouteBuilder {
 
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( route, selectedRelationId ) {
+		Object.freeze ( this );
 		this.#route = route;
 		this.#selectedRelationId = selectedRelationId;
 		this.#publicTransportData = new publicTransportData ( selectedRelationId );

@@ -71,6 +71,10 @@ class PaneButtonClickEL {
 
 	#paneManagerUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( paneManagerUI ) {
 		this.#paneManagerUI = paneManagerUI;
 	}
@@ -91,7 +95,12 @@ class PaneButtonClickEL {
 
 class PaneDataDivWheelEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	handleEvent ( wheelEvent ) {
@@ -132,6 +141,10 @@ class PanesManagerUI {
 			this.#paneData.textContent = '';
 		}
 	}
+
+	/*
+	constructor
+	*/
 
 	constructor ( uiMainDiv ) {
 		Object.seal ( this );

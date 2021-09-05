@@ -247,8 +247,12 @@ class TravelUI {
 		this.#createAddRouteButton ( this.#routesHeaderDiv );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( uiMainDiv ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#createTravelNameDiv ( uiMainDiv );
 		new TravelToolbarUI ( uiMainDiv );
 		this.#createRoutesListHeaderDiv ( uiMainDiv );

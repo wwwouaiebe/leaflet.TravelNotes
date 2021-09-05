@@ -82,6 +82,10 @@ class TravelNotesViewer {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

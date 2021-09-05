@@ -169,6 +169,10 @@ class ErrorsUI {
 		this.#timerId = setTimeout ( ( ) => this.#hide ( ), timeOutDuration );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

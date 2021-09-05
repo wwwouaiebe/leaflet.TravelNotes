@@ -60,6 +60,10 @@ import { LAT_LNG, ZERO, ONE, TWO, THREE, HEXADECIMAL, DISTANCE } from '../main/C
 
 class Utilities {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

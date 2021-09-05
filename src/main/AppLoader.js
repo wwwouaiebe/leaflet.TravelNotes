@@ -638,8 +638,12 @@ class AppLoader {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

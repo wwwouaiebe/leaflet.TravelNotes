@@ -76,6 +76,10 @@ class Translator {
 
 	#translations = new Map ( );
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

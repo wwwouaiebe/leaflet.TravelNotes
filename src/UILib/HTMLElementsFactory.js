@@ -93,6 +93,10 @@ class HTMLElementsFactory {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

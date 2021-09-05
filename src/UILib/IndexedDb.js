@@ -142,6 +142,10 @@ class IndexedDb {
 		this.#indexedDb = null;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

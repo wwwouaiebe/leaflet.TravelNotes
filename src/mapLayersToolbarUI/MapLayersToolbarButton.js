@@ -63,7 +63,12 @@ class LayerButtonMouseEnterEL {
 
 	#mapLayer = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( mapLayer ) {
+		Object.freeze ( this );
 		this.#mapLayer = mapLayer;
 	}
 
@@ -92,7 +97,12 @@ class LayerButtonMouseLeaveEL {
 
 	#mapLayer = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( mapLayer ) {
+		Object.freeze ( this );
 		this.#mapLayer = mapLayer;
 	}
 
@@ -121,7 +131,12 @@ class LayerButtonClickEL {
 
 	#mapLayer = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( mapLayer ) {
+		Object.freeze ( this );
 		this.#mapLayer = mapLayer;
 	}
 
@@ -174,7 +189,12 @@ class MapLayersToolbarButton {
 
 	#parentNode = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( mapLayer, parentNode ) {
+		Object.freeze ( this );
 		this.#parentNode = parentNode;
 		this.#buttonHTMLElement = theHTMLElementsFactory.create (
 			'div',

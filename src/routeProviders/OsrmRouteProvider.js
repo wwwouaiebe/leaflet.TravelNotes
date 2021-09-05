@@ -241,6 +241,10 @@ class OsrmRouteProvider extends BaseRouteProvider {
 			);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
 	}

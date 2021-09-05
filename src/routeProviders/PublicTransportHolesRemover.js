@@ -149,7 +149,12 @@ class PublicTransportHolesRemover {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( publicTransportData ) {
+		Object.freeze ( this );
 		this.#publicTransportData = publicTransportData;
 	}
 

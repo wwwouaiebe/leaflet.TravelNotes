@@ -255,6 +255,10 @@ class MapboxRouteProvider extends BaseRouteProvider {
 			);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
 	}

@@ -360,7 +360,12 @@ class PrintViewsFactory {
 		} // end of while ( ! done )
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( route, printSize ) {
+		Object.freeze ( this );
 		this.#route = route;
 		this.#printSize = printSize;
 

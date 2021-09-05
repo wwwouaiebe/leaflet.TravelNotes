@@ -68,7 +68,12 @@ class MapLayerButtonClickEL {
 
 	#mapLayers = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( mapLayers ) {
+		Object.freeze ( this );
 		this.#mapLayers = mapLayers;
 	}
 
@@ -92,6 +97,14 @@ class MapLayerButtonClickEL {
 
 class GeoLocationButtonClickEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theGeoLocator.switch ( );
@@ -109,6 +122,14 @@ class GeoLocationButtonClickEL {
 */
 
 class ZoomButtonClickEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
@@ -149,6 +170,10 @@ class ViewerLayersToolbarUI {
 			attribution : ''
 		}
 	];
+
+	/*
+	constructor
+	*/
 
 	constructor ( ) {
 		Object.freeze ( this );

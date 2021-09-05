@@ -70,6 +70,14 @@ const OUR_VIEWER_DEFAULT_ZOOM = 2;
 
 class KeydownEventListener {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( keyBoardEvent ) {
 		keyBoardEvent.stopPropagation ( );
 		if ( 'Z' === keyBoardEvent.key || 'z' === keyBoardEvent.key ) {
@@ -286,8 +294,12 @@ class AppLoaderViewer {
 		theTravelNotesViewer.addReadOnlyMap ( this.#travelUrl, this.#addLayerToolbar );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

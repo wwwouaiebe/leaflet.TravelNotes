@@ -178,6 +178,10 @@ class OsrmTextInstructions 	{
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		this.abbreviations = abbreviations;
 		Object.freeze ( this );

@@ -311,6 +311,19 @@ class PrintPageBuilder {
 		this.#cancelButton.addEventListener (	'click', this.#eventsListeners.onAfterPrint, false );
 	}
 
+	/*
+	constructor
+	*/
+
+	constructor ( route, views, printData ) {
+		this.#route = route;
+		this.#views = views;
+		this.#printData = printData;
+		this.#eventsListeners.onPrint = new PrintEL ( );
+		this.#eventsListeners.onAfterPrint = new AfterPrintEL ( this );
+		Object.freeze ( this );
+	}
+
 	/**
 	Hide existing HTMLElements, add the toolbar and prepare the polyline and add the views to the html page
 	@private
@@ -355,15 +368,6 @@ class PrintPageBuilder {
 		// adding views
 		this.#viewsCounter = ZERO;
 		this.#views.forEach ( view => this.#createViewOnPage ( view ) );
-	}
-
-	constructor ( route, views, printData ) {
-		this.#route = route;
-		this.#views = views;
-		this.#printData = printData;
-		this.#eventsListeners.onPrint = new PrintEL ( );
-		this.#eventsListeners.onAfterPrint = new AfterPrintEL ( this );
-		Object.seal ( this );
 	}
 }
 

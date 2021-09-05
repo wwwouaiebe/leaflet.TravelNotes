@@ -130,6 +130,14 @@ class OsmSearchLimitsUI {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	/**
 	Add maps event listeners and search limits on the map
 	*/

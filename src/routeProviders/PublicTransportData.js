@@ -65,7 +65,12 @@ class PublicTransportData {
 	#nodesMap = new Map ( );
 	#stopsMap = new Map ( );
 
+	/*
+	constructor
+	*/
+
 	constructor ( selectedRelationId ) {
+		Object.freeze ( this );
 		this.#selectedRelationId = selectedRelationId;
 		this.nodes3WaysCounter = ZERO;
 	}

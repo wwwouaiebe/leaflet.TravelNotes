@@ -211,6 +211,10 @@ class TravelHTMLViewsFactory {
 		return footerHTML;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

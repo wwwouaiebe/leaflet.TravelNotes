@@ -79,7 +79,12 @@ class ProviderToolbarProviderButton {
 
 	#buttonHTMLElement = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( providerToolbarUI, provider ) {
+		Object.freeze ( this );
 		this.#providerToolbarUI = providerToolbarUI;
 		this.#provider = provider;
 

@@ -82,7 +82,12 @@ class ButtonsContainerWheelEL {
 
 	#wheelEventData = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( mapLayersToolbarUI, wheelEventData ) {
+		Object.freeze ( this );
 		this.#mapLayersToolbarUI = mapLayersToolbarUI;
 		this.#wheelEventData = wheelEventData;
 	}
@@ -274,6 +279,10 @@ class MapLayersToolbarUI {
 	#onMouseLeave ( ) {
 		this.#timerId = setTimeout ( ( ) => this.#hide ( ), theConfig.layersToolbarUI.toolbarTimeOut );
 	}
+
+	/*
+	constructor
+	*/
 
 	constructor ( ) {
 		this.#onWheelButtonsEventListener = new ButtonsContainerWheelEL ( this, this.#wheelEventData );

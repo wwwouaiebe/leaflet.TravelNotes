@@ -61,7 +61,12 @@ class TreeCheckboxChangeEL {
 
 	#osmSearchTreeUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI ) {
+		Object.freeze ( this );
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 	}
 
@@ -87,6 +92,14 @@ class TreeCheckboxChangeEL {
 
 class TreeWheelEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( wheelEvent ) {
 		wheelEvent.stopPropagation ( );
 		if ( wheelEvent.deltaY ) {
@@ -110,7 +123,12 @@ class TreeArrowClickEL {
 
 	#osmSearchTreeUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( osmSearchTreeUI ) {
+		Object.freeze ( this );
 		this.#osmSearchTreeUI = osmSearchTreeUI;
 	}
 
@@ -210,7 +228,12 @@ class OsmSearchTreeUI {
 		this.#deepTree --;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 
 		this.#eventListeners.onChangeCheckbox = new TreeCheckboxChangeEL ( this );
 		this.#eventListeners.onClickArrow = new TreeArrowClickEL ( this );

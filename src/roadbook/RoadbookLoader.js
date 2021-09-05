@@ -61,6 +61,14 @@ import { ZERO, ONE, HTTP_STATUS_OK } from '../main/Constants.js';
 
 class ShowTravelNotesChangeEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
 		theRoadbookUpdater.showTravelNotes = changeEvent.target.checked;
@@ -79,6 +87,14 @@ class ShowTravelNotesChangeEL {
 */
 
 class ShowRouteNotesChangeEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
@@ -99,6 +115,14 @@ class ShowRouteNotesChangeEL {
 
 class ShowManeuverNotesChangeEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( changeEvent ) {
 		changeEvent.stopPropagation ( );
 		theRoadbookUpdater.showManeuversNotes = changeEvent.target.checked;
@@ -118,6 +142,10 @@ class ShowManeuverNotesChangeEL {
 
 class StorageEL {
 	#UUID = null;
+
+	/*
+	constructor
+	*/
 
 	constructor ( UUID ) {
 		this.#UUID = UUID;
@@ -156,6 +184,14 @@ class StorageEL {
 */
 
 class SaveButtonClickEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( ) {
 		try {
@@ -325,6 +361,10 @@ class RoadbookLoader {
 			this.#saveButton.textContent = theTranslator.getText ( 'Roadbook - Save' );
 		}
 	}
+
+	/*
+	constructor
+	*/
 
 	constructor ( ) {
 		let params = new URLSearchParams ( document.location.search.substring ( ONE ) );

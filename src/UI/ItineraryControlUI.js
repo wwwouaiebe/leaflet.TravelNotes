@@ -63,7 +63,12 @@ class NotesCheckboxInputEL {
 
 	#itineraryDataUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( itineraryDataUI ) {
+		Object.freeze ( this );
 		this.#itineraryDataUI = itineraryDataUI;
 	}
 
@@ -86,7 +91,12 @@ class ManeuverCheckboxInputEL {
 
 	#itineraryDataUI = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( itineraryDataUI ) {
+		Object.freeze ( this );
 		this.#itineraryDataUI = itineraryDataUI;
 	}
 
@@ -143,6 +153,10 @@ class ItineraryControlUI {
 	*/
 
 	#itineraryDataUI = null;
+
+	/*
+	constructor
+	*/
 
 	constructor ( paneControl, itineraryDataUI ) {
 		this.#paneControl = paneControl;

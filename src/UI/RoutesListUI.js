@@ -80,8 +80,12 @@ class RoutesListUI {
 	#routeDropEventListener = new RouteDropEL ( );
 	#routeDragStartEventListener = new RouteDragStartEL ( );
 
+	/*
+	constructor
+	*/
+
 	constructor ( UIMainHTMLElement ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#routesListHTMLElement = theHTMLElementsFactory.create ( 'div', null, UIMainHTMLElement );
 		this.#routesListHTMLElement.addEventListener ( 'dragover', new RoutesListDragOverEL ( ) );
 		this.#routesListHTMLElement.addEventListener ( 'wheel', new RoutesListWheelEL ( ) );

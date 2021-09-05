@@ -361,8 +361,12 @@ class TravelToolbarUI {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( uiMainDiv ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{

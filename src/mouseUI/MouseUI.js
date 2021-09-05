@@ -85,6 +85,10 @@ class MouseUI {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

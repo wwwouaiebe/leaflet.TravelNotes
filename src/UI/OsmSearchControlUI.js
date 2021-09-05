@@ -88,7 +88,12 @@ class OsmSearchControlUI {
 
 	#paneControl = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( paneControl ) {
+		Object.freeze ( this );
 		this.#paneControl = paneControl;
 		this.#osmSearchTreeUI = new OsmSearchTreeUI ( );
 		this.#osmSearchWaitUI = new OsmSearchWaitUI ( );

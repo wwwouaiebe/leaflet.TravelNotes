@@ -64,6 +64,10 @@ class WaitUI {
 	#backgroundDiv = null;
 	#messageDiv = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

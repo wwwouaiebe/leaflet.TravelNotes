@@ -70,6 +70,14 @@ import { GEOLOCATION_STATUS } from '../main/Constants.js';
 
 class ApiKeysButtonClickEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theAPIKeysManager.setKeysFromDialog ( );
@@ -88,6 +96,14 @@ class ApiKeysButtonClickEL {
 
 class GeoLocatorButtonClickEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		theGeoLocator.switch ( );
@@ -105,6 +121,14 @@ class GeoLocatorButtonClickEL {
 */
 
 class PinButtonClickEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( clickEvent ) {
 		clickEvent.target.textContent = '📌' === clickEvent.target.textContent ? '❌' : '📌';
@@ -277,8 +301,12 @@ class TravelNotesToolbarUI {
 		pinButton.addEventListener ( 'click', new PinButtonClickEL ( ), false );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( uiMainDiv ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#buttonsDiv = theHTMLElementsFactory.create (
 			'div',
 			{

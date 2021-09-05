@@ -135,6 +135,10 @@ class OsmSearchPaneUI extends PaneUI {
 		this.#osmSearchDataUI.clearData ( this.paneDataDiv );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( paneData, paneControl ) {
 		super ( paneData, paneControl );
 	}

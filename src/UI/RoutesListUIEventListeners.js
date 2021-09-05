@@ -60,7 +60,12 @@ import { MOUSE_WHEEL_FACTORS } from '../main/Constants.js';
 
 class RoutesListDragOverEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**
@@ -83,7 +88,12 @@ class RoutesListDragOverEL {
 
 class RouteDragStartEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**
@@ -115,7 +125,12 @@ class RouteDragStartEL {
 
 class RouteDropEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**
@@ -145,7 +160,12 @@ class RouteDropEL {
 
 class RoutesListWheelEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	handleEvent ( wheelEvent ) {
@@ -170,7 +190,12 @@ class RoutesListWheelEL {
 
 class RouteContextMenuEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	handleEvent ( contextMenuEvent ) {

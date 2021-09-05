@@ -126,6 +126,10 @@ class TravelNotes {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

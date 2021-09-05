@@ -67,6 +67,10 @@ const OUR_MIN_NOTES_DISTANCE = 9;
 
 class NoteHTMLViewsFactory {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

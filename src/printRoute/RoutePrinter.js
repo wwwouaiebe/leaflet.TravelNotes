@@ -112,6 +112,10 @@ class RoutePrinter {
 		];
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

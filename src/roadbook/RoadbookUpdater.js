@@ -64,7 +64,12 @@ class RoadbookUpdater {
 
 	#travelNotesHtmlElement = document.getElementById ( 'TravelNotes' );
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**

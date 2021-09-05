@@ -257,6 +257,10 @@ class MapzenValhallaRouteProvider extends BaseRouteProvider {
 			);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		super ( );
 	}

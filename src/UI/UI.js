@@ -190,6 +190,10 @@ class UI {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

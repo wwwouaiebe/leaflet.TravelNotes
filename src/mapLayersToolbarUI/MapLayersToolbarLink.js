@@ -58,9 +58,13 @@ import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 
 class LinkMouseEnterEL {
 
-	/**
-	Mouse enter event listener. Inverse the button color
+	/*
+	constructor
 	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( mouseEnterEvent ) {
 		mouseEnterEvent.stopPropagation ( );
@@ -81,9 +85,13 @@ class LinkMouseEnterEL {
 
 class LinkMouseLeaveEL {
 
-	/**
-	Mouse leave event listener. Inverse the button color
+	/*
+	constructor
 	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( mouseLeaveEvent ) {
 		mouseLeaveEvent.stopPropagation ( );
@@ -129,7 +137,12 @@ class MapLayersToolbarLink {
 
 	#parentNode = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( linkProperties, parentNode ) {
+		Object.freeze ( this );
 		this.#parentNode = parentNode;
 		this.#linkButton = theHTMLElementsFactory.create (
 			'div',

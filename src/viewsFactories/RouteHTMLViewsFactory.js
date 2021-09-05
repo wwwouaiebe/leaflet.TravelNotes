@@ -151,6 +151,10 @@ class RouteHTMLViewsFactory {
 		return maneuverHTML;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
 		Object.freeze ( this );
 	}

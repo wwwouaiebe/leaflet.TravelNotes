@@ -66,7 +66,12 @@ import { PANE_ID } from '../main/Constants.js';
 
 class TravelNoteDragStartEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	handleEvent ( dragEvent ) {
@@ -94,7 +99,12 @@ class TravelNoteDragStartEL {
 
 class TravelNoteDragOverEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	handleEvent ( dragEvent ) {
@@ -113,7 +123,12 @@ class TravelNoteDragOverEL {
 
 class TravelNoteDropEL {
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	handleEvent ( dropEvent ) {
@@ -145,7 +160,12 @@ class TravelNoteContextMenuEL {
 
 	#paneData = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( paneData ) {
+		Object.freeze ( this );
 		this.#paneData = paneData;
 	}
 
@@ -183,6 +203,10 @@ class TravelNotesPaneUI extends PaneUI {
 		onDrop : null,
 		onContextMenu : null
 	};
+
+	/*
+	constructor
+	*/
 
 	constructor ( paneData, paneControl ) {
 		super ( paneData, paneControl );

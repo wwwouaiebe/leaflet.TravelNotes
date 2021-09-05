@@ -143,8 +143,12 @@ class ProvidersToolbarUI {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( UIMainHTMLElement ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#toolbarHTMLElement = theHTMLElementsFactory.create (
 			'div',
 			{

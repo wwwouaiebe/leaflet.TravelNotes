@@ -65,6 +65,14 @@ import { ZERO } from '../main/Constants.js';
 
 class SearchResultContextMenuEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
@@ -89,6 +97,14 @@ class SearchResultContextMenuEL {
 */
 
 class SearchResultMouseEnterEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -115,6 +131,14 @@ class SearchResultMouseEnterEL {
 */
 
 class SearchResultMouseLeaveEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( mouseEvent ) {
 		mouseEvent.stopPropagation ( );
@@ -333,6 +357,10 @@ class OsmSearchDataUI {
 		this.#addTitle ( );
 		this.#addEventListeners ( );
 	}
+
+	/*
+	constructor
+	*/
 
 	constructor ( paneData ) {
 		this.#paneData = paneData;
