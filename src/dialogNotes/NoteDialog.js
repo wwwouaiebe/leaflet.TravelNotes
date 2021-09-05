@@ -264,8 +264,9 @@ class NoteDialog extends BaseDialog {
 	}
 
 	onOk ( ) {
-		this.#destructor ( );
-		super.onOk ( );
+		if ( super.onOk ( ) ) {
+			this.#destructor ( );
+		}
 	}
 
 	/**

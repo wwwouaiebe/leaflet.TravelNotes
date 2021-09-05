@@ -564,7 +564,9 @@ class BaseDialog {
 		if ( this.canClose ( ) ) {
 			this.#destructor ( );
 			this.#onPromiseOkFct ( returnValue );
+			return true;
 		}
+		return false;
 	}
 
 	/**

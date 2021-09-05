@@ -469,12 +469,12 @@ class HTMLSanitizer {
 			targetNode.textContent = '';
 		}
 	}
-	
+
 	/**
 	This method clone a DOM node, removing all invalid childs and attributes
 	@param {HTMLElement} htmlElement the node to clone
 	*/
-	
+
 	clone ( htmlElement ) {
 		let clone = document.createElement ( htmlElement.tagName );
 		this.#cloneNode ( htmlElement, clone );
