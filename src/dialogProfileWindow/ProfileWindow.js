@@ -140,6 +140,7 @@ class SvgContextMenuEL extends BaseSvgEL {
 				lat : latLngElevOnRoute.latLng [ ZERO ],
 				lng : latLngElevOnRoute.latLng [ ONE ]
 			};
+			mouseEvent.target.dataset.tanObjId = profileSvg.dataset.tanObjId;
 			new ProfileContextMenu ( mouseEvent ).show ( );
 		}
 	}
