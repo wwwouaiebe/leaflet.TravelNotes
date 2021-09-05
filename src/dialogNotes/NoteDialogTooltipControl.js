@@ -85,7 +85,12 @@ class NoteDialogTooltipControl {
 		onInputUpdated : null
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#tooltipDiv = theHTMLElementsFactory.create (
 			'div',

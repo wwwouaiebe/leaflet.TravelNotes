@@ -58,7 +58,12 @@ class EyeMouseDownEL {
 
 	#passwordInput = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( passwordInput ) {
+		Object.freeze ( this );
 		this.#passwordInput = passwordInput;
 	}
 
@@ -86,7 +91,12 @@ class EyeMouseUpEL {
 
 	#passwordInput = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( passwordInput ) {
+		Object.freeze ( this );
 		this.#passwordInput = passwordInput;
 	}
 

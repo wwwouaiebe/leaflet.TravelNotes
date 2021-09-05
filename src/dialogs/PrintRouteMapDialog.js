@@ -304,8 +304,12 @@ class PrintRouteMapDialog extends BaseDialog {
 		return printNotesDiv;
 	}
 
-	constructor ( ) {
-		super ( );
+	/*
+	constructor
+	*/
+
+	constructor ( options = {} ) {
+		super ( options );
 	}
 
 	/**

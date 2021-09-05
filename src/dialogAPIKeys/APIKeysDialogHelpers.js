@@ -61,8 +61,13 @@ class DataEncryptorHandlers {
 
 	#APIKeysDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -143,8 +148,13 @@ class SaveAPIKeysHelper {
 
 	#APIKeysControls = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysControls ) {
 		this.#APIKeysControls = APIKeysControls;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {

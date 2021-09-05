@@ -69,8 +69,12 @@ class TopBarDragStartEL {
 
 	#dragData = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( dragData ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#dragData = dragData;
 	}
 

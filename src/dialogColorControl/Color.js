@@ -65,6 +65,7 @@ class Color {
 	#blue = COLOR_CONTROL.maxColorValue;
 
 	/*
+	constructor
 	@param {?number} red The red value of the color. Must be between 0 and 255. If null set to 255
 	@param {?number} green The green value of the color. Must be between 0 and 255. If null set to 255
 	@param {?number} blue The blue value of the color. Must be between 0 and 255. If null set to 255
@@ -93,7 +94,7 @@ class Color {
 				:
 				COLOR_CONTROL.maxColorValue;
 
-		Object.seal ( this );
+		Object.freeze ( this );
 	}
 
 	/**

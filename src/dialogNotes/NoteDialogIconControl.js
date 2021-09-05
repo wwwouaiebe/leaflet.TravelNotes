@@ -88,7 +88,12 @@ class NoteDialogIconControl {
 		onInputUpdated : null
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#iconDiv = theHTMLElementsFactory.create (
 			'div',

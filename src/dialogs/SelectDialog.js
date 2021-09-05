@@ -79,6 +79,10 @@ class SelectDialog extends BaseDialog {
 		return selectDiv;
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( options = {} ) {
 		super ( options );
 		this.#options = options;

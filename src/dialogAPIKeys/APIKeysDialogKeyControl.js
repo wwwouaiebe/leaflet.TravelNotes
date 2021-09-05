@@ -62,6 +62,14 @@ import { INVALID_OBJ_ID } from '../main/Constants.js';
 
 class DeleteButtonClickEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( clickEvent ) {
 		clickEvent.stopPropagation ( );
 		let dispatchedEvent = new Event ( 'apikeydeleted' );
@@ -111,6 +119,10 @@ class APIKeysDialogKeyControl {
 
 	#objId = INVALID_OBJ_ID;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKey ) {
 
 		this.#objId = ObjId.nextObjId;
@@ -156,6 +168,7 @@ class APIKeysDialogKeyControl {
 			this.#rootHTMLElement
 		)
 			.addEventListener ( 'click', new DeleteButtonClickEL ( ), false );
+		Object.freeze ( this );
 	}
 
 	/**

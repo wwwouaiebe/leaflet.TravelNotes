@@ -270,6 +270,10 @@ class APIKeysDialogToolbar {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog, APIKeysControls, haveAPIKeysFile ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
@@ -282,7 +286,7 @@ class APIKeysDialogToolbar {
 		);
 
 		this.#addToolbarButtons ( );
-
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {

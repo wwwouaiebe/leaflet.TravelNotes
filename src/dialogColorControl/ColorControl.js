@@ -236,8 +236,12 @@ class ColorControl {
 		this.#colorSampleDiv.style [ 'background-color' ] = this.#newColor.cssColor;
 	}
 
-	constructor ( cssColor ) {
+	/*
+	constructor
+	*/
 
+	constructor ( cssColor ) {
+		Object.freeze ( this );
 		this.#newColor.cssColor = cssColor;
 		this.#colorDiv = theHTMLElementsFactory.create (
 			'div',

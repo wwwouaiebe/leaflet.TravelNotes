@@ -65,8 +65,12 @@ class OkButtonClickEL {
 
 	#baseDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( baseDialog ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#baseDialog = baseDialog;
 	}
 
@@ -97,8 +101,12 @@ class CancelButtonClickEL {
 
 	#baseDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( baseDialog ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#baseDialog = baseDialog;
 	}
 
@@ -129,8 +137,12 @@ class TopBarDragStartEL {
 
 	#dragData = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( dragData ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#dragData = dragData;
 	}
 
@@ -166,8 +178,12 @@ class TopBarDragEndEL {
 	#containerDiv = null;
 	#backgroundDiv= null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( dragData, containerDiv, backgroundDiv ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#dragData = dragData;
 		this.#containerDiv = containerDiv;
 		this.#backgroundDiv = backgroundDiv;
@@ -222,8 +238,12 @@ class KeyboardKeydownEL {
 
 	#baseDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( baseDialog ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#baseDialog = baseDialog;
 	}
 
@@ -265,6 +285,14 @@ class BackgroundLeftPanEL {
 
 	#mapCenter = [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ];
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( leftPanEvent ) {
 		if ( 'start' === leftPanEvent.action ) {
 			this.#mapCenter = theTravelNotesData.map.getCenter ( );
@@ -303,6 +331,14 @@ class BackgroundRightPanEL {
 	#initialZoom = ZERO;
 	#startPoint = null;
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( rightPanEvent ) {
 		if ( 'start' === rightPanEvent.action ) {
 			this.#initialZoom = theTravelNotesData.map.getZoom ( );
@@ -327,6 +363,14 @@ class BackgroundRightPanEL {
 */
 
 class BackgroundWheelEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( wheelEvent ) {
 		if ( 'TravelNotes-Background' !== wheelEvent.target.id ) {
@@ -355,6 +399,14 @@ class BackgroundWheelEL {
 
 class BackgroundContextMenuEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( contextmenuEvent ) {
 		contextmenuEvent.preventDefault ( );
 	}
@@ -371,6 +423,14 @@ class BackgroundContextMenuEL {
 */
 
 class BackgroundDragOverEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( dragEvent ) {
 		dragEvent.preventDefault ( );

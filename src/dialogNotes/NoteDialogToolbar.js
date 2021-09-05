@@ -251,7 +251,12 @@ class NoteDialogToolbar {
 		);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#rootHTMLElement = theHTMLElementsFactory.create (
 			'div',

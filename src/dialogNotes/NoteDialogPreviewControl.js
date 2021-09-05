@@ -67,17 +67,19 @@ class NoteDialogPreviewControl {
 	#previewNote = null;
 	#previewDiv = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( previewNote ) {
-
+		Object.freeze ( this );
 		this.#previewNote = previewNote;
-
 		this.#previewDiv = theHTMLElementsFactory.create (
 			'div',
 			{
 				className : 'TravelNotes-NoteDialog-PreviewDiv'
 			}
 		);
-
 		this.#previewDiv.appendChild (
 			theNoteHTMLViewsFactory.getNoteTextAndIconHTML (
 				'TravelNotes-NoteDialog-',

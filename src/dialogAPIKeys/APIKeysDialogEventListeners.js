@@ -67,9 +67,14 @@ class APIKeyDeletedEL {
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -98,8 +103,13 @@ class OpenUnsecureFileChangeEL {
 
 	#APIKeysDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -141,9 +151,14 @@ class RestoreFromUnsecureFileButtonClickEL {
 	#APIKeysDialog = null;
 	#openUnsecureFileInputEventListener = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#openUnsecureFileInputEventListener = new OpenUnsecureFileChangeEL ( this.#APIKeysDialog );
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -174,9 +189,14 @@ class ReloadFromServerButtonClickEL {
 	#APIKeysDialog = null;
 	#dataEncryptorHandlers = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#dataEncryptorHandlers = new DataEncryptorHandlers ( this.#APIKeysDialog );
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -236,9 +256,14 @@ class OpenSecureFileChangeEL {
 	#APIKeysDialog = null;
 	#dataEncryptorHandlers = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#dataEncryptorHandlers = new DataEncryptorHandlers ( this.#APIKeysDialog );
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -278,9 +303,14 @@ class RestoreFromSecureFileButtonClickEL {
 	#APIKeysDialog = null;
 	#openSecureFileInputEventListener = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#openSecureFileInputEventListener = new OpenSecureFileChangeEL ( this.#APIKeysDialog );
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -312,11 +342,16 @@ class SaveToSecureFileButtonClickEL {
 	#saveAPIKeysHelper = null;
 	#dataEncryptorHandlers = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
 		this.#saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
 		this.#dataEncryptorHandlers = new DataEncryptorHandlers ( this.#APIKeysDialog );
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -360,10 +395,15 @@ class SaveToUnsecureFileButtonClickEL {
 	#APIKeysControls = null;
 	#saveAPIKeysHelper = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
 		this.#saveAPIKeysHelper = new SaveAPIKeysHelper ( this.#APIKeysControls );
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -400,9 +440,14 @@ class NewAPIKeyButtonClickEL {
 	#APIKeysDialog = null;
 	#APIKeysControls = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( APIKeysDialog, APIKeysControls ) {
 		this.#APIKeysDialog = APIKeysDialog;
 		this.#APIKeysControls = APIKeysControls;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {

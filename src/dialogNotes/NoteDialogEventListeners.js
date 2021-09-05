@@ -73,7 +73,12 @@ class NoteDialogGeoCoderHelper {
 		this.#noteDialog.updatePreview ( { address : addressString } );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 	}
 
@@ -116,7 +121,12 @@ class AddressButtonClickEL {
 	#latLng = null;
 	#geoCoderHelper = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog, latLng ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#latLng = latLng;
 		this.#geoCoderHelper = new NoteDialogGeoCoderHelper ( this.#noteDialog );
@@ -148,7 +158,12 @@ class AllControlsFocusEL {
 	#noteDialog = null;
 	#disableFocusControl = false;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog, disableFocusControl ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#disableFocusControl = disableFocusControl;
 	}
@@ -182,7 +197,12 @@ class UrlInputBlurEL {
 
 	#noteDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 	}
 
@@ -220,7 +240,12 @@ class AllControlsInputEL {
 
 	#noteDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 	}
 

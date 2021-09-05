@@ -99,7 +99,7 @@ class PasswordDialog extends BaseDialog {
 	#onMouseUpEyeEventListener = null;
 
 	/*
-	The constructor
+	constructor
 	@param {boolean} verifyPassword When true the password must be conform to the password rules
 	*/
 

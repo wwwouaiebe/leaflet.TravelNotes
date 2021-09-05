@@ -86,7 +86,12 @@ class NoteDialogPopupControl {
 		onInputUpdated : null
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#popupDiv = theHTMLElementsFactory.create (
 			'div',

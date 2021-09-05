@@ -81,7 +81,12 @@ class MouseEL {
 		this.#target.dispatchEvent ( panEvent );
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( target, button ) {
+		Object.freeze ( this );
 		this.#target = target;
 		this.#button = button;
 		switch ( button ) {

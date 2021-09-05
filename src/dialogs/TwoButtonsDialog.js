@@ -93,6 +93,10 @@ class TwoButtonsDialog extends BaseDialog {
 
 	#options = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( options = {} ) {
 		super ( options );
 		this.#options = options;

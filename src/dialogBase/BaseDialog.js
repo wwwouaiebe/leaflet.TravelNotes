@@ -502,9 +502,8 @@ class BaseDialog {
 	}
 
 	constructor ( options = {} ) {
-		Object.seal ( this );
+		Object.freeze ( this );
 		this.#options = options;
-
 		this.#eventListeners.onKeydown = new KeyboardKeydownEL ( this );
 	}
 

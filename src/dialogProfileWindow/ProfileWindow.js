@@ -73,6 +73,14 @@ import { SVG_NS, SVG_PROFILE, ZERO, ONE, TWO, THREE } from '../main/Constants.js
 
 class BaseSvgEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	getlatLngElevOnRouteAtMousePosition ( mouseEvent, profileSvg ) {
 		let route = theDataSearchEngine.getRoute ( Number.parseInt ( profileSvg.dataset.tanObjId ) );
 		let clientRect = profileSvg.getBoundingClientRect ( );
@@ -108,6 +116,10 @@ class BaseSvgEL {
 */
 
 class SvgContextMenuEL extends BaseSvgEL {
+
+	/*
+	constructor
+	*/
 
 	constructor ( ) {
 		super ( );
@@ -145,6 +157,14 @@ class SvgContextMenuEL extends BaseSvgEL {
 
 class SvgMouseLeaveEL {
 
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
+
 	handleEvent ( mouseLeaveEvent ) {
 		mouseLeaveEvent.preventDefault ( );
 		mouseLeaveEvent.stopPropagation ( );
@@ -168,6 +188,10 @@ class SvgMouseLeaveEL {
 */
 
 class SvgMouseMoveEL extends BaseSvgEL {
+
+	/*
+	constructor
+	*/
 
 	constructor ( ) {
 		super ( );
@@ -340,6 +364,10 @@ class ProfileWindow extends FloatWindow {
 		this.#svg = null;
 		this.#ascentDiv = null;
 	}
+
+	/*
+	constructor
+	*/
 
 	constructor ( ) {
 		super ( );

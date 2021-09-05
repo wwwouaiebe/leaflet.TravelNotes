@@ -99,7 +99,12 @@ class NoteDialogAddressControl {
 		onAddressButtonClick : null
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog, latLng ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#latLng = latLng;
 		this.#addressHeaderDiv = theHTMLElementsFactory.create (

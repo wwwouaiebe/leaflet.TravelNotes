@@ -62,9 +62,14 @@ class RedSliderInputEL {
 	#redSlider = null;
 	#colorButtons = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( redSlider, colorButtons ) {
 		this.#redSlider = redSlider;
 		this.#colorButtons = colorButtons;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -110,9 +115,14 @@ class ColorInputEL {
 	#colorControl = null;
 	#inputs = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( colorControl, inputs ) {
 		this.#colorControl = colorControl;
 		this.#inputs = inputs;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {
@@ -149,8 +159,13 @@ class ColorButtonClickEL {
 
 	#colorControl = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( colorControl ) {
 		this.#colorControl = colorControl;
+		Object.freeze ( this );
 	}
 
 	destructor ( ) {

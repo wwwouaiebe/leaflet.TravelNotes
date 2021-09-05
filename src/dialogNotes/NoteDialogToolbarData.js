@@ -64,7 +64,12 @@ class NoteDialogToolbarData {
 	#preDefinedIconsMap = new Map ( );
 	#preDefinedIcons = [];
 
+	/*
+	constructor
+	*/
+
 	constructor ( ) {
+		Object.freeze ( this );
 	}
 
 	/**

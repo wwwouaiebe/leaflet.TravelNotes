@@ -86,7 +86,12 @@ class NoteDialogIconDimsControl {
 		onInputUpdated : null
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#iconDimsDiv = theHTMLElementsFactory.create (
 			'div',

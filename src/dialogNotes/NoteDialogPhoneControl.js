@@ -86,7 +86,12 @@ class NoteDialogPhoneControl {
 		onInputUpdated : null
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 
 		this.#noteDialog = noteDialog;
 

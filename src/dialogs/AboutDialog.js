@@ -77,9 +77,12 @@ class AboutDialog extends BaseDialog {
 
 	#aboutDiv = null;
 
-	constructor ( ) {
+	/*
+	constructor
+	*/
 
-		super ( );
+	constructor ( options = {} ) {
+		super ( options );
 		this.#aboutDiv = theHTMLElementsFactory.create ( 'div', { id : 'TravelNotes-AboutDialog-AboutDiv' } );
 
 		theHTMLSanitizer.sanitizeToHtmlElement (

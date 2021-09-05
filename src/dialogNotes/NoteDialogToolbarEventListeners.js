@@ -64,7 +64,12 @@ class EditionButtonsClickEL {
 
 	#noteDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 	}
 
@@ -173,7 +178,12 @@ class IconSelectorChangeEL {
 			);
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 	}
 
@@ -215,7 +225,12 @@ class ToogleContentsButtonClickEL {
 
 	#noteDialog = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 	}
 
@@ -247,7 +262,12 @@ class OpenFileInputChangeEL {
 
 	#noteDialogToolbar = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialogToolbar ) {
+		Object.freeze ( this );
 		this.#noteDialogToolbar = noteDialogToolbar;
 	}
 
@@ -290,7 +310,12 @@ class OpenFileButtonClickEL {
 
 	#noteDialogToolbar = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialogToolbar ) {
+		Object.freeze ( this );
 		this.#noteDialogToolbar = noteDialogToolbar;
 	}
 

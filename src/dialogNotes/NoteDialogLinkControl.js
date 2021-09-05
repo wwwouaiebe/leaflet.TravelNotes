@@ -129,7 +129,12 @@ class NoteDialogLinkControl {
 		}
 	}
 
+	/*
+	constructor
+	*/
+
 	constructor ( noteDialog, latLng ) {
+		Object.freeze ( this );
 		this.#noteDialog = noteDialog;
 		this.#linkHeaderDiv = theHTMLElementsFactory.create (
 			'div',

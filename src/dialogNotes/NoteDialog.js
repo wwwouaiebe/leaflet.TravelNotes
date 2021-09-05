@@ -154,6 +154,10 @@ class NoteDialog extends BaseDialog {
 
 	#focusControl = null;
 
+	/*
+	constructor
+	*/
+
 	constructor ( note, routeObjId, startGeoCoder ) {
 		super ( );
 		this.#note = note;
