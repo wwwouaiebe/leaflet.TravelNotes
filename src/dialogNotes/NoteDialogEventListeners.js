@@ -213,6 +213,7 @@ class UrlInputBlurEL {
 	handleEvent ( blurEvent ) {
 		blurEvent.stopPropagation ( );
 		if ( '' === blurEvent.target.value ) {
+			this.#noteDialog.hideError ( );
 			return;
 		}
 

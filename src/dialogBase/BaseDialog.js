@@ -632,6 +632,7 @@ class BaseDialog {
 	*/
 
 	showError ( errorText ) {
+		this.#errorDiv.textContent ='';
 		theHTMLSanitizer.sanitizeToHtmlElement (
 			errorText,
 			this.#errorDiv
