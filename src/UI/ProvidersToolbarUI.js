@@ -238,6 +238,9 @@ class ProvidersToolbarUI {
 		this.#createTransitModesButtons ( );
 		this.#createProvidersButtons ( );
 		this.provider = this.#providerButtons.keys ().next ().value;
+		let providerName = this.#providerButtons.keys ( ).next ( ).value;
+		this.provider = providerName;
+		this.transitMode = theTravelNotesData.providers.get ( providerName.toLowerCase ( ) ).transitModes [ ZERO ];
 	}
 
 }
