@@ -108,7 +108,7 @@ class TravelNotesViewer {
 
 		theViewerLayersToolbarUI.setMapLayer ( 'OSM - Color' );
 		if ( travelUrl ) {
-			this.loadDistantTravel ( travelUrl );
+			this.#loadDistantTravel ( travelUrl );
 		}
 	}
 }

@@ -633,8 +633,8 @@ class AppLoader {
 			let map = window.L.map ( 'TravelNotes-Map', { attributionControl : false, zoomControl : false } )
 				.setView ( [ LAT_LNG.defaultValue, LAT_LNG.defaultValue ], ZERO );
 
-			if ( this.travelUrl ) {
-				theTravelNotes.addReadOnlyMap ( map, this.travelUrl );
+			if ( this.#travelUrl ) {
+				theTravelNotes.addReadOnlyMap ( map, this.#travelUrl );
 			}
 			else {
 				this.#addUnloadEventsListeners ( );
