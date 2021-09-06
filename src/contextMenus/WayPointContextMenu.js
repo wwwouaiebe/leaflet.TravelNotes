@@ -78,7 +78,7 @@ class WayPointContextMenu extends BaseContextMenu {
 
 	constructor ( contextMenuEvent, parentNode = null ) {
 		super ( contextMenuEvent, parentNode );
-		this.#wayPointObjId = this.eventData.targrtObjId;
+		this.#wayPointObjId = this.eventData.targetObjId;
 	}
 
 	/* eslint-disable no-magic-numbers */

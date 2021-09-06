@@ -85,10 +85,7 @@ class EditionButtonsClickEL {
 		if ( ! this.#noteDialog.focusControl ) {
 			return;
 		}
-		let button = clickEvent.target;
-		while ( ! button.dataset.tanHtmlBefore ) {
-			button = button.parentNode;
-		}
+		let button = clickEvent.currentTarget;
 		let selectionStart = this.#noteDialog.focusControl.selectionStart;
 		let selectionEnd = this.#noteDialog.focusControl.selectionEnd;
 

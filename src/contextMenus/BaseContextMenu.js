@@ -248,8 +248,14 @@ class BaseContextMenu {
 			// Needed for leaflet objects
 			this.#eventData.targetObjId = contextMenuEvent.target.objId;
 		}
-		else if ( contextMenuEvent.target.dataset && contextMenuEvent.target.dataset.tanObjId ) {
-			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.target.dataset.tanObjId );
+		else if (
+			contextMenuEvent.currentTarget
+			&&
+			contextMenuEvent.currentTarget.dataset
+			&&
+			contextMenuEvent.currentTarget.dataset.tanObjId
+		) {
+			this.#eventData.targetObjId = Number.parseInt ( contextMenuEvent.currentTarget.dataset.tanObjId );
 		}
 		this.#eventData.haveParentNode = null !== parentNode;
 		Object.freeze ( this.#eventData );

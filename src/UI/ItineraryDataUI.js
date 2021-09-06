@@ -71,11 +71,6 @@ class ManeuverContextMenuEL {
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
-		let maneuverElement = contextMenuEvent.target;
-		while ( ! maneuverElement.dataset.tanObjId ) {
-			maneuverElement = maneuverElement.parentNode;
-		}
-		contextMenuEvent.target.dataset.tanObjId = maneuverElement.dataset.tanObjId;
 		new ManeuverContextMenu ( contextMenuEvent, this.#paneData ).show ( );
 	}
 }
@@ -105,11 +100,6 @@ class NoteContextMenuEL {
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
-		let maneuverElement = contextMenuEvent.target;
-		while ( ! maneuverElement.dataset.tanObjId ) {
-			maneuverElement = maneuverElement.parentNode;
-		}
-		contextMenuEvent.target.dataset.tanObjId = maneuverElement.dataset.tanObjId;
 		new NoteContextMenu ( contextMenuEvent, this.#paneData ).show ( );
 	}
 }

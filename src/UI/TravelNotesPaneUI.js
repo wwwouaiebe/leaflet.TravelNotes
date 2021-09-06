@@ -133,10 +133,7 @@ class TravelNoteDropEL {
 
 	handleEvent ( dropEvent ) {
 		dropEvent.preventDefault ( );
-		let element = dropEvent.target;
-		while ( ! element.dataset.tanObjId ) {
-			element = element.parentElement;
-		}
+		let element = dropEvent.currentTarget;
 		let clientRect = element.getBoundingClientRect ( );
 
 		theNoteEditor.travelNoteDropped (
@@ -172,11 +169,6 @@ class TravelNoteContextMenuEL {
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
-		let element = contextMenuEvent.target;
-		while ( ! element.dataset.tanObjId ) {
-			element = element.parentNode;
-		}
-		contextMenuEvent.target.dataset.tanObjId = element.dataset.tanObjId;
 		new NoteContextMenu ( contextMenuEvent, this.#paneData ).show ( );
 	}
 }
@@ -226,6 +218,7 @@ class TravelNotesPaneUI extends PaneUI {
 				childNode => {
 					childNode.removeEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
 					childNode.removeEventListener ( 'dragstart', this.#eventListeners.onDragStart, false );
+					childNode.removeEventListener ( 'drop', this.#eventListeners.onDrop, false );
 				}
 			);
 			this.paneData.removeChild ( this.#travelNotesDiv );
@@ -239,7 +232,6 @@ class TravelNotesPaneUI extends PaneUI {
 
 	add ( ) {
 		this.#travelNotesDiv = theNoteHTMLViewsFactory.getTravelNotesHTML ( 'TravelNotes-TravelNotesPaneUI-' );
-		this.#travelNotesDiv.addEventListener ( 'drop', this.#eventListeners.onDrop, false );
 		this.#travelNotesDiv.addEventListener ( 'dragover', this.#eventListeners.onDragOver, false );
 		this.paneData.appendChild ( this.#travelNotesDiv );
 		this.#travelNotesDiv.childNodes.forEach (
@@ -247,6 +239,7 @@ class TravelNotesPaneUI extends PaneUI {
 				childNode.draggable = true;
 				childNode.addEventListener ( 'contextmenu', this.#eventListeners.onContextMenu, false );
 				childNode.addEventListener ( 'dragstart', this.#eventListeners.onDragStart, false );
+				childNode.addEventListener ( 'drop', this.#eventListeners.onDrop, false );
 				childNode.classList.add ( 'TravelNotes-UI-MoveCursor' );
 			}
 		);

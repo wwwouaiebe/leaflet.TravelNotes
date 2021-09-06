@@ -82,7 +82,7 @@ class OsmSearchContextMenu extends BaseContextMenu {
 	constructor ( contextMenuEvent, parentNode = null ) {
 		super ( contextMenuEvent, parentNode );
 		this.#osmElement =
-			theTravelNotesData.searchData [ Number.parseInt ( contextMenuEvent.target.dataset.tanElementIndex ) ];
+			theTravelNotesData.searchData [ Number.parseInt ( contextMenuEvent.currentTarget.dataset.tanElementIndex ) ];
 		this.#latLng = [ this.#osmElement.lat, this.#osmElement.lon ];
 	}
 

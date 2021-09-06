@@ -81,9 +81,9 @@ class BaseSvgEL {
 		Object.freeze ( this );
 	}
 
-	getlatLngElevOnRouteAtMousePosition ( mouseEvent, profileSvg ) {
-		let route = theDataSearchEngine.getRoute ( Number.parseInt ( profileSvg.dataset.tanObjId ) );
-		let clientRect = profileSvg.getBoundingClientRect ( );
+	getlatLngElevOnRouteAtMousePosition ( mouseEvent ) {
+		let route = theDataSearchEngine.getRoute ( Number.parseInt ( mouseEvent.currentTarget.dataset.tanObjId ) );
+		let clientRect = mouseEvent.currentTarget.getBoundingClientRect ( );
 		let routeDist =
 			(
 				( mouseEvent.clientX - clientRect.x -
@@ -129,18 +129,12 @@ class SvgContextMenuEL extends BaseSvgEL {
 		mouseEvent.preventDefault ( );
 		mouseEvent.stopPropagation ( );
 
-		let profileSvg = mouseEvent.target;
-		while ( ! profileSvg.dataset.tanObjId ) {
-			profileSvg = profileSvg.parentNode;
-		}
-
-		let latLngElevOnRoute = this.getlatLngElevOnRouteAtMousePosition ( mouseEvent, profileSvg );
+		let latLngElevOnRoute = this.getlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
 			mouseEvent.latlng = {
 				lat : latLngElevOnRoute.latLng [ ZERO ],
 				lng : latLngElevOnRoute.latLng [ ONE ]
 			};
-			mouseEvent.target.dataset.tanObjId = profileSvg.dataset.tanObjId;
 			new ProfileContextMenu ( mouseEvent ).show ( );
 		}
 	}
@@ -169,12 +163,10 @@ class SvgMouseLeaveEL {
 	handleEvent ( mouseLeaveEvent ) {
 		mouseLeaveEvent.preventDefault ( );
 		mouseLeaveEvent.stopPropagation ( );
-		let profileSvg = mouseLeaveEvent.target;
-		while ( ! profileSvg.dataset.tanObjId ) {
-			profileSvg = profileSvg.parentNode;
-		}
-
-		theEventDispatcher.dispatch ( 'removeobject', { objId : Number.parseInt ( profileSvg.dataset.tanMarkerObjId ) } );
+		theEventDispatcher.dispatch (
+			'removeobject',
+			{ objId : Number.parseInt ( mouseLeaveEvent.currentTarget.dataset.tanMarkerObjId ) }
+		);
 	}
 }
 
@@ -223,12 +215,8 @@ class SvgMouseMoveEL extends BaseSvgEL {
 		mouseEvent.preventDefault ( );
 		mouseEvent.stopPropagation ( );
 
-		this.#profileSvg = mouseEvent.target;
-		while ( ! this.#profileSvg.dataset.tanObjId ) {
-			this.#profileSvg = this.#profileSvg.parentNode;
-		}
-
-		let latLngElevOnRoute = this.getlatLngElevOnRouteAtMousePosition ( mouseEvent, this.#profileSvg );
+		this.#profileSvg = mouseEvent.currentTarget;
+		let latLngElevOnRoute = this.getlatLngElevOnRouteAtMousePosition ( mouseEvent );
 		if ( latLngElevOnRoute ) {
 
 			// itinerary point marker on the map

@@ -76,12 +76,6 @@ class SearchResultContextMenuEL {
 	handleEvent ( contextMenuEvent ) {
 		contextMenuEvent.stopPropagation ( );
 		contextMenuEvent.preventDefault ( );
-		let searchResultElement = contextMenuEvent.target;
-		while ( ! searchResultElement.dataset.tanObjId ) {
-			searchResultElement = searchResultElement.parentNode;
-		}
-		contextMenuEvent.target.dataset.tanObjId = searchResultElement.dataset.tanObjId;
-		contextMenuEvent.target.dataset.tanElementIndex = searchResultElement.dataset.tanElementIndex;
 		new OsmSearchContextMenu ( contextMenuEvent, this.paneDataDiv ).show ( );
 	}
 
