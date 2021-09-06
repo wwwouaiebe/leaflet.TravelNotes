@@ -58,10 +58,6 @@ import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
 
 class RoadbookUpdater {
 
-	showTravelNotes = true;
-	showRouteNotes = true;
-	showManeuversNotes = false;
-
 	#travelNotesHtmlElement = document.getElementById ( 'TravelNotes' );
 
 	/*
@@ -69,7 +65,11 @@ class RoadbookUpdater {
 	*/
 
 	constructor ( ) {
-		Object.freeze ( this );
+		this.showTravelNotes = true;
+		this.showRouteNotes = true;
+		this.showManeuversNotes = false;
+
+		Object.seal ( this );
 	}
 
 	/**

@@ -71,16 +71,22 @@ const OUR_DEMO_MAX_MANEUVERS_NOTES = 10;
 /**
 @------------------------------------------------------------------------------------------------------------------------------
 
-@class RoadbookUpdate
+@class RoadbookUpdateEL
 @classdesc 'roadbookupdate' event listener
-to the document
 @hideconstructor
-@private
 
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-class RoadbookUpdate {
+class RoadbookUpdateEL {
+
+	/*
+	constructor
+	*/
+
+	constructor ( ) {
+		Object.freeze ( this );
+	}
 
 	handleEvent ( ) {
 		theMouseUI.saveStatus = SAVE_STATUS.modified;
@@ -263,7 +269,7 @@ class AppLoader {
 			},
 			false
 		);
-		document.addEventListener ( 'roadbookupdate', new RoadbookUpdate ( ), false );
+		document.addEventListener ( 'roadbookupdate', new RoadbookUpdateEL ( ), false );
 		document.addEventListener (
 			'profileclosed',
 			profileClosedEvent => {
@@ -330,7 +336,7 @@ class AppLoader {
 		document.addEventListener (
 			'settransitmode',
 			setTransitModeEvent => {
-				if ( setTransitModeEvent.data && setTransitModeEvent.data.provider ) {
+				if ( setTransitModeEvent.data && setTransitModeEvent.data.transitMode ) {
 					theUI.providersToolbarUI.transitMode = setTransitModeEvent.data.transitMode;
 				}
 			},

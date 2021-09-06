@@ -86,7 +86,11 @@ class RoutesListUI {
 
 	constructor ( UIMainHTMLElement ) {
 		Object.freeze ( this );
-		this.#routesListHTMLElement = theHTMLElementsFactory.create ( 'div', null, UIMainHTMLElement );
+		this.#routesListHTMLElement = theHTMLElementsFactory.create (
+			'div',
+			{ className : 'TravelNotes-TravelUI-RoutesListDiv' },
+			UIMainHTMLElement
+		);
 		this.#routesListHTMLElement.addEventListener ( 'dragover', new RoutesListDragOverEL ( ) );
 		this.#routesListHTMLElement.addEventListener ( 'wheel', new RoutesListWheelEL ( ) );
 	}

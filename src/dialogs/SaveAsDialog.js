@@ -108,7 +108,7 @@ class SaveAsDialog extends BaseDialog {
 		[ this.#removeRoutesNotesDiv, this.#removeRoutesNotesInput ] =
 			this.#createInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Routes Notes' ) );
 		[ this.#removeManeuversDiv, this.#removeManeuversInput ] =
-			this.#createInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Travel Notes' ) );
+			this.#createInputDiv ( theTranslator.getText ( 'SaveAsDialog - Remove Maneuvers' ) );
 	}
 
 	/**

@@ -178,7 +178,7 @@ class GpxFactory {
 			fileName = 'TravelNote';
 		}
 		fileName += '.gpx';
-		theUtilities.saveFile ( fileName, this.#myGpxString );
+		theUtilities.saveFile ( fileName, this.#myGpxString, 'application/xml' );
 	}
 
 	/*
