@@ -508,7 +508,7 @@ class BaseDialog {
 		this.#keyboardELEnabled = true;
 	}
 
-	#destructor ( ) {
+	#BaseDialogDestructor ( ) {
 		this.#backgroundDiv.removeEventListener ( 'dragover', this.#eventListeners.onDragOver, false );
 		this.#backgroundDiv.removeEventListener ( 'leftpan', this.#eventListeners.onLeftPan, false );
 		this.#backgroundDiv.removeEventListener ( 'rightpan', this.#eventListeners.onRightPan, false );
@@ -541,7 +541,7 @@ class BaseDialog {
 	*/
 
 	onCancel ( ) {
-		this.#destructor ( );
+		this.#BaseDialogDestructor ( );
 		this.#onPromiseErrorFct ( 'Canceled by user' );
 	}
 
@@ -562,7 +562,7 @@ class BaseDialog {
 
 	onOk ( returnValue ) {
 		if ( this.canClose ( ) ) {
-			this.#destructor ( );
+			this.#BaseDialogDestructor ( );
 			this.#onPromiseOkFct ( returnValue );
 			return true;
 		}

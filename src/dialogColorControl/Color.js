@@ -149,7 +149,7 @@ class Color {
 	*/
 
 	set cssColor ( cssColor ) {
-		if ( '#' === cssColor [ ZERO ] ) {
+		if ( '\u0023' === cssColor [ ZERO ] ) {
 			this.#red = Number.parseInt ( cssColor.substr ( ONE, TWO ), HEXADECIMAL );
 			this.#green = Number.parseInt ( cssColor.substr ( THREE, TWO ), HEXADECIMAL );
 			this.#blue = Number.parseInt ( cssColor.substr ( FIVE, TWO ), HEXADECIMAL );
