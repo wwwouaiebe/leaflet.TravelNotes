@@ -20,6 +20,7 @@
     "grunt-rollup": "latest",
     "grunt-stylelint": "latest",
     "grunt-terser": "latest",
+    "grunt-text-replace": "latest",
     "jsdoc": "latest",
     "osrm-text-instructions": "latest",
     "rollup": "latest",

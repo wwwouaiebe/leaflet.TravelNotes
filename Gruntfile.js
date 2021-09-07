@@ -62,22 +62,42 @@ module.exports = function(grunt) {
 			},				
 			target: ['src/**/*.js']
 		},	
+		replace: {
+			release : {
+				src: ['tmp/src/**/*.js'],
+				overwrite: true, 
+				replacements: [
+					{
+						from: '#',
+						to: '_'
+					},
+					{
+						from: 'Object.freeze ( this );',
+						to: '/* Object.freeze ( this ); */'
+					},
+					{
+						from: 'Object.seal ( this );',
+						to: '/* Object.seal ( this ); */'
+					}
+				]
+			}
+		},
 		rollup : {
 			Default : {
 				options : {
 					format : 'iife'
 				},
 				files: {
-				  'tmp/TravelNotes.min.js': ['src/main/main.js'],  
-				  'tmp/TravelNotesViewer.min.js': ['src/main/mainViewer.js'],  
-				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js'],			  
-				  'tmp/GraphHopperRouteProvider.min.js': ['src/routeProviders/GraphHopperRouteProvider.js'],			  
-				  'tmp/MapboxRouteProvider.min.js': ['src/routeProviders/MapboxRouteProvider.js'],			  
-				  'tmp/MapzenValhallaRouteProvider.min.js': ['src/routeProviders/MapzenValhallaRouteProvider.js'],			  
-				  'tmp/OpenRouteServiceRouteProvider.min.js': ['src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
-				  'tmp/OsrmRouteProvider.min.js': ['src/routeProviders/OsrmRouteProvider.js'],				  
-				  'tmp/PolylineRouteProvider.min.js': ['src/routeProviders/PolylineRouteProvider.js'],				  
-				  'tmp/PublicTransportRouteProvider.min.js': ['src/routeProviders/PublicTransportRouteProvider.js']				  
+				  'tmp/TravelNotes.min.js': ['tmp/src/main/main.js'],  
+				  'tmp/TravelNotesViewer.min.js': ['tmp/src/main/mainViewer.js'],  
+				  'tmp/TravelNotesRoadbook.min.js': ['tmp/src/roadbook/roadbook.js'],			  
+				  'tmp/GraphHopperRouteProvider.min.js': ['tmp/src/routeProviders/GraphHopperRouteProvider.js'],			  
+				  'tmp/MapboxRouteProvider.min.js': ['tmp/src/routeProviders/MapboxRouteProvider.js'],			  
+				  'tmp/MapzenValhallaRouteProvider.min.js': ['tmp/src/routeProviders/MapzenValhallaRouteProvider.js'],			  
+				  'tmp/OpenRouteServiceRouteProvider.min.js': ['tmp/src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
+				  'tmp/OsrmRouteProvider.min.js': ['tmp/src/routeProviders/OsrmRouteProvider.js'],				  
+				  'tmp/PolylineRouteProvider.min.js': ['tmp/src/routeProviders/PolylineRouteProvider.js'],				  
+				  'tmp/PublicTransportRouteProvider.min.js': ['tmp/src/routeProviders/PublicTransportRouteProvider.js']				  
 				}
 			}
 		},
@@ -89,7 +109,7 @@ module.exports = function(grunt) {
 		},	
 		cssmin: {
 			options: {
-				// don't remove this. Colors must not be changed in css to avois problems with data uri
+				// don't remove this. Colors must not be changed in css to avoid problems with data uri
 				compatibility : {
 					properties : {
 						colors : false
@@ -170,6 +190,17 @@ module.exports = function(grunt) {
 			},
 		},
 		copy: {
+			beforerelease:{
+				// for replace
+				files: [
+					{
+						expand: true,
+						cwd: '',
+						src: ['src/**/*.js' ],
+						dest: 'tmp/'
+					}
+				]
+			},
 			release: {
 				// release only
 				files: [
@@ -435,6 +466,7 @@ module.exports = function(grunt) {
 	grunt.config.data.pkg.buildNumber = ("00000" + ( Number.parseInt ( grunt.config.data.pkg.buildNumber ) + 1 )).substr ( -5, 5 ) ;
 	grunt.file.write ( 'buildNumber.json', '{ "buildNumber" : "' + grunt.config.data.pkg.buildNumber + '"}'  );
 	grunt.loadNpmTasks('grunt-eslint');
+	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-rollup');
 	grunt.loadNpmTasks('grunt-stylelint');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -445,7 +477,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('doc', [ 'clean:doc','jsdoc' ]);
 	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug','copy:debug','clean:end', ]);
 	grunt.registerTask('docs', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
-	grunt.registerTask('release', [ 'clean:release', 'eslint', 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
+	grunt.registerTask('release', [ 'clean:release', 'eslint', 'copy:beforerelease', 'replace:release' , 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
