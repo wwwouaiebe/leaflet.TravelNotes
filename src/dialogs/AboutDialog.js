@@ -60,7 +60,7 @@ import theHTMLElementsFactory from '../UILib/HTMLElementsFactory.js';
 import theTranslator from '../UILib/Translator.js';
 import BaseDialog from '../dialogBase/BaseDialog.js';
 import theHTMLSanitizer from '../coreLib/HTMLSanitizer.js';
-import theCurrentVersion from '../data/Version.js';
+import { theAppVersion } from '../data/Version.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ class AboutDialog extends BaseDialog {
 				'<p>Contact : <a href="https://www.ouaie.be/pages/Contact" target="_blank">https://www.ouaie.be/</a></p>' +
 				'<p>GitHub : <a href="https://github.com/wwwouaiebe/leaflet.TravelNotes" target="_blank">' +
 				'https://github.com/wwwouaiebe/leaflet.TravelNotes</a></p>' +
-				'<p>Version : ' + theCurrentVersion + '.' +
+				'<p>Version : ' + theAppVersion + '.' +
 				'<p>This program uses:' +
 				' <a href="https://leafletjs.com/" target="_blank">leaflet</a>,' +
 				' <a href="https://github.com/Project-OSRM/osrm-text-instructions" target="_blank">' +

@@ -46,7 +46,7 @@ Tests ...
 
 /*
 
-Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!!
+Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!!
 
 								--
 							   //\\
@@ -58,10 +58,17 @@ Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! Warning!!! War
 						 //      o     \\
 						 \==============/
 
-You have also to adapt the version in the #upgradeObject ( ) method of
+Since v3.0.0 theDataVersion and theAppVersion are two different values.
+
+theDataVersion is only modified when changes in the Itinerary, ItineraryPoint,
+Maneuver, Note, Route, Travel or WayPoint classes interfaces.
+
+You have also to adapt the theDataVersion in the #upgradeObject ( ) method of
 Itinerary, ItineraryPoint,Maneuver, Note, Route, Travel and WayPoint.
 
-And change the version in the package.json file and run npm audit fix.
+The theAppVersion changes at each release.
+You have also to change the theAppVersion in the package.json file
+and run npm audit fix before a release.
 
 */
 
@@ -76,9 +83,10 @@ And change the version in the package.json file and run npm audit fix.
 @------------------------------------------------------------------------------------------------------------------------------
 */
 
-const theCurrentVersion = '2.3.0';
+const theDataVersion = '2.3.0';
+const theAppVersion = '3.0.0';
 
-export default theCurrentVersion;
+export { theDataVersion, theAppVersion };
 
 /*
 --- End of Version.js file ----------------------------------------------------------------------------------------------------

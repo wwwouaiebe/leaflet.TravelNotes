@@ -80,7 +80,7 @@ import theUI from '../UI/UI.js';
 import Travel from '../data/Travel.js';
 import Route from '../data/Route.js';
 import ViewerFileLoader from '../core/ViewerFileLoader.js';
-import theCurrentVersion from '../data/Version.js';
+import { theAppVersion } from '../data/Version.js';
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import MapContextMenu from '../contextMenus/MapContextMenu.js';
 import theMapLayersToolbarUI from '../mapLayersToolbarUI/MapLayersToolbarUI.js';
@@ -228,7 +228,7 @@ class TravelNotes {
 	theTravelNotes version
 	*/
 
-	get version ( ) { return theCurrentVersion; }
+	get version ( ) { return theAppVersion; }
 }
 
 /**

@@ -49,7 +49,7 @@ Tests ...
 */
 
 import { NOT_FOUND } from '../main/Constants.js';
-import theCurrentVersion from '../data/Version.js';
+import { theDataVersion } from '../data/Version.js';
 
 /**
 @--------------------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ class ObjType {
 	@type {string}
 	*/
 
-	get version ( ) { return theCurrentVersion; }
+	get version ( ) { return theDataVersion; }
 
 	/**
 	An object literal with the ObjType properties and without any methods.
@@ -100,7 +100,7 @@ class ObjType {
 	get jsonObject ( ) {
 		return {
 			name : this.#objTypeName,
-			version : theCurrentVersion
+			version : theDataVersion
 		};
 	}
 
