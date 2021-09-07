@@ -75,7 +75,6 @@ import DataEncryptor from '../coreLib/DataEncryptor.js';
 import PasswordDialog from '../dialogPassword/PasswordDialog.js';
 import theTranslator from '../UILib/Translator.js';
 import theErrorsUI from '../errorsUI/ErrorsUI.js';
-import BaseRouteProvider from '../routeProviders/BaseRouteProvider.js';
 
 import { ZERO, ONE, HTTP_STATUS_OK } from '../main/Constants.js';
 
@@ -330,10 +329,6 @@ class APIKeysManager {
 	*/
 
 	addProvider ( providerClass ) {
-		if ( ! Object.prototype.isPrototypeOf.call ( BaseRouteProvider, providerClass ) ) {
-			console.error ( 'Invalid provider class given : ' + providerClass.name );
-			return;
-		}
 		let provider = new providerClass ( );
 		let providerName = provider.name.toLowerCase ( );
 
