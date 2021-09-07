@@ -688,10 +688,6 @@
 		"msgstr" : "It's impossible to edit a route created with this provider ({provider})."
 	},
 	{
-		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
-		"msgstr" : "It's impossible to edit a route without a save or cancel on the modifications"
-	},
-	{
 		"msgid" : "RoutePropertiesDialog - Chained route",
 		"msgstr" : "Chained route : "
 	},
@@ -738,10 +734,6 @@
 	{
 		"msgid" : "SaveAsDialog - Remove Maneuvers",
 		"msgstr" : "Remove Maneuvers"
-	},
-	{
-		"msgid" : "TravelEditor - Cannot remove an edited route",
-		"msgstr" : "It's impossible to remove an edited route"
 	},
 	{
 		"msgid" : "TravelEditor - Gives a name to the travel",

@@ -688,10 +688,6 @@
 		"msgstr" : "Il n'est pas possible d'éditer un trajet créé avec ce fournisseur ({provider})."
 	},
 	{
-		"msgid" : "RouteEditor - Not possible to edit a route without a save or cancel",
-		"msgstr" : "Il n'est pas possible d'éditer un trajet sans sauver ou abandonner les modifications"
-	},
-	{
 		"msgid" : "RoutePropertiesDialog - Chained route",
 		"msgstr" : "Trajet chaîné : "
 	},
@@ -738,10 +734,6 @@
 	{
 		"msgid" : "SaveAsDialog - Remove Maneuvers",
 		"msgstr" : "Supprimer les manœuvres"
-	},
-	{
-		"msgid" : "TravelEditor - Cannot remove an edited route",
-		"msgstr" : "Il n'est pas possible de supprimer un trajet quand celui-ci est en cours d'édition"
 	},
 	{
 		"msgid" : "TravelEditor - Gives a name to the travel",
