@@ -64,7 +64,7 @@ module.exports = function(grunt) {
 		},	
 		replace: {
 			release : {
-				src: ['tmp/src/**/*.js'],
+				src: ['tmpRelease/src/**/*.js'],
 				overwrite: true, 
 				replacements: [
 					{
@@ -88,16 +88,16 @@ module.exports = function(grunt) {
 					format : 'iife'
 				},
 				files: {
-				  'tmp/TravelNotes.min.js': ['src/main/main.js'],  
-				  'tmp/TravelNotesViewer.min.js': ['src/main/mainViewer.js'],  
-				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js'],			  
-				  'tmp/GraphHopperRouteProvider.min.js': ['src/routeProviders/GraphHopperRouteProvider.js'],			  
-				  'tmp/MapboxRouteProvider.min.js': ['src/routeProviders/MapboxRouteProvider.js'],			  
-				  'tmp/MapzenValhallaRouteProvider.min.js': ['src/routeProviders/MapzenValhallaRouteProvider.js'],			  
-				  'tmp/OpenRouteServiceRouteProvider.min.js': ['src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
-				  'tmp/OsrmRouteProvider.min.js': ['src/routeProviders/OsrmRouteProvider.js'],				  
-				  'tmp/PolylineRouteProvider.min.js': ['src/routeProviders/PolylineRouteProvider.js'],				  
-				  'tmp/PublicTransportRouteProvider.min.js': ['src/routeProviders/PublicTransportRouteProvider.js']				  
+				  'tmpDebug/TravelNotes.min.js': ['src/main/main.js'],  
+				  'tmpDebug/TravelNotesViewer.min.js': ['src/main/mainViewer.js'],  
+				  'tmpDebug/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js'],			  
+				  'tmpDebug/GraphHopperRouteProvider.min.js': ['src/routeProviders/GraphHopperRouteProvider.js'],			  
+				  'tmpDebug/MapboxRouteProvider.min.js': ['src/routeProviders/MapboxRouteProvider.js'],			  
+				  'tmpDebug/MapzenValhallaRouteProvider.min.js': ['src/routeProviders/MapzenValhallaRouteProvider.js'],			  
+				  'tmpDebug/OpenRouteServiceRouteProvider.min.js': ['src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
+				  'tmpDebug/OsrmRouteProvider.min.js': ['src/routeProviders/OsrmRouteProvider.js'],				  
+				  'tmpDebug/PolylineRouteProvider.min.js': ['src/routeProviders/PolylineRouteProvider.js'],				  
+				  'tmpDebug/PublicTransportRouteProvider.min.js': ['src/routeProviders/PublicTransportRouteProvider.js']				  
 				}
 			}
 			,
@@ -106,16 +106,16 @@ module.exports = function(grunt) {
 					format : 'iife'
 				},
 				files: {
-				  'tmp/TravelNotes.min.js': ['tmp/src/main/main.js'],  
-				  'tmp/TravelNotesViewer.min.js': ['tmp/src/main/mainViewer.js'],  
-				  'tmp/TravelNotesRoadbook.min.js': ['tmp/src/roadbook/roadbook.js'],			  
-				  'tmp/GraphHopperRouteProvider.min.js': ['tmp/src/routeProviders/GraphHopperRouteProvider.js'],			  
-				  'tmp/MapboxRouteProvider.min.js': ['tmp/src/routeProviders/MapboxRouteProvider.js'],			  
-				  'tmp/MapzenValhallaRouteProvider.min.js': ['tmp/src/routeProviders/MapzenValhallaRouteProvider.js'],			  
-				  'tmp/OpenRouteServiceRouteProvider.min.js': ['tmp/src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
-				  'tmp/OsrmRouteProvider.min.js': ['tmp/src/routeProviders/OsrmRouteProvider.js'],				  
-				  'tmp/PolylineRouteProvider.min.js': ['tmp/src/routeProviders/PolylineRouteProvider.js'],				  
-				  'tmp/PublicTransportRouteProvider.min.js': ['tmp/src/routeProviders/PublicTransportRouteProvider.js']				  
+				  'tmpRelease/TravelNotes.min.js': ['tmpRelease/src/main/main.js'],  
+				  'tmpRelease/TravelNotesViewer.min.js': ['tmpRelease/src/main/mainViewer.js'],  
+				  'tmpRelease/TravelNotesRoadbook.min.js': ['tmpRelease/src/roadbook/roadbook.js'],			  
+				  'tmpRelease/GraphHopperRouteProvider.min.js': ['tmpRelease/src/routeProviders/GraphHopperRouteProvider.js'],			  
+				  'tmpRelease/MapboxRouteProvider.min.js': ['tmpRelease/src/routeProviders/MapboxRouteProvider.js'],			  
+				  'tmpRelease/MapzenValhallaRouteProvider.min.js': ['tmpRelease/src/routeProviders/MapzenValhallaRouteProvider.js'],			  
+				  'tmpRelease/OpenRouteServiceRouteProvider.min.js': ['tmpRelease/src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
+				  'tmpRelease/OsrmRouteProvider.min.js': ['tmpRelease/src/routeProviders/OsrmRouteProvider.js'],				  
+				  'tmpRelease/PolylineRouteProvider.min.js': ['tmpRelease/src/routeProviders/PolylineRouteProvider.js'],				  
+				  'tmpRelease/PublicTransportRouteProvider.min.js': ['tmpRelease/src/routeProviders/PublicTransportRouteProvider.js']				  
 				}
 			}
 		},
@@ -164,22 +164,22 @@ module.exports = function(grunt) {
 					}
 				},
 				files: {
-					'dist/TravelNotes.min.js': ['tmp/TravelNotes.min.js'],
-					'dist/TravelNotesProviders/GraphHopperRouteProvider.min.js': ['tmp/GraphHopperRouteProvider.min.js'],			  
-					'dist/TravelNotesProviders/MapboxRouteProvider.min.js': ['tmp/MapboxRouteProvider.min.js'],			  
-					'dist/TravelNotesProviders/MapzenValhallaRouteProvider.min.js': ['tmp/MapzenValhallaRouteProvider.min.js'],			  
-					'dist/TravelNotesProviders/OpenRouteServiceRouteProvider.min.js': ['tmp/OpenRouteServiceRouteProvider.min.js'],				  
-					'dist/TravelNotesProviders/OsrmRouteProvider.min.js': ['tmp/OsrmRouteProvider.min.js'],				  
-					'dist/TravelNotesProviders/PolylineRouteProvider.min.js': ['tmp/PolylineRouteProvider.min.js'],				  
-					'dist/TravelNotesProviders/PublicTransportRouteProvider.min.js': ['tmp/PublicTransportRouteProvider.min.js'],
-					'gh-page/TravelNotes.min.js': ['tmp/TravelNotes.min.js'],
-					'gh-page/TravelNotesProviders/GraphHopperRouteProvider.min.js': ['tmp/GraphHopperRouteProvider.min.js'],			  
-					'gh-page/TravelNotesProviders/MapboxRouteProvider.min.js': ['tmp/MapboxRouteProvider.min.js'],			  
-					'gh-page/TravelNotesProviders/MapzenValhallaRouteProvider.min.js': ['tmp/MapzenValhallaRouteProvider.min.js'],			  
-					'gh-page/TravelNotesProviders/OpenRouteServiceRouteProvider.min.js': ['tmp/OpenRouteServiceRouteProvider.min.js'],				  
-					'gh-page/TravelNotesProviders/OsrmRouteProvider.min.js': ['tmp/OsrmRouteProvider.min.js'],				  
-					'gh-page/TravelNotesProviders/PolylineRouteProvider.min.js': ['tmp/PolylineRouteProvider.min.js'],				  
-					'gh-page/TravelNotesProviders/PublicTransportRouteProvider.min.js': ['tmp/PublicTransportRouteProvider.min.js']				  
+					'dist/TravelNotes.min.js': ['tmpRelease/TravelNotes.min.js'],
+					'dist/TravelNotesProviders/GraphHopperRouteProvider.min.js': ['tmpRelease/GraphHopperRouteProvider.min.js'],			  
+					'dist/TravelNotesProviders/MapboxRouteProvider.min.js': ['tmpRelease/MapboxRouteProvider.min.js'],			  
+					'dist/TravelNotesProviders/MapzenValhallaRouteProvider.min.js': ['tmpRelease/MapzenValhallaRouteProvider.min.js'],			  
+					'dist/TravelNotesProviders/OpenRouteServiceRouteProvider.min.js': ['tmpRelease/OpenRouteServiceRouteProvider.min.js'],				  
+					'dist/TravelNotesProviders/OsrmRouteProvider.min.js': ['tmpRelease/OsrmRouteProvider.min.js'],				  
+					'dist/TravelNotesProviders/PolylineRouteProvider.min.js': ['tmpRelease/PolylineRouteProvider.min.js'],				  
+					'dist/TravelNotesProviders/PublicTransportRouteProvider.min.js': ['tmpRelease/PublicTransportRouteProvider.min.js'],
+					'gh-page/TravelNotes.min.js': ['tmpRelease/TravelNotes.min.js'],
+					'gh-page/TravelNotesProviders/GraphHopperRouteProvider.min.js': ['tmpRelease/GraphHopperRouteProvider.min.js'],			  
+					'gh-page/TravelNotesProviders/MapboxRouteProvider.min.js': ['tmpRelease/MapboxRouteProvider.min.js'],			  
+					'gh-page/TravelNotesProviders/MapzenValhallaRouteProvider.min.js': ['tmpRelease/MapzenValhallaRouteProvider.min.js'],			  
+					'gh-page/TravelNotesProviders/OpenRouteServiceRouteProvider.min.js': ['tmpRelease/OpenRouteServiceRouteProvider.min.js'],				  
+					'gh-page/TravelNotesProviders/OsrmRouteProvider.min.js': ['tmpRelease/OsrmRouteProvider.min.js'],				  
+					'gh-page/TravelNotesProviders/PolylineRouteProvider.min.js': ['tmpRelease/PolylineRouteProvider.min.js'],				  
+					'gh-page/TravelNotesProviders/PublicTransportRouteProvider.min.js': ['tmpRelease/PublicTransportRouteProvider.min.js']				  
 				}
 			},
 			Viewer: {
@@ -190,8 +190,8 @@ module.exports = function(grunt) {
 					}
 				},
 				files: {
-					'dist/viewer/TravelNotesViewer.min.js': ['tmp/TravelNotesViewer.min.js'],
-					'gh-page/viewer/TravelNotesViewer.min.js': ['tmp/TravelNotesViewer.min.js']
+					'dist/viewer/TravelNotesViewer.min.js': ['tmpRelease/TravelNotesViewer.min.js'],
+					'gh-page/viewer/TravelNotesViewer.min.js': ['tmpRelease/TravelNotesViewer.min.js']
 				}
 			},
 			Roadbook: {
@@ -202,20 +202,20 @@ module.exports = function(grunt) {
 					}
 				},
 				files: {
-					'dist/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.min.js'],
-					'gh-page/TravelNotesRoadbook.min.js': ['tmp/TravelNotesRoadbook.min.js']
+					'dist/TravelNotesRoadbook.min.js': ['tmpRelease/TravelNotesRoadbook.min.js'],
+					'gh-page/TravelNotesRoadbook.min.js': ['tmpRelease/TravelNotesRoadbook.min.js']
 				}
 			},
 		},
 		copy: {
-			beforerelease:{
+			beforeRelease:{
 				// for replace
 				files: [
 					{
 						expand: true,
 						cwd: '',
 						src: ['src/**/*.js' ],
-						dest: 'tmp/'
+						dest: 'tmpRelease/'
 					}
 				]
 			},
@@ -406,13 +406,13 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
+						cwd: 'tmpDebug/',
 						src: ['TravelNotesRoadbook.min.css'],
 						dest: 'debug/'
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
+						cwd: 'tmpDebug/',
 						src: ['TravelNotes.min.css'],
 						dest: 'debug/'
 					},
@@ -437,7 +437,7 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
-						cwd: 'tmp/',
+						cwd: 'tmpDebug/',
 						src: ['TravelNotesViewer.min.css'],
 						dest: 'debug/viewer/'
 					},
@@ -464,10 +464,11 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			doc: ['TechDoc'],
-			debug: ['debug', 'tmp', 'out'],
-			release: ['TechDoc', 'dist', 'gh-page', 'tmp', 'out'],
-			end: [ 'tmp', 'out' ]
+			beforeDoc: ['TechDoc'],
+			beforeDebug: ['debug', 'tmpDebug', 'out'],
+			beforeRelease: [ 'dist', 'gh-page', 'tmpRelease', 'out'],
+			afterDebug: [ 'tmpDebug', 'out' ],
+			afterRelease: [ 'tmpRelease', 'out' ]
 		},
 		jsdoc : {
 			doc : {
@@ -492,10 +493,47 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
-	grunt.registerTask('doc', [ 'clean:doc','jsdoc' ]);
-	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup:debug', 'stylelint','cssmin:debug','copy:debug','clean:end', ]);
-	grunt.registerTask('docs', [ 'clean:debug', 'eslint', 'rollup:debug', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
-	grunt.registerTask('release', [ 'clean:release', 'eslint', 'copy:beforerelease', 'replace:release' , 'rolluprelease', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
+	grunt.registerTask(
+		'doc', 
+		[ 
+			'clean:beforeDoc',
+			'jsdoc'
+		]
+	);
+	grunt.registerTask(
+		'default',
+		[ 
+			'eslint', 
+			'stylelint',
+			'clean:beforeDebug', 
+			'rollup:debug', 
+			'cssmin:debug',
+			'copy:debug',
+			'clean:afterDebug',
+		]
+	);
+	grunt.registerTask(
+		'release',
+		[ 
+			'eslint', 
+			'stylelint',
+			'clean:beforeDebug', 
+			'rollup:debug', 
+			'cssmin:debug',
+			'copy:debug',
+			'clean:afterDebug',
+			'clean:beforeRelease', 
+			'copy:beforeRelease', 
+			'replace:release' ,
+			'rollup:release',
+			'terser',
+			'cssmin:release',
+			'copy:release',
+			'clean:afterRelease',
+			'clean:beforeDoc',
+			'jsdoc'
+		]
+	);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
