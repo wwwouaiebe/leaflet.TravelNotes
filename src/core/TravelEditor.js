@@ -150,8 +150,22 @@ class TravelEditor {
 	@fires roadbookupdate
 	*/
 
-	routeDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore )		{
-		theTravelNotesData.travel.routes.moveTo ( draggedRouteObjId, targetRouteObjId, draggedBefore );
+	routeDropped ( draggedRouteObjId, targetRouteObjId, draggedBefore ) {
+		let newDraggedRouteObjId =
+			draggedRouteObjId === theTravelNotesData.travel.editedRoute.objId
+				?
+				theTravelNotesData.editedRouteObjId
+				:
+				draggedRouteObjId;
+
+		let newTargetRouteObjId =
+			targetRouteObjId === theTravelNotesData.travel.editedRoute.objId
+				?
+				theTravelNotesData.editedRouteObjId
+				:
+				targetRouteObjId;
+
+		theTravelNotesData.travel.routes.moveTo ( newDraggedRouteObjId, newTargetRouteObjId, draggedBefore );
 		theRouteEditor.chainRoutes ( );
 		theEventDispatcher.dispatch ( 'setrouteslist' );
 		theEventDispatcher.dispatch ( 'roadbookupdate' );
