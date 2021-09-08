@@ -83,7 +83,25 @@ module.exports = function(grunt) {
 			}
 		},
 		rollup : {
-			Default : {
+			debug : {
+				options : {
+					format : 'iife'
+				},
+				files: {
+				  'tmp/TravelNotes.min.js': ['src/main/main.js'],  
+				  'tmp/TravelNotesViewer.min.js': ['src/main/mainViewer.js'],  
+				  'tmp/TravelNotesRoadbook.min.js': ['src/roadbook/roadbook.js'],			  
+				  'tmp/GraphHopperRouteProvider.min.js': ['src/routeProviders/GraphHopperRouteProvider.js'],			  
+				  'tmp/MapboxRouteProvider.min.js': ['src/routeProviders/MapboxRouteProvider.js'],			  
+				  'tmp/MapzenValhallaRouteProvider.min.js': ['src/routeProviders/MapzenValhallaRouteProvider.js'],			  
+				  'tmp/OpenRouteServiceRouteProvider.min.js': ['src/routeProviders/OpenRouteServiceRouteProvider.js'],				  
+				  'tmp/OsrmRouteProvider.min.js': ['src/routeProviders/OsrmRouteProvider.js'],				  
+				  'tmp/PolylineRouteProvider.min.js': ['src/routeProviders/PolylineRouteProvider.js'],				  
+				  'tmp/PublicTransportRouteProvider.min.js': ['src/routeProviders/PublicTransportRouteProvider.js']				  
+				}
+			}
+			,
+			release : {
 				options : {
 					format : 'iife'
 				},
@@ -475,9 +493,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.registerTask('doc', [ 'clean:doc','jsdoc' ]);
-	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug','copy:debug','clean:end', ]);
-	grunt.registerTask('docs', [ 'clean:debug', 'eslint', 'rollup', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
-	grunt.registerTask('release', [ 'clean:release', 'eslint', 'copy:beforerelease', 'replace:release' , 'rollup', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
+	grunt.registerTask('default', [ 'clean:debug', 'eslint', 'rollup:debug', 'stylelint','cssmin:debug','copy:debug','clean:end', ]);
+	grunt.registerTask('docs', [ 'clean:debug', 'eslint', 'rollup:debug', 'stylelint','cssmin:debug', 'copy:debug', 'jsdoc','clean:end', ]);
+	grunt.registerTask('release', [ 'clean:release', 'eslint', 'copy:beforerelease', 'replace:release' , 'rolluprelease', 'terser', 'stylelint', 'cssmin:release', 'jsdoc', 'copy:release', 'clean:end' ]);
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');
 	console.log ( '\n                                     ' + grunt.config.data.pkg.name + ' - ' + grunt.config.data.pkg.version +' - build: '+ grunt.config.data.pkg.buildNumber + ' - ' + grunt.template.today("isoDateTime") +'\n' );
 	console.log ( '---------------------------------------------------------------------------------------------------------------------------------------------');

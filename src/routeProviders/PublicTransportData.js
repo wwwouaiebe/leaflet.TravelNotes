@@ -70,9 +70,9 @@ class PublicTransportData {
 	*/
 
 	constructor ( selectedRelationId ) {
-		Object.freeze ( this );
 		this.#selectedRelationId = selectedRelationId;
 		this.nodes3WaysCounter = ZERO;
+		Object.seal ( this );
 	}
 
 	get waysMap ( ) { return this.#waysMap; }
