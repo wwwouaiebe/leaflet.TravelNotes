@@ -49,6 +49,7 @@ Tests ...
 
 import theEventDispatcher from '../coreLib/EventDispatcher.js';
 import theTravelNotesData from '../data/TravelNotesData.js';
+import theConfig from '../data/Config.js';
 import OverpassAPIDataLoader from '../coreLib/OverpassAPIDataLoader.js';
 import theOsmSearchDictionary from '../coreOsmSearch/OsmSearchDictionary.js';
 import theGeometry from '../coreLib/Geometry.js';
@@ -181,13 +182,36 @@ class OsmSearchEngine	{
 					);
 					queryTag = queryTag.substr ( ZERO, queryTag.length - ONE ) + '"';
 				}
-				let queryElement =
-					ONE === valuesElements.elements.size ? valuesElements.elements.values ( ).next ( ).value : 'nwr';
 
-				searchQueries.push (
-					queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
-					( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;'
-				);
+				// This modification due to slow response from https://lz4.overpass-api.de/api/interpreter
+				// Some overpass API servers don't know nwr...
+
+				if ( theConfig.overpassApi.useNwr ) {
+					let queryElement =
+						ONE === valuesElements.elements.size ? valuesElements.elements.values ( ).next ( ).value : 'nwr';
+
+					searchQueries.push (
+						queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
+						( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;'
+					);
+				}
+				else {
+					let queryElements = [];
+					if ( ONE === valuesElements.elements.size ) {
+						queryElements .push ( valuesElements.elements.values ( ).next ( ).value );
+					}
+					else {
+						queryElements = [ 'node', 'way', 'rel' ];
+					}
+					queryElements.forEach (
+						queryElement => {
+							searchQueries.push (
+								queryElement + '[' + queryTag + ']' + searchBoundingBoxString + ';' +
+								( 'node' === queryElement ? '' : '(._;>;);' ) + 'out;'
+							);
+						}
+					);
+				}
 			}
 		);
 

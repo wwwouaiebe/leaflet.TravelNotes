@@ -182,6 +182,7 @@ Le contenu du fichier TravelNotesConfig.json:
 - __osmSearch.searchPointPolyline.fill__ : le remplissage de la polyline utilisée pour indiquer sur la carte la position d'un résultat de recherche lorsque ce résultat est sous forme de polyline ( valeur par défaut : false )
 - __osmSearch.searchPointPolyline.weight__ : l'épaisseur de la polyline utilisée pour indiquer sur la carte la position d'un résultat de recherche lorsque ce résultat est sous forme de polyline ( valeur par défaut : 4 )
 - __osmSearch.showSearchNoteDialog__ : quand cette valeur est true, la boite de dialogue d'édition des notes est affichée lorsqu'une note est créée à partir d'un résultat de recherche ( valeur par défaut : false )
+- __overpassApi.useNwr__ : certaines instances de OverpassAPI ne connaissent pas l'instruction nwr. Dans ce cas il faut mettre useNwr = false ( valeur par defaut: true )
 - __overpassApi.timeOut__ : le temps qui va s'écouler, en secondes, entre le moment où une requête vers OverpassAPI est lancée et celui où un timeout sera déclenché ( valeur par défaut : 40 )
 - __overpassApi.url__ : l'url à utiliser pour OverpassAPI ( valeur par défaut : "https://lz4.overpass-api.de/api/interpreter" )
 - __printRouteMap.isEnabled__ : quand cette valeur est true, la commande pour imprimer les cartes d'un trajet est active ( valeur par défaut : true )
