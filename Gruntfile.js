@@ -493,6 +493,12 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.registerTask (
+		'default',
+		[
+			'eslint'
+		]
+	);
 	grunt.registerTask(
 		'doc', 
 		[ 
@@ -501,7 +507,7 @@ module.exports = function(grunt) {
 		]
 	);
 	grunt.registerTask(
-		'default',
+		'debug',
 		[ 
 			'eslint', 
 			'stylelint',

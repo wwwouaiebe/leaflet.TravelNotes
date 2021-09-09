@@ -84,7 +84,7 @@ and run npm audit fix before a release.
 */
 
 const theDataVersion = '2.3.0';
-const theAppVersion = '3.0.0';
+const theAppVersion = 'v3.0.0-RC1';
 
 export { theDataVersion, theAppVersion };
 
