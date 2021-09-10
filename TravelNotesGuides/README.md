@@ -53,9 +53,9 @@ Other samples:
 The [gh-pages branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) is the last stable version. 
 This branch contains all the needed files to run Travel & Notes, but not the sources.
   
-### v2.3.0 branch
+### v3.0.0 branch
 
-The [v2.3.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v2.3.0) contains the source files of the last stable version.
+The [v3.0.0 branch](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v3.0.0) contains the source files of the last stable version.
 
 ### master branch
 
@@ -72,14 +72,13 @@ how to convert files made with an earlier version.
 
 Following bugs are corrected:
 
-- Issue #158: when creating a route note from an Osm search result, the distance from the beginning of route is 0
-- Issue #159: When creating a note from an Osm search result, it's needed to verify the address before adding the note or showing the dialog
-- Issue #160: noopener noreferrer are added automaticaly when a link is created with target='_blank'
-- Issue #162: Zoom on the map is not working when a dialog is displayed.
-- Issue #163: svg icons integrated in js files are not displayed correctly ( Chrome ).
-- Issue #164: PolylineProvider and PublicTransportProvider crash when selected from the provider toolbar 
-- Issue #168: RCN REF numbers are difficult to read in the notes icons. Change the color.
-- Issue #170: The apps crash when renaming a waypoint and then saving the route before the end of the renaming operation..
+- Issue #179: Reordering the route list with drag and drop don't work when the dragged route is edited.
+- Issue #173: Bad message displayed in the console for rel attribute when opening a file
+
+And following enhancements are done:
+
+- Issue #175: Private and static fields and methods are coming with next Firefox... 
+- Issue #173: UUID generator is not rfc 4122 compliant
 
 For other versions, see the document ['What's new?' - en ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/en/WhatsNew.md)
 
@@ -137,9 +136,9 @@ D'autres exemples:
 La [branche gh-pages](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/gh-pages) est la dernière version stable.
 Cette branche contient tous les fichiers nécessaires pour utiliser Travel & Notes, mais ne contient pas les sources.
 
-### branche v2.3.0
+### branche v3.0.0
 
-La [branche v2.3.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v2.3.0) contient les sources de la dernière version stable.
+La [branche v3.0.0](https://github.com/wwwouaiebe/leaflet.TravelNotes/tree/v3.0.0) contient les sources de la dernière version stable.
 
 ### branche master
 
@@ -155,13 +154,12 @@ comment convertir des fichiers réalisés avec une version antérieure.
 
 Les bugs suivants sont corrigés:
 
-- Issue #158: la distance entre une note de trajet et le début du trajet est 0 quand cette note est créée depuis un résultat de recherche dans OpenStreetMap.
-- Issue #159: l'adresse doit être vérifiée quand une note est créée depuis un résultat de recherche dans OpenStreetMap.
-- Issue #160: noopener noreferrer sont ajoutés automatiquement quand un lien est créé avec target='_blank'
-- Issue #162: le zoom ne fonctionne pas quand un dialogue est affiché ( Firefox ).
-- Issue #163: les icônes en svg intégrées dans les fichiers JS ne sont pas affichées correctement ( Chrome ).
-- Issue #164: polylineProvider et PublicTransportProvider crash quand les providers sont sélectionnés 
-- Issue #168: La couleur des références RCN-REF est modifiée dans les icônes.
-- Issue #170: un crash survient lorsque un trajet édité est sauvé avant qu'un point de passage soit entièrement renommé.
+- Issue #179: Réordonner la liste des routes avec un glisser/déposer ne fonctionne pas quand la route sélectionnée est la route en cours d'édition.
+- Issue #173: Un message incorrect pour l'attribut "rel" est affiché dans la console quand un fichier est ouvert.
+
+Et les améliorations suivantes ont été apportées:
+
+- Issue #175: Les variables et méthodes Private et static sont disponible dans Firefox. Une grande mise à jour du code a été effectuée.
+- Issue #173: Le generateur de UUID ne suit pas la norme publiée dans la rfc 4122.
 
 Pour les autres versions, reportez-vous au document ['quoi de neuf?' - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/QuoiDeNeuf.md)

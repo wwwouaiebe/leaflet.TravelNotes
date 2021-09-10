@@ -114,3 +114,28 @@ trajet et/ou SANS les manoeuvres. Cette commande permet d'avoir un fichier beauc
 - il est possible d'utiliser le clavier pour les commandes du viewer. Voir 
 le [guide pour les utilisateurs - fr ](https://github.com/wwwouaiebe/leaflet.TravelNotes/blob/gh-pages/TravelNotesGuides/fr/GuideUtilisateurFR.md#Viewer)
 - et de nombreuses modifications purement techniques ainsi qie la correction de nombreux petits bugs.
+
+### Quoi de neuf dans la version 2.3.0
+
+Les bugs suivants sont corrigés:
+
+- Issue #158: la distance entre une note de trajet et le début du trajet est 0 quand cette note est créée depuis un résultat de recherche dans OpenStreetMap.
+- Issue #159: l'adresse doit être vérifiée quand une note est créée depuis un résultat de recherche dans OpenStreetMap.
+- Issue #160: noopener noreferrer sont ajoutés automatiquement quand un lien est créé avec target='_blank'
+- Issue #162: le zoom ne fonctionne pas quand un dialogue est affiché ( Firefox ).
+- Issue #163: les icônes en svg intégrées dans les fichiers JS ne sont pas affichées correctement ( Chrome ).
+- Issue #164: polylineProvider et PublicTransportProvider crash quand les providers sont sélectionnés 
+- Issue #168: La couleur des références RCN-REF est modifiée dans les icônes.
+- Issue #170: un crash survient lorsque un trajet édité est sauvé avant qu'un point de passage soit entièrement renommé.
+
+### Quoi de neuf dans la version 3.0.0
+
+Les bugs suivants sont corrigés:
+
+- Issue #179: Réordonner la liste des routes avec un glisser/déposer ne fonctionne pas quand la route sélectionnée est la route en cours d'édition.
+- Issue #173: Un message incorrect pour l'attribut "rel" est affiché dans la console quand un fichier est ouvert.
+
+Et les améliorations suivantes ont été apportées:
+
+- Issue #175: Les variables et méthodes Private et static sont disponible dans Firefox. Une grande mise à jour du code a été effectuée.
+- Issue #173: Le generateur de UUID ne suit pas la norme publiée dans la rfc 4122.

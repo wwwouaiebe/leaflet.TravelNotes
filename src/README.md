@@ -4,14 +4,16 @@ First, you need Node.js and a local web server installed on your computer. Havin
 
 Then clone leaflet.TravelNotes in your GitHub repository and install it on your computer.
 
-Open a Node.js command prompt or a Git shell and go to the directory where leaflet.TravelNote is installed and run __npm install leafletTravelNotes__. All the needed Node packages wil be installed.
+Open a Node.js command prompt or a Git shell and go to the directory where leaflet.TravelNote is installed and run __npm install leaflet.TravelNotes__. All the needed Node packages wil be installed.
 
 From the Node.js command prompt or Git shell run:
-- __grunt__ to build the application in debug mode
-- __grunt docs__ to build the application in debug mode and build the technical documentation
-- __grunt release__ to build the application in release mode and build the technical documentation
+- __grunt__ to verify the sources with eslint
+- __grunt doc__ to build the technical documentation
+- __grunt debug__ to build the application in debug mode
+- __grunt release__ to build the application in debug and release mode and build the technical documentation
 
-When running grunt, the source files are verified with eslint and rollup. If an error is found, grunt is stopped and the build not executed, so you have to correct all the errors before you can run the application.
+When running grunt in debug or release mode, the source files are verified with eslint and rollup. If an error is found, grunt is stopped and the build not executed, 
+so you have to correct all the errors before you can run the application.
 
 ## What's the difference between debug and release modes?
 
@@ -20,7 +22,8 @@ In debug mode, the application is installed in the leaflet.TravelNotes/debug fol
 In release mode the application is installed in the leaflet.TravelNotes/dist folder and in the leaflet.TravelNotes/gh-page folder. The leaflet.TravelNotes/gh-page folder contains all the needed files
 to run the application, included last version of leaflet. 
 
-In release mode, all the js sources files are grouped in one big js file with rollup and then this file is minified with terser, so the file is quite imposible to understand if an error occurs at the execution time.
+In release mode, all the js sources files are grouped in one big js file with rollup, the private fields and methods transformed in public fields and method for compatibility with old browsers,
+and then this file is minified with terser, so the file is quite imposible to understand if an error occurs at the execution time.
 
 # How the application works
 
@@ -34,8 +37,8 @@ the map (notes, routes, waypoints) or on the user interface (UI), a drag and dro
 This event is captured by an event listener (one of the classes with the name finishing with __...EL__) and the event listener call a method, mainly in one of the global objects in the __core__ module / folder.
 
 When the action is performed, the map and the UI have to be updated with the new/modifed/deleted data. So at the end of the procedure a new event is dispatched to the document with the data
-( see the __coreLib/EventDispatcher.js__ file ). This second event is captured by an event listener on the document (see  __AppLoader.#addEventsListeners ( )__ method). This event listener call the appropriate methods 
-of the classes __MapEditor__ and __UI__ to update the map and the UI.
+( see the __coreLib/EventDispatcher.js__ file ). This second event is captured by an event listener on the document (see  __AppLoader.#addEventsListeners ( )__ method). This event listener call
+the appropriate methods of the classes __MapEditor__ and __UI__ to update the map and the UI.
 
 Seems to be simple, but remember that there are quite 200 event listeners in the app.
 

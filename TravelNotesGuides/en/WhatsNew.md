@@ -124,3 +124,14 @@ Following bugs are corrected:
 - Issue #168: RCN REF numbers are difficult to read in the notes icons. Change the color.
 - Issue #170: The apps crash when renaming a waypoint and then saving the route before the end of the renaming operation..
 
+### What's new in release 3.0.0
+
+Following bugs are corrected:
+
+- Issue #179: Reordering the route list with drag and drop don't work when the dragged route is edited.
+- Issue #173: Bad message displayed in the console for rel attribute when opening a file
+
+And following enhancements are done:
+
+- Issue #175: Private and static fields and methods are coming with next Firefox... 
+- Issue #173: UUID generator is not rfc 4122 compliant

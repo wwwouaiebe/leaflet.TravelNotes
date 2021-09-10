@@ -161,8 +161,9 @@
 		"showSearchNoteDialog":false
 	},
 	"overpassApi": {
+		"useNwr":true,
 		"timeOut":40,
-		"url":"https://z.overpass-api.de/api/interpreter"
+		"url":"https://lz4.overpass-api.de/api/interpreter"
 	},
 	"printRouteMap":
 	{

@@ -1,6 +1,6 @@
 {
   "name": "leaflet.travelnotes",
-  "version": "3.0.0-RC1",
+  "version": "3.0.0",
   "description": "A mapping and routing application.",
   "main": "src/main/main.js",
   "dependencies": {
