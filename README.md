@@ -1,3 +1,13 @@
+# About issues and development since september 10, 2021
+
+Since september 10, 2021, all new developments will be done in the [TravelNotes](https://github.com/wwwouaiebe/TravelNotes) repository only
+and this leaflet.TravelNotes repository will be archived and no longer updated.
+
+Currently, the [leaflet.TravelNotes v3.0.0 release](https://github.com/wwwouaiebe/leaflet.TravelNotes/releases/tag/v3.0.0) and 
+[TravelNotes v3.0.0 release](https://github.com/wwwouaiebe/TravelNotes/releases/tag/v3.0.0) are identical.
+
+If you will create bugs, asking questions... please create an issue in the [TravelNotes issues](https://github.com/wwwouaiebe/TravelNotes/issues) only.
+
 # Travel & Notes 
 
 <a href="#fr" >Vers la version française</a>
